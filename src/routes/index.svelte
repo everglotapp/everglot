@@ -1,5 +1,6 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
+    import PageTitle from "../comp/typography/PageTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
 
     function joinChat() {
@@ -13,11 +14,9 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-<div class="container max-w-5xl py-32">
-    <div class="join-container">
-        <header class="join-header">
-            <h1><i class="fas fa-smile" />Everglot Demo</h1>
-        </header>
+<div class="container max-w-5xl py-16">
+    <PageTitle>Everglot Demo</PageTitle>
+    <div class="join-container rounded-md">
         <main class="join-main">
             <form name="join-chat" action="/chat">
                 <div class="form-control">
@@ -58,14 +57,6 @@
         margin: 80px auto;
     }
 
-    .join-header {
-        text-align: center;
-        padding: 20px;
-        background: var(--dark-color-a);
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-    }
-
     .join-main {
         padding: 30px 40px;
         background: var(--dark-color-b);
@@ -96,11 +87,6 @@
         font-size: 16px;
         padding: 5px;
         height: 40px;
-        width: 100%;
-    }
-
-    .join-main .btn {
-        margin-top: 20px;
         width: 100%;
     }
 </style>

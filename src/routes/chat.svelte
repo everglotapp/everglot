@@ -1,5 +1,10 @@
 <script lang="ts">
+    import PageTitle from "../comp/typography/PageTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+
+    // TODO: Check if user is signed in, if not redirect to sign in.
+
+    // TODO: Read user data from database.
 </script>
 
 <svelte:head>
@@ -7,11 +12,8 @@
 </svelte:head>
 
 <div class="container max-w-5xl py-8">
+    <PageTitle>Everglot Demo</PageTitle>
     <div class="chat-container">
-        <header class="chat-header">
-            <h1><i class="fas fa-smile" />Everglot Demo</h1>
-            <a href="/" class="btn">Leave Room</a>
-        </header>
         <main class="chat-main">
             <div class="chat-sidebar">
                 <h3><i class="fas fa-comments" /> Room Name:</h3>
@@ -44,17 +46,6 @@
         background: #fff;
         margin: 30px auto;
         overflow: hidden;
-    }
-
-    .chat-header {
-        background: var(--dark-color-a);
-        color: #fff;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        padding: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
     }
 
     .chat-main {

@@ -14,41 +14,42 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-<div class="container max-w-5xl py-16">
+<div class="container max-w-md py-16">
     <PageTitle>Everglot Demo</PageTitle>
-    <div class="join-container rounded-md">
-        <main class="join-main">
-            <form name="join-chat" action="/chat">
-                <div class="form-control">
-                    <label for="username">Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        placeholder="Enter username..."
-                        required
-                    />
-                </div>
-                <div class="form-control">
-                    <label for="room">Room</label>
-                    <select name="room" id="room">
-                        <option value="English">English</option>
-                        <option value="German">German</option>
-                        <option value="French">French</option>
-                        <option value="Italian">Italian</option>
-                        <option value="Spanish">Spanish</option>
-                        <option value="Chinese">Chinese</option>
-                        <option value="Japanese">Japanese</option>
-                    </select>
-                </div>
-                <ButtonLarge
-                    tag="button"
-                    className="w-full justify-center"
-                    on:click={joinChat}>Join Chat</ButtonLarge
-                >
-            </form>
-        </main>
-    </div>
+    <form
+        name="join-chat"
+        action="/chat"
+        class="bg-primary-lightest py-8 px-16"
+        on:submit|preventDefault={joinChat}
+    >
+        <div class="form-control">
+            <label for="username">Username</label>
+            <input
+                type="text"
+                name="username"
+                id="username"
+                placeholder="Enter username..."
+                required
+            />
+        </div>
+        <div class="form-control">
+            <label for="room">Room</label>
+            <select name="room" id="room">
+                <option value="English">English</option>
+                <option value="German">German</option>
+                <option value="French">French</option>
+                <option value="Italian">Italian</option>
+                <option value="Spanish">Spanish</option>
+                <option value="Chinese">Chinese</option>
+                <option value="Japanese">Japanese</option>
+            </select>
+        </div>
+        <ButtonLarge
+            tag="button"
+            className="w-full justify-center"
+            on:click={joinChat}>Join Chat</ButtonLarge
+        >
+    </form>
 </div>
 
 <style>
@@ -57,36 +58,26 @@
         margin: 80px auto;
     }
 
-    .join-main {
-        padding: 30px 40px;
-        background: var(--dark-color-b);
-    }
-
-    .join-main p {
+    .form-control {
         margin-bottom: 20px;
     }
 
-    .join-main .form-control {
-        margin-bottom: 20px;
-    }
-
-    .join-main label {
+    label {
         display: block;
         margin-bottom: 5px;
-        @apply text-gray-light;
     }
 
-    .join-main input[type="text"] {
-        font-size: 16px;
-        padding: 5px;
-        height: 40px;
-        width: 100%;
+    input[type="text"] {
+        @apply w-full;
+        @apply px-4;
+        @apply py-2;
+        @apply rounded-md;
     }
 
-    .join-main select {
-        font-size: 16px;
-        padding: 5px;
-        height: 40px;
-        width: 100%;
+    select {
+        @apply w-full;
+        @apply px-4;
+        @apply py-2;
+        @apply rounded-md;
     }
 </style>

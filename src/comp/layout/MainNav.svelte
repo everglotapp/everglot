@@ -11,12 +11,6 @@
                 href=".">Everglot</a
             >
         </li>
-        <li class="ml-auto">
-            <a
-                aria-current={segment === "login" ? "page" : undefined}
-                href="login">Login</a
-            >
-        </li>
     </ul>
 </nav>
 

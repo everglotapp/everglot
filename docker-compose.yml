@@ -6,4 +6,4 @@ services:
         restart: always
         working_dir: /usr/src/app
         ports:
-            - "127.0.0.1:3000:3000"
+            - "127.0.0.1:8002:3000"

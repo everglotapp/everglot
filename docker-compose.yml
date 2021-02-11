@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-    everglot-lp:
+    everglot-app:
         image: everglot/everglot-app:latest
         restart: always
         working_dir: /usr/src/app

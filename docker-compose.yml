@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+    everglot-lp:
+        image: everglot/everglot-app:latest
+        restart: always
+        working_dir: /usr/src/app
+        ports:
+            - "127.0.0.1:3000:3000"

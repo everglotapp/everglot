@@ -1,1 +1,3 @@
-# everglot
+# Everglot
+
+Everglot web application

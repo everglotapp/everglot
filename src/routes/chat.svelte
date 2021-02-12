@@ -1,13 +1,15 @@
 <script lang="ts">
     import { onMount } from "svelte"
+    import { goto } from "@sapper/app"
+    import { username, room } from "../stores"
+
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
-    import Qs from "qs"
     import socketio from "socket.io-client"
 
     let socket: socketio.Server | undefined
 
-    let roomName = ""
+    let roomObj
     let roomMessages: any[] = []
     let roomUsers: any[] = []
     let msg = ""
@@ -16,34 +18,41 @@
 
     // TODO: Read user data from database.
     onMount(() => {
+        if (!$username.length || !$room.length) {
+            goto("/")
+        }
+
         socket = socketio()
 
-        const { username, room } = Qs.parse(location.search, {
-            ignoreQueryPrefix: true,
-        })
-
         // Join chatroom
-        socket.emit("joinRoom", { username, room })
+        socket.emit("joinRoom", { username: $username, room: $room })
 
         // Get room and users
         socket.on("roomUsers", ({ room, users }) => {
-            roomName = room
+            roomObj = room
             roomUsers = [...users]
         })
         // Message from server
         socket.on("message", (message) => {
-            roomMessages = [...messages, message]
+            roomMessages = [...roomMessages, message]
 
             // Scroll down
-            chatMessages.scrollTop = chatMessages.scrollHeight
+            const messagesEl = document.getElementById("chat-messages")
+            if (messagesEl) {
+                messagesEl.scrollTop = messagesEl.scrollHeight
+            }
         })
     })
 
     function onSend() {
-        const trimmedMsg = (msg = msg.trim())
+        const trimmedMsg = msg.trim()
 
         if (!trimmedMsg) {
+            msg = ""
             return false
+        } else {
+            // TODO: do this only if message was sent successfully.
+            msg = ""
         }
 
         socket?.emit("chatMessage", trimmedMsg)
@@ -58,23 +67,38 @@
     <PageTitle>Everglot Demo</PageTitle>
     <div class="my-8">
         <main class="chat-main">
-            <div
-                class="chat-sidebar py-4 px-4 bg-primary-lightest rounded-tl-md"
-            >
-                <h3>Room Name:</h3>
-                <h2>{roomName}</h2>
-                <h3>Users</h3>
-                <ul>
+            <div class="chat-sidebar bg-primary-lightest rounded-tl-md">
+                <div
+                    class="py-4 px-4 text-lg font-bold w-full text-gray-dark bg-gray-lightest mb-4"
+                >
+                    {$room}
+                </div>
+                <h3 class="px-4 text-gray-bitdark font-bold mb-4">Users</h3>
+                <ul class="">
                     {#each roomUsers as user}
-                        <li>{user.username}}</li>
+                        {#if user.username === ""}
+                            <li
+                                class="px-8 py-2 text-lg bg-gray-lightest font-bold text-gray-bitdark shadow-sm mb-1"
+                            >
+                                Everglot Bot
+                            </li>
+                        {:else}
+                            <li
+                                class="px-8 py-2 text-lg bg-gray-lightest font-bold text-gray-dark shadow-sm mb-1"
+                            >
+                                {user.username}
+                            </li>
+                        {/if}
                     {/each}
                 </ul>
             </div>
-            <div class="chat-messages rounded-tr-md">
+            <div id="chat-messages" class="rounded-tr-md p-8">
                 {#each roomMessages as message}
                     <div class="message">
                         <p class="meta">
-                            {message.username}<span>{message.time}</span>
+                            {message.username}&nbsp;–&nbsp;<span
+                                >{message.time}</span
+                            >
                         </p>
                         <p class="text">{message.text}</p>
                     </div>
@@ -82,7 +106,7 @@
             </div>
         </main>
         <div class="chat-form-container rounded-bl-md rounded-br-md">
-            <form id="chat-form">
+            <form id="chat-form" on:submit|preventDefault={onSend}>
                 <input
                     id="msg"
                     type="text"
@@ -110,13 +134,16 @@
         overflow-y: scroll;
     }
 
-    .chat-messages {
-        padding: 30px;
+    #chat-messages {
         max-height: 500px;
+        min-height: 40vh;
         overflow-y: scroll;
+        @screen 2xl {
+            height: 500px;
+        }
     }
 
-    .chat-messages .message {
+    #chat-messages .message {
         padding: 10px;
         margin-bottom: 15px;
         @apply bg-primary-lightest;
@@ -124,7 +151,7 @@
         overflow-wrap: break-word;
     }
 
-    .chat-messages .message .meta {
+    #chat-messages .message .meta {
         font-size: 15px;
         font-weight: bold;
         @apply text-primary-dark;
@@ -132,13 +159,13 @@
         margin-bottom: 7px;
     }
 
-    .chat-messages .message .meta span {
+    #chat-messages .message .meta span {
         @apply text-gray-bitdark;
     }
 
     .chat-form-container {
         padding: 20px 30px;
-        @apply bg-primary-lightest;
+        @apply bg-gray-lightest;
     }
 
     .chat-form-container form {

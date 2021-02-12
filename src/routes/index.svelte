@@ -1,5 +1,7 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
+    import { username, room } from "../stores"
+
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
 
@@ -19,7 +21,7 @@
     <form
         name="join-chat"
         action="/chat"
-        class="bg-primary-lightest py-8 px-16"
+        class="bg-primary-lightest py-10 px-16"
         on:submit|preventDefault={joinChat}
     >
         <div class="form-control">
@@ -30,11 +32,12 @@
                 id="username"
                 placeholder="Enter username..."
                 required
+                bind:value={$username}
             />
         </div>
         <div class="form-control">
             <label for="room">Room</label>
-            <select name="room" id="room">
+            <select name="room" id="room" bind:value={$room}>
                 <option value="English">English</option>
                 <option value="German">German</option>
                 <option value="French">French</option>
@@ -53,18 +56,15 @@
 </div>
 
 <style>
-    .join-container {
-        max-width: 500px;
-        margin: 80px auto;
-    }
-
     .form-control {
         margin-bottom: 20px;
     }
 
     label {
         display: block;
-        margin-bottom: 5px;
+        @apply mb-2;
+        @apply text-gray-bitdark;
+        @apply font-bold;
     }
 
     input[type="text"] {

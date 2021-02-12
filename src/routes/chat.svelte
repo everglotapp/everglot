@@ -1,10 +1,62 @@
 <script lang="ts">
+    import { onMount } from "svelte"
+    import { goto } from "@sapper/app"
+    import { username, room } from "../stores"
+
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+    import socketio from "socket.io-client"
+
+    let socket: socketio.Server | undefined
+
+    let roomObj
+    let roomMessages: any[] = []
+    let roomUsers: any[] = []
+    let msg = ""
 
     // TODO: Check if user is signed in, if not redirect to sign in.
 
     // TODO: Read user data from database.
+    onMount(() => {
+        if (!$username.length || !$room.length) {
+            goto("/")
+        }
+
+        socket = socketio()
+
+        // Join chatroom
+        socket.emit("joinRoom", { username: $username, room: $room })
+
+        // Get room and users
+        socket.on("roomUsers", ({ room, users }) => {
+            roomObj = room
+            roomUsers = [...users]
+        })
+        // Message from server
+        socket.on("message", (message) => {
+            roomMessages = [...roomMessages, message]
+
+            // Scroll down
+            const messagesEl = document.getElementById("chat-messages")
+            if (messagesEl) {
+                messagesEl.scrollTop = messagesEl.scrollHeight
+            }
+        })
+    })
+
+    function onSend() {
+        const trimmedMsg = msg.trim()
+
+        if (!trimmedMsg) {
+            msg = ""
+            return false
+        } else {
+            // TODO: do this only if message was sent successfully.
+            msg = ""
+        }
+
+        socket?.emit("chatMessage", trimmedMsg)
+    }
 </script>
 
 <svelte:head>
@@ -13,27 +65,59 @@
 
 <div class="container max-w-5xl py-8">
     <PageTitle>Everglot Demo</PageTitle>
-    <div class="chat-container">
+    <div class="my-8">
         <main class="chat-main">
-            <div class="chat-sidebar">
-                <h3><i class="fas fa-comments" /> Room Name:</h3>
-                <h2 id="room-name" />
-                <h3><i class="fas fa-users" /> Users</h3>
-                <ul id="users" />
+            <div class="chat-sidebar bg-primary-lightest rounded-tl-md">
+                <div
+                    class="py-4 px-4 text-lg font-bold w-full text-gray-dark bg-gray-lightest mb-4"
+                >
+                    {$room}
+                </div>
+                <h3 class="px-4 text-gray-bitdark font-bold mb-4">Users</h3>
+                <ul class="">
+                    {#each roomUsers as user}
+                        {#if user.username === ""}
+                            <li
+                                class="px-8 py-2 text-lg bg-gray-lightest font-bold text-gray-bitdark shadow-sm mb-1"
+                            >
+                                Everglot Bot
+                            </li>
+                        {:else}
+                            <li
+                                class="px-8 py-2 text-lg bg-gray-lightest font-bold text-gray-dark shadow-sm mb-1"
+                            >
+                                {user.username}
+                            </li>
+                        {/if}
+                    {/each}
+                </ul>
             </div>
-            <div class="chat-messages" />
+            <div id="chat-messages" class="rounded-tr-md p-8">
+                {#each roomMessages as message}
+                    <div class="message">
+                        <p class="meta">
+                            {message.username}&nbsp;–&nbsp;<span
+                                >{message.time}</span
+                            >
+                        </p>
+                        <p class="text">{message.text}</p>
+                    </div>
+                {/each}
+            </div>
         </main>
-        <div class="chat-form-container">
-            <form id="chat-form">
+        <div class="chat-form-container rounded-bl-md rounded-br-md">
+            <form id="chat-form" on:submit|preventDefault={onSend}>
                 <input
                     id="msg"
                     type="text"
                     placeholder="Enter Message"
                     required
                     autocomplete="off"
+                    class="max-w-sm"
+                    bind:value={msg}
                 />
-                <button class="btn"
-                    ><i class="fas fa-paper-plane" /> Send</button
+                <ButtonLarge className="ml-4" tag="button" on:click={onSend}
+                    >Send</ButtonLarge
                 >
             </form>
         </div>
@@ -41,69 +125,47 @@
 </div>
 
 <style>
-    .chat-container {
-        max-width: 1100px;
-        background: #fff;
-        margin: 30px auto;
-        overflow: hidden;
-    }
-
     .chat-main {
         display: grid;
         grid-template-columns: 1fr 3fr;
     }
 
     .chat-sidebar {
-        background: var(--dark-color-b);
-        color: #fff;
-        padding: 20px 20px 60px;
         overflow-y: scroll;
     }
 
-    .chat-sidebar h2 {
-        font-size: 20px;
-        background: rgba(0, 0, 0, 0.1);
-        padding: 10px;
-        margin-bottom: 20px;
-    }
-
-    .chat-sidebar h3 {
-        margin-bottom: 15px;
-    }
-
-    .chat-sidebar ul li {
-        padding: 10px 0;
-    }
-
-    .chat-messages {
-        padding: 30px;
+    #chat-messages {
         max-height: 500px;
+        min-height: 40vh;
         overflow-y: scroll;
+        @screen 2xl {
+            height: 500px;
+        }
     }
 
-    .chat-messages .message {
+    #chat-messages .message {
         padding: 10px;
         margin-bottom: 15px;
-        background-color: var(--light-color);
+        @apply bg-primary-lightest;
         border-radius: 5px;
         overflow-wrap: break-word;
     }
 
-    .chat-messages .message .meta {
+    #chat-messages .message .meta {
         font-size: 15px;
         font-weight: bold;
-        color: var(--dark-color-b);
+        @apply text-primary-dark;
         opacity: 0.7;
         margin-bottom: 7px;
     }
 
-    .chat-messages .message .meta span {
-        color: #777;
+    #chat-messages .message .meta span {
+        @apply text-gray-bitdark;
     }
 
     .chat-form-container {
         padding: 20px 30px;
-        background-color: var(--dark-color-a);
+        @apply bg-gray-lightest;
     }
 
     .chat-form-container form {

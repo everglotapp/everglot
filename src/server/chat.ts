@@ -1,11 +1,11 @@
-import type polka from "polka"
+import type { Server } from "http"
 import socketio from "socket.io"
 import { formatMessage } from "./messages"
 import { userJoin, getCurrentUser, userLeave, getRoomUsers } from "./users"
 
 const botName = "Everglot Bot"
 
-export function start(server: polka.Polka.server) {
+export function start(server: Server) {
     const io = socketio(server)
     // Run when client connects
     io.on("connection", (socket) => {

@@ -2,8 +2,9 @@
     import { goto } from "@sapper/app"
     import { username, room } from "../stores"
 
-    import PageTitle from "../comp/typography/PageTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+
+    import { LogInIcon } from "svelte-feather-icons"
 
     function joinChat() {
         if (document.forms["join-chat"].reportValidity()) {
@@ -16,8 +17,7 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-<div class="container max-w-md py-16">
-    <PageTitle>Everglot Demo</PageTitle>
+<div class="container max-w-md py-24">
     <form
         name="join-chat"
         action="/chat"
@@ -33,11 +33,17 @@
                 placeholder="Enter username..."
                 required
                 bind:value={$username}
+                class="px-4 py-3 border-none shadow-md"
             />
         </div>
         <div class="form-control">
             <label for="room">Room</label>
-            <select name="room" id="room" bind:value={$room}>
+            <select
+                name="room"
+                id="room"
+                bind:value={$room}
+                class="border-none shadow-sm"
+            >
                 <option value="English">English</option>
                 <option value="German">German</option>
                 <option value="French">French</option>
@@ -50,7 +56,8 @@
         <ButtonLarge
             tag="button"
             className="w-full justify-center"
-            on:click={joinChat}>Join Chat</ButtonLarge
+            on:click={joinChat}
+            >Join Chat<LogInIcon size="20" class="ml-2" /></ButtonLarge
         >
     </form>
 </div>
@@ -69,8 +76,6 @@
 
     input[type="text"] {
         @apply w-full;
-        @apply px-4;
-        @apply py-2;
         @apply rounded-md;
     }
 

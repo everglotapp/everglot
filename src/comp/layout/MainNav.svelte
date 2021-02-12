@@ -8,7 +8,7 @@
             <a
                 aria-current={segment === undefined ? "page" : undefined}
                 class="logo font-bold uppercase tracking-wide"
-                href=".">Everglot</a
+                href=".">Everglot Demo</a
             >
         </li>
     </ul>

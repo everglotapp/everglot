@@ -3,8 +3,9 @@
     import { goto } from "@sapper/app"
     import { username, room } from "../stores"
 
-    import PageTitle from "../comp/typography/PageTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+    import { ChevronsRightIcon } from "svelte-feather-icons"
+
     import socketio from "socket.io-client"
 
     let socket: socketio.Server | undefined
@@ -64,7 +65,6 @@
 </svelte:head>
 
 <div class="container max-w-5xl py-8">
-    <PageTitle>Everglot Demo</PageTitle>
     <div class="my-8">
         <main class="chat-main">
             <div class="chat-sidebar bg-primary-lightest rounded-tl-md">
@@ -106,18 +106,28 @@
             </div>
         </main>
         <div class="chat-form-container rounded-bl-md rounded-br-md">
-            <form id="chat-form" on:submit|preventDefault={onSend}>
+            <form
+                id="chat-form"
+                on:submit|preventDefault={onSend}
+                class="justify-end items-center"
+            >
                 <input
                     id="msg"
                     type="text"
-                    placeholder="Enter Message"
+                    placeholder="Enter message …"
                     required
                     autocomplete="off"
-                    class="max-w-sm"
+                    class="max-w-xl border-none shadow-md px-4 py-4 w-full rounded-md"
                     bind:value={msg}
                 />
-                <ButtonLarge className="ml-4" tag="button" on:click={onSend}
-                    >Send</ButtonLarge
+                <ButtonLarge
+                    className="ml-4 px-6"
+                    tag="button"
+                    on:click={onSend}
+                    >Send<ChevronsRightIcon
+                        size="20"
+                        class="ml-2"
+                    /></ButtonLarge
                 >
             </form>
         </div>
@@ -143,7 +153,7 @@
         }
     }
 
-    #chat-messages .message {
+    .message {
         padding: 10px;
         margin-bottom: 15px;
         @apply bg-primary-lightest;
@@ -151,7 +161,7 @@
         overflow-wrap: break-word;
     }
 
-    #chat-messages .message .meta {
+    .message .meta {
         font-size: 15px;
         font-weight: bold;
         @apply text-primary-dark;
@@ -159,8 +169,12 @@
         margin-bottom: 7px;
     }
 
-    #chat-messages .message .meta span {
+    .message .meta span {
         @apply text-gray-bitdark;
+    }
+
+    .message p {
+        @apply mb-1;
     }
 
     .chat-form-container {
@@ -170,13 +184,6 @@
 
     .chat-form-container form {
         display: flex;
-    }
-
-    .chat-form-container input[type="text"] {
-        font-size: 16px;
-        padding: 5px;
-        height: 40px;
-        flex: 1;
     }
 
     @media (max-width: 700px) {

@@ -1,15 +1,52 @@
 <script lang="ts">
+    import { onMount } from "svelte"
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+    import Qs from "qs"
+    import socketio from "socket.io-client"
+
+    let socket: socketio.Server | undefined
+
+    let roomName = ""
+    let roomMessages: any[] = []
+    let roomUsers: any[] = []
+    let msg = ""
 
     // TODO: Check if user is signed in, if not redirect to sign in.
 
     // TODO: Read user data from database.
+    onMount(() => {
+        socket = socketio()
 
-    let msg = ""
+        const { username, room } = Qs.parse(location.search, {
+            ignoreQueryPrefix: true,
+        })
+
+        // Join chatroom
+        socket.emit("joinRoom", { username, room })
+
+        // Get room and users
+        socket.on("roomUsers", ({ room, users }) => {
+            roomName = room
+            roomUsers = [...users]
+        })
+        // Message from server
+        socket.on("message", (message) => {
+            roomMessages = [...messages, message]
+
+            // Scroll down
+            chatMessages.scrollTop = chatMessages.scrollHeight
+        })
+    })
 
     function onSend() {
-        console.log(msg)
+        const trimmedMsg = (msg = msg.trim())
+
+        if (!trimmedMsg) {
+            return false
+        }
+
+        socket?.emit("chatMessage", trimmedMsg)
     }
 </script>
 
@@ -24,12 +61,25 @@
             <div
                 class="chat-sidebar py-4 px-4 bg-primary-lightest rounded-tl-md"
             >
-                <h3><i class="fas fa-comments" /> Room Name:</h3>
-                <h2 id="room-name" />
-                <h3><i class="fas fa-users" /> Users</h3>
-                <ul id="users" />
+                <h3>Room Name:</h3>
+                <h2>{roomName}</h2>
+                <h3>Users</h3>
+                <ul>
+                    {#each roomUsers as user}
+                        <li>{user.username}}</li>
+                    {/each}
+                </ul>
             </div>
-            <div class="chat-messages rounded-tr-md" />
+            <div class="chat-messages rounded-tr-md">
+                {#each roomMessages as message}
+                    <div class="message">
+                        <p class="meta">
+                            {message.username}<span>{message.time}</span>
+                        </p>
+                        <p class="text">{message.text}</p>
+                    </div>
+                {/each}
+            </div>
         </main>
         <div class="chat-form-container rounded-bl-md rounded-br-md">
             <form id="chat-form">

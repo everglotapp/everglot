@@ -3,7 +3,7 @@
         <span>&copy; 2021 Everglot.</span>
     </div>
     <div class="flex self-center sm:space-x-8 sm:justify-end flex-col sm:flex-row">
-        <span class="cursor-not-allowed">Privacy</span>
+        <a href="https://everglot.com/privacy">Privacy</a>
         <span class="cursor-not-allowed">Imprint</span>
     </div>
 </footer>

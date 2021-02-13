@@ -1,6 +1,6 @@
 version: "3"
 
 services:
-    lang:
+    everglot-app:
         ports:
-            - "127.0.0.1:3000:3000"
+            - "127.0.0.1:8002:3000"

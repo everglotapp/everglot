@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+    everglot-app:
+        entrypoint: "npm run dev"
+        volumes:
+            - ./:/home/node/app

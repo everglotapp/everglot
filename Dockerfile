@@ -1,12 +1,14 @@
 from node:15
 
-WORKDIR /usr/src/app
+USER node
+RUN mkdir -p /home/node/app
+WORKDIR /home/node/app
 
-COPY package*.json ./
+COPY --chown=node:node package*.json ./
 
 RUN npm ci
 
-COPY . .
+COPY --chown=node:node . .
 
 RUN npm run build
 

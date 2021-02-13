@@ -2,64 +2,106 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    background-color: #fefefe;
-}
+@layer base {
+    body {
+        background-color: #fefefe;
+    }
 
-h1 {
-    @apply text-2xl;
-    @apply mb-12;
-}
-h2 {
-    @apply text-xl;
-    @apply mb-8;
-    @apply text-gray-dark;
-    @apply font-bold;
-}
-h3 {
-    @apply text-lg;
-    @apply mb-6;
-    @apply text-gray-dark;
-    @apply font-bold;
-}
-h4 {
-    @apply mb-4;
-    @apply text-gray-darkest;
-    @apply font-bold;
-}
-h5 {
-    @apply mb-4;
-    @apply text-gray-bitdark;
-    @apply font-bold;
-}
+    h1 {
+        @apply text-2xl;
+        @apply mb-12;
+    }
+    h2 {
+        @apply text-xl;
+        @apply mb-8;
+        @apply text-gray-dark;
+        @apply font-bold;
+    }
+    h3 {
+        @apply text-lg;
+        @apply mb-6;
+        @apply text-gray-dark;
+        @apply font-bold;
+    }
+    h4 {
+        @apply mb-4;
+        @apply text-gray-darkest;
+        @apply font-bold;
+    }
+    h5 {
+        @apply mb-4;
+        @apply text-gray-bitdark;
+        @apply font-bold;
+    }
 
-a {
-    @apply text-primary-dark;
-    @apply mb-2;
-    @apply font-bold;
-}
-p {
-    @apply mb-4;
-}
+    a {
+        @apply text-primary-dark;
+        @apply mb-2;
+        @apply font-bold;
+    }
+    p {
+        @apply mb-4;
+    }
 
-:root {
-    --dark-color-a: #667aff;
-    --dark-color-b: #7386ff;
-    --light-color: #e6e9ff;
-    --success-color: #5cb85c;
-    --error-color: #d9534f;
-}
+    :root {
+        --dark-color-a: #667aff;
+        --dark-color-b: #7386ff;
+        --light-color: #e6e9ff;
+        --success-color: #5cb85c;
+        --error-color: #d9534f;
+    }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-ul {
-    list-style: none;
-}
+    ul {
+        list-style: none;
+    }
 
-a {
-    text-decoration: none;
+    a {
+        text-decoration: none;
+    }
+
+    label {
+        @apply flex;
+        @apply tracking-wide;
+        @apply text-gray-bitdark;
+        @apply text-sm;
+        @apply mb-1;
+        @apply pl-1;
+    }
+    input,
+    [type="text"],
+    [type="email"],
+    [type="url"],
+    [type="password"],
+    [type="number"],
+    [type="date"],
+    [type="datetime-local"],
+    [type="month"],
+    [type="search"],
+    [type="tel"],
+    [type="time"],
+    [type="week"],
+    [multiple],
+    textarea,
+    select {
+        @apply flex;
+        @apply rounded-xl;
+        @apply border-gray-300;
+        @apply text-gray-600;
+        @apply py-2;
+        @apply px-3;
+        @apply leading-relaxed;
+        @apply focus:border-gray-300;
+        @apply focus:ring-2;
+        @apply focus:ring-gray-200;
+        @apply focus:ring-opacity-50;
+    }
+    input[type="email"]::placeholder {
+        @apply text-gray-bitlight;
+    }
 }

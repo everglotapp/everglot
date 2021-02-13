@@ -69,22 +69,24 @@
         <main class="chat-main">
             <div class="chat-sidebar bg-primary-lightest rounded-tl-md">
                 <div
-                    class="py-4 px-4 text-lg font-bold w-full text-gray-dark bg-gray-lightest mb-4"
+                    class="py-3 px-4 text-lg font-bold w-full border-8 border-primary-lightest bg-gray-lightest text-gray-dark mb-4"
                 >
                     {$room}
                 </div>
-                <h3 class="px-4 text-gray-bitdark font-bold mb-4">Users</h3>
-                <ul class="">
+                <h3 class="px-4 text-gray-bitdark font-bold text-sm mb-4">
+                    Users
+                </h3>
+                <ul>
                     {#each roomUsers as user}
                         {#if user.username === ""}
                             <li
-                                class="px-8 py-2 text-lg bg-gray-lightest font-bold text-gray-bitdark shadow-sm mb-1"
+                                class="px-8 py-2 text-lg bg-gray-lightest text-gray-bitdark shadow-sm mb-1"
                             >
                                 Everglot Bot
                             </li>
                         {:else}
                             <li
-                                class="px-8 py-2 text-lg bg-gray-lightest font-bold text-gray-dark shadow-sm mb-1"
+                                class="px-8 py-2 text-lg bg-gray-lightest text-gray-dark shadow-sm mb-1"
                             >
                                 {user.username}
                             </li>
@@ -157,7 +159,7 @@
         padding: 10px;
         margin-bottom: 15px;
         @apply bg-primary-lightest;
-        border-radius: 5px;
+        @apply rounded-md;
         overflow-wrap: break-word;
     }
 

@@ -17,7 +17,7 @@ export function start(server: Server) {
             // Welcome current user
             socket.emit(
                 "message",
-                formatMessage(botName, "Welcome to Everglot!")
+                formatMessage(botName, `Welcome to Everglot, ${username}!`)
             )
 
             // Broadcast when a user connects

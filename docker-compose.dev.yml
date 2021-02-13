@@ -5,3 +5,5 @@ services:
         entrypoint: "npm run dev"
         volumes:
             - ./:/home/node/app
+        ports:
+            - "127.0.0.1:3000:3000"

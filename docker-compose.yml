@@ -3,5 +3,9 @@ version: "3"
 services:
     everglot-app:
         image: everglot/everglot-app:latest
+        build:
+            context: .
         restart: always
         working_dir: /home/node/app
+        ports:
+            - "127.0.0.1:3000:3000"

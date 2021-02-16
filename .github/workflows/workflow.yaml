@@ -1,0 +1,55 @@
+on:
+  push:
+    branches:
+      - main
+    pull_request:
+      branches:
+      - main
+
+jobs:
+  build:
+    name: Build, Push and Deploy
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout main
+      uses: actions/checkout@v2
+      with:
+        ref: main
+
+    - name: Checkout k8s-setup repo
+      uses: actions/checkout@v2
+      with:
+        repository: everglotapp/k8s-setup
+        token: ${{ secrets.GH_ACCESS_TOKEN }}
+        path: k8s-setup
+        ref: main
+
+    - name: Build container image
+      run: docker build -t registry.digitalocean.com/everglot/everglot .
+
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2.1.0
+      with:
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+    - name: Log in to DigitalOcean Container Registry with short-lived credentials
+      run: doctl registry login --expiry-seconds 600
+
+    - name: Push image to DigitalOcean Container Registry
+      run: docker push registry.digitalocean.com/everglot/everglot
+
+    - name: Save DigitalOcean kubeconfig with short-lived credentials
+      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-1-20-2-do-0-ams3-1612982708095
+
+    - name: Delete Postgres Kubernetes Secrets if existed
+      run: kubectl delete secret postgres --ignore-not-found
+
+    - name: Inject Postgres Kubernetes Secrets from Github Secrets
+      run: kubectl create secret generic postgres --from-literal=postgres-password='${{ secrets.PGPASSWORD }}'
+
+    - name: Deploy to DigitalOcean Kubernetes
+      run: kubectl apply -f $GITHUB_WORKSPACE/k8s-setup/everglot/service-deployment.yml
+
+    - name: Verify deployment
+      run: kubectl rollout status deployment/everglot

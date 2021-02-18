@@ -42,7 +42,6 @@
     })
 
     function scrollDown() {
-        // Scroll down
         const messagesEl = document.getElementById("chat-messages")
         if (messagesEl) {
             messagesEl.scrollTop = messagesEl.scrollHeight

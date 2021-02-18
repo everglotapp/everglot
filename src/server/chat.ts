@@ -2,19 +2,82 @@ import type { Server } from "http"
 import socketio from "socket.io"
 import { formatMessage } from "./messages"
 import { userJoin, getCurrentUser, userLeave, getRoomUsers } from "./users"
-import type { Language } from "./rooms"
 import { ALPHABET } from "../constants"
 
 const botName = "Everglot Bot"
 
-let hangmanRunning: Record<Language["enName"], boolean> = {
-    English: false,
-    German: false,
-    French: false,
-    Italian: false,
-    Spanish: false,
-    Chinese: false,
-    Japanese: false,
+type HangmanLanguage = "English" | "German"
+class HangmanGame {
+    running: boolean = false
+    language: HangmanLanguage
+    picked: string[] = []
+    available: string[] = []
+    word: string = "Test"
+
+    constructor(language: HangmanLanguage) {
+        this.language = language
+        this.available = ALPHABET[language].filter(
+            (l: string) => l === l.toLowerCase()
+        )
+    }
+
+    start(): void {
+        this.running = true
+    }
+
+    letterPicked(l: string): boolean {
+        return this.picked.includes(l.toLowerCase())
+    }
+
+    letterAvailable(l: string): boolean {
+        return this.available.includes(l.toLowerCase())
+    }
+
+    pickLetter(l: string): void {
+        this.picked.push(l.toLowerCase())
+        this.available = this.available.filter(
+            (av: string) => l.toLowerCase() !== av
+        )
+    }
+
+    get over(): boolean {
+        for (let i = 0; i < this.word.length; ++i) {
+            if (!this.picked.includes(this.word[i].toLowerCase())) {
+                return false
+            }
+        }
+        return true
+    }
+
+    nextRound(): boolean {
+        if (!this.over) {
+            return false
+        }
+        this.reset("newword")
+        return true
+    }
+
+    reset(newWord: string): void {
+        this.word = newWord
+        this.picked = []
+        this.available = ALPHABET[this.language].filter(
+            (l: string) => l === l.toLowerCase()
+        )
+    }
+
+    get publicWord(): string {
+        let result = ""
+        for (let i = 0; i < this.word.length; ++i) {
+            result += this.picked.includes(this.word[i].toLowerCase())
+                ? this.word[i]
+                : "_ "
+        }
+        return result
+    }
+}
+let hangmanGames: Record<HangmanLanguage, HangmanGame> = {
+    English: new HangmanGame("English"),
+    German: new HangmanGame("German"),
 }
 
 export function start(server: Server) {
@@ -67,35 +130,52 @@ export function start(server: Server) {
                     "message",
                     formatMessage(user.username, msg)
                 )
-                type HangmanLanguage = "English" | "German"
                 if (["English", "German"].includes(user.room)) {
-                    if (hangmanRunning[user.room]) {
+                    const hangman = hangmanGames[user.room as HangmanLanguage]
+                    if (hangman.running) {
+                        if (msg.length === 1) {
+                            if (!hangman.letterPicked(msg)) {
+                                if (hangman.letterAvailable(msg)) {
+                                    hangman.pickLetter(msg)
+                                    sendBotMessage(
+                                        `Current word: ${hangman.publicWord}`,
+                                        user.room
+                                    )
+                                    if (hangman.nextRound()) {
+                                        sendBotMessage(
+                                            `New word: ${hangman.publicWord}`,
+                                            user.room
+                                        )
+                                    }
+                                }
+                            }
+                        }
                         if (
                             ALPHABET[user.room as HangmanLanguage].includes(msg)
                         ) {
-                            sendBotMessage(
-                                `You have chosen letter ${msg}`,
-                                user.room
-                            )
                         }
                     }
                     if (msg.startsWith("!hangman")) {
-                        if (hangmanRunning[user.room]) {
-                            console.log(user.room)
+                        if (hangman.running) {
                             sendBotMessage(
                                 "Hangman is already running.",
                                 user.room
                             )
                         } else {
-                            hangmanRunning[user.room] = true
-                            sendBotMessage("Started a hangman game.", user.room)
+                            hangman.start()
+                            sendBotMessage(
+                                `Started a hangman game: ${hangman.publicWord}`,
+                                user.room
+                            )
                         }
                     }
                 } else {
-                    sendBotMessage(
-                        "So far, hangman is only supported in English and German.",
-                        user.room
-                    )
+                    if (msg.startsWith("!hangman")) {
+                        sendBotMessage(
+                            "So far, hangman is only supported in English and German.",
+                            user.room
+                        )
+                    }
                 }
             }
         })

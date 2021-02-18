@@ -52,6 +52,7 @@
     label {
         @apply flex font-bold text-gray-bitdark text-sm mb-1;
     }
+
     input {
         @apply shadow-md rounded-md px-4 py-3 mb-3 w-full border-none;
     }

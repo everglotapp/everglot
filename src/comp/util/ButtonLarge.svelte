@@ -59,6 +59,7 @@
         a {
             @apply py-3 px-10 inline-flex rounded-xl font-bold cursor-pointer transition-colors;
         }
+
         button:disabled,
         button[disabled],
         a:disabled,

@@ -17,12 +17,7 @@
 
     // TODO: Check if user is signed in, if not redirect to sign in.
 
-    // TODO: Read user data from database.
-    onMount(() => {
-        if (!$username.length) {
-            goto("/")
-        }
-
+    function subscribe() {
         socket = socketio()
 
         // Join chatroom
@@ -39,6 +34,15 @@
             roomMessages = [...roomMessages, message]
             scrollDown()
         })
+    }
+
+    // TODO: Read user data from database.
+    onMount(() => {
+        if (!$username.length) {
+            goto("/")
+        }
+
+        subscribe()
     })
 
     function scrollDown() {
@@ -64,7 +68,7 @@
 
     function changeRoom() {
         socket.emit("leaveRoom")
-        socket.emit("joinRoom", { username: $username, room: $room })
+        subscribe()
     }
 </script>
 

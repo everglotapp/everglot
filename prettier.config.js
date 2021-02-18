@@ -22,5 +22,11 @@ module.exports = {
                 tabWidth: 4,
             },
         },
+        {
+            files: "*.css",
+            options: {
+                tabWidth: 2,
+            },
+        },
     ],
 }

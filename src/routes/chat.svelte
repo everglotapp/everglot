@@ -183,6 +183,7 @@
         max-height: 500px;
         min-height: 40vh;
         overflow-y: scroll;
+
         @screen 2xl {
             height: 500px;
         }
@@ -191,17 +192,19 @@
     .message {
         padding: 10px;
         margin-bottom: 15px;
+        overflow-wrap: break-word;
+
         @apply bg-primary-lightest;
         @apply rounded-md;
-        overflow-wrap: break-word;
     }
 
     .message .meta {
         font-size: 15px;
         font-weight: bold;
-        @apply text-primary-dark;
         opacity: 0.7;
         margin-bottom: 7px;
+
+        @apply text-primary-dark;
     }
 
     .message .meta span {
@@ -214,6 +217,7 @@
 
     .chat-form-container {
         padding: 20px 30px;
+
         @apply bg-gray-lightest;
     }
 

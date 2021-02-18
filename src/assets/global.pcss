@@ -68,10 +68,12 @@
     label {
         @apply flex;
         @apply tracking-wide;
-        @apply text-gray-bitdark;
         @apply text-sm;
         @apply mb-1;
         @apply pl-1;
+        @apply mb-2;
+        @apply text-gray-bitdark;
+        @apply font-bold;
     }
     input,
     [type="text"],
@@ -103,5 +105,11 @@
     }
     input[type="email"]::placeholder {
         @apply text-gray-bitlight;
+    }
+}
+
+@layer components {
+    .form-control {
+        margin-bottom: 20px;
     }
 }

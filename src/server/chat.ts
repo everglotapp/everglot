@@ -39,6 +39,11 @@ export function start(server: Server) {
         })
 
         // Listen for chatMessage
+        socket.on("leaveRoom", () => {
+            userLeave(socket.id)
+        })
+
+        // Listen for chatMessage
         socket.on("chatMessage", (msg) => {
             const user = getCurrentUser(socket.id)
 

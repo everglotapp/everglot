@@ -1,36 +1,53 @@
 <script lang="ts">
+    import { username, room } from "../stores"
     import { onMount } from "svelte"
     import { goto } from "@sapper/app"
-    import { username, room } from "../stores"
 
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
-    import { LogInIcon, ChevronsRightIcon } from "svelte-feather-icons"
+    import { ChevronsRightIcon } from "svelte-feather-icons"
+
+    import type { User } from "../server/users"
+    import type { Language } from "../server/rooms"
+    import type { Message } from "../server/messages"
 
     import socketio from "socket.io-client"
 
-    let socket: socketio.Server | undefined
+    let socket: SocketIOClient.Socket | undefined
 
-    let roomObj
-    let roomMessages: any[] = []
-    let roomUsers: any[] = []
+    let roomMessages: Message[] = []
+    let roomUsers: User[] = []
     let msg = ""
 
     // TODO: Check if user is signed in, if not redirect to sign in.
 
     function subscribe() {
         socket = socketio()
+        if (!socket) {
+            return
+        }
 
         // Join chatroom
         socket.emit("joinRoom", { username: $username, room: $room })
 
         // Get room and users
-        socket.on("roomUsers", ({ room, users }) => {
-            roomObj = room
-            roomUsers = [...users]
-            scrollDown()
-        })
+        socket.on(
+            "roomUsers",
+            ({
+                room: recvRoom,
+                users,
+            }: {
+                room: Language["enName"]
+                users: User[]
+            }) => {
+                if (recvRoom !== $room) {
+                    return
+                }
+                roomUsers = [...users]
+                scrollDown()
+            }
+        )
         // Message from server
-        socket.on("message", (message) => {
+        socket.on("message", (message: Message) => {
             roomMessages = [...roomMessages, message]
             scrollDown()
         })
@@ -67,7 +84,7 @@
     }
 
     function changeRoom() {
-        socket.emit("leaveRoom")
+        socket?.emit("leaveRoom")
         subscribe()
     }
 </script>

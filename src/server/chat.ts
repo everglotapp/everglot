@@ -2,19 +2,25 @@ import type { Server } from "http"
 import socketio from "socket.io"
 import { formatMessage } from "./messages"
 import { userJoin, getCurrentUser, userLeave, getRoomUsers } from "./users"
+import type { Language } from "./rooms"
 import { ALPHABET } from "../constants"
 
 const botName = "Everglot Bot"
 
-let hangmanRunning = {
+let hangmanRunning: Record<Language["enName"], boolean> = {
     English: false,
     German: false,
+    French: false,
+    Italian: false,
+    Spanish: false,
+    Chinese: false,
+    Japanese: false,
 }
 
 export function start(server: Server) {
     const io = socketio(server)
     // Run when client connects
-    io.on("connection", (socket) => {
+    io.on("connection", (socket: socketio.Socket) => {
         socket.on("joinRoom", ({ username, room }) => {
             const user = userJoin(socket.id, username, room)
 
@@ -52,15 +58,21 @@ export function start(server: Server) {
         // Listen for chatMessage
         socket.on("chatMessage", (msg) => {
             const user = getCurrentUser(socket.id)
+            if (!user) {
+                return
+            }
 
             if (msg) {
                 io.to(user.room).emit(
                     "message",
                     formatMessage(user.username, msg)
                 )
+                type HangmanLanguage = "English" | "German"
                 if (["English", "German"].includes(user.room)) {
                     if (hangmanRunning[user.room]) {
-                        if (ALPHABET[user.room].includes(msg)) {
+                        if (
+                            ALPHABET[user.room as HangmanLanguage].includes(msg)
+                        ) {
                             sendBotMessage(
                                 `You have chosen letter ${msg}`,
                                 user.room
@@ -106,7 +118,7 @@ export function start(server: Server) {
             }
         })
 
-        function sendBotMessage(msg, room, delay = 300) {
+        function sendBotMessage(msg: string, room: string, delay = 300) {
             setTimeout(() => {
                 io.to(room).emit("message", formatMessage(botName, msg))
             }, delay)

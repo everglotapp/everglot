@@ -116,3 +116,5 @@ export const ALPHABET = {
         "Z",
     ],
 }
+
+export default { ALPHABET }

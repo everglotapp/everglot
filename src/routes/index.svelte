@@ -7,7 +7,11 @@
     import { ArrowRightIcon } from "svelte-feather-icons"
 
     function setUsername() {
-        if (document.forms["set-username"].reportValidity()) {
+        const form = document.forms[0]
+        if (form.name !== "set-username") {
+            return
+        }
+        if (form.reportValidity()) {
             goto("/chat")
         }
     }

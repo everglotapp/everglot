@@ -1,8 +1,20 @@
-const users = []
+import type { Language } from "./rooms"
+
+export type User = {
+    socketId: string
+    username: string
+    room: Language["enName"]
+}
+
+const users: User[] = []
 
 // Join user to chat
-export function userJoin(id, username, room) {
-    const user = { id, username, room }
+export function userJoin(
+    socketId: string,
+    username: string,
+    room: Language["enName"]
+) {
+    const user = { socketId, username, room }
 
     users.push(user)
 
@@ -10,13 +22,13 @@ export function userJoin(id, username, room) {
 }
 
 // Get current user
-export function getCurrentUser(id) {
-    return users.find((user) => user.id === id)
+export function getCurrentUser(socketId: string) {
+    return users.find((user) => user.socketId === socketId)
 }
 
 // User leaves chat
-export function userLeave(id) {
-    const index = users.findIndex((user) => user.id === id)
+export function userLeave(socketId: string) {
+    const index = users.findIndex((user) => user.socketId === socketId)
 
     if (index !== -1) {
         return users.splice(index, 1)[0]
@@ -24,6 +36,6 @@ export function userLeave(id) {
 }
 
 // Get room users
-export function getRoomUsers(room) {
+export function getRoomUsers(room: Language["enName"]) {
     return users.filter((user) => user.room === room)
 }

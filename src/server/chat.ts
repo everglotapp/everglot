@@ -2,83 +2,10 @@ import type { Server } from "http"
 import socketio from "socket.io"
 import { formatMessage } from "./messages"
 import { userJoin, getCurrentUser, userLeave, getRoomUsers } from "./users"
-import { ALPHABET } from "../constants"
+import { hangmanGames } from "./hangman"
+import type { HangmanLanguage } from "./hangman"
 
 const botName = "Everglot Bot"
-
-type HangmanLanguage = "English" | "German"
-class HangmanGame {
-    running: boolean = false
-    language: HangmanLanguage
-    picked: string[] = []
-    available: string[] = []
-    word: string = "Test"
-
-    constructor(language: HangmanLanguage) {
-        this.language = language
-        this.available = ALPHABET[language].filter(
-            (l: string) => l === l.toLowerCase()
-        )
-    }
-
-    start(): void {
-        this.running = true
-    }
-
-    letterPicked(l: string): boolean {
-        return this.picked.includes(l.toLowerCase())
-    }
-
-    letterAvailable(l: string): boolean {
-        return this.available.includes(l.toLowerCase())
-    }
-
-    pickLetter(l: string): void {
-        this.picked.push(l.toLowerCase())
-        this.available = this.available.filter(
-            (av: string) => l.toLowerCase() !== av
-        )
-    }
-
-    get over(): boolean {
-        for (let i = 0; i < this.word.length; ++i) {
-            if (!this.picked.includes(this.word[i].toLowerCase())) {
-                return false
-            }
-        }
-        return true
-    }
-
-    nextRound(): boolean {
-        if (!this.over) {
-            return false
-        }
-        this.reset("newword")
-        return true
-    }
-
-    reset(newWord: string): void {
-        this.word = newWord
-        this.picked = []
-        this.available = ALPHABET[this.language].filter(
-            (l: string) => l === l.toLowerCase()
-        )
-    }
-
-    get publicWord(): string {
-        let result = ""
-        for (let i = 0; i < this.word.length; ++i) {
-            result += this.picked.includes(this.word[i].toLowerCase())
-                ? this.word[i]
-                : "_ "
-        }
-        return result
-    }
-}
-let hangmanGames: Record<HangmanLanguage, HangmanGame> = {
-    English: new HangmanGame("English"),
-    German: new HangmanGame("German"),
-}
 
 export function start(server: Server) {
     const io = socketio(server)
@@ -92,7 +19,10 @@ export function start(server: Server) {
             // Welcome current user
             socket.emit(
                 "message",
-                formatMessage(botName, `Welcome to Everglot, ${username}!`)
+                formatMessage(
+                    botName,
+                    `Welcome to Everglot, ${username}! Write !help to see available commands.`
+                )
             )
 
             // Broadcast when a user connects
@@ -111,6 +41,16 @@ export function start(server: Server) {
                 room: user.room,
                 users: getRoomUsers(user.room),
             })
+
+            if (["English", "German"].includes(user.room)) {
+                const hangman = hangmanGames[user.room as HangmanLanguage]
+                if (hangman.running) {
+                    sendBotMessage(
+                        `Current word: ${hangman.publicWord}`,
+                        user.room
+                    )
+                }
+            }
         })
 
         // Listen for chatMessage
@@ -130,7 +70,13 @@ export function start(server: Server) {
                     "message",
                     formatMessage(user.username, msg)
                 )
-                if (["English", "German"].includes(user.room)) {
+                if (msg.startsWith("!help")) {
+                    sendBotMessage(
+                        "Available commands: !hangman, !help",
+                        user.room
+                    )
+                    return
+                } else if (["English", "German"].includes(user.room)) {
                     const hangman = hangmanGames[user.room as HangmanLanguage]
                     if (hangman.running) {
                         if (msg.length === 1) {
@@ -149,10 +95,6 @@ export function start(server: Server) {
                                     }
                                 }
                             }
-                        }
-                        if (
-                            ALPHABET[user.room as HangmanLanguage].includes(msg)
-                        ) {
                         }
                     }
                     if (msg.startsWith("!hangman")) {

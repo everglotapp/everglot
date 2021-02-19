@@ -48,8 +48,12 @@
         )
         // Message from server
         socket.on("message", (message: Message) => {
+            let force = !chatIsManuallyScrolled()
             roomMessages = [...roomMessages, message]
-            scrollDown()
+            if (message.username === $username) {
+                force = true
+            }
+            setTimeout(() => scrollDown(true), 150)
         })
     }
 
@@ -62,11 +66,43 @@
         subscribe()
     })
 
-    function scrollDown() {
-        const messagesEl = document.getElementById("chat-messages")
-        if (messagesEl) {
-            messagesEl.scrollTop = messagesEl.scrollHeight
+    function scrollDown(force: boolean = false) {
+        const container = document.getElementById("chat-messages")
+        if (container) {
+            if (!force && !isScrolled(container)) {
+                return
+            }
+            scroll(container)
         }
+    }
+
+    /**
+     * This function will set the scrollTop of an element using either the
+     * scroll method if available, or by changing the scrollTop property.
+     * If no scrollTop is specified, it'll scroll to the bottom.
+     * src: https://github.com/theomessin/vue-chat-scroll/blob/8a68a271fecaffad43d25300ca192e0ada88100b/src/scroll.ts
+     */
+    const scroll = (el: Element, scrollTop?: number): void => {
+        const top = scrollTop || el.scrollHeight - el.clientHeight
+        if (typeof el.scroll === "function") {
+            el.scroll({ top })
+        } else {
+            el.scrollTop = top
+        }
+    }
+
+    const chatIsManuallyScrolled = (scrollTop?: number): boolean => {
+        const container = document.getElementById("chat-messages")
+        return container ? isScrolled(container) : false
+    }
+
+    /**
+     * Whether the element is scrolled to the specified position.
+     * By default: Whether the element is scrolled to the bottom.
+     */
+    const isScrolled = (el: Element, scrollTop?: number): boolean => {
+        const top = scrollTop || el.scrollHeight - el.clientHeight
+        return el.scrollTop === top
     }
 
     function onSend() {

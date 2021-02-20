@@ -1,5 +1,10 @@
 import type { Language } from "./rooms"
 
+type SocketHistory = {
+    greeted: boolean
+}
+const socketHistories: Record<string, SocketHistory> = {}
+
 export type User = {
     socketId: string
     username: string
@@ -17,6 +22,7 @@ export function userJoin(
     const user = { socketId, username, room }
 
     users.push(user)
+    socketHistories[socketId] ||= { greeted: false }
 
     return user
 }
@@ -38,4 +44,14 @@ export function userLeave(socketId: string) {
 // Get room users
 export function getRoomUsers(room: Language["enName"]) {
     return users.filter((user) => user.room === room)
+}
+
+// Whether user has been greeted before.
+export function userIsNew(user: User) {
+    return !socketHistories[user.socketId].greeted
+}
+
+// Mark user as greeted.
+export function userGreeted(user: User) {
+    socketHistories[user.socketId].greeted = true
 }

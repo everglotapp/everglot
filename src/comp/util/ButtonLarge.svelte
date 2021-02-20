@@ -26,7 +26,7 @@
 <script lang="ts">
     export let variant: Variant = "FILLED"
     export let color: Color = "PRIMARY"
-    export let tag: keyof HTMLElementTagNameMap = "a"
+    export let tag: "a" | "button" = "a"
     export let href: string = ""
     export let type: string = "button"
     export let disabled: boolean = false

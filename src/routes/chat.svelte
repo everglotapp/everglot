@@ -19,15 +19,16 @@
     let msg = ""
 
     // TODO: Check if user is signed in, if not redirect to sign in.
-
     function subscribe() {
-        socket = socketio()
         if (!socket) {
             return
         }
 
         // Join chatroom
-        socket.emit("joinRoom", { username: $username, room: $room })
+        socket.emit("joinRoom", {
+            username: $username,
+            room: $room,
+        })
 
         // Get room and users
         socket.on(
@@ -57,12 +58,24 @@
         })
     }
 
+    function unsubscribe() {
+        if (!socket) {
+            return
+        }
+        socket.off("roomUsers")
+        socket.off("message")
+    }
+
     // TODO: Read user data from database.
     onMount(() => {
         if (!$username.length) {
             goto("/")
         }
 
+        socket = socketio()
+        if (!socket) {
+            return
+        }
         subscribe()
     })
 
@@ -120,7 +133,9 @@
     }
 
     function changeRoom() {
+        unsubscribe()
         socket?.emit("leaveRoom")
+        roomMessages = []
         subscribe()
     }
 </script>
@@ -133,13 +148,13 @@
     <div class="chat-main">
         <div class="chat-sidebar bg-primary-lightest rounded-tl-md">
             <div
-                class="py-3 px-4 text-lg font-bold w-full border-8 border-primary-lightest bg-gray-lightest text-gray-dark mb-4"
+                class="py-3 px-4 text-lg font-bold w-full border-8 border-primary-lightest text-gray-dark mb-4"
             >
                 <select
                     name="room"
                     id="room"
                     bind:value={$room}
-                    on:blur={changeRoom}
+                    on:change={changeRoom}
                     class="border-none shadow-sm w-full"
                 >
                     <option value="English">English</option>
@@ -174,9 +189,10 @@
             {#each roomMessages as message}
                 <div class="message">
                     <p class="meta">
-                        {message.username}&nbsp;–&nbsp;<span
-                            >{message.time}</span
-                        >
+                        <span class="username">{message.username}</span>
+                        {#if message.username === "Everglot Bot"}[{$room}]{/if}
+                        &nbsp;–&nbsp;
+                        <span>{message.time}</span>
                     </p>
                     <p class="text">{message.text}</p>
                 </div>
@@ -240,6 +256,10 @@
         opacity: 0.7;
         margin-bottom: 7px;
 
+        @apply text-gray-bitdark;
+    }
+
+    .message .meta .username {
         @apply text-primary-dark;
     }
 

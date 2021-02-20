@@ -1,7 +1,14 @@
 import type { Server } from "http"
 import socketio from "socket.io"
 import { formatMessage } from "./messages"
-import { userJoin, getCurrentUser, userLeave, getRoomUsers } from "./users"
+import {
+    userJoin,
+    getCurrentUser,
+    userLeave,
+    getRoomUsers,
+    userIsNew,
+    userGreeted,
+} from "./users"
 import { hangmanGames } from "./hangman"
 import type { HangmanLanguage } from "./hangman"
 
@@ -16,14 +23,17 @@ export function start(server: Server) {
 
             socket.join(user.room)
 
-            // Welcome current user
-            socket.emit(
-                "message",
-                formatMessage(
-                    botName,
-                    `Welcome to Everglot, ${username}! Write !help to see available commands.`
+            if (userIsNew(user)) {
+                // Welcome current user
+                io.to(user.room).emit(
+                    "message",
+                    formatMessage(
+                        botName,
+                        `Welcome to Everglot, ${username}! Write !help to see available commands.`
+                    )
                 )
-            )
+                userGreeted(user)
+            }
 
             // Broadcast when a user connects
             socket.broadcast
@@ -80,19 +90,20 @@ export function start(server: Server) {
                     const hangman = hangmanGames[user.room as HangmanLanguage]
                     if (hangman.running) {
                         if (msg.length === 1) {
-                            if (!hangman.letterPicked(msg)) {
-                                if (hangman.letterAvailable(msg)) {
-                                    hangman.pickLetter(msg)
+                            if (
+                                !hangman.letterPicked(msg) &&
+                                hangman.letterAvailable(msg)
+                            ) {
+                                hangman.pickLetter(msg)
+                                sendBotMessage(
+                                    `Current word: ${hangman.publicWord}`,
+                                    user.room
+                                )
+                                if (hangman.nextRound()) {
                                     sendBotMessage(
-                                        `Current word: ${hangman.publicWord}`,
+                                        `You guessed correctly! Here's the next word: ${hangman.publicWord}`,
                                         user.room
                                     )
-                                    if (hangman.nextRound()) {
-                                        sendBotMessage(
-                                            `New word: ${hangman.publicWord}`,
-                                            user.room
-                                        )
-                                    }
                                 }
                             }
                         }

@@ -2,18 +2,96 @@ import { ALPHABET } from "../constants"
 
 export type HangmanLanguage = "English" | "German"
 
+const DICTIONARY: Record<HangmanLanguage, string[]> = {
+    English: [
+        "me",
+        "new",
+        "old",
+        "forever",
+        "think",
+        "believe",
+        "stubborn",
+        "indicate",
+        "imply",
+        "lose",
+        "win",
+        "I",
+        "you",
+        "he",
+        "she",
+        "we",
+        "us",
+        "they",
+        "thus",
+        "hangman",
+        "city",
+        "country",
+        "land",
+        "river",
+        "sea",
+        "surprise",
+        "zip",
+        "natives",
+        "speedup",
+        "abort",
+        "unsurprisingly",
+        "absolutely",
+        "effect",
+        "bone",
+        "place",
+        "body",
+        "eye",
+    ],
+    German: [
+        "ich",
+        "du",
+        "er",
+        "sie",
+        "es",
+        "verlieren",
+        "gewinnen",
+        "Spiel",
+        "Galgenmännchen",
+        "daher",
+        "sobald",
+        "immer",
+        "oft",
+        "stur",
+        "Auge",
+        "Hintergrund",
+        "Körper",
+        "selten",
+        "Überraschung",
+        "Brot",
+        "jedenfalls",
+        "unbedingt",
+        "sogar",
+        "durchaus",
+        "soeben",
+        "laufen",
+        "Bürgermeister",
+        "Stadt",
+        "Land",
+        "Fluss",
+        "See",
+        "Meer",
+    ],
+}
+
 export class HangmanGame {
     running: boolean = false
     language: HangmanLanguage
     picked: string[] = []
     available: string[] = []
-    word: string = "Test"
+    word: string
 
     constructor(language: HangmanLanguage) {
         this.language = language
         this.available = ALPHABET[language].filter(
             (l: string) => l === l.toLowerCase()
         )
+        const dict = DICTIONARY[this.language]
+        this.word = dict[Math.floor(Math.random() * dict.length)]
     }
 
     start(): void {
@@ -48,7 +126,8 @@ export class HangmanGame {
         if (!this.over) {
             return false
         }
-        this.reset("newword")
+        const dict = DICTIONARY[this.language]
+        this.reset(dict[Math.floor(Math.random() * dict.length)])
         return true
     }
 

@@ -45,8 +45,11 @@ jobs:
     - name: Inject Postgres Kubernetes Secrets from Github Secrets
       run: kubectl create secret generic postgres --from-literal=postgres-password='${{ secrets.PGPASSWORD }}'
 
-    - name: Deploy to DigitalOcean Kubernetes
+    - name: Deploy Config to DigitalOcean Kubernetes
       run: kubectl apply -f $GITHUB_WORKSPACE/k8s-setup/everglot/service-deployment.yml
+
+    - name: Rollout Deployment to DigitalOcean Kubernetes
+      run: kubectl rollout restart deployment/everglot
 
     - name: Verify deployment
       run: kubectl rollout status deployment/everglot

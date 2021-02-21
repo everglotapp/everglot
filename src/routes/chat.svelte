@@ -106,7 +106,7 @@
 
     const chatIsManuallyScrolled = (scrollTop?: number): boolean => {
         const container = document.getElementById("chat-messages")
-        return container ? isScrolled(container) : false
+        return container ? isScrolled(container, scrollTop) : false
     }
 
     /**

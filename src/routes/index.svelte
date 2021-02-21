@@ -114,14 +114,6 @@
                 />
             </div>
         </fieldset>
-        <fieldset>
-            <legend>What timezone are you in? *</legend>
-            <div class="form-control">
-                <select class="w-full md:w-auto">
-                    <option>GMT</option>
-                </select>
-            </div>
-        </fieldset>
         <ButtonLarge
             tag="button"
             className="w-full justify-center"

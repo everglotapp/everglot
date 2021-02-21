@@ -56,41 +56,6 @@
             </div>
         </fieldset>
         <fieldset>
-            <legend>What language(s) do you speak natively? *</legend>
-            <p class="text-xs text-gray-bitdark my-0 mb-1">
-                These are the languages that you could help others learn.
-            </p>
-            <div class="form-control">
-                <ButtonLarge
-                    tag="button"
-                    className="mr-1"
-                    variant={teach.German ? "FILLED" : "OUTLINED"}
-                    on:click={() => {
-                        teach.German = !teach.German
-                        if (teach.German) {
-                            learn.German = false
-                        }
-                    }}>German</ButtonLarge
-                >
-                <ButtonLarge
-                    tag="button"
-                    className="mr-1"
-                    variant={teach.English ? "FILLED" : "OUTLINED"}
-                    on:click={() => {
-                        teach.English = !teach.English
-                        if (teach.English) {
-                            learn.English = false
-                        }
-                    }}>English</ButtonLarge
-                >
-                <input
-                    class="inline-flex w-auto"
-                    type="text"
-                    placeholder="Other …"
-                />
-            </div>
-        </fieldset>
-        <fieldset>
             <legend>What language(s) do you want to learn? *</legend>
             <p class="text-xs text-gray-bitdark my-0 mb-1">
                 Please only choose languages that you are already learning or
@@ -101,6 +66,7 @@
                     tag="button"
                     className="mr-1"
                     variant={learn.German ? "FILLED" : "OUTLINED"}
+                    disabled={teach.German}
                     on:click={() => {
                         learn.German = !learn.German
                         if (learn.German) {
@@ -112,10 +78,48 @@
                     tag="button"
                     className="mr-1"
                     variant={learn.English ? "FILLED" : "OUTLINED"}
+                    disabled={teach.English}
                     on:click={() => {
                         learn.English = !learn.English
                         if (learn.English) {
                             teach.English = false
+                        }
+                    }}>English</ButtonLarge
+                >
+                <input
+                    class="inline-flex w-auto"
+                    type="text"
+                    placeholder="Other …"
+                />
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>What language(s) do you speak natively? *</legend>
+            <p class="text-xs text-gray-bitdark my-0 mb-1">
+                These are the languages that you could help others learn.
+            </p>
+            <div class="form-control">
+                <ButtonLarge
+                    tag="button"
+                    className="mr-1"
+                    variant={teach.German ? "FILLED" : "OUTLINED"}
+                    disabled={learn.German}
+                    on:click={() => {
+                        teach.German = !teach.German
+                        if (teach.German) {
+                            learn.German = false
+                        }
+                    }}>German</ButtonLarge
+                >
+                <ButtonLarge
+                    tag="button"
+                    className="mr-1"
+                    variant={teach.English ? "FILLED" : "OUTLINED"}
+                    disabled={learn.English}
+                    on:click={() => {
+                        teach.English = !teach.English
+                        if (teach.English) {
+                            learn.English = false
                         }
                     }}>English</ButtonLarge
                 >

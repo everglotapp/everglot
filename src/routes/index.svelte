@@ -67,6 +67,9 @@
                     variant={teach.German ? "FILLED" : "OUTLINED"}
                     on:click={() => {
                         teach.German = !teach.German
+                        if (teach.German) {
+                            learn.German = false
+                        }
                     }}>German</ButtonLarge
                 >
                 <ButtonLarge
@@ -75,6 +78,9 @@
                     variant={teach.English ? "FILLED" : "OUTLINED"}
                     on:click={() => {
                         teach.English = !teach.English
+                        if (teach.English) {
+                            learn.English = false
+                        }
                     }}>English</ButtonLarge
                 >
                 <input
@@ -97,6 +103,9 @@
                     variant={learn.German ? "FILLED" : "OUTLINED"}
                     on:click={() => {
                         learn.German = !learn.German
+                        if (learn.German) {
+                            teach.German = false
+                        }
                     }}>German</ButtonLarge
                 >
                 <ButtonLarge
@@ -105,6 +114,9 @@
                     variant={learn.English ? "FILLED" : "OUTLINED"}
                     on:click={() => {
                         learn.English = !learn.English
+                        if (learn.English) {
+                            teach.English = false
+                        }
                     }}>English</ButtonLarge
                 >
                 <input
@@ -131,7 +143,7 @@
 
     input,
     select {
-        @apply shadow-md rounded-xl px-4 py-3 mb-3 my-1 border border-gray-lightest;
+        @apply rounded-xl px-4 py-3 mb-3 my-1 border border-gray-light;
     }
 
     fieldset {

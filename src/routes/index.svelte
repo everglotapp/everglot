@@ -41,8 +41,8 @@
     >
         <fieldset>
             <div class="form-control">
-                <label for="username">Pick a username *</label>
-                <p class="text-xs text-gray-bitdark my-0">
+                <label for="username">Pick a username*</label>
+                <p class="helper-text">
                     The others will see you under this name.
                 </p>
                 <input
@@ -56,8 +56,8 @@
             </div>
         </fieldset>
         <fieldset>
-            <legend>What language(s) do you want to learn? *</legend>
-            <p class="text-xs text-gray-bitdark my-0 mb-1">
+            <legend>What language(s) do you want to learn?*</legend>
+            <p class="helper-text">
                 Please only choose languages that you are already learning or
                 really interested in learning.
             </p>
@@ -94,8 +94,8 @@
             </div>
         </fieldset>
         <fieldset>
-            <legend>What language(s) do you speak natively? *</legend>
-            <p class="text-xs text-gray-bitdark my-0 mb-1">
+            <legend>What language(s) do you speak natively?*</legend>
+            <p class="helper-text">
                 These are the languages that you could help others learn.
             </p>
             <div class="form-control">
@@ -142,12 +142,33 @@
 <style>
     label,
     legend {
-        @apply flex font-bold text-gray-bitdark text-sm mb-1;
+        @apply flex font-bold text-gray-bitdark mb-1;
+    }
+
+    .helper-text {
+        @apply text-sm text-gray-bitdark my-0;
     }
 
     input,
     select {
         @apply rounded-xl px-4 py-3 mb-3 my-1 border border-gray-light;
+    }
+    [type="text"]:focus,
+    [type="email"]:focus,
+    [type="url"]:focus,
+    [type="password"]:focus,
+    [type="number"]:focus,
+    [type="date"]:focus,
+    [type="datetime-local"]:focus,
+    [type="month"]:focus,
+    [type="search"]:focus,
+    [type="tel"]:focus,
+    [type="time"]:focus,
+    [type="week"]:focus,
+    [multiple]:focus,
+    textarea:focus,
+    select:focus {
+        @apply border-primary ring-primary;
     }
 
     fieldset {

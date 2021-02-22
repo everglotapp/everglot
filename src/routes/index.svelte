@@ -25,6 +25,7 @@
         German: false,
         English: false,
     }
+    let gender: "f" | "m" | "d" | null = null
 </script>
 
 <svelte:head>
@@ -56,10 +57,10 @@
             </div>
         </fieldset>
         <fieldset>
-            <legend>What language(s) do you want to learn?*</legend>
+            <legend>What language(s) do you want to learn (2 max)?*</legend>
             <p class="helper-text">
-                Please only choose languages that you are already learning or
-                really interested in learning.
+                Please only choose languages that you really want to learn or
+                already are learning.
             </p>
             <div class="form-control">
                 <ButtonLarge
@@ -87,16 +88,17 @@
                     }}>English</ButtonLarge
                 >
                 <input
-                    class="inline-flex w-auto"
+                    class="inline-flex w-auto focus:border-primary focus:ring-primary focus:outline-primary"
                     type="text"
                     placeholder="Other …"
+                    disabled={learn.English && learn.German}
                 />
             </div>
         </fieldset>
-        <fieldset>
-            <legend>What language(s) do you speak natively?*</legend>
+        <fieldset class="mb-4">
+            <legend>What language(s) do you speak natively (2 max)?*</legend>
             <p class="helper-text">
-                These are the languages that you could help others learn.
+                These are the languages that you could help others out with.
             </p>
             <div class="form-control">
                 <ButtonLarge
@@ -124,51 +126,77 @@
                     }}>English</ButtonLarge
                 >
                 <input
-                    class="inline-flex w-auto"
+                    class="inline-flex w-auto focus:border-primary focus:ring-primary focus:outline-primary"
                     type="text"
+                    disabled={teach.English && teach.German}
                     placeholder="Other …"
                 />
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>What gender do you identify as?</legend>
+            <p class="helper-text">
+                We'll use this information only to optimize group compositions.
+            </p>
+            <div class="form-control">
+                <ButtonLarge
+                    tag="button"
+                    className="mr-1 mb-1"
+                    variant={gender === "f" ? "FILLED" : "OUTLINED"}
+                    on:click={() => (gender = gender === "f" ? null : "f")}
+                    >Female</ButtonLarge
+                >
+                <ButtonLarge
+                    tag="button"
+                    className="mr-1 mb-1"
+                    variant={gender === "m" ? "FILLED" : "OUTLINED"}
+                    on:click={() => (gender = gender === "m" ? null : "m")}
+                    >Male</ButtonLarge
+                >
+                <ButtonLarge
+                    tag="button"
+                    variant={gender === "d" ? "FILLED" : "OUTLINED"}
+                    on:click={() => (gender = gender === "d" ? null : "d")}
+                    >Other</ButtonLarge
+                >
             </div>
         </fieldset>
         <ButtonLarge
             tag="button"
             className="w-full justify-center"
             on:click={setUsername}
-            >Next<ArrowRightIcon size="20" class="ml-2" /></ButtonLarge
+            >Next<ArrowRightIcon
+                class="ml-2 self-center"
+                size="24"
+            /></ButtonLarge
         >
     </form>
 </div>
 
 <style>
+    label {
+        @apply px-0;
+    }
+
     label,
     legend {
-        @apply flex font-bold text-gray-bitdark mb-1;
+        @apply text-sm flex font-bold text-gray-bitdark mb-1;
     }
 
     .helper-text {
-        @apply text-sm text-gray-bitdark my-0;
+        @apply text-sm text-gray-bitdark my-0 mb-1;
     }
 
     input,
     select {
         @apply rounded-xl px-4 py-3 mb-3 my-1 border border-gray-light;
     }
-    [type="text"]:focus,
-    [type="email"]:focus,
-    [type="url"]:focus,
-    [type="password"]:focus,
-    [type="number"]:focus,
-    [type="date"]:focus,
-    [type="datetime-local"]:focus,
-    [type="month"]:focus,
-    [type="search"]:focus,
-    [type="tel"]:focus,
-    [type="time"]:focus,
-    [type="week"]:focus,
-    [multiple]:focus,
-    textarea:focus,
-    select:focus {
-        @apply border-primary ring-primary;
+
+    input:disabled,
+    input[disabled],
+    select:disabled,
+    select[disabled] {
+        @apply cursor-not-allowed text-gray-light;
     }
 
     fieldset {

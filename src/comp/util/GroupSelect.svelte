@@ -3,7 +3,8 @@
     import Select from "svelte-select"
 
     export let items: any[]
-    export let selectedValue: any[]
+    export let selected: any[] | null
+    export let placeholder: string = "Other …"
 
     const dispatch = createEventDispatcher()
 
@@ -13,7 +14,13 @@
 </script>
 
 <div class="wrapper inline-flex">
-    <Select {items} {selectedValue} on:select={handleSelect} isMulti={true} />
+    <Select
+        {items}
+        selectedValue={selected}
+        on:select={handleSelect}
+        isMulti={true}
+        {placeholder}
+    />
 </div>
 
 <style>
@@ -26,15 +33,23 @@
         --multiItemActiveColor: theme("colors.white");
         --placeholderColor: theme("colors.gray.bitdark");
         --itemColor: theme("colors.primary.DEFAULT");
+        --multiItemBorderRadius: theme("borderRadius.lg");
         --itemHoverBG: theme("colors.primary.lightest");
         --itemIsActiveBG: theme("colors.primary.DEFAULT");
         --itemActiveBackground: theme("colors.primary.DEFAULT");
-        --inputPadding: theme("padding.3") theme("padding.10");
+        --inputPadding: theme("padding.2") theme("padding.2");
+        --multiSelectPadding: theme("padding.0") theme("padding.2");
+        --inputFontSize: theme("fontSize.base");
+        --inputLeft: theme("spacing.1");
         @apply text-white font-bold;
     }
 
-    .wrapper:focus {
-        --border: theme("borderWidth.DEFAULT") solid
+    .wrapper :global(input) {
+        max-width: 5rem;
+    }
+
+    .wrapper :global(.selectContainer.focused) {
+        box-shadow: 0 0 0 calc(0px + theme("ringOffsetWidth.1"))
             theme("colors.primary.DEFAULT");
     }
 </style>

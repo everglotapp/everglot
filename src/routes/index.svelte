@@ -4,20 +4,14 @@
     import { username } from "../stores"
 
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+    import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import GroupSelect from "../comp/util/GroupSelect.svelte"
     import PageTitle from "../comp/typography/PageTitle.svelte"
 
     import { ArrowRightIcon } from "svelte-feather-icons"
 
-    function setUsername() {
-        const form = document.forms[0]
-        if (form.name !== "set-username") {
-            return
-        }
-        if (form.reportValidity()) {
-            goto("/chat")
-        }
-    }
+    const MAX_LEARNING = 2
+    const MAX_TEACHING = 2
     enum Gender {
         FEMALE = "f",
         MALE = "m",
@@ -25,28 +19,96 @@
     }
 
     let teach = {
-        German: false,
-        English: false,
+        de: false,
+        en: false,
     }
     let learn = {
-        German: false,
-        English: false,
+        de: false,
+        en: false,
     }
-    let gender: Gender | null = null
 
-    let items = [
-        { value: "chocolate", label: "Chocolate" },
-        { value: "pizza", label: "Pizza" },
-        { value: "cake", label: "Cake" },
-        { value: "chips", label: "Chips" },
-        { value: "ice-cream", label: "Ice Cream" },
+    type LanguageItem = { value: string; label: string }
+    let items: LanguageItem[] = [
+        { value: "zh", label: "Chinese" },
+        { value: "es", label: "Spanish" },
+        { value: "ar", label: "Arabic" },
+        { value: "it", label: "Italian" },
+        { value: "jp", label: "Japanese" },
     ]
+    let learnOther: LanguageItem[] = []
+    let teachOther: LanguageItem[] = []
 
-    let selectedValue = [{ value: "cake", label: "Cake" }]
+    $: totalTeaching =
+        Object.values(teach)
+            .map(Number)
+            .reduce((n, i) => n + i) + teachOther.length
+    $: totalLearning =
+        Object.values(learn)
+            .map(Number)
+            .reduce((n, i) => n + i) + learnOther.length
 
-    function handleSelect(event: CustomEvent) {
-        console.log("selected item:", event.detail)
-        // .. do something here 🙂
+    $: learnable =
+        totalLearning >= MAX_LEARNING
+            ? []
+            : items.filter((item) => {
+                  const lang = item.value
+                  return Object.keys(learn).includes(lang)
+                      ? !learn[lang as keyof typeof learn]
+                      : !teachOther.find(({ value }) => value === lang)
+              })
+    $: teachable =
+        totalTeaching >= MAX_TEACHING
+            ? []
+            : items.filter((item) => {
+                  const lang = item.value
+                  return Object.keys(teach).includes(lang)
+                      ? !teach[lang as keyof typeof teach]
+                      : !learnOther.find(({ value }) => value === lang)
+              })
+
+    function handleSelectLearnOther(event: CustomEvent<LanguageItem[] | null>) {
+        console.log("learnOther", event.detail)
+        learnOther = [...(event.detail || [])]
+    }
+    function handleSelectTeachOther(event: CustomEvent<LanguageItem[] | null>) {
+        console.log("teachOther", event.detail)
+        teachOther = [...(event.detail || [])]
+    }
+
+    function toggleLearn(lang: keyof typeof learn) {
+        learn = {
+            ...learn,
+            [lang]: !learn[lang],
+        }
+        if (learn[lang]) {
+            teach = { ...teach, [lang]: false }
+        }
+    }
+
+    function toggleTeach(lang: keyof typeof teach) {
+        teach = {
+            ...teach,
+            [lang]: !teach[lang],
+        }
+        if (teach[lang]) {
+            learn = { ...learn, [lang]: false }
+        }
+    }
+
+    let gender: Gender | null = null
+    function toggleGender(pickedGender: Gender) {
+        return (gender = gender === pickedGender ? null : pickedGender)
+    }
+
+    function handleSubmit() {
+        const form = document.forms[0]
+        if (form.name !== "user-profile") {
+            return
+        }
+        // TODO: replace with JS form validation
+        if (form.reportValidity()) {
+            goto("/chat")
+        }
     }
 </script>
 
@@ -57,10 +119,10 @@
 <div class="container max-w-2xl px-4 py-8 md:py-16">
     <PageTitle>Tell us a little bit about yourself</PageTitle>
     <form
-        name="set-username"
+        name="user-profile"
         action="/chat"
         class="py-10 md:px-8"
-        on:submit|preventDefault={setUsername}
+        on:submit|preventDefault={handleSubmit}
     >
         <fieldset>
             <div class="form-control">
@@ -79,80 +141,65 @@
             </div>
         </fieldset>
         <fieldset>
-            <legend>What language(s) do you want to learn (2 max)?*</legend>
+            <legend
+                >What language(s) do you want to learn ({MAX_LEARNING} max)?*</legend
+            >
             <p class="helper-text">
                 Please only choose languages that you really want to learn or
                 already are learning.
             </p>
             <div class="form-control">
-                <ButtonLarge
+                <ButtonSmall
                     tag="button"
                     className="mr-1 mb-1"
-                    variant={learn.German ? "FILLED" : "OUTLINED"}
-                    disabled={teach.German}
-                    on:click={() => {
-                        learn.German = !learn.German
-                        if (learn.German) {
-                            teach.German = false
-                        }
-                    }}>German</ButtonLarge
+                    variant={learn.de ? "FILLED" : "OUTLINED"}
+                    disabled={teach.de ||
+                        (!learn.de && totalLearning >= MAX_LEARNING)}
+                    on:click={() => toggleLearn("de")}>German</ButtonSmall
                 >
-                <ButtonLarge
+                <ButtonSmall
                     tag="button"
                     className="mr-1 mb-1"
-                    variant={learn.English ? "FILLED" : "OUTLINED"}
-                    disabled={teach.English}
-                    on:click={() => {
-                        learn.English = !learn.English
-                        if (learn.English) {
-                            teach.English = false
-                        }
-                    }}>English</ButtonLarge
+                    variant={learn.en ? "FILLED" : "OUTLINED"}
+                    disabled={teach.en ||
+                        (!learn.en && totalLearning >= MAX_LEARNING)}
+                    on:click={() => toggleLearn("en")}>English</ButtonSmall
                 >
-                <GroupSelect {items} {selectedValue} on:select={handleSelect} />
-                <!-- <input
-                    class="inline-flex w-auto focus:border-primary focus:ring-primary focus:outline-primary"
-                    type="text"
-                    placeholder="Other …"
-                    disabled={learn.English && learn.German}
-                /> -->
+                <GroupSelect
+                    items={learnable}
+                    selected={learnOther.length ? learnOther : null}
+                    on:select={handleSelectLearnOther}
+                />
             </div>
         </fieldset>
         <fieldset class="mb-4">
-            <legend>What language(s) do you speak natively (2 max)?*</legend>
+            <legend
+                >What language(s) do you speak natively ({MAX_TEACHING} max)?*</legend
+            >
             <p class="helper-text">
                 These are the languages that you could help others out with.
             </p>
             <div class="form-control">
-                <ButtonLarge
+                <ButtonSmall
                     tag="button"
                     className="mr-1"
-                    variant={teach.German ? "FILLED" : "OUTLINED"}
-                    disabled={learn.German}
-                    on:click={() => {
-                        teach.German = !teach.German
-                        if (teach.German) {
-                            learn.German = false
-                        }
-                    }}>German</ButtonLarge
+                    variant={teach.de ? "FILLED" : "OUTLINED"}
+                    disabled={learn.de ||
+                        (!teach.de && totalTeaching >= MAX_TEACHING)}
+                    on:click={() => toggleTeach("de")}>German</ButtonSmall
                 >
-                <ButtonLarge
+                <ButtonSmall
                     tag="button"
                     className="mr-1"
-                    variant={teach.English ? "FILLED" : "OUTLINED"}
-                    disabled={learn.English}
-                    on:click={() => {
-                        teach.English = !teach.English
-                        if (teach.English) {
-                            learn.English = false
-                        }
-                    }}>English</ButtonLarge
+                    variant={teach.en ? "FILLED" : "OUTLINED"}
+                    disabled={learn.en ||
+                        (!teach.en && totalTeaching >= MAX_TEACHING)}
+                    on:click={() => toggleTeach("en")}>English</ButtonSmall
                 >
-                <input
-                    class="inline-flex w-auto focus:border-primary focus:ring-primary focus:outline-primary"
-                    type="text"
-                    disabled={teach.English && teach.German}
-                    placeholder="Other …"
+                <GroupSelect
+                    items={teachable}
+                    selected={teachOther.length ? teachOther : null}
+                    on:select={handleSelectTeachOther}
                 />
             </div>
         </fieldset>
@@ -162,37 +209,31 @@
                 We'll use this information only to optimize group compositions.
             </p>
             <div class="form-control">
-                <ButtonLarge
+                <ButtonSmall
                     tag="button"
                     className="mr-1 mb-1"
                     variant={gender === Gender.FEMALE ? "FILLED" : "OUTLINED"}
-                    on:click={() =>
-                        (gender =
-                            gender === Gender.FEMALE ? null : Gender.FEMALE)}
-                    >Female</ButtonLarge
+                    on:click={() => toggleGender(Gender.FEMALE)}
+                    >Female</ButtonSmall
                 >
-                <ButtonLarge
+                <ButtonSmall
                     tag="button"
                     className="mr-1 mb-1"
                     variant={gender === Gender.MALE ? "FILLED" : "OUTLINED"}
-                    on:click={() =>
-                        (gender = gender === Gender.MALE ? null : Gender.MALE)}
-                    >Male</ButtonLarge
+                    on:click={() => toggleGender(Gender.MALE)}>Male</ButtonSmall
                 >
-                <ButtonLarge
+                <ButtonSmall
                     tag="button"
                     variant={gender === Gender.OTHER ? "FILLED" : "OUTLINED"}
-                    on:click={() =>
-                        (gender =
-                            gender === Gender.OTHER ? null : Gender.OTHER)}
-                    >Other</ButtonLarge
+                    on:click={() => toggleGender(Gender.OTHER)}
+                    >Other</ButtonSmall
                 >
             </div>
         </fieldset>
         <ButtonLarge
             tag="button"
             className="w-full justify-center"
-            on:click={setUsername}
+            on:click={handleSubmit}
             >Next<ArrowRightIcon
                 class="ml-2 self-center"
                 size="24"

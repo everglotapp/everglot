@@ -1,8 +1,10 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
+
     import { username } from "../stores"
 
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+    import GroupSelect from "../comp/util/GroupSelect.svelte"
     import PageTitle from "../comp/typography/PageTitle.svelte"
 
     import { ArrowRightIcon } from "svelte-feather-icons"
@@ -16,6 +18,11 @@
             goto("/chat")
         }
     }
+    enum Gender {
+        FEMALE = "f",
+        MALE = "m",
+        OTHER = "o",
+    }
 
     let teach = {
         German: false,
@@ -25,7 +32,22 @@
         German: false,
         English: false,
     }
-    let gender: "f" | "m" | "d" | null = null
+    let gender: Gender | null = null
+
+    let items = [
+        { value: "chocolate", label: "Chocolate" },
+        { value: "pizza", label: "Pizza" },
+        { value: "cake", label: "Cake" },
+        { value: "chips", label: "Chips" },
+        { value: "ice-cream", label: "Ice Cream" },
+    ]
+
+    let selectedValue = [{ value: "cake", label: "Cake" }]
+
+    function handleSelect(event: CustomEvent) {
+        console.log("selected item:", event.detail)
+        // .. do something here 🙂
+    }
 </script>
 
 <svelte:head>
@@ -65,7 +87,7 @@
             <div class="form-control">
                 <ButtonLarge
                     tag="button"
-                    className="mr-1"
+                    className="mr-1 mb-1"
                     variant={learn.German ? "FILLED" : "OUTLINED"}
                     disabled={teach.German}
                     on:click={() => {
@@ -77,7 +99,7 @@
                 >
                 <ButtonLarge
                     tag="button"
-                    className="mr-1"
+                    className="mr-1 mb-1"
                     variant={learn.English ? "FILLED" : "OUTLINED"}
                     disabled={teach.English}
                     on:click={() => {
@@ -87,12 +109,13 @@
                         }
                     }}>English</ButtonLarge
                 >
-                <input
+                <GroupSelect {items} {selectedValue} on:select={handleSelect} />
+                <!-- <input
                     class="inline-flex w-auto focus:border-primary focus:ring-primary focus:outline-primary"
                     type="text"
                     placeholder="Other …"
                     disabled={learn.English && learn.German}
-                />
+                /> -->
             </div>
         </fieldset>
         <fieldset class="mb-4">
@@ -142,21 +165,26 @@
                 <ButtonLarge
                     tag="button"
                     className="mr-1 mb-1"
-                    variant={gender === "f" ? "FILLED" : "OUTLINED"}
-                    on:click={() => (gender = gender === "f" ? null : "f")}
+                    variant={gender === Gender.FEMALE ? "FILLED" : "OUTLINED"}
+                    on:click={() =>
+                        (gender =
+                            gender === Gender.FEMALE ? null : Gender.FEMALE)}
                     >Female</ButtonLarge
                 >
                 <ButtonLarge
                     tag="button"
                     className="mr-1 mb-1"
-                    variant={gender === "m" ? "FILLED" : "OUTLINED"}
-                    on:click={() => (gender = gender === "m" ? null : "m")}
+                    variant={gender === Gender.MALE ? "FILLED" : "OUTLINED"}
+                    on:click={() =>
+                        (gender = gender === Gender.MALE ? null : Gender.MALE)}
                     >Male</ButtonLarge
                 >
                 <ButtonLarge
                     tag="button"
-                    variant={gender === "d" ? "FILLED" : "OUTLINED"}
-                    on:click={() => (gender = gender === "d" ? null : "d")}
+                    variant={gender === Gender.OTHER ? "FILLED" : "OUTLINED"}
+                    on:click={() =>
+                        (gender =
+                            gender === Gender.OTHER ? null : Gender.OTHER)}
                     >Other</ButtonLarge
                 >
             </div>
@@ -187,15 +215,12 @@
         @apply text-sm text-gray-bitdark my-0 mb-1;
     }
 
-    input,
-    select {
+    input {
         @apply rounded-xl px-4 py-3 mb-3 my-1 border border-gray-light;
     }
 
     input:disabled,
-    input[disabled],
-    select:disabled,
-    select[disabled] {
+    input[disabled] {
         @apply cursor-not-allowed text-gray-light;
     }
 

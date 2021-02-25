@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
 
-    import { username } from "../stores"
+    import { username, room } from "../stores"
 
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
@@ -67,11 +67,9 @@
               })
 
     function handleSelectLearnOther(event: CustomEvent<LanguageItem[] | null>) {
-        console.log("learnOther", event.detail)
         learnOther = [...(event.detail || [])]
     }
     function handleSelectTeachOther(event: CustomEvent<LanguageItem[] | null>) {
-        console.log("teachOther", event.detail)
         teachOther = [...(event.detail || [])]
     }
 
@@ -132,6 +130,11 @@
                         return
                     }
                     if (res.success === true) {
+                        $room = learn.en
+                            ? "English"
+                            : learn.de
+                            ? "German"
+                            : learnOther[0].label
                         goto("/chat")
                     } else {
                         // TODO: Submission failed. Give feedback.

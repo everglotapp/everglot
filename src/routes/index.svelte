@@ -75,7 +75,7 @@
         teachOther = [...(event.detail || [])]
     }
 
-    function toggleLearn(lang: keyof typeof learn) {
+    function toggleLearn(lang: keyof typeof teach & keyof typeof learn) {
         learn = {
             ...learn,
             [lang]: !learn[lang],
@@ -85,7 +85,7 @@
         }
     }
 
-    function toggleTeach(lang: keyof typeof teach) {
+    function toggleTeach(lang: keyof typeof teach & keyof typeof learn) {
         teach = {
             ...teach,
             [lang]: !teach[lang],
@@ -100,15 +100,47 @@
         return (gender = gender === pickedGender ? null : pickedGender)
     }
 
+    let submitting = false
     function handleSubmit() {
         const form = document.forms[0]
         if (form.name !== "user-profile") {
             return
         }
         // TODO: replace with JS form validation
-        if (form.reportValidity()) {
-            goto("/chat")
+        if (!form.reportValidity()) {
+            // TODO: give feedback that submission failed and why
+            return
         }
+        submitting = true
+        fetch("/profile/", {
+            method: "post",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: $username,
+                gender,
+            }),
+        })
+            .then((response) => {
+                if (response.status !== 200) {
+                    return
+                }
+                response.json().then((res) => {
+                    if (!res.hasOwnProperty("success")) {
+                        return
+                    }
+                    if (res.success === true) {
+                        goto("/chat")
+                    } else {
+                        // TODO: Submission failed. Give feedback.
+                    }
+                })
+            })
+            .then(() => {
+                submitting = false
+            })
     }
 </script>
 
@@ -234,6 +266,7 @@
             tag="button"
             className="w-full justify-center"
             on:click={handleSubmit}
+            disabled={submitting}
             >Next<ArrowRightIcon
                 class="ml-2 self-center"
                 size="24"

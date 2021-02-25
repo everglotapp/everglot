@@ -62,6 +62,7 @@
     }
 
     .wrapper :global(.selectContainer .multiSelectItem .multiSelectItem_clear),
+    .wrapper :global(.selectContainer .clearSelect),
     .wrapper :global(.listContainer .listItem),
     .wrapper :global(.listContainer .listItem .item) {
         @apply cursor-pointer;

@@ -177,7 +177,7 @@
                 >What language(s) do you speak natively ({MAX_TEACHING} max)?*</legend
             >
             <p class="helper-text">
-                These are the languages that you could help others out with.
+                These are languages that you could help others out with.
             </p>
             <div class="form-control">
                 <ButtonSmall

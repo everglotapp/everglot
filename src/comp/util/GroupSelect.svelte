@@ -52,4 +52,18 @@
         box-shadow: 0 0 0 calc(0px + theme("ringOffsetWidth.1"))
             theme("colors.primary.DEFAULT");
     }
+
+    .wrapper :global(.selectContainer input) {
+        @apply cursor-text;
+    }
+
+    .wrapper :global(.selectContainer.focused input) {
+        @apply shadow-none;
+    }
+
+    .wrapper :global(.selectContainer .multiSelectItem .multiSelectItem_clear),
+    .wrapper :global(.listContainer .listItem),
+    .wrapper :global(.listContainer .listItem .item) {
+        @apply cursor-pointer;
+    }
 </style>

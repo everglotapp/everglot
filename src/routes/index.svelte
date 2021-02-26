@@ -13,7 +13,7 @@
     const MAX_LEARNING = 2
     const MAX_TEACHING = 2
     enum Gender {
-        FEMALE = "f",
+        FEMALE = "g",
         MALE = "m",
         OTHER = "o",
     }
@@ -203,6 +203,7 @@
                 <GroupSelect
                     items={learnable}
                     selected={learnOther.length ? learnOther : null}
+                    hideInput={totalLearning >= MAX_LEARNING}
                     on:select={handleSelectLearnOther}
                 />
             </div>
@@ -234,6 +235,7 @@
                 <GroupSelect
                     items={teachable}
                     selected={teachOther.length ? teachOther : null}
+                    hideInput={totalTeaching >= MAX_TEACHING}
                     on:select={handleSelectTeachOther}
                 />
             </div>

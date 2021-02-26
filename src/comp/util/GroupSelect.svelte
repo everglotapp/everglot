@@ -4,6 +4,7 @@
 
     export let items: any[]
     export let selected: any[] | null
+    export let hideInput: boolean = false
     export let placeholder: string = "Other …"
 
     const dispatch = createEventDispatcher()
@@ -13,7 +14,7 @@
     }
 </script>
 
-<div class="wrapper inline-flex">
+<div class="wrapper inline-flex" class:hideInput>
     <Select
         {items}
         selectedValue={selected}
@@ -34,6 +35,7 @@
         --placeholderColor: theme("colors.gray.bitdark");
         --itemColor: theme("colors.primary.DEFAULT");
         --multiItemBorderRadius: theme("borderRadius.lg");
+        --multiItemMargin: 0 0.25rem 0 0;
         --itemHoverBG: theme("colors.primary.lightest");
         --itemIsActiveBG: theme("colors.primary.DEFAULT");
         --itemActiveBackground: theme("colors.primary.DEFAULT");
@@ -57,8 +59,23 @@
         @apply cursor-text;
     }
 
-    .wrapper :global(.selectContainer.focused input) {
-        @apply shadow-none;
+    .wrapper :global(.selectContainer .multiSelectItem) {
+        @apply self-center;
+    }
+
+    .wrapper.hideInput :global(.selectContainer .multiSelectItem + input) {
+        max-width: 1.5rem;
+    }
+
+    .wrapper:not(.hideInput)
+        :global(.selectContainer .multiSelectItem + input) {
+        border-left: 2px solid theme("colors.primary.DEFAULT");
+        @apply rounded-none pl-2;
+    }
+
+    .wrapper :global(.selectContainer.focused input),
+    .wrapper :global(.selectContainer input:focus) {
+        box-shadow: none !important;
     }
 
     .wrapper :global(.selectContainer .multiSelectItem .multiSelectItem_clear),

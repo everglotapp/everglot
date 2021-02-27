@@ -10,9 +10,10 @@
     import type { Language } from "../server/rooms"
     import type { Message } from "../server/messages"
 
-    import socketio from "socket.io-client"
+    import { io } from "socket.io-client"
+    import type SocketIO from "socket.io-client"
 
-    let socket: SocketIOClient.Socket | undefined
+    let socket: SocketIO.Socket | undefined
 
     let roomMessages: Message[] = []
     let roomUsers: User[] = []
@@ -31,39 +32,17 @@
         })
 
         // Get room and users
-        socket.on(
-            "roomUsers",
-            ({
-                room: recvRoom,
-                users,
-            }: {
-                room: Language["enName"]
-                users: User[]
-            }) => {
-                if (recvRoom !== $room) {
-                    return
-                }
-                roomUsers = [...users]
-                scrollDown()
-            }
-        )
+        socket.on("roomUsers", onRoomUsers)
         // Message from server
-        socket.on("message", (message: Message) => {
-            let force = !chatIsManuallyScrolled()
-            roomMessages = [...roomMessages, message]
-            if (message.username === $username) {
-                force = true
-            }
-            setTimeout(() => scrollDown(true), 150)
-        })
+        socket.on("message", onMessage)
     }
 
     function unsubscribe() {
         if (!socket) {
             return
         }
-        socket.off("roomUsers")
-        socket.off("message")
+        socket.off("roomUsers", onRoomUsers)
+        socket.off("message", onMessage)
     }
 
     // TODO: Read user data from database.
@@ -72,7 +51,7 @@
             goto("/")
         }
 
-        socket = socketio()
+        socket = io()
         if (!socket) {
             return
         }
@@ -130,6 +109,29 @@
         }
 
         socket?.emit("chatMessage", trimmedMsg)
+    }
+
+    function onRoomUsers({
+        room: recvRoom,
+        users,
+    }: {
+        room: Language["enName"]
+        users: User[]
+    }) {
+        if (recvRoom !== $room) {
+            return
+        }
+        roomUsers = [...users]
+        scrollDown()
+    }
+
+    function onMessage(message: Message) {
+        let force = !chatIsManuallyScrolled()
+        roomMessages = [...roomMessages, message]
+        if (message.username === $username) {
+            force = true
+        }
+        setTimeout(() => scrollDown(true), 150)
     }
 
     function changeRoom() {

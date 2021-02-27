@@ -2,17 +2,19 @@ export type Room = {
     languageCode2: Language["code2"]
 }
 
+type EnglishLanguageName =
+    | "English"
+    | "German"
+    | "French"
+    | "Italian"
+    | "Spanish"
+    | "Chinese"
+    | "Japanese"
+
 export type Language = {
     code2: string //two letters ISO 639-1 language code
     code3: string // three letters ISO 639-2
-    enName:
-        | "English"
-        | "German"
-        | "French"
-        | "Italian"
-        | "Spanish"
-        | "Chinese"
-        | "Japanese"
+    enName: EnglishLanguageName
 }
 
 export const LANGUAGES: Language[] = [

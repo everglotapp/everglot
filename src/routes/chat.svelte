@@ -150,12 +150,13 @@
             <div
                 class="py-3 px-4 text-lg font-bold w-full border-8 border-primary-lightest text-gray-dark mb-4"
             >
+                <!-- svelte-ignore a11y-no-onchange -->
                 <select
                     name="room"
                     id="room"
                     bind:value={$room}
                     on:change={changeRoom}
-                    class="border-none shadow-sm w-full"
+                    class="border-none shadow-sm rounded-xl w-full"
                 >
                     <option value="English">English</option>
                     <option value="German">German</option>
@@ -171,13 +172,13 @@
                 {#each roomUsers as user}
                     {#if user.username === ""}
                         <li
-                            class="px-8 py-2 text-lg bg-gray-lightest text-gray-bitdark shadow-sm mb-1"
+                            class="px-8 py-2 text-lg bg-gray-lightest text-gray-bitdark shadow-sm mb-1 overflow-hidden overflow-ellipsis"
                         >
                             Everglot Bot
                         </li>
                     {:else}
                         <li
-                            class="px-8 py-2 text-lg bg-gray-lightest text-gray-dark shadow-sm mb-1"
+                            class="px-8 py-2 text-lg bg-gray-lightest text-gray-dark shadow-sm mb-1 overflow-hidden overflow-ellipsis"
                         >
                             {user.username}
                         </li>

@@ -86,7 +86,7 @@ export function start(server: Server) {
                         user.room
                     )
                     return
-                } else if (["English", "German"].includes(user.room)) {
+                } else if (Object.keys(hangmanGames).includes(user.room)) {
                     const hangman = hangmanGames[user.room as HangmanLanguage]
                     if (hangman.running) {
                         if (msg.length === 1) {

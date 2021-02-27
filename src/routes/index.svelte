@@ -1,29 +1,171 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
-    import { username } from "../stores"
+    import { getLocales } from "@marcelovicentegc/i18n-iso-languages"
+
+    import { username, room } from "../stores"
 
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+    import ButtonSmall from "../comp/util/ButtonSmall.svelte"
+    import GroupSelect from "../comp/util/GroupSelect.svelte"
     import PageTitle from "../comp/typography/PageTitle.svelte"
 
     import { ArrowRightIcon } from "svelte-feather-icons"
 
-    function setUsername() {
-        const form = document.forms[0]
-        if (form.name !== "set-username") {
-            return
+    enum Gender {
+        FEMALE = "g",
+        MALE = "m",
+        OTHER = "o",
+    }
+
+    const locales = getLocales()
+
+    const MAX_LEARNING = 2
+    const MAX_TEACHING = 2
+
+    let teach: Record<string, boolean> = {
+        de: false,
+        en: false,
+    }
+    let learn: Record<string, boolean> = {
+        de: false,
+        en: false,
+    }
+
+    type LanguageItem = { value: string; label: string }
+    let items: LanguageItem[] = locales
+        .filter((locale) => !["en", "de"].includes(locale.ISO6391))
+        .map((locale) => ({
+            value: locale.ISO6391,
+            label: locale.officialLanguage,
+        }))
+
+    let learnOther: LanguageItem[] = []
+    let teachOther: LanguageItem[] = []
+
+    enum CefrLevel {
+        A1 = "A1",
+        A2 = "A2",
+        B1 = "B1",
+        B2 = "B2",
+        C1 = "C1",
+        C2 = "C2",
+    }
+    let learningLevels: Record<string, CefrLevel | null> = {
+        en: null,
+        de: null,
+        ...Object.fromEntries(items.map((item) => [item.value, null])),
+    }
+
+    $: totalTeaching =
+        Object.values(teach)
+            .map(Number)
+            .reduce((n, i) => n + i) + teachOther.length
+    $: totalLearning =
+        Object.values(learn)
+            .map(Number)
+            .reduce((n, i) => n + i) + learnOther.length
+    $: learningCodes = [
+        ...Object.keys(learn).filter((code) => learn[code]),
+        ...learnOther.map((item) => item.value),
+    ]
+
+    $: learnable =
+        totalLearning >= MAX_LEARNING
+            ? []
+            : items.filter((item) => {
+                  const lang = item.value
+                  return Object.keys(learn).includes(lang)
+                      ? !learn[lang as keyof typeof learn]
+                      : !teachOther.find(({ value }) => value === lang)
+              })
+    $: teachable =
+        totalTeaching >= MAX_TEACHING
+            ? []
+            : items.filter((item) => {
+                  const lang = item.value
+                  return Object.keys(teach).includes(lang)
+                      ? !teach[lang as keyof typeof teach]
+                      : !learnOther.find(({ value }) => value === lang)
+              })
+
+    function handleSelectLearnOther(event: CustomEvent<LanguageItem[] | null>) {
+        learnOther = [...(event.detail || [])]
+    }
+    function handleSelectTeachOther(event: CustomEvent<LanguageItem[] | null>) {
+        teachOther = [...(event.detail || [])]
+    }
+
+    function toggleLearn(lang: keyof typeof teach & keyof typeof learn) {
+        learn = {
+            ...learn,
+            [lang]: !learn[lang],
         }
-        if (form.reportValidity()) {
-            goto("/chat")
+        if (learn[lang]) {
+            teach = { ...teach, [lang]: false }
         }
     }
 
-    let teach = {
-        German: false,
-        English: false,
+    function toggleTeach(lang: keyof typeof teach & keyof typeof learn) {
+        teach = {
+            ...teach,
+            [lang]: !teach[lang],
+        }
+        if (teach[lang]) {
+            learn = { ...learn, [lang]: false }
+        }
     }
-    let learn = {
-        German: false,
-        English: false,
+
+    let gender: Gender | null = null
+    function toggleGender(pickedGender: Gender) {
+        return (gender = gender === pickedGender ? null : pickedGender)
+    }
+
+    let submitting = false
+    function handleSubmit() {
+        const form = document.forms[0]
+        if (form.name !== "user-profile") {
+            return
+        }
+        // TODO: replace with JS form validation
+        if (!form.reportValidity()) {
+            // TODO: give feedback that submission failed and why
+            return
+        }
+        submitting = true
+        fetch("/profile/", {
+            method: "post",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: $username,
+                gender,
+            }),
+        })
+            .then((response) => {
+                if (response.status !== 200) {
+                    return
+                }
+                response.json().then((res) => {
+                    if (!res.hasOwnProperty("success")) {
+                        return
+                    }
+                    if (res.success === true) {
+                        $room = learn.en
+                            ? "English"
+                            : learn.de
+                            ? "German"
+                            : learnOther[0].label
+                        goto("/chat")
+                    } else {
+                        // TODO: Submission failed. Give feedback.
+                    }
+                })
+            })
+            .then(() => {
+                submitting = false
+            })
     }
 </script>
 
@@ -34,10 +176,10 @@
 <div class="container max-w-2xl px-4 py-8 md:py-16">
     <PageTitle>Tell us a little bit about yourself</PageTitle>
     <form
-        name="set-username"
+        name="user-profile"
         action="/chat"
         class="py-10 md:px-8"
-        on:submit|preventDefault={setUsername}
+        on:submit|preventDefault={handleSubmit}
     >
         <fieldset>
             <div class="form-control">
@@ -56,119 +198,171 @@
             </div>
         </fieldset>
         <fieldset>
-            <legend>What language(s) do you want to learn?*</legend>
+            <legend
+                >What language(s) do you want to learn ({MAX_LEARNING} max)?*</legend
+            >
             <p class="helper-text">
-                Please only choose languages that you are already learning or
-                really interested in learning.
+                Please only choose languages that you really want to learn or
+                already are learning.
             </p>
             <div class="form-control">
-                <ButtonLarge
+                <ButtonSmall
+                    tag="button"
+                    className="mr-1 mb-1"
+                    variant={learn.de ? "FILLED" : "OUTLINED"}
+                    disabled={teach.de ||
+                        (!learn.de && totalLearning >= MAX_LEARNING)}
+                    on:click={() => toggleLearn("de")}>German</ButtonSmall
+                >
+                <ButtonSmall
+                    tag="button"
+                    className="mr-1 mb-1"
+                    variant={learn.en ? "FILLED" : "OUTLINED"}
+                    disabled={teach.en ||
+                        (!learn.en && totalLearning >= MAX_LEARNING)}
+                    on:click={() => toggleLearn("en")}>English</ButtonSmall
+                >
+                <GroupSelect
+                    items={learnable}
+                    selected={learnOther.length ? learnOther : null}
+                    hideInput={totalLearning >= MAX_LEARNING}
+                    on:select={handleSelectLearnOther}
+                />
+            </div>
+            <div>
+                {#if learningCodes.length}
+                    <legend>Your level in …</legend>
+                {/if}
+                {#each learningCodes as code}
+                    <div class="flex items-center">
+                        <div class="mr-2 mb-2 text-sm text-gray-bitdark">
+                            {locales.find((locale) => locale.ISO6391 === code)
+                                ?.officialLanguage}:
+                        </div>
+                        <div>
+                            <select
+                                value={learningLevels[code]}
+                                placeholder="Your level …"
+                            >
+                                <option value={CefrLevel.A1}
+                                    >A1 - Beginner</option
+                                >
+                                <option value={CefrLevel.A2}
+                                    >A2 - Elementary</option
+                                >
+                                <option value={CefrLevel.B1}
+                                    >B1 - Intermediate</option
+                                >
+                                <option value={CefrLevel.B2}
+                                    >B2 - Upper intermediate</option
+                                >
+                                <option value={CefrLevel.C1}
+                                    >C1 - Advanced</option
+                                >
+                                <option value={CefrLevel.C2}
+                                    >C2 - Proficient</option
+                                >
+                            </select>
+                        </div>
+                    </div>
+                {/each}
+            </div>
+        </fieldset>
+        <fieldset class="mb-4">
+            <legend
+                >What language(s) could you help others out with ({MAX_TEACHING}
+                max)?*</legend
+            >
+            <p class="helper-text">
+                These are languages that you either speak natively or on a
+                near-native level.
+            </p>
+            <div class="form-control">
+                <ButtonSmall
                     tag="button"
                     className="mr-1"
-                    variant={learn.German ? "FILLED" : "OUTLINED"}
-                    disabled={teach.German}
-                    on:click={() => {
-                        learn.German = !learn.German
-                        if (learn.German) {
-                            teach.German = false
-                        }
-                    }}>German</ButtonLarge
+                    variant={teach.de ? "FILLED" : "OUTLINED"}
+                    disabled={learn.de ||
+                        (!teach.de && totalTeaching >= MAX_TEACHING)}
+                    on:click={() => toggleTeach("de")}>German</ButtonSmall
                 >
-                <ButtonLarge
+                <ButtonSmall
                     tag="button"
                     className="mr-1"
-                    variant={learn.English ? "FILLED" : "OUTLINED"}
-                    disabled={teach.English}
-                    on:click={() => {
-                        learn.English = !learn.English
-                        if (learn.English) {
-                            teach.English = false
-                        }
-                    }}>English</ButtonLarge
+                    variant={teach.en ? "FILLED" : "OUTLINED"}
+                    disabled={learn.en ||
+                        (!teach.en && totalTeaching >= MAX_TEACHING)}
+                    on:click={() => toggleTeach("en")}>English</ButtonSmall
                 >
-                <input
-                    class="inline-flex w-auto"
-                    type="text"
-                    placeholder="Other …"
+                <GroupSelect
+                    items={teachable}
+                    selected={teachOther.length ? teachOther : null}
+                    hideInput={totalTeaching >= MAX_TEACHING}
+                    on:select={handleSelectTeachOther}
                 />
             </div>
         </fieldset>
         <fieldset>
-            <legend>What language(s) do you speak natively?*</legend>
+            <legend>What gender do you identify as?</legend>
             <p class="helper-text">
-                These are the languages that you could help others learn.
+                We'll use this information only to optimize group compositions.
             </p>
             <div class="form-control">
-                <ButtonLarge
+                <ButtonSmall
                     tag="button"
-                    className="mr-1"
-                    variant={teach.German ? "FILLED" : "OUTLINED"}
-                    disabled={learn.German}
-                    on:click={() => {
-                        teach.German = !teach.German
-                        if (teach.German) {
-                            learn.German = false
-                        }
-                    }}>German</ButtonLarge
+                    className="mr-1 mb-1"
+                    variant={gender === Gender.FEMALE ? "FILLED" : "OUTLINED"}
+                    on:click={() => toggleGender(Gender.FEMALE)}
+                    >Female</ButtonSmall
                 >
-                <ButtonLarge
+                <ButtonSmall
                     tag="button"
-                    className="mr-1"
-                    variant={teach.English ? "FILLED" : "OUTLINED"}
-                    disabled={learn.English}
-                    on:click={() => {
-                        teach.English = !teach.English
-                        if (teach.English) {
-                            learn.English = false
-                        }
-                    }}>English</ButtonLarge
+                    className="mr-1 mb-1"
+                    variant={gender === Gender.MALE ? "FILLED" : "OUTLINED"}
+                    on:click={() => toggleGender(Gender.MALE)}>Male</ButtonSmall
                 >
-                <input
-                    class="inline-flex w-auto"
-                    type="text"
-                    placeholder="Other …"
-                />
+                <ButtonSmall
+                    tag="button"
+                    variant={gender === Gender.OTHER ? "FILLED" : "OUTLINED"}
+                    on:click={() => toggleGender(Gender.OTHER)}
+                    >Other</ButtonSmall
+                >
             </div>
         </fieldset>
         <ButtonLarge
             tag="button"
             className="w-full justify-center"
-            on:click={setUsername}
-            >Next<ArrowRightIcon size="20" class="ml-2" /></ButtonLarge
+            on:click={handleSubmit}
+            disabled={submitting}
+            >Next<ArrowRightIcon
+                class="ml-2 self-center"
+                size="24"
+            /></ButtonLarge
         >
     </form>
 </div>
 
 <style>
+    label {
+        @apply px-0;
+    }
+
     label,
     legend {
-        @apply flex font-bold text-gray-bitdark mb-1;
+        @apply text-sm flex font-bold text-gray-bitdark mb-1;
     }
 
     .helper-text {
-        @apply text-sm text-gray-bitdark my-0;
+        @apply text-sm text-gray-bitdark my-0 mb-1;
     }
 
-    input,
-    select {
+    input {
         @apply rounded-xl px-4 py-3 mb-3 my-1 border border-gray-light;
     }
-    [type="text"]:focus,
-    [type="email"]:focus,
-    [type="url"]:focus,
-    [type="password"]:focus,
-    [type="number"]:focus,
-    [type="date"]:focus,
-    [type="datetime-local"]:focus,
-    [type="month"]:focus,
-    [type="search"]:focus,
-    [type="tel"]:focus,
-    [type="time"]:focus,
-    [type="week"]:focus,
-    [multiple]:focus,
-    textarea:focus,
-    select:focus {
-        @apply border-primary ring-primary;
+
+    input:disabled,
+    input[disabled] {
+        @apply cursor-not-allowed text-gray-light;
     }
 
     fieldset {

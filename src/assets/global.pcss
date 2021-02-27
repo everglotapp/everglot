@@ -99,7 +99,7 @@
         @apply rounded-xl;
         @apply border-gray-300;
         @apply text-gray-600;
-        @apply py-2;
+        @apply py-1;
         @apply px-3;
         @apply leading-relaxed;
         @apply focus:border-gray-300;
@@ -116,5 +116,23 @@
 @layer components {
     .form-control {
         margin-bottom: 20px;
+    }
+
+    [type="text"]:focus,
+    [type="email"]:focus,
+    [type="url"]:focus,
+    [type="password"]:focus,
+    [type="number"]:focus,
+    [type="date"]:focus,
+    [type="datetime-local"]:focus,
+    [type="month"]:focus,
+    [type="search"]:focus,
+    [type="tel"]:focus,
+    [type="time"]:focus,
+    [type="week"]:focus,
+    [multiple]:focus,
+    textarea:focus,
+    select:focus {
+        @apply border-primary ring-primary;
     }
 }

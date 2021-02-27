@@ -1,7 +1,7 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "lib": ["DOM", "ES2017", "WebWorker"],
+    "lib": ["DOM", "ES2017", "WebWorker", "ES2019"],
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strict": true,

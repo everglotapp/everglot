@@ -1,5 +1,6 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
+    import { getLocales } from "@marcelovicentegc/i18n-iso-languages"
 
     import { username, room } from "../stores"
 
@@ -10,33 +11,50 @@
 
     import { ArrowRightIcon } from "svelte-feather-icons"
 
-    const MAX_LEARNING = 2
-    const MAX_TEACHING = 2
     enum Gender {
         FEMALE = "g",
         MALE = "m",
         OTHER = "o",
     }
 
-    let teach = {
+    const locales = getLocales()
+
+    const MAX_LEARNING = 2
+    const MAX_TEACHING = 2
+
+    let teach: Record<string, boolean> = {
         de: false,
         en: false,
     }
-    let learn = {
+    let learn: Record<string, boolean> = {
         de: false,
         en: false,
     }
 
     type LanguageItem = { value: string; label: string }
-    let items: LanguageItem[] = [
-        { value: "zh", label: "Chinese" },
-        { value: "es", label: "Spanish" },
-        { value: "ar", label: "Arabic" },
-        { value: "it", label: "Italian" },
-        { value: "jp", label: "Japanese" },
-    ]
+    let items: LanguageItem[] = locales
+        .filter((locale) => !["en", "de"].includes(locale.ISO6391))
+        .map((locale) => ({
+            value: locale.ISO6391,
+            label: locale.officialLanguage,
+        }))
+
     let learnOther: LanguageItem[] = []
     let teachOther: LanguageItem[] = []
+
+    enum CefrLevel {
+        A1 = "A1",
+        A2 = "A2",
+        B1 = "B1",
+        B2 = "B2",
+        C1 = "C1",
+        C2 = "C2",
+    }
+    let learningLevels: Record<string, CefrLevel | null> = {
+        en: null,
+        de: null,
+        ...Object.fromEntries(items.map((item) => [item.value, null])),
+    }
 
     $: totalTeaching =
         Object.values(teach)
@@ -46,6 +64,10 @@
         Object.values(learn)
             .map(Number)
             .reduce((n, i) => n + i) + learnOther.length
+    $: learningCodes = [
+        ...Object.keys(learn).filter((code) => learn[code]),
+        ...learnOther.map((item) => item.value),
+    ]
 
     $: learnable =
         totalLearning >= MAX_LEARNING
@@ -207,13 +229,53 @@
                     on:select={handleSelectLearnOther}
                 />
             </div>
+            <div>
+                {#if learningCodes.length}
+                    <legend>Your level in …</legend>
+                {/if}
+                {#each learningCodes as code}
+                    <div class="flex items-center">
+                        <div class="mr-2 mb-2 text-sm text-gray-bitdark">
+                            {locales.find((locale) => locale.ISO6391 === code)
+                                ?.officialLanguage}:
+                        </div>
+                        <div>
+                            <select
+                                value={learningLevels[code]}
+                                placeholder="Your level …"
+                            >
+                                <option value={CefrLevel.A1}
+                                    >A1 - Beginner</option
+                                >
+                                <option value={CefrLevel.A2}
+                                    >A2 - Elementary</option
+                                >
+                                <option value={CefrLevel.B1}
+                                    >B1 - Intermediate</option
+                                >
+                                <option value={CefrLevel.B2}
+                                    >B2 - Upper intermediate</option
+                                >
+                                <option value={CefrLevel.C1}
+                                    >C1 - Advanced</option
+                                >
+                                <option value={CefrLevel.C2}
+                                    >C2 - Proficient</option
+                                >
+                            </select>
+                        </div>
+                    </div>
+                {/each}
+            </div>
         </fieldset>
         <fieldset class="mb-4">
             <legend
-                >What language(s) do you speak natively ({MAX_TEACHING} max)?*</legend
+                >What language(s) could you help others out with ({MAX_TEACHING}
+                max)?*</legend
             >
             <p class="helper-text">
-                These are languages that you could help others out with.
+                These are languages that you either speak natively or on a
+                near-native level.
             </p>
             <div class="form-control">
                 <ButtonSmall

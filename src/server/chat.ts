@@ -1,5 +1,6 @@
 import type { Server } from "http"
-import socketio from "socket.io"
+import { Server as SocketIO } from "socket.io"
+import type { Socket } from "socket.io"
 import { formatMessage } from "./messages"
 import {
     userJoin,
@@ -15,9 +16,9 @@ import type { HangmanLanguage } from "./hangman"
 const botName = "Everglot Bot"
 
 export function start(server: Server) {
-    const io = socketio(server)
+    const io = new SocketIO(server)
     // Run when client connects
-    io.on("connection", (socket: socketio.Socket) => {
+    io.on("connection", (socket: Socket) => {
         socket.on("joinRoom", ({ username, room }) => {
             const user = userJoin(socket.id, username, room)
 

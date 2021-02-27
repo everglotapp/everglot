@@ -181,7 +181,7 @@
         class="py-10 md:px-8"
         on:submit|preventDefault={handleSubmit}
     >
-        <fieldset>
+        <fieldset class="mb-2">
             <div class="form-control">
                 <label for="username">Pick a username*</label>
                 <p class="helper-text">
@@ -199,7 +199,7 @@
         </fieldset>
         <fieldset>
             <legend
-                >What language(s) do you want to learn ({MAX_LEARNING} max)?*</legend
+                >What language(s) are you interested in ({MAX_LEARNING} max)?*</legend
             >
             <p class="helper-text">
                 Please only choose languages that you really want to learn or
@@ -229,18 +229,19 @@
                     on:select={handleSelectLearnOther}
                 />
             </div>
-            <div>
-                {#if learningCodes.length}
-                    <legend>Your level in …</legend>
-                {/if}
+        </fieldset>
+        {#if learningCodes.length}
+            <fieldset class="mt-1 mb-2">
+                <legend>Your level in …</legend>
                 {#each learningCodes as code}
-                    <div class="flex items-center">
-                        <div class="mr-2 mb-2 text-sm text-gray-bitdark">
+                    <div class="level flex items-center mb-0.5">
+                        <label for={`level_${code}`}>
                             {locales.find((locale) => locale.ISO6391 === code)
                                 ?.officialLanguage}:
-                        </div>
+                        </label>
                         <div>
                             <select
+                                id={`level_${code}`}
                                 value={learningLevels[code]}
                                 placeholder="Your level …"
                             >
@@ -266,9 +267,9 @@
                         </div>
                     </div>
                 {/each}
-            </div>
-        </fieldset>
-        <fieldset class="mb-4">
+            </fieldset>
+        {/if}
+        <fieldset class="my-4">
             <legend
                 >What language(s) could you help others out with ({MAX_TEACHING}
                 max)?*</legend
@@ -302,7 +303,7 @@
                 />
             </div>
         </fieldset>
-        <fieldset>
+        <fieldset class="mb-4">
             <legend>What gender do you identify as?</legend>
             <p class="helper-text">
                 We'll use this information only to optimize group compositions.
@@ -365,7 +366,15 @@
         @apply cursor-not-allowed text-gray-light;
     }
 
-    fieldset {
-        @apply mb-4;
+    .level {
+        @apply justify-between max-w-xs;
+    }
+
+    .level label {
+        @apply font-normal text-base !important;
+    }
+
+    .level select {
+        @apply pr-8 !important;
     }
 </style>

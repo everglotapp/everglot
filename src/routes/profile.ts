@@ -1,6 +1,24 @@
 import { db } from "../server/db"
 import type { SapperRequest, SapperResponse } from "@sapper/server"
 
+export const MAX_LEARNING = 2
+export const MAX_TEACHING = 2
+
+export enum Gender {
+    FEMALE = "f",
+    MALE = "m",
+    OTHER = "o",
+}
+
+export enum CefrLevel {
+    A1 = "A1",
+    A2 = "A2",
+    B1 = "B1",
+    B2 = "B2",
+    C1 = "C1",
+    C2 = "C2",
+}
+
 export async function post(
     req: SapperRequest & { body: any },
     res: SapperResponse,
@@ -9,7 +27,7 @@ export async function post(
     res.setHeader("Content-Type", "application/json")
     const gender =
         req.body.hasOwnProperty("gender") &&
-        ["m", "w", "o"].includes(req.body.gender)
+        Object.values(Gender).includes(req.body.gender)
             ? req.body.gender
             : null
 

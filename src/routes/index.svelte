@@ -3,6 +3,7 @@
     import { getLocales } from "@marcelovicentegc/i18n-iso-languages"
 
     import { username, room } from "../stores"
+    import { MAX_LEARNING, MAX_TEACHING, Gender, CefrLevel } from "./profile"
 
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
@@ -11,16 +12,7 @@
 
     import { ArrowRightIcon } from "svelte-feather-icons"
 
-    enum Gender {
-        FEMALE = "g",
-        MALE = "m",
-        OTHER = "o",
-    }
-
     const locales = getLocales()
-
-    const MAX_LEARNING = 2
-    const MAX_TEACHING = 2
 
     let teach: Record<string, boolean> = {
         de: false,
@@ -42,14 +34,6 @@
     let learnOther: LanguageItem[] = []
     let teachOther: LanguageItem[] = []
 
-    enum CefrLevel {
-        A1 = "A1",
-        A2 = "A2",
-        B1 = "B1",
-        B2 = "B2",
-        C1 = "C1",
-        C2 = "C2",
-    }
     let learningLevels: Record<string, CefrLevel | null> = {
         en: null,
         de: null,

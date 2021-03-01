@@ -1,17 +1,24 @@
 import { db } from "../server/db"
 import type { SapperRequest, SapperResponse } from "@sapper/server"
 
+import { Gender, CefrLevel as _CefrLevel } from "../users"
+
 export async function post(
     req: SapperRequest & { body: any },
     res: SapperResponse,
-    _next: () => void
+    next: () => void
 ) {
     res.setHeader("Content-Type", "application/json")
     const gender =
         req.body.hasOwnProperty("gender") &&
-        ["m", "w", "o"].includes(req.body.gender)
+        Object.values(Gender).includes(req.body.gender)
             ? req.body.gender
             : null
+
+    if (!req.body.hasOwnProperty("learn")) {
+        res.end({ success: false })
+        next()
+    }
 
     // TODO: when sign up is implemented, use session to find user ID and update the user record
     const email = "example@everglot.com"

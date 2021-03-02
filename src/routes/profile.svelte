@@ -11,6 +11,7 @@
     import PageTitle from "../comp/typography/PageTitle.svelte"
 
     import { ArrowRightIcon } from "svelte-feather-icons"
+    import Chat from "./chat.svelte"
 
     const locales = getLocales()
 
@@ -223,10 +224,10 @@
             </div>
         </fieldset>
         {#if learningCodes.length}
-            <fieldset class="mt-1 mb-2">
+            <fieldset class="mt-1 mb-3">
                 <legend>Your level in …</legend>
                 {#each learningCodes as code}
-                    <div class="level flex items-center mb-0.5">
+                    <div class="level flex items-center py-1">
                         <label for={`level_${code}`}>
                             {locales.find((locale) => locale.ISO6391 === code)
                                 ?.officialLanguage}:
@@ -234,30 +235,45 @@
                         <div>
                             <select
                                 id={`level_${code}`}
-                                value={learningLevels[code]}
+                                bind:value={learningLevels[code]}
+                                required
                                 placeholder="Your level …"
                             >
+                                <option value="">Please select …</option>
                                 <option value={CefrLevel.A1}
-                                    >A1 - Beginner</option
+                                    >A1 – Beginner</option
                                 >
                                 <option value={CefrLevel.A2}
-                                    >A2 - Elementary</option
+                                    >A2 – Elementary</option
                                 >
                                 <option value={CefrLevel.B1}
-                                    >B1 - Intermediate</option
+                                    >B1 – Intermediate</option
                                 >
                                 <option value={CefrLevel.B2}
-                                    >B2 - Upper intermediate</option
+                                    >B2 – Upper intermediate</option
                                 >
                                 <option value={CefrLevel.C1}
-                                    >C1 - Advanced</option
+                                    >C1 – Advanced</option
                                 >
                                 <option value={CefrLevel.C2}
-                                    >C2 - Proficient</option
+                                    >C2 – Proficient</option
                                 >
                             </select>
                         </div>
                     </div>
+                    {#if learningLevels[code] === CefrLevel.A1 || learningLevels[code] === CefrLevel.A2}
+                        <div
+                            class="p-8 py-0 rounded-xl bg-gray-lightest font-bold text-gray-dark text-xs"
+                        >
+                            Everglot is not recommended for {learningLevels[
+                                code
+                            ] === CefrLevel.A1
+                                ? "beginners"
+                                : "elementary level learners"}, yet. Although
+                            you can continue, please be aware that it may be
+                            very difficult for you to follow along.
+                        </div>
+                    {/if}
                 {/each}
             </fieldset>
         {/if}

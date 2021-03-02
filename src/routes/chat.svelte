@@ -17,10 +17,10 @@
 
     let roomMessages: Message[] = []
     let roomUsers: User[] = []
-    let msg = ""
+    let msg: string = ""
 
     // TODO: Check if user is signed in, if not redirect to sign in.
-    function subscribe() {
+    function subscribe(): void {
         if (!socket) {
             return
         }
@@ -37,7 +37,7 @@
         socket.on("message", onMessage)
     }
 
-    function unsubscribe() {
+    function unsubscribe(): void {
         if (!socket) {
             return
         }
@@ -58,7 +58,7 @@
         subscribe()
     })
 
-    function scrollDown(force: boolean = false) {
+    function scrollDown(force: boolean = false): void {
         const container = document.getElementById("chat-messages")
         if (container) {
             if (!force && !isScrolled(container)) {
@@ -97,12 +97,12 @@
         return el.scrollTop === top
     }
 
-    function onSend() {
+    function onSend(): void {
         const trimmedMsg = msg.trim()
 
         if (!trimmedMsg) {
             msg = ""
-            return false
+            return
         } else {
             // TODO: do this only if message was sent successfully.
             msg = ""
@@ -117,7 +117,7 @@
     }: {
         room: Language["enName"]
         users: User[]
-    }) {
+    }): void {
         if (recvRoom !== $room) {
             return
         }
@@ -125,7 +125,7 @@
         scrollDown()
     }
 
-    function onMessage(message: Message) {
+    function onMessage(message: Message): void {
         let force = !chatIsManuallyScrolled()
         roomMessages = [...roomMessages, message]
         if (message.username === $username) {
@@ -134,7 +134,7 @@
         setTimeout(() => scrollDown(true), 150)
     }
 
-    function changeRoom() {
+    function changeRoom(): void {
         unsubscribe()
         socket?.emit("leaveRoom")
         roomMessages = []

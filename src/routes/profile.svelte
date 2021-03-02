@@ -134,7 +134,13 @@
                 gender,
                 teach: teachingCodes,
                 learn: learningCodes,
-                cefrLevels: learningLevels,
+                cefrLevels: Object.entries(learningLevels).reduce(
+                    (levels, [code, level]) =>
+                        learningCodes.includes(code)
+                            ? { ...levels, [code]: level }
+                            : levels,
+                    {}
+                ),
             }),
         })
             .then((response) => {

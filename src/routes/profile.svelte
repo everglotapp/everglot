@@ -11,7 +11,6 @@
     import PageTitle from "../comp/typography/PageTitle.svelte"
 
     import { ArrowRightIcon } from "svelte-feather-icons"
-    import Chat from "./chat.svelte"
 
     const locales = getLocales()
 
@@ -35,10 +34,10 @@
     let learnOther: LanguageItem[] = []
     let teachOther: LanguageItem[] = []
 
-    let learningLevels: Record<string, CefrLevel | null> = {
-        en: null,
-        de: null,
-        ...Object.fromEntries(items.map((item) => [item.value, null])),
+    let learningLevels: Record<string, CefrLevel | ""> = {
+        en: "",
+        de: "",
+        ...Object.fromEntries(items.map((item) => [item.value, ""])),
     }
 
     $: totalTeaching =
@@ -262,16 +261,18 @@
                         </div>
                     </div>
                     {#if learningLevels[code] === CefrLevel.A1 || learningLevels[code] === CefrLevel.A2}
-                        <div
-                            class="p-8 py-0 rounded-xl bg-gray-lightest font-bold text-gray-dark text-xs"
-                        >
-                            Everglot is not recommended for {learningLevels[
-                                code
-                            ] === CefrLevel.A1
-                                ? "beginners"
-                                : "elementary level learners"}, yet. Although
-                            you can continue, please be aware that it may be
-                            very difficult for you to follow along.
+                        <div class="warning-skill">
+                            <p>
+                                Everglot is not recommended for {learningLevels[
+                                    code
+                                ] === CefrLevel.A1
+                                    ? "beginners"
+                                    : "elementary level learners"}, yet.
+                            </p>
+                            <p>
+                                You can still continue. Please be aware that it
+                                may be very difficult for you to follow along.
+                            </p>
                         </div>
                     {/if}
                 {/each}
@@ -375,14 +376,22 @@
     }
 
     .level {
-        @apply justify-between max-w-xs;
+        @apply justify-between max-w-xs mb-2;
     }
 
     .level label {
-        @apply font-normal text-base !important;
+        @apply font-normal text-base m-0 !important;
     }
 
     .level select {
         @apply pr-8 !important;
+    }
+
+    .warning-skill {
+        @apply px-6 py-4 my-1 rounded-2xl bg-gray-lightest font-bold text-gray-dark;
+    }
+
+    .warning-skill p:last-child {
+        @apply m-0;
     }
 </style>

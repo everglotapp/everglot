@@ -23,6 +23,8 @@
         en: false,
     }
 
+    let errorMessage: string | null = null
+
     type LanguageItem = { value: string; label: string }
     let items: LanguageItem[] = locales
         .filter((locale) => !["en", "de"].includes(locale.ISO6391))
@@ -34,10 +36,10 @@
     let learnOther: LanguageItem[] = []
     let teachOther: LanguageItem[] = []
 
-    let learningLevels: Record<string, CefrLevel | null> = {
-        en: null,
-        de: null,
-        ...Object.fromEntries(items.map((item) => [item.value, null])),
+    let learningLevels: Record<string, CefrLevel | ""> = {
+        en: "",
+        de: "",
+        ...Object.fromEntries(items.map((item) => [item.value, ""])),
     }
 
     $: totalTeaching =
@@ -132,7 +134,13 @@
                 gender,
                 teach: teachingCodes,
                 learn: learningCodes,
-                cefrLevels: learningLevels,
+                cefrLevels: Object.entries(learningLevels).reduce(
+                    (levels, [code, level]) =>
+                        learningCodes.includes(code)
+                            ? { ...levels, [code]: level }
+                            : levels,
+                    {}
+                ),
             }),
         })
             .then((response) => {
@@ -151,7 +159,7 @@
                             : learnOther[0].label
                         goto("/chat")
                     } else {
-                        // TODO: Submission failed. Give feedback.
+                        errorMessage = res.message
                     }
                 })
             })
@@ -167,6 +175,11 @@
 
 <div class="container max-w-2xl px-4 py-8 md:py-16">
     <PageTitle>Tell us a little bit about yourself</PageTitle>
+    {#if errorMessage}
+        <div class="p-8 bg-red-200 text-gray-dark font-bold">
+            {errorMessage}
+        </div>
+    {/if}
     <form
         name="user-profile"
         action="/chat"
@@ -223,10 +236,10 @@
             </div>
         </fieldset>
         {#if learningCodes.length}
-            <fieldset class="mt-1 mb-2">
+            <fieldset class="mt-1 mb-3">
                 <legend>Your level in …</legend>
                 {#each learningCodes as code}
-                    <div class="level flex items-center mb-0.5">
+                    <div class="level flex items-center py-1">
                         <label for={`level_${code}`}>
                             {locales.find((locale) => locale.ISO6391 === code)
                                 ?.officialLanguage}:
@@ -234,30 +247,47 @@
                         <div>
                             <select
                                 id={`level_${code}`}
-                                value={learningLevels[code]}
+                                bind:value={learningLevels[code]}
+                                required
                                 placeholder="Your level …"
                             >
+                                <option value="">Please select …</option>
                                 <option value={CefrLevel.A1}
-                                    >A1 - Beginner</option
+                                    >A1 – Beginner</option
                                 >
                                 <option value={CefrLevel.A2}
-                                    >A2 - Elementary</option
+                                    >A2 – Elementary</option
                                 >
                                 <option value={CefrLevel.B1}
-                                    >B1 - Intermediate</option
+                                    >B1 – Intermediate</option
                                 >
                                 <option value={CefrLevel.B2}
-                                    >B2 - Upper intermediate</option
+                                    >B2 – Upper intermediate</option
                                 >
                                 <option value={CefrLevel.C1}
-                                    >C1 - Advanced</option
+                                    >C1 – Advanced</option
                                 >
                                 <option value={CefrLevel.C2}
-                                    >C2 - Proficient</option
+                                    >C2 – Proficient</option
                                 >
                             </select>
                         </div>
                     </div>
+                    {#if learningLevels[code] === CefrLevel.A1 || learningLevels[code] === CefrLevel.A2}
+                        <div class="warning-skill">
+                            <p>
+                                Everglot is not recommended for {learningLevels[
+                                    code
+                                ] === CefrLevel.A1
+                                    ? "beginners"
+                                    : "elementary level learners"}, yet.
+                            </p>
+                            <p>
+                                You can still continue. Please be aware that it
+                                may be very difficult for you to follow along.
+                            </p>
+                        </div>
+                    {/if}
                 {/each}
             </fieldset>
         {/if}
@@ -359,14 +389,22 @@
     }
 
     .level {
-        @apply justify-between max-w-xs;
+        @apply justify-between max-w-xs mb-2;
     }
 
     .level label {
-        @apply font-normal text-base !important;
+        @apply font-normal text-base m-0 !important;
     }
 
     .level select {
         @apply pr-8 !important;
+    }
+
+    .warning-skill {
+        @apply px-6 py-4 my-1 rounded-2xl bg-gray-lightest font-bold text-gray-dark;
+    }
+
+    .warning-skill p:last-child {
+        @apply m-0;
     }
 </style>

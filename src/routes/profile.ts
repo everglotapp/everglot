@@ -16,7 +16,11 @@ export async function post(
             : null
 
     if (!req.body.hasOwnProperty("learn")) {
-        res.end({ success: false })
+        res.end({
+            success: false,
+            message:
+                "Please select at least one language that you are interested in.",
+        })
         next()
     }
 
@@ -39,8 +43,13 @@ export async function post(
             RETURNING *`,
         values: [email, req.body.username, gender],
     })
-    console.log(queryResult?.rows)
+    let success = queryResult && queryResult.rowCount === 1
     res.end(
-        JSON.stringify({ success: queryResult && queryResult.rowCount === 1 })
+        JSON.stringify({
+            success,
+            message: success
+                ? null
+                : "Something went wrong while processing your request.",
+        })
     )
 }

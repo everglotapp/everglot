@@ -23,6 +23,8 @@
         en: false,
     }
 
+    let errorMessage: string | null = null
+
     type LanguageItem = { value: string; label: string }
     let items: LanguageItem[] = locales
         .filter((locale) => !["en", "de"].includes(locale.ISO6391))
@@ -151,7 +153,7 @@
                             : learnOther[0].label
                         goto("/chat")
                     } else {
-                        // TODO: Submission failed. Give feedback.
+                        errorMessage = res.message
                     }
                 })
             })
@@ -167,6 +169,11 @@
 
 <div class="container max-w-2xl px-4 py-8 md:py-16">
     <PageTitle>Tell us a little bit about yourself</PageTitle>
+    {#if errorMessage}
+        <div class="p-8 bg-red-200 text-gray-dark font-bold">
+            {errorMessage}
+        </div>
+    {/if}
     <form
         name="user-profile"
         action="/chat"

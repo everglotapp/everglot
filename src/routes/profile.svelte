@@ -306,7 +306,7 @@
                                 </p>
                                 <p>
                                     Don't worry, we will place you on a waiting
-                                    list for an {learnOther[0].label} study group
+                                    list for a {learnOther[0].label} study group
                                     and notify you as soon as it's ready.
                                 </p>
                             </div>

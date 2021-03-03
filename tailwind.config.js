@@ -15,7 +15,7 @@ module.exports = {
     purge: {
         content: ["./src/**/*.svelte", "./src/**/*.html"],
         enabled: !dev, // disable purge in dev
-        mode: "all",
+        // mode: "all",
     },
     theme: {
         container: {

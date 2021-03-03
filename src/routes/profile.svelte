@@ -1,5 +1,6 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
+    import { scale } from "svelte/transition"
     import { getLocales } from "@marcelovicentegc/i18n-iso-languages"
 
     import { username, room } from "../stores"
@@ -156,7 +157,7 @@
                             ? "English"
                             : learn.de
                             ? "German"
-                            : learnOther[0].label
+                            : learnOther[0].label // FIXME: learnOther[0] can be undefined here … why?
                         goto("/chat")
                     } else {
                         errorMessage = res.message
@@ -276,7 +277,11 @@
                     </div>
                 {/each}
                 {#if Object.keys(learningLevels).some((code) => learningLevels[code] === CefrLevel.A1 || learningLevels[code] === CefrLevel.A2)}
-                    <div class="warning-skill">
+                    <div
+                        class="warning-skill"
+                        in:scale={{ duration: 150, delay: 150 }}
+                        out:scale={{ duration: 150 }}
+                    >
                         <div class="warning-inner-with-icon">
                             <div>
                                 <span style="font-size: 32px;">&#x1F62C;</span>
@@ -296,7 +301,11 @@
                     </div>
                 {/if}
                 {#if learnOther.length === 1}
-                    <div class="warning-learn-other">
+                    <div
+                        class="warning-learn-other"
+                        in:scale={{ duration: 150, delay: 150 }}
+                        out:scale={{ duration: 150 }}
+                    >
                         <div class="warning-inner-with-icon">
                             <div><ClockIcon size="32" /></div>
                             <div>
@@ -312,7 +321,11 @@
                             </div>
                         </div>
                     </div>{:else if learnOther.length === 2}
-                    <div class="warning-learn-other">
+                    <div
+                        class="warning-learn-other"
+                        in:scale={{ duration: 150, delay: 150 }}
+                        out:scale={{ duration: 150 }}
+                    >
                         <div class="warning-inner-with-icon">
                             <div><ClockIcon size="32" /></div>
                             <div>

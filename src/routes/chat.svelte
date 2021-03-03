@@ -3,8 +3,8 @@
     import { onMount } from "svelte"
     import { goto } from "@sapper/app"
 
-    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
-    import { ChevronsRightIcon } from "svelte-feather-icons"
+    import ButtonSmall from "../comp/util/ButtonSmall.svelte"
+    import { UserIcon, ChevronsRightIcon } from "svelte-feather-icons"
 
     import type { User } from "../server/users"
     import type { Language } from "../server/rooms"
@@ -146,47 +146,58 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-<div class="container max-w-5xl py-8 my-8" class:hidden={!$room.length}>
-    <div class="chat-main">
-        <div class="chat-sidebar bg-primary-lightest rounded-tl-md">
-            <div
-                class="py-3 px-4 text-lg font-bold w-full border-8 border-primary-lightest text-gray-dark mb-4"
+<section>
+    <div class="chat-sidebar bg-primary-lightest rounded-tl-md">
+        <div
+            class="py-3 px-4 text-lg font-bold w-full border-8 border-primary-lightest text-gray-dark mb-4"
+        >
+            <!-- svelte-ignore a11y-no-onchange -->
+            <select
+                name="room"
+                id="room"
+                bind:value={$room}
+                on:change={changeRoom}
+                class="border-none shadow-sm rounded-xl w-full"
             >
-                <!-- svelte-ignore a11y-no-onchange -->
-                <select
-                    name="room"
-                    id="room"
-                    bind:value={$room}
-                    on:change={changeRoom}
-                    class="border-none shadow-sm rounded-xl w-full"
-                >
-                    <option value="English">English</option>
-                    <option value="German">German</option>
-                    <option value="French">French</option>
-                    <option value="Italian">Italian</option>
-                    <option value="Spanish">Spanish</option>
-                    <option value="Chinese">Chinese</option>
-                    <option value="Japanese">Japanese</option>
-                </select>
-            </div>
-            <h3 class="px-4 text-gray-bitdark font-bold text-sm mb-4">Users</h3>
-            <ul>
-                {#each roomUsers as user}
-                    {#if user.username === ""}
-                        <li
-                            class="px-8 py-2 text-lg bg-gray-lightest text-gray-bitdark shadow-sm mb-1 overflow-hidden overflow-ellipsis"
-                        >
-                            Everglot Bot
-                        </li>
-                    {:else}
-                        <li
-                            class="px-8 py-2 text-lg bg-gray-lightest text-gray-dark shadow-sm mb-1 overflow-hidden overflow-ellipsis"
-                        >
-                            {user.username}
-                        </li>
-                    {/if}
-                {/each}
-            </ul>
+                <option value="English">English</option>
+                <option value="German">German</option>
+                <option value="French">French</option>
+                <option value="Italian">Italian</option>
+                <option value="Spanish">Spanish</option>
+                <option value="Chinese">Chinese</option>
+                <option value="Japanese">Japanese</option>
+            </select>
+        </div>
+        <h3 class="px-4 text-gray-bitdark font-bold text-sm mb-4">Users</h3>
+        <ul>
+            {#each roomUsers as user}
+                {#if user.username === ""}
+                    <li
+                        class="px-8 py-2 text-lg bg-gray-lightest text-gray-bitdark shadow-sm mb-1 overflow-hidden overflow-ellipsis"
+                    >
+                        Everglot Bot
+                    </li>
+                {:else}
+                    <li
+                        class="px-8 py-2 text-lg bg-gray-lightest text-gray-dark shadow-sm mb-1 overflow-hidden overflow-ellipsis"
+                    >
+                        {user.username}
+                    </li>
+                {/if}
+            {/each}
+        </ul>
+    </div>
+    <div id="chat-main">
+        <div
+            class="flex bg-gray-lightest py-4 px-8"
+            style="justify-content: space-between;"
+        >
+            <span class="text-lg py-2">{$room} Chat</span>
+            <ButtonSmall variant="TEXT" href="/profile"
+                ><UserIcon size="24" class="mr-1" /><span
+                    class="hidden md:visible">Profile</span
+                ></ButtonSmall
+            >
         </div>
         <div id="chat-messages" class="rounded-tr-md p-8">
             {#each roomMessages as message}
@@ -202,6 +213,7 @@
             {/each}
         </div>
     </div>
+    <div class="bg-primary-lightest" />
     <div class="chat-form-container rounded-bl-md rounded-br-md">
         <form
             id="chat-form"
@@ -214,34 +226,35 @@
                 placeholder="Enter message …"
                 required
                 autocomplete="off"
-                class="max-w-xl border-none shadow-md px-4 py-4 w-full rounded-md"
+                class="border-none shadow-md px-4 py-4 w-full rounded-md"
                 bind:value={msg}
             />
-            <ButtonLarge className="ml-4 px-6" tag="button" on:click={onSend}
-                >Send<ChevronsRightIcon size="20" class="ml-2" /></ButtonLarge
+            <ButtonSmall className="ml-4 px-6" tag="button" on:click={onSend}
+                >Send<ChevronsRightIcon size="24" class="ml-1" /></ButtonSmall
             >
         </form>
     </div>
-</div>
+</section>
 
 <style>
-    .chat-main {
+    section {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
         display: grid;
-        grid-template-columns: 1fr 3fr;
+        grid-template-columns: 1fr 4fr;
+        grid-template-rows: 7fr 1fr;
     }
 
     .chat-sidebar {
         overflow-y: scroll;
     }
 
-    #chat-messages {
-        max-height: 500px;
-        min-height: 40vh;
+    #chat-main {
         overflow-y: scroll;
-
-        @screen 2xl {
-            height: 500px;
-        }
+        top: 0;
     }
 
     .message {
@@ -285,12 +298,26 @@
     }
 
     @media (max-width: 700px) {
-        .chat-main {
+        section {
             display: block;
+        }
+
+        #chat-main {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 100px;
         }
 
         .chat-sidebar {
             display: none;
+        }
+
+        .chat-form-container {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
     }
 </style>

@@ -4,9 +4,9 @@
     import { username, room } from "../stores"
     onMount(() => {
         if ($username && $room && $username.length && $room.length) {
-            goto("/chat")
+            goto("/chat", { replaceState: true, noscroll: true })
         } else {
-            goto("/profile")
+            goto("/profile", { replaceState: true, noscroll: true })
         }
     })
 </script>

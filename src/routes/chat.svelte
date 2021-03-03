@@ -200,7 +200,7 @@
             </div>
         {/each}
     </div>
-    <div />
+    <div class="bg-primary-lightest" />
     <div class="chat-form-container rounded-bl-md rounded-br-md">
         <form
             id="chat-form"
@@ -288,8 +288,22 @@
             display: block;
         }
 
+        .chat-messages {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 100px;
+        }
+
         .chat-sidebar {
             display: none;
+        }
+
+        .chat-form-container {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
     }
 </style>

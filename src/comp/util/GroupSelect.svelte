@@ -5,6 +5,7 @@
     export let items: any[]
     export let selected: any[] | null
     export let hideInput: boolean = false
+    export let disabled: boolean = false
     export let placeholder: string = "Other …"
 
     const dispatch = createEventDispatcher()
@@ -21,6 +22,7 @@
         on:select={handleSelect}
         isMulti={true}
         {placeholder}
+        isDisabled={disabled}
     />
 </div>
 

@@ -156,7 +156,7 @@
                             ? "English"
                             : learn.de
                             ? "German"
-                            : learnOther[0].label
+                            : learnOther[0].label // FIXME: learnOther[0] can be undefined here … why?
                         goto("/chat")
                     } else {
                         errorMessage = res.message

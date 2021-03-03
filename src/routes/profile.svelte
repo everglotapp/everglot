@@ -231,6 +231,7 @@
                     items={learnable}
                     selected={learnOther.length ? learnOther : null}
                     hideInput={totalLearning >= MAX_LEARNING}
+                    disabled={learn.de && learn.en}
                     on:select={handleSelectLearnOther}
                 />
             </div>
@@ -361,6 +362,7 @@
                     items={teachable}
                     selected={teachOther.length ? teachOther : null}
                     hideInput={totalTeaching >= MAX_TEACHING}
+                    disabled={teach.de && teach.en}
                     on:select={handleSelectTeachOther}
                 />
             </div>

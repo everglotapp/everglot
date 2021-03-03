@@ -10,7 +10,7 @@
     import GroupSelect from "../comp/util/GroupSelect.svelte"
     import PageTitle from "../comp/typography/PageTitle.svelte"
 
-    import { ArrowRightIcon } from "svelte-feather-icons"
+    import { ArrowRightIcon, ClockIcon } from "svelte-feather-icons"
 
     const locales = getLocales()
 
@@ -273,22 +273,62 @@
                             </select>
                         </div>
                     </div>
-                    {#if learningLevels[code] === CefrLevel.A1 || learningLevels[code] === CefrLevel.A2}
-                        <div class="warning-skill">
-                            <p>
-                                Everglot is not recommended for {learningLevels[
-                                    code
-                                ] === CefrLevel.A1
-                                    ? "beginners"
-                                    : "elementary level learners"}, yet.
-                            </p>
-                            <p>
-                                You can still continue. Please be aware that it
-                                may be very difficult for you to follow along.
-                            </p>
-                        </div>
-                    {/if}
                 {/each}
+                {#if Object.keys(learningLevels).some((code) => learningLevels[code] === CefrLevel.A1 || learningLevels[code] === CefrLevel.A2)}
+                    <div class="warning-skill">
+                        <div class="warning-inner-with-icon">
+                            <div>
+                                <span style="font-size: 32px;">&#x1F62C;</span>
+                            </div>
+                            <div>
+                                <p>
+                                    Everglot can be quite difficult for
+                                    beginners and elementary level learners.
+                                </p>
+                                <p>
+                                    You can still continue. Please be aware that
+                                    in the beginning it could be hard for you to
+                                    follow along.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {/if}
+                {#if learnOther.length === 1}
+                    <div class="warning-learn-other">
+                        <div class="warning-inner-with-icon">
+                            <div><ClockIcon size="32" /></div>
+                            <div>
+                                <p>
+                                    Sorry, {learnOther[0].label} is not supported,
+                                    yet.
+                                </p>
+                                <p>
+                                    Don't worry, we will place you on a waiting
+                                    list for an {learnOther[0].label} study group
+                                    and notify you as soon as it's ready.
+                                </p>
+                            </div>
+                        </div>
+                    </div>{:else if learnOther.length === 2}
+                    <div class="warning-learn-other">
+                        <div class="warning-inner-with-icon">
+                            <div><ClockIcon size="32" /></div>
+                            <div>
+                                <p>
+                                    Sorry, {learnOther[0].label} and {learnOther[1]
+                                        .label} are not supported, yet.
+                                </p>
+                                <p>
+                                    Don't worry, we will place you on a waiting
+                                    list for {learnOther[0].label} and {learnOther[1]
+                                        .label} study groups and notify you as soon
+                                    as they're ready.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {/if}
             </fieldset>
         {/if}
         <fieldset class="my-4">
@@ -401,10 +441,19 @@
     }
 
     .warning-skill {
+        @apply px-6 py-4 my-1 rounded-2xl bg-gray-lightest text-gray-dark;
+    }
+
+    .warning-learn-other {
         @apply px-6 py-4 my-1 rounded-2xl bg-gray-lightest font-bold text-gray-dark;
     }
 
-    .warning-skill p:last-child {
+    .warning-skill p:last-child,
+    .warning-learn-other p:last-child {
         @apply m-0;
+    }
+
+    .warning-inner-with-icon {
+        @apply flex items-center space-x-6;
     }
 </style>

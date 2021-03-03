@@ -4,7 +4,7 @@
     import { goto } from "@sapper/app"
 
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
-    import { ChevronsRightIcon } from "svelte-feather-icons"
+    import { UserIcon, ChevronsRightIcon } from "svelte-feather-icons"
 
     import type { User } from "../server/users"
     import type { Language } from "../server/rooms"
@@ -146,7 +146,7 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-<div class="chat-main">
+<section>
     <div class="chat-sidebar bg-primary-lightest rounded-tl-md">
         <div
             class="py-3 px-4 text-lg font-bold w-full border-8 border-primary-lightest text-gray-dark mb-4"
@@ -187,18 +187,29 @@
             {/each}
         </ul>
     </div>
-    <div id="chat-messages" class="rounded-tr-md p-8">
-        {#each roomMessages as message}
-            <div class="message">
-                <p class="meta">
-                    <span class="username">{message.username}</span>
-                    {#if message.username === "Everglot Bot"}[{$room}]{/if}
-                    &nbsp;–&nbsp;
-                    <span>{message.time}</span>
-                </p>
-                <p class="text">{message.text}</p>
-            </div>
-        {/each}
+    <div id="chat-main">
+        <div
+            class="flex bg-gray-lightest py-4 px-8"
+            style="justify-content: space-between;"
+        >
+            <span class="text-lg py-2">{$room} Chat</span>
+            <ButtonSmall variant="TEXT" href="/profile"
+                ><UserIcon size="24" class="mr-1" />Profile</ButtonSmall
+            >
+        </div>
+        <div id="chat-messages" class="rounded-tr-md p-8">
+            {#each roomMessages as message}
+                <div class="message">
+                    <p class="meta">
+                        <span class="username">{message.username}</span>
+                        {#if message.username === "Everglot Bot"}[{$room}]{/if}
+                        &nbsp;–&nbsp;
+                        <span>{message.time}</span>
+                    </p>
+                    <p class="text">{message.text}</p>
+                </div>
+            {/each}
+        </div>
     </div>
     <div class="bg-primary-lightest" />
     <div class="chat-form-container rounded-bl-md rounded-br-md">
@@ -221,10 +232,10 @@
             >
         </form>
     </div>
-</div>
+</section>
 
 <style>
-    .chat-main {
+    section {
         position: fixed;
         left: 0;
         right: 0;
@@ -239,7 +250,7 @@
         overflow-y: scroll;
     }
 
-    #chat-messages {
+    #chat-main {
         overflow-y: scroll;
     }
 
@@ -284,11 +295,11 @@
     }
 
     @media (max-width: 700px) {
-        .chat-main {
+        section {
             display: block;
         }
 
-        .chat-messages {
+        .chat-main {
             position: fixed;
             left: 0;
             right: 0;

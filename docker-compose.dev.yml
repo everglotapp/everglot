@@ -8,3 +8,5 @@ services:
         ports:
             - "127.0.0.1:8002:3000"
             - "127.0.0.1:10000:10000"
+        environment:
+            NODE_ENV: "development"

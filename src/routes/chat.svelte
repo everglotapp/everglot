@@ -194,7 +194,9 @@
         >
             <span class="text-lg py-2">{$room} Chat</span>
             <ButtonSmall variant="TEXT" href="/profile"
-                ><UserIcon size="24" class="mr-1" />Profile</ButtonSmall
+                ><UserIcon size="24" class="mr-1" /><span
+                    class="hidden md:visible">Profile</span
+                ></ButtonSmall
             >
         </div>
         <div id="chat-messages" class="rounded-tr-md p-8">
@@ -252,6 +254,7 @@
 
     #chat-main {
         overflow-y: scroll;
+        top: 0;
     }
 
     .message {
@@ -299,7 +302,7 @@
             display: block;
         }
 
-        .chat-main {
+        #chat-main {
             position: fixed;
             left: 0;
             right: 0;

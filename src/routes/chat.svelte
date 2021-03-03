@@ -246,6 +246,8 @@
         display: grid;
         grid-template-columns: 1fr 4fr;
         grid-template-rows: 7fr 1fr;
+        width: 100vw;
+        height: 100vh;
     }
 
     .chat-sidebar {

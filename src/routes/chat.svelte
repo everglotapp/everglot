@@ -194,8 +194,8 @@
         >
             <span class="text-lg py-2">{$room} Chat</span>
             <ButtonSmall variant="TEXT" href="/profile"
-                ><UserIcon size="24" class="mr-1" /><span
-                    class="hidden md:visible">Profile</span
+                ><UserIcon size="24" class="md:mr-1" /><span
+                    class="hidden md:inline">Profile</span
                 ></ButtonSmall
             >
         </div>
@@ -290,7 +290,7 @@
     }
 
     .chat-form-container {
-        padding: 20px 30px;
+        padding: 18px 30px;
 
         @apply bg-gray-lightest;
     }
@@ -308,7 +308,7 @@
             position: fixed;
             left: 0;
             right: 0;
-            bottom: 100px;
+            bottom: 94px;
         }
 
         .chat-sidebar {

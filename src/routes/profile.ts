@@ -1,7 +1,7 @@
 import { db } from "../server/db"
 import type { SapperRequest, SapperResponse } from "@sapper/server"
 
-import { Gender, CefrLevel as _CefrLevel } from "../users"
+import { Gender, CefrLevel as _CefrLevel, MIN_USERNAME_LENGTH } from "../users"
 
 export async function post(
     req: SapperRequest & { body: any },
@@ -20,6 +20,25 @@ export async function post(
             success: false,
             message:
                 "Please select at least one language that you are interested in.",
+        })
+        next()
+    }
+
+    if (
+        !req.body.hasOwnProperty("username") ||
+        typeof req.body.username !== "string"
+    ) {
+        res.end({
+            success: false,
+            message: "Please specify a username.",
+        })
+        next()
+    }
+
+    if (req.body.username.length < MIN_USERNAME_LENGTH) {
+        res.end({
+            success: false,
+            message: `Usernames must be at least ${MIN_USERNAME_LENGTH} characters long.`,
         })
         next()
     }

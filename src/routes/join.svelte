@@ -1,9 +1,18 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
+    import { onMount } from "svelte"
+
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import { signedIn } from "../stores"
 
+    onMount(() => {
+        if ($signedIn) {
+            goto("/index", { replaceState: true, noscroll: true })
+        }
+    })
+
+    let errorMessage: string | null = null
     let submitting = false
     const handleSubmit = (_event: Event) => {
         if (submitting) {
@@ -42,7 +51,7 @@
                         $signedIn = true
                         goto("/profile", { replaceState: true, noscroll: true })
                     } else {
-                        // TODO: give feedback
+                        errorMessage = res.message
                     }
                 })
             })
@@ -61,6 +70,12 @@
 <div class="container px-4 mx-auto my-16 max-w-sm">
     <PageTitle>Join Everglot</PageTitle>
 
+    {#if errorMessage}
+        <div class="p-8 bg-red-200 text-gray-dark font-bold">
+            {errorMessage}
+        </div>
+    {/if}
+
     <form
         on:submit|preventDefault={handleSubmit}
         name="join"
@@ -78,7 +93,14 @@
         </div>
         <div class="flex flex-col w-full mb-2">
             <label for="password">Password</label>
-            <input id="password" type="password" bind:value={password} />
+            <input
+                id="password"
+                type="password"
+                minlength="8"
+                pattern={`.{8,}`}
+                title="8 characters minimum"
+                bind:value={password}
+            />
         </div>
         <p class="my-5 text-gray-bitdark text-sm">
             By signing up you agree to our <a

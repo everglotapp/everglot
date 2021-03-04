@@ -1,6 +1,8 @@
 import { db } from "../server/db"
 import type { SapperRequest, SapperResponse } from "@sapper/server"
 
+import { MIN_PASSWORD_LENGTH } from "../users"
+
 import bcrypt from "bcrypt"
 
 const SALT_ROUNDS = 13
@@ -11,17 +13,24 @@ export async function post(
     next: () => void
 ) {
     res.setHeader("Content-Type", "application/json")
-    if (!req.body.hasOwnProperty("email")) {
+    if (
+        !req.body.hasOwnProperty("email") ||
+        typeof req.body.email !== "string"
+    ) {
         res.end({
             success: false,
-            message: "Please specify an email address.",
+            message: "Please specify a valid email address.",
         })
         next()
     }
-    if (!req.body.hasOwnProperty("password")) {
+    if (
+        !req.body.hasOwnProperty("password") ||
+        typeof req.body.password !== "string" ||
+        req.body.password.length < MIN_PASSWORD_LENGTH
+    ) {
         res.end({
             success: false,
-            message: "Please specify a password.",
+            message: `Please specify a password with a minimum length of ${MIN_PASSWORD_LENGTH}.`,
         })
         next()
     }

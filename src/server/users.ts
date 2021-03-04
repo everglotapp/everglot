@@ -11,8 +11,6 @@ export type User = {
     room: Language["enName"]
 }
 
-export const MIN_USERNAME_LENGTH = 4
-
 const users: User[] = []
 
 // Join user to chat

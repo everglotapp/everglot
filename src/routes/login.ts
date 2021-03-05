@@ -10,11 +10,12 @@ export async function post(
     _next: () => void
 ) {
     res.setHeader("Content-Type", "application/json")
-    // TODO: check email validity
+    // TODO: properly validate email
     if (
         !req.body.hasOwnProperty("email") ||
         typeof req.body.email !== "string" ||
-        !req.body.email.length
+        !req.body.email.length ||
+        !req.body.email.includes("@")
     ) {
         res.end({
             success: false,

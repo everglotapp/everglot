@@ -89,6 +89,7 @@
                 type="email"
                 bind:value={email}
                 placeholder="jane.doe@example.com"
+                required
             />
         </div>
         <div class="flex flex-col w-full mb-2">
@@ -100,6 +101,7 @@
                 pattern={`.{8,}`}
                 title="8 characters minimum"
                 bind:value={password}
+                required
             />
         </div>
         <p class="my-5 text-gray-bitdark text-sm">

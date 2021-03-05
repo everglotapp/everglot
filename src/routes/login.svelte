@@ -1,14 +1,63 @@
 <script lang="ts">
+    import { goto } from "@sapper/app"
+    import { onMount } from "svelte"
+
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+    import { signedIn } from "../stores"
 
+    onMount(() => {
+        if ($signedIn) {
+            goto("/index", { replaceState: true, noscroll: true })
+        }
+    })
+
+    let errorMessage: string | null = null
     let submitting = false
     const handleSubmit = (_event: Event) => {
         if (submitting) {
             return
         }
+        const form = document.forms[0]
+        if (form.name !== "login") {
+            return
+        }
+        // TODO: replace with JS form validation
+        if (!form.reportValidity()) {
+            // TODO: give feedback that submission failed and why
+            return
+        }
         submitting = true
-        submitting = false
+        fetch("/login/", {
+            method: "post",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email,
+                password,
+            }),
+        })
+            .then((response) => {
+                if (response.status !== 200) {
+                    return
+                }
+                response.json().then((res) => {
+                    if (!res.hasOwnProperty("success")) {
+                        return
+                    }
+                    if (res.success === true) {
+                        $signedIn = true
+                        goto("/profile", { replaceState: true, noscroll: true })
+                    } else {
+                        errorMessage = res.message
+                    }
+                })
+            })
+            .then(() => {
+                submitting = false
+            })
     }
     let email = ""
     let password = ""
@@ -21,9 +70,16 @@
 <div class="container px-4 mx-auto mt-16 mb-32 max-w-sm">
     <PageTitle>Login to Everglot</PageTitle>
 
+    {#if errorMessage}
+        <div class="p-8 bg-red-200 text-gray-dark font-bold">
+            {errorMessage}
+        </div>
+    {/if}
+
     <form
         on:submit|preventDefault={handleSubmit}
         method="post"
+        name="login"
         class="bg-white my-8"
     >
         <div class="flex flex-col w-full mb-2">
@@ -33,11 +89,20 @@
                 type="email"
                 bind:value={email}
                 placeholder="jane.doe@example.com"
+                required
             />
         </div>
         <div class="flex flex-col w-full mb-2">
             <label for="password">Password</label>
-            <input id="password" type="password" bind:value={password} />
+            <input
+                id="password"
+                type="password"
+                minlength="8"
+                pattern={`.{8,}`}
+                title="8 characters minimum"
+                bind:value={password}
+                required
+            />
         </div>
         <button
             type="submit"
@@ -50,10 +115,7 @@
             className="w-full justify-center"
             >I don't have an account</ButtonLarge
         >
-        <div
-            class="py-4 font-bold my-8 px-8 bg-primary-lightest"
-            class:hidden={!submitting}
-        >
+        <div class="py-4 font-bold my-8 px-8 bg-primary-lightest">
             Sorry, login will be available soon!
         </div>
     </form>

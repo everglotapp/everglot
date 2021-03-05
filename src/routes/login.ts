@@ -1,61 +1,94 @@
-import { db } from "../server/db"
 import type { SapperRequest, SapperResponse } from "@sapper/server"
-
 import bcrypt from "bcrypt"
 
-const SALT_ROUNDS = 13
+import { db } from "../server/db"
+import { MIN_PASSWORD_LENGTH } from "../users"
 
 export async function post(
     req: SapperRequest & { body: any },
     res: SapperResponse,
-    next: () => void
+    _next: () => void
 ) {
     res.setHeader("Content-Type", "application/json")
-    if (!req.body.hasOwnProperty("email")) {
+    // TODO: check email validity
+    if (
+        !req.body.hasOwnProperty("email") ||
+        typeof req.body.email !== "string" ||
+        !req.body.email.length
+    ) {
         res.end({
             success: false,
             message: "Please specify an email address.",
         })
-        next()
+        return
     }
-    if (!req.body.hasOwnProperty("password")) {
+    if (
+        !req.body.hasOwnProperty("password") ||
+        typeof req.body.password !== "string" ||
+        req.body.password.length < MIN_PASSWORD_LENGTH
+    ) {
         res.end({
             success: false,
             message: "Please specify a password.",
         })
-        next()
+        return
     }
     const { email, password } = req.body
     // TODO: check that email and password are strings
     const queryResult = await db?.query({
-        text: `SELECT FROM users
+        text: `SELECT password_hash FROM users
             WHERE
                 email = $1
-            RETURNING *
             LIMIT 1`,
         values: [email],
     })
-    let userFound = queryResult && queryResult.rowCount === 1
-    if (!userFound) {
-        res.end(
-            JSON.stringify({
-                success: false,
-                message: "Something went wrong while processing your request.",
-            })
+
+    const userExists = Boolean(queryResult?.rowCount === 1)
+    if (!userExists) {
+        // TODO: Inform user that email does not exist?
+        console.log(
+            `User tried to login with an email address that does not exist: ${email}`
         )
-        next()
+        serverError(res)
+        return
     }
 
-    const passwordCorrect = await bcrypt.compare(
+    const storedPasswordHash = queryResult?.rows[0]?.password_hash
+
+    /** Avoid comparing null/undefined/empty string */
+    if (!storedPasswordHash || !storedPasswordHash.length) {
+        console.error(`User stored password hash is empty. Email: ${email}`)
+        serverError(res)
+        return
+    }
+
+    const passwordCorrect: boolean = await bcrypt.compare(
         password,
-        queryResult.rows[0].password_hash
+        storedPasswordHash
     )
+
+    if (passwordCorrect) {
+        console.log("Successful login")
+    } else {
+        console.log(
+            `User tried to login with incorrect password. Email: ${email}`
+        )
+    }
     res.end(
         JSON.stringify({
             success: passwordCorrect,
             message: passwordCorrect
                 ? null
                 : "Something went wrong while processing your request.",
+        })
+    )
+}
+
+function serverError(res: SapperResponse) {
+    res.end(
+        JSON.stringify({
+            success: false,
+            message: "Something went wrong while processing your request.",
         })
     )
 }

@@ -11,11 +11,13 @@ export async function post(
 ) {
     res.setHeader("Content-Type", "application/json")
     // TODO: properly validate email
+    const email = req?.body?.email
+    const password = req?.body?.password
     if (
-        !req.body.hasOwnProperty("email") ||
-        typeof req.body.email !== "string" ||
-        !req.body.email.length ||
-        !req.body.email.includes("@")
+        !email ||
+        typeof email !== "string" ||
+        !email.length ||
+        !email.includes("@")
     ) {
         res.end({
             success: false,
@@ -24,9 +26,9 @@ export async function post(
         return
     }
     if (
-        !req.body.hasOwnProperty("password") ||
-        typeof req.body.password !== "string" ||
-        req.body.password.length < MIN_PASSWORD_LENGTH
+        !password ||
+        typeof password !== "string" ||
+        password.length < MIN_PASSWORD_LENGTH
     ) {
         res.end({
             success: false,
@@ -34,7 +36,6 @@ export async function post(
         })
         return
     }
-    const { email, password } = req.body
     // TODO: check that email and password are strings
     const queryResult = await db?.query({
         text: `SELECT password_hash FROM users

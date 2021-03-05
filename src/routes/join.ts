@@ -14,12 +14,14 @@ export async function post(
     next: () => void
 ) {
     res.setHeader("Content-Type", "application/json")
+    const email = req?.body?.email
+    const password = req?.body?.password
     // TODO: properly validate email
     if (
-        !req.body.hasOwnProperty("email") ||
-        typeof req.body.email !== "string" ||
-        !req.body.email.length ||
-        !req.body.email.includes("@")
+        !email ||
+        typeof email !== "string" ||
+        !email.length ||
+        !email.includes("@")
     ) {
         res.end({
             success: false,
@@ -28,9 +30,9 @@ export async function post(
         next()
     }
     if (
-        !req.body.hasOwnProperty("password") ||
-        typeof req.body.password !== "string" ||
-        req.body.password.length < MIN_PASSWORD_LENGTH
+        !password ||
+        typeof password !== "string" ||
+        password.length < MIN_PASSWORD_LENGTH
     ) {
         res.end({
             success: false,
@@ -38,7 +40,6 @@ export async function post(
         })
         next()
     }
-    const { email, password } = req.body
     const hash = await bcrypt.hash(password, SALT_ROUNDS)
     if (!hash) {
         res.end({

@@ -90,6 +90,7 @@
                 bind:value={email}
                 placeholder="jane.doe@example.com"
                 required
+                class="py-2"
             />
         </div>
         <div class="flex flex-col w-full mb-2">
@@ -102,11 +103,12 @@
                 title="8 characters minimum"
                 bind:value={password}
                 required
+                class="py-2"
             />
         </div>
         <p class="my-5 text-gray-bitdark text-sm">
             By signing up you agree to our <a
-                href="/privacy"
+                href="https://everglot.com/privacy"
                 class="font-normal">privacy policy</a
             >.
         </p>

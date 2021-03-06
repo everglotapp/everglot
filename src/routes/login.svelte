@@ -90,6 +90,7 @@
                 bind:value={email}
                 placeholder="jane.doe@example.com"
                 required
+                class="py-2"
             />
         </div>
         <div class="flex flex-col w-full mb-2">
@@ -102,6 +103,7 @@
                 title="8 characters minimum"
                 bind:value={password}
                 required
+                class="py-2"
             />
         </div>
         <button

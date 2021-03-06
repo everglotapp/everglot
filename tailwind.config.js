@@ -12,6 +12,11 @@ module.exports = {
         extendedFontSizeScale: true,
         applyComplexClasses: true,
     },
+    purge: {
+        content: ["./src/**/*.svelte", "./src/**/*.html"],
+        enabled: !dev, // disable purge in dev
+        // mode: "all",
+    },
     theme: {
         container: {
             center: true,

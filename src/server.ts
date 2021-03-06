@@ -19,13 +19,12 @@ pool.connect().then(() => {
 })
 
 /** Configure Express HTTP server. */
-const app: Express = express() // You can also use Express
-    .use(
-        compression({ threshold: 0 }),
-        sirv("static", { dev }),
-        json(),
-        sapper.middleware()
-    )
+const app: Express = express().use(
+    compression({ threshold: 0 }),
+    sirv("static", { dev }),
+    json(),
+    sapper.middleware()
+)
 
 /** Start HTTP server. */
 const server = app.listen(PORT)

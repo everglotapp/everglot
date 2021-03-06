@@ -3,6 +3,7 @@ import bcrypt from "bcrypt"
 
 import { db } from "../server/db"
 import { MIN_PASSWORD_LENGTH } from "../users"
+import { serverError } from "./_helpers"
 
 export async function post(
     req: SapperRequest & { body: any },
@@ -19,10 +20,12 @@ export async function post(
         !email.length ||
         !email.includes("@")
     ) {
-        res.end({
-            success: false,
-            message: "Please specify an email address.",
-        })
+        res.end(
+            JSON.stringify({
+                success: false,
+                message: "Please specify an email address.",
+            })
+        )
         return
     }
     if (
@@ -30,10 +33,12 @@ export async function post(
         typeof password !== "string" ||
         password.length < MIN_PASSWORD_LENGTH
     ) {
-        res.end({
-            success: false,
-            message: "Please specify a password.",
-        })
+        res.end(
+            JSON.stringify({
+                success: false,
+                message: "Please specify a password.",
+            })
+        )
         return
     }
     // TODO: check that email and password are strings
@@ -69,28 +74,19 @@ export async function post(
         storedPasswordHash
     )
 
-    if (passwordCorrect) {
-        console.log("Successful login")
-    } else {
+    if (!passwordCorrect) {
         console.log(
             `User tried to login with incorrect password. Email: ${email}`
         )
+        serverError(res)
+        return
     }
-    res.end(
-        JSON.stringify({
-            success: passwordCorrect,
-            message: passwordCorrect
-                ? null
-                : "Something went wrong while processing your request.",
-        })
-    )
-}
 
-function serverError(res: SapperResponse) {
+    console.log("Successful login")
+
     res.end(
         JSON.stringify({
-            success: false,
-            message: "Something went wrong while processing your request.",
+            success: true,
         })
     )
 }

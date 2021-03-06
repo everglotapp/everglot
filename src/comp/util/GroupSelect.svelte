@@ -61,6 +61,11 @@
         @apply cursor-text;
     }
 
+    .wrapper :global(.selectContainer.disabled),
+    .wrapper :global(.selectContainer.disabled input) {
+        @apply cursor-not-allowed;
+    }
+
     .wrapper :global(.selectContainer .multiSelectItem) {
         @apply self-center;
     }

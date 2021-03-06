@@ -1,35 +1,33 @@
 import sirv from "sirv"
-import polka from "polka"
+import express from "express"
 import compression from "compression"
 import * as sapper from "@sapper/server"
 import chat from "./server/chat"
 import { createDatabasePool } from "./server/db"
 import { json } from "body-parser"
 
+import type { Express } from "express"
+
 const { PORT, NODE_ENV } = process.env
 const dev = NODE_ENV === "development"
 
+/** Configure database clients. */
 const pool = createDatabasePool()
+/** Connect to database. */
 pool.connect().then(() => {
     console.log("[Database Pool] Database connection established")
 })
 
-const polkaInstance: polka.Polka = polka() // You can also use Express
-    .use(
-        compression({ threshold: 0 }),
-        sirv("static", { dev }),
-        json(),
-        sapper.middleware()
-    )
-polkaInstance.listen(PORT, (err: any) => {
-    if (err) {
-        console.log("error", err)
-    }
-})
+/** Configure Express HTTP server. */
+const app: Express = express().use(
+    compression({ threshold: 0 }),
+    sirv("static", { dev }),
+    json(),
+    sapper.middleware()
+)
 
-const { server } = polkaInstance
-if (typeof server === "undefined") {
-    console.error("Failed to initialize polka server")
-    process.exit(1)
-}
+/** Start HTTP server. */
+const server = app.listen(PORT)
+
+/** Start Socket.IO (WebSocket) chat server. */
 chat.start(server)

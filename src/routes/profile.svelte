@@ -110,6 +110,10 @@
 
     let submitting = false
     function handleSubmit() {
+        if (submitting) {
+            return
+        }
+
         const form = document.forms[0]
         if (form.name !== "user-profile") {
             return
@@ -421,26 +425,12 @@
 </div>
 
 <style>
-    label {
-        @apply px-0;
-    }
-
-    label,
-    legend {
-        @apply text-sm flex font-bold text-gray-bitdark mb-1;
-    }
-
     .helper-text {
         @apply text-sm text-gray-bitdark my-0 mb-1;
     }
 
     input {
-        @apply rounded-xl px-4 py-3 mb-3 my-1 border border-gray-light;
-    }
-
-    input:disabled,
-    input[disabled] {
-        @apply cursor-not-allowed text-gray-light;
+        @apply px-4 py-3 mb-3 my-1;
     }
 
     .level {

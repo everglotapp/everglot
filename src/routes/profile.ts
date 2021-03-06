@@ -1,7 +1,7 @@
-import { db } from "../server/db"
 import type { SapperRequest, SapperResponse } from "@sapper/server"
 
-import { Gender, CefrLevel as _CefrLevel } from "../users"
+import { db } from "../server/db"
+import { Gender, CefrLevel as _CefrLevel, MIN_USERNAME_LENGTH } from "../users"
 
 export async function post(
     req: SapperRequest & { body: any },
@@ -9,7 +9,7 @@ export async function post(
     next: () => void
 ) {
     res.setHeader("Content-Type", "application/json")
-    const gender =
+    const gender: Gender | null =
         req.body.hasOwnProperty("gender") &&
         Object.values(Gender).includes(req.body.gender)
             ? req.body.gender
@@ -20,6 +20,25 @@ export async function post(
             success: false,
             message:
                 "Please select at least one language that you are interested in.",
+        })
+        next()
+    }
+
+    if (
+        !req.body.hasOwnProperty("username") ||
+        typeof req.body.username !== "string"
+    ) {
+        res.end({
+            success: false,
+            message: "Please specify a username.",
+        })
+        next()
+    }
+
+    if (req.body.username.length < MIN_USERNAME_LENGTH) {
+        res.end({
+            success: false,
+            message: `Usernames must be at least ${MIN_USERNAME_LENGTH} characters long.`,
         })
         next()
     }
@@ -37,16 +56,17 @@ export async function post(
             ON CONFLICT (email) DO UPDATE SET (
                 username,
                 gender,
+                uuid,
                 last_active_at
             ) = ($2, $3, NOW())
             WHERE users.email = $1
             RETURNING *`,
         values: [email, req.body.username, gender],
     })
-    let success = queryResult && queryResult.rowCount === 1
+    let success = queryResult?.rowCount === 1
     res.end(
         JSON.stringify({
-            success,
+            success: Boolean(success),
             message: success
                 ? null
                 : "Something went wrong while processing your request.",

@@ -3,7 +3,7 @@ import bcrypt from "bcrypt"
 
 import { db } from "../server/db"
 import { MIN_PASSWORD_LENGTH } from "../users"
-import { serverError } from "./_helpers"
+import { serverError } from "../helpers"
 
 export async function post(
     req: SapperRequest & { body: any },

@@ -2,7 +2,7 @@ import { db } from "../server/db"
 import type { SapperRequest, SapperResponse } from "@sapper/server"
 
 import { MIN_PASSWORD_LENGTH } from "../users"
-import { serverError } from "./_helpers"
+import { serverError } from "../helpers"
 
 import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
@@ -12,7 +12,7 @@ const SALT_ROUNDS = 13
 export async function post(
     req: SapperRequest & { body: any },
     res: SapperResponse,
-    next: () => void
+    _next: () => void
 ) {
     res.setHeader("Content-Type", "application/json")
     const email = req?.body?.email

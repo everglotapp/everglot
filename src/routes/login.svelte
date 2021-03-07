@@ -3,6 +3,7 @@
     import { onMount } from "svelte"
 
     import PageTitle from "../comp/typography/PageTitle.svelte"
+    import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import { signedIn } from "../stores"
 
@@ -71,9 +72,7 @@
     <PageTitle>Login to Everglot</PageTitle>
 
     {#if errorMessage}
-        <div class="p-8 bg-red-200 text-gray-dark font-bold">
-            {errorMessage}
-        </div>
+        <ErrorMessage>{errorMessage}</ErrorMessage>
     {/if}
 
     <form

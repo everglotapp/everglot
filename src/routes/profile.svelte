@@ -9,6 +9,7 @@
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import GroupSelect from "../comp/util/GroupSelect.svelte"
+    import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import PageTitle from "../comp/typography/PageTitle.svelte"
 
     import { ArrowRightIcon, ClockIcon } from "svelte-feather-icons"
@@ -180,11 +181,11 @@
 
 <div class="container max-w-2xl px-4 py-8 md:py-16">
     <PageTitle>Tell us a little bit about yourself</PageTitle>
+
     {#if errorMessage}
-        <div class="p-8 bg-red-200 text-gray-dark font-bold">
-            {errorMessage}
-        </div>
+        <ErrorMessage>{errorMessage}</ErrorMessage>
     {/if}
+
     <form
         name="user-profile"
         action="/chat"

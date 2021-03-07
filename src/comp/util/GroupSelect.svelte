@@ -2,8 +2,8 @@
     import { createEventDispatcher } from "svelte"
     import Select from "svelte-select"
 
-    export let items: any[]
-    export let selected: any[] | null
+    export let items: unknown[]
+    export let selected: unknown[] | null
     export let hideInput: boolean = false
     export let disabled: boolean = false
     export let placeholder: string = "Other …"

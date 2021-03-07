@@ -64,7 +64,9 @@ export async function post(
 
     /** Avoid comparing null/undefined/empty string */
     if (!storedPasswordHash || !storedPasswordHash.length) {
-        console.error(`User stored password hash is empty. Email: ${email}`)
+        console.error(
+            `User stored password hash is empty. This should never happen! Email: ${email}`
+        )
         serverError(res)
         return
     }

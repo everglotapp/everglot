@@ -43,7 +43,8 @@ export async function post(
     }
     // TODO: check that email and password are strings
     const queryResult = await db?.query({
-        text: `SELECT password_hash FROM users
+        text: `
+            SELECT password_hash FROM users
             WHERE
                 email = $1
             LIMIT 1`,
@@ -64,7 +65,9 @@ export async function post(
 
     /** Avoid comparing null/undefined/empty string */
     if (!storedPasswordHash || !storedPasswordHash.length) {
-        console.error(`User stored password hash is empty. Email: ${email}`)
+        console.error(
+            `User stored password hash is empty. This should never happen! Email: ${email}`
+        )
         serverError(res)
         return
     }

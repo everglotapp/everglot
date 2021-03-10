@@ -11,11 +11,15 @@ services:
             PGUSER: ${POSTGRES_USER:?Please set POSTGRES_USER}
             PGPASSWORD: ${POSTGRES_PASSWORD:?Please set POSTGRES_PASSWORD}
             PGDATABASE: ${POSTGRES_DB:?Please set POSTGRES_DB}
-            PGHOST: ${PGHOST:-db}
+            PGHOST: ${PGHOST:-everglot-db}
             PGPORT: ${PGPORT:-5432}
-            DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGHOST:-db}:${PGPORT}/${POSTGRES_DB}"
+            DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGHOST:-everglot-db}:${PGPORT}/${POSTGRES_DB}"
+            SESSION_COOKIE_VALIDATION_SECRETS: ${SESSION_COOKIE_VALIDATION_SECRETS:?Please set SESSION_COOKIE_VALIDATION_SECRETS}
 
-networks:
-    default:
-        external:
-            name: everglot-network
+    everglot-db:
+        image: postgres:13-alpine
+        restart: always
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER:?Please set POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Please set POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB:?Please set POSTGRES_DB}

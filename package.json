@@ -14,15 +14,18 @@
     "export": "run-s build:css build:export",
     "start": "node __sapper__/build",
     "serve": "serve ___sapper__/export",
-    "validate": "svelte-check --ignore src/node_modules/@sapper --compiler-warnings 'module-script-reactive-declaration:ignore'"
+    "validate": "svelte-check --ignore src/node_modules/@sapper --compiler-warnings 'module-script-reactive-declaration:ignore'",
+    "migrate": "node-pg-migrate -m src/migrations"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "compression": "^1.7.1",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "moment": "^2.29.1",
     "node-pg-migrate": "^5.9.0",
     "pg": "^8.5.1",
+    "postgraphile": "^4.11.0",
     "sirv": "^1.0.11",
     "socket.io": "^3.1.2",
     "uuid": "^8.3.2"
@@ -45,6 +48,7 @@
     "@tsconfig/svelte": "^1.0.10",
     "@types/bcrypt": "^3.0.0",
     "@types/compression": "^1.7.0",
+    "@types/express-session": "^1.17.3",
     "@types/node": "^14.14.31",
     "@types/polka": "^0.5.2",
     "@types/socket.io": "^2.1.13",

@@ -43,7 +43,8 @@ export async function post(
     }
     // TODO: check that email and password are strings
     const queryResult = await db?.query({
-        text: `SELECT password_hash FROM users
+        text: `
+            SELECT password_hash FROM users
             WHERE
                 email = $1
             LIMIT 1`,

@@ -7,6 +7,8 @@ import session from "express-session"
 
 import * as sapper from "@sapper/server"
 
+import { postgraphile } from "postgraphile"
+
 import type { Express } from "express"
 
 const { NODE_ENV } = process.env
@@ -57,6 +59,14 @@ export default function configureExpress(app: Express): Express {
         }
         sess.cookie = { ...sess.cookie, secure: true } // serve secure cookies
     }
+
+    app.use(
+        postgraphile(process.env.DATABASE_URL, "public", {
+            watchPg: true,
+            graphiql: true,
+            enhanceGraphiql: true,
+        })
+    )
 
     app.use(session(sess))
 

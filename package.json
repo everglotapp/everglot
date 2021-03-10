@@ -18,6 +18,7 @@
     "migrate": "node-pg-migrate -m src/migrations"
   },
   "dependencies": {
+    "@graphile/persisted-operations": "0.0.3",
     "bcrypt": "^5.0.1",
     "compression": "^1.7.1",
     "express": "^4.17.1",

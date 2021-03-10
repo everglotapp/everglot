@@ -7,7 +7,9 @@ import session from "express-session"
 
 import * as sapper from "@sapper/server"
 
-import { postgraphile } from "postgraphile"
+import { postgraphile, makePluginHook } from "postgraphile"
+import PersistedOperationsPlugin from "@graphile/persisted-operations"
+import type { PostGraphileOptions } from "postgraphile"
 
 import type { Express } from "express"
 
@@ -60,12 +62,16 @@ export default function configureExpress(app: Express): Express {
         sess.cookie = { ...sess.cookie, secure: true } // serve secure cookies
     }
 
+    const pluginHook = makePluginHook([PersistedOperationsPlugin])
     app.use(
+        // TODO: use a restricted user account for postgraphile access
         postgraphile(process.env.DATABASE_URL, "public", {
             watchPg: true,
             graphiql: true,
             enhanceGraphiql: true,
-        })
+            pluginHook,
+            persistedOperations: {}, // disable all queries for now, TODO: persist them
+        } as PostGraphileOptions & { persistedOperations: {} })
     )
 
     app.use(session(sess))

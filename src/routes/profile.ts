@@ -54,10 +54,20 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 text: SQL_DELETE_USER_LANGUAGES,
                 values: [req.session.user_id],
             })
-            for (let code of req.body.teach) {
+            const { teach, learn, cefrLevels } = req.body
+            for (const code of teach) {
                 await client.query({
-                    text: SQL_ASSIGN_NATIVE_LANGUAGES,
+                    text: SQL_ASSIGN_NATIVE_LANGUAGE,
                     values: [req.session.user_id, code],
+                })
+            }
+            for (const code of learn) {
+                if (!cefrLevels.hasOwnProperty(code)) {
+                    throw new Error(`cefrLevels doesn't have property ${code}`)
+                }
+                await client.query({
+                    text: SQL_ASSIGN_NON_NATIVE_LANGUAGE,
+                    values: [req.session.user_id, code, cefrLevels[code]],
                 })
             }
             await client.query("COMMIT")
@@ -87,7 +97,7 @@ const SQL_DELETE_USER_LANGUAGES = `
 DELETE FROM user_languages
 WHERE user_id = $1`
 
-const SQL_ASSIGN_NATIVE_LANGUAGES = `
+const SQL_ASSIGN_NATIVE_LANGUAGE = `
 INSERT INTO user_languages (
     user_id,
     language_id,
@@ -103,4 +113,26 @@ VALUES (
     ),
     null,
     true
+)`
+
+const SQL_ASSIGN_NON_NATIVE_LANGUAGE = `
+INSERT INTO user_languages (
+    user_id,
+    language_id,
+    language_skill_level_id,
+    native
+)
+VALUES (
+    $1,
+    (
+        SELECT id
+        FROM languages
+        WHERE alpha2 = $2
+    ),
+    (
+        SELECT id
+        FROM language_skill_levels
+        WHERE name = $3
+    ),
+    false
 )`

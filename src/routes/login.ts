@@ -1,15 +1,12 @@
-import type { SapperRequest, SapperResponse } from "@sapper/server"
 import bcrypt from "bcrypt"
 
 import { db } from "../server/db"
 import { MIN_PASSWORD_LENGTH } from "../users"
 import { serverError } from "../helpers"
 
-export async function post(
-    req: SapperRequest & { body: any },
-    res: SapperResponse,
-    _next: () => void
-) {
+import type { Request, Response } from "express"
+
+export async function post(req: Request, res: Response, _next: () => void) {
     res.setHeader("Content-Type", "application/json")
     // TODO: properly validate email
     const email = req?.body?.email
@@ -20,12 +17,10 @@ export async function post(
         !email.length ||
         !email.includes("@")
     ) {
-        res.end(
-            JSON.stringify({
-                success: false,
-                message: "Please specify an email address.",
-            })
-        )
+        res.status(422).json({
+            success: false,
+            message: "Please specify an email address.",
+        })
         return
     }
     if (
@@ -33,18 +28,17 @@ export async function post(
         typeof password !== "string" ||
         password.length < MIN_PASSWORD_LENGTH
     ) {
-        res.end(
-            JSON.stringify({
-                success: false,
-                message: "Please specify a password.",
-            })
-        )
+        res.status(422).json({
+            success: false,
+            message: "Please specify a password.",
+        })
         return
     }
     // TODO: check that email and password are strings
-    const queryResult = await db?.query({
+    const queryResult = await db?.query<{ id: number; password_hash: string }>({
         text: `
-            SELECT password_hash FROM users
+            SELECT id, password_hash
+            FROM users
             WHERE
                 email = $1
             LIMIT 1`,
@@ -61,7 +55,8 @@ export async function post(
         return
     }
 
-    const storedPasswordHash = queryResult?.rows[0]?.password_hash
+    const user = queryResult?.rows[0]!
+    const storedPasswordHash = user.password_hash
 
     /** Avoid comparing null/undefined/empty string */
     if (!storedPasswordHash || !storedPasswordHash.length) {
@@ -85,11 +80,15 @@ export async function post(
         return
     }
 
-    console.log("Successful login")
+    console.log(`Successful login! Email: ${email}`)
 
-    res.end(
-        JSON.stringify({
-            success: true,
-        })
-    )
+    req.session.regenerate(function (err: any) {
+        if (err) {
+            console.error(err.message)
+            serverError(res)
+        } else {
+            req.session.user_id = user.id
+            res.status(200).json({ success: true })
+        }
+    })
 }

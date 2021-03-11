@@ -12,7 +12,7 @@ const pool = createDatabasePool()
 console.log("[Database Pool] Database connection established")
 
 /** Configure HTTP server. */
-const app = configureExpress(express())
+const app = configureExpress(express(), pool)
 /** Start HTTP server. */
 const server = app.listen(PORT)
 

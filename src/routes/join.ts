@@ -1,5 +1,4 @@
 import { db } from "../server/db"
-import type { SapperRequest, SapperResponse } from "@sapper/server"
 
 import { MIN_PASSWORD_LENGTH } from "../users"
 import { serverError } from "../helpers"
@@ -9,11 +8,9 @@ import { v4 as uuidv4 } from "uuid"
 
 const SALT_ROUNDS = 13
 
-export async function post(
-    req: SapperRequest & { body: any },
-    res: SapperResponse,
-    _next: () => void
-) {
+import type { Request, Response } from "express"
+
+export async function post(req: Request, res: Response, _next: () => void) {
     res.setHeader("Content-Type", "application/json")
     const email = req?.body?.email
     const password = req?.body?.password
@@ -24,12 +21,10 @@ export async function post(
         !email.length ||
         !email.includes("@")
     ) {
-        res.end(
-            JSON.stringify({
-                success: false,
-                message: "Please specify a valid email address.",
-            })
-        )
+        res.status(422).json({
+            success: false,
+            message: "Please specify a valid email address.",
+        })
         return
     }
     if (
@@ -37,12 +32,10 @@ export async function post(
         typeof password !== "string" ||
         password.length < MIN_PASSWORD_LENGTH
     ) {
-        res.end(
-            JSON.stringify({
-                success: false,
-                message: `Please specify a password with a minimum length of ${MIN_PASSWORD_LENGTH}.`,
-            })
-        )
+        res.status(422).json({
+            success: false,
+            message: `Please specify a password with a minimum length of ${MIN_PASSWORD_LENGTH}.`,
+        })
         return
     }
     const hash = await bcrypt.hash(password, SALT_ROUNDS)
@@ -50,6 +43,7 @@ export async function post(
         serverError(res)
         return
     }
+    const uuid = uuidv4()
     const queryResult = await db?.query({
         text: `INSERT INTO users (
                 email,
@@ -58,17 +52,22 @@ export async function post(
                 created_at
             )
             VALUES ($1, $2, $3, NOW())
-            RETURNING *`,
-        values: [email, hash, uuidv4()],
+            RETURNING id`,
+        values: [email, hash, uuid],
     })
     let success = queryResult?.rowCount === 1
     if (!success) {
         serverError(res)
         return
     }
-    res.end(
-        JSON.stringify({
-            success: true,
-        })
-    )
+
+    req.session.regenerate(function (err: any) {
+        if (err) {
+            console.error(err.message)
+            serverError(res)
+        } else {
+            req.session.user_id = queryResult?.rows[0].id
+            res.status(200).json({ success: true })
+        }
+    })
 }

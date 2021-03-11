@@ -2,24 +2,33 @@ import { exit } from "process"
 
 import compression from "compression"
 import sirv from "sirv"
-import { json } from "body-parser"
 import session from "express-session"
+import { json } from "express"
+import pgSimpleSessionStore from "connect-pg-simple"
 
 import * as sapper from "@sapper/server"
 
-import { postgraphile } from "postgraphile"
+import { postgraphile, makePluginHook } from "postgraphile"
+import PersistedOperationsPlugin from "@graphile/persisted-operations"
+import type { PostGraphileOptions } from "postgraphile"
 
 import type { Express } from "express"
+import type { Pool } from "pg"
 
-const { NODE_ENV } = process.env
+const {
+    NODE_ENV,
+    DATABASE_URL,
+    SESSION_COOKIE_VALIDATION_SECRETS,
+    SESSION_COOKIE_NAME = "everglot_sid",
+} = process.env
 const dev = NODE_ENV === "development"
 
-export default function configureExpress(app: Express): Express {
+export default function configureExpress(app: Express, pool: Pool): Express {
     app.use(compression({ threshold: 0 }), sirv("static", { dev }), json())
 
     if (
-        !process.env.SESSION_COOKIE_VALIDATION_SECRETS ||
-        !process.env.SESSION_COOKIE_VALIDATION_SECRETS.length
+        !SESSION_COOKIE_VALIDATION_SECRETS ||
+        !SESSION_COOKIE_VALIDATION_SECRETS.length
     ) {
         console.error(
             "SESSION_COOKIE_VALIDATION_SECRETS environment variable required. It should be a JSON array of random strings with the first element being the current secret, and the rest being previous secrets that are still considered valid."
@@ -28,7 +37,7 @@ export default function configureExpress(app: Express): Express {
     }
     let secret: string[] | null
     try {
-        secret = JSON.parse(process.env.SESSION_COOKIE_VALIDATION_SECRETS)
+        secret = JSON.parse(SESSION_COOKIE_VALIDATION_SECRETS)
         if (
             !Array.isArray(secret) ||
             !secret.length ||
@@ -49,7 +58,14 @@ export default function configureExpress(app: Express): Express {
     }
     const sess: session.SessionOptions = {
         secret,
-        cookie: {},
+        cookie: { maxAge: 3 * 24 * 60 * 60 * 1000 }, // 3 days until touch or re-login
+        store: new (pgSimpleSessionStore(session))({
+            pool,
+            tableName: "user_sessions",
+        }),
+        name: SESSION_COOKIE_NAME,
+        resave: false,
+        saveUninitialized: false,
     }
 
     if (!dev) {
@@ -60,17 +76,51 @@ export default function configureExpress(app: Express): Express {
         sess.cookie = { ...sess.cookie, secure: true } // serve secure cookies
     }
 
+    app.use(session(sess))
+
+    app.use((req, res, next) => {
+        if (pathIsProtected(req.path) && !req.session.user_id) {
+            console.log(`Unauthorized access to path "${req.path}"`)
+            res.redirect("/login")
+            return
+        }
+        next()
+    })
+
+    const pluginHook = makePluginHook([PersistedOperationsPlugin])
     app.use(
-        postgraphile(process.env.DATABASE_URL, "public", {
+        // TODO: use a restricted user account for postgraphile access
+        postgraphile(DATABASE_URL, "public", {
             watchPg: true,
             graphiql: true,
             enhanceGraphiql: true,
-        })
+            pluginHook,
+            persistedOperations: {}, // disable all queries for now, TODO: persist them
+            async additionalGraphQLContextFromRequest(req, _res) {
+                return { req }
+            },
+        } as PostGraphileOptions & { persistedOperations: {} })
     )
-
-    app.use(session(sess))
 
     app.use(sapper.middleware())
 
     return app
+}
+
+function pathIsProtected(path: string): boolean {
+    const UNPROTECTED_ROUTES = [
+        "/join",
+        "/login",
+        "/global.css",
+        "/favicon.ico",
+        "/manifest.json",
+    ]
+    if (UNPROTECTED_ROUTES.includes(path)) {
+        return false
+    }
+    if (path.startsWith("/client/")) {
+        // static files
+        return false
+    }
+    return true
 }

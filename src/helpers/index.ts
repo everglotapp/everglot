@@ -1,10 +1,11 @@
-import type { SapperResponse } from "@sapper/server"
+import type { Response } from "express"
 
-export function serverError(res: SapperResponse) {
-    res.end(
-        JSON.stringify({
-            success: false,
-            message: "Something went wrong while processing your request.",
-        })
-    )
+export function serverError(
+    res: Response,
+    message = "Something went wrong while processing your request."
+) {
+    res.status(500).json({
+        success: false,
+        message,
+    })
 }

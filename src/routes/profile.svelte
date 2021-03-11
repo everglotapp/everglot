@@ -4,7 +4,13 @@
     import { getLocales } from "@marcelovicentegc/i18n-iso-languages"
 
     import { username, room } from "../stores"
-    import { MAX_LEARNING, MAX_TEACHING, Gender, CefrLevel } from "../users"
+    import {
+        MAX_LEARNING,
+        MAX_TEACHING,
+        Gender,
+        CefrLevel,
+        MIN_USERNAME_LENGTH,
+    } from "../users"
 
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
@@ -204,6 +210,9 @@
                     id="username"
                     placeholder="Username …"
                     required
+                    minlength={MIN_USERNAME_LENGTH}
+                    pattern={`.{${MIN_USERNAME_LENGTH},}`}
+                    title={`${MIN_USERNAME_LENGTH} characters minimum`}
                     bind:value={$username}
                 />
             </div>

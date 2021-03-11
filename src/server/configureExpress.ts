@@ -15,15 +15,20 @@ import type { PostGraphileOptions } from "postgraphile"
 import type { Express } from "express"
 import type { Pool } from "pg"
 
-const { NODE_ENV } = process.env
+const {
+    NODE_ENV,
+    DATABASE_URL,
+    SESSION_COOKIE_VALIDATION_SECRETS,
+    SESSION_COOKIE_NAME = "everglot_sid",
+} = process.env
 const dev = NODE_ENV === "development"
 
 export default function configureExpress(app: Express, pool: Pool): Express {
     app.use(compression({ threshold: 0 }), sirv("static", { dev }), json())
 
     if (
-        !process.env.SESSION_COOKIE_VALIDATION_SECRETS ||
-        !process.env.SESSION_COOKIE_VALIDATION_SECRETS.length
+        !SESSION_COOKIE_VALIDATION_SECRETS ||
+        !SESSION_COOKIE_VALIDATION_SECRETS.length
     ) {
         console.error(
             "SESSION_COOKIE_VALIDATION_SECRETS environment variable required. It should be a JSON array of random strings with the first element being the current secret, and the rest being previous secrets that are still considered valid."
@@ -32,7 +37,7 @@ export default function configureExpress(app: Express, pool: Pool): Express {
     }
     let secret: string[] | null
     try {
-        secret = JSON.parse(process.env.SESSION_COOKIE_VALIDATION_SECRETS)
+        secret = JSON.parse(SESSION_COOKIE_VALIDATION_SECRETS)
         if (
             !Array.isArray(secret) ||
             !secret.length ||
@@ -58,6 +63,7 @@ export default function configureExpress(app: Express, pool: Pool): Express {
             pool,
             tableName: "user_sessions",
         }),
+        name: SESSION_COOKIE_NAME,
         resave: false,
         saveUninitialized: false,
     }
@@ -75,12 +81,15 @@ export default function configureExpress(app: Express, pool: Pool): Express {
     const pluginHook = makePluginHook([PersistedOperationsPlugin])
     app.use(
         // TODO: use a restricted user account for postgraphile access
-        postgraphile(process.env.DATABASE_URL, "public", {
+        postgraphile(DATABASE_URL, "public", {
             watchPg: true,
             graphiql: true,
             enhanceGraphiql: true,
             pluginHook,
             persistedOperations: {}, // disable all queries for now, TODO: persist them
+            async additionalGraphQLContextFromRequest(req, _res) {
+                return { req }
+            },
         } as PostGraphileOptions & { persistedOperations: {} })
     )
 

@@ -6,6 +6,7 @@
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import { signedIn } from "../stores"
+    import { MIN_PASSWORD_LENGTH } from "../users"
 
     onMount(() => {
         if ($signedIn) {
@@ -97,9 +98,9 @@
             <input
                 id="password"
                 type="password"
-                minlength="8"
-                pattern={`.{8,}`}
-                title="8 characters minimum"
+                minlength={MIN_PASSWORD_LENGTH}
+                pattern={`.{${MIN_PASSWORD_LENGTH},}`}
+                title={`${MIN_PASSWORD_LENGTH} characters minimum`}
                 bind:value={password}
                 required
                 class="py-2"

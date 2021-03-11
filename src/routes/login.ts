@@ -41,7 +41,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
     // TODO: check that email and password are strings
     const queryResult = await db?.query({
         text: `
-            SELECT password_hash FROM users
+            SELECT id, password_hash
+            FROM users
             WHERE
                 email = $1
             LIMIT 1`,
@@ -58,7 +59,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    const storedPasswordHash = queryResult?.rows[0]?.password_hash
+    const user: { id: number; password_hash: string } = queryResult?.rows[0]
+    const storedPasswordHash = user.password_hash
 
     /** Avoid comparing null/undefined/empty string */
     if (!storedPasswordHash || !storedPasswordHash.length) {
@@ -87,10 +89,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
     req.session.regenerate(function (err: any) {
         if (err) {
             console.error(err.message)
+            serverError(res)
         } else {
-            res.redirect("/")
+            req.session.user_id = user.id
+            res.status(200).json({ success: true })
         }
     })
-
-    serverError(res)
 }

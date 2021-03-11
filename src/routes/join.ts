@@ -47,6 +47,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         serverError(res)
         return
     }
+    const uuid = uuidv4()
     const queryResult = await db?.query({
         text: `INSERT INTO users (
                 email,
@@ -55,8 +56,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 created_at
             )
             VALUES ($1, $2, $3, NOW())
-            RETURNING *`,
-        values: [email, hash, uuidv4()],
+            RETURNING id`,
+        values: [email, hash, uuid],
     })
     let success = queryResult?.rowCount === 1
     if (!success) {
@@ -67,10 +68,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
     req.session.regenerate(function (err: any) {
         if (err) {
             console.error(err.message)
+            serverError(res)
         } else {
-            res.redirect("/")
+            req.session.user_id = queryResult?.rows[0].id
+            res.status(200).json({ success: true })
         }
     })
-
-    serverError(res)
 }

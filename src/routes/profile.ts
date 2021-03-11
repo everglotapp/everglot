@@ -4,7 +4,7 @@ import { Gender, CefrLevel as _CefrLevel, MIN_USERNAME_LENGTH } from "../users"
 import type { Request, Response } from "express"
 import { serverError } from "../helpers"
 
-export async function post(req: Request, res: Response, next: () => void) {
+export async function post(req: Request, res: Response, _next: () => void) {
     res.setHeader("Content-Type", "application/json")
     const gender: Gender | null =
         req.body.hasOwnProperty("gender") &&
@@ -13,35 +13,36 @@ export async function post(req: Request, res: Response, next: () => void) {
             : null
 
     if (!req.body.hasOwnProperty("learn")) {
-        res.end({
+        res.status(422).json({
             success: false,
             message:
                 "Please select at least one language that you are interested in.",
         })
-        next()
+        return
     }
 
     if (
         !req.body.hasOwnProperty("username") ||
         typeof req.body.username !== "string"
     ) {
-        res.end({
+        res.status(422).json({
             success: false,
             message: "Please specify a username.",
         })
-        next()
+        return
     }
 
     if (req.body.username.length < MIN_USERNAME_LENGTH) {
-        res.end({
+        res.status(422).json({
             success: false,
             message: `Usernames must be at least ${MIN_USERNAME_LENGTH} characters long.`,
         })
-        next()
+        return
     }
 
     // TODO: when sign up is implemented, use session to find user ID and update the user record
     const email = "example@everglot.com"
+    // TODO: remove uuid from here, assign uuid on sign up
     const queryResult = await db?.query({
         text: `INSERT INTO users (
                 email,
@@ -64,9 +65,7 @@ export async function post(req: Request, res: Response, next: () => void) {
     if (!success) {
         serverError(res)
     }
-    res.end(
-        JSON.stringify({
-            success: true,
-        })
-    )
+    res.status(200).json({
+        success: true,
+    })
 }

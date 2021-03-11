@@ -1,5 +1,4 @@
 import { db } from "../server/db"
-import type { SapperRequest, SapperResponse } from "@sapper/server"
 
 import { MIN_PASSWORD_LENGTH } from "../users"
 import { serverError } from "../helpers"
@@ -9,11 +8,9 @@ import { v4 as uuidv4 } from "uuid"
 
 const SALT_ROUNDS = 13
 
-export async function post(
-    req: SapperRequest & { body: any },
-    res: SapperResponse,
-    _next: () => void
-) {
+import type { Request, Response } from "express"
+
+export async function post(req: Request, res: Response, _next: () => void) {
     res.setHeader("Content-Type", "application/json")
     const email = req?.body?.email
     const password = req?.body?.password
@@ -66,9 +63,14 @@ export async function post(
         serverError(res)
         return
     }
-    res.end(
-        JSON.stringify({
-            success: true,
-        })
-    )
+
+    req.session.regenerate(function (err: any) {
+        if (err) {
+            console.error(err.message)
+        } else {
+            res.redirect("/")
+        }
+    })
+
+    serverError(res)
 }

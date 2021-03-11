@@ -1,6 +1,6 @@
-import type { SapperResponse } from "@sapper/server"
+import type { Response } from "express"
 
-export function serverError(res: SapperResponse) {
+export function serverError(res: Response) {
     res.end(
         JSON.stringify({
             success: false,

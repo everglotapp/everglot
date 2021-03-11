@@ -2,8 +2,8 @@ import { exit } from "process"
 
 import compression from "compression"
 import sirv from "sirv"
-import { json } from "body-parser"
 import session from "express-session"
+import { json } from "express"
 import pgSimpleSessionStore from "connect-pg-simple"
 
 import * as sapper from "@sapper/server"
@@ -59,6 +59,7 @@ export default function configureExpress(app: Express, pool: Pool): Express {
             tableName: "user_sessions",
         }),
         resave: false,
+        saveUninitialized: false,
     }
 
     if (!dev) {

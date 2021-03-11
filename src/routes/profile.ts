@@ -1,13 +1,10 @@
-import type { SapperRequest, SapperResponse } from "@sapper/server"
-
 import { db } from "../server/db"
 import { Gender, CefrLevel as _CefrLevel, MIN_USERNAME_LENGTH } from "../users"
 
-export async function post(
-    req: SapperRequest & { body: any },
-    res: SapperResponse,
-    next: () => void
-) {
+import type { Request, Response } from "express"
+import { serverError } from "../helpers"
+
+export async function post(req: Request, res: Response, next: () => void) {
     res.setHeader("Content-Type", "application/json")
     const gender: Gender | null =
         req.body.hasOwnProperty("gender") &&
@@ -64,12 +61,12 @@ export async function post(
         values: [email, req.body.username, gender],
     })
     let success = queryResult?.rowCount === 1
+    if (!success) {
+        serverError(res)
+    }
     res.end(
         JSON.stringify({
-            success: Boolean(success),
-            message: success
-                ? null
-                : "Something went wrong while processing your request.",
+            success: true,
         })
     )
 }

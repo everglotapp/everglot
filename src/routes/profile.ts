@@ -1,4 +1,3 @@
-import { db } from "../server/db"
 import { Gender, CefrLevel as _CefrLevel, MIN_USERNAME_LENGTH } from "../users"
 
 import type { Request, Response } from "express"
@@ -46,6 +45,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         const client = await createDatabasePool().connect()
         try {
             await client.query("BEGIN")
+            console.assert(!!req.session.user_id)
             await client.query({
                 text: `
                   UPDATE users SET
@@ -55,6 +55,34 @@ export async function post(req: Request, res: Response, _next: () => void) {
                   WHERE users.id = $1`,
                 values: [req.session.user_id, req.body.username, gender],
             })
+            await client.query({
+                text: `
+                  DELETE FROM user_languages
+                  WHERE user_id = $1`,
+                values: [req.session.user_id],
+            })
+            for (let code of req.body.teach) {
+                await client.query({
+                    text: `
+                    INSERT INTO user_languages (
+                        user_id,
+                        language_id,
+                        language_skill_level_id,
+                        native
+                    )
+                    VALUES (
+                        $1,
+                        (
+                            SELECT id
+                            FROM languages
+                            WHERE alpha2 = $2
+                        ),
+                        null,
+                        true
+                    )`,
+                    values: [req.session.user_id, code],
+                })
+            }
             await client.query("COMMIT")
             res.status(200).json({
                 success: true,

@@ -47,39 +47,16 @@ export async function post(req: Request, res: Response, _next: () => void) {
             await client.query("BEGIN")
             console.assert(!!req.session.user_id)
             await client.query({
-                text: `
-                  UPDATE users SET
-                      username = $2,
-                      gender = $3,
-                      last_active_at = NOW()
-                  WHERE users.id = $1`,
+                text: SQL_UPDATE_USER_ATTRIBUTES,
                 values: [req.session.user_id, req.body.username, gender],
             })
             await client.query({
-                text: `
-                  DELETE FROM user_languages
-                  WHERE user_id = $1`,
+                text: SQL_DELETE_USER_LANGUAGES,
                 values: [req.session.user_id],
             })
             for (let code of req.body.teach) {
                 await client.query({
-                    text: `
-                    INSERT INTO user_languages (
-                        user_id,
-                        language_id,
-                        language_skill_level_id,
-                        native
-                    )
-                    VALUES (
-                        $1,
-                        (
-                            SELECT id
-                            FROM languages
-                            WHERE alpha2 = $2
-                        ),
-                        null,
-                        true
-                    )`,
+                    text: SQL_ASSIGN_NATIVE_LANGUAGES,
                     values: [req.session.user_id, code],
                 })
             }
@@ -98,3 +75,32 @@ export async function post(req: Request, res: Response, _next: () => void) {
         serverError(res)
     })
 }
+
+const SQL_UPDATE_USER_ATTRIBUTES = `
+UPDATE users SET
+username = $2,
+gender = $3,
+last_active_at = NOW()
+WHERE users.id = $1`
+
+const SQL_DELETE_USER_LANGUAGES = `
+DELETE FROM user_languages
+WHERE user_id = $1`
+
+const SQL_ASSIGN_NATIVE_LANGUAGES = `
+INSERT INTO user_languages (
+    user_id,
+    language_id,
+    language_skill_level_id,
+    native
+)
+VALUES (
+    $1,
+    (
+        SELECT id
+        FROM languages
+        WHERE alpha2 = $2
+    ),
+    null,
+    true
+)`

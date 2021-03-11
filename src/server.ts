@@ -13,6 +13,8 @@ console.log("[Database Pool] Database connection established")
 
 /** Configure HTTP server. */
 const app = configureExpress(express(), pool)
+/** Disable header leaking information on the server. */
+app.disable("x-powered-by")
 /** Start HTTP server. */
 const server = app.listen(PORT)
 

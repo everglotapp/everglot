@@ -13,6 +13,7 @@
         show = !show
     }
 
+    // @ts-ignore (left side of comma operator isn't ignored by svelte)
     $: segment, change()
     $: fullscreen = segment ? FULLSCREEN_SEGMENTS.includes(segment) : false
 </script>

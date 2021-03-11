@@ -4,6 +4,8 @@ import { Gender, CefrLevel as _CefrLevel, MIN_USERNAME_LENGTH } from "../users"
 import type { Request, Response } from "express"
 import { serverError } from "../helpers"
 
+import { createDatabasePool } from "../server/db"
+
 export async function post(req: Request, res: Response, _next: () => void) {
     res.setHeader("Content-Type", "application/json")
     const gender: Gender | null =
@@ -40,20 +42,31 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    const queryResult = await db?.query({
-        text: `
-            UPDATE users SET
-                username = $2,
-                gender = $3,
-                last_active_at = NOW()
-            WHERE users.id = $1`,
-        values: [req.session.user_id, req.body.username, gender],
-    })
-    let success = queryResult?.rowCount === 1
-    if (!success) {
+    ;(async () => {
+        const client = await createDatabasePool().connect()
+        try {
+            await client.query("BEGIN")
+            await client.query({
+                text: `
+                  UPDATE users SET
+                      username = $2,
+                      gender = $3,
+                      last_active_at = NOW()
+                  WHERE users.id = $1`,
+                values: [req.session.user_id, req.body.username, gender],
+            })
+            await client.query("COMMIT")
+            res.status(200).json({
+                success: true,
+            })
+        } catch (e) {
+            await client.query("ROLLBACK")
+            throw e
+        } finally {
+            client.release()
+        }
+    })().catch((e) => {
+        console.error(e.stack)
         serverError(res)
-    }
-    res.status(200).json({
-        success: true,
     })
 }

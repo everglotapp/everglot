@@ -6,6 +6,9 @@ import { serverError } from "../helpers"
 
 import type { Request, Response } from "express"
 
+const LOGIN_FAILED_MESSAGE =
+    "That didn't work. Did you enter the correct password?"
+
 export async function post(req: Request, res: Response, _next: () => void) {
     res.setHeader("Content-Type", "application/json")
     // TODO: properly validate email
@@ -34,7 +37,6 @@ export async function post(req: Request, res: Response, _next: () => void) {
         })
         return
     }
-    // TODO: check that email and password are strings
     const queryResult = await db?.query<{ id: number; password_hash: string }>({
         text: `
             SELECT id, password_hash
@@ -51,7 +53,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         console.log(
             `User tried to login with an email address that does not exist: ${email}`
         )
-        serverError(res)
+        serverError(res, LOGIN_FAILED_MESSAGE)
         return
     }
 
@@ -63,7 +65,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         console.error(
             `User stored password hash is empty. This should never happen! Email: ${email}`
         )
-        serverError(res)
+        serverError(res, LOGIN_FAILED_MESSAGE)
         return
     }
 
@@ -76,7 +78,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         console.log(
             `User tried to login with incorrect password. Email: ${email}`
         )
-        serverError(res)
+        serverError(res, LOGIN_FAILED_MESSAGE)
         return
     }
 

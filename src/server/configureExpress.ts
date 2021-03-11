@@ -113,6 +113,7 @@ function pathIsProtected(path: string): boolean {
         "/join/",
         "/login",
         "/login/",
+        "/service-worker.js",
         "/global.css",
         "/favicon.ico",
         "/manifest.json",

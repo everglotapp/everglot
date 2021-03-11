@@ -1,18 +1,11 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
-    import { onMount } from "svelte"
 
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import { signedIn } from "../stores"
     import { MIN_PASSWORD_LENGTH } from "../users"
-
-    onMount(() => {
-        if ($signedIn) {
-            goto("/index", { replaceState: true, noscroll: true })
-        }
-    })
 
     let errorMessage: string | null = null
     let submitting = false

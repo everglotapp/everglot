@@ -1,6 +1,5 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
-    import { onMount } from "svelte"
 
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
@@ -8,14 +7,11 @@
     import { signedIn } from "../stores"
     import { MIN_PASSWORD_LENGTH } from "../users"
 
-    onMount(() => {
-        if ($signedIn) {
-            goto("/index", { replaceState: true, noscroll: true })
-        }
-    })
-
     let errorMessage: string | null = null
     let submitting = false
+    let email = ""
+    let password = ""
+
     const handleSubmit = (_event: Event) => {
         if (submitting) {
             return
@@ -41,28 +37,22 @@
                 password,
             }),
         })
-            .then((response) => {
-                if (response.status !== 200) {
+            .then(async (response) => {
+                const res = await response.json()
+                if (!res.hasOwnProperty("success")) {
                     return
                 }
-                response.json().then((res) => {
-                    if (!res.hasOwnProperty("success")) {
-                        return
-                    }
-                    if (res.success === true) {
-                        $signedIn = true
-                        goto("/profile", { replaceState: true, noscroll: true })
-                    } else {
-                        errorMessage = res.message
-                    }
-                })
+                if (res.success === true) {
+                    $signedIn = true
+                    goto("/profile", { replaceState: true, noscroll: true })
+                } else {
+                    errorMessage = res.message
+                }
             })
             .then(() => {
                 submitting = false
             })
     }
-    let email = ""
-    let password = ""
 </script>
 
 <svelte:head>

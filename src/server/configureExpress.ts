@@ -4,6 +4,7 @@ import compression from "compression"
 import sirv from "sirv"
 import { json } from "body-parser"
 import session from "express-session"
+import pgSimpleSessionStore from "connect-pg-simple"
 
 import * as sapper from "@sapper/server"
 
@@ -12,11 +13,12 @@ import PersistedOperationsPlugin from "@graphile/persisted-operations"
 import type { PostGraphileOptions } from "postgraphile"
 
 import type { Express } from "express"
+import type { Pool } from "pg"
 
 const { NODE_ENV } = process.env
 const dev = NODE_ENV === "development"
 
-export default function configureExpress(app: Express): Express {
+export default function configureExpress(app: Express, pool: Pool): Express {
     app.use(compression({ threshold: 0 }), sirv("static", { dev }), json())
 
     if (
@@ -51,7 +53,12 @@ export default function configureExpress(app: Express): Express {
     }
     const sess: session.SessionOptions = {
         secret,
-        cookie: {},
+        cookie: { maxAge: 3 * 24 * 60 * 60 * 1000 }, // 3 days until touch or re-login
+        store: new (pgSimpleSessionStore(session))({
+            pool,
+            tableName: "user_sessions",
+        }),
+        resave: false,
     }
 
     if (!dev) {
@@ -61,6 +68,8 @@ export default function configureExpress(app: Express): Express {
         }
         sess.cookie = { ...sess.cookie, secure: true } // serve secure cookies
     }
+
+    app.use(session(sess))
 
     const pluginHook = makePluginHook([PersistedOperationsPlugin])
     app.use(
@@ -73,8 +82,6 @@ export default function configureExpress(app: Express): Express {
             persistedOperations: {}, // disable all queries for now, TODO: persist them
         } as PostGraphileOptions & { persistedOperations: {} })
     )
-
-    app.use(session(sess))
 
     app.use(sapper.middleware())
 

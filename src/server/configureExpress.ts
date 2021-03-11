@@ -110,7 +110,9 @@ export default function configureExpress(app: Express, pool: Pool): Express {
 function pathIsProtected(path: string): boolean {
     const UNPROTECTED_ROUTES = [
         "/join",
+        "/join/",
         "/login",
+        "/login/",
         "/global.css",
         "/favicon.ico",
         "/manifest.json",

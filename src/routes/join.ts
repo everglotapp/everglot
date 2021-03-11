@@ -21,12 +21,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
         !email.length ||
         !email.includes("@")
     ) {
-        res.end(
-            JSON.stringify({
-                success: false,
-                message: "Please specify a valid email address.",
-            })
-        )
+        res.status(422).json({
+            success: false,
+            message: "Please specify a valid email address.",
+        })
         return
     }
     if (
@@ -34,12 +32,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
         typeof password !== "string" ||
         password.length < MIN_PASSWORD_LENGTH
     ) {
-        res.end(
-            JSON.stringify({
-                success: false,
-                message: `Please specify a password with a minimum length of ${MIN_PASSWORD_LENGTH}.`,
-            })
-        )
+        res.status(422).json({
+            success: false,
+            message: `Please specify a password with a minimum length of ${MIN_PASSWORD_LENGTH}.`,
+        })
         return
     }
     const hash = await bcrypt.hash(password, SALT_ROUNDS)

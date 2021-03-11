@@ -117,8 +117,5 @@
             className="w-full justify-center"
             >I don't have an account</ButtonLarge
         >
-        <div class="py-4 font-bold my-8 px-8 bg-primary-lightest">
-            Sorry, login will be available soon!
-        </div>
     </form>
 </div>

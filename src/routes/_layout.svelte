@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte"
     import { scale } from "svelte/transition"
     import MainNav from "../comp/layout/MainNav.svelte"
     import Footer from "../comp/layout/Footer.svelte"
@@ -7,22 +8,26 @@
     const FULLSCREEN_SEGMENTS = ["chat"]
 
     const timeout = 150
-    let show = true
+    let transitionTriggeringSwitch = true
 
     const change = () => {
-        show = !show
+        transitionTriggeringSwitch = !transitionTriggeringSwitch
     }
 
     // @ts-ignore (left side of comma operator isn't ignored by svelte)
     $: segment, change()
     $: fullscreen = segment ? FULLSCREEN_SEGMENTS.includes(segment) : false
+
+    onMount(() => {
+        segment = window.location.pathname.split("/")[1]
+    })
 </script>
 
 {#if !fullscreen}
     <MainNav {segment} />
 {/if}
 
-{#if show}
+{#if transitionTriggeringSwitch}
     <main
         in:scale={{ duration: timeout, delay: timeout }}
         out:scale={{ duration: timeout }}

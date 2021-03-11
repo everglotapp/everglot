@@ -78,6 +78,15 @@ export default function configureExpress(app: Express, pool: Pool): Express {
 
     app.use(session(sess))
 
+    app.use((req, res, next) => {
+        if (pathIsProtected(req.path) && !req.session.user_id) {
+            console.log(`Unauthorized access to path "${req.path}"`)
+            res.redirect("/login")
+            return
+        }
+        next()
+    })
+
     const pluginHook = makePluginHook([PersistedOperationsPlugin])
     app.use(
         // TODO: use a restricted user account for postgraphile access
@@ -96,4 +105,22 @@ export default function configureExpress(app: Express, pool: Pool): Express {
     app.use(sapper.middleware())
 
     return app
+}
+
+function pathIsProtected(path: string): boolean {
+    const UNPROTECTED_ROUTES = [
+        "/join",
+        "/login",
+        "/global.css",
+        "/favicon.ico",
+        "/manifest.json",
+    ]
+    if (UNPROTECTED_ROUTES.includes(path)) {
+        return false
+    }
+    if (path.startsWith("/client/")) {
+        // static files
+        return false
+    }
+    return true
 }

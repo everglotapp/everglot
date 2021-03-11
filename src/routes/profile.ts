@@ -2,9 +2,14 @@ import { db } from "../server/db"
 import { Gender, CefrLevel as _CefrLevel, MIN_USERNAME_LENGTH } from "../users"
 
 import type { Request, Response } from "express"
-import { serverError } from "../helpers"
+import { unauthorized, serverError } from "../helpers"
 
 export async function post(req: Request, res: Response, _next: () => void) {
+    if (!req.session.user_id) {
+        unauthorized(res)
+        return
+    }
+
     res.setHeader("Content-Type", "application/json")
     const gender: Gender | null =
         req.body.hasOwnProperty("gender") &&

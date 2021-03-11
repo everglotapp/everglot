@@ -17,12 +17,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
         !email.length ||
         !email.includes("@")
     ) {
-        res.end(
-            JSON.stringify({
-                success: false,
-                message: "Please specify an email address.",
-            })
-        )
+        res.status(422).json({
+            success: false,
+            message: "Please specify an email address.",
+        })
         return
     }
     if (
@@ -30,16 +28,14 @@ export async function post(req: Request, res: Response, _next: () => void) {
         typeof password !== "string" ||
         password.length < MIN_PASSWORD_LENGTH
     ) {
-        res.end(
-            JSON.stringify({
-                success: false,
-                message: "Please specify a password.",
-            })
-        )
+        res.status(422).json({
+            success: false,
+            message: "Please specify a password.",
+        })
         return
     }
     // TODO: check that email and password are strings
-    const queryResult = await db?.query({
+    const queryResult = await db?.query<{ id: number; password_hash: string }>({
         text: `
             SELECT id, password_hash
             FROM users
@@ -59,7 +55,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    const user: { id: number; password_hash: string } = queryResult?.rows[0]
+    const user = queryResult?.rows[0]!
     const storedPasswordHash = user.password_hash
 
     /** Avoid comparing null/undefined/empty string */
@@ -84,7 +80,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    console.log("Successful login")
+    console.log(`Successful login! Email: ${email}`)
 
     req.session.regenerate(function (err: any) {
         if (err) {

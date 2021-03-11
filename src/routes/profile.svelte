@@ -154,6 +154,7 @@
                     {}
                 ),
             }),
+            redirect: "follow", // if user isn't signed in anymore
         })
             .then((response) => {
                 if (response.status !== 200) {

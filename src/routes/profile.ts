@@ -2,14 +2,9 @@ import { db } from "../server/db"
 import { Gender, CefrLevel as _CefrLevel, MIN_USERNAME_LENGTH } from "../users"
 
 import type { Request, Response } from "express"
-import { unauthorized, serverError } from "../helpers"
+import { serverError } from "../helpers"
 
 export async function post(req: Request, res: Response, _next: () => void) {
-    if (!req.session.user_id) {
-        unauthorized(res)
-        return
-    }
-
     res.setHeader("Content-Type", "application/json")
     const gender: Gender | null =
         req.body.hasOwnProperty("gender") &&
@@ -45,26 +40,14 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    // TODO: when sign up is implemented, use session to find user ID and update the user record
-    const email = "example@everglot.com"
-    // TODO: remove uuid from here, assign uuid on sign up
     const queryResult = await db?.query({
-        text: `INSERT INTO users (
-                email,
-                username,
-                gender,
-                last_active_at
-            )
-            VALUES ($1, $2, $3, NOW())
-            ON CONFLICT (email) DO UPDATE SET (
-                username,
-                gender,
-                uuid,
-                last_active_at
-            ) = ($2, $3, NOW())
-            WHERE users.email = $1
-            RETURNING *`,
-        values: [email, req.body.username, gender],
+        text: `
+            UPDATE users SET
+                username = $2,
+                gender = $3,
+                last_active_at = NOW()
+            WHERE users.id = $1`,
+        values: [req.session.user_id, req.body.username, gender],
     })
     let success = queryResult?.rowCount === 1
     if (!success) {

@@ -14,6 +14,14 @@ import type { Request, Response } from "express"
 
 type InvalidEmailReason = "smtp" | "regex" | "typo" | "mx" | "disposable"
 
+export function get(req: Request, res: Response, next: () => void) {
+    if (req.session.user_id) {
+        res.redirect("/")
+        return
+    }
+    next()
+}
+
 export async function post(req: Request, res: Response, _next: () => void) {
     if (!ensureJson(req, res)) {
         return

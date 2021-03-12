@@ -11,11 +11,18 @@ import type { Request, Response } from "express"
 const LOGIN_FAILED_MESSAGE =
     "That didn't work. Did you enter the correct password?"
 
+export function get(req: Request, res: Response, next: () => void) {
+    if (req.session.user_id) {
+        res.redirect("/")
+        return
+    }
+    next()
+}
+
 export async function post(req: Request, res: Response, _next: () => void) {
     if (!ensureJson(req, res)) {
         return
     }
-    // TODO: properly validate email
     const email = req?.body?.email
     const password = req?.body?.password
     if (!email || typeof email !== "string" || !email.length) {

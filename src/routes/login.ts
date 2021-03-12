@@ -2,7 +2,7 @@ import bcrypt from "bcrypt"
 
 import { db } from "../server/db"
 import { MIN_PASSWORD_LENGTH } from "../users"
-import { serverError } from "../helpers"
+import { ensureJson, serverError } from "../helpers"
 
 import type { Request, Response } from "express"
 
@@ -10,7 +10,7 @@ const LOGIN_FAILED_MESSAGE =
     "That didn't work. Did you enter the correct password?"
 
 export async function post(req: Request, res: Response, _next: () => void) {
-    res.setHeader("Content-Type", "application/json")
+    ensureJson(req, res)
     // TODO: properly validate email
     const email = req?.body?.email
     const password = req?.body?.password

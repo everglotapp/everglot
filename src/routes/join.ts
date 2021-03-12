@@ -1,7 +1,7 @@
 import { db } from "../server/db"
 
 import { MIN_PASSWORD_LENGTH } from "../users"
-import { serverError } from "../helpers"
+import { ensureJson, serverError } from "../helpers"
 
 import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
@@ -11,7 +11,9 @@ const SALT_ROUNDS = 13
 import type { Request, Response } from "express"
 
 export async function post(req: Request, res: Response, _next: () => void) {
-    res.setHeader("Content-Type", "application/json")
+    if (!ensureJson(req, res)) {
+        return
+    }
     const email = req?.body?.email
     const password = req?.body?.password
     // TODO: properly validate email

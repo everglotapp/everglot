@@ -10,7 +10,9 @@ const LOGIN_FAILED_MESSAGE =
     "That didn't work. Did you enter the correct password?"
 
 export async function post(req: Request, res: Response, _next: () => void) {
-    ensureJson(req, res)
+    if (!ensureJson(req, res)) {
+        return
+    }
     // TODO: properly validate email
     const email = req?.body?.email
     const password = req?.body?.password

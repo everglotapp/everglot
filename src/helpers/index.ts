@@ -11,8 +11,7 @@ export function serverError(
 }
 
 const CONTENT_TYPE_JSON = "application/json"
-export function ensureJson(req: Request, res: Response) {
-    res.setHeader("Content-Type", CONTENT_TYPE_JSON)
+export function ensureJson(req: Request, res: Response): boolean {
     if (
         !req.headers.hasOwnProperty("content-type") ||
         req.headers["content-type"] !== CONTENT_TYPE_JSON
@@ -22,5 +21,8 @@ export function ensureJson(req: Request, res: Response) {
             message: "This endpoint only accepts JSON data",
         })
         res.end()
+        return false
     }
+    res.setHeader("Content-Type", CONTENT_TYPE_JSON)
+    return true
 }

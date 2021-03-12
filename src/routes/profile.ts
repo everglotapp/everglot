@@ -6,7 +6,9 @@ import { ensureJson, serverError } from "../helpers"
 import { createDatabasePool } from "../server/db"
 
 export async function post(req: Request, res: Response, _next: () => void) {
-    ensureJson(req, res)
+    if (!ensureJson(req, res)) {
+        return
+    }
     const gender: Gender | null =
         req.body.hasOwnProperty("gender") &&
         Object.values(Gender).includes(req.body.gender)

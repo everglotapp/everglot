@@ -11,7 +11,9 @@ const SALT_ROUNDS = 13
 import type { Request, Response } from "express"
 
 export async function post(req: Request, res: Response, _next: () => void) {
-    ensureJson(req, res)
+    if (!ensureJson(req, res)) {
+        return
+    }
     const email = req?.body?.email
     const password = req?.body?.password
     // TODO: properly validate email

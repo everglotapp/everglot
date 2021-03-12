@@ -36,7 +36,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     if (!emailValidation.valid) {
         res.status(422).json({
             success: false,
-            message: "Please specify a valid email address.",
+            message: "That email address looks wrong to us.",
         })
         return
     }

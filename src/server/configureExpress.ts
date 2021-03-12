@@ -81,6 +81,7 @@ export default function configureExpress(app: Express, pool: Pool): Express {
     app.use((req, res, next) => {
         if (pathIsProtected(req.path) && !req.session.user_id) {
             console.log(`Unauthorized access to path "${req.path}"`)
+            // TODO: Add parameter with request path to redirect to after login
             res.redirect("/login")
             return
         }

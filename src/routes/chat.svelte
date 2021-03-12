@@ -4,7 +4,11 @@
     import { goto } from "@sapper/app"
 
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
-    import { UserIcon, ChevronsRightIcon } from "svelte-feather-icons"
+    import {
+        UserIcon,
+        LogOutIcon,
+        ChevronsRightIcon,
+    } from "svelte-feather-icons"
 
     import type { User } from "../server/users"
     import type { Language } from "../server/rooms"
@@ -47,8 +51,8 @@
 
     // TODO: Read user data from database.
     onMount(() => {
-        if (!$username.length) {
-            goto("/")
+        if (!$username || !$username.length) {
+            goto("/profile")
         }
 
         socket = io()
@@ -193,11 +197,33 @@
             style="justify-content: space-between;"
         >
             <span class="text-lg py-2">{$room} Chat</span>
-            <ButtonSmall variant="TEXT" href="/profile"
-                ><UserIcon size="24" class="md:mr-1" /><span
-                    class="hidden md:inline">Profile</span
-                ></ButtonSmall
-            >
+            <div>
+                <ButtonSmall
+                    variant="TEXT"
+                    tag="button"
+                    href="/profile"
+                    on:click={() => {
+                        fetch("/logout", {
+                            method: "post",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json",
+                            },
+                            redirect: "follow", // if user isn't signed in anymore
+                        }).then(() => {
+                            goto("/login")
+                        })
+                    }}
+                    ><LogOutIcon size="24" class="md:mr-1" /><span
+                        class="hidden md:inline">Logout</span
+                    ></ButtonSmall
+                >
+                <ButtonSmall variant="TEXT" href="/profile"
+                    ><UserIcon size="24" class="md:mr-1" /><span
+                        class="hidden md:inline">Profile</span
+                    ></ButtonSmall
+                >
+            </div>
         </div>
         <div id="chat-messages" class="rounded-tr-md p-8">
             {#each roomMessages as message}

@@ -6,9 +6,13 @@ import { ensureJson, serverError } from "../helpers"
 import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
 
+import validate from "deep-email-validator"
+
 const SALT_ROUNDS = 13
 
 import type { Request, Response } from "express"
+
+type InvalidEmailReason = "smtp" | "regex" | "typo" | "mx" | "disposable"
 
 export async function post(req: Request, res: Response, _next: () => void) {
     if (!ensureJson(req, res)) {
@@ -16,16 +20,53 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
     const email = req?.body?.email
     const password = req?.body?.password
-    // TODO: properly validate email
-    if (
-        !email ||
-        typeof email !== "string" ||
-        !email.length ||
-        !email.includes("@")
-    ) {
+    if (!email || typeof email !== "string" || !email.length) {
         res.status(422).json({
             success: false,
-            message: "Please specify a valid email address.",
+            message: "Please specify an email address.",
+        })
+        return
+    }
+    const emailValidation = await validate({
+        email,
+        validateRegex: true,
+        validateMx: true,
+        validateTypo: true,
+        validateDisposable: true,
+        validateSMTP: true,
+    })
+    if (!emailValidation.valid) {
+        const { validators, reason } = emailValidation
+        let invalidEmailMsg = "Please double-check that email address."
+        if (
+            typeof reason !== "undefined" &&
+            validators.hasOwnProperty(reason) &&
+            validators[reason as InvalidEmailReason]
+        ) {
+            console.log(
+                `User provided an invalid email "${email}": ${
+                    validators[reason as InvalidEmailReason]!.reason
+                } (${JSON.stringify(emailValidation)})"`
+            )
+            invalidEmailMsg = {
+                smtp:
+                    "It looks like the email address you provided does not exist.",
+                regex: "That email address looks wrong to us.",
+                mx:
+                    "It looks like the email address you provided does not exist.",
+                disposable: "Please use a different email provider.",
+                typo: "Did you misspell the email address by accident?",
+            }[reason as InvalidEmailReason]
+        } else {
+            console.log(
+                `User provided an invalid email "${email}": ${JSON.stringify(
+                    emailValidation
+                )}"`
+            )
+        }
+        res.status(422).json({
+            success: false,
+            message: invalidEmailMsg,
         })
         return
     }

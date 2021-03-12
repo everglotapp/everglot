@@ -34,21 +34,17 @@
                 password,
             }),
         })
-            .then((response) => {
-                if (response.status !== 200) {
+            .then(async (response) => {
+                const res = await response.json()
+                if (!res.hasOwnProperty("success")) {
                     return
                 }
-                response.json().then((res) => {
-                    if (!res.hasOwnProperty("success")) {
-                        return
-                    }
-                    if (res.success === true) {
-                        $signedIn = true
-                        goto("/profile", { replaceState: true, noscroll: true })
-                    } else {
-                        errorMessage = res.message
-                    }
-                })
+                if (res.success === true) {
+                    $signedIn = true
+                    goto("/profile", { replaceState: true, noscroll: true })
+                } else {
+                    errorMessage = res.message
+                }
             })
             .then(() => {
                 submitting = false

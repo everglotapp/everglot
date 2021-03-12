@@ -4,6 +4,8 @@ import { db } from "../server/db"
 import { MIN_PASSWORD_LENGTH } from "../users"
 import { ensureJson, serverError } from "../helpers"
 
+import validate from "deep-email-validator"
+
 import type { Request, Response } from "express"
 
 const LOGIN_FAILED_MESSAGE =
@@ -16,15 +18,25 @@ export async function post(req: Request, res: Response, _next: () => void) {
     // TODO: properly validate email
     const email = req?.body?.email
     const password = req?.body?.password
-    if (
-        !email ||
-        typeof email !== "string" ||
-        !email.length ||
-        !email.includes("@")
-    ) {
+    if (!email || typeof email !== "string" || !email.length) {
         res.status(422).json({
             success: false,
             message: "Please specify an email address.",
+        })
+        return
+    }
+    const emailValidation = await validate({
+        email,
+        validateRegex: true,
+        validateMx: false,
+        validateTypo: false,
+        validateDisposable: false,
+        validateSMTP: false,
+    })
+    if (!emailValidation.valid) {
+        res.status(422).json({
+            success: false,
+            message: "That email address looks wrong to us.",
         })
         return
     }

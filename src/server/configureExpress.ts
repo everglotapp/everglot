@@ -94,11 +94,14 @@ export default function configureExpress(app: Express, pool: Pool): Express {
         postgraphile(DATABASE_URL, "public", {
             watchPg: true,
             graphiql: true,
-            enhanceGraphiql: true,
+            enhanceGraphiql: dev,
             pluginHook,
             persistedOperations: {}, // disable all queries for now, TODO: persist them
             async additionalGraphQLContextFromRequest(req, _res) {
                 return { req }
+            },
+            pgSettings: {
+                statement_timeout: "3000",
             },
         } as PostGraphileOptions & { persistedOperations: {} })
     )

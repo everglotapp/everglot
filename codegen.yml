@@ -1,0 +1,26 @@
+overwrite: true
+schema: "schema.graphql"
+documents: "src/**/*.graphql"
+hooks:
+    afterAllFileWrite:
+        - node addToPersistedOperations.js
+generates:
+    static/graphql.client.json:
+        plugins:
+            - graphql-codegen-persisted-query-ids:
+                  output: client
+                  algorithm: sha256
+    src/graphql.server.json:
+        plugins:
+            - graphql-codegen-persisted-query-ids:
+                  output: server
+                  algorithm: sha256
+    src/types/generated/graphql.d.ts:
+        plugins:
+            - "typescript"
+            - "typescript-operations"
+            - "typescript-graphql-files-modules"
+            - "typescript-document-nodes"
+    src/graphql.schema.json:
+        plugins:
+            - "introspection"

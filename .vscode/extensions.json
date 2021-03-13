@@ -4,6 +4,7 @@
     "csstools.postcss",
     "esbenp.prettier-vscode",
     "bradlc.vscode-tailwindcss",
-    "stylelint.vscode-stylelint"
+    "stylelint.vscode-stylelint",
+    "graphql.vscode-graphql"
   ]
 }

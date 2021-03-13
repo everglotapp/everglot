@@ -10,6 +10,7 @@ import * as sapper from "@sapper/server"
 
 import { postgraphile, makePluginHook } from "postgraphile"
 import PersistedOperationsPlugin from "@graphile/persisted-operations"
+import PgSimplifyInflectorPlugin from "@graphile-contrib/pg-simplify-inflector"
 import type { PostGraphileOptions } from "postgraphile"
 
 import type { Express } from "express"
@@ -92,18 +93,29 @@ export default function configureExpress(app: Express, pool: Pool): Express {
     app.use(
         // TODO: use a restricted user account for postgraphile access
         postgraphile(DATABASE_URL, "public", {
+            appendPlugins: [PgSimplifyInflectorPlugin],
             watchPg: true,
             graphiql: dev,
             enhanceGraphiql: dev,
             pluginHook,
-            persistedOperations: {}, // disable all queries for now, TODO: persist them
+            persistedOperationsDirectory: `${__dirname}/../../../.persisted_operations/`,
             async additionalGraphQLContextFromRequest(req, _res) {
                 return { req }
             },
+            exportGqlSchemaPath: dev ? "schema.graphql" : false,
+            showErrorStack: dev ? "json" : false,
+            extendedErrors: dev ? ["hint", "detail", "errcode"] : [],
+            allowExplain: dev
+                ? (_req) => {
+                      // TODO: customise condition!
+                      return true
+                  }
+                : false,
+            legacyRelations: "omit",
             pgSettings: {
                 statement_timeout: "3000",
             },
-        } as PostGraphileOptions & { persistedOperations: {} })
+        } as PostGraphileOptions & { persistedOperationsDirectory: {} })
     )
 
     app.use(sapper.middleware())
@@ -129,5 +141,8 @@ function pathIsProtected(path: string): boolean {
         // static files
         return false
     }
+    // if (dev && path === "/graphql") {
+    //     return false
+    // }
     return true
 }

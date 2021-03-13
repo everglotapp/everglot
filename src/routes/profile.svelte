@@ -1,15 +1,25 @@
 <script context="module" lang="ts">
     export async function preload() {
-        const response = await this.fetch(`/languages.json`, {
+        const response = await this.fetch(`/graphql`, {
+            method: "POST",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
             },
+            body: JSON.stringify({
+                extensions: {
+                    persistedQuery: {
+                        version: 1,
+                        sha256Hash:
+                            "a9f61bcb578bdd14da454b2bc2b956bfde716898a7cc6a61a8d6f095d50d9dad",
+                    },
+                },
+            }),
         })
         if (response) {
-            const languages = await response.json()
-            if (languages) {
-                return { languages }
+            const res = await response.json()
+            if (res && res?.data?.languages?.nodes) {
+                return { languages: res.data.languages.nodes }
             }
         }
     }
@@ -38,7 +48,7 @@
 
     type Language = {
         alpha2: string
-        english_name: string
+        englishName: string
     }
     export let languages: Language[] = []
 
@@ -58,7 +68,7 @@
         .filter((lang) => !["en", "de"].includes(lang.alpha2))
         .map((lang) => ({
             value: lang.alpha2,
-            label: lang.english_name,
+            label: lang.englishName,
         }))
 
     let learnOther: LanguageItem[] = []
@@ -269,7 +279,7 @@
                     <div class="level flex items-center py-1">
                         <label for={`level_${code}`}>
                             {languages.find((lang) => lang.alpha2 === code)
-                                ?.english_name}:
+                                ?.englishName}:
                         </label>
                         <div>
                             <select

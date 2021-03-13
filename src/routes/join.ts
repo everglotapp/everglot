@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid"
 
 import validate from "deep-email-validator"
 
-const SALT_ROUNDS = 14
+const BCRYPT_WORK_FACTOR = 14
 
 import type { Request, Response } from "express"
 
@@ -89,7 +89,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         })
         return
     }
-    const hash = await bcrypt.hash(password, SALT_ROUNDS)
+    const hash = await bcrypt.hash(password, BCRYPT_WORK_FACTOR)
     if (!hash) {
         serverError(res)
         return

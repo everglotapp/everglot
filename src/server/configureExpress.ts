@@ -93,7 +93,7 @@ export default function configureExpress(app: Express, pool: Pool): Express {
         // TODO: use a restricted user account for postgraphile access
         postgraphile(DATABASE_URL, "public", {
             watchPg: true,
-            graphiql: true,
+            graphiql: dev,
             enhanceGraphiql: dev,
             pluginHook,
             persistedOperations: {}, // disable all queries for now, TODO: persist them

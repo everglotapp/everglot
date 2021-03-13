@@ -95,11 +95,14 @@ export default function configureExpress(app: Express, pool: Pool): Express {
             watchPg: true,
             graphiql: dev,
             enhanceGraphiql: dev,
-            pluginHook,
-            persistedOperations: {}, // disable all queries for now, TODO: persist them
+            // pluginHook,
+            // persistedOperations: {}, // disable all queries for now, TODO: persist them
             async additionalGraphQLContextFromRequest(req, _res) {
                 return { req }
             },
+            showErrorStack: dev ? "json" : false,
+            extendedErrors: dev ? ["hint", "detail", "errcode"] : [],
+            legacyRelations: "omit",
             pgSettings: {
                 statement_timeout: "3000",
             },

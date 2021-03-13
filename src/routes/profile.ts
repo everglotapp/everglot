@@ -1,4 +1,10 @@
-import { Gender, CefrLevel as _CefrLevel, MIN_USERNAME_LENGTH } from "../users"
+import {
+    Gender,
+    CefrLevel as _CefrLevel,
+    MIN_USERNAME_LENGTH,
+    MAX_LEARNING,
+    MAX_TEACHING,
+} from "../users"
 
 import type { Request, Response } from "express"
 import { ensureJson, serverError } from "../helpers"
@@ -46,13 +52,13 @@ export async function post(req: Request, res: Response, _next: () => void) {
     if (
         !req.body.hasOwnProperty("teach") ||
         !Array.isArray(req.body.teach) ||
-        req.body.teach.length < 1 ||
-        req.body.teach.length > 2
+        !req.body.teach.length ||
+        req.body.teach.length > MAX_TEACHING
     ) {
         res.status(422).json({
             success: false,
             message:
-                "Please specify 1 or 2 languages you could help others out with.",
+                "Please specify up to 2 languages you could help others out with.",
         })
         return
     }
@@ -60,12 +66,12 @@ export async function post(req: Request, res: Response, _next: () => void) {
     if (
         !req.body.hasOwnProperty("learn") ||
         !Array.isArray(req.body.learn) ||
-        req.body.learn.length < 1 ||
-        req.body.learn.length > 2
+        !req.body.learn.length ||
+        req.body.learn.length > MAX_LEARNING
     ) {
         res.status(422).json({
             success: false,
-            message: "Please specify 1 or 2 languages you are interested in.",
+            message: "Please specify up to 2 languages you are interested in.",
         })
         return
     }
@@ -112,7 +118,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 }
                 if (teach.includes(code)) {
                     throw new Error(
-                        `Already teaching language with code "${code}", cannot learn it as well!`
+                        `User claimed to learn the language with code "${code}" which they already speak natively.`
                     )
                 }
                 await client.query({

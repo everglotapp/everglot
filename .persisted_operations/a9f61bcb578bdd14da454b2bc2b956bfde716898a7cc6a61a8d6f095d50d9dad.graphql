@@ -1,0 +1,10 @@
+query LanguageCodeMappings {
+  languages {
+    nodes {
+      alpha2
+      englishName
+      __typename
+    }
+    __typename
+  }
+}

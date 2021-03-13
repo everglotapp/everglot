@@ -1,0 +1,8 @@
+query LanguageCodeMappings {
+    languages {
+        nodes {
+            alpha2
+            englishName
+        }
+    }
+}

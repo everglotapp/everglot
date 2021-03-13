@@ -1,13 +1,4 @@
 <script context="module" lang="ts">
-    const query = `query LanguageCodeMappings {
-  allLanguages {
-    nodes {
-      alpha2
-      englishName
-    }
-  }
-}
-`
     export async function preload() {
         const response = await this.fetch(`/graphql`, {
             method: "POST",
@@ -16,13 +7,19 @@
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                query,
+                extensions: {
+                    persistedQuery: {
+                        version: 1,
+                        sha256Hash:
+                            "a9f61bcb578bdd14da454b2bc2b956bfde716898a7cc6a61a8d6f095d50d9dad",
+                    },
+                },
             }),
         })
         if (response) {
             const res = await response.json()
-            if (res) {
-                return { languages: res.data.allLanguages.nodes }
+            if (res && res?.data?.languages?.nodes) {
+                return { languages: res.data.languages.nodes }
             }
         }
     }

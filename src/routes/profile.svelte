@@ -1,7 +1,23 @@
+<script context="module" lang="ts">
+    export async function preload() {
+        const response = await this.fetch(`/languages.json`, {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
+        if (response) {
+            const languages = await response.json()
+            if (languages) {
+                return { languages }
+            }
+        }
+    }
+</script>
+
 <script lang="ts">
     import { goto } from "@sapper/app"
     import { scale } from "svelte/transition"
-    import { getLocales } from "@marcelovicentegc/i18n-iso-languages"
 
     import { username, room } from "../stores"
     import {
@@ -20,7 +36,11 @@
 
     import { ArrowRightIcon, ClockIcon } from "svelte-feather-icons"
 
-    const locales = getLocales()
+    type Language = {
+        alpha2: string
+        english_name: string
+    }
+    export let languages: Language[] = []
 
     let teach: Record<string, boolean> = {
         de: false,
@@ -34,11 +54,11 @@
     let errorMessage: string | null = null
 
     type LanguageItem = { value: string; label: string }
-    let items: LanguageItem[] = locales
-        .filter((locale) => !["en", "de"].includes(locale.ISO6391))
-        .map((locale) => ({
-            value: locale.ISO6391,
-            label: locale.officialLanguage,
+    let items: LanguageItem[] = languages
+        .filter((lang) => !["en", "de"].includes(lang.alpha2))
+        .map((lang) => ({
+            value: lang.alpha2,
+            label: lang.english_name,
         }))
 
     let learnOther: LanguageItem[] = []
@@ -131,7 +151,7 @@
             return
         }
         submitting = true
-        errorMessage = ""
+        errorMessage = null
         const teachingCodes = [
             ...Object.keys(teach).filter((code) => teach[code]),
             ...teachOther.map((item) => item.value),
@@ -248,8 +268,8 @@
                 {#each learningCodes as code}
                     <div class="level flex items-center py-1">
                         <label for={`level_${code}`}>
-                            {locales.find((locale) => locale.ISO6391 === code)
-                                ?.officialLanguage}:
+                            {languages.find((lang) => lang.alpha2 === code)
+                                ?.english_name}:
                         </label>
                         <div>
                             <select

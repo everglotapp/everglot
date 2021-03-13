@@ -1,6 +1,5 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
-    import { scale } from "svelte/transition"
 
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
@@ -24,7 +23,7 @@
             return
         }
         submitting = true
-        errorMessage = ""
+        errorMessage = null
         fetch("/join/", {
             method: "post",
             headers: {

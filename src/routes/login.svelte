@@ -26,7 +26,7 @@
             return
         }
         submitting = true
-        errorMessage = ""
+        errorMessage = null
         fetch("/login/", {
             method: "post",
             headers: {

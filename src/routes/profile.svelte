@@ -116,7 +116,7 @@
     }
 
     let submitting = false
-    function handleSubmit() {
+    async function handleSubmit() {
         if (submitting) {
             return
         }
@@ -135,7 +135,7 @@
             ...Object.keys(teach).filter((code) => teach[code]),
             ...teachOther.map((item) => item.value),
         ]
-        fetch("/profile/", {
+        const response = await fetch("/profile/", {
             method: "post",
             headers: {
                 Accept: "application/json",
@@ -156,29 +156,26 @@
             }),
             redirect: "follow", // if user isn't signed in anymore
         })
-            .then((response) => {
-                if (response.status !== 200) {
-                    return
-                }
-                response.json().then((res) => {
-                    if (!res.hasOwnProperty("success")) {
-                        return
-                    }
-                    if (res.success === true) {
-                        $room = learn.en
-                            ? "English"
-                            : learn.de
-                            ? "German"
-                            : learnOther[0].label // FIXME: learnOther[0] can be undefined here … why?
-                        goto("/chat")
-                    } else {
-                        errorMessage = res.message
-                    }
-                })
-            })
-            .then(() => {
-                submitting = false
-            })
+        if (response.status !== 200) {
+            submitting = false
+            return
+        }
+        const res = await response.json()
+        if (!res.hasOwnProperty("success")) {
+            submitting = false
+            return
+        }
+        if (res.success === true) {
+            $room = learn.en
+                ? "English"
+                : learn.de
+                ? "German"
+                : learnOther[0].label // FIXME: learnOther[0] can be undefined here … why?
+            goto("/chat")
+        } else {
+            errorMessage = res.message
+        }
+        submitting = false
     }
 </script>
 

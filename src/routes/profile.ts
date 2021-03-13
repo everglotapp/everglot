@@ -43,6 +43,49 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
+    if (
+        !req.body.hasOwnProperty("teach") ||
+        !Array.isArray(req.body.teach) ||
+        req.body.teach.length < 1 ||
+        req.body.teach.length > 2
+    ) {
+        res.status(422).json({
+            success: false,
+            message:
+                "Please specify 1 or 2 languages you could help others out with.",
+        })
+        return
+    }
+
+    if (
+        !req.body.hasOwnProperty("learn") ||
+        !Array.isArray(req.body.learn) ||
+        req.body.learn.length < 1 ||
+        req.body.learn.length > 2
+    ) {
+        res.status(422).json({
+            success: false,
+            message: "Please specify 1 or 2 languages you are interested in.",
+        })
+        return
+    }
+
+    if (
+        !req.body.hasOwnProperty("cefrCodes") ||
+        typeof req.body.cefrCodes !== "object" ||
+        Object.keys(req.body.cefrCodes).length !== req.body.learn.length ||
+        Object.keys(req.body.cefrLevels).some(
+            (code) => !req.body.learn.includes(code)
+        )
+    ) {
+        res.status(422).json({
+            success: false,
+            message:
+                "Please specify your level in every language that you're interested in.",
+        })
+        return
+    }
+
     ;(async () => {
         const client = await createDatabasePool().connect()
         try {
@@ -66,6 +109,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
             for (const code of learn) {
                 if (!cefrLevels.hasOwnProperty(code)) {
                     throw new Error(`cefrLevels doesn't have property ${code}`)
+                }
+                if (teach.includes(code)) {
+                    throw new Error(
+                        `Already teaching language with code "${code}", cannot learn it as well!`
+                    )
                 }
                 await client.query({
                     text: SQL_ASSIGN_NON_NATIVE_LANGUAGE,

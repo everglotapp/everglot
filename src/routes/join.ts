@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid"
 
 import validate from "deep-email-validator"
 
-const SALT_ROUNDS = 13
+const SALT_ROUNDS = 14
 
 import type { Request, Response } from "express"
 

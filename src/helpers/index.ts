@@ -21,6 +21,14 @@ const CONTENT_TYPE_JSON = "application/json"
  * @returns Whether request has content type `application/json`.
  */
 export function ensureJson(req: Request, res: Response): boolean {
+    if (!ensureJsonRequest(req, res)) {
+        return false
+    }
+    res.setHeader("Content-Type", CONTENT_TYPE_JSON)
+    return true
+}
+
+export function ensureJsonRequest(req: Request, res: Response): boolean {
     if (
         !req.headers.hasOwnProperty("content-type") ||
         req.headers["content-type"] !== CONTENT_TYPE_JSON
@@ -32,6 +40,5 @@ export function ensureJson(req: Request, res: Response): boolean {
         res.end()
         return false
     }
-    res.setHeader("Content-Type", CONTENT_TYPE_JSON)
     return true
 }

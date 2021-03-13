@@ -58,7 +58,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         res.status(422).json({
             success: false,
             message:
-                "Please specify up to 2 languages you could help others out with.",
+                "Please choose up to 2 languages you could help others out with.",
         })
         return
     }
@@ -71,7 +71,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     ) {
         res.status(422).json({
             success: false,
-            message: "Please specify up to 2 languages you are interested in.",
+            message: "Please choose up to 2 languages you are interested in.",
         })
         return
     }

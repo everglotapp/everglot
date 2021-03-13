@@ -131,6 +131,7 @@
             return
         }
         submitting = true
+        errorMessage = ""
         const teachingCodes = [
             ...Object.keys(teach).filter((code) => teach[code]),
             ...teachOther.map((item) => item.value),
@@ -156,10 +157,6 @@
             }),
             redirect: "follow", // if user isn't signed in anymore
         })
-        if (response.status !== 200) {
-            submitting = false
-            return
-        }
         const res = await response.json()
         if (!res.hasOwnProperty("success")) {
             submitting = false
@@ -185,10 +182,6 @@
 
 <div class="container max-w-2xl px-4 py-8 md:py-16">
     <PageTitle>Tell us a little bit about yourself</PageTitle>
-
-    {#if errorMessage}
-        <ErrorMessage>{errorMessage}</ErrorMessage>
-    {/if}
 
     <form
         name="user-profile"
@@ -419,6 +412,11 @@
                 >
             </div>
         </fieldset>
+        {#if errorMessage}
+            <div class="mb-2">
+                <ErrorMessage>{errorMessage}</ErrorMessage>
+            </div>
+        {/if}
         <ButtonLarge
             tag="button"
             className="w-full justify-center"

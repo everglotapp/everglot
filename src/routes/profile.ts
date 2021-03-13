@@ -71,9 +71,9 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
 
     if (
-        !req.body.hasOwnProperty("cefrCodes") ||
-        typeof req.body.cefrCodes !== "object" ||
-        Object.keys(req.body.cefrCodes).length !== req.body.learn.length ||
+        !req.body.hasOwnProperty("cefrLevels") ||
+        typeof req.body.cefrLevels !== "object" ||
+        Object.keys(req.body.cefrLevels).length !== req.body.learn.length ||
         Object.keys(req.body.cefrLevels).some(
             (code) => !req.body.learn.includes(code)
         )

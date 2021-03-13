@@ -6,6 +6,7 @@
 
     export let segment: string | undefined
     const FULLSCREEN_SEGMENTS = ["chat"]
+    const SHOWNAV_SEGMENTS = ["login", "join"]
 
     const timeout = 150
     let transitionTriggeringSwitch = true
@@ -17,13 +18,14 @@
     // @ts-ignore (left side of comma operator isn't ignored by svelte)
     $: segment, change()
     $: fullscreen = segment ? FULLSCREEN_SEGMENTS.includes(segment) : false
+    $: showNav = segment ? SHOWNAV_SEGMENTS.includes(segment) : true
 
     onMount(() => {
         segment = window.location.pathname.split("/")[1]
     })
 </script>
 
-{#if !fullscreen}
+{#if showNav}
     <MainNav {segment} />
 {/if}
 

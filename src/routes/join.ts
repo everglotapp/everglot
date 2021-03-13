@@ -41,7 +41,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         validateMx: true,
         validateTypo: true,
         validateDisposable: true,
-        validateSMTP: true,
+        validateSMTP: true, // TODO: Disable this? Seems to fail too often.
     })
     if (!emailValidation.valid) {
         const { validators, reason } = emailValidation

@@ -11,6 +11,15 @@ export function serverError(
 }
 
 const CONTENT_TYPE_JSON = "application/json"
+/**
+ * Ends the response if request wasn't of type `application/json`.
+ * Sets response `content-type` to `application/json`.
+ *
+ * Among others, this function ensures CSRF protection because
+ * the Same-Origin Policy should prevent AJAX request forgery.
+ *
+ * @returns Whether request has content type `application/json`.
+ */
 export function ensureJson(req: Request, res: Response): boolean {
     if (
         !req.headers.hasOwnProperty("content-type") ||

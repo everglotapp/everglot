@@ -1,4 +1,10 @@
-import { Gender, CefrLevel as _CefrLevel, MIN_USERNAME_LENGTH } from "../users"
+import {
+    Gender,
+    CefrLevel as _CefrLevel,
+    MIN_USERNAME_LENGTH,
+    MAX_LEARNING,
+    MAX_TEACHING,
+} from "../users"
 
 import type { Request, Response } from "express"
 import { ensureJson, serverError } from "../helpers"
@@ -43,6 +49,49 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
+    if (
+        !req.body.hasOwnProperty("teach") ||
+        !Array.isArray(req.body.teach) ||
+        !req.body.teach.length ||
+        req.body.teach.length > MAX_TEACHING
+    ) {
+        res.status(422).json({
+            success: false,
+            message:
+                "Please choose up to 2 languages you could help others out with.",
+        })
+        return
+    }
+
+    if (
+        !req.body.hasOwnProperty("learn") ||
+        !Array.isArray(req.body.learn) ||
+        !req.body.learn.length ||
+        req.body.learn.length > MAX_LEARNING
+    ) {
+        res.status(422).json({
+            success: false,
+            message: "Please choose up to 2 languages you are interested in.",
+        })
+        return
+    }
+
+    if (
+        !req.body.hasOwnProperty("cefrLevels") ||
+        typeof req.body.cefrLevels !== "object" ||
+        Object.keys(req.body.cefrLevels).length !== req.body.learn.length ||
+        Object.keys(req.body.cefrLevels).some(
+            (code) => !req.body.learn.includes(code)
+        )
+    ) {
+        res.status(422).json({
+            success: false,
+            message:
+                "Please specify your level in every language that you're interested in.",
+        })
+        return
+    }
+
     ;(async () => {
         const client = await createDatabasePool().connect()
         try {
@@ -66,6 +115,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
             for (const code of learn) {
                 if (!cefrLevels.hasOwnProperty(code)) {
                     throw new Error(`cefrLevels doesn't have property ${code}`)
+                }
+                if (teach.includes(code)) {
+                    throw new Error(
+                        `User claimed to learn the language with code "${code}" which they already speak natively.`
+                    )
                 }
                 await client.query({
                     text: SQL_ASSIGN_NON_NATIVE_LANGUAGE,

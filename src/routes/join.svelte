@@ -23,6 +23,7 @@
             return
         }
         submitting = true
+        errorMessage = null
         fetch("/join/", {
             method: "post",
             headers: {

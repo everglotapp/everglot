@@ -1,6 +1,7 @@
 import express from "express"
 import configureExpress from "./server/configureExpress"
 import chat from "./server/chat"
+import gql from "./server/gql"
 import { createDatabasePool } from "./server/db"
 
 const { PORT } = process.env
@@ -11,6 +12,9 @@ const pool = createDatabasePool()
 ;(async () => await pool.connect())()
 console.log("[Database Pool] Database connection established")
 
+/** Watch the PG database and update the GraphQL schema automatically. */
+gql.start()
+
 /** Configure HTTP server. */
 const app = configureExpress(express(), pool)
 /** Disable header leaking information on the server. */
@@ -19,4 +23,4 @@ app.disable("x-powered-by")
 const server = app.listen(PORT)
 
 /** Start Socket.IO (WebSocket) chat server. */
-chat.start(server)
+chat.start(server, pool)

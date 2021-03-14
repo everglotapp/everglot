@@ -15,12 +15,14 @@ generates:
             - graphql-codegen-persisted-query-ids:
                   output: server
                   algorithm: sha256
-    src/types/generated/graphql.d.ts:
+    src/types/generated/graphql.ts:
         plugins:
             - "typescript"
             - "typescript-operations"
-            - "typescript-graphql-files-modules"
             - "typescript-document-nodes"
+    src/types/generated/queries.d.ts:
+        plugins:
+            - "typescript-graphql-files-modules"
     src/graphql.schema.json:
         plugins:
             - "introspection"

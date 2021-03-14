@@ -1,12 +1,17 @@
 import moment from "moment"
 
+import type { User } from "../types/generated/graphql"
+
 export type Message = {
-    username: string
+    username: User["username"]
     text: string
     time: string
 }
 
-export function formatMessage(username: string, text: string): Message {
+export function formatMessage(
+    username: User["username"],
+    text: string
+): Message {
     return {
         username,
         text,

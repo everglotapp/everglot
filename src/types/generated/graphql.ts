@@ -1985,15 +1985,6 @@ export type LanguageCodeMappingsQuery = (
 );
 
 
-declare module '*/language-code-mappings.graphql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const LanguageCodeMappings: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
 export const LanguageCodeMappings = gql`
     query LanguageCodeMappings {
   languages {

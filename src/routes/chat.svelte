@@ -10,8 +10,8 @@
         ChevronsRightIcon,
     } from "svelte-feather-icons"
 
-    import type { User } from "../server/users"
-    import type { Language } from "../server/rooms"
+    import type { ChatUser } from "../server/users"
+    import type { Language } from "../types/generated/graphql"
     import type { Message } from "../server/messages"
 
     import { io } from "socket.io-client"
@@ -20,7 +20,7 @@
     let socket: SocketIO.Socket | undefined
 
     let roomMessages: Message[] = []
-    let roomUsers: User[] = []
+    let roomUsers: ChatUser[] = []
     let msg: string = ""
 
     // TODO: Check if user is signed in, if not redirect to sign in.
@@ -119,8 +119,8 @@
         room: recvRoom,
         users,
     }: {
-        room: Language["enName"]
-        users: User[]
+        room: Language["englishName"]
+        users: ChatUser[]
     }): void {
         if (recvRoom !== $room) {
             return
@@ -174,8 +174,8 @@
         </div>
         <h3 class="px-4 text-gray-bitdark font-bold text-sm mb-4">Users</h3>
         <ul>
-            {#each roomUsers as user}
-                {#if user.username === ""}
+            {#each roomUsers as chatUser}
+                {#if chatUser.user.username === ""}
                     <li
                         class="px-8 py-2 text-lg bg-gray-lightest text-gray-bitdark shadow-sm mb-1 overflow-hidden overflow-ellipsis"
                     >
@@ -185,7 +185,7 @@
                     <li
                         class="px-8 py-2 text-lg bg-gray-lightest text-gray-dark shadow-sm mb-1 overflow-hidden overflow-ellipsis"
                     >
-                        {user.username}
+                        {chatUser.user.username}
                     </li>
                 {/if}
             {/each}

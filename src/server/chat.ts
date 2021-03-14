@@ -1,6 +1,8 @@
 import type { Server } from "http"
 import { Server as SocketIO } from "socket.io"
-import type { Socket } from "socket.io"
+
+import session from "./middlewares/session"
+
 import { formatMessage } from "./messages"
 import {
     userJoin,
@@ -10,59 +12,91 @@ import {
     userIsNew,
     userGreeted,
 } from "./users"
+
+import { performQuery } from "./gql"
+
 import { hangmanGames } from "./hangman"
 import type { HangmanLanguage } from "./hangman"
 
+import type { Pool } from "pg"
+
 const botName = "Everglot Bot"
 
-export function start(server: Server) {
+export function start(server: Server, pool: Pool) {
     const io = new SocketIO(server)
+
+    /** Reuse session/authentication from Express server. */
+    const sessionMiddleware = session(pool)
+    io.use((socket: EverglotChatSocket, next) => {
+        sessionMiddleware(socket.request, {}, next)
+    })
+
     // Run when client connects
-    io.on("connection", (socket: Socket) => {
-        socket.on("joinRoom", ({ username, room }) => {
-            const user = userJoin(socket.id, username, room)
+    io.on("connection", (socket: EverglotChatSocket) => {
+        const { session } = socket.request
 
-            socket.join(user.room)
-
-            if (userIsNew(user)) {
-                // Welcome current user
-                io.to(user.room).emit(
-                    "message",
-                    formatMessage(
-                        botName,
-                        `Welcome to Everglot, ${username}! Write !help to see available commands.`
-                    )
+        socket.on(
+            "joinRoom",
+            async ({ room }: { room: string; username: string }) => {
+                const res = await performQuery(
+                    `query ChatUser($id: Int!) {
+                        user(id: $id) {
+                            id
+                            username
+                        }
+                    }`,
+                    { id: session.user_id }
                 )
-                userGreeted(user)
-            }
-
-            // Broadcast when a user connects
-            socket.broadcast
-                .to(user.room)
-                .emit(
-                    "message",
-                    formatMessage(
-                        botName,
-                        `${user.username} has joined the chat`
+                if (!res.data) {
+                    console.log(
+                        "Empty username for joining user",
+                        session.user_id
                     )
-                )
-
-            // Send users and room info
-            io.to(user.room).emit("roomUsers", {
-                room: user.room,
-                users: getRoomUsers(user.room),
-            })
-
-            if (["English", "German"].includes(user.room)) {
-                const hangman = hangmanGames[user.room as HangmanLanguage]
-                if (hangman.running) {
-                    sendBotMessage(
-                        `Current word: ${hangman.publicWord}`,
-                        user.room
+                    return
+                }
+                const chatUser = userJoin(socket.id, res.data.user, room)
+                socket.join(chatUser.room)
+                if (userIsNew(chatUser)) {
+                    // Welcome current user
+                    io.to(chatUser.room).emit(
+                        "message",
+                        formatMessage(
+                            botName,
+                            `Welcome to Everglot, ${chatUser.user.username}! Write !help to see available commands.`
+                        )
                     )
+                    userGreeted(chatUser)
+                }
+
+                // Broadcast when a user connects
+                socket.broadcast
+                    .to(chatUser.room)
+                    .emit(
+                        "message",
+                        formatMessage(
+                            botName,
+                            `${chatUser.user.username} has joined the chat`
+                        )
+                    )
+
+                // Send users and room info
+                io.to(chatUser.room).emit("roomUsers", {
+                    room: chatUser.room,
+                    users: getRoomUsers(chatUser.room),
+                })
+
+                if (["English", "German"].includes(chatUser.room)) {
+                    const hangman =
+                        hangmanGames[chatUser.room as HangmanLanguage]
+                    if (hangman.running) {
+                        sendBotMessage(
+                            `Current word: ${hangman.publicWord}`,
+                            chatUser.room
+                        )
+                    }
                 }
             }
-        })
+        )
 
         // Listen for chatMessage
         socket.on("leaveRoom", () => {
@@ -71,24 +105,25 @@ export function start(server: Server) {
 
         // Listen for chatMessage
         socket.on("chatMessage", (msg) => {
-            const user = getCurrentUser(socket.id)
-            if (!user) {
+            const chatUser = getCurrentUser(socket.id)
+            if (!chatUser) {
                 return
             }
 
             if (msg) {
-                io.to(user.room).emit(
+                io.to(chatUser.room).emit(
                     "message",
-                    formatMessage(user.username, msg)
+                    formatMessage(chatUser.user.username, msg)
                 )
                 if (msg.startsWith("!help")) {
                     sendBotMessage(
                         "Available commands: !hangman, !help",
-                        user.room
+                        chatUser.room
                     )
                     return
-                } else if (Object.keys(hangmanGames).includes(user.room)) {
-                    const hangman = hangmanGames[user.room as HangmanLanguage]
+                } else if (Object.keys(hangmanGames).includes(chatUser.room)) {
+                    const hangman =
+                        hangmanGames[chatUser.room as HangmanLanguage]
                     if (hangman.running) {
                         if (msg.length === 1) {
                             if (
@@ -98,12 +133,12 @@ export function start(server: Server) {
                                 hangman.pickLetter(msg)
                                 sendBotMessage(
                                     `Current word: ${hangman.publicWord}`,
-                                    user.room
+                                    chatUser.room
                                 )
                                 if (hangman.nextRound()) {
                                     sendBotMessage(
                                         `You guessed correctly! Here's the next word: ${hangman.publicWord}`,
-                                        user.room
+                                        chatUser.room
                                     )
                                 }
                             }
@@ -113,13 +148,13 @@ export function start(server: Server) {
                         if (hangman.running) {
                             sendBotMessage(
                                 "Hangman is already running.",
-                                user.room
+                                chatUser.room
                             )
                         } else {
                             hangman.start()
                             sendBotMessage(
                                 `Started a hangman game: ${hangman.publicWord}`,
-                                user.room
+                                chatUser.room
                             )
                         }
                     }
@@ -127,7 +162,7 @@ export function start(server: Server) {
                     if (msg.startsWith("!hangman")) {
                         sendBotMessage(
                             "So far, hangman is only supported in English and German.",
-                            user.room
+                            chatUser.room
                         )
                     }
                 }
@@ -136,20 +171,24 @@ export function start(server: Server) {
 
         // Runs when client disconnects
         socket.on("disconnect", () => {
-            const user = userLeave(socket.id)
-
-            if (user) {
-                io.to(user.room).emit(
-                    "message",
-                    formatMessage(botName, `${user.username} has left the chat`)
-                )
-
-                // Send users and room info
-                io.to(user.room).emit("roomUsers", {
-                    room: user.room,
-                    users: getRoomUsers(user.room),
-                })
+            const chatUser = userLeave(socket.id)
+            if (!chatUser) {
+                return
             }
+
+            io.to(chatUser.room).emit(
+                "message",
+                formatMessage(
+                    botName,
+                    `${chatUser.user.username} has left the chat`
+                )
+            )
+
+            // Send users and room info
+            io.to(chatUser.room).emit("roomUsers", {
+                room: chatUser.room,
+                users: getRoomUsers(chatUser.room),
+            })
         })
 
         function sendBotMessage(msg: string, room: string, delay = 300) {

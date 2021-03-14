@@ -1,30 +1,30 @@
-import type { Language } from "./rooms"
+import type { Language, User } from "../types/generated/graphql"
 
 type SocketHistory = {
     greeted: boolean
 }
 const socketHistories: Record<string, SocketHistory> = {}
 
-export type User = {
+export type ChatUser = {
     socketId: string
-    username: string
-    room: Language["enName"]
+    user: Partial<User>
+    room: Language["englishName"]
 }
 
-const users: User[] = []
+const users: ChatUser[] = []
 
 // Join user to chat
 export function userJoin(
     socketId: string,
-    username: string,
-    room: Language["enName"]
+    user: Partial<User>,
+    room: Language["englishName"]
 ) {
-    const user = { socketId, username, room }
+    const chatUser = { socketId, user, room }
 
-    users.push(user)
+    users.push(chatUser)
     socketHistories[socketId] ||= { greeted: false }
 
-    return user
+    return chatUser
 }
 
 // Get current user
@@ -42,16 +42,16 @@ export function userLeave(socketId: string) {
 }
 
 // Get room users
-export function getRoomUsers(room: Language["enName"]) {
+export function getRoomUsers(room: Language["englishName"]) {
     return users.filter((user) => user.room === room)
 }
 
 // Whether user has been greeted before.
-export function userIsNew(user: User) {
+export function userIsNew(user: ChatUser) {
     return !socketHistories[user.socketId].greeted
 }
 
 // Mark user as greeted.
-export function userGreeted(user: User) {
+export function userGreeted(user: ChatUser) {
     socketHistories[user.socketId].greeted = true
 }

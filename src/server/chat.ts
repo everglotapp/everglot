@@ -1,6 +1,8 @@
 import type { Server } from "http"
 import { Server as SocketIO } from "socket.io"
-import type { Socket } from "socket.io"
+
+import session from "./middlewares/session"
+
 import { formatMessage } from "./messages"
 import {
     userJoin,
@@ -10,20 +12,46 @@ import {
     userIsNew,
     userGreeted,
 } from "./users"
+
+import { performQuery } from "./gql"
+
 import { hangmanGames } from "./hangman"
 import type { HangmanLanguage } from "./hangman"
 
+import type { Pool } from "pg"
+
 const botName = "Everglot Bot"
 
-export function start(server: Server) {
+export function start(server: Server, pool: Pool) {
     const io = new SocketIO(server)
+
+    /** Reuse session/authentication from Express server. */
+    const sessionMiddleware = session(pool)
+    io.use((socket: EverglotChatSocket, next) => {
+        sessionMiddleware(socket.request, {}, next)
+    })
+
     // Run when client connects
-    io.on("connection", (socket: Socket) => {
-        socket.on("joinRoom", ({ username, room }) => {
-            const user = userJoin(socket.id, username, room)
+    io.on("connection", (socket: EverglotChatSocket) => {
+        const { session } = socket.request
 
+        socket.on("joinRoom", async ({ username, room }) => {
+            const res = await performQuery(
+                `query ChatUser($id: Int!) {
+                    user(id: $id) {
+                        id
+                        username
+                    }
+                }`,
+                { id: session.user_id }
+            )
+            if (!res.data) {
+                console.log("Empty username for joining user", session.user_id)
+                return
+            }
+            username = res.data.user.username
+            const user = userJoin(socket.id, res.data.user, room)
             socket.join(user.room)
-
             if (userIsNew(user)) {
                 // Welcome current user
                 io.to(user.room).emit(
@@ -43,7 +71,7 @@ export function start(server: Server) {
                     "message",
                     formatMessage(
                         botName,
-                        `${user.username} has joined the chat`
+                        `${user.user.username} has joined the chat`
                     )
                 )
 
@@ -79,7 +107,7 @@ export function start(server: Server) {
             if (msg) {
                 io.to(user.room).emit(
                     "message",
-                    formatMessage(user.username, msg)
+                    formatMessage(user.user.username, msg)
                 )
                 if (msg.startsWith("!help")) {
                     sendBotMessage(
@@ -141,7 +169,10 @@ export function start(server: Server) {
             if (user) {
                 io.to(user.room).emit(
                     "message",
-                    formatMessage(botName, `${user.username} has left the chat`)
+                    formatMessage(
+                        botName,
+                        `${user.user.username} has left the chat`
+                    )
                 )
 
                 // Send users and room info

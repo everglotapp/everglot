@@ -17,7 +17,6 @@ export async function performQuery(
         | undefined,
     operationName: string | undefined = undefined
 ) {
-    console.log("performing query", query)
     return await withPostGraphileContext(
         {
             pgPool: createDatabasePool(),

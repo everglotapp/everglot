@@ -1,33 +1,15 @@
-<script context="module" lang="ts">
-    export async function preload() {
-        const response = await this.fetch(`/graphql`, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                extensions: {
-                    persistedQuery: {
-                        version: 1,
-                        sha256Hash:
-                            "a9f61bcb578bdd14da454b2bc2b956bfde716898a7cc6a61a8d6f095d50d9dad",
-                    },
-                },
-            }),
-        })
-        if (response) {
-            const res = await response.json()
-            if (res && res?.data?.languages?.nodes) {
-                return { languages: res.data.languages.nodes }
-            }
-        }
-    }
-</script>
-
 <script lang="ts">
     import { goto } from "@sapper/app"
     import { scale } from "svelte/transition"
+
+    import { LanguageCodeMappings } from "../types/generated/graphql"
+    import type { Language } from "../types/generated/graphql"
+    import { operationStore, query } from "@urql/svelte"
+
+    const languagesQuery = operationStore<{
+        languages: { nodes: Pick<Language, "englishName" | "alpha2">[] }
+    }>(LanguageCodeMappings)
+    query(languagesQuery)
 
     import { username, room } from "../stores"
     import {
@@ -46,12 +28,6 @@
 
     import { ArrowRightIcon, ClockIcon } from "svelte-feather-icons"
 
-    type Language = {
-        alpha2: string
-        englishName: string
-    }
-    export let languages: Language[] = []
-
     let teach: Record<string, boolean> = {
         de: false,
         en: false,
@@ -63,12 +39,21 @@
 
     let errorMessage: string | null = null
 
+    let languages: Pick<Language, "englishName" | "alpha2">[] = []
+    $: if (
+        $languagesQuery &&
+        !$languagesQuery.fetching &&
+        $languagesQuery.data
+    ) {
+        languages = $languagesQuery.data.languages.nodes
+    }
     type LanguageItem = { value: string; label: string }
-    let items: LanguageItem[] = languages
-        .filter((lang) => !["en", "de"].includes(lang.alpha2))
-        .map((lang) => ({
-            value: lang.alpha2,
-            label: lang.englishName,
+    let items: LanguageItem[] = []
+    $: items = languages
+        .filter(({ alpha2 }) => alpha2 !== "en" && alpha2 !== "de")
+        .map(({ alpha2, englishName }) => ({
+            value: alpha2,
+            label: englishName,
         }))
 
     let learnOther: LanguageItem[] = []
@@ -210,255 +195,272 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-<div class="container max-w-2xl px-4 py-8 md:py-16">
-    <PageTitle>Tell us a little bit about yourself</PageTitle>
+{#if $languagesQuery.fetching}
+    <p class="container max-w-2xl px-4 py-8 md:py-16">Loading...</p>
+{:else if $languagesQuery.error}
+    <p class="container max-w-2xl px-4 py-8 md:py-16">
+        Oh no... {$languagesQuery.error.message}
+    </p>
+{:else}
+    <div class="container max-w-2xl px-4 py-8 md:py-16">
+        <PageTitle>Tell us a little bit about yourself</PageTitle>
 
-    <form
-        name="user-profile"
-        action="/chat"
-        class="py-10 md:px-8"
-        on:submit|preventDefault={handleSubmit}
-    >
-        <fieldset class="mb-2">
-            <div class="form-control">
-                <label for="username">Pick a username*</label>
-                <p class="helper-text">
-                    The others will see you under this name.
-                </p>
-                <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    placeholder="Username …"
-                    required
-                    minlength={MIN_USERNAME_LENGTH}
-                    pattern={`.{${MIN_USERNAME_LENGTH},}`}
-                    title={`${MIN_USERNAME_LENGTH} characters minimum`}
-                    bind:value={$username}
-                />
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend
-                >What language(s) are you interested in ({MAX_LEARNING} max)?*</legend
-            >
-            <p class="helper-text">
-                Please only choose languages that you really want to learn or
-                already are learning.
-            </p>
-            <div class="form-control">
-                <ButtonSmall
-                    tag="button"
-                    className="mr-1 mb-1"
-                    variant={learn.de ? "FILLED" : "OUTLINED"}
-                    disabled={teach.de ||
-                        (!learn.de && totalLearning >= MAX_LEARNING)}
-                    on:click={() => toggleLearn("de")}>German</ButtonSmall
-                >
-                <ButtonSmall
-                    tag="button"
-                    className="mr-1 mb-1"
-                    variant={learn.en ? "FILLED" : "OUTLINED"}
-                    disabled={teach.en ||
-                        (!learn.en && totalLearning >= MAX_LEARNING)}
-                    on:click={() => toggleLearn("en")}>English</ButtonSmall
-                >
-                <GroupSelect
-                    items={learnable}
-                    selected={learnOther.length ? learnOther : null}
-                    hideInput={totalLearning >= MAX_LEARNING}
-                    disabled={learn.de && learn.en}
-                    on:select={handleSelectLearnOther}
-                />
-            </div>
-        </fieldset>
-        {#if learningCodes.length}
-            <fieldset class="mt-1 mb-3">
-                <legend>Your level in …</legend>
-                {#each learningCodes as code}
-                    <div class="level flex items-center py-1">
-                        <label for={`level_${code}`}>
-                            {languages.find((lang) => lang.alpha2 === code)
-                                ?.englishName}:
-                        </label>
-                        <div>
-                            <select
-                                id={`level_${code}`}
-                                bind:value={learningLevels[code]}
-                                required
-                                placeholder="Your level …"
-                            >
-                                <option value="">Please select …</option>
-                                <option value={CefrLevel.A1}
-                                    >A1 – Beginner</option
-                                >
-                                <option value={CefrLevel.A2}
-                                    >A2 – Elementary</option
-                                >
-                                <option value={CefrLevel.B1}
-                                    >B1 – Intermediate</option
-                                >
-                                <option value={CefrLevel.B2}
-                                    >B2 – Upper intermediate</option
-                                >
-                                <option value={CefrLevel.C1}
-                                    >C1 – Advanced</option
-                                >
-                                <option value={CefrLevel.C2}
-                                    >C2 – Proficient</option
-                                >
-                            </select>
-                        </div>
-                    </div>
-                {/each}
-                {#if Object.keys(learningLevels).some((code) => learningLevels[code] === CefrLevel.A1 || learningLevels[code] === CefrLevel.A2)}
-                    <div
-                        class="warning-skill"
-                        in:scale={{ duration: 150, delay: 150 }}
-                        out:scale={{ duration: 150 }}
-                    >
-                        <div class="warning-inner-with-icon">
-                            <div>
-                                <span style="font-size: 32px;">&#x1F62C;</span>
-                            </div>
-                            <div>
-                                <p>
-                                    Everglot can be quite difficult for
-                                    beginners and elementary level learners.
-                                </p>
-                                <p>
-                                    You can still continue. Please be aware that
-                                    in the beginning it could be hard for you to
-                                    follow along.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                {/if}
-                {#if learnOther.length === 1}
-                    <div
-                        class="warning-learn-other"
-                        in:scale={{ duration: 150, delay: 150 }}
-                        out:scale={{ duration: 150 }}
-                    >
-                        <div class="warning-inner-with-icon">
-                            <div><ClockIcon size="32" /></div>
-                            <div>
-                                <p>
-                                    Sorry, {learnOther[0].label} is not supported,
-                                    yet.
-                                </p>
-                                <p>
-                                    Don't worry, we will place you on a waiting
-                                    list for a {learnOther[0].label} study group
-                                    and notify you as soon as it's ready.
-                                </p>
-                            </div>
-                        </div>
-                    </div>{:else if learnOther.length === 2}
-                    <div
-                        class="warning-learn-other"
-                        in:scale={{ duration: 150, delay: 150 }}
-                        out:scale={{ duration: 150 }}
-                    >
-                        <div class="warning-inner-with-icon">
-                            <div><ClockIcon size="32" /></div>
-                            <div>
-                                <p>
-                                    Sorry, {learnOther[0].label} and {learnOther[1]
-                                        .label} are not supported, yet.
-                                </p>
-                                <p>
-                                    Don't worry, we will place you on a waiting
-                                    list for {learnOther[0].label} and {learnOther[1]
-                                        .label} study groups and notify you as soon
-                                    as they're ready.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                {/if}
-            </fieldset>
-        {/if}
-        <fieldset class="my-4">
-            <legend
-                >What language(s) could you help others out with ({MAX_TEACHING}
-                max)?*</legend
-            >
-            <p class="helper-text">
-                These are languages that you either speak natively or on a
-                near-native level.
-            </p>
-            <div class="form-control">
-                <ButtonSmall
-                    tag="button"
-                    className="mr-1"
-                    variant={teach.de ? "FILLED" : "OUTLINED"}
-                    disabled={learn.de ||
-                        (!teach.de && totalTeaching >= MAX_TEACHING)}
-                    on:click={() => toggleTeach("de")}>German</ButtonSmall
-                >
-                <ButtonSmall
-                    tag="button"
-                    className="mr-1"
-                    variant={teach.en ? "FILLED" : "OUTLINED"}
-                    disabled={learn.en ||
-                        (!teach.en && totalTeaching >= MAX_TEACHING)}
-                    on:click={() => toggleTeach("en")}>English</ButtonSmall
-                >
-                <GroupSelect
-                    items={teachable}
-                    selected={teachOther.length ? teachOther : null}
-                    hideInput={totalTeaching >= MAX_TEACHING}
-                    disabled={teach.de && teach.en}
-                    on:select={handleSelectTeachOther}
-                />
-            </div>
-        </fieldset>
-        <fieldset class="mb-4">
-            <legend>What gender do you identify as?</legend>
-            <p class="helper-text">
-                We'll use this information only to optimize group compositions.
-            </p>
-            <div class="form-control">
-                <ButtonSmall
-                    tag="button"
-                    className="mr-1 mb-1"
-                    variant={gender === Gender.FEMALE ? "FILLED" : "OUTLINED"}
-                    on:click={() => toggleGender(Gender.FEMALE)}
-                    >Female</ButtonSmall
-                >
-                <ButtonSmall
-                    tag="button"
-                    className="mr-1 mb-1"
-                    variant={gender === Gender.MALE ? "FILLED" : "OUTLINED"}
-                    on:click={() => toggleGender(Gender.MALE)}>Male</ButtonSmall
-                >
-                <ButtonSmall
-                    tag="button"
-                    variant={gender === Gender.OTHER ? "FILLED" : "OUTLINED"}
-                    on:click={() => toggleGender(Gender.OTHER)}
-                    >Other</ButtonSmall
-                >
-            </div>
-        </fieldset>
-        {#if errorMessage}
-            <div class="mb-2">
-                <ErrorMessage>{errorMessage}</ErrorMessage>
-            </div>
-        {/if}
-        <ButtonLarge
-            tag="button"
-            className="w-full justify-center"
-            on:click={handleSubmit}
-            disabled={submitting}
-            >Next<ArrowRightIcon
-                class="ml-2 self-center"
-                size="24"
-            /></ButtonLarge
+        <form
+            name="user-profile"
+            action="/chat"
+            class="py-10 md:px-8"
+            on:submit|preventDefault={handleSubmit}
         >
-    </form>
-</div>
+            <fieldset class="mb-2">
+                <div class="form-control">
+                    <label for="username">Pick a username*</label>
+                    <p class="helper-text">
+                        The others will see you under this name.
+                    </p>
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        placeholder="Username …"
+                        required
+                        minlength={MIN_USERNAME_LENGTH}
+                        pattern={`.{${MIN_USERNAME_LENGTH},}`}
+                        title={`${MIN_USERNAME_LENGTH} characters minimum`}
+                        bind:value={$username}
+                    />
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend
+                    >What language(s) are you interested in ({MAX_LEARNING} max)?*</legend
+                >
+                <p class="helper-text">
+                    Please only choose languages that you really want to learn
+                    or already are learning.
+                </p>
+                <div class="form-control">
+                    <ButtonSmall
+                        tag="button"
+                        className="mr-1 mb-1"
+                        variant={learn.de ? "FILLED" : "OUTLINED"}
+                        disabled={teach.de ||
+                            (!learn.de && totalLearning >= MAX_LEARNING)}
+                        on:click={() => toggleLearn("de")}>German</ButtonSmall
+                    >
+                    <ButtonSmall
+                        tag="button"
+                        className="mr-1 mb-1"
+                        variant={learn.en ? "FILLED" : "OUTLINED"}
+                        disabled={teach.en ||
+                            (!learn.en && totalLearning >= MAX_LEARNING)}
+                        on:click={() => toggleLearn("en")}>English</ButtonSmall
+                    >
+                    <GroupSelect
+                        items={learnable}
+                        selected={learnOther.length ? learnOther : null}
+                        hideInput={totalLearning >= MAX_LEARNING}
+                        disabled={learn.de && learn.en}
+                        on:select={handleSelectLearnOther}
+                    />
+                </div>
+            </fieldset>
+            {#if learningCodes.length}
+                <fieldset class="mt-1 mb-3">
+                    <legend>Your level in …</legend>
+                    {#each learningCodes as code}
+                        <div class="level flex items-center py-1">
+                            <label for={`level_${code}`}>
+                                {languages.find(({ alpha2 }) => alpha2 === code)
+                                    ?.englishName}:
+                            </label>
+                            <div>
+                                <select
+                                    id={`level_${code}`}
+                                    bind:value={learningLevels[code]}
+                                    required
+                                    placeholder="Your level …"
+                                >
+                                    <option value="">Please select …</option>
+                                    <option value={CefrLevel.A1}
+                                        >A1 – Beginner</option
+                                    >
+                                    <option value={CefrLevel.A2}
+                                        >A2 – Elementary</option
+                                    >
+                                    <option value={CefrLevel.B1}
+                                        >B1 – Intermediate</option
+                                    >
+                                    <option value={CefrLevel.B2}
+                                        >B2 – Upper intermediate</option
+                                    >
+                                    <option value={CefrLevel.C1}
+                                        >C1 – Advanced</option
+                                    >
+                                    <option value={CefrLevel.C2}
+                                        >C2 – Proficient</option
+                                    >
+                                </select>
+                            </div>
+                        </div>
+                    {/each}
+                    {#if Object.keys(learningLevels).some((code) => learningLevels[code] === CefrLevel.A1 || learningLevels[code] === CefrLevel.A2)}
+                        <div
+                            class="warning-skill"
+                            in:scale={{ duration: 150, delay: 150 }}
+                            out:scale={{ duration: 150 }}
+                        >
+                            <div class="warning-inner-with-icon">
+                                <div>
+                                    <span style="font-size: 32px;"
+                                        >&#x1F62C;</span
+                                    >
+                                </div>
+                                <div>
+                                    <p>
+                                        Everglot can be quite difficult for
+                                        beginners and elementary level learners.
+                                    </p>
+                                    <p>
+                                        You can still continue. Please be aware
+                                        that in the beginning it could be hard
+                                        for you to follow along.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
+                    {#if learnOther.length === 1}
+                        <div
+                            class="warning-learn-other"
+                            in:scale={{ duration: 150, delay: 150 }}
+                            out:scale={{ duration: 150 }}
+                        >
+                            <div class="warning-inner-with-icon">
+                                <div><ClockIcon size="32" /></div>
+                                <div>
+                                    <p>
+                                        Sorry, {learnOther[0].label} is not supported,
+                                        yet.
+                                    </p>
+                                    <p>
+                                        Don't worry, we will place you on a
+                                        waiting list for a {learnOther[0].label}
+                                        study group and notify you as soon as it's
+                                        ready.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>{:else if learnOther.length === 2}
+                        <div
+                            class="warning-learn-other"
+                            in:scale={{ duration: 150, delay: 150 }}
+                            out:scale={{ duration: 150 }}
+                        >
+                            <div class="warning-inner-with-icon">
+                                <div><ClockIcon size="32" /></div>
+                                <div>
+                                    <p>
+                                        Sorry, {learnOther[0].label} and {learnOther[1]
+                                            .label} are not supported, yet.
+                                    </p>
+                                    <p>
+                                        Don't worry, we will place you on a
+                                        waiting list for {learnOther[0].label} and
+                                        {learnOther[1].label} study groups and notify
+                                        you as soon as they're ready.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
+                </fieldset>
+            {/if}
+            <fieldset class="my-4">
+                <legend
+                    >What language(s) could you help others out with ({MAX_TEACHING}
+                    max)?*</legend
+                >
+                <p class="helper-text">
+                    These are languages that you either speak natively or on a
+                    near-native level.
+                </p>
+                <div class="form-control">
+                    <ButtonSmall
+                        tag="button"
+                        className="mr-1"
+                        variant={teach.de ? "FILLED" : "OUTLINED"}
+                        disabled={learn.de ||
+                            (!teach.de && totalTeaching >= MAX_TEACHING)}
+                        on:click={() => toggleTeach("de")}>German</ButtonSmall
+                    >
+                    <ButtonSmall
+                        tag="button"
+                        className="mr-1"
+                        variant={teach.en ? "FILLED" : "OUTLINED"}
+                        disabled={learn.en ||
+                            (!teach.en && totalTeaching >= MAX_TEACHING)}
+                        on:click={() => toggleTeach("en")}>English</ButtonSmall
+                    >
+                    <GroupSelect
+                        items={teachable}
+                        selected={teachOther.length ? teachOther : null}
+                        hideInput={totalTeaching >= MAX_TEACHING}
+                        disabled={teach.de && teach.en}
+                        on:select={handleSelectTeachOther}
+                    />
+                </div>
+            </fieldset>
+            <fieldset class="mb-4">
+                <legend>What gender do you identify as?</legend>
+                <p class="helper-text">
+                    We'll use this information only to optimize group
+                    compositions.
+                </p>
+                <div class="form-control">
+                    <ButtonSmall
+                        tag="button"
+                        className="mr-1 mb-1"
+                        variant={gender === Gender.FEMALE
+                            ? "FILLED"
+                            : "OUTLINED"}
+                        on:click={() => toggleGender(Gender.FEMALE)}
+                        >Female</ButtonSmall
+                    >
+                    <ButtonSmall
+                        tag="button"
+                        className="mr-1 mb-1"
+                        variant={gender === Gender.MALE ? "FILLED" : "OUTLINED"}
+                        on:click={() => toggleGender(Gender.MALE)}
+                        >Male</ButtonSmall
+                    >
+                    <ButtonSmall
+                        tag="button"
+                        variant={gender === Gender.OTHER
+                            ? "FILLED"
+                            : "OUTLINED"}
+                        on:click={() => toggleGender(Gender.OTHER)}
+                        >Other</ButtonSmall
+                    >
+                </div>
+            </fieldset>
+            {#if errorMessage}
+                <div class="mb-2">
+                    <ErrorMessage>{errorMessage}</ErrorMessage>
+                </div>
+            {/if}
+            <ButtonLarge
+                tag="button"
+                className="w-full justify-center"
+                on:click={handleSubmit}
+                disabled={submitting}
+                >Next<ArrowRightIcon
+                    class="ml-2 self-center"
+                    size="24"
+                /></ButtonLarge
+            >
+        </form>
+    </div>
+{/if}
 
 <style>
     .helper-text {

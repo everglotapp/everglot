@@ -5,7 +5,7 @@ hooks:
     afterAllFileWrite:
         - node addToPersistedOperations.js
 generates:
-    static/graphql.client.json:
+    src/graphql.client.json:
         plugins:
             - graphql-codegen-persisted-query-ids:
                   output: client

@@ -47,7 +47,7 @@ export async function start() {
         "public",
         getPostGraphileOptions(),
         (newSchema) => {
-            console.log("Generated new GraphQL schema")
+            console.log("[PostGraphile Watcher] Generated new GraphQL schema")
             schema = newSchema
         }
     )

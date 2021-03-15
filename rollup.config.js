@@ -8,6 +8,7 @@ import babel from "@rollup/plugin-babel"
 import json from "@rollup/plugin-json"
 import { terser } from "rollup-plugin-terser"
 import typescript from "@rollup/plugin-typescript"
+import graphql from "@rollup/plugin-graphql"
 import config from "sapper/config/rollup.js"
 import pkg from "./package.json"
 
@@ -51,9 +52,10 @@ export default {
                 browser: true,
                 dedupe: ["svelte"],
             }),
-            json(),
+            json({ compact: true }),
             commonjs(),
             typescript({ sourceMap: dev }),
+            graphql(),
 
             legacy &&
                 babel({
@@ -112,9 +114,10 @@ export default {
             resolve({
                 dedupe: ["svelte"],
             }),
-            json(),
+            json({ compact: true }),
             commonjs(),
             typescript({ sourceMap: dev }),
+            graphql(),
         ],
         external: Object.keys(pkg.dependencies).concat(
             require("module").builtinModules
@@ -136,6 +139,7 @@ export default {
             }),
             commonjs(),
             typescript({ sourceMap: dev }),
+            graphql(),
             !dev && terser(),
         ],
 

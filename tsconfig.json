@@ -6,7 +6,8 @@
     "noUnusedParameters": true,
     "strict": true,
     "strictFunctionTypes": false,
-    "typeRoots": ["src/types/", "src/types/generated", "node_modules/@types/"]
+    "typeRoots": ["src/types/", "src/types/generated", "node_modules/@types/"],
+    "resolveJsonModule": true
   },
   "include": ["src/**/*", "src/*", "src/node_modules/**/*"],
   "exclude": ["node_modules/*", "__sapper__/*", "static/*"]

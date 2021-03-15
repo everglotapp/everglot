@@ -1,19 +1,24 @@
 <script lang="ts">
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
+
+    import fetch from "cross-fetch"
+    import {
+        initClient as initUrqlClient,
+        dedupExchange,
+        fetchExchange,
+        cacheExchange,
+    } from "@urql/svelte"
+    import { persistedFetchExchange } from "@urql/exchange-persisted-fetch"
+    import persistedOperations from "../graphql.client.json"
+
     import MainNav from "../comp/layout/MainNav.svelte"
     import Footer from "../comp/layout/Footer.svelte"
+    import type { DocumentNode } from "graphql"
 
     export let segment: string | undefined
     const FULLSCREEN_SEGMENTS = ["chat"]
     const SHOWNAV_SEGMENTS = ["login", "join"]
-
-    const timeout = 150
-    let transitionTriggeringSwitch = true
-
-    const change = () => {
-        transitionTriggeringSwitch = !transitionTriggeringSwitch
-    }
 
     // @ts-ignore (left side of comma operator isn't ignored by svelte)
     $: segment, change()
@@ -23,6 +28,43 @@
     onMount(() => {
         segment = window.location.pathname.split("/")[1]
     })
+
+    initUrqlClient({
+        url: "/graphql",
+        fetch,
+        exchanges: [
+            dedupExchange,
+            cacheExchange,
+            persistedFetchExchange({
+                // Disable until PostGraphile supports queries via GET
+                // https://github.com/graphile/postgraphile/issues/442
+                preferGetForPersistedQueries: false,
+                enforcePersistedQueries: true,
+                async generateHash(
+                    _query: string,
+                    document: DocumentNode
+                ): Promise<string> {
+                    if (document?.definitions[0]?.name?.value) {
+                        return persistedOperations[
+                            document.definitions[0].name
+                                .value as keyof typeof persistedOperations
+                        ]
+                    }
+                    throw new Error(
+                        "Failed to resolve persisted operation hash"
+                    )
+                },
+            }),
+            fetchExchange,
+        ],
+    })
+
+    const timeout = 150
+    let transitionTriggeringSwitch = true
+
+    const change = () => {
+        transitionTriggeringSwitch = !transitionTriggeringSwitch
+    }
 </script>
 
 {#if showNav}

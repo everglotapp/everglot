@@ -3,7 +3,7 @@ import PersistedOperationsPlugin from "@graphile/persisted-operations"
 import PgSimplifyInflectorPlugin from "@graphile-contrib/pg-simplify-inflector"
 import type { PostGraphileOptions } from "postgraphile"
 
-import type { RequestHandler } from "express"
+import type { Request, RequestHandler } from "express"
 
 const { NODE_ENV, DATABASE_URL } = process.env
 const dev = NODE_ENV === "development"
@@ -20,6 +20,9 @@ export function getPostGraphileOptions(): PostGraphileOptions {
         enhanceGraphiql: dev,
         pluginHook,
         persistedOperationsDirectory: `${__dirname}/../../../.persisted_operations/`,
+        allowUnpersistedOperation(req: Request) {
+            return dev && req.headers.referer?.endsWith("/graphiql")
+        },
         async additionalGraphQLContextFromRequest(req, _res) {
             return { req }
         },

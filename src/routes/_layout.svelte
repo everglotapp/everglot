@@ -18,12 +18,18 @@
 
     export let segment: string | undefined
     const FULLSCREEN_SEGMENTS = ["chat"]
-    const SHOWNAV_SEGMENTS = ["profile", "chat"]
+    const SHOWNAV_SEGMENTS = [
+        "profile",
+        "chat",
+        "languages",
+        "global",
+        "groups",
+    ]
 
     // @ts-ignore (left side of comma operator isn't ignored by svelte)
     $: segment, change()
     $: fullscreen = segment ? FULLSCREEN_SEGMENTS.includes(segment) : false
-    $: showNav = segment ? SHOWNAV_SEGMENTS.includes(segment) : true
+    $: showNav = segment ? SHOWNAV_SEGMENTS.includes(segment) : false
     // const showNav = true
 
     onMount(() => {

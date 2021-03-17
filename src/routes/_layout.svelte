@@ -92,9 +92,6 @@
     >
         <slot />
     </main>
-    {#if !fullscreen}
-        <Footer />
-    {/if}
 {:else}
     <main
         in:scale={{ duration: timeout, delay: timeout }}
@@ -103,9 +100,10 @@
     >
         <slot />
     </main>
-    {#if !fullscreen}
-        <Footer />
-    {/if}
+{/if}
+
+{#if !fullscreen}
+    <Footer />
 {/if}
 
 <style>

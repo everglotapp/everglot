@@ -264,7 +264,7 @@
 
     a {
         display: flex;
-        padding: 1rem 1rem;
+        padding: 0.75rem 1rem;
         text-decoration: none;
         @apply text-gray-bitdark;
         @apply text-center;

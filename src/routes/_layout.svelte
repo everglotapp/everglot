@@ -14,7 +14,7 @@
 
     import MainNav from "../comp/layout/MainNav.svelte"
     import Footer from "../comp/layout/Footer.svelte"
-    import type { DocumentNode } from "graphql"
+    import type { DocumentNode, OperationDefinitionNode } from "graphql"
 
     export let segment: string | undefined
     const FULLSCREEN_SEGMENTS = ["chat"]
@@ -44,10 +44,16 @@
                     _query: string,
                     document: DocumentNode
                 ): Promise<string> {
-                    if (document?.definitions[0]?.name?.value) {
+                    // Note that we're assuming that the first definition is a operation
+                    // definition rather than a FragmentDefinitionNode.
+                    // Also we're ignoring the query variable meaning that we
+                    // cannot just use raw query strings. To change that, return its hash.
+                    const operationName = (document
+                        ?.definitions[0] as OperationDefinitionNode)?.name
+                        ?.value
+                    if (operationName) {
                         return persistedOperations[
-                            document.definitions[0].name
-                                .value as keyof typeof persistedOperations
+                            operationName as keyof typeof persistedOperations
                         ]
                     }
                     throw new Error(

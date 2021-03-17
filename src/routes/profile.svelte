@@ -195,20 +195,21 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-{#if $languagesQuery.fetching}
-    <p class="container max-w-2xl px-4 py-8 md:py-16">Loading...</p>
-{:else if $languagesQuery.error}
-    <p class="container max-w-2xl px-4 py-8 md:py-16">
-        Oh no... {$languagesQuery.error.message}
+{#if $languagesQuery.fetching}{:else if $languagesQuery.error}
+    <p class="container max-w-2xl px-4 py-8 md:py-8">
+        Something went wrong.
+        <ErrorMessage>{$languagesQuery.error.message}</ErrorMessage>
     </p>
 {:else}
-    <div class="container max-w-2xl px-4 py-8 md:py-16">
-        <PageTitle>Tell us a little bit about yourself</PageTitle>
+    <div class="container max-w-2xl px-4 py-8 md:py-8">
+        <PageTitle
+            >{#if $room}Profile{:else}Tell us a little bit about yourself{/if}</PageTitle
+        >
 
         <form
             name="user-profile"
             action="/chat"
-            class="py-10 md:px-8"
+            class="py-8 md:px-8"
             on:submit|preventDefault={handleSubmit}
         >
             <fieldset class="mb-2">

@@ -18,12 +18,13 @@
 
     export let segment: string | undefined
     const FULLSCREEN_SEGMENTS = ["chat"]
-    const SHOWNAV_SEGMENTS = ["login", "join"]
+    const SHOWNAV_SEGMENTS = ["profile", "chat"]
 
     // @ts-ignore (left side of comma operator isn't ignored by svelte)
     $: segment, change()
     $: fullscreen = segment ? FULLSCREEN_SEGMENTS.includes(segment) : false
     $: showNav = segment ? SHOWNAV_SEGMENTS.includes(segment) : true
+    // const showNav = true
 
     onMount(() => {
         segment = window.location.pathname.split("/")[1]

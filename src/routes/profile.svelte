@@ -182,7 +182,8 @@
                 ? "English"
                 : learn.de
                 ? "German"
-                : learnOther[0].label // FIXME: learnOther[0] can be undefined here … why?
+                : // : learnOther[0].label // FIXME: learnOther[0] can be undefined here … why?
+                  "English"
             goto("/chat")
         } else {
             errorMessage = res.message
@@ -202,9 +203,13 @@
     </p>
 {:else}
     <div class="container max-w-2xl px-4 py-8 md:py-8">
-        <PageTitle
-            >{#if $room}Profile{:else}Tell us a little bit about yourself{/if}</PageTitle
-        >
+        <PageTitle>
+            {#if $room.length}
+                Profile
+            {:else}
+                Tell us a little bit about yourself
+            {/if}
+        </PageTitle>
 
         <form
             name="user-profile"

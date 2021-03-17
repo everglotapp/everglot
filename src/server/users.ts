@@ -16,7 +16,7 @@ const users: ChatUser[] = []
 // Join user to chat
 export function userJoin(
     socketId: string,
-    user: Partial<User>,
+    user: Pick<User, "id" | "username">,
     room: Language["englishName"]
 ) {
     const chatUser = { socketId, user, room }

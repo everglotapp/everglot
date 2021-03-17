@@ -51,7 +51,7 @@
 
     // TODO: Read user data from database.
     onMount(() => {
-        if (!$username || !$username.length) {
+        if (!($username || "").length) {
             goto("/profile")
         }
 

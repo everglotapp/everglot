@@ -78,6 +78,7 @@
                 <div class="my-auto">
                     <ButtonSmall
                         variant="TEXT"
+                        color="SECONDARY"
                         tag="button"
                         href="/profile"
                         on:click={() => {
@@ -100,7 +101,9 @@
             <div class="flex justify-center">
                 <div class="flex">
                     <a
-                        aria-current={segment === "groups" ? "page" : undefined}
+                        aria-current={segment === "chat" || segment === "groups"
+                            ? "page"
+                            : undefined}
                         href="/groups"
                         class="nav-item-with-icon"
                         ><span>My Groups</span>
@@ -206,7 +209,8 @@
     }
 
     a:hover {
-        @apply bg-gray-verylight;
+        @apply text-primary;
+        @apply bg-gray-lightest;
     }
 
     .nav-item-with-icon {

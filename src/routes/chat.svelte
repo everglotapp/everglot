@@ -1,14 +1,9 @@
 <script lang="ts">
     import { username, room } from "../stores"
-    import { onMount } from "svelte"
-    import { goto } from "@sapper/app"
+    import { onMount, onDestroy } from "svelte"
 
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
-    import {
-        UserIcon,
-        LogOutIcon,
-        ChevronsRightIcon,
-    } from "svelte-feather-icons"
+    import { UserIcon, ChevronsRightIcon } from "svelte-feather-icons"
 
     import type { ChatUser } from "../server/users"
     import type { Language } from "../types/generated/graphql"
@@ -17,7 +12,7 @@
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
 
-    let socket: SocketIO.Socket | undefined
+    let socket: SocketIO.Socket | null = null
 
     let roomMessages: Message[] = []
     let roomUsers: Pick<ChatUser["user"], "uuid" | "username">[] = []
@@ -55,6 +50,15 @@
             return
         }
         subscribe()
+    })
+
+    onDestroy(() => {
+        if (!socket) {
+            return
+        }
+        unsubscribe()
+        socket.emit("leaveRoom")
+        socket = null
     })
 
     function scrollDown(force: boolean = false): void {
@@ -128,7 +132,7 @@
         // let force = !chatIsManuallyScrolled()
         roomMessages = [...roomMessages, message]
         if (message.username === $username) {
-            force = true
+            // force = true
         }
         setTimeout(() => scrollDown(true), 150)
     }
@@ -193,26 +197,6 @@
         >
             <span class="text-lg py-2">{$room} Chat</span>
             <div>
-                <ButtonSmall
-                    variant="TEXT"
-                    tag="button"
-                    href="/profile"
-                    on:click={() => {
-                        fetch("/logout", {
-                            method: "post",
-                            headers: {
-                                Accept: "application/json",
-                                "Content-Type": "application/json",
-                            },
-                            redirect: "follow", // if user isn't signed in anymore
-                        }).then(() => {
-                            goto("/login")
-                        })
-                    }}
-                    ><LogOutIcon size="24" class="md:mr-1" /><span
-                        class="hidden md:inline">Logout</span
-                    ></ButtonSmall
-                >
                 <ButtonSmall variant="TEXT" href="/profile"
                     ><UserIcon size="24" class="md:mr-1" /><span
                         class="hidden md:inline">Profile</span

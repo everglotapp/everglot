@@ -1,4 +1,8 @@
 <script lang="ts">
+    import { goto } from "@sapper/app"
+    import { LogOutIcon } from "svelte-feather-icons"
+    import ButtonSmall from "../util/ButtonSmall.svelte"
+
     export let segment: string | undefined
 </script>
 
@@ -69,8 +73,29 @@
                     </a>
                 </div>
             </div>
-            <div class="flex justify-center">
-                <!-- Search -->
+            <div class="flex justify-center items-center">
+                <!-- TODO: Search -->
+                <div class="my-auto">
+                    <ButtonSmall
+                        variant="TEXT"
+                        tag="button"
+                        href="/profile"
+                        on:click={() => {
+                            fetch("/logout", {
+                                method: "post",
+                                headers: {
+                                    Accept: "application/json",
+                                    "Content-Type": "application/json",
+                                },
+                                redirect: "follow", // if user isn't signed in anymore
+                            }).then(() => {
+                                goto("/login")
+                            })
+                        }}
+                        ><span class="hidden md:inline md:mr-1">Logout</span
+                        ><LogOutIcon size="24" /></ButtonSmall
+                    >
+                </div>
             </div>
             <div class="flex justify-center">
                 <div class="flex">

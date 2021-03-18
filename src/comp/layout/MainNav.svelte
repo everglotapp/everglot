@@ -144,7 +144,7 @@
 
         position: relative;
         z-index: 10;
-        max-height: 93px;
+        max-height: 84px;
     }
 
     a[aria-current] {

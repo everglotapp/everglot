@@ -198,6 +198,7 @@
     a {
         display: flex;
         padding: 0.75rem 1rem;
+        margin: 0;
         text-decoration: none;
 
         @apply text-gray-bitdark;

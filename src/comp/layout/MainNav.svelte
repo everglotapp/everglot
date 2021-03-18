@@ -150,6 +150,7 @@
         bottom: 0;
         left: 0;
         right: 0;
+
         @apply bg-accent;
     }
 
@@ -161,6 +162,7 @@
         display: flex;
         padding: 0.75rem 1rem;
         text-decoration: none;
+
         @apply text-gray-bitdark;
         @apply text-center;
     }
@@ -185,6 +187,7 @@
         border-radius: 50%;
         width: 42px;
         height: 42px;
+
         @apply bg-gray-light;
     }
 </style>

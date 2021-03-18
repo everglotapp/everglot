@@ -470,19 +470,29 @@
 
 <style>
     .helper-text {
-        @apply text-sm text-gray-bitdark my-0 mb-1;
+        @apply text-sm;
+        @apply text-gray-bitdark;
+        @apply my-0;
+        @apply mb-1;
     }
 
     input {
-        @apply px-4 py-3 mb-3 my-1;
+        @apply px-4;
+        @apply py-3;
+        @apply mb-3;
+        @apply my-1;
     }
 
     .level {
-        @apply justify-between max-w-xs mb-2;
+        @apply justify-between;
+        @apply max-w-xs;
+        @apply mb-2;
     }
 
     .level label {
-        @apply font-normal text-base m-0 !important;
+        @apply font-normal !important;
+        @apply text-base !important;
+        @apply m-0 !important;
     }
 
     .level select {
@@ -490,11 +500,22 @@
     }
 
     .warning-skill {
-        @apply px-6 py-4 my-1 rounded-2xl bg-gray-lightest text-gray-dark;
+        @apply px-6;
+        @apply py-4;
+        @apply my-1;
+        @apply rounded-2xl;
+        @apply bg-gray-lightest;
+        @apply text-gray-dark;
     }
 
     .warning-learn-other {
-        @apply px-6 py-4 my-1 rounded-2xl bg-gray-lightest font-bold text-gray-dark;
+        @apply px-6;
+        @apply py-4;
+        @apply my-1;
+        @apply rounded-2xl;
+        @apply bg-gray-lightest;
+        @apply font-bold;
+        @apply text-gray-dark;
     }
 
     .warning-skill p:last-child,
@@ -503,6 +524,8 @@
     }
 
     .warning-inner-with-icon {
-        @apply flex items-center space-x-6;
+        @apply flex;
+        @apply items-center;
+        @apply space-x-6;
     }
 </style>

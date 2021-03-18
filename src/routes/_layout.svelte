@@ -16,23 +16,15 @@
     import Footer from "../comp/layout/Footer.svelte"
     import type { DocumentNode, OperationDefinitionNode } from "graphql"
 
-    export let segment: string | undefined
-    const FULLSCREEN_SEGMENTS = ["chat"]
-    const SHOWNAV_SEGMENTS = [
-        "profile",
-        "chat",
-        "languages",
-        "global",
-        "groups",
-    ]
-
+    export let segment: string | undefined = undefined
     // @ts-ignore (left side of comma operator isn't ignored by svelte)
     $: segment, change()
-    $: fullscreen = segment ? FULLSCREEN_SEGMENTS.includes(segment) : false
-    $: showNav = segment ? SHOWNAV_SEGMENTS.includes(segment) : false
-    // const showNav = true
+
+    const showMainNav = segment !== "chat"
+    const showFooter = segment !== "chat"
 
     onMount(() => {
+        // TODO: is this really necessary?
         segment = window.location.pathname.split("/")[1]
     })
 
@@ -80,7 +72,7 @@
     }
 </script>
 
-{#if showNav}
+{#if showMainNav}
     <MainNav {segment} />
 {/if}
 
@@ -88,7 +80,7 @@
     <main
         in:scale={{ duration: timeout, delay: timeout }}
         out:scale={{ duration: timeout }}
-        class:fullscreen
+        class:fullscreen={false}
     >
         <slot />
     </main>
@@ -96,13 +88,13 @@
     <main
         in:scale={{ duration: timeout, delay: timeout }}
         out:scale={{ duration: timeout }}
-        class:fullscreen
+        class:fullscreen={false}
     >
         <slot />
     </main>
 {/if}
 
-{#if !fullscreen}
+{#if showFooter}
     <Footer />
 {/if}
 

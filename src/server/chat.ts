@@ -43,6 +43,7 @@ export function start(server: Server, pool: Pool) {
                         user(id: $id) {
                             id
                             username
+                            uuid
                         }
                     }`,
                     { id: session.user_id }

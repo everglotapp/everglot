@@ -20,7 +20,7 @@
     let socket: SocketIO.Socket | undefined
 
     let roomMessages: Message[] = []
-    let roomUsers: ChatUser[] = []
+    let roomUsers: Pick<ChatUser["user"], "uuid" | "username">[] = []
     let msg: string = ""
 
     // TODO: Check if user is signed in, if not redirect to sign in.
@@ -31,7 +31,6 @@
 
         // Join chatroom
         socket.emit("joinRoom", {
-            username: $username,
             room: $room,
         })
 
@@ -51,10 +50,6 @@
 
     // TODO: Read user data from database.
     onMount(() => {
-        if (!($username || "").length) {
-            goto("/profile")
-        }
-
         socket = io()
         if (!socket) {
             return
@@ -87,10 +82,10 @@
         }
     }
 
-    const chatIsManuallyScrolled = (scrollTop?: number): boolean => {
-        const container = document.getElementById("chat-messages")
-        return container ? isScrolled(container, scrollTop) : false
-    }
+    // const chatIsManuallyScrolled = (scrollTop?: number): boolean => {
+    //     const container = document.getElementById("chat-messages")
+    //     return container ? isScrolled(container, scrollTop) : false
+    // }
 
     /**
      * Whether the element is scrolled to the specified position.
@@ -120,7 +115,7 @@
         users,
     }: {
         room: Language["englishName"]
-        users: ChatUser[]
+        users: Pick<ChatUser["user"], "username" | "uuid">[]
     }): void {
         if (recvRoom !== $room) {
             return
@@ -130,7 +125,7 @@
     }
 
     function onMessage(message: Message): void {
-        let force = !chatIsManuallyScrolled()
+        // let force = !chatIsManuallyScrolled()
         roomMessages = [...roomMessages, message]
         if (message.username === $username) {
             force = true
@@ -175,7 +170,7 @@
         <h3 class="px-4 text-gray-bitdark font-bold text-sm mb-4">Users</h3>
         <ul>
             {#each roomUsers as chatUser}
-                {#if chatUser.user.username === ""}
+                {#if chatUser.username === ""}
                     <li
                         class="px-8 py-2 text-lg bg-gray-lightest text-gray-bitdark shadow-sm mb-1 overflow-hidden overflow-ellipsis"
                     >
@@ -185,7 +180,7 @@
                     <li
                         class="px-8 py-2 text-lg bg-gray-lightest text-gray-dark shadow-sm mb-1 overflow-hidden overflow-ellipsis"
                     >
-                        {chatUser.user.username}
+                        {chatUser.username}
                     </li>
                 {/if}
             {/each}
@@ -230,7 +225,9 @@
                 <div class="message">
                     <p class="meta">
                         <span class="username">{message.username}</span>
-                        {#if message.username === "Everglot Bot"}[{$room}]{/if}
+                        {#if message.username === "Everglot Bot" && $room && $room.length}
+                            <span> [{$room}]</span>
+                        {/if}
                         &nbsp;–&nbsp;
                         <span>{message.time}</span>
                     </p>
@@ -265,7 +262,7 @@
 <style>
     section {
         display: grid;
-        grid-template-columns: 1fr 4fr;
+        grid-template-columns: 300px 1fr;
         grid-template-rows: 1fr 200px;
         width: 100%;
         height: 100%;

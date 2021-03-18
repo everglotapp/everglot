@@ -20,8 +20,9 @@
     // @ts-ignore (left side of comma operator isn't ignored by svelte)
     $: segment, change()
 
-    const showMainNav = segment !== "chat"
-    const showFooter = segment !== "chat"
+    $: showMainNav = segment !== "login" && segment !== "join"
+    $: showFooter = segment !== "chat"
+    $: noscroll = segment === "chat"
 
     onMount(() => {
         // TODO: is this really necessary?
@@ -72,44 +73,61 @@
     }
 </script>
 
-{#if showMainNav}
-    <MainNav {segment} />
-{/if}
+<div id="app" class:noscroll>
+    {#if showMainNav}
+        <MainNav {segment} />
+    {/if}
 
-{#if transitionTriggeringSwitch}
-    <main
-        in:scale={{ duration: timeout, delay: timeout }}
-        out:scale={{ duration: timeout }}
-        class:fullscreen={false}
-    >
-        <slot />
+    <main>
+        {#if transitionTriggeringSwitch}
+            <div
+                class="main-inner"
+                in:scale={{ duration: timeout, delay: timeout }}
+                out:scale={{ duration: timeout }}
+            >
+                <slot />
+            </div>
+        {:else}
+            <div
+                class="main-inner"
+                in:scale={{ duration: timeout, delay: timeout }}
+                out:scale={{ duration: timeout }}
+            >
+                <slot />
+            </div>
+        {/if}
     </main>
-{:else}
-    <main
-        in:scale={{ duration: timeout, delay: timeout }}
-        out:scale={{ duration: timeout }}
-        class:fullscreen={false}
-    >
-        <slot />
-    </main>
-{/if}
 
-{#if showFooter}
-    <Footer />
-{/if}
+    {#if showFooter}
+        <Footer />
+    {/if}
+</div>
 
 <style>
+    #app {
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
     main {
         position: relative;
         background-color: white;
         box-sizing: border-box;
     }
 
-    main.fullscreen {
+    #app.noscroll {
         position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+    }
+
+    #app.noscroll main {
+        height: 100%;
+    }
+
+    .main-inner {
+        display: flex;
+        height: 100%;
     }
 </style>

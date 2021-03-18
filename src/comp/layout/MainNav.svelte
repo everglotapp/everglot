@@ -2,7 +2,7 @@
     export let segment: string | undefined
 </script>
 
-<div class="shadow-md bg-white" style="position: relative; z-index: 10;">
+<div class="nav-container">
     <nav class="flex container mx-auto px-2">
         <div class="flex flex-grow-0 self-center">
             <a
@@ -138,6 +138,15 @@
 </div>
 
 <style>
+    .nav-container {
+        @apply shadow-md;
+        @apply bg-white;
+
+        position: relative;
+        z-index: 10;
+        max-height: 93px;
+    }
+
     a[aria-current] {
         position: relative;
     }

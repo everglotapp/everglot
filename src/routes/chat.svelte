@@ -264,16 +264,11 @@
 
 <style>
     section {
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
         display: grid;
         grid-template-columns: 1fr 4fr;
-        grid-template-rows: 7fr 1fr;
-        width: 100vw;
-        height: 100vh;
+        grid-template-rows: 1fr 200px;
+        width: 100%;
+        height: 100%;
     }
 
     .chat-sidebar {

@@ -150,61 +150,34 @@
 </svelte:head>
 
 <section>
-    <div class="chat-sidebar bg-primary-lightest rounded-tl-md">
+    <div class="sidebar">
         <div
-            class="py-3 px-4 text-lg font-bold w-full border-8 border-primary-lightest text-gray-dark mb-4"
+            class="users-container py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4"
         >
-            <!-- svelte-ignore a11y-no-onchange -->
-            <select
-                name="room"
-                id="room"
-                bind:value={$room}
-                on:change={changeRoom}
-                class="border-none shadow-sm rounded-xl w-full"
-            >
-                <option value="English">English</option>
-                <option value="German">German</option>
-                <option value="French">French</option>
-                <option value="Italian">Italian</option>
-                <option value="Spanish">Spanish</option>
-                <option value="Chinese">Chinese</option>
-                <option value="Japanese">Japanese</option>
-            </select>
+            <h3 class="px-4 text-gray-bitdark font-bold mb-4">
+                Active Members
+            </h3>
+            <ul class="users">
+                {#each roomUsers as chatUser}
+                    {#if chatUser.username === ""}
+                        <li class="user" title="Everglot Bot" />
+                    {:else}
+                        <li class="user" title={chatUser.username || "n/a"} />
+                    {/if}
+                {/each}
+            </ul>
         </div>
-        <h3 class="px-4 text-gray-bitdark font-bold text-sm mb-4">Users</h3>
-        <ul>
-            {#each roomUsers as chatUser}
-                {#if chatUser.username === ""}
-                    <li
-                        class="px-8 py-2 text-lg bg-gray-lightest text-gray-bitdark shadow-sm mb-1 overflow-hidden overflow-ellipsis"
-                    >
-                        Everglot Bot
-                    </li>
-                {:else}
-                    <li
-                        class="px-8 py-2 text-lg bg-gray-lightest text-gray-dark shadow-sm mb-1 overflow-hidden overflow-ellipsis"
-                    >
-                        {chatUser.username}
-                    </li>
-                {/if}
-            {/each}
-        </ul>
     </div>
-    <div id="chat-main">
-        <div
-            class="flex bg-gray-lightest py-4 px-8"
-            style="justify-content: space-between;"
-        >
-            <span class="text-lg py-2">{$room} Chat</span>
-            <div>
-                <ButtonSmall variant="TEXT" href="/profile"
-                    ><UserIcon size="24" class="md:mr-1" /><span
-                        class="hidden md:inline">Profile</span
-                    ></ButtonSmall
-                >
-            </div>
+    <div class="main">
+        <div class="flex items-center bg-primary text-white py-4 px-8">
+            <span class="text-xl py-2">Group 1</span>
+            <div
+                class="inline"
+                style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
+            />
+            <span>General Channel</span>
         </div>
-        <div id="chat-messages" class="rounded-tr-md p-8">
+        <div class="rounded-tr-md p-8">
             {#each roomMessages as message}
                 <div class="message">
                     <p class="meta">
@@ -219,27 +192,31 @@
                 </div>
             {/each}
         </div>
-    </div>
-    <div class="bg-primary-lightest" />
-    <div class="chat-form-container rounded-bl-md rounded-br-md">
-        <form
-            id="chat-form"
-            on:submit|preventDefault={onSend}
-            class="justify-end items-center"
-        >
-            <input
-                id="msg"
-                type="text"
-                placeholder="Enter message …"
-                required
-                autocomplete="off"
-                class="border-none shadow-md px-4 py-4 w-full rounded-md"
-                bind:value={msg}
-            />
-            <ButtonSmall className="ml-4 px-6" tag="button" on:click={onSend}
-                >Send<ChevronsRightIcon size="24" class="ml-1" /></ButtonSmall
+        <div class="submit-form-container rounded-bl-md rounded-br-md">
+            <form
+                on:submit|preventDefault={onSend}
+                class="submit-form justify-end items-center"
             >
-        </form>
+                <input
+                    id="msg"
+                    type="text"
+                    placeholder="Enter message …"
+                    required
+                    autocomplete="off"
+                    class="border-none shadow-md px-4 py-4 w-full rounded-md"
+                    bind:value={msg}
+                />
+                <ButtonSmall
+                    className="ml-4 px-6"
+                    tag="button"
+                    on:click={onSend}
+                    >Send<ChevronsRightIcon
+                        size="24"
+                        class="ml-1"
+                    /></ButtonSmall
+                >
+            </form>
+        </div>
     </div>
 </section>
 
@@ -247,18 +224,43 @@
     section {
         display: grid;
         grid-template-columns: 300px 1fr;
-        grid-template-rows: 1fr 200px;
         width: 100%;
         height: 100%;
     }
 
-    .chat-sidebar {
+    .sidebar {
         overflow-y: scroll;
+
+        @apply rounded-tl-md;
     }
 
-    #chat-main {
+    .users-container {
+        @apply my-4;
+    }
+
+    .users {
+        display: grid;
+        grid-template-rows: 3;
+        grid-template-columns: 4;
+
+        @apply text-center;
+    }
+
+    .user {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+
+        @apply bg-gray-light;
+    }
+
+    .main {
         overflow-y: scroll;
         top: 0;
+        display: grid;
+        grid-template-rows: 70px 1fr 200px;
+        width: 100%;
+        height: 100%;
     }
 
     .message {
@@ -291,13 +293,13 @@
         @apply mb-1;
     }
 
-    .chat-form-container {
+    .submit-form-container {
         padding: 18px 30px;
 
         @apply bg-gray-lightest;
     }
 
-    .chat-form-container form {
+    .submit-form-container form {
         display: flex;
     }
 
@@ -306,18 +308,18 @@
             display: block;
         }
 
-        #chat-main {
+        .main {
             position: fixed;
             left: 0;
             right: 0;
             bottom: 94px;
         }
 
-        .chat-sidebar {
+        .sidebar {
             display: none;
         }
 
-        .chat-form-container {
+        .submit-form-container {
             position: fixed;
             left: 0;
             right: 0;

@@ -16,17 +16,16 @@
     import Footer from "../comp/layout/Footer.svelte"
     import type { DocumentNode, OperationDefinitionNode } from "graphql"
 
-    export let segment: string | undefined
-    const FULLSCREEN_SEGMENTS = ["chat"]
-    const SHOWNAV_SEGMENTS = ["profile", "chat"]
-
+    export let segment: string | undefined = undefined
     // @ts-ignore (left side of comma operator isn't ignored by svelte)
     $: segment, change()
-    $: fullscreen = segment ? FULLSCREEN_SEGMENTS.includes(segment) : false
-    $: showNav = segment ? SHOWNAV_SEGMENTS.includes(segment) : true
-    // const showNav = true
+
+    $: showMainNav = segment !== "login" && segment !== "join"
+    $: showFooter = segment !== "chat"
+    $: noscroll = segment === "chat"
 
     onMount(() => {
+        // TODO: is this really necessary?
         segment = window.location.pathname.split("/")[1]
     })
 
@@ -74,46 +73,61 @@
     }
 </script>
 
-{#if showNav}
-    <MainNav {segment} />
-{/if}
+<div id="app" class:noscroll>
+    {#if showMainNav}
+        <MainNav {segment} />
+    {/if}
 
-{#if transitionTriggeringSwitch}
-    <main
-        in:scale={{ duration: timeout, delay: timeout }}
-        out:scale={{ duration: timeout }}
-        class:fullscreen
-    >
-        <slot />
+    <main>
+        {#if transitionTriggeringSwitch}
+            <div
+                class="main-inner"
+                in:scale={{ duration: timeout, delay: timeout }}
+                out:scale={{ duration: timeout }}
+            >
+                <slot />
+            </div>
+        {:else}
+            <div
+                class="main-inner"
+                in:scale={{ duration: timeout, delay: timeout }}
+                out:scale={{ duration: timeout }}
+            >
+                <slot />
+            </div>
+        {/if}
     </main>
-    {#if !fullscreen}
+
+    {#if showFooter}
         <Footer />
     {/if}
-{:else}
-    <main
-        in:scale={{ duration: timeout, delay: timeout }}
-        out:scale={{ duration: timeout }}
-        class:fullscreen
-    >
-        <slot />
-    </main>
-    {#if !fullscreen}
-        <Footer />
-    {/if}
-{/if}
+</div>
 
 <style>
+    #app {
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
     main {
         position: relative;
         background-color: white;
         box-sizing: border-box;
     }
 
-    main.fullscreen {
+    #app.noscroll {
         position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+    }
+
+    #app.noscroll main {
+        height: 100%;
+    }
+
+    .main-inner {
+        display: flex;
+        height: 100%;
     }
 </style>

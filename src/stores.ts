@@ -1,5 +1,5 @@
 import { writable } from "svelte/store"
 
-export const signedIn = writable(false)
-export const username = writable(null)
-export const room = writable("")
+export const signedIn = writable<boolean>(false)
+export const username = writable<string | null>(null)
+export const room = writable<string>("")

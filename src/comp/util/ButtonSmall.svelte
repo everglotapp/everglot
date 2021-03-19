@@ -18,7 +18,7 @@
             PRIMARY:
                 "border border-transparent hover:bg-gray-lightest text-primary focus:bg-white focus:border-primary",
             SECONDARY:
-                "border border-transparent hover:bg-gray-lightest text-primary focus:bg-white focus:border-primary",
+                "border border-transparent hover:bg-gray-lightest text-gray-bitdark focus:bg-white focus:border-bitdark",
         },
     }
 </script>

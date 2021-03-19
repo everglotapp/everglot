@@ -23,8 +23,8 @@ export function getPostGraphileOptions(): PostGraphileOptions {
         allowUnpersistedOperation(req: Request) {
             return dev && req.headers.referer?.endsWith("/graphiql")
         },
-        async additionalGraphQLContextFromRequest(req, _res) {
-            return { req }
+        async additionalGraphQLContextFromRequest(req: Request, _res) {
+            return { userId: req.session.user_id }
         },
         exportGqlSchemaPath: dev ? "schema.graphql" : undefined,
         showErrorStack: dev ? "json" : false,

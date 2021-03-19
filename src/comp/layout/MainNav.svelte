@@ -19,7 +19,7 @@
             class="flex flex-1 mx-auto justify-between"
             style="max-width: 820px;"
         >
-            <div class="flex justify-center">
+            <div class="hidden md:flex justify-center">
                 <div class="flex">
                     <a
                         aria-current={segment === "global" ? "page" : undefined}
@@ -172,7 +172,11 @@
 
         position: relative;
         z-index: 10;
-        max-height: 84px;
+
+        max-height: 68px;
+        @screen md {
+            max-height: 84px;
+        }
     }
 
     a[aria-current] {
@@ -197,12 +201,16 @@
 
     a {
         display: flex;
-        padding: 0.75rem 1rem;
+        padding: 0.25rem 0.5rem;
         margin: 0;
         text-decoration: none;
 
         @apply text-gray-bitdark;
         @apply text-center;
+
+        @screen md {
+            padding: 0.75rem 1rem;
+        }
     }
 
     a.logo {

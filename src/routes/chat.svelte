@@ -143,6 +143,11 @@
         roomMessages = []
         subscribe()
     }
+
+    let split = true
+    function toggleSplit() {
+        split = !split
+    }
 </script>
 
 <svelte:head>
@@ -184,12 +189,12 @@
                     />
                 </svg>
                 <span>Display</span>
-                <div class="toggle">
-                    <div>On</div>
-                    <div aria-selected="true">Off</div>
+                <div class="toggle" on:click={toggleSplit}>
+                    <div aria-selected={split}>On</div>
+                    <div aria-selected={!split}>Off</div>
                 </div>
             </div>
-            <div class="toggle-row">
+            <div class="toggle-row" style="cursor: not-allowed;">
                 <svg
                     width="35"
                     height="35"
@@ -244,7 +249,7 @@
                     <div aria-selected="true">Off</div>
                 </div>
             </div>
-            <div class="toggle-row">
+            <div class="toggle-row" style="cursor: not-allowed;">
                 <svg
                     width="35"
                     height="35"
@@ -274,45 +279,50 @@
             />
             <span>General Channel</span>
         </div>
-        <div class="rounded-tr-md p-8">
-            {#each roomMessages as message}
-                <div class="message">
-                    <p class="meta">
-                        <span class="username">{message.username}</span>
-                        {#if message.username === "Everglot Bot" && $room && $room.length}
-                            <span> [{$room}]</span>
-                        {/if}
-                        &nbsp;–&nbsp;
-                        <span>{message.time}</span>
-                    </p>
-                    <p class="text">{message.text}</p>
+        <div class="main-views" class:split>
+            {#if split}
+                <div class="main-view-left hidden p-8" />
+            {/if}
+            <div class="main-view-right rounded-tr-md p-8">
+                {#each roomMessages as message}
+                    <div class="message">
+                        <p class="meta">
+                            <span class="username">{message.username}</span>
+                            {#if message.username === "Everglot Bot" && $room && $room.length}
+                                <span> [{$room}]</span>
+                            {/if}
+                            &nbsp;–&nbsp;
+                            <span>{message.time}</span>
+                        </p>
+                        <p class="text">{message.text}</p>
+                    </div>
+                {/each}
+                <div class="submit-form-container rounded-bl-md rounded-br-md">
+                    <form
+                        on:submit|preventDefault={onSend}
+                        class="submit-form justify-end items-center"
+                    >
+                        <input
+                            id="msg"
+                            type="text"
+                            placeholder="Enter text message …"
+                            required
+                            autocomplete="off"
+                            class="border-none shadow-md px-4 py-4 w-full rounded-md"
+                            bind:value={msg}
+                        />
+                        <ButtonSmall
+                            className="ml-4 px-6"
+                            tag="button"
+                            on:click={onSend}
+                            >Send<ChevronsRightIcon
+                                size="24"
+                                class="ml-1"
+                            /></ButtonSmall
+                        >
+                    </form>
                 </div>
-            {/each}
-        </div>
-        <div class="submit-form-container rounded-bl-md rounded-br-md">
-            <form
-                on:submit|preventDefault={onSend}
-                class="submit-form justify-end items-center"
-            >
-                <input
-                    id="msg"
-                    type="text"
-                    placeholder="Enter message …"
-                    required
-                    autocomplete="off"
-                    class="border-none shadow-md px-4 py-4 w-full rounded-md"
-                    bind:value={msg}
-                />
-                <ButtonSmall
-                    className="ml-4 px-6"
-                    tag="button"
-                    on:click={onSend}
-                    >Send<ChevronsRightIcon
-                        size="24"
-                        class="ml-1"
-                    /></ButtonSmall
-                >
-            </form>
+            </div>
         </div>
     </div>
 </section>
@@ -359,6 +369,7 @@
     }
 
     .toggle {
+        @apply cursor-pointer;
         @apply border-2;
         @apply rounded-lg;
         @apply border-primary;
@@ -371,19 +382,46 @@
         @apply rounded-md;
         @apply p-1;
         @apply text-xs;
+
+        transition: background-color 100ms ease-in;
     }
 
-    .toggle div[aria-selected] {
+    .toggle div[aria-selected="true"] {
         @apply bg-primary;
+
+        transition: background-color 100ms ease-in;
     }
 
     .main {
         overflow-y: scroll;
         top: 0;
         display: grid;
-        grid-template-rows: 70px 1fr 200px;
+        grid-template-rows: 70px 1fr;
         width: 100%;
         height: 100%;
+    }
+
+    .main-views {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .main-views.split {
+        @screen md {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    .main-view-left {
+        @screen md {
+            display: grid;
+            grid-template-rows: 1fr 200px;
+        }
+    }
+
+    .main-view-right {
+        display: grid;
+        grid-template-rows: 1fr 200px;
     }
 
     .message {

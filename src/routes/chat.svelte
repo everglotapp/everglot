@@ -154,7 +154,7 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-<section>
+<div class="wrapper">
     <div class="sidebar">
         <div
             class="users-container py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4"
@@ -270,65 +270,77 @@
             </div>
         </div>
     </div>
-    <div class="main">
-        <div class="flex items-center bg-primary text-white py-4 px-8">
-            <span class="text-xl py-2">Group 1</span>
-            <div
-                class="inline"
-                style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
-            />
-            <span>General Channel</span>
-        </div>
-        <div class="main-views" class:split>
-            {#if split}
-                <div class="main-view-left hidden p-8" />
-            {/if}
-            <div class="main-view-right rounded-tr-md p-8">
-                {#each roomMessages as message}
-                    <div class="message">
-                        <p class="meta">
-                            <span class="username">{message.username}</span>
-                            {#if message.username === "Everglot Bot" && $room && $room.length}
-                                <span> [{$room}]</span>
-                            {/if}
-                            &nbsp;–&nbsp;
-                            <span>{message.time}</span>
-                        </p>
-                        <p class="text">{message.text}</p>
+    <div class="section-wrapper">
+        <section>
+            <header class="flex items-center bg-primary text-white py-4 px-8">
+                <span class="text-xl py-2">Group 1</span>
+                <div
+                    class="inline"
+                    style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
+                />
+                <span>General Channel</span>
+            </header>
+            <div class="views-wrapper">
+                <div class="views" class:split>
+                    {#if split}
+                        <div class="view-left hidden" />
+                    {/if}
+                    <div class="view-right rounded-tr-md">
+                        <div class="view-right-inner">
+                            <div class="messages">
+                                {#each roomMessages as message}
+                                    <div class="message">
+                                        <p class="meta">
+                                            <span class="username"
+                                                >{message.username}</span
+                                            >
+                                            {#if message.username === "Everglot Bot" && $room && $room.length}
+                                                <span> [{$room}]</span>
+                                            {/if}
+                                            &nbsp;–&nbsp;
+                                            <span>{message.time}</span>
+                                        </p>
+                                        <p class="text">{message.text}</p>
+                                    </div>
+                                {/each}
+                            </div>
+                            <div
+                                class="submit-form-container rounded-bl-md rounded-br-md"
+                            >
+                                <form
+                                    on:submit|preventDefault={onSend}
+                                    class="submit-form justify-end items-center"
+                                >
+                                    <input
+                                        id="msg"
+                                        type="text"
+                                        placeholder="Enter text message …"
+                                        required
+                                        autocomplete="off"
+                                        class="border-none shadow-md px-4 py-4 w-full rounded-md"
+                                        bind:value={msg}
+                                    />
+                                    <ButtonSmall
+                                        className="ml-4 px-6"
+                                        tag="button"
+                                        on:click={onSend}
+                                        >Send<ChevronsRightIcon
+                                            size="24"
+                                            class="ml-1"
+                                        /></ButtonSmall
+                                    >
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                {/each}
-                <div class="submit-form-container rounded-bl-md rounded-br-md">
-                    <form
-                        on:submit|preventDefault={onSend}
-                        class="submit-form justify-end items-center"
-                    >
-                        <input
-                            id="msg"
-                            type="text"
-                            placeholder="Enter text message …"
-                            required
-                            autocomplete="off"
-                            class="border-none shadow-md px-4 py-4 w-full rounded-md"
-                            bind:value={msg}
-                        />
-                        <ButtonSmall
-                            className="ml-4 px-6"
-                            tag="button"
-                            on:click={onSend}
-                            >Send<ChevronsRightIcon
-                                size="24"
-                                class="ml-1"
-                            /></ButtonSmall
-                        >
-                    </form>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
-</section>
+</div>
 
 <style>
-    section {
+    .wrapper {
         display: grid;
         grid-template-columns: 300px 1fr;
         width: 100%;
@@ -362,9 +374,12 @@
     }
 
     .toggle-row {
+        max-width: 200px;
+
         @apply flex;
         @apply items-center;
-        @apply justify-around;
+        @apply justify-between;
+        @apply mx-auto;
         @apply py-1;
     }
 
@@ -392,43 +407,89 @@
         transition: background-color 100ms ease-in;
     }
 
-    .main {
-        overflow-y: scroll;
-        top: 0;
-        display: grid;
-        grid-template-rows: 70px 1fr;
-        width: 100%;
-        height: 100%;
+    .section-wrapper {
+        @apply relative;
+        @apply w-full;
+        @apply h-full;
     }
 
-    .main-views {
-        display: grid;
+    section {
+        @apply absolute;
+        @apply left-0;
+        @apply right-0;
+        @apply top-0;
+        @apply bottom-0;
+        @apply grid;
+
+        grid-template-rows: 70px 1fr;
+    }
+
+    header {
+        @apply relative;
+        @apply w-full;
+    }
+
+    .views-wrapper {
+        @apply relative;
+        @apply w-full;
+        @apply h-full;
+    }
+
+    .views {
+        @apply absolute;
+        @apply left-0;
+        @apply right-0;
+        @apply top-0;
+        @apply bottom-0;
+        @apply max-h-full;
+        @apply grid;
+
         grid-template-columns: 1fr;
     }
 
-    .main-views.split {
+    .views.split {
         @screen md {
             grid-template-columns: 1fr 1fr;
         }
     }
 
-    .main-view-left {
+    .view-left {
+        @apply relative;
+
         @screen md {
-            display: grid;
             grid-template-rows: 1fr 200px;
+
+            @apply grid;
         }
     }
 
-    .main-view-right {
-        display: grid;
-        grid-template-rows: 1fr 200px;
+    .view-right {
+        @apply relative;
+        @apply w-full;
+        @apply h-full;
+    }
+
+    .view-right-inner {
+        @apply grid;
+        @apply absolute;
+        @apply left-0;
+        @apply right-0;
+        @apply top-0;
+        @apply bottom-0;
+        @apply max-h-full;
+
+        grid-template-rows: 1fr 94px;
+    }
+
+    .messages {
+        @apply overflow-y-scroll;
+        @apply py-2;
     }
 
     .message {
-        padding: 10px;
-        margin-bottom: 15px;
-        overflow-wrap: break-word;
-
+        @apply p-2;
+        @apply mb-3;
+        @apply break-words;
         @apply bg-primary-lightest;
         @apply rounded-md;
     }
@@ -458,6 +519,10 @@
         padding: 18px 30px;
 
         @apply bg-gray-lightest;
+        @apply absolute;
+        @apply bottom-0;
+        @apply left-0;
+        @apply right-0;
     }
 
     .submit-form-container form {
@@ -465,11 +530,11 @@
     }
 
     @media (max-width: 700px) {
-        section {
+        .wrapper {
             display: block;
         }
 
-        .main {
+        section {
             position: fixed;
             left: 0;
             right: 0;

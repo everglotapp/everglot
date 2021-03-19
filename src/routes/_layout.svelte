@@ -73,7 +73,7 @@
     }
 </script>
 
-<div id="app" class:noscroll>
+<div id="app" class:noscroll class:with-main-nav={showMainNav}>
     {#if showMainNav}
         <MainNav {segment} />
     {/if}
@@ -120,6 +120,12 @@
 
     #app.noscroll {
         position: fixed;
+        display: grid;
+        grid-template-rows: 1fr;
+    }
+
+    #app.noscroll.with-main-nav {
+        grid-template-rows: 84px 1fr;
     }
 
     #app.noscroll main {

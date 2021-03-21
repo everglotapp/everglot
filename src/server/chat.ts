@@ -59,15 +59,19 @@ export function start(server: Server, pool: Pool) {
                 socket.join(chatUser.room)
                 if (userIsNew(chatUser)) {
                     // Welcome current user
-                    io.to(chatUser.room).emit(
-                        "message",
-                        formatMessage(
-                            botName,
-                            `Welcome to Everglot, ${chatUser.user.username}! Write !help to see available commands.`
-                        )
+                    sendBotMessage(
+                        `Welcome to Everglot, ${chatUser.user.username}! Write !help to see available commands.`,
+                        chatUser.room
                     )
+
                     userGreeted(chatUser)
                 }
+
+                socket.emit("welcome", {
+                    user: {
+                        uuid: chatUser.user.uuid,
+                    },
+                })
 
                 // Broadcast when a user connects
                 socket.broadcast
@@ -114,7 +118,11 @@ export function start(server: Server, pool: Pool) {
             if (msg) {
                 io.to(chatUser.room).emit(
                     "message",
-                    formatMessage(chatUser.user.username, msg)
+                    formatMessage(
+                        chatUser.user.username,
+                        msg,
+                        chatUser.user.uuid
+                    )
                 )
                 if (msg.startsWith("!help")) {
                     sendBotMessage(
@@ -177,12 +185,9 @@ export function start(server: Server, pool: Pool) {
                 return
             }
 
-            io.to(chatUser.room).emit(
-                "message",
-                formatMessage(
-                    botName,
-                    `${chatUser.user.username} has left the chat`
-                )
+            sendBotMessage(
+                `${chatUser.user.username} has left the chat`,
+                chatUser.room
             )
 
             // Send users and room info

@@ -80,7 +80,7 @@ PGPASSWORD=everglot_app_pass \
     npm run migrate create "this is my migration name"
 ```
 
-Then change it. To run newly create and/or remaining migrations, call the `migrate` npm script with the up command as you did during the initial setup (to load the schema):
+Then change the new file. To run newly created and/or remaining migrations, call the `migrate` npm script with the up command as you did during the initial setup (to load the schema):
 
 ```bash
 PGHOST=localhost \

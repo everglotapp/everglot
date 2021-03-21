@@ -211,7 +211,7 @@
                     <div aria-selected={!split}>Off</div>
                 </div>
             </div>
-            <div class="toggle-row" style="cursor: not-allowed;">
+            <div class="toggle-row">
                 <svg
                     width="35"
                     height="35"
@@ -261,12 +261,12 @@
                     </defs>
                 </svg>
                 <span>Mic</span>
-                <div class="toggle">
+                <div class="toggle" style="cursor: not-allowed;">
                     <div>On</div>
                     <div aria-selected="true">Off</div>
                 </div>
             </div>
-            <div class="toggle-row" style="cursor: not-allowed;">
+            <div class="toggle-row">
                 <svg
                     width="35"
                     height="35"
@@ -280,7 +280,7 @@
                     />
                 </svg>
                 <span>Audio</span>
-                <div class="toggle">
+                <div class="toggle" style="cursor: not-allowed;">
                     <div>On</div>
                     <div aria-selected="true">Off</div>
                 </div>
@@ -289,7 +289,9 @@
     </div>
     <div class="section-wrapper">
         <section>
-            <header class="flex items-center bg-primary text-white py-4 px-8">
+            <header
+                class="flex items-center bg-primary text-white shadow-sm py-4 px-8"
+            >
                 <span class="text-xl py-2">Group 1</span>
                 <div
                     class="inline"
@@ -457,6 +459,8 @@
         @apply relative;
         @apply w-full;
         @apply h-full;
+        @apply flex;
+        @apply flex-col;
     }
 
     section {
@@ -466,6 +470,7 @@
         @apply top-0;
         @apply bottom-0;
         @apply grid;
+        @apply h-full;
 
         grid-template-rows: 70px 1fr;
     }
@@ -479,6 +484,8 @@
         @apply relative;
         @apply w-full;
         @apply h-full;
+        @apply flex;
+        @apply flex-col;
     }
 
     .views {
@@ -487,6 +494,7 @@
         @apply right-0;
         @apply top-0;
         @apply bottom-0;
+        @apply h-full;
         @apply max-h-full;
         @apply grid;
 
@@ -503,13 +511,13 @@
         @apply relative;
         @apply w-full;
         @apply h-full;
+        @apply flex;
+        @apply flex-col;
     }
 
     .view-left {
         @screen md {
-            grid-template-rows: 1fr 200px;
-
-            @apply grid;
+            @apply block;
         }
     }
 
@@ -521,6 +529,7 @@
         @apply top-0;
         @apply bottom-0;
         @apply max-h-full;
+        @apply h-full;
     }
 
     .view-right-inner {

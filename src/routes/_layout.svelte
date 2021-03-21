@@ -122,6 +122,7 @@
         position: fixed;
         display: grid;
         grid-template-rows: 1fr;
+        height: 100%;
     }
 
     #app.noscroll.with-main-nav {

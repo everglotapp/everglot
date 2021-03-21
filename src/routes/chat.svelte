@@ -289,9 +289,7 @@
     </div>
     <div class="section-wrapper">
         <section>
-            <header
-                class="flex items-center bg-primary text-white shadow-sm py-4 px-8"
-            >
+            <header>
                 <span class="text-xl py-2">Group 1</span>
                 <div
                     class="inline"
@@ -305,7 +303,7 @@
                         <div
                             class="view view-left hidden"
                             in:scale={{ duration: 200, delay: 0 }}
-                            out:slide={{ duration: 400 }}
+                            out:slide={{ duration: 200 }}
                         >
                             <div class="view-inner view-left-inner px-3">
                                 <div
@@ -468,16 +466,35 @@
         @apply left-0;
         @apply right-0;
         @apply top-0;
-        @apply bottom-0;
         @apply grid;
         @apply h-full;
 
-        grid-template-rows: 70px 1fr;
+        bottom: 94px;
+        grid-template-rows: 0 1fr;
+
+        @apply px-3;
+
+        @screen md {
+            grid-template-rows: 70px 1fr;
+            @apply bottom-0;
+            @apply p-0;
+        }
     }
 
     header {
         @apply relative;
         @apply w-full;
+        @apply flex;
+        @apply items-center;
+        @apply bg-primary;
+        @apply text-white;
+        @apply shadow-sm;
+        @apply p-0;
+
+        @screen md {
+            @apply py-4;
+            @apply px-8;
+        }
     }
 
     .views-wrapper {
@@ -516,6 +533,8 @@
     }
 
     .view-left {
+        @apply hidden;
+
         @screen md {
             @apply block;
         }
@@ -594,13 +613,6 @@
     @media (max-width: 700px) {
         .wrapper {
             display: block;
-        }
-
-        section {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 94px;
         }
 
         .sidebar {

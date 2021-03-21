@@ -24,7 +24,7 @@
         }
         submitting = true
         errorMessage = null
-        fetch("/join/", {
+        fetch("/join", {
             method: "post",
             headers: {
                 Accept: "application/json",
@@ -33,6 +33,12 @@
             body: JSON.stringify({
                 email,
                 password,
+                token:
+                    typeof window === "undefined"
+                        ? null
+                        : new URL(window.location.href).searchParams.get(
+                              "token"
+                          ),
             }),
         })
             .then(async (response) => {

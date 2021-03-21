@@ -27,7 +27,7 @@
         }
         submitting = true
         errorMessage = null
-        fetch("/login/", {
+        fetch("/login", {
             method: "post",
             headers: {
                 Accept: "application/json",

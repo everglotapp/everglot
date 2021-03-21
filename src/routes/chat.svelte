@@ -62,12 +62,16 @@
     })
 
     function scrollDown(force: boolean = false): void {
-        const container = document.getElementById("chat-messages")
-        if (container) {
-            if (!force && !isScrolled(container)) {
-                return
+        const containers = Array.from(
+            document.getElementsByClassName("messages")
+        )
+        for (const container of containers) {
+            if (container) {
+                if (!force && !isScrolled(container)) {
+                    return
+                }
+                scroll(container)
             }
-            scroll(container)
         }
     }
 
@@ -477,8 +481,13 @@
         @apply top-0;
         @apply bottom-0;
         @apply max-h-full;
+        @apply px-3;
 
         grid-template-rows: 1fr 94px;
+    }
+
+    .views.split .view-right-inner {
+        @apply px-0;
     }
 
     .messages {
@@ -492,6 +501,7 @@
         @apply break-words;
         @apply bg-primary-lightest;
         @apply rounded-md;
+        @apply shadow-sm;
     }
 
     .message .meta {

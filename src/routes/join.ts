@@ -22,10 +22,23 @@ export function get(req: Request, res: Response, next: () => void) {
     next()
 }
 
+// TODO: Create an invite tokens table and check token against it.
+const SIGNUP_TOKEN = "Tkb8T3mfZcsvNRBg6hKuwnL6o8s8vFuD"
 export async function post(req: Request, res: Response, _next: () => void) {
     if (!ensureJson(req, res)) {
         return
     }
+
+    const token = req?.body?.token
+    if (!token || typeof token !== "string" || token !== SIGNUP_TOKEN) {
+        res.status(422).json({
+            success: false,
+            message:
+                "Sign up is currently disabled. Please do get in touch with us!",
+        })
+        return
+    }
+
     const email = req?.body?.email
     const password = req?.body?.password
     if (!email || typeof email !== "string" || !email.length) {

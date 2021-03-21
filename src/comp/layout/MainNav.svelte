@@ -19,7 +19,7 @@
             class="flex flex-1 mx-auto justify-between items-center"
             style="max-width: 820px;"
         >
-            <div class="hidden md:flex justify-center">
+            <div class="flex justify-center">
                 <div class="flex">
                     <a
                         aria-current={segment === "global" ? "page" : undefined}
@@ -73,7 +73,7 @@
                     </a>
                 </div>
             </div>
-            <div class="flex justify-center items-center">
+            <div class="hidden md:flex justify-center items-center">
                 <!-- TODO: Search -->
                 <div class="my-auto">
                     <ButtonSmall

@@ -1,6 +1,7 @@
 <script lang="ts">
     import { room } from "../stores"
     import { onMount, onDestroy } from "svelte"
+    import { scale, slide } from "svelte/transition"
 
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import { ChevronsRightIcon } from "svelte-feather-icons"
@@ -299,13 +300,37 @@
             <div class="views-wrapper">
                 <div class="views" class:split>
                     {#if split}
-                        <div class="view-left hidden" />
+                        <div
+                            class="view view-left hidden"
+                            in:scale={{ duration: 200, delay: 0 }}
+                            out:slide={{ duration: 400 }}
+                        >
+                            <div class="view-inner view-left-inner px-3">
+                                <div
+                                    class="flex flex-row bg-gray-light max-h-12 px-2 items-center"
+                                >
+                                    <div
+                                        class="text-lg py-1 px-3 bg-primary text-white rounded-tl-md rounded-tr-md"
+                                    >
+                                        Games
+                                    </div>
+                                    <div class="text-lg py-1 px-3">
+                                        Subtitles
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {/if}
-                    <div class="view-right rounded-tr-md">
-                        <div class="view-right-inner">
+                    <div class="view view-right rounded-tr-md">
+                        <div class="view-inner view-right-inner">
                             <div class="messages">
                                 {#each roomMessages as message}
-                                    <div class="message">
+                                    <div
+                                        class="message"
+                                        transition:scale|local={{
+                                            duration: 200,
+                                        }}
+                                    >
                                         <p class="meta">
                                             <span class="username"
                                                 >{message.username}</span
@@ -474,9 +499,13 @@
         }
     }
 
-    .view-left {
+    .view {
         @apply relative;
+        @apply w-full;
+        @apply h-full;
+    }
 
+    .view-left {
         @screen md {
             grid-template-rows: 1fr 200px;
 
@@ -484,13 +513,7 @@
         }
     }
 
-    .view-right {
-        @apply relative;
-        @apply w-full;
-        @apply h-full;
-    }
-
-    .view-right-inner {
+    .view-inner {
         @apply grid;
         @apply absolute;
         @apply left-0;
@@ -498,6 +521,9 @@
         @apply top-0;
         @apply bottom-0;
         @apply max-h-full;
+    }
+
+    .view-right-inner {
         @apply px-3;
 
         grid-template-rows: 1fr 94px;

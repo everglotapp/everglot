@@ -375,9 +375,11 @@
     }
 
     .users {
-        display: grid;
-        grid-template-rows: 3;
-        grid-template-columns: 4;
+        @apply grid;
+        @apply grid-cols-4;
+        @apply grid-rows-3;
+        @apply grid-flow-row;
+        @apply gap-2;
     }
 
     .user {

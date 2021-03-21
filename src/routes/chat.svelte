@@ -1,6 +1,7 @@
 <script lang="ts">
     import { room } from "../stores"
     import { onMount, onDestroy } from "svelte"
+    import { scale, slide } from "svelte/transition"
 
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import { ChevronsRightIcon } from "svelte-feather-icons"
@@ -210,7 +211,7 @@
                     <div aria-selected={!split}>Off</div>
                 </div>
             </div>
-            <div class="toggle-row" style="cursor: not-allowed;">
+            <div class="toggle-row">
                 <svg
                     width="35"
                     height="35"
@@ -260,12 +261,12 @@
                     </defs>
                 </svg>
                 <span>Mic</span>
-                <div class="toggle">
+                <div class="toggle" style="cursor: not-allowed;">
                     <div>On</div>
                     <div aria-selected="true">Off</div>
                 </div>
             </div>
-            <div class="toggle-row" style="cursor: not-allowed;">
+            <div class="toggle-row">
                 <svg
                     width="35"
                     height="35"
@@ -279,7 +280,7 @@
                     />
                 </svg>
                 <span>Audio</span>
-                <div class="toggle">
+                <div class="toggle" style="cursor: not-allowed;">
                     <div>On</div>
                     <div aria-selected="true">Off</div>
                 </div>
@@ -288,7 +289,9 @@
     </div>
     <div class="section-wrapper">
         <section>
-            <header class="flex items-center bg-primary text-white py-4 px-8">
+            <header
+                class="flex items-center bg-primary text-white shadow-sm py-4 px-8"
+            >
                 <span class="text-xl py-2">Group 1</span>
                 <div
                     class="inline"
@@ -299,13 +302,37 @@
             <div class="views-wrapper">
                 <div class="views" class:split>
                     {#if split}
-                        <div class="view-left hidden" />
+                        <div
+                            class="view view-left hidden"
+                            in:scale={{ duration: 200, delay: 0 }}
+                            out:slide={{ duration: 400 }}
+                        >
+                            <div class="view-inner view-left-inner px-3">
+                                <div
+                                    class="flex flex-row bg-gray-light max-h-12 px-2 items-center"
+                                >
+                                    <div
+                                        class="text-lg py-1 px-3 bg-primary text-white rounded-tl-md rounded-tr-md"
+                                    >
+                                        Games
+                                    </div>
+                                    <div class="text-lg py-1 px-3">
+                                        Subtitles
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {/if}
-                    <div class="view-right rounded-tr-md">
-                        <div class="view-right-inner">
+                    <div class="view view-right rounded-tr-md">
+                        <div class="view-inner view-right-inner">
                             <div class="messages">
                                 {#each roomMessages as message}
-                                    <div class="message">
+                                    <div
+                                        class="message"
+                                        transition:scale|local={{
+                                            duration: 200,
+                                        }}
+                                    >
                                         <p class="meta">
                                             <span class="username"
                                                 >{message.username}</span
@@ -432,6 +459,8 @@
         @apply relative;
         @apply w-full;
         @apply h-full;
+        @apply flex;
+        @apply flex-col;
     }
 
     section {
@@ -441,6 +470,7 @@
         @apply top-0;
         @apply bottom-0;
         @apply grid;
+        @apply h-full;
 
         grid-template-rows: 70px 1fr;
     }
@@ -454,6 +484,8 @@
         @apply relative;
         @apply w-full;
         @apply h-full;
+        @apply flex;
+        @apply flex-col;
     }
 
     .views {
@@ -462,6 +494,7 @@
         @apply right-0;
         @apply top-0;
         @apply bottom-0;
+        @apply h-full;
         @apply max-h-full;
         @apply grid;
 
@@ -474,23 +507,21 @@
         }
     }
 
-    .view-left {
-        @apply relative;
-
-        @screen md {
-            grid-template-rows: 1fr 200px;
-
-            @apply grid;
-        }
-    }
-
-    .view-right {
+    .view {
         @apply relative;
         @apply w-full;
         @apply h-full;
+        @apply flex;
+        @apply flex-col;
     }
 
-    .view-right-inner {
+    .view-left {
+        @screen md {
+            @apply block;
+        }
+    }
+
+    .view-inner {
         @apply grid;
         @apply absolute;
         @apply left-0;
@@ -498,6 +529,10 @@
         @apply top-0;
         @apply bottom-0;
         @apply max-h-full;
+        @apply h-full;
+    }
+
+    .view-right-inner {
         @apply px-3;
 
         grid-template-rows: 1fr 94px;

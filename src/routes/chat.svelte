@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { username, room } from "../stores"
+    import { room } from "../stores"
     import { onMount, onDestroy } from "svelte"
 
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import { ChevronsRightIcon } from "svelte-feather-icons"
 
     import type { ChatUser } from "../server/users"
-    import type { Language } from "../types/generated/graphql"
+    import type { Language, User } from "../types/generated/graphql"
     import type { Message } from "../server/messages"
 
     import { io } from "socket.io-client"
@@ -16,6 +16,7 @@
 
     let roomMessages: Message[] = []
     let roomUsers: Pick<ChatUser["user"], "uuid" | "username">[] = []
+    let myUuid: User["uuid"] | null = null
     let msg: string = ""
 
     // TODO: Check if user is signed in, if not redirect to sign in.
@@ -29,6 +30,8 @@
             room: $room,
         })
 
+        // Welcome from server
+        socket.on("welcome", onWelcome)
         // Get room and users
         socket.on("roomUsers", onRoomUsers)
         // Message from server
@@ -61,14 +64,14 @@
         socket = null
     })
 
-    function scrollDown(force: boolean = false): void {
-        const container = document.getElementById("chat-messages")
-        if (container) {
-            if (!force && !isScrolled(container)) {
-                return
-            }
-            scroll(container)
+    const getChatMessageContainers = () =>
+        Array.from(document.getElementsByClassName("messages"))
+
+    function scrollToBottom(container: Element, force: boolean = false): void {
+        if (!isScrolledToBottom(container) && !force) {
+            return
         }
+        scroll(container)
     }
 
     /**
@@ -86,18 +89,25 @@
         }
     }
 
-    // const chatIsManuallyScrolled = (scrollTop?: number): boolean => {
-    //     const container = document.getElementById("chat-messages")
-    //     return container ? isScrolled(container, scrollTop) : false
-    // }
-
     /**
      * Whether the element is scrolled to the specified position.
-     * By default: Whether the element is scrolled to the bottom.
+     * @param scrollTop Position to check against, bottom if null.
      */
-    const isScrolled = (el: Element, scrollTop?: number): boolean => {
+    const isScrolled = (el: Element, scrollTop: number | null): boolean => {
         const top = scrollTop || el.scrollHeight - el.clientHeight
         return el.scrollTop === top
+    }
+
+    const isScrolledToBottom = (container: Element): boolean => {
+        return isScrolled(container, null)
+    }
+
+    function onWelcome({
+        user,
+    }: {
+        user: Pick<ChatUser["user"], "uuid">
+    }): void {
+        myUuid = user.uuid
     }
 
     function onSend(): void {
@@ -114,6 +124,9 @@
         socket?.emit("chatMessage", trimmedMsg)
     }
 
+    /**
+     * Called after joining a chat when the server sends the room's users.
+     */
     function onRoomUsers({
         room: recvRoom,
         users,
@@ -125,23 +138,26 @@
             return
         }
         roomUsers = [...users]
-        scrollDown()
+        getChatMessageContainers().forEach((container) =>
+            scrollToBottom(container, true)
+        )
     }
 
     function onMessage(message: Message): void {
-        // let force = !chatIsManuallyScrolled()
-        roomMessages = [...roomMessages, message]
-        if (message.username === $username) {
-            // force = true
-        }
-        setTimeout(() => scrollDown(true), 150)
-    }
+        getChatMessageContainers().forEach((container) => {
+            const isOwnMessage =
+                message.uuid !== null &&
+                myUuid !== null &&
+                message.uuid === myUuid
+            /**
+             * Force auto-scroll if the user sent the message themselves
+             * or if the user didn't scroll upwards before receiving the message.
+             */
+            const force = isOwnMessage || isScrolledToBottom(container)
 
-    function changeRoom(): void {
-        unsubscribe()
-        socket?.emit("leaveRoom")
-        roomMessages = []
-        subscribe()
+            setTimeout(() => scrollToBottom(container, force), 150)
+        })
+        roomMessages = [...roomMessages, message]
     }
 
     let split = true
@@ -351,6 +367,9 @@
         overflow-y: scroll;
 
         @apply rounded-tl-md;
+        @apply flex;
+        @apply flex-col;
+        @apply justify-between;
     }
 
     .users-container {
@@ -359,9 +378,11 @@
     }
 
     .users {
-        display: grid;
-        grid-template-rows: 3;
-        grid-template-columns: 4;
+        @apply grid;
+        @apply grid-cols-4;
+        @apply grid-rows-3;
+        @apply grid-flow-row;
+        @apply gap-2;
     }
 
     .user {
@@ -477,8 +498,13 @@
         @apply top-0;
         @apply bottom-0;
         @apply max-h-full;
+        @apply px-3;
 
         grid-template-rows: 1fr 94px;
+    }
+
+    .views.split .view-right-inner {
+        @apply px-0;
     }
 
     .messages {
@@ -492,6 +518,7 @@
         @apply break-words;
         @apply bg-primary-lightest;
         @apply rounded-md;
+        @apply shadow-sm;
     }
 
     .message .meta {

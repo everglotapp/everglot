@@ -16,7 +16,7 @@
             >
         </div>
         <div
-            class="flex flex-1 mx-auto justify-between"
+            class="flex flex-1 mx-auto justify-between items-center"
             style="max-width: 820px;"
         >
             <div class="hidden md:flex justify-center">
@@ -173,7 +173,7 @@
         position: relative;
         z-index: 10;
 
-        max-height: 68px;
+        max-height: 58px;
         @screen md {
             max-height: 75px;
         }
@@ -201,7 +201,7 @@
 
     a {
         display: flex;
-        padding: 0.25rem 0.5rem;
+        padding: 0.5rem 0.75rem;
         margin: 0;
         text-decoration: none;
 
@@ -228,6 +228,19 @@
         @apply items-center;
         @apply gap-y-1;
         @apply justify-center;
+    }
+
+    .nav-item-with-icon span {
+        @apply hidden;
+        @apply md:inline;
+    }
+
+    .nav-item-with-icon svg {
+        width: 36px;
+
+        @screen md {
+            width: 32px;
+        }
     }
 
     .profile-icon {

@@ -126,7 +126,7 @@
     }
 
     #app.noscroll.with-main-nav {
-        grid-template-rows: 68px 1fr;
+        grid-template-rows: 58px 1fr;
 
         @screen md {
             grid-template-rows: 75px 1fr;

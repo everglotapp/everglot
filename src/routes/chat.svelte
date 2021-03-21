@@ -367,6 +367,9 @@
         overflow-y: scroll;
 
         @apply rounded-tl-md;
+        @apply flex;
+        @apply flex-col;
+        @apply justify-between;
     }
 
     .users-container {

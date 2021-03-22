@@ -63,6 +63,17 @@
 
 <svelte:head>
     <title>Join – Everglot</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="457984069949-bgc3aj14fi47olkp0arn7is4cr07cfla.apps.googleusercontent.com">
+    <script type="text/javascript">
+        function onSignIn(googleUser) {
+          var profile = googleUser.getBasicProfile();
+          console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+          console.log('Name: ' + profile.getName());
+          console.log('Image URL: ' + profile.getImageUrl());
+          console.log('Email: ' + profile.getEmail());
+        }
+    </script>
 </svelte:head>
 
 <div class="container px-4 mx-auto my-16 max-w-sm">
@@ -115,6 +126,7 @@
             class="py-3 px-10 w-full mb-1 bg-primary hover:bg-primary-bitlight text-white rounded-xl font-bold"
             >Create a new account</button
         >
+        <div class="g-signin2 w-full justify-center" data-onsuccess="onSignIn"></div>
         <ButtonLarge
             href="login"
             variant="TEXT"

@@ -64,14 +64,17 @@
 <svelte:head>
     <title>Join – Everglot</title>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="457984069949-bgc3aj14fi47olkp0arn7is4cr07cfla.apps.googleusercontent.com">
+    <meta
+        name="google-signin-client_id"
+        content="457984069949-bgc3aj14fi47olkp0arn7is4cr07cfla.apps.googleusercontent.com"
+    />
     <script type="text/javascript">
         function onSignIn(googleUser) {
-          var profile = googleUser.getBasicProfile();
-          console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-          console.log('Name: ' + profile.getName());
-          console.log('Image URL: ' + profile.getImageUrl());
-          console.log('Email: ' + profile.getEmail());
+            var profile = googleUser.getBasicProfile()
+            console.log("ID: " + profile.getId()) // Do not send to your backend! Use an ID token instead.
+            console.log("Name: " + profile.getName())
+            console.log("Image URL: " + profile.getImageUrl())
+            console.log("Email: " + profile.getEmail())
         }
     </script>
 </svelte:head>
@@ -119,19 +122,25 @@
                 class="font-normal">privacy policy</a
             >.
         </p>
-        <button
-            type="submit"
-            disabled={submitting}
-            on:click={handleSubmit}
-            class="py-3 px-10 w-full mb-1 bg-primary hover:bg-primary-bitlight text-white rounded-xl font-bold"
-            >Create a new account</button
-        >
-        <div class="g-signin2 w-full justify-center" data-onsuccess="onSignIn"></div>
-        <ButtonLarge
-            href="login"
-            variant="TEXT"
-            className="w-full justify-center"
-            >I already have an account</ButtonLarge
-        >
+        <div class="flex flex-col items-center">
+            <button
+                type="submit"
+                disabled={submitting}
+                on:click={handleSubmit}
+                class="py-3 px-10 w-full mb-1 bg-primary hover:bg-primary-bitlight text-white rounded-xl font-bold"
+                >Create a new account</button
+            >
+            <div
+                class="g-signin2 flex justify-center mt-2 mb-1"
+                data-onsuccess="onSignIn"
+                data-longtitle="true"
+            />
+            <ButtonLarge
+                href="login"
+                variant="TEXT"
+                className="w-full justify-center"
+                >I already have an account</ButtonLarge
+            >
+        </div>
     </form>
 </div>

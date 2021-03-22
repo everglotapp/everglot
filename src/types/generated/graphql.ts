@@ -1707,6 +1707,20 @@ export type DeleteUserByUuidInput = {
   uuid: Scalars['UUID'];
 };
 
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserQuery = (
+  { __typename?: 'Query' }
+  & { users?: Maybe<(
+    { __typename?: 'UsersConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid'>
+    )>> }
+  )> }
+);
+
 export type LanguageCodeMappingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1722,6 +1736,19 @@ export type LanguageCodeMappingsQuery = (
 );
 
 
+export const CurrentUser = gql`
+    query CurrentUser {
+  users(first: 1) {
+    nodes {
+      bio
+      email
+      gender
+      username
+      uuid
+    }
+  }
+}
+    `;
 export const LanguageCodeMappings = gql`
     query LanguageCodeMappings {
   languages {

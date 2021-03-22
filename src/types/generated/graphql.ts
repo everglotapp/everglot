@@ -39,8 +39,6 @@ export type Query = Node & {
   languageSkillLevels?: Maybe<LanguageSkillLevelsConnection>;
   /** Reads and enables pagination through a set of `Language`. */
   languages?: Maybe<LanguagesConnection>;
-  /** Reads and enables pagination through a set of `Pgmigration`. */
-  pgmigrations?: Maybe<PgmigrationsConnection>;
   /** Reads and enables pagination through a set of `UserLanguage`. */
   userLanguages?: Maybe<UserLanguagesConnection>;
   /** Reads and enables pagination through a set of `UserSession`. */
@@ -51,18 +49,16 @@ export type Query = Node & {
   language?: Maybe<Language>;
   languageByAlpha2?: Maybe<Language>;
   languageByEnglishName?: Maybe<Language>;
-  pgmigration?: Maybe<Pgmigration>;
   userLanguage?: Maybe<UserLanguage>;
   userSession?: Maybe<UserSession>;
   user?: Maybe<User>;
   userByEmail?: Maybe<User>;
   userByUuid?: Maybe<User>;
+  currentUserId?: Maybe<Scalars['Int']>;
   /** Reads a single `LanguageSkillLevel` using its globally unique `ID`. */
   languageSkillLevelByNodeId?: Maybe<LanguageSkillLevel>;
   /** Reads a single `Language` using its globally unique `ID`. */
   languageByNodeId?: Maybe<Language>;
-  /** Reads a single `Pgmigration` using its globally unique `ID`. */
-  pgmigrationByNodeId?: Maybe<Pgmigration>;
   /** Reads a single `UserLanguage` using its globally unique `ID`. */
   userLanguageByNodeId?: Maybe<UserLanguage>;
   /** Reads a single `UserSession` using its globally unique `ID`. */
@@ -99,18 +95,6 @@ export type QueryLanguagesArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<LanguagesOrderBy>>;
   condition?: Maybe<LanguageCondition>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryPgmigrationsArgs = {
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  before?: Maybe<Scalars['Cursor']>;
-  after?: Maybe<Scalars['Cursor']>;
-  orderBy?: Maybe<Array<PgmigrationsOrderBy>>;
-  condition?: Maybe<PgmigrationCondition>;
 };
 
 
@@ -175,12 +159,6 @@ export type QueryLanguageByEnglishNameArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
-export type QueryPgmigrationArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root query type which gives access points into the data universe. */
 export type QueryUserLanguageArgs = {
   id: Scalars['Int'];
 };
@@ -218,12 +196,6 @@ export type QueryLanguageSkillLevelByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryLanguageByNodeIdArgs = {
-  nodeId: Scalars['ID'];
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryPgmigrationByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
 
@@ -515,63 +487,6 @@ export type LanguageCondition = {
   createdAt?: Maybe<Scalars['Datetime']>;
 };
 
-/** A connection to a list of `Pgmigration` values. */
-export type PgmigrationsConnection = {
-  __typename?: 'PgmigrationsConnection';
-  /** A list of `Pgmigration` objects. */
-  nodes: Array<Maybe<Pgmigration>>;
-  /** A list of edges which contains the `Pgmigration` and cursor to aid in pagination. */
-  edges: Array<PgmigrationsEdge>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** The count of *all* `Pgmigration` you could get from the connection. */
-  totalCount: Scalars['Int'];
-};
-
-export type Pgmigration = Node & {
-  __typename?: 'Pgmigration';
-  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
-  id: Scalars['Int'];
-  name: Scalars['String'];
-  runOn: Scalars['Datetime'];
-};
-
-/** A `Pgmigration` edge in the connection. */
-export type PgmigrationsEdge = {
-  __typename?: 'PgmigrationsEdge';
-  /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
-  /** The `Pgmigration` at the end of the edge. */
-  node?: Maybe<Pgmigration>;
-};
-
-/** Methods to use when ordering `Pgmigration`. */
-export enum PgmigrationsOrderBy {
-  Natural = 'NATURAL',
-  IdAsc = 'ID_ASC',
-  IdDesc = 'ID_DESC',
-  NameAsc = 'NAME_ASC',
-  NameDesc = 'NAME_DESC',
-  RunOnAsc = 'RUN_ON_ASC',
-  RunOnDesc = 'RUN_ON_DESC',
-  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
-}
-
-/**
- * A condition to be used against `Pgmigration` object types. All fields are tested
- * for equality and combined with a logical ‘and.’
- */
-export type PgmigrationCondition = {
-  /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `name` field. */
-  name?: Maybe<Scalars['String']>;
-  /** Checks for equality with the object’s `runOn` field. */
-  runOn?: Maybe<Scalars['Datetime']>;
-};
-
 /** A connection to a list of `UserSession` values. */
 export type UserSessionsConnection = {
   __typename?: 'UserSessionsConnection';
@@ -710,8 +625,6 @@ export type Mutation = {
   createLanguageSkillLevel?: Maybe<CreateLanguageSkillLevelPayload>;
   /** Creates a single `Language`. */
   createLanguage?: Maybe<CreateLanguagePayload>;
-  /** Creates a single `Pgmigration`. */
-  createPgmigration?: Maybe<CreatePgmigrationPayload>;
   /** Creates a single `UserLanguage`. */
   createUserLanguage?: Maybe<CreateUserLanguagePayload>;
   /** Creates a single `UserSession`. */
@@ -730,10 +643,6 @@ export type Mutation = {
   updateLanguageByAlpha2?: Maybe<UpdateLanguagePayload>;
   /** Updates a single `Language` using a unique key and a patch. */
   updateLanguageByEnglishName?: Maybe<UpdateLanguagePayload>;
-  /** Updates a single `Pgmigration` using its globally unique id and a patch. */
-  updatePgmigrationByNodeId?: Maybe<UpdatePgmigrationPayload>;
-  /** Updates a single `Pgmigration` using a unique key and a patch. */
-  updatePgmigration?: Maybe<UpdatePgmigrationPayload>;
   /** Updates a single `UserLanguage` using its globally unique id and a patch. */
   updateUserLanguageByNodeId?: Maybe<UpdateUserLanguagePayload>;
   /** Updates a single `UserLanguage` using a unique key and a patch. */
@@ -762,10 +671,6 @@ export type Mutation = {
   deleteLanguageByAlpha2?: Maybe<DeleteLanguagePayload>;
   /** Deletes a single `Language` using a unique key. */
   deleteLanguageByEnglishName?: Maybe<DeleteLanguagePayload>;
-  /** Deletes a single `Pgmigration` using its globally unique id. */
-  deletePgmigrationByNodeId?: Maybe<DeletePgmigrationPayload>;
-  /** Deletes a single `Pgmigration` using a unique key. */
-  deletePgmigration?: Maybe<DeletePgmigrationPayload>;
   /** Deletes a single `UserLanguage` using its globally unique id. */
   deleteUserLanguageByNodeId?: Maybe<DeleteUserLanguagePayload>;
   /** Deletes a single `UserLanguage` using a unique key. */
@@ -794,12 +699,6 @@ export type MutationCreateLanguageSkillLevelArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateLanguageArgs = {
   input: CreateLanguageInput;
-};
-
-
-/** The root mutation type which contains root level fields which mutate data. */
-export type MutationCreatePgmigrationArgs = {
-  input: CreatePgmigrationInput;
 };
 
 
@@ -854,18 +753,6 @@ export type MutationUpdateLanguageByAlpha2Args = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateLanguageByEnglishNameArgs = {
   input: UpdateLanguageByEnglishNameInput;
-};
-
-
-/** The root mutation type which contains root level fields which mutate data. */
-export type MutationUpdatePgmigrationByNodeIdArgs = {
-  input: UpdatePgmigrationByNodeIdInput;
-};
-
-
-/** The root mutation type which contains root level fields which mutate data. */
-export type MutationUpdatePgmigrationArgs = {
-  input: UpdatePgmigrationInput;
 };
 
 
@@ -950,18 +837,6 @@ export type MutationDeleteLanguageByAlpha2Args = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteLanguageByEnglishNameArgs = {
   input: DeleteLanguageByEnglishNameInput;
-};
-
-
-/** The root mutation type which contains root level fields which mutate data. */
-export type MutationDeletePgmigrationByNodeIdArgs = {
-  input: DeletePgmigrationByNodeIdInput;
-};
-
-
-/** The root mutation type which contains root level fields which mutate data. */
-export type MutationDeletePgmigrationArgs = {
-  input: DeletePgmigrationInput;
 };
 
 
@@ -1091,46 +966,6 @@ export type LanguageInput = {
   alpha2: Scalars['String'];
   englishName: Scalars['String'];
   createdAt?: Maybe<Scalars['Datetime']>;
-};
-
-/** The output of our create `Pgmigration` mutation. */
-export type CreatePgmigrationPayload = {
-  __typename?: 'CreatePgmigrationPayload';
-  /**
-   * The exact same `clientMutationId` that was provided in the mutation input,
-   * unchanged and unused. May be used by a client to track mutations.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** The `Pgmigration` that was created by this mutation. */
-  pgmigration?: Maybe<Pgmigration>;
-  /** Our root query field type. Allows us to run any query from our mutation payload. */
-  query?: Maybe<Query>;
-  /** An edge for our `Pgmigration`. May be used by Relay 1. */
-  pgmigrationEdge?: Maybe<PgmigrationsEdge>;
-};
-
-
-/** The output of our create `Pgmigration` mutation. */
-export type CreatePgmigrationPayloadPgmigrationEdgeArgs = {
-  orderBy?: Maybe<Array<PgmigrationsOrderBy>>;
-};
-
-/** All input for the create `Pgmigration` mutation. */
-export type CreatePgmigrationInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** The `Pgmigration` to be created by this mutation. */
-  pgmigration: PgmigrationInput;
-};
-
-/** An input for mutations affecting `Pgmigration` */
-export type PgmigrationInput = {
-  id?: Maybe<Scalars['Int']>;
-  name: Scalars['String'];
-  runOn: Scalars['Datetime'];
 };
 
 /** The output of our create `UserLanguage` mutation. */
@@ -1401,60 +1236,6 @@ export type UpdateLanguageByEnglishNameInput = {
   /** An object where the defined keys will be set on the `Language` being updated. */
   patch: LanguagePatch;
   englishName: Scalars['String'];
-};
-
-/** The output of our update `Pgmigration` mutation. */
-export type UpdatePgmigrationPayload = {
-  __typename?: 'UpdatePgmigrationPayload';
-  /**
-   * The exact same `clientMutationId` that was provided in the mutation input,
-   * unchanged and unused. May be used by a client to track mutations.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** The `Pgmigration` that was updated by this mutation. */
-  pgmigration?: Maybe<Pgmigration>;
-  /** Our root query field type. Allows us to run any query from our mutation payload. */
-  query?: Maybe<Query>;
-  /** An edge for our `Pgmigration`. May be used by Relay 1. */
-  pgmigrationEdge?: Maybe<PgmigrationsEdge>;
-};
-
-
-/** The output of our update `Pgmigration` mutation. */
-export type UpdatePgmigrationPayloadPgmigrationEdgeArgs = {
-  orderBy?: Maybe<Array<PgmigrationsOrderBy>>;
-};
-
-/** All input for the `updatePgmigrationByNodeId` mutation. */
-export type UpdatePgmigrationByNodeIdInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** The globally unique `ID` which will identify a single `Pgmigration` to be updated. */
-  nodeId: Scalars['ID'];
-  /** An object where the defined keys will be set on the `Pgmigration` being updated. */
-  patch: PgmigrationPatch;
-};
-
-/** Represents an update to a `Pgmigration`. Fields that are set will be updated. */
-export type PgmigrationPatch = {
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  runOn?: Maybe<Scalars['Datetime']>;
-};
-
-/** All input for the `updatePgmigration` mutation. */
-export type UpdatePgmigrationInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** An object where the defined keys will be set on the `Pgmigration` being updated. */
-  patch: PgmigrationPatch;
-  id: Scalars['Int'];
 };
 
 /** The output of our update `UserLanguage` mutation. */
@@ -1768,50 +1549,6 @@ export type DeleteLanguageByEnglishNameInput = {
   englishName: Scalars['String'];
 };
 
-/** The output of our delete `Pgmigration` mutation. */
-export type DeletePgmigrationPayload = {
-  __typename?: 'DeletePgmigrationPayload';
-  /**
-   * The exact same `clientMutationId` that was provided in the mutation input,
-   * unchanged and unused. May be used by a client to track mutations.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** The `Pgmigration` that was deleted by this mutation. */
-  pgmigration?: Maybe<Pgmigration>;
-  deletedPgmigrationNodeId?: Maybe<Scalars['ID']>;
-  /** Our root query field type. Allows us to run any query from our mutation payload. */
-  query?: Maybe<Query>;
-  /** An edge for our `Pgmigration`. May be used by Relay 1. */
-  pgmigrationEdge?: Maybe<PgmigrationsEdge>;
-};
-
-
-/** The output of our delete `Pgmigration` mutation. */
-export type DeletePgmigrationPayloadPgmigrationEdgeArgs = {
-  orderBy?: Maybe<Array<PgmigrationsOrderBy>>;
-};
-
-/** All input for the `deletePgmigrationByNodeId` mutation. */
-export type DeletePgmigrationByNodeIdInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** The globally unique `ID` which will identify a single `Pgmigration` to be deleted. */
-  nodeId: Scalars['ID'];
-};
-
-/** All input for the `deletePgmigration` mutation. */
-export type DeletePgmigrationInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  id: Scalars['Int'];
-};
-
 /** The output of our delete `UserLanguage` mutation. */
 export type DeleteUserLanguagePayload = {
   __typename?: 'DeleteUserLanguagePayload';
@@ -1970,6 +1707,20 @@ export type DeleteUserByUuidInput = {
   uuid: Scalars['UUID'];
 };
 
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserQuery = (
+  { __typename?: 'Query' }
+  & { users?: Maybe<(
+    { __typename?: 'UsersConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid'>
+    )>> }
+  )> }
+);
+
 export type LanguageCodeMappingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1985,6 +1736,19 @@ export type LanguageCodeMappingsQuery = (
 );
 
 
+export const CurrentUser = gql`
+    query CurrentUser {
+  users(first: 1) {
+    nodes {
+      bio
+      email
+      gender
+      username
+      uuid
+    }
+  }
+}
+    `;
 export const LanguageCodeMappings = gql`
     query LanguageCodeMappings {
   languages {

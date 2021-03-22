@@ -1,15 +1,17 @@
 <script lang="ts">
+    import { onMount } from "svelte"
     import { goto } from "@sapper/app"
 
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import { signedIn } from "../stores"
-    import { MIN_PASSWORD_LENGTH } from "../users"
+    import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 
     let errorMessage: string | null = null
     let submitting = false
-    const handleSubmit = (_event: Event) => {
+
+    const handleSubmit = async (_event: Event) => {
         if (submitting) {
             return
         }
@@ -24,39 +26,67 @@
         }
         submitting = true
         errorMessage = null
-        fetch("/join", {
+        const response = await doSubmit({
+            method: AuthMethod.EMAIL,
+            email,
+            password,
+            token:
+                typeof window === "undefined"
+                    ? null
+                    : new URL(window.location.href).searchParams.get("token"),
+        })
+        const res = await response.json()
+        if (!res.hasOwnProperty("success")) {
+            return
+        }
+        if (res.success === true) {
+            $signedIn = true
+            goto("/profile", { replaceState: true, noscroll: true })
+        } else {
+            errorMessage = res.message
+        }
+    }
+
+    async function doSubmit(body: {
+        method: AuthMethod
+        token?: string | null
+        idToken?: string
+        email?: string
+        password?: string
+    }): Promise<Response> {
+        return fetch("/join", {
             method: "post",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                email,
-                password,
-                token:
-                    typeof window === "undefined"
-                        ? null
-                        : new URL(window.location.href).searchParams.get(
-                              "token"
-                          ),
-            }),
+            body: JSON.stringify(body),
+        }).then(async (response: Response) => {
+            submitting = false
+            return response
         })
-            .then(async (response) => {
-                const res = await response.json()
-                if (!res.hasOwnProperty("success")) {
-                    return
-                }
-                if (res.success === true) {
-                    $signedIn = true
-                    goto("/profile", { replaceState: true, noscroll: true })
-                } else {
-                    errorMessage = res.message
-                }
-            })
-            .then(() => {
-                submitting = false
-            })
     }
+
+    onMount(() => {
+        // @ts-ignore
+        window.onSignIn = async (googleUser: any) => {
+            const response = await doSubmit({
+                method: AuthMethod.GOOGLE,
+                idToken: googleUser.getAuthResponse().id_token,
+            })
+            const res = await response.json()
+            if (!res.hasOwnProperty("success")) {
+                return
+            }
+            if (res.success === true) {
+                $signedIn = true
+                goto("/profile", { replaceState: true, noscroll: true })
+            } else {
+                errorMessage = res.message
+            }
+        }
+    })
+
     let email = ""
     let password = ""
 </script>
@@ -68,15 +98,6 @@
         name="google-signin-client_id"
         content="457984069949-bgc3aj14fi47olkp0arn7is4cr07cfla.apps.googleusercontent.com"
     />
-    <script type="text/javascript">
-        function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile()
-            console.log("ID: " + profile.getId()) // Do not send to your backend! Use an ID token instead.
-            console.log("Name: " + profile.getName())
-            console.log("Image URL: " + profile.getImageUrl())
-            console.log("Email: " + profile.getEmail())
-        }
-    </script>
 </svelte:head>
 
 <div class="container px-4 mx-auto my-16 max-w-sm">

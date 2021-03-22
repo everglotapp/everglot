@@ -7,6 +7,7 @@ import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
 
 import validate from "deep-email-validator"
+import { OAuth2Client } from "google-auth-library"
 
 const BCRYPT_WORK_FACTOR = 14
 
@@ -42,8 +43,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    // TODO: Remove this condition and always check the invite token.
-    if (authMethod !== AuthMethod.GOOGLE) {
+    // TODO: Always check the invite token, no matter which auth method is used.
+    if (authMethod === AuthMethod.GOOGLE) {
+        // const client = new OAuth2Client(CLIENT_ID);
+        // TODO: Check integrity of ID token etc.
+    } else {
         const inviteToken = req?.body?.token
         if (
             !inviteToken ||

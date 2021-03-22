@@ -1,6 +1,6 @@
 import { db } from "../server/db"
 
-import { MIN_PASSWORD_LENGTH } from "../users"
+import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import { ensureJson, serverError } from "../helpers"
 
 import bcrypt from "bcrypt"
@@ -23,20 +23,40 @@ export function get(req: Request, res: Response, next: () => void) {
 }
 
 // TODO: Create an invite tokens table and check token against it.
-const SIGNUP_TOKEN = "Tkb8T3mfZcsvNRBg6hKuwnL6o8s8vFuD"
+const INVITE_TOKEN = "Tkb8T3mfZcsvNRBg6hKuwnL6o8s8vFuD"
 export async function post(req: Request, res: Response, _next: () => void) {
     if (!ensureJson(req, res)) {
         return
     }
 
-    const token = req?.body?.token
-    if (!token || typeof token !== "string" || token !== SIGNUP_TOKEN) {
+    const authMethod = req?.body?.method
+    if (
+        !authMethod ||
+        typeof authMethod !== "string" ||
+        !Object.values(AuthMethod).includes(authMethod as AuthMethod)
+    ) {
         res.status(422).json({
             success: false,
-            message:
-                "Sign up is currently disabled. Please do get in touch with us!",
+            message: "Please specify an auth method.",
         })
         return
+    }
+
+    // TODO: Remove this condition and always check the invite token.
+    if (authMethod !== AuthMethod.GOOGLE) {
+        const inviteToken = req?.body?.token
+        if (
+            !inviteToken ||
+            typeof inviteToken !== "string" ||
+            inviteToken !== INVITE_TOKEN
+        ) {
+            res.status(422).json({
+                success: false,
+                message:
+                    "Sign up is currently disabled. Please do get in touch with us!",
+            })
+            return
+        }
     }
 
     const email = req?.body?.email

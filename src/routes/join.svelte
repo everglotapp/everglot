@@ -47,13 +47,14 @@
         }
     }
 
-    async function doSubmit(body: {
+    type SubmitBody = {
         method: AuthMethod
         token?: string | null
         idToken?: string
         email?: string
         password?: string
-    }): Promise<Response> {
+    }
+    async function doSubmit(body: SubmitBody): Promise<Response> {
         return fetch("/join", {
             method: "post",
             headers: {

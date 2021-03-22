@@ -123,12 +123,12 @@
             >.
         </p>
         <div class="flex flex-col items-center">
-            <button
+            <ButtonLarge
+                tag="button"
                 type="submit"
+                className="w-full justify-center"
                 disabled={submitting}
-                on:click={handleSubmit}
-                class="py-3 px-10 w-full mb-1 bg-primary hover:bg-primary-bitlight text-white rounded-xl font-bold"
-                >Create a new account</button
+                on:click={handleSubmit}>Create a new account</ButtonLarge
             >
             <div
                 class="g-signin2 flex justify-center mt-2 mb-1"

@@ -2,10 +2,10 @@
 
 exports.shorthands = undefined
 
-const NAME = "APP_SERVER"
+const NAME = "evg_server"
 
 exports.up = (pgm) => {
-    pgm.createRole(NAME, { bypassrls: true })
+    pgm.createRole(NAME, { bypassrls: false })
 }
 
 exports.down = (pgm) => {

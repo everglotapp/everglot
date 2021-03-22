@@ -6,6 +6,8 @@ import { getPostGraphileOptions } from "./middlewares/postgraphile"
 
 import type { GraphQLSchema, Source } from "graphql"
 
+const DATABASE_SCHEMA = "app_public"
+
 let schema: GraphQLSchema | null
 
 export async function performQuery(
@@ -20,7 +22,7 @@ export async function performQuery(
     return await withPostGraphileContext(
         {
             pgPool: createDatabasePool(),
-            pgDefaultRole: "APP_SERVER",
+            pgDefaultRole: "evg_server",
         },
         async (context) => {
             // Execute your GraphQL query in this function with the provided
@@ -44,7 +46,7 @@ export async function performQuery(
 export async function start() {
     const releaseWatcher = await watchPostGraphileSchema(
         createDatabasePool(),
-        "public",
+        DATABASE_SCHEMA,
         getPostGraphileOptions(),
         (newSchema) => {
             console.log("[PostGraphile Watcher] Generated new GraphQL schema")

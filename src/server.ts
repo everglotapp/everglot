@@ -9,8 +9,18 @@ const { PORT } = process.env
 /** Configure database clients. */
 const pool = createDatabasePool()
 /** Connect to database. */
-;(async () => await pool.connect())()
-console.log("[Database Pool] Database connection established")
+;(async () => {
+    await pool.connect()
+    console.log("[Database Pool] Database connection established")
+    const DATABASE_SCHEMA = "app_public"
+    const DATABASE_ROLE = "evg_server"
+    await pool.query(`SET SEARCH_PATH TO "${DATABASE_SCHEMA}"`)
+    console.log(
+        `[Database Pool] Set default schema (search path) to "${DATABASE_SCHEMA}"`
+    )
+    await pool.query(`SET ROLE "${DATABASE_ROLE}"`)
+    console.log(`[Database Pool] Set user role to "${DATABASE_ROLE}"`)
+})()
 
 /** Watch the PG database and update the GraphQL schema automatically. */
 gql.start()

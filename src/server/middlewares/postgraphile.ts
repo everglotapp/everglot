@@ -8,6 +8,8 @@ import type { Request, RequestHandler } from "express"
 const { NODE_ENV, DATABASE_URL } = process.env
 const dev = NODE_ENV === "development"
 
+const DATABASE_SCHEMA = "app_public"
+
 let middleware: RequestHandler | null
 
 export function getPostGraphileOptions(): PostGraphileOptions {
@@ -37,7 +39,7 @@ export function getPostGraphileOptions(): PostGraphileOptions {
             : false,
         legacyRelations: "omit",
         pgSettings: async (req: Request) => ({
-            role: "APP_USER",
+            role: "evg_client",
             "user.id": req.session.user_id,
             statement_timeout: "3000",
         }),
@@ -48,7 +50,11 @@ export function makeMiddleware(): RequestHandler {
     if (middleware) {
         return middleware
     }
-    middleware = postgraphile(DATABASE_URL, "public", getPostGraphileOptions())
+    middleware = postgraphile(
+        DATABASE_URL,
+        DATABASE_SCHEMA,
+        getPostGraphileOptions()
+    )
     return middleware
 }
 

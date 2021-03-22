@@ -36,9 +36,11 @@ export function getPostGraphileOptions(): PostGraphileOptions {
               }
             : false,
         legacyRelations: "omit",
-        pgSettings: {
+        pgSettings: async (req: Request) => ({
+            role: "APP_USER",
+            "user.id": req.session.user_id,
             statement_timeout: "3000",
-        },
+        }),
     } as PostGraphileOptions & { persistedOperationsDirectory: {} }
 }
 

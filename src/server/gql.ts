@@ -20,7 +20,7 @@ export async function performQuery(
     return await withPostGraphileContext(
         {
             pgPool: createDatabasePool(),
-            // pgDefaultRole: "...",
+            pgDefaultRole: "APP_SERVER",
         },
         async (context) => {
             // Execute your GraphQL query in this function with the provided

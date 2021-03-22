@@ -200,6 +200,7 @@ type Query implements Node {
   user(id: Int!): User
   userByEmail(email: String!): User
   userByUuid(uuid: UUID!): User
+  currentUserId: Int
 
   """Reads a single `LanguageSkillLevel` using its globally unique `ID`."""
   languageSkillLevelByNodeId(

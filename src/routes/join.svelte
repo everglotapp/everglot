@@ -122,25 +122,23 @@
                 class="font-normal">privacy policy</a
             >.
         </p>
-        <div class="flex flex-col items-center">
-            <ButtonLarge
-                tag="button"
-                type="submit"
-                className="w-full justify-center"
-                disabled={submitting}
-                on:click={handleSubmit}>Create a new account</ButtonLarge
-            >
-            <div
-                class="g-signin2 flex justify-center mt-2 mb-1"
-                data-onsuccess="onSignIn"
-                data-longtitle="true"
-            />
-            <ButtonLarge
-                href="login"
-                variant="TEXT"
-                className="w-full justify-center"
-                >I already have an account</ButtonLarge
-            >
-        </div>
+        <ButtonLarge
+            tag="button"
+            type="submit"
+            className="w-full justify-center"
+            disabled={submitting}
+            on:click={handleSubmit}>Create a new account</ButtonLarge
+        >
+        <div
+            class="g-signin2 flex justify-center mt-2 mb-1"
+            data-onsuccess="onSignIn"
+            data-longtitle="true"
+        />
+        <ButtonLarge
+            href="login"
+            variant="TEXT"
+            className="w-full justify-center"
+            >I already have an account</ButtonLarge
+        >
     </form>
 </div>

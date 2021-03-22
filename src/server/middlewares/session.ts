@@ -54,6 +54,7 @@ export function makeMiddleware(pool: Pool) {
         cookie: { maxAge: 3 * 24 * 60 * 60 * 1000 }, // 3 days until touch or re-login
         store: new (pgSimpleSessionStore(session))({
             pool,
+            schemaName: "app_public",
             tableName: "user_sessions",
         }),
         name: SESSION_COOKIE_NAME,

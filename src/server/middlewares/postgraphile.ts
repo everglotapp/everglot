@@ -8,6 +8,8 @@ import type { Request, RequestHandler } from "express"
 const { NODE_ENV, DATABASE_URL } = process.env
 const dev = NODE_ENV === "development"
 
+import { DATABASE_SCHEMA, DATABASE_ROLE_CLIENT } from "../db"
+
 let middleware: RequestHandler | null
 
 export function getPostGraphileOptions(): PostGraphileOptions {
@@ -36,9 +38,15 @@ export function getPostGraphileOptions(): PostGraphileOptions {
               }
             : false,
         legacyRelations: "omit",
-        pgSettings: {
+        pgSettings: async (req: Request) => ({
+            /**
+             * These are requests that the client makes directly.
+             * Therefore they get their own, very restricted permissions.
+             */
+            role: DATABASE_ROLE_CLIENT,
+            "user.id": req.session.user_id,
             statement_timeout: "3000",
-        },
+        }),
     } as PostGraphileOptions & { persistedOperationsDirectory: {} }
 }
 
@@ -46,7 +54,11 @@ export function makeMiddleware(): RequestHandler {
     if (middleware) {
         return middleware
     }
-    middleware = postgraphile(DATABASE_URL, "public", getPostGraphileOptions())
+    middleware = postgraphile(
+        DATABASE_URL,
+        DATABASE_SCHEMA,
+        getPostGraphileOptions()
+    )
     return middleware
 }
 

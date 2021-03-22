@@ -8,26 +8,17 @@
         dedupExchange,
         fetchExchange,
         cacheExchange,
+        query,
     } from "@urql/svelte"
     import { persistedFetchExchange } from "@urql/exchange-persisted-fetch"
     import persistedOperations from "../graphql.client.json"
 
+    import { currentUser } from "../stores"
+
     import MainNav from "../comp/layout/MainNav.svelte"
     import Footer from "../comp/layout/Footer.svelte"
+
     import type { DocumentNode, OperationDefinitionNode } from "graphql"
-
-    export let segment: string | undefined = undefined
-    // @ts-ignore (left side of comma operator isn't ignored by svelte)
-    $: segment, change()
-
-    $: showMainNav = segment !== "login" && segment !== "join"
-    $: showFooter = segment !== "chat"
-    $: noscroll = segment === "chat"
-
-    onMount(() => {
-        // TODO: is this really necessary?
-        segment = window.location.pathname.split("/")[1]
-    })
 
     initUrqlClient({
         url: "/graphql",
@@ -65,11 +56,27 @@
         ],
     })
 
+    query(currentUser)
+
+    export let segment: string | undefined = undefined
+    // @ts-ignore (left side of comma operator isn't ignored by svelte)
+    $: segment, change()
+
+    $: showMainNav = segment !== "login" && segment !== "join"
+    $: showFooter = segment !== "chat"
+    $: noscroll = segment === "chat"
+
+    onMount(() => {
+        // TODO: is this really necessary?
+        segment = window.location.pathname.split("/")[1]
+    })
+
     const timeout = 150
     let transitionTriggeringSwitch = true
 
     const change = () => {
         transitionTriggeringSwitch = !transitionTriggeringSwitch
+        $currentUser.context = { requestPolicy: "network-only" }
     }
 </script>
 

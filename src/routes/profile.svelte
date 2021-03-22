@@ -2,16 +2,15 @@
     import { goto } from "@sapper/app"
     import { scale } from "svelte/transition"
 
-    import { LanguageCodeMappings } from "../types/generated/graphql"
     import type { Language } from "../types/generated/graphql"
-    import { operationStore, query } from "@urql/svelte"
+    import { query } from "@urql/svelte"
 
-    const languagesQuery = operationStore<{
-        languages: { nodes: Pick<Language, "englishName" | "alpha2">[] }
-    }>(LanguageCodeMappings)
-    query(languagesQuery)
-
-    import { username, room } from "../stores"
+    import {
+        currentUser,
+        username,
+        room,
+        languageCodeMappings,
+    } from "../stores"
     import {
         MAX_LEARNING,
         MAX_TEACHING,
@@ -28,6 +27,8 @@
 
     import { ArrowRightIcon, ClockIcon } from "svelte-feather-icons"
 
+    query(languageCodeMappings)
+
     let teach: Record<string, boolean> = {
         de: false,
         en: false,
@@ -41,11 +42,11 @@
 
     let languages: Pick<Language, "englishName" | "alpha2">[] = []
     $: if (
-        $languagesQuery &&
-        !$languagesQuery.fetching &&
-        $languagesQuery.data
+        $languageCodeMappings &&
+        !$languageCodeMappings.fetching &&
+        $languageCodeMappings.data
     ) {
-        languages = $languagesQuery.data.languages.nodes
+        languages = $languageCodeMappings.data.languages.nodes
     }
     type LanguageItem = { value: string; label: string }
     let items: LanguageItem[] = []
@@ -196,15 +197,15 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-{#if $languagesQuery.fetching}{:else if $languagesQuery.error}
+{#if $languageCodeMappings.fetching}{:else if $languageCodeMappings.error}
     <p class="container max-w-2xl px-4 py-8 md:py-8">
         Something went wrong.
-        <ErrorMessage>{$languagesQuery.error.message}</ErrorMessage>
+        <ErrorMessage>{$languageCodeMappings.error.message}</ErrorMessage>
     </p>
 {:else}
     <div class="container max-w-2xl px-4 py-8 md:py-8">
         <PageTitle>
-            {#if $room.length}
+            {#if !$currentUser.fetching && $currentUser?.data?.users.nodes[0]?.username?.length}
                 Profile
             {:else}
                 Tell us a little bit about yourself

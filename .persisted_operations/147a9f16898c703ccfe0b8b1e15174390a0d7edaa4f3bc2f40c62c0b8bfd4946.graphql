@@ -1,0 +1,13 @@
+query CurrentUser {
+  users(first: 1) {
+    nodes {
+      bio
+      email
+      gender
+      username
+      uuid
+      __typename
+    }
+    __typename
+  }
+}

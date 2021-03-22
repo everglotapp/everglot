@@ -5,8 +5,7 @@ import { createDatabasePool } from "./db"
 import { getPostGraphileOptions } from "./middlewares/postgraphile"
 
 import type { GraphQLSchema, Source } from "graphql"
-
-const DATABASE_SCHEMA = "app_public"
+import { DATABASE_ROLE_SERVER, DATABASE_SCHEMA } from "./db"
 
 let schema: GraphQLSchema | null
 
@@ -22,7 +21,7 @@ export async function performQuery(
     return await withPostGraphileContext(
         {
             pgPool: createDatabasePool(),
-            pgDefaultRole: "evg_server",
+            pgDefaultRole: DATABASE_ROLE_SERVER,
         },
         async (context) => {
             // Execute your GraphQL query in this function with the provided

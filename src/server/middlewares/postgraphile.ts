@@ -8,7 +8,7 @@ import type { Request, RequestHandler } from "express"
 const { NODE_ENV, DATABASE_URL } = process.env
 const dev = NODE_ENV === "development"
 
-const DATABASE_SCHEMA = "app_public"
+import { DATABASE_SCHEMA, DATABASE_ROLE_CLIENT } from "../db"
 
 let middleware: RequestHandler | null
 
@@ -39,7 +39,11 @@ export function getPostGraphileOptions(): PostGraphileOptions {
             : false,
         legacyRelations: "omit",
         pgSettings: async (req: Request) => ({
-            role: "evg_client",
+            /**
+             * These are requests that the client makes directly.
+             * Therefore they get their own, very restricted permissions.
+             */
+            role: DATABASE_ROLE_CLIENT,
             "user.id": req.session.user_id,
             statement_timeout: "3000",
         }),

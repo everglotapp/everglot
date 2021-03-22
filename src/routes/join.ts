@@ -116,6 +116,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 created_at
             )
             VALUES ($1, $2, $3, NOW())
+            ON CONFLICT (email)
+                DO NOTHING
             RETURNING id`,
         values: [email, hash, uuid],
     })

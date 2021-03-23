@@ -4,7 +4,6 @@
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
-    import { signedIn } from "../stores"
     import { MIN_PASSWORD_LENGTH } from "../users"
 
     let errorMessage: string | null = null
@@ -44,7 +43,6 @@
                     return
                 }
                 if (res.success === true) {
-                    $signedIn = true
                     goto("/profile", { replaceState: true, noscroll: true })
                 } else {
                     errorMessage = res.message

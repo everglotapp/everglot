@@ -34,6 +34,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
     const emailValidation = await validate({
         email,
+        /**
+         * Only check basic format for sanity, otherwise assume email to be correct.
+         * It needs to exist in the database anyways.
+         */
         validateRegex: true,
         validateMx: false,
         validateTypo: false,
@@ -64,6 +68,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
             FROM users
             WHERE
                 email = $1
+            AND
+                password_hash IS NOT NULL
             LIMIT 1`,
         values: [email],
     })

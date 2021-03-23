@@ -4,7 +4,6 @@ import { operationStore } from "@urql/svelte"
 import { CurrentUser, LanguageCodeMappings } from "./types/generated/graphql"
 import type { User, Language } from "./types/generated/graphql"
 
-export const signedIn = writable<boolean>(false)
 export const username = writable<string | null>(null)
 export const room = writable<string>("")
 

@@ -5,7 +5,6 @@
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
-    import { signedIn } from "../stores"
     import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
     import { GOOGLE_SIGNIN_CLIENT_ID } from "../constants"
 
@@ -41,7 +40,6 @@
             return
         }
         if (res.success === true) {
-            $signedIn = true
             goto("/profile", { replaceState: true, noscroll: true })
         } else {
             errorMessage = res.message
@@ -75,13 +73,18 @@
             const response = await doSubmit({
                 method: AuthMethod.GOOGLE,
                 idToken: googleUser.getAuthResponse().id_token,
+                token:
+                    typeof window === "undefined"
+                        ? null
+                        : new URL(window.location.href).searchParams.get(
+                              "token"
+                          ),
             })
             const res = await response.json()
             if (!res.hasOwnProperty("success")) {
                 return
             }
             if (res.success === true) {
-                $signedIn = true
                 goto("/profile", { replaceState: true, noscroll: true })
             } else {
                 errorMessage = res.message

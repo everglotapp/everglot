@@ -72,6 +72,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             const { name, email, email_verified, picture, locale } = payload
             console.log({ name, email, email_verified, picture, locale })
             // TODO: save user as google user, log them in
+            throw new Error("Saving Google user data not yet implemented")
         } catch (e: any) {
             console.error(e.stack)
             res.status(422).json({
@@ -81,7 +82,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             })
             return
         }
-    } else {
+    } else if (authMethod === AuthMethod.EMAIL) {
         const inviteToken = req?.body?.token
         if (
             !inviteToken ||
@@ -95,6 +96,9 @@ export async function post(req: Request, res: Response, _next: () => void) {
             })
             return
         }
+    } else {
+        // this should never be called
+        throw new Error(`Unknown auth method ${authMethod}`)
     }
 
     const email = req?.body?.email

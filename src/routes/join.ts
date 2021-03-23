@@ -2,12 +2,13 @@ import { db } from "../server/db"
 
 import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import { ensureJson, serverError } from "../helpers"
+import { GOOGLE_SIGNIN_CLIENT_ID } from "../constants"
 
 import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
 
 import validate from "deep-email-validator"
-import { OAuth2Client } from "google-auth-library"
+import { OAuth2Client, TokenPayload } from "google-auth-library"
 
 const BCRYPT_WORK_FACTOR = 14
 
@@ -45,8 +46,41 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
     // TODO: Always check the invite token, no matter which auth method is used.
     if (authMethod === AuthMethod.GOOGLE) {
-        // const client = new OAuth2Client(CLIENT_ID);
-        // TODO: Check integrity of ID token etc.
+        const idToken = req?.body?.idToken
+        if (!idToken || typeof idToken !== "string" || !idToken.length) {
+            res.status(422).json({
+                success: false,
+                message:
+                    "Something went wrong while signing you up with your Google account. Please try again.",
+            })
+            return
+        }
+        try {
+            const client = new OAuth2Client(GOOGLE_SIGNIN_CLIENT_ID)
+            // Check integrity of ID token (make sure that it's valid and comes from Google)
+            const ticket = await client.verifyIdToken({
+                idToken,
+                audience: GOOGLE_SIGNIN_CLIENT_ID,
+            })
+            if (!ticket) {
+                throw new Error("Empty ticket")
+            }
+            const payload = ticket.getPayload()
+            if (!payload) {
+                throw new Error("Empty payload")
+            }
+            const { name, email, email_verified, picture, locale } = payload
+            console.log({ name, email, email_verified, picture, locale })
+            // TODO: save user as google user, log them in
+        } catch (e: any) {
+            console.error(e.stack)
+            res.status(422).json({
+                success: false,
+                message:
+                    "Something went wrong while signing you up with your Google account. Please try again.",
+            })
+            return
+        }
     } else {
         const inviteToken = req?.body?.token
         if (

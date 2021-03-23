@@ -7,6 +7,7 @@
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import { signedIn } from "../stores"
     import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
+    import { GOOGLE_SIGNIN_CLIENT_ID } from "../constants"
 
     let errorMessage: string | null = null
     let submitting = false
@@ -95,10 +96,7 @@
 <svelte:head>
     <title>Join – Everglot</title>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta
-        name="google-signin-client_id"
-        content="457984069949-bgc3aj14fi47olkp0arn7is4cr07cfla.apps.googleusercontent.com"
-    />
+    <meta name="google-signin-client_id" content={GOOGLE_SIGNIN_CLIENT_ID} />
 </svelte:head>
 
 <div class="container px-4 mx-auto my-16 max-w-sm">

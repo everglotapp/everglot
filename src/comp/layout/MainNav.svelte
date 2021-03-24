@@ -186,8 +186,9 @@
         z-index: 10;
 
         max-height: 58px;
+
         @screen md {
-            max-height: 75px;
+            max-height: 76px;
         }
     }
 

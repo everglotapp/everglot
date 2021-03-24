@@ -7,6 +7,7 @@
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
     import { GOOGLE_SIGNIN_CLIENT_ID } from "../constants"
+    import { username } from "../stores"
 
     let errorMessage: string | null = null
     let submitting = false
@@ -70,9 +71,10 @@
     onMount(() => {
         // @ts-ignore
         window.onSignIn = async (googleUser: any) => {
+            $username = googleUser?.getBasicProfile()?.getName() || $username
             const response = await doSubmit({
                 method: AuthMethod.GOOGLE,
-                idToken: googleUser.getAuthResponse().id_token,
+                idToken: googleUser?.getAuthResponse()?.id_token,
                 token:
                     typeof window === "undefined"
                         ? null

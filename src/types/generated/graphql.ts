@@ -305,6 +305,7 @@ export type User = Node & {
   uuid: Scalars['UUID'];
   avatarUrl?: Maybe<Scalars['String']>;
   locale: Scalars['Int'];
+  googleId?: Maybe<Scalars['String']>;
   /** Reads a single `Language` that is related to this `User`. */
   languageByLocale?: Maybe<Language>;
   /** Reads and enables pagination through a set of `UserLanguage`. */
@@ -423,6 +424,8 @@ export enum UsersOrderBy {
   AvatarUrlDesc = 'AVATAR_URL_DESC',
   LocaleAsc = 'LOCALE_ASC',
   LocaleDesc = 'LOCALE_DESC',
+  GoogleIdAsc = 'GOOGLE_ID_ASC',
+  GoogleIdDesc = 'GOOGLE_ID_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
@@ -453,6 +456,8 @@ export type UserCondition = {
   avatarUrl?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `locale` field. */
   locale?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `googleId` field. */
+  googleId?: Maybe<Scalars['String']>;
 };
 
 /** Methods to use when ordering `UserLanguage`. */
@@ -1131,6 +1136,7 @@ export type UserInput = {
   uuid: Scalars['UUID'];
   avatarUrl?: Maybe<Scalars['String']>;
   locale?: Maybe<Scalars['Int']>;
+  googleId?: Maybe<Scalars['String']>;
 };
 
 /** The output of our update `LanguageSkillLevel` mutation. */
@@ -1435,6 +1441,7 @@ export type UserPatch = {
   uuid?: Maybe<Scalars['UUID']>;
   avatarUrl?: Maybe<Scalars['String']>;
   locale?: Maybe<Scalars['Int']>;
+  googleId?: Maybe<Scalars['String']>;
 };
 
 /** All input for the `updateUser` mutation. */

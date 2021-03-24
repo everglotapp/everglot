@@ -63,7 +63,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
         hash: string | null = null,
         avatarUrl: string | null = null,
         locale: string | null = null,
-        username: string | null = null
+        username: string | null = null,
+        googleId: string | null = null
 
     if (authMethod === AuthMethod.GOOGLE) {
         const idToken = req?.body?.idToken
@@ -104,6 +105,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             avatarUrl = payload.picture || null
             locale = payload.locale || null
             username = payload.name || null
+            googleId = payload.sub || null
         } catch (e: any) {
             console.error(e.stack)
             res.status(422).json({
@@ -194,6 +196,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 email,
                 password_hash,
                 uuid,
+                google_id,
                 avatar_url,
                 locale
             )
@@ -203,17 +206,18 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 $3,
                 $4,
                 $5,
+                $6,
                 (
                     SELECT id
                     FROM languages
-                    WHERE alpha2 = $6
+                    WHERE alpha2 = $7
                     LIMIT 1
                 )
             )
             ON CONFLICT (email)
                 DO NOTHING
             RETURNING id`,
-        values: [username, email, hash, uuid, avatarUrl, locale],
+        values: [username, email, hash, uuid, googleId, avatarUrl, locale],
     })
     let success = queryResult?.rowCount === 1
     if (!success) {

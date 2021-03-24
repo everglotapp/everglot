@@ -167,3 +167,9 @@
         >
     </form>
 </div>
+
+<style>
+    :global(.g-signin2) {
+        min-height: 36px;
+    }
+</style>

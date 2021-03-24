@@ -17,10 +17,10 @@
     let socket: SocketIO.Socket | null = null
 
     let roomMessages: Message[] = []
-    let roomUsers: Pick<
+    let roomUsers: (Pick<
         ChatUser["user"],
         "uuid" | "username" | "avatarUrl"
-    >[] = []
+    > & { username: string })[] = []
     let myUuid: User["uuid"] | null = null
     let msg: string = ""
 
@@ -142,7 +142,12 @@
         if (recvRoom !== $room) {
             return
         }
-        roomUsers = [...users]
+        roomUsers = [
+            ...users.map((user) => ({
+                ...user,
+                username: user.username!,
+            })),
+        ]
         getChatMessageContainers().forEach((container) =>
             scrollToBottom(container, true)
         )
@@ -188,14 +193,16 @@
                     {#if chatUser.username === ""}
                         <li class="user" title="Everglot Bot" />
                     {:else}
-                        <li class="user" title={chatUser.username || "n/a"}>
-                            {#if chatUser.avatarUrl && chatUser.avatarUrl.startsWith("https://")}
+                        <li class="user" title={chatUser.username}>
+                            {#if false && (chatUser.avatarUrl || "").startsWith("https://")}
                                 <img
-                                    src={chatUser.avatarUrl}
-                                    alt={`Avatar of ${
-                                        chatUser.username || "n/a"
-                                    }`}
+                                    src={chatUser.avatarUrl || ""}
+                                    alt={`Avatar of ${chatUser.username}`}
                                 />
+                            {:else}
+                                <span class="initial"
+                                    >{chatUser.username.charAt(0)}</span
+                                >
                             {/if}
                         </li>
                     {/if}
@@ -431,6 +438,13 @@
         @apply bg-gray-light;
         @apply shadow-sm;
         @apply overflow-hidden;
+        @apply inline-flex;
+        @apply justify-center;
+        @apply items-center;
+    }
+
+    .user > .initial {
+        height: 1.75rem;
     }
 
     .toggle-row {

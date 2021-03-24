@@ -31,8 +31,8 @@
             email,
             password,
         })
-        const res = await response.json()
-        if (!res.hasOwnProperty("success")) {
+        const res = await response?.json()
+        if (!res || !res.hasOwnProperty("success")) {
             return
         }
         if (res.success === true) {
@@ -49,18 +49,26 @@
         password?: string
     }
 
-    async function doSubmit(body: SubmitBody): Promise<Response> {
-        return fetch("/login", {
+    async function doSubmit(body: SubmitBody): Promise<Response | null> {
+        const response = await fetch("/login", {
             method: "post",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(body),
-        }).then(async (response: Response) => {
-            submitting = false
-            return response
+            redirect: "follow",
         })
+
+        submitting = false
+
+        if (response.redirected && response?.url?.length) {
+            errorMessage = "Your account is not registered, yet."
+            window.location.href = response.url!
+            return null
+        }
+
+        return response
     }
 
     onMount(() => {
@@ -70,8 +78,8 @@
                 method: AuthMethod.GOOGLE,
                 idToken: googleUser?.getAuthResponse()?.id_token,
             })
-            const res = await response.json()
-            if (!res.hasOwnProperty("success")) {
+            const res = await response?.json()
+            if (!res || !res.hasOwnProperty("success")) {
                 return
             }
             if (res.success === true) {
@@ -149,3 +157,9 @@
         >
     </form>
 </div>
+
+<style>
+    :global(.g-signin2) {
+        min-height: 36px;
+    }
+</style>

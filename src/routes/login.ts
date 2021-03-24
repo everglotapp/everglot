@@ -102,7 +102,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             console.log(
                 `User tried to login with an id token that does not exist: ${idToken}`
             )
-            serverError(res, LOGIN_FAILED_MESSAGE)
+            res.redirect("/join")
             return
         }
 

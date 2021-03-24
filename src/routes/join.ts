@@ -8,7 +8,7 @@ import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
 
 import validate from "deep-email-validator"
-import { OAuth2Client, TokenPayload } from "google-auth-library"
+import { OAuth2Client } from "google-auth-library"
 
 const BCRYPT_WORK_FACTOR = 14
 
@@ -185,7 +185,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             return
         }
     } else {
-        // this should never be called
+        // this should never get called due to the check above
         throw new Error(`Unknown auth method ${authMethod}`)
     }
 

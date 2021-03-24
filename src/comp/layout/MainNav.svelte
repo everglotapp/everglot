@@ -1,7 +1,15 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
+
     import { LogOutIcon } from "svelte-feather-icons"
+    import { query } from "@urql/svelte"
+
     import ButtonSmall from "../util/ButtonSmall.svelte"
+
+    import { currentUser } from "../../stores"
+
+    query(currentUser)
+    $: currentUserNode = $currentUser.data?.users.nodes[0]
 
     export let segment: string | undefined
 </script>
@@ -157,7 +165,11 @@
                         href="/profile"
                         class="nav-item-with-icon justify-center"
                     >
-                        <div class="profile-icon" /></a
+                        <div class="avatar">
+                            {#if !$currentUser.fetching && currentUserNode.avatarUrl}
+                                <img src={currentUserNode.avatarUrl} />
+                            {/if}
+                        </div></a
                     >
                 </div>
             </div>
@@ -243,11 +255,12 @@
         }
     }
 
-    .profile-icon {
+    .avatar {
         border-radius: 50%;
         width: 42px;
         height: 42px;
 
         @apply bg-gray-light;
+        @apply overflow-hidden;
     }
 </style>

@@ -1,9 +1,8 @@
 <script lang="ts">
-    import { room } from "../stores"
     import { onMount, onDestroy } from "svelte"
     import { scale, slide } from "svelte/transition"
 
-    import { currentUser } from "../stores"
+    import { room, currentUser } from "../stores"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
 
     import type { ChatUser } from "../server/users"

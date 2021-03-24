@@ -301,8 +301,13 @@ export type User = Node & {
   bio: Scalars['String'];
   lastActiveAt: Scalars['Datetime'];
   createdAt: Scalars['Datetime'];
-  passwordHash: Scalars['String'];
+  passwordHash?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
+  avatarUrl?: Maybe<Scalars['String']>;
+  locale: Scalars['Int'];
+  googleId?: Maybe<Scalars['String']>;
+  /** Reads a single `Language` that is related to this `User`. */
+  languageByLocale?: Maybe<Language>;
   /** Reads and enables pagination through a set of `UserLanguage`. */
   userLanguages: UserLanguagesConnection;
 };
@@ -319,6 +324,141 @@ export type UserUserLanguagesArgs = {
 };
 
 
+export type Language = Node & {
+  __typename?: 'Language';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  /** ISO 3166-1 alpha-2 standardized code */
+  alpha2: Scalars['String'];
+  englishName: Scalars['String'];
+  createdAt: Scalars['Datetime'];
+  /** Reads and enables pagination through a set of `User`. */
+  usersByLocale: UsersConnection;
+  /** Reads and enables pagination through a set of `UserLanguage`. */
+  userLanguages: UserLanguagesConnection;
+};
+
+
+export type LanguageUsersByLocaleArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+};
+
+
+export type LanguageUserLanguagesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  condition?: Maybe<UserLanguageCondition>;
+};
+
+/** A connection to a list of `User` values. */
+export type UsersConnection = {
+  __typename?: 'UsersConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User` and cursor to aid in pagination. */
+  edges: Array<UsersEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection. */
+export type UsersEdge = {
+  __typename?: 'UsersEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+};
+
+
+/** Information about pagination in a connection. */
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['Cursor']>;
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['Cursor']>;
+};
+
+/** Methods to use when ordering `User`. */
+export enum UsersOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UsernameAsc = 'USERNAME_ASC',
+  UsernameDesc = 'USERNAME_DESC',
+  EmailAsc = 'EMAIL_ASC',
+  EmailDesc = 'EMAIL_DESC',
+  UnconfirmedEmailAsc = 'UNCONFIRMED_EMAIL_ASC',
+  UnconfirmedEmailDesc = 'UNCONFIRMED_EMAIL_DESC',
+  GenderAsc = 'GENDER_ASC',
+  GenderDesc = 'GENDER_DESC',
+  BioAsc = 'BIO_ASC',
+  BioDesc = 'BIO_DESC',
+  LastActiveAtAsc = 'LAST_ACTIVE_AT_ASC',
+  LastActiveAtDesc = 'LAST_ACTIVE_AT_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PasswordHashAsc = 'PASSWORD_HASH_ASC',
+  PasswordHashDesc = 'PASSWORD_HASH_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  AvatarUrlAsc = 'AVATAR_URL_ASC',
+  AvatarUrlDesc = 'AVATAR_URL_DESC',
+  LocaleAsc = 'LOCALE_ASC',
+  LocaleDesc = 'LOCALE_DESC',
+  GoogleIdAsc = 'GOOGLE_ID_ASC',
+  GoogleIdDesc = 'GOOGLE_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/** A condition to be used against `User` object types. All fields are tested for equality and combined with a logical ‘and.’ */
+export type UserCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `username` field. */
+  username?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `email` field. */
+  email?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `unconfirmedEmail` field. */
+  unconfirmedEmail?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `gender` field. */
+  gender?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `bio` field. */
+  bio?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `lastActiveAt` field. */
+  lastActiveAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `passwordHash` field. */
+  passwordHash?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `avatarUrl` field. */
+  avatarUrl?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `locale` field. */
+  locale?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `googleId` field. */
+  googleId?: Maybe<Scalars['String']>;
+};
 
 /** Methods to use when ordering `UserLanguage`. */
 export enum UserLanguagesOrderBy {
@@ -358,30 +498,6 @@ export type UserLanguageCondition = {
   createdAt?: Maybe<Scalars['Datetime']>;
 };
 
-export type Language = Node & {
-  __typename?: 'Language';
-  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
-  id: Scalars['Int'];
-  /** ISO 3166-1 alpha-2 standardized code */
-  alpha2: Scalars['String'];
-  englishName: Scalars['String'];
-  createdAt: Scalars['Datetime'];
-  /** Reads and enables pagination through a set of `UserLanguage`. */
-  userLanguages: UserLanguagesConnection;
-};
-
-
-export type LanguageUserLanguagesArgs = {
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  before?: Maybe<Scalars['Cursor']>;
-  after?: Maybe<Scalars['Cursor']>;
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
-  condition?: Maybe<UserLanguageCondition>;
-};
-
 /** A `UserLanguage` edge in the connection. */
 export type UserLanguagesEdge = {
   __typename?: 'UserLanguagesEdge';
@@ -389,19 +505,6 @@ export type UserLanguagesEdge = {
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `UserLanguage` at the end of the edge. */
   node?: Maybe<UserLanguage>;
-};
-
-/** Information about pagination in a connection. */
-export type PageInfo = {
-  __typename?: 'PageInfo';
-  /** When paginating forwards, are there more items? */
-  hasNextPage: Scalars['Boolean'];
-  /** When paginating backwards, are there more items? */
-  hasPreviousPage: Scalars['Boolean'];
-  /** When paginating backwards, the cursor to continue. */
-  startCursor?: Maybe<Scalars['Cursor']>;
-  /** When paginating forwards, the cursor to continue. */
-  endCursor?: Maybe<Scalars['Cursor']>;
 };
 
 /** A `LanguageSkillLevel` edge in the connection. */
@@ -543,79 +646,6 @@ export type UserSessionCondition = {
   sess?: Maybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `expire` field. */
   expire?: Maybe<Scalars['Datetime']>;
-};
-
-/** A connection to a list of `User` values. */
-export type UsersConnection = {
-  __typename?: 'UsersConnection';
-  /** A list of `User` objects. */
-  nodes: Array<Maybe<User>>;
-  /** A list of edges which contains the `User` and cursor to aid in pagination. */
-  edges: Array<UsersEdge>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** The count of *all* `User` you could get from the connection. */
-  totalCount: Scalars['Int'];
-};
-
-/** A `User` edge in the connection. */
-export type UsersEdge = {
-  __typename?: 'UsersEdge';
-  /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
-  /** The `User` at the end of the edge. */
-  node?: Maybe<User>;
-};
-
-/** Methods to use when ordering `User`. */
-export enum UsersOrderBy {
-  Natural = 'NATURAL',
-  IdAsc = 'ID_ASC',
-  IdDesc = 'ID_DESC',
-  UsernameAsc = 'USERNAME_ASC',
-  UsernameDesc = 'USERNAME_DESC',
-  EmailAsc = 'EMAIL_ASC',
-  EmailDesc = 'EMAIL_DESC',
-  UnconfirmedEmailAsc = 'UNCONFIRMED_EMAIL_ASC',
-  UnconfirmedEmailDesc = 'UNCONFIRMED_EMAIL_DESC',
-  GenderAsc = 'GENDER_ASC',
-  GenderDesc = 'GENDER_DESC',
-  BioAsc = 'BIO_ASC',
-  BioDesc = 'BIO_DESC',
-  LastActiveAtAsc = 'LAST_ACTIVE_AT_ASC',
-  LastActiveAtDesc = 'LAST_ACTIVE_AT_DESC',
-  CreatedAtAsc = 'CREATED_AT_ASC',
-  CreatedAtDesc = 'CREATED_AT_DESC',
-  PasswordHashAsc = 'PASSWORD_HASH_ASC',
-  PasswordHashDesc = 'PASSWORD_HASH_DESC',
-  UuidAsc = 'UUID_ASC',
-  UuidDesc = 'UUID_DESC',
-  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
-}
-
-/** A condition to be used against `User` object types. All fields are tested for equality and combined with a logical ‘and.’ */
-export type UserCondition = {
-  /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `username` field. */
-  username?: Maybe<Scalars['String']>;
-  /** Checks for equality with the object’s `email` field. */
-  email?: Maybe<Scalars['String']>;
-  /** Checks for equality with the object’s `unconfirmedEmail` field. */
-  unconfirmedEmail?: Maybe<Scalars['String']>;
-  /** Checks for equality with the object’s `gender` field. */
-  gender?: Maybe<Scalars['String']>;
-  /** Checks for equality with the object’s `bio` field. */
-  bio?: Maybe<Scalars['String']>;
-  /** Checks for equality with the object’s `lastActiveAt` field. */
-  lastActiveAt?: Maybe<Scalars['Datetime']>;
-  /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
-  /** Checks for equality with the object’s `passwordHash` field. */
-  passwordHash?: Maybe<Scalars['String']>;
-  /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
 };
 
 /** The root mutation type which contains root level fields which mutate data. */
@@ -1069,6 +1099,8 @@ export type CreateUserPayload = {
   user?: Maybe<User>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `User`. */
+  languageByLocale?: Maybe<Language>;
   /** An edge for our `User`. May be used by Relay 1. */
   userEdge?: Maybe<UsersEdge>;
 };
@@ -1100,8 +1132,11 @@ export type UserInput = {
   bio?: Maybe<Scalars['String']>;
   lastActiveAt?: Maybe<Scalars['Datetime']>;
   createdAt?: Maybe<Scalars['Datetime']>;
-  passwordHash: Scalars['String'];
+  passwordHash?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
+  avatarUrl?: Maybe<Scalars['String']>;
+  locale?: Maybe<Scalars['Int']>;
+  googleId?: Maybe<Scalars['String']>;
 };
 
 /** The output of our update `LanguageSkillLevel` mutation. */
@@ -1367,6 +1402,8 @@ export type UpdateUserPayload = {
   user?: Maybe<User>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `User`. */
+  languageByLocale?: Maybe<Language>;
   /** An edge for our `User`. May be used by Relay 1. */
   userEdge?: Maybe<UsersEdge>;
 };
@@ -1402,6 +1439,9 @@ export type UserPatch = {
   createdAt?: Maybe<Scalars['Datetime']>;
   passwordHash?: Maybe<Scalars['String']>;
   uuid?: Maybe<Scalars['UUID']>;
+  avatarUrl?: Maybe<Scalars['String']>;
+  locale?: Maybe<Scalars['Int']>;
+  googleId?: Maybe<Scalars['String']>;
 };
 
 /** All input for the `updateUser` mutation. */
@@ -1656,6 +1696,8 @@ export type DeleteUserPayload = {
   deletedUserNodeId?: Maybe<Scalars['ID']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `User`. */
+  languageByLocale?: Maybe<Language>;
   /** An edge for our `User`. May be used by Relay 1. */
   userEdge?: Maybe<UsersEdge>;
 };

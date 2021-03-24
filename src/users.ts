@@ -18,3 +18,8 @@ export enum CefrLevel {
     C1 = "C1",
     C2 = "C2",
 }
+
+export enum AuthMethod {
+    EMAIL = "email",
+    GOOGLE = "google",
+}

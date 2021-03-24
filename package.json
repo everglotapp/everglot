@@ -27,6 +27,7 @@
     "deep-email-validator": "github:mfbx9da4/deep-email-validator#pull/17/head",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "google-auth-library": "^7.0.2",
     "graphql": "^15.5.0",
     "moment": "^2.29.1",
     "node-pg-migrate": "^5.9.0",

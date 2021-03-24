@@ -1,15 +1,18 @@
 <script lang="ts">
+    import { onMount } from "svelte"
     import { goto } from "@sapper/app"
 
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
-    import { signedIn } from "../stores"
-    import { MIN_PASSWORD_LENGTH } from "../users"
+    import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
+    import { GOOGLE_SIGNIN_CLIENT_ID } from "../constants"
+    import { username } from "../stores"
 
     let errorMessage: string | null = null
     let submitting = false
-    const handleSubmit = (_event: Event) => {
+
+    const handleSubmit = async (_event: Event) => {
         if (submitting) {
             return
         }
@@ -24,45 +27,81 @@
         }
         submitting = true
         errorMessage = null
-        fetch("/join", {
+        const response = await doSubmit({
+            method: AuthMethod.EMAIL,
+            email,
+            password,
+            token:
+                typeof window === "undefined"
+                    ? null
+                    : new URL(window.location.href).searchParams.get("token"),
+        })
+        const res = await response.json()
+        if (!res.hasOwnProperty("success")) {
+            return
+        }
+        if (res.success === true) {
+            goto("/profile", { replaceState: true, noscroll: true })
+        } else {
+            errorMessage = res.message
+        }
+    }
+
+    type SubmitBody = {
+        method: AuthMethod
+        token?: string | null
+        idToken?: string
+        email?: string
+        password?: string
+    }
+    async function doSubmit(body: SubmitBody): Promise<Response> {
+        return fetch("/join", {
             method: "post",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                email,
-                password,
+            body: JSON.stringify(body),
+        }).then(async (response: Response) => {
+            submitting = false
+            return response
+        })
+    }
+
+    onMount(() => {
+        // @ts-ignore
+        window.onSignIn = async (googleUser: any) => {
+            $username = googleUser?.getBasicProfile()?.getName() || $username
+            const response = await doSubmit({
+                method: AuthMethod.GOOGLE,
+                idToken: googleUser?.getAuthResponse()?.id_token,
                 token:
                     typeof window === "undefined"
                         ? null
                         : new URL(window.location.href).searchParams.get(
                               "token"
                           ),
-            }),
-        })
-            .then(async (response) => {
-                const res = await response.json()
-                if (!res.hasOwnProperty("success")) {
-                    return
-                }
-                if (res.success === true) {
-                    $signedIn = true
-                    goto("/profile", { replaceState: true, noscroll: true })
-                } else {
-                    errorMessage = res.message
-                }
             })
-            .then(() => {
-                submitting = false
-            })
-    }
+            const res = await response.json()
+            if (!res.hasOwnProperty("success")) {
+                return
+            }
+            if (res.success === true) {
+                goto("/profile", { replaceState: true, noscroll: true })
+            } else {
+                errorMessage = res.message
+            }
+        }
+    })
+
     let email = ""
     let password = ""
 </script>
 
 <svelte:head>
     <title>Join – Everglot</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content={GOOGLE_SIGNIN_CLIENT_ID} />
 </svelte:head>
 
 <div class="container px-4 mx-auto my-16 max-w-sm">
@@ -108,13 +147,18 @@
                 class="font-normal">privacy policy</a
             >.
         </p>
-        <button
+        <ButtonLarge
+            tag="button"
             type="submit"
+            className="w-full justify-center"
             disabled={submitting}
-            on:click={handleSubmit}
-            class="py-3 px-10 w-full mb-1 bg-primary hover:bg-primary-bitlight text-white rounded-xl font-bold"
-            >Create a new account</button
+            on:click={handleSubmit}>Create a new account</ButtonLarge
         >
+        <div
+            class="g-signin2 flex justify-center mt-2 mb-1"
+            data-onsuccess="onSignIn"
+            data-longtitle="true"
+        />
         <ButtonLarge
             href="login"
             variant="TEXT"

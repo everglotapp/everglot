@@ -1,14 +1,15 @@
 <script lang="ts">
-    import { room } from "../stores"
     import { onMount, onDestroy } from "svelte"
     import { scale, slide } from "svelte/transition"
 
+    import { room } from "../stores"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
-    import { ChevronsRightIcon } from "svelte-feather-icons"
 
     import type { ChatUser } from "../server/users"
     import type { Language, User } from "../types/generated/graphql"
     import type { Message } from "../server/messages"
+
+    import { ChevronsRightIcon } from "svelte-feather-icons"
 
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
@@ -16,7 +17,10 @@
     let socket: SocketIO.Socket | null = null
 
     let roomMessages: Message[] = []
-    let roomUsers: Pick<ChatUser["user"], "uuid" | "username">[] = []
+    let roomUsers: (Pick<
+        ChatUser["user"],
+        "uuid" | "username" | "avatarUrl"
+    > & { username: string })[] = []
     let myUuid: User["uuid"] | null = null
     let msg: string = ""
 
@@ -133,12 +137,17 @@
         users,
     }: {
         room: Language["englishName"]
-        users: Pick<ChatUser["user"], "username" | "uuid">[]
+        users: Pick<ChatUser["user"], "username" | "uuid" | "avatarUrl">[]
     }): void {
         if (recvRoom !== $room) {
             return
         }
-        roomUsers = [...users]
+        roomUsers = [
+            ...users.map((user) => ({
+                ...user,
+                username: user.username!,
+            })),
+        ]
         getChatMessageContainers().forEach((container) =>
             scrollToBottom(container, true)
         )
@@ -184,7 +193,18 @@
                     {#if chatUser.username === ""}
                         <li class="user" title="Everglot Bot" />
                     {:else}
-                        <li class="user" title={chatUser.username || "n/a"} />
+                        <li class="user" title={chatUser.username}>
+                            {#if (chatUser.avatarUrl || "").startsWith("https://")}
+                                <img
+                                    src={chatUser.avatarUrl || ""}
+                                    alt={`Avatar of ${chatUser.username}`}
+                                />
+                            {:else}
+                                <span class="initial"
+                                    >{chatUser.username.charAt(0)}</span
+                                >
+                            {/if}
+                        </li>
                     {/if}
                 {/each}
             </ul>
@@ -417,6 +437,14 @@
 
         @apply bg-gray-light;
         @apply shadow-sm;
+        @apply overflow-hidden;
+        @apply flex;
+        @apply justify-center;
+        @apply items-center;
+    }
+
+    .user > .initial {
+        height: 1.625rem;
     }
 
     .toggle-row {

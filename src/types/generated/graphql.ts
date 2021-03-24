@@ -1758,7 +1758,7 @@ export type CurrentUserQuery = (
     { __typename?: 'UsersConnection' }
     & { nodes: Array<Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid'>
+      & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid' | 'avatarUrl'>
     )>> }
   )> }
 );
@@ -1787,6 +1787,7 @@ export const CurrentUser = gql`
       gender
       username
       uuid
+      avatarUrl
     }
   }
 }

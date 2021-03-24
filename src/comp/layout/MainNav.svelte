@@ -1,7 +1,15 @@
 <script lang="ts">
     import { goto } from "@sapper/app"
+
     import { LogOutIcon } from "svelte-feather-icons"
+    import { query } from "@urql/svelte"
+
     import ButtonSmall from "../util/ButtonSmall.svelte"
+
+    import { currentUser } from "../../stores"
+
+    query(currentUser)
+    $: currentUserNode = $currentUser.data?.users.nodes[0]
 
     export let segment: string | undefined
 </script>
@@ -157,7 +165,22 @@
                         href="/profile"
                         class="nav-item-with-icon justify-center"
                     >
-                        <div class="profile-icon" /></a
+                        <div class="avatar">
+                            {#if !$currentUser.fetching}
+                                {#if currentUserNode?.avatarUrl && (currentUserNode?.avatarUrl || "").startsWith("https://")}
+                                    <img
+                                        src={currentUserNode?.avatarUrl || ""}
+                                        alt={`Avatar of ${currentUserNode?.username}`}
+                                    />
+                                {:else}
+                                    <span class="initial"
+                                        >{currentUserNode?.username?.charAt(
+                                            0
+                                        )}</span
+                                    >
+                                {/if}
+                            {/if}
+                        </div></a
                     >
                 </div>
             </div>
@@ -174,8 +197,9 @@
         z-index: 10;
 
         max-height: 58px;
+
         @screen md {
-            max-height: 75px;
+            max-height: 76px;
         }
     }
 
@@ -243,11 +267,19 @@
         }
     }
 
-    .profile-icon {
+    .avatar {
         border-radius: 50%;
         width: 42px;
         height: 42px;
 
         @apply bg-gray-light;
+        @apply overflow-hidden;
+        @apply flex;
+        @apply justify-center;
+        @apply items-center;
+    }
+
+    .avatar > .initial {
+        height: 1.625rem;
     }
 </style>

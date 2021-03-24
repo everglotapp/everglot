@@ -44,6 +44,7 @@ export function start(server: Server, pool: Pool) {
                             id
                             username
                             uuid
+                            avatarUrl
                         }
                     }`,
                     { id: session.user_id }

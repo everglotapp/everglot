@@ -2,26 +2,25 @@
     import { onMount, onDestroy } from "svelte"
     import { scale, slide } from "svelte/transition"
 
-    import { room, currentUser } from "../stores"
+    import { room } from "../stores"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
 
     import type { ChatUser } from "../server/users"
     import type { Language, User } from "../types/generated/graphql"
     import type { Message } from "../server/messages"
 
-    import { query } from "@urql/svelte"
     import { ChevronsRightIcon } from "svelte-feather-icons"
 
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
 
-    query(currentUser)
-    $: currentUserNode = $currentUser.data?.users.nodes[0]
-
     let socket: SocketIO.Socket | null = null
 
     let roomMessages: Message[] = []
-    let roomUsers: Pick<ChatUser["user"], "uuid" | "username">[] = []
+    let roomUsers: Pick<
+        ChatUser["user"],
+        "uuid" | "username" | "avatarUrl"
+    >[] = []
     let myUuid: User["uuid"] | null = null
     let msg: string = ""
 
@@ -138,7 +137,7 @@
         users,
     }: {
         room: Language["englishName"]
-        users: Pick<ChatUser["user"], "username" | "uuid">[]
+        users: Pick<ChatUser["user"], "username" | "uuid" | "avatarUrl">[]
     }): void {
         if (recvRoom !== $room) {
             return
@@ -184,33 +183,24 @@
             <h3 class="px-4 text-gray-bitdark text-sm font-bold mb-4">
                 Active Members
             </h3>
-            {#if $currentUser.fetching}
-                …
-            {:else if currentUserNode}
-                <ul class="users">
-                    {#each roomUsers as chatUser}
-                        {#if chatUser.uuid === currentUserNode.uuid}
-                            <li
-                                class="user"
-                                title={currentUserNode.username || "n/a"}
-                            >
-                                {#if currentUserNode.avatarUrl}
-                                    <img src={currentUserNode.avatarUrl} />
-                                {/if}
-                            </li>
-                        {:else if chatUser.username === ""}
-                            <li class="user" title="Everglot Bot" />
-                        {:else}
-                            <li
-                                class="user"
-                                title={chatUser.username || "n/a"}
-                            />
-                        {/if}
-                    {/each}
-                </ul>
-            {:else}
-                Failed to fetch users
-            {/if}
+            <ul class="users">
+                {#each roomUsers as chatUser}
+                    {#if chatUser.username === ""}
+                        <li class="user" title="Everglot Bot" />
+                    {:else}
+                        <li class="user" title={chatUser.username || "n/a"}>
+                            {#if chatUser.avatarUrl && chatUser.avatarUrl.startsWith("https://")}
+                                <img
+                                    src={chatUser.avatarUrl}
+                                    alt={`Avatar of ${
+                                        chatUser.username || "n/a"
+                                    }`}
+                                />
+                            {/if}
+                        </li>
+                    {/if}
+                {/each}
+            </ul>
         </div>
         <div
             class="toggles py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4"

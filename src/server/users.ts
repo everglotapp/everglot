@@ -7,7 +7,7 @@ const socketHistories: Record<string, SocketHistory> = {}
 
 export type ChatUser = {
     socketId: string
-    user: Pick<User, "id" | "username" | "uuid">
+    user: Pick<User, "id" | "username" | "uuid" | "avatarUrl">
     room: Language["englishName"]
 }
 
@@ -16,7 +16,7 @@ const users: ChatUser[] = []
 // Join user to chat
 export function userJoin(
     socketId: string,
-    user: Pick<User, "id" | "username" | "uuid">,
+    user: Pick<User, "id" | "username" | "uuid" | "avatarUrl">,
     room: Language["englishName"]
 ) {
     const chatUser = { socketId, user, room }
@@ -45,9 +45,10 @@ export function userLeave(socketId: string) {
 export function getRoomUsers(room: Language["englishName"]) {
     return users
         .filter((user) => user.room === room)
-        .map(({ user: { uuid, username } }) => ({
+        .map(({ user: { uuid, username, avatarUrl } }) => ({
             uuid,
             username,
+            avatarUrl,
         }))
 }
 

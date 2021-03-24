@@ -166,8 +166,19 @@
                         class="nav-item-with-icon justify-center"
                     >
                         <div class="avatar">
-                            {#if !$currentUser.fetching && currentUserNode.avatarUrl}
-                                <img src={currentUserNode.avatarUrl} />
+                            {#if !$currentUser.fetching}
+                                {#if currentUserNode?.avatarUrl && (currentUserNode?.avatarUrl || "").startsWith("https://")}
+                                    <img
+                                        src={currentUserNode?.avatarUrl || ""}
+                                        alt={`Avatar of ${currentUserNode?.username}`}
+                                    />
+                                {:else}
+                                    <span class="initial"
+                                        >{currentUserNode?.username?.charAt(
+                                            0
+                                        )}</span
+                                    >
+                                {/if}
                             {/if}
                         </div></a
                     >
@@ -263,5 +274,12 @@
 
         @apply bg-gray-light;
         @apply overflow-hidden;
+        @apply flex;
+        @apply justify-center;
+        @apply items-center;
+    }
+
+    .avatar > .initial {
+        height: 1.625rem;
     }
 </style>

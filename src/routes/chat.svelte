@@ -194,7 +194,7 @@
                         <li class="user" title="Everglot Bot" />
                     {:else}
                         <li class="user" title={chatUser.username}>
-                            {#if false && (chatUser.avatarUrl || "").startsWith("https://")}
+                            {#if (chatUser.avatarUrl || "").startsWith("https://")}
                                 <img
                                     src={chatUser.avatarUrl || ""}
                                     alt={`Avatar of ${chatUser.username}`}
@@ -438,13 +438,13 @@
         @apply bg-gray-light;
         @apply shadow-sm;
         @apply overflow-hidden;
-        @apply inline-flex;
+        @apply flex;
         @apply justify-center;
         @apply items-center;
     }
 
     .user > .initial {
-        height: 1.75rem;
+        height: 1.625rem;
     }
 
     .toggle-row {

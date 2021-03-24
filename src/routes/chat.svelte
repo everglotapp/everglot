@@ -3,15 +3,21 @@
     import { onMount, onDestroy } from "svelte"
     import { scale, slide } from "svelte/transition"
 
+    import { currentUser } from "../stores"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
-    import { ChevronsRightIcon } from "svelte-feather-icons"
 
     import type { ChatUser } from "../server/users"
     import type { Language, User } from "../types/generated/graphql"
     import type { Message } from "../server/messages"
 
+    import { query } from "@urql/svelte"
+    import { ChevronsRightIcon } from "svelte-feather-icons"
+
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
+
+    query(currentUser)
+    $: currentUserNode = $currentUser.data?.users.nodes[0]
 
     let socket: SocketIO.Socket | null = null
 
@@ -179,15 +185,33 @@
             <h3 class="px-4 text-gray-bitdark text-sm font-bold mb-4">
                 Active Members
             </h3>
-            <ul class="users">
-                {#each roomUsers as chatUser}
-                    {#if chatUser.username === ""}
-                        <li class="user" title="Everglot Bot" />
-                    {:else}
-                        <li class="user" title={chatUser.username || "n/a"} />
-                    {/if}
-                {/each}
-            </ul>
+            {#if $currentUser.fetching}
+                …
+            {:else if currentUserNode}
+                <ul class="users">
+                    {#each roomUsers as chatUser}
+                        {#if chatUser.uuid === currentUserNode.uuid}
+                            <li
+                                class="user"
+                                title={currentUserNode.username || "n/a"}
+                            >
+                                {#if currentUserNode.avatarUrl}
+                                    <img src={currentUserNode.avatarUrl} />
+                                {/if}
+                            </li>
+                        {:else if chatUser.username === ""}
+                            <li class="user" title="Everglot Bot" />
+                        {:else}
+                            <li
+                                class="user"
+                                title={chatUser.username || "n/a"}
+                            />
+                        {/if}
+                    {/each}
+                </ul>
+            {:else}
+                Failed to fetch users
+            {/if}
         </div>
         <div
             class="toggles py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4"
@@ -417,6 +441,7 @@
 
         @apply bg-gray-light;
         @apply shadow-sm;
+        @apply overflow-hidden;
     }
 
     .toggle-row {

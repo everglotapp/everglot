@@ -9,7 +9,10 @@ export const room = writable<string>("")
 
 export const currentUser = operationStore<{
     users: {
-        nodes: Pick<User, "bio" | "email" | "gender" | "username" | "uuid">[]
+        nodes: Pick<
+            User,
+            "bio" | "email" | "gender" | "username" | "uuid" | "avatarUrl"
+        >[]
     }
 }>(CurrentUser)
 

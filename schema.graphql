@@ -17,6 +17,64 @@ type Query implements Node {
     nodeId: ID!
   ): Node
 
+  """Reads and enables pagination through a set of `GroupUser`."""
+  groupUsers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupUserCondition
+  ): GroupUsersConnection
+
+  """Reads and enables pagination through a set of `Group`."""
+  groups(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupCondition
+  ): GroupsConnection
+
   """Reads and enables pagination through a set of `LanguageSkillLevel`."""
   languageSkillLevels(
     """Only read the first `n` values of the set."""
@@ -161,6 +219,8 @@ type Query implements Node {
     """
     condition: UserCondition
   ): UsersConnection
+  groupUser(id: Int!): GroupUser
+  group(id: Int!): Group
   languageSkillLevel(id: Int!): LanguageSkillLevel
   language(id: Int!): Language
   languageByAlpha2(alpha2: String!): Language
@@ -171,6 +231,18 @@ type Query implements Node {
   userByEmail(email: String!): User
   userByUuid(uuid: UUID!): User
   currentUserId: Int
+
+  """Reads a single `GroupUser` using its globally unique `ID`."""
+  groupUserByNodeId(
+    """The globally unique `ID` to be used in selecting a single `GroupUser`."""
+    nodeId: ID!
+  ): GroupUser
+
+  """Reads a single `Group` using its globally unique `ID`."""
+  groupByNodeId(
+    """The globally unique `ID` to be used in selecting a single `Group`."""
+    nodeId: ID!
+  ): Group
 
   """Reads a single `LanguageSkillLevel` using its globally unique `ID`."""
   languageSkillLevelByNodeId(
@@ -217,102 +289,39 @@ interface Node {
   nodeId: ID!
 }
 
-"""A connection to a list of `LanguageSkillLevel` values."""
-type LanguageSkillLevelsConnection {
-  """A list of `LanguageSkillLevel` objects."""
-  nodes: [LanguageSkillLevel]!
+"""A connection to a list of `GroupUser` values."""
+type GroupUsersConnection {
+  """A list of `GroupUser` objects."""
+  nodes: [GroupUser]!
 
   """
-  A list of edges which contains the `LanguageSkillLevel` and cursor to aid in pagination.
+  A list of edges which contains the `GroupUser` and cursor to aid in pagination.
   """
-  edges: [LanguageSkillLevelsEdge!]!
+  edges: [GroupUsersEdge!]!
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  """
-  The count of *all* `LanguageSkillLevel` you could get from the connection.
-  """
+  """The count of *all* `GroupUser` you could get from the connection."""
   totalCount: Int!
 }
 
-type LanguageSkillLevel implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  name: String
-
-  """Reads and enables pagination through a set of `UserLanguage`."""
-  userLanguages(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `UserLanguage`."""
-    orderBy: [UserLanguagesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: UserLanguageCondition
-  ): UserLanguagesConnection!
-}
-
-"""A connection to a list of `UserLanguage` values."""
-type UserLanguagesConnection {
-  """A list of `UserLanguage` objects."""
-  nodes: [UserLanguage]!
-
-  """
-  A list of edges which contains the `UserLanguage` and cursor to aid in pagination.
-  """
-  edges: [UserLanguagesEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `UserLanguage` you could get from the connection."""
-  totalCount: Int!
-}
-
-type UserLanguage implements Node {
+type GroupUser implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
   nodeId: ID!
   id: Int!
   userId: Int!
-  languageId: Int!
-  languageSkillLevelId: Int
-  native: Boolean!
-  createdAt: Datetime!
+  groupId: Int!
+  joinedOn: Datetime!
+  lastActive: Datetime
 
-  """Reads a single `User` that is related to this `UserLanguage`."""
+  """Reads a single `User` that is related to this `GroupUser`."""
   user: User
 
-  """Reads a single `Language` that is related to this `UserLanguage`."""
-  language: Language
-
-  """
-  Reads a single `LanguageSkillLevel` that is related to this `UserLanguage`.
-  """
-  languageSkillLevel: LanguageSkillLevel
+  """Reads a single `Group` that is related to this `GroupUser`."""
+  group: Group
 }
 
 """
@@ -371,6 +380,35 @@ type User implements Node {
     """
     condition: UserLanguageCondition
   ): UserLanguagesConnection!
+
+  """Reads and enables pagination through a set of `GroupUser`."""
+  groupUsers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupUserCondition
+  ): GroupUsersConnection!
 }
 
 """
@@ -447,6 +485,35 @@ type Language implements Node {
     """
     condition: UserLanguageCondition
   ): UserLanguagesConnection!
+
+  """Reads and enables pagination through a set of `Group`."""
+  groups(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupCondition
+  ): GroupsConnection!
 }
 
 """A connection to a list of `User` values."""
@@ -570,6 +637,114 @@ input UserCondition {
   googleId: String
 }
 
+"""A connection to a list of `UserLanguage` values."""
+type UserLanguagesConnection {
+  """A list of `UserLanguage` objects."""
+  nodes: [UserLanguage]!
+
+  """
+  A list of edges which contains the `UserLanguage` and cursor to aid in pagination.
+  """
+  edges: [UserLanguagesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `UserLanguage` you could get from the connection."""
+  totalCount: Int!
+}
+
+type UserLanguage implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  userId: Int!
+  languageId: Int!
+  languageSkillLevelId: Int
+  native: Boolean!
+  createdAt: Datetime!
+
+  """Reads a single `User` that is related to this `UserLanguage`."""
+  user: User
+
+  """Reads a single `Language` that is related to this `UserLanguage`."""
+  language: Language
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `UserLanguage`.
+  """
+  languageSkillLevel: LanguageSkillLevel
+}
+
+type LanguageSkillLevel implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  name: String
+
+  """Reads and enables pagination through a set of `UserLanguage`."""
+  userLanguages(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `UserLanguage`."""
+    orderBy: [UserLanguagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserLanguageCondition
+  ): UserLanguagesConnection!
+
+  """Reads and enables pagination through a set of `Group`."""
+  groups(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupCondition
+  ): GroupsConnection!
+}
+
 """Methods to use when ordering `UserLanguage`."""
 enum UserLanguagesOrderBy {
   NATURAL
@@ -613,6 +788,154 @@ input UserLanguageCondition {
   createdAt: Datetime
 }
 
+"""A connection to a list of `Group` values."""
+type GroupsConnection {
+  """A list of `Group` objects."""
+  nodes: [Group]!
+
+  """
+  A list of edges which contains the `Group` and cursor to aid in pagination.
+  """
+  edges: [GroupsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Group` you could get from the connection."""
+  totalCount: Int!
+}
+
+type Group implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  groupName: String
+  languageId: Int!
+  languageSkillLevelId: Int!
+  createdAt: Datetime!
+
+  """Reads a single `Language` that is related to this `Group`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Group`."""
+  languageSkillLevel: LanguageSkillLevel
+
+  """Reads and enables pagination through a set of `GroupUser`."""
+  groupUsers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupUserCondition
+  ): GroupUsersConnection!
+}
+
+"""Methods to use when ordering `GroupUser`."""
+enum GroupUsersOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  GROUP_ID_ASC
+  GROUP_ID_DESC
+  JOINED_ON_ASC
+  JOINED_ON_DESC
+  LAST_ACTIVE_ASC
+  LAST_ACTIVE_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `GroupUser` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input GroupUserCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `groupId` field."""
+  groupId: Int
+
+  """Checks for equality with the object’s `joinedOn` field."""
+  joinedOn: Datetime
+
+  """Checks for equality with the object’s `lastActive` field."""
+  lastActive: Datetime
+}
+
+"""A `Group` edge in the connection."""
+type GroupsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Group` at the end of the edge."""
+  node: Group
+}
+
+"""Methods to use when ordering `Group`."""
+enum GroupsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  GROUP_NAME_ASC
+  GROUP_NAME_DESC
+  LANGUAGE_ID_ASC
+  LANGUAGE_ID_DESC
+  LANGUAGE_SKILL_LEVEL_ID_ASC
+  LANGUAGE_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Group` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input GroupCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `groupName` field."""
+  groupName: String
+
+  """Checks for equality with the object’s `languageId` field."""
+  languageId: Int
+
+  """Checks for equality with the object’s `languageSkillLevelId` field."""
+  languageSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
 """A `UserLanguage` edge in the connection."""
 type UserLanguagesEdge {
   """A cursor for use in pagination."""
@@ -620,6 +943,34 @@ type UserLanguagesEdge {
 
   """The `UserLanguage` at the end of the edge."""
   node: UserLanguage
+}
+
+"""A `GroupUser` edge in the connection."""
+type GroupUsersEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GroupUser` at the end of the edge."""
+  node: GroupUser
+}
+
+"""A connection to a list of `LanguageSkillLevel` values."""
+type LanguageSkillLevelsConnection {
+  """A list of `LanguageSkillLevel` objects."""
+  nodes: [LanguageSkillLevel]!
+
+  """
+  A list of edges which contains the `LanguageSkillLevel` and cursor to aid in pagination.
+  """
+  edges: [LanguageSkillLevelsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `LanguageSkillLevel` you could get from the connection.
+  """
+  totalCount: Int!
 }
 
 """A `LanguageSkillLevel` edge in the connection."""
@@ -786,6 +1137,22 @@ input UserSessionCondition {
 The root mutation type which contains root level fields which mutate data.
 """
 type Mutation {
+  """Creates a single `GroupUser`."""
+  createGroupUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGroupUserInput!
+  ): CreateGroupUserPayload
+
+  """Creates a single `Group`."""
+  createGroup(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGroupInput!
+  ): CreateGroupPayload
+
   """Creates a single `LanguageSkillLevel`."""
   createLanguageSkillLevel(
     """
@@ -825,6 +1192,38 @@ type Mutation {
     """
     input: CreateUserInput!
   ): CreateUserPayload
+
+  """Updates a single `GroupUser` using its globally unique id and a patch."""
+  updateGroupUserByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGroupUserByNodeIdInput!
+  ): UpdateGroupUserPayload
+
+  """Updates a single `GroupUser` using a unique key and a patch."""
+  updateGroupUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGroupUserInput!
+  ): UpdateGroupUserPayload
+
+  """Updates a single `Group` using its globally unique id and a patch."""
+  updateGroupByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGroupByNodeIdInput!
+  ): UpdateGroupPayload
+
+  """Updates a single `Group` using a unique key and a patch."""
+  updateGroup(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGroupInput!
+  ): UpdateGroupPayload
 
   """
   Updates a single `LanguageSkillLevel` using its globally unique id and a patch.
@@ -944,6 +1343,38 @@ type Mutation {
     input: UpdateUserByUuidInput!
   ): UpdateUserPayload
 
+  """Deletes a single `GroupUser` using its globally unique id."""
+  deleteGroupUserByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGroupUserByNodeIdInput!
+  ): DeleteGroupUserPayload
+
+  """Deletes a single `GroupUser` using a unique key."""
+  deleteGroupUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGroupUserInput!
+  ): DeleteGroupUserPayload
+
+  """Deletes a single `Group` using its globally unique id."""
+  deleteGroupByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGroupByNodeIdInput!
+  ): DeleteGroupPayload
+
+  """Deletes a single `Group` using a unique key."""
+  deleteGroup(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGroupInput!
+  ): DeleteGroupPayload
+
   """Deletes a single `LanguageSkillLevel` using its globally unique id."""
   deleteLanguageSkillLevelByNodeId(
     """
@@ -1055,6 +1486,106 @@ type Mutation {
     """
     input: DeleteUserByUuidInput!
   ): DeleteUserPayload
+}
+
+"""The output of our create `GroupUser` mutation."""
+type CreateGroupUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GroupUser` that was created by this mutation."""
+  groupUser: GroupUser
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `GroupUser`."""
+  user: User
+
+  """Reads a single `Group` that is related to this `GroupUser`."""
+  group: Group
+
+  """An edge for our `GroupUser`. May be used by Relay 1."""
+  groupUserEdge(
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupUsersEdge
+}
+
+"""All input for the create `GroupUser` mutation."""
+input CreateGroupUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `GroupUser` to be created by this mutation."""
+  groupUser: GroupUserInput!
+}
+
+"""An input for mutations affecting `GroupUser`"""
+input GroupUserInput {
+  id: Int
+  userId: Int
+  groupId: Int
+  joinedOn: Datetime
+  lastActive: Datetime
+}
+
+"""The output of our create `Group` mutation."""
+type CreateGroupPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Group` that was created by this mutation."""
+  group: Group
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Language` that is related to this `Group`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Group`."""
+  languageSkillLevel: LanguageSkillLevel
+
+  """An edge for our `Group`. May be used by Relay 1."""
+  groupEdge(
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupsEdge
+}
+
+"""All input for the create `Group` mutation."""
+input CreateGroupInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Group` to be created by this mutation."""
+  group: GroupInput!
+}
+
+"""An input for mutations affecting `Group`"""
+input GroupInput {
+  id: Int
+  groupName: String
+  languageId: Int
+  languageSkillLevelId: Int
+  createdAt: Datetime
 }
 
 """The output of our create `LanguageSkillLevel` mutation."""
@@ -1294,6 +1825,154 @@ input UserInput {
   avatarUrl: String
   locale: Int
   googleId: String
+}
+
+"""The output of our update `GroupUser` mutation."""
+type UpdateGroupUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GroupUser` that was updated by this mutation."""
+  groupUser: GroupUser
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `GroupUser`."""
+  user: User
+
+  """Reads a single `Group` that is related to this `GroupUser`."""
+  group: Group
+
+  """An edge for our `GroupUser`. May be used by Relay 1."""
+  groupUserEdge(
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupUsersEdge
+}
+
+"""All input for the `updateGroupUserByNodeId` mutation."""
+input UpdateGroupUserByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `GroupUser` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `GroupUser` being updated.
+  """
+  patch: GroupUserPatch!
+}
+
+"""
+Represents an update to a `GroupUser`. Fields that are set will be updated.
+"""
+input GroupUserPatch {
+  id: Int
+  userId: Int
+  groupId: Int
+  joinedOn: Datetime
+  lastActive: Datetime
+}
+
+"""All input for the `updateGroupUser` mutation."""
+input UpdateGroupUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `GroupUser` being updated.
+  """
+  patch: GroupUserPatch!
+  id: Int!
+}
+
+"""The output of our update `Group` mutation."""
+type UpdateGroupPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Group` that was updated by this mutation."""
+  group: Group
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Language` that is related to this `Group`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Group`."""
+  languageSkillLevel: LanguageSkillLevel
+
+  """An edge for our `Group`. May be used by Relay 1."""
+  groupEdge(
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupsEdge
+}
+
+"""All input for the `updateGroupByNodeId` mutation."""
+input UpdateGroupByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Group` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Group` being updated.
+  """
+  patch: GroupPatch!
+}
+
+"""
+Represents an update to a `Group`. Fields that are set will be updated.
+"""
+input GroupPatch {
+  id: Int
+  groupName: String
+  languageId: Int
+  languageSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateGroup` mutation."""
+input UpdateGroupInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Group` being updated.
+  """
+  patch: GroupPatch!
+  id: Int!
 }
 
 """The output of our update `LanguageSkillLevel` mutation."""
@@ -1713,6 +2392,114 @@ input UpdateUserByUuidInput {
   """
   patch: UserPatch!
   uuid: UUID!
+}
+
+"""The output of our delete `GroupUser` mutation."""
+type DeleteGroupUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GroupUser` that was deleted by this mutation."""
+  groupUser: GroupUser
+  deletedGroupUserNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `GroupUser`."""
+  user: User
+
+  """Reads a single `Group` that is related to this `GroupUser`."""
+  group: Group
+
+  """An edge for our `GroupUser`. May be used by Relay 1."""
+  groupUserEdge(
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupUsersEdge
+}
+
+"""All input for the `deleteGroupUserByNodeId` mutation."""
+input DeleteGroupUserByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `GroupUser` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteGroupUser` mutation."""
+input DeleteGroupUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""The output of our delete `Group` mutation."""
+type DeleteGroupPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Group` that was deleted by this mutation."""
+  group: Group
+  deletedGroupNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Language` that is related to this `Group`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Group`."""
+  languageSkillLevel: LanguageSkillLevel
+
+  """An edge for our `Group`. May be used by Relay 1."""
+  groupEdge(
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupsEdge
+}
+
+"""All input for the `deleteGroupByNodeId` mutation."""
+input DeleteGroupByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Group` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteGroup` mutation."""
+input DeleteGroupInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
 }
 
 """The output of our delete `LanguageSkillLevel` mutation."""

@@ -197,13 +197,13 @@
                     {:else}
                         <li class="user" title={chatUser.username}>
                             {#if showBioUuid !== null && showBioUuid === chatUser.uuid}
-                                <div class="relative">
+                                <div class="relative" in:scale out:scale>
                                     <div
                                         class="absolute"
                                         style="left: calc(100% + 4px);"
                                     >
                                         <div
-                                            class="fixed bg-white px-3 py-1 shadow-md min-w-sm"
+                                            class="fixed bg-white px-3 py-1 shadow-md min-w-sm rounded-md"
                                             style="z-index: 1;"
                                         >
                                             <Bio uuid={chatUser.uuid} />

@@ -1,0 +1,15 @@
+query ChatUsers {
+  chatUsers {
+    edges {
+      node {
+        username
+        uuid
+        bio
+        avatarUrl
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

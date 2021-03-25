@@ -3,6 +3,7 @@
     import { scale, slide } from "svelte/transition"
 
     import { room } from "../stores"
+    import Bio from "../comp/users/Bio.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
 
     import type { ChatUser } from "../server/users"
@@ -23,6 +24,7 @@
     > & { username: string })[] = []
     let myUuid: User["uuid"] | null = null
     let msg: string = ""
+    let showBioUuid: User["uuid"] | null = null
 
     // TODO: Check if user is signed in, if not redirect to sign in.
     function subscribe(): void {
@@ -194,16 +196,44 @@
                         <li class="user" title="Everglot Bot" />
                     {:else}
                         <li class="user" title={chatUser.username}>
-                            {#if (chatUser.avatarUrl || "").startsWith("https://")}
-                                <img
-                                    src={chatUser.avatarUrl || ""}
-                                    alt={`Avatar of ${chatUser.username}`}
-                                />
-                            {:else}
-                                <span class="initial"
-                                    >{chatUser.username.charAt(0)}</span
-                                >
+                            {#if showBioUuid !== null && showBioUuid === chatUser.uuid}
+                                <div class="relative">
+                                    <div
+                                        class="absolute"
+                                        style="left: calc(100% + 4px);"
+                                    >
+                                        <div
+                                            class="fixed bg-white px-3 py-1 shadow-md min-w-sm"
+                                            style="z-index: 1;"
+                                        >
+                                            <Bio uuid={chatUser.uuid} />
+                                        </div>
+                                    </div>
+                                </div>
                             {/if}
+                            <div class="avatar">
+                                {#if (chatUser.avatarUrl || "").startsWith("https://")}
+                                    <img
+                                        src={chatUser.avatarUrl || ""}
+                                        alt={`Avatar of ${chatUser.username}`}
+                                        on:click={() =>
+                                            (showBioUuid =
+                                                showBioUuid === chatUser.uuid
+                                                    ? null
+                                                    : chatUser.uuid)}
+                                    />
+                                {:else}
+                                    <span
+                                        class="initial"
+                                        on:click={() =>
+                                            (showBioUuid =
+                                                showBioUuid === chatUser.uuid
+                                                    ? null
+                                                    : chatUser.uuid)}
+                                        >{chatUser.username.charAt(0)}</span
+                                    >
+                                {/if}
+                            </div>
                         </li>
                     {/if}
                 {/each}
@@ -430,20 +460,26 @@
         @apply gap-2;
     }
 
-    .user {
-        border-radius: 50%;
+    .avatar {
         width: 50px;
         height: 50px;
+        border-radius: 50%;
 
-        @apply bg-gray-light;
-        @apply shadow-sm;
-        @apply overflow-hidden;
         @apply flex;
         @apply justify-center;
         @apply items-center;
+        @apply bg-gray-light;
+        @apply shadow-sm;
+        @apply cursor-pointer;
+        @apply overflow-hidden;
     }
 
-    .user > .initial {
+    .avatar > img {
+        width: 50px;
+        max-height: 50px;
+    }
+
+    .avatar > .initial {
         height: 1.625rem;
     }
 

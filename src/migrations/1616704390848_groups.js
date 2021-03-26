@@ -10,6 +10,11 @@ exports.up = pgm => {
             notNull: false,
             default: "",
         },
+        global: {
+            type: "boolean",
+            notNull: true,
+            default: false,
+        },
         language_id: {
             type: "serial",
             references: { schema: "app_public", name: "languages" },

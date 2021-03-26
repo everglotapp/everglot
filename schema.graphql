@@ -314,6 +314,7 @@ type GroupUser implements Node {
   id: Int!
   userId: Int!
   groupId: Int!
+  userType: UserType!
   joinedOn: Datetime!
   lastActive: Datetime
 
@@ -322,6 +323,12 @@ type GroupUser implements Node {
 
   """Reads a single `Group` that is related to this `GroupUser`."""
   group: Group
+}
+
+enum UserType {
+  LEARNER
+  NATIVE
+  GLOBAL
 }
 
 """
@@ -812,6 +819,7 @@ type Group implements Node {
   nodeId: ID!
   id: Int!
   groupName: String
+  global: Boolean!
   languageId: Int!
   languageSkillLevelId: Int!
   createdAt: Datetime!
@@ -861,6 +869,8 @@ enum GroupUsersOrderBy {
   USER_ID_DESC
   GROUP_ID_ASC
   GROUP_ID_DESC
+  USER_TYPE_ASC
+  USER_TYPE_DESC
   JOINED_ON_ASC
   JOINED_ON_DESC
   LAST_ACTIVE_ASC
@@ -882,6 +892,9 @@ input GroupUserCondition {
 
   """Checks for equality with the object’s `groupId` field."""
   groupId: Int
+
+  """Checks for equality with the object’s `userType` field."""
+  userType: UserType
 
   """Checks for equality with the object’s `joinedOn` field."""
   joinedOn: Datetime
@@ -906,6 +919,8 @@ enum GroupsOrderBy {
   ID_DESC
   GROUP_NAME_ASC
   GROUP_NAME_DESC
+  GLOBAL_ASC
+  GLOBAL_DESC
   LANGUAGE_ID_ASC
   LANGUAGE_ID_DESC
   LANGUAGE_SKILL_LEVEL_ID_ASC
@@ -925,6 +940,9 @@ input GroupCondition {
 
   """Checks for equality with the object’s `groupName` field."""
   groupName: String
+
+  """Checks for equality with the object’s `global` field."""
+  global: Boolean
 
   """Checks for equality with the object’s `languageId` field."""
   languageId: Int
@@ -1534,6 +1552,7 @@ input GroupUserInput {
   id: Int
   userId: Int
   groupId: Int
+  userType: UserType!
   joinedOn: Datetime
   lastActive: Datetime
 }
@@ -1583,6 +1602,7 @@ input CreateGroupInput {
 input GroupInput {
   id: Int
   groupName: String
+  global: Boolean
   languageId: Int
   languageSkillLevelId: Int
   createdAt: Datetime
@@ -1882,6 +1902,7 @@ input GroupUserPatch {
   id: Int
   userId: Int
   groupId: Int
+  userType: UserType
   joinedOn: Datetime
   lastActive: Datetime
 }
@@ -1955,6 +1976,7 @@ Represents an update to a `Group`. Fields that are set will be updated.
 input GroupPatch {
   id: Int
   groupName: String
+  global: Boolean
   languageId: Int
   languageSkillLevelId: Int
   createdAt: Datetime

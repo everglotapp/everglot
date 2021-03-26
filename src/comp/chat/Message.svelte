@@ -14,7 +14,7 @@
 
     query(chatUsers)
 
-    export let username = ""
+    export let uuid: string = ""
     export let userUuid: string | null = null
     export let time = ""
     export let text = ""
@@ -27,7 +27,7 @@
         user =
             (userUuid && userUuid.length
                 ? chatUsers.data.chatUsers.nodes.find(
-                      ({ uuid }) => uuid === userUuid
+                      (u) => u.uuid === userUuid
                   ) || null
                 : null) || null
     }
@@ -43,7 +43,7 @@
 >
     <div class="author">
         {#if userUuid}
-            <span class="username">{username}</span>
+            <span class="username">{user ? user.username : "…"}</span>
         {:else}
             <span class="username">Everglot<br /> Bot</span>
         {/if}
@@ -62,7 +62,7 @@
             />
             {#if showBio}
                 <ClickAwayListener
-                    elementId="message-user-bio"
+                    elementId={`message-${uuid}-bio`}
                     on:clickaway={() => (showBio = false)}
                 />
                 <EscapeKeyListener on:keydown={() => (showBio = false)} />
@@ -75,7 +75,7 @@
                 >
                     <div class="absolute" style="left: 4px;">
                         <div
-                            id="message-user-bio"
+                            id={`message-${uuid}-bio`}
                             class="fixed bg-white shadow-lg rounded-md"
                             style="z-index: 1; min-width: 240px;"
                         >

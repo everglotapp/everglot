@@ -22,7 +22,7 @@
 
     let socket: SocketIO.Socket | null = null
 
-    let roomMessages: ChatMessage[] = []
+    let messages: ChatMessage[] = []
     let users: (Pick<ChatUser["user"], "uuid" | "username" | "avatarUrl"> & {
         username: string
     })[] = []
@@ -177,7 +177,7 @@
 
             setTimeout(() => scrollToBottom(container, force), 150)
         })
-        roomMessages = [...roomMessages, message]
+        messages = [...messages, message]
     }
 
     let split = true
@@ -385,9 +385,9 @@
                     <div class="view view-right rounded-tr-md">
                         <div class="view-inner view-right-inner">
                             <div class="messages">
-                                {#each roomMessages as message}
+                                {#each messages as message (message.uuid)}
                                     <Message
-                                        username={message.username}
+                                        uuid={message.uuid}
                                         userUuid={message.userUuid}
                                         time={message.time}
                                         text={message.text}

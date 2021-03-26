@@ -455,8 +455,9 @@
         @apply grid;
         @apply grid-cols-4;
         @apply grid-rows-3;
-        @apply grid-flow-row;
+        @apply grid-flow-col;
         @apply gap-2;
+        @apply overflow-x-scroll;
     }
 
     .toggle-row {

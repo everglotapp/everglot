@@ -5,6 +5,8 @@
     import { LogOutIcon } from "svelte-feather-icons"
     import { query } from "@urql/svelte"
 
+    import Avatar from "../users/Avatar.svelte"
+
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
@@ -206,25 +208,18 @@
                         }}
                         class="nav-item-with-icon justify-center cursor-pointer"
                     >
-                        <div class="avatar">
-                            {#if !$currentUser.fetching}
-                                {#if currentUserNode?.avatarUrl && (currentUserNode?.avatarUrl || "").startsWith("https://")}
-                                    <img
-                                        src={currentUserNode?.avatarUrl || ""}
-                                        alt={currentUserNode?.username?.charAt(
-                                            0
-                                        )}
-                                        aria-label={`Avatar of ${currentUserNode?.username}`}
-                                    />
-                                {:else}
-                                    <span class="initial"
-                                        >{currentUserNode?.username?.charAt(
-                                            0
-                                        )}</span
-                                    >
-                                {/if}
-                            {/if}
-                        </div></button
+                        {#if !$currentUser.fetching}
+                            <Avatar
+                                url={currentUserNode?.avatarUrl || ""}
+                                username={currentUserNode?.username || ""}
+                                size={42}
+                            />
+                        {:else}
+                            <div
+                                class="bg-gray-lightest"
+                                style="border-radius: 50%; width: 50px; height: 50px;"
+                            />
+                        {/if}</button
                     >
                 </div>
             </div>

@@ -3,6 +3,7 @@
     import { scale, slide } from "svelte/transition"
 
     import { room } from "../stores"
+    import Bio from "../comp/users/Bio.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
 
     import type { ChatUser } from "../server/users"
@@ -17,12 +18,12 @@
     let socket: SocketIO.Socket | null = null
 
     let roomMessages: Message[] = []
-    let roomUsers: (Pick<
-        ChatUser["user"],
-        "uuid" | "username" | "avatarUrl"
-    > & { username: string })[] = []
+    let users: (Pick<ChatUser["user"], "uuid" | "username" | "avatarUrl"> & {
+        username: string
+    })[] = []
     let myUuid: User["uuid"] | null = null
     let msg: string = ""
+    let showBioUuid: User["uuid"] | null = null
 
     // TODO: Check if user is signed in, if not redirect to sign in.
     function subscribe(): void {
@@ -53,6 +54,10 @@
 
     // TODO: Read user data from database.
     onMount(() => {
+        if (typeof document !== "undefined") {
+            document.addEventListener("click", handleDocumentClick)
+            document.addEventListener("keydown", handleDocumentKeydown)
+        }
         socket = io()
         if (!socket) {
             return
@@ -61,6 +66,10 @@
     })
 
     onDestroy(() => {
+        if (typeof document !== "undefined") {
+            document.removeEventListener("click", handleDocumentClick)
+            document.removeEventListener("keydown", handleDocumentKeydown)
+        }
         if (!socket) {
             return
         }
@@ -70,7 +79,11 @@
     })
 
     const getChatMessageContainers = () =>
-        Array.from(document.getElementsByClassName("messages"))
+        Array.from(
+            typeof document === "undefined"
+                ? []
+                : document.getElementsByClassName("messages")
+        )
 
     function scrollToBottom(container: Element, force: boolean = false): void {
         if (!isScrolledToBottom(container) && !force) {
@@ -134,7 +147,7 @@
      */
     function onRoomUsers({
         room: recvRoom,
-        users,
+        users: recvUsers,
     }: {
         room: Language["englishName"]
         users: Pick<ChatUser["user"], "username" | "uuid" | "avatarUrl">[]
@@ -142,8 +155,8 @@
         if (recvRoom !== $room) {
             return
         }
-        roomUsers = [
-            ...users.map((user) => ({
+        users = [
+            ...recvUsers.map((user) => ({
                 ...user,
                 username: user.username!,
             })),
@@ -174,6 +187,40 @@
     function toggleSplit() {
         split = !split
     }
+
+    function handleDocumentClick(event: MouseEvent) {
+        if (showBioUuid === null) {
+            // Not showing bio, so we don't care
+            return
+        }
+        const bio = document.getElementById("bio")
+        if (!bio || event.composedPath().includes(bio)) {
+            // Bio doesn't exist or user clicked inside bio
+            return
+        }
+        // Close bio
+        showBioUuid = null
+    }
+
+    function handleDocumentKeydown(event: KeyboardEvent) {
+        if (showBioUuid === null) {
+            // Not showing bio, so we don't care
+            return
+        }
+        event = event || window.event
+        if (!event) {
+            return
+        }
+        let isEscape = false
+        if ("key" in event) {
+            isEscape = event.key === "Escape" || event.key === "Esc"
+        } else {
+            isEscape = (event as KeyboardEvent).keyCode === 27
+        }
+        if (isEscape) {
+            showBioUuid = null
+        }
+    }
 </script>
 
 <svelte:head>
@@ -189,21 +236,66 @@
                 Active Members
             </h3>
             <ul class="users">
-                {#each roomUsers as chatUser}
-                    {#if chatUser.username === ""}
+                {#each users as user}
+                    {#if user.username === ""}
                         <li class="user" title="Everglot Bot" />
                     {:else}
-                        <li class="user" title={chatUser.username}>
-                            {#if (chatUser.avatarUrl || "").startsWith("https://")}
-                                <img
-                                    src={chatUser.avatarUrl || ""}
-                                    alt={`Avatar of ${chatUser.username}`}
-                                />
-                            {:else}
-                                <span class="initial"
-                                    >{chatUser.username.charAt(0)}</span
+                        <li
+                            class="user"
+                            title={user.username}
+                            aria-label={user.username}
+                        >
+                            {#if showBioUuid !== null && showBioUuid === user.uuid}
+                                <div
+                                    class="relative"
+                                    in:scale={{ duration: 200, delay: 0 }}
+                                    out:scale={{ duration: 200, delay: 0 }}
+                                    aria-label={`User Bio`}
                                 >
+                                    <div
+                                        class="absolute"
+                                        style="left: calc(100% + 4px);"
+                                    >
+                                        <div
+                                            id="bio"
+                                            class="fixed bg-white shadow-lg rounded-md"
+                                            style="z-index: 1; min-width: 240px;"
+                                        >
+                                            <Bio uuid={user.uuid} />
+                                        </div>
+                                    </div>
+                                </div>
                             {/if}
+                            <div
+                                class="avatar"
+                                on:click={(event) => {
+                                    event.stopPropagation()
+                                    showBioUuid =
+                                        showBioUuid === user.uuid
+                                            ? null
+                                            : user.uuid
+                                }}
+                                on:keydown={(event) => {
+                                    event.stopPropagation()
+                                    showBioUuid =
+                                        showBioUuid === user.uuid
+                                            ? null
+                                            : user.uuid
+                                }}
+                                tabindex="0"
+                            >
+                                {#if (user.avatarUrl || "").startsWith("https://")}
+                                    <img
+                                        src={user.avatarUrl || ""}
+                                        alt={user.username}
+                                        role="presentation"
+                                    />
+                                {:else}
+                                    <span class="initial" role="presentation"
+                                        >{user.username.charAt(0)}</span
+                                    >
+                                {/if}
+                            </div>
                         </li>
                     {/if}
                 {/each}
@@ -430,20 +522,26 @@
         @apply gap-2;
     }
 
-    .user {
-        border-radius: 50%;
+    .avatar {
         width: 50px;
         height: 50px;
+        border-radius: 50%;
 
-        @apply bg-gray-light;
-        @apply shadow-sm;
-        @apply overflow-hidden;
         @apply flex;
         @apply justify-center;
         @apply items-center;
+        @apply bg-gray-light;
+        @apply shadow-md;
+        @apply cursor-pointer;
+        @apply overflow-hidden;
     }
 
-    .user > .initial {
+    .avatar > img {
+        width: 50px;
+        max-height: 50px;
+    }
+
+    .avatar > .initial {
         height: 1.625rem;
     }
 

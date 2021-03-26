@@ -10,15 +10,15 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122). */
+  UUID: any;
+  /** A location in a connection that can be used for resuming pagination. */
+  Cursor: any;
   /**
    * A point in time as described by the [ISO
    * 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
    */
   Datetime: any;
-  /** A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122). */
-  UUID: any;
-  /** A location in a connection that can be used for resuming pagination. */
-  Cursor: any;
   /** A JavaScript object encoded in the JSON format as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
 };
@@ -35,6 +35,8 @@ export type Query = Node & {
   nodeId: Scalars['ID'];
   /** Fetches an object given its globally unique `ID`. */
   node?: Maybe<Node>;
+  /** Reads and enables pagination through a set of `ChatUser`. */
+  chatUsers?: Maybe<ChatUsersConnection>;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
   languageSkillLevels?: Maybe<LanguageSkillLevelsConnection>;
   /** Reads and enables pagination through a set of `Language`. */
@@ -71,6 +73,18 @@ export type Query = Node & {
 /** The root query type which gives access points into the data universe. */
 export type QueryNodeArgs = {
   nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChatUsersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<ChatUsersOrderBy>>;
+  condition?: Maybe<ChatUserCondition>;
 };
 
 
@@ -223,6 +237,79 @@ export type Node = {
   nodeId: Scalars['ID'];
 };
 
+/** A connection to a list of `ChatUser` values. */
+export type ChatUsersConnection = {
+  __typename?: 'ChatUsersConnection';
+  /** A list of `ChatUser` objects. */
+  nodes: Array<Maybe<ChatUser>>;
+  /** A list of edges which contains the `ChatUser` and cursor to aid in pagination. */
+  edges: Array<ChatUsersEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `ChatUser` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+export type ChatUser = {
+  __typename?: 'ChatUser';
+  username?: Maybe<Scalars['String']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  bio?: Maybe<Scalars['String']>;
+  avatarUrl?: Maybe<Scalars['String']>;
+};
+
+
+/** A `ChatUser` edge in the connection. */
+export type ChatUsersEdge = {
+  __typename?: 'ChatUsersEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `ChatUser` at the end of the edge. */
+  node?: Maybe<ChatUser>;
+};
+
+
+/** Information about pagination in a connection. */
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['Cursor']>;
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['Cursor']>;
+};
+
+/** Methods to use when ordering `ChatUser`. */
+export enum ChatUsersOrderBy {
+  Natural = 'NATURAL',
+  UsernameAsc = 'USERNAME_ASC',
+  UsernameDesc = 'USERNAME_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  BioAsc = 'BIO_ASC',
+  BioDesc = 'BIO_DESC',
+  AvatarUrlAsc = 'AVATAR_URL_ASC',
+  AvatarUrlDesc = 'AVATAR_URL_DESC'
+}
+
+/**
+ * A condition to be used against `ChatUser` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
+export type ChatUserCondition = {
+  /** Checks for equality with the object’s `username` field. */
+  username?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `bio` field. */
+  bio?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `avatarUrl` field. */
+  avatarUrl?: Maybe<Scalars['String']>;
+};
+
 /** A connection to a list of `LanguageSkillLevel` values. */
 export type LanguageSkillLevelsConnection = {
   __typename?: 'LanguageSkillLevelsConnection';
@@ -323,7 +410,6 @@ export type UserUserLanguagesArgs = {
   condition?: Maybe<UserLanguageCondition>;
 };
 
-
 export type Language = Node & {
   __typename?: 'Language';
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
@@ -381,20 +467,6 @@ export type UsersEdge = {
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `User` at the end of the edge. */
   node?: Maybe<User>;
-};
-
-
-/** Information about pagination in a connection. */
-export type PageInfo = {
-  __typename?: 'PageInfo';
-  /** When paginating forwards, are there more items? */
-  hasNextPage: Scalars['Boolean'];
-  /** When paginating backwards, are there more items? */
-  hasPreviousPage: Scalars['Boolean'];
-  /** When paginating backwards, the cursor to continue. */
-  startCursor?: Maybe<Scalars['Cursor']>;
-  /** When paginating forwards, the cursor to continue. */
-  endCursor?: Maybe<Scalars['Cursor']>;
 };
 
 /** Methods to use when ordering `User`. */
@@ -651,6 +723,8 @@ export type UserSessionCondition = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Creates a single `ChatUser`. */
+  createChatUser?: Maybe<CreateChatUserPayload>;
   /** Creates a single `LanguageSkillLevel`. */
   createLanguageSkillLevel?: Maybe<CreateLanguageSkillLevelPayload>;
   /** Creates a single `Language`. */
@@ -717,6 +791,12 @@ export type Mutation = {
   deleteUserByEmail?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
   deleteUserByUuid?: Maybe<DeleteUserPayload>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateChatUserArgs = {
+  input: CreateChatUserInput;
 };
 
 
@@ -915,6 +995,47 @@ export type MutationDeleteUserByEmailArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByUuidArgs = {
   input: DeleteUserByUuidInput;
+};
+
+/** The output of our create `ChatUser` mutation. */
+export type CreateChatUserPayload = {
+  __typename?: 'CreateChatUserPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChatUser` that was created by this mutation. */
+  chatUser?: Maybe<ChatUser>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** An edge for our `ChatUser`. May be used by Relay 1. */
+  chatUserEdge?: Maybe<ChatUsersEdge>;
+};
+
+
+/** The output of our create `ChatUser` mutation. */
+export type CreateChatUserPayloadChatUserEdgeArgs = {
+  orderBy?: Maybe<Array<ChatUsersOrderBy>>;
+};
+
+/** All input for the create `ChatUser` mutation. */
+export type CreateChatUserInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChatUser` to be created by this mutation. */
+  chatUser: ChatUserInput;
+};
+
+/** An input for mutations affecting `ChatUser` */
+export type ChatUserInput = {
+  username?: Maybe<Scalars['String']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  bio?: Maybe<Scalars['String']>;
+  avatarUrl?: Maybe<Scalars['String']>;
 };
 
 /** The output of our create `LanguageSkillLevel` mutation. */
@@ -1749,6 +1870,20 @@ export type DeleteUserByUuidInput = {
   uuid: Scalars['UUID'];
 };
 
+export type ChatUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ChatUsersQuery = (
+  { __typename?: 'Query' }
+  & { chatUsers?: Maybe<(
+    { __typename?: 'ChatUsersConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'ChatUser' }
+      & Pick<ChatUser, 'username' | 'uuid' | 'bio' | 'avatarUrl'>
+    )>> }
+  )> }
+);
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1778,6 +1913,18 @@ export type LanguageCodeMappingsQuery = (
 );
 
 
+export const ChatUsers = gql`
+    query ChatUsers {
+  chatUsers {
+    nodes {
+      username
+      uuid
+      bio
+      avatarUrl
+    }
+  }
+}
+    `;
 export const CurrentUser = gql`
     query CurrentUser {
   users(first: 1) {

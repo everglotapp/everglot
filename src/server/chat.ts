@@ -120,7 +120,7 @@ export function start(server: Server, pool: Pool) {
                 io.to(chatUser.room).emit(
                     "message",
                     formatMessage(
-                        chatUser.user.username,
+                        chatUser.user.username || "",
                         msg,
                         chatUser.user.uuid
                     )

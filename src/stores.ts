@@ -1,7 +1,11 @@
 import { writable } from "svelte/store"
 import { operationStore } from "@urql/svelte"
 
-import { CurrentUser, LanguageCodeMappings } from "./types/generated/graphql"
+import {
+    CurrentUser,
+    LanguageCodeMappings,
+    ChatUsers,
+} from "./types/generated/graphql"
 import type { User, Language } from "./types/generated/graphql"
 
 export const username = writable<string | null>(null)
@@ -19,3 +23,9 @@ export const currentUser = operationStore<{
 export const languageCodeMappings = operationStore<{
     languages: { nodes: Pick<Language, "englishName" | "alpha2">[] }
 }>(LanguageCodeMappings)
+
+export const chatUsers = operationStore<{
+    chatUsers: {
+        nodes: Pick<User, "uuid" | "bio" | "username" | "avatarUrl">[]
+    }
+}>(ChatUsers)

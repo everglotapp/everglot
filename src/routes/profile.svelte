@@ -197,7 +197,9 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-{#if $languageCodeMappings.fetching}{:else if $languageCodeMappings.error}
+{#if $languageCodeMappings.fetching}
+    <div />
+{:else if $languageCodeMappings.error}
     <p class="container max-w-2xl px-4 py-8 md:py-8">
         Something went wrong.
         <ErrorMessage>{$languageCodeMappings.error.message}</ErrorMessage>

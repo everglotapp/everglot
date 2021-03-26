@@ -1,5 +1,3 @@
-import bcrypt from "bcrypt"
-
 import { db } from "../server/db"
 import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import { ensureJson, serverError } from "../helpers"

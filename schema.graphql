@@ -17,6 +17,35 @@ type Query implements Node {
     nodeId: ID!
   ): Node
 
+  """Reads and enables pagination through a set of `ChatUser`."""
+  chatUsers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `ChatUser`."""
+    orderBy: [ChatUsersOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChatUserCondition
+  ): ChatUsersConnection
+
   """Reads and enables pagination through a set of `LanguageSkillLevel`."""
   languageSkillLevels(
     """Only read the first `n` values of the set."""
@@ -217,6 +246,93 @@ interface Node {
   nodeId: ID!
 }
 
+"""A connection to a list of `ChatUser` values."""
+type ChatUsersConnection {
+  """A list of `ChatUser` objects."""
+  nodes: [ChatUser]!
+
+  """
+  A list of edges which contains the `ChatUser` and cursor to aid in pagination.
+  """
+  edges: [ChatUsersEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `ChatUser` you could get from the connection."""
+  totalCount: Int!
+}
+
+type ChatUser {
+  username: String
+  uuid: UUID
+  bio: String
+  avatarUrl: String
+}
+
+"""
+A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122).
+"""
+scalar UUID
+
+"""A `ChatUser` edge in the connection."""
+type ChatUsersEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ChatUser` at the end of the edge."""
+  node: ChatUser
+}
+
+"""A location in a connection that can be used for resuming pagination."""
+scalar Cursor
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: Cursor
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: Cursor
+}
+
+"""Methods to use when ordering `ChatUser`."""
+enum ChatUsersOrderBy {
+  NATURAL
+  USERNAME_ASC
+  USERNAME_DESC
+  UUID_ASC
+  UUID_DESC
+  BIO_ASC
+  BIO_DESC
+  AVATAR_URL_ASC
+  AVATAR_URL_DESC
+}
+
+"""
+A condition to be used against `ChatUser` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input ChatUserCondition {
+  """Checks for equality with the object’s `username` field."""
+  username: String
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `bio` field."""
+  bio: String
+
+  """Checks for equality with the object’s `avatarUrl` field."""
+  avatarUrl: String
+}
+
 """A connection to a list of `LanguageSkillLevel` values."""
 type LanguageSkillLevelsConnection {
   """A list of `LanguageSkillLevel` objects."""
@@ -373,11 +489,6 @@ type User implements Node {
   ): UserLanguagesConnection!
 }
 
-"""
-A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122).
-"""
-scalar UUID
-
 type Language implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
@@ -473,24 +584,6 @@ type UsersEdge {
 
   """The `User` at the end of the edge."""
   node: User
-}
-
-"""A location in a connection that can be used for resuming pagination."""
-scalar Cursor
-
-"""Information about pagination in a connection."""
-type PageInfo {
-  """When paginating forwards, are there more items?"""
-  hasNextPage: Boolean!
-
-  """When paginating backwards, are there more items?"""
-  hasPreviousPage: Boolean!
-
-  """When paginating backwards, the cursor to continue."""
-  startCursor: Cursor
-
-  """When paginating forwards, the cursor to continue."""
-  endCursor: Cursor
 }
 
 """Methods to use when ordering `User`."""
@@ -786,6 +879,14 @@ input UserSessionCondition {
 The root mutation type which contains root level fields which mutate data.
 """
 type Mutation {
+  """Creates a single `ChatUser`."""
+  createChatUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateChatUserInput!
+  ): CreateChatUserPayload
+
   """Creates a single `LanguageSkillLevel`."""
   createLanguageSkillLevel(
     """
@@ -1055,6 +1156,49 @@ type Mutation {
     """
     input: DeleteUserByUuidInput!
   ): DeleteUserPayload
+}
+
+"""The output of our create `ChatUser` mutation."""
+type CreateChatUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatUser` that was created by this mutation."""
+  chatUser: ChatUser
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatUser`. May be used by Relay 1."""
+  chatUserEdge(
+    """The method to use when ordering `ChatUser`."""
+    orderBy: [ChatUsersOrderBy!] = [NATURAL]
+  ): ChatUsersEdge
+}
+
+"""All input for the create `ChatUser` mutation."""
+input CreateChatUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ChatUser` to be created by this mutation."""
+  chatUser: ChatUserInput!
+}
+
+"""An input for mutations affecting `ChatUser`"""
+input ChatUserInput {
+  username: String
+  uuid: UUID
+  bio: String
+  avatarUrl: String
 }
 
 """The output of our create `LanguageSkillLevel` mutation."""

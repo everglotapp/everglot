@@ -1,0 +1,12 @@
+query ChatUsers {
+  chatUsers {
+    nodes {
+      username
+      uuid
+      bio
+      avatarUrl
+      __typename
+    }
+    __typename
+  }
+}

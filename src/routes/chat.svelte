@@ -4,6 +4,7 @@
 
     import { room } from "../stores"
     import Bio from "../comp/users/Bio.svelte"
+    import Avatar from "../comp/users/Avatar.svelte"
 
     import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
@@ -232,8 +233,9 @@
                                     </div>
                                 </div>
                             {/if}
-                            <div
-                                class="avatar"
+                            <Avatar
+                                url={user.avatarUrl || ""}
+                                username={user.username}
                                 on:click={(event) => {
                                     event.stopPropagation()
                                     showBioUuid =
@@ -248,20 +250,7 @@
                                             ? null
                                             : user.uuid
                                 }}
-                                tabindex="0"
-                            >
-                                {#if (user.avatarUrl || "").startsWith("https://")}
-                                    <img
-                                        src={user.avatarUrl || ""}
-                                        alt={user.username}
-                                        role="presentation"
-                                    />
-                                {:else}
-                                    <span class="initial" role="presentation"
-                                        >{user.username.charAt(0)}</span
-                                    >
-                                {/if}
-                            </div>
+                            />
                         </li>
                     {/if}
                 {/each}
@@ -486,29 +475,6 @@
         @apply grid-rows-3;
         @apply grid-flow-row;
         @apply gap-2;
-    }
-
-    .avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-
-        @apply flex;
-        @apply justify-center;
-        @apply items-center;
-        @apply bg-gray-light;
-        @apply shadow-md;
-        @apply cursor-pointer;
-        @apply overflow-hidden;
-    }
-
-    .avatar > img {
-        width: 50px;
-        max-height: 50px;
-    }
-
-    .avatar > .initial {
-        height: 1.625rem;
     }
 
     .toggle-row {

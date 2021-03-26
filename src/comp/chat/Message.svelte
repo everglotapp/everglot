@@ -5,6 +5,10 @@
     import { chatUsers, room } from "../../stores"
 
     import Avatar from "../users/Avatar.svelte"
+    import Bio from "../users/Bio.svelte"
+
+    import ClickAwayListener from "../util/ClickAwayListener.svelte"
+    import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
     import type { User } from "../../types/generated/graphql"
 
@@ -27,6 +31,8 @@
                   ) || null
                 : null) || null
     }
+
+    let showBio = false
 </script>
 
 <div
@@ -49,7 +55,39 @@
                 username={user.username || ""}
                 url={user.avatarUrl || ""}
                 size={32}
+                on:click={(event) => {
+                    event.stopPropagation()
+                    showBio = !showBio
+                }}
+                on:keydown={(event) => {
+                    event.stopPropagation()
+                    showBio = !showBio
+                }}
             />
+            {#if showBio}
+                <ClickAwayListener
+                    elementId="message-user-bio"
+                    on:clickaway={() => (showBio = false)}
+                />
+                <EscapeKeyListener on:keydown={() => (showBio = false)} />
+                <div
+                    class="relative"
+                    in:scale={{ duration: 200, delay: 0 }}
+                    out:scale={{ duration: 200, delay: 0 }}
+                    aria-label={`User Bio`}
+                    style="height: 0; width: 0; margin-left: 100%;"
+                >
+                    <div class="absolute" style="left: 4px;">
+                        <div
+                            id="message-user-bio"
+                            class="fixed bg-white shadow-lg rounded-md"
+                            style="z-index: 1; min-width: 240px;"
+                        >
+                            <Bio uuid={userUuid} />
+                        </div>
+                    </div>
+                </div>
+            {/if}
         {/if}
     </div>
     <div class="main">

@@ -54,7 +54,10 @@
 
     // TODO: Read user data from database.
     onMount(() => {
-        document.addEventListener("click", handleDocumentClick)
+        if (typeof document !== "undefined") {
+            document.addEventListener("click", handleDocumentClick)
+            document.addEventListener("keydown", handleDocumentKeydown)
+        }
         socket = io()
         if (!socket) {
             return
@@ -63,7 +66,10 @@
     })
 
     onDestroy(() => {
-        document.removeEventListener("click", handleDocumentClick)
+        if (typeof document !== "undefined") {
+            document.removeEventListener("click", handleDocumentClick)
+            document.removeEventListener("keydown", handleDocumentKeydown)
+        }
         if (!socket) {
             return
         }
@@ -73,7 +79,11 @@
     })
 
     const getChatMessageContainers = () =>
-        Array.from(document.getElementsByClassName("messages"))
+        Array.from(
+            typeof document === "undefined"
+                ? []
+                : document.getElementsByClassName("messages")
+        )
 
     function scrollToBottom(container: Element, force: boolean = false): void {
         if (!isScrolledToBottom(container) && !force) {
@@ -180,6 +190,7 @@
 
     function handleDocumentClick(event: MouseEvent) {
         if (showBioUuid === null) {
+            // Not showing bio, so we don't care
             return
         }
         const bio = document.getElementById("bio")
@@ -189,6 +200,26 @@
         }
         // Close bio
         showBioUuid = null
+    }
+
+    function handleDocumentKeydown(event: KeyboardEvent) {
+        if (showBioUuid === null) {
+            // Not showing bio, so we don't care
+            return
+        }
+        event = event || window.event
+        if (!event) {
+            return
+        }
+        let isEscape = false
+        if ("key" in event) {
+            isEscape = event.key === "Escape" || event.key === "Esc"
+        } else {
+            isEscape = (event as KeyboardEvent).keyCode === 27
+        }
+        if (isEscape) {
+            showBioUuid = null
+        }
     }
 </script>
 
@@ -238,6 +269,13 @@
                             <div
                                 class="avatar"
                                 on:click={(event) => {
+                                    event.stopPropagation()
+                                    showBioUuid =
+                                        showBioUuid === user.uuid
+                                            ? null
+                                            : user.uuid
+                                }}
+                                on:keydown={(event) => {
                                     event.stopPropagation()
                                     showBioUuid =
                                         showBioUuid === user.uuid

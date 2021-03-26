@@ -41,7 +41,7 @@
         duration: 200,
     }}
 >
-    <div class="author">
+    <div class="author" id={`message-${uuid}-author`}>
         {#if userUuid}
             <span class="username">{user ? user.username : "…"}</span>
         {:else}
@@ -55,14 +55,11 @@
                 username={user.username || ""}
                 url={user.avatarUrl || ""}
                 size={32}
-                on:click={(event) => {
-                    event.stopPropagation()
-                    showBio = !showBio
-                }}
+                on:click={() => (showBio = !showBio)}
             />
             {#if showBio}
                 <ClickAwayListener
-                    elementId={`message-${uuid}-bio`}
+                    elementId={`message-${uuid}-author`}
                     on:clickaway={() => (showBio = false)}
                 />
                 <EscapeKeyListener on:keydown={() => (showBio = false)} />
@@ -75,7 +72,6 @@
                 >
                     <div class="absolute" style="left: 4px;">
                         <div
-                            id={`message-${uuid}-bio`}
                             class="fixed bg-white shadow-lg rounded-md"
                             style="z-index: 1; min-width: 240px;"
                         >

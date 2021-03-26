@@ -162,7 +162,6 @@
                                 style="top: calc(100% + 2px);"
                             >
                                 <div
-                                    id="main-nav-settings"
                                     class="fixed bg-white shadow-lg rounded-md"
                                     style="z-index: 1;"
                                 >
@@ -202,11 +201,10 @@
                         aria-current={segment === "profile"
                             ? "page"
                             : undefined}
-                        on:click={(event) => {
-                            event.stopPropagation()
-                            showSettingsDropdown = !showSettingsDropdown
-                        }}
+                        on:click={() =>
+                            (showSettingsDropdown = !showSettingsDropdown)}
                         class="nav-item-with-icon justify-center cursor-pointer"
+                        id="main-nav-settings"
                     >
                         {#if !$currentUser.fetching}
                             <Avatar

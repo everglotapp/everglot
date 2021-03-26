@@ -204,6 +204,7 @@
                         <li class="user" title="Everglot Bot" />
                     {:else}
                         <li
+                            id={`user-bio-${i}`}
                             class="user"
                             title={user.username}
                             aria-label={user.username}
@@ -225,7 +226,6 @@
                                 >
                                     <div class="absolute" style="left: 4px;">
                                         <div
-                                            id={`user-bio-${i}`}
                                             class="fixed bg-white shadow-lg rounded-md"
                                             style="z-index: 1; min-width: 240px;"
                                         >
@@ -237,13 +237,11 @@
                             <Avatar
                                 url={user.avatarUrl || ""}
                                 username={user.username}
-                                on:click={(event) => {
-                                    event.stopPropagation()
-                                    showBioUuid =
+                                on:click={() =>
+                                    (showBioUuid =
                                         showBioUuid === user.uuid
                                             ? null
-                                            : user.uuid
-                                }}
+                                            : user.uuid)}
                             />
                         </li>
                     {/if}

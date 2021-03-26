@@ -18,10 +18,9 @@
     let socket: SocketIO.Socket | null = null
 
     let roomMessages: Message[] = []
-    let roomUsers: (Pick<
-        ChatUser["user"],
-        "uuid" | "username" | "avatarUrl"
-    > & { username: string })[] = []
+    let users: (Pick<ChatUser["user"], "uuid" | "username" | "avatarUrl"> & {
+        username: string
+    })[] = []
     let myUuid: User["uuid"] | null = null
     let msg: string = ""
     let showBioUuid: User["uuid"] | null = null
@@ -136,7 +135,7 @@
      */
     function onRoomUsers({
         room: recvRoom,
-        users,
+        users: recvUsers,
     }: {
         room: Language["englishName"]
         users: Pick<ChatUser["user"], "username" | "uuid" | "avatarUrl">[]
@@ -144,8 +143,8 @@
         if (recvRoom !== $room) {
             return
         }
-        roomUsers = [
-            ...users.map((user) => ({
+        users = [
+            ...recvUsers.map((user) => ({
                 ...user,
                 username: user.username!,
             })),
@@ -191,46 +190,50 @@
                 Active Members
             </h3>
             <ul class="users">
-                {#each roomUsers as chatUser}
-                    {#if chatUser.username === ""}
+                {#each users as user}
+                    {#if user.username === ""}
                         <li class="user" title="Everglot Bot" />
                     {:else}
-                        <li class="user" title={chatUser.username}>
-                            {#if showBioUuid !== null && showBioUuid === chatUser.uuid}
-                                <div class="relative" in:scale out:scale>
+                        <li class="user" title={user.username}>
+                            {#if showBioUuid !== null && showBioUuid === user.uuid}
+                                <div
+                                    class="relative"
+                                    in:scale={{ duration: 200, delay: 0 }}
+                                    out:scale={{ duration: 200, delay: 0 }}
+                                >
                                     <div
                                         class="absolute"
                                         style="left: calc(100% + 4px);"
                                     >
                                         <div
-                                            class="fixed bg-white px-3 py-1 shadow-md min-w-sm rounded-md"
-                                            style="z-index: 1;"
+                                            class="fixed bg-white shadow-lg rounded-md"
+                                            style="z-index: 1; min-width: 240px;"
                                         >
-                                            <Bio uuid={chatUser.uuid} />
+                                            <Bio uuid={user.uuid} />
                                         </div>
                                     </div>
                                 </div>
                             {/if}
                             <div class="avatar">
-                                {#if (chatUser.avatarUrl || "").startsWith("https://")}
+                                {#if (user.avatarUrl || "").startsWith("https://")}
                                     <img
-                                        src={chatUser.avatarUrl || ""}
-                                        alt={`Avatar of ${chatUser.username}`}
+                                        src={user.avatarUrl || ""}
+                                        alt={`Avatar of ${user.username}`}
                                         on:click={() =>
                                             (showBioUuid =
-                                                showBioUuid === chatUser.uuid
+                                                showBioUuid === user.uuid
                                                     ? null
-                                                    : chatUser.uuid)}
+                                                    : user.uuid)}
                                     />
                                 {:else}
                                     <span
                                         class="initial"
                                         on:click={() =>
                                             (showBioUuid =
-                                                showBioUuid === chatUser.uuid
+                                                showBioUuid === user.uuid
                                                     ? null
-                                                    : chatUser.uuid)}
-                                        >{chatUser.username.charAt(0)}</span
+                                                    : user.uuid)}
+                                        >{user.username.charAt(0)}</span
                                     >
                                 {/if}
                             </div>
@@ -469,7 +472,7 @@
         @apply justify-center;
         @apply items-center;
         @apply bg-gray-light;
-        @apply shadow-sm;
+        @apply shadow-md;
         @apply cursor-pointer;
         @apply overflow-hidden;
     }

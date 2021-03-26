@@ -14,14 +14,24 @@
     }
 </script>
 
-<div>
+<div class="wrapper">
     {#if $chatUsers.fetching}
         …
     {:else if user}
-        {user.username}
-        <hr />
-        {user.bio}
+        <span class="font-bold text-gray-bitdark">{user.username}</span>
+        <hr class="my-1" />
+        <div>{user.bio}</div>
     {:else}
-        error
+        <span class="text-sm italic">error</span>
     {/if}
 </div>
+
+<style>
+    .wrapper {
+        text-align: initial;
+
+        @apply text-base;
+        @apply py-2;
+        @apply px-5;
+    }
+</style>

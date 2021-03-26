@@ -6,6 +6,7 @@
     import Bio from "../comp/users/Bio.svelte"
 
     import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
+    import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
 
     import type { ChatUser } from "../server/users"
@@ -56,9 +57,6 @@
 
     // TODO: Read user data from database.
     onMount(() => {
-        if (typeof document !== "undefined") {
-            document.addEventListener("keydown", handleDocumentKeydown)
-        }
         socket = io()
         if (!socket) {
             return
@@ -67,9 +65,6 @@
     })
 
     onDestroy(() => {
-        if (typeof document !== "undefined") {
-            document.removeEventListener("keydown", handleDocumentKeydown)
-        }
         if (!socket) {
             return
         }
@@ -187,26 +182,6 @@
     function toggleSplit() {
         split = !split
     }
-
-    function handleDocumentKeydown(event: KeyboardEvent) {
-        if (showBioUuid === null) {
-            // Not showing bio, so we don't care
-            return
-        }
-        event = event || window.event
-        if (!event) {
-            return
-        }
-        let isEscape = false
-        if ("key" in event) {
-            isEscape = event.key === "Escape" || event.key === "Esc"
-        } else {
-            isEscape = (event as KeyboardEvent).keyCode === 27
-        }
-        if (isEscape) {
-            showBioUuid = null
-        }
-    }
 </script>
 
 <svelte:head>
@@ -235,6 +210,9 @@
                                 <ClickAwayListener
                                     elementId="user-bio"
                                     on:clickaway={() => (showBioUuid = null)}
+                                />
+                                <EscapeKeyListener
+                                    on:keydown={() => (showBioUuid = null)}
                                 />
                                 <div
                                     class="relative"

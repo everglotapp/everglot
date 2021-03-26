@@ -7,6 +7,7 @@
 
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
+    import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
     import { currentUser } from "../../stores"
 
@@ -145,6 +146,9 @@
                             elementId="main-nav-settings"
                             on:clickaway={() => (showSettingsDropdown = false)}
                         />
+                        <EscapeKeyListener
+                            on:keydown={() => (showSettingsDropdown = false)}
+                        />
                         <div
                             class="relative"
                             in:scale={{ duration: 200, delay: 0 }}
@@ -235,7 +239,6 @@
 
         position: relative;
         z-index: 10;
-
         max-height: 58px;
 
         @screen md {

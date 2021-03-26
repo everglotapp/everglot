@@ -251,11 +251,9 @@
                                     in:scale={{ duration: 200, delay: 0 }}
                                     out:scale={{ duration: 200, delay: 0 }}
                                     aria-label={`User Bio`}
+                                    style="height: 0; width: 0; margin-left: 100%;"
                                 >
-                                    <div
-                                        class="absolute"
-                                        style="left: calc(100% + 4px);"
-                                    >
+                                    <div class="absolute" style="left: 4px;">
                                         <div
                                             id="bio"
                                             class="fixed bg-white shadow-lg rounded-md"

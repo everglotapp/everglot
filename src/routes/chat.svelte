@@ -5,14 +5,15 @@
     import { room } from "../stores"
     import Bio from "../comp/users/Bio.svelte"
     import Avatar from "../comp/users/Avatar.svelte"
+    import Message from "../comp/chat/Message.svelte"
 
     import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
 
-    import type { ChatUser } from "../server/users"
+    import type { ChatUser } from "../server/chat/users"
+    import type { ChatMessage } from "../server/chat/messages"
     import type { Language, User } from "../types/generated/graphql"
-    import type { Message } from "../server/messages"
 
     import { ChevronsRightIcon } from "svelte-feather-icons"
 
@@ -21,7 +22,7 @@
 
     let socket: SocketIO.Socket | null = null
 
-    let roomMessages: Message[] = []
+    let messages: ChatMessage[] = []
     let users: (Pick<ChatUser["user"], "uuid" | "username" | "avatarUrl"> & {
         username: string
     })[] = []
@@ -162,12 +163,12 @@
         )
     }
 
-    function onMessage(message: Message): void {
+    function onMessage(message: ChatMessage): void {
         getChatMessageContainers().forEach((container) => {
             const isOwnMessage =
-                message.uuid !== null &&
+                message.userUuid !== null &&
                 myUuid !== null &&
-                message.uuid === myUuid
+                message.userUuid === myUuid
             /**
              * Force auto-scroll if the user sent the message themselves
              * or if the user didn't scroll upwards before receiving the message.
@@ -176,7 +177,7 @@
 
             setTimeout(() => scrollToBottom(container, force), 150)
         })
-        roomMessages = [...roomMessages, message]
+        messages = [...messages, message]
     }
 
     let split = true
@@ -198,18 +199,19 @@
                 Active Members
             </h3>
             <ul class="users">
-                {#each users as user}
+                {#each users as user, i}
                     {#if user.username === ""}
                         <li class="user" title="Everglot Bot" />
                     {:else}
                         <li
+                            id={`user-bio-${i}`}
                             class="user"
                             title={user.username}
                             aria-label={user.username}
                         >
                             {#if showBioUuid !== null && showBioUuid === user.uuid}
                                 <ClickAwayListener
-                                    elementId="user-bio"
+                                    elementId={`user-bio-${i}`}
                                     on:clickaway={() => (showBioUuid = null)}
                                 />
                                 <EscapeKeyListener
@@ -224,7 +226,6 @@
                                 >
                                     <div class="absolute" style="left: 4px;">
                                         <div
-                                            id="user-bio"
                                             class="fixed bg-white shadow-lg rounded-md"
                                             style="z-index: 1; min-width: 240px;"
                                         >
@@ -236,20 +237,11 @@
                             <Avatar
                                 url={user.avatarUrl || ""}
                                 username={user.username}
-                                on:click={(event) => {
-                                    event.stopPropagation()
-                                    showBioUuid =
+                                on:click={() =>
+                                    (showBioUuid =
                                         showBioUuid === user.uuid
                                             ? null
-                                            : user.uuid
-                                }}
-                                on:keydown={(event) => {
-                                    event.stopPropagation()
-                                    showBioUuid =
-                                        showBioUuid === user.uuid
-                                            ? null
-                                            : user.uuid
-                                }}
+                                            : user.uuid)}
                             />
                         </li>
                     {/if}
@@ -391,25 +383,13 @@
                     <div class="view view-right rounded-tr-md">
                         <div class="view-inner view-right-inner">
                             <div class="messages">
-                                {#each roomMessages as message}
-                                    <div
-                                        class="message"
-                                        transition:scale|local={{
-                                            duration: 200,
-                                        }}
-                                    >
-                                        <p class="meta">
-                                            <span class="username"
-                                                >{message.username}</span
-                                            >
-                                            {#if message.username === "Everglot Bot" && $room && $room.length}
-                                                <span> [{$room}]</span>
-                                            {/if}
-                                            &nbsp;–&nbsp;
-                                            <span>{message.time}</span>
-                                        </p>
-                                        <p class="text">{message.text}</p>
-                                    </div>
+                                {#each messages as message (message.uuid)}
+                                    <Message
+                                        uuid={message.uuid}
+                                        userUuid={message.userUuid}
+                                        time={message.time}
+                                        text={message.text}
+                                    />
                                 {/each}
                             </div>
                             <div
@@ -473,8 +453,9 @@
         @apply grid;
         @apply grid-cols-4;
         @apply grid-rows-3;
-        @apply grid-flow-row;
+        @apply grid-flow-col;
         @apply gap-2;
+        @apply overflow-x-scroll;
     }
 
     .toggle-row {
@@ -622,36 +603,7 @@
     .messages {
         @apply overflow-y-scroll;
         @apply py-2;
-    }
-
-    .message {
-        @apply p-2;
-        @apply mb-3;
-        @apply break-words;
-        @apply bg-primary-lightest;
-        @apply rounded-md;
-        @apply shadow-sm;
-    }
-
-    .message .meta {
-        font-size: 15px;
-        font-weight: bold;
-        opacity: 0.7;
-        margin-bottom: 7px;
-
-        @apply text-gray-bitdark;
-    }
-
-    .message .meta .username {
-        @apply text-primary-dark;
-    }
-
-    .message .meta span {
-        @apply text-gray-bitdark;
-    }
-
-    .message p {
-        @apply mb-1;
+        @apply pr-2;
     }
 
     .submit-form-container {

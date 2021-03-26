@@ -59,10 +59,6 @@
                     event.stopPropagation()
                     showBio = !showBio
                 }}
-                on:keydown={(event) => {
-                    event.stopPropagation()
-                    showBio = !showBio
-                }}
             />
             {#if showBio}
                 <ClickAwayListener

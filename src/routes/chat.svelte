@@ -244,13 +244,6 @@
                                             ? null
                                             : user.uuid
                                 }}
-                                on:keydown={(event) => {
-                                    event.stopPropagation()
-                                    showBioUuid =
-                                        showBioUuid === user.uuid
-                                            ? null
-                                            : user.uuid
-                                }}
                             />
                         </li>
                     {/if}

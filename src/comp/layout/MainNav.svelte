@@ -206,10 +206,6 @@
                             event.stopPropagation()
                             showSettingsDropdown = !showSettingsDropdown
                         }}
-                        on:keydown={(event) => {
-                            event.stopPropagation()
-                            showSettingsDropdown = !showSettingsDropdown
-                        }}
                         class="nav-item-with-icon justify-center cursor-pointer"
                     >
                         {#if !$currentUser.fetching}

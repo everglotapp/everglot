@@ -1,10 +1,13 @@
 <script lang="ts">
+    import { scale } from "svelte/transition"
     import { goto } from "@sapper/app"
 
     import { LogOutIcon } from "svelte-feather-icons"
     import { query } from "@urql/svelte"
 
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import ClickAwayListener from "../util/ClickAwayListener.svelte"
+    import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
     import { currentUser } from "../../stores"
 
@@ -12,6 +15,8 @@
     $: currentUserNode = $currentUser.data?.users.nodes[0]
 
     export let segment: string | undefined
+
+    let showSettingsDropdown = false
 </script>
 
 <div class="nav-container">
@@ -83,28 +88,6 @@
             </div>
             <div class="hidden md:flex justify-center items-center">
                 <!-- TODO: Search -->
-                <div class="my-auto">
-                    <ButtonSmall
-                        variant="TEXT"
-                        color="SECONDARY"
-                        tag="button"
-                        href="/profile"
-                        on:click={() => {
-                            fetch("/logout", {
-                                method: "post",
-                                headers: {
-                                    Accept: "application/json",
-                                    "Content-Type": "application/json",
-                                },
-                                redirect: "follow", // if user isn't signed in anymore
-                            }).then(() => {
-                                goto("/login")
-                            })
-                        }}
-                        ><span class="hidden md:inline md:mr-1">Logout</span
-                        ><LogOutIcon size="24" /></ButtonSmall
-                    >
-                </div>
             </div>
             <div class="flex justify-center">
                 <div class="flex">
@@ -158,19 +141,80 @@
                             </g>
                         </svg>
                     </a>
-                    <a
+                    {#if showSettingsDropdown}
+                        <ClickAwayListener
+                            elementId="main-nav-settings"
+                            on:clickaway={() => (showSettingsDropdown = false)}
+                        />
+                        <EscapeKeyListener
+                            on:keydown={() => (showSettingsDropdown = false)}
+                        />
+                        <div
+                            class="relative"
+                            in:scale={{ duration: 200, delay: 0 }}
+                            out:scale={{ duration: 200, delay: 0 }}
+                            aria-label={`Settings`}
+                        >
+                            <div
+                                class="absolute"
+                                style="top: calc(100% + 2px);"
+                            >
+                                <div
+                                    id="main-nav-settings"
+                                    class="fixed bg-white shadow-lg rounded-md"
+                                    style="z-index: 1;"
+                                >
+                                    <div class="my-auto">
+                                        <ButtonSmall
+                                            variant="TEXT"
+                                            color="SECONDARY"
+                                            tag="button"
+                                            href="/profile"
+                                            on:click={() => {
+                                                fetch("/logout", {
+                                                    method: "post",
+                                                    headers: {
+                                                        Accept:
+                                                            "application/json",
+                                                        "Content-Type":
+                                                            "application/json",
+                                                    },
+                                                    redirect: "follow", // if user isn't signed in anymore
+                                                }).then(() => {
+                                                    goto("/login")
+                                                })
+                                            }}
+                                            ><span
+                                                class="hidden md:inline md:mr-1"
+                                                >Logout</span
+                                            ><LogOutIcon
+                                                size="24"
+                                            /></ButtonSmall
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
+                    <button
                         aria-current={segment === "profile"
                             ? "page"
                             : undefined}
-                        href="/profile"
-                        class="nav-item-with-icon justify-center"
+                        on:click={(event) => {
+                            event.stopPropagation()
+                            showSettingsDropdown = !showSettingsDropdown
+                        }}
+                        class="nav-item-with-icon justify-center cursor-pointer"
                     >
                         <div class="avatar">
                             {#if !$currentUser.fetching}
                                 {#if currentUserNode?.avatarUrl && (currentUserNode?.avatarUrl || "").startsWith("https://")}
                                     <img
                                         src={currentUserNode?.avatarUrl || ""}
-                                        alt={`Avatar of ${currentUserNode?.username}`}
+                                        alt={currentUserNode?.username?.charAt(
+                                            0
+                                        )}
+                                        aria-label={`Avatar of ${currentUserNode?.username}`}
                                     />
                                 {:else}
                                     <span class="initial"
@@ -180,7 +224,7 @@
                                     >
                                 {/if}
                             {/if}
-                        </div></a
+                        </div></button
                     >
                 </div>
             </div>
@@ -195,7 +239,6 @@
 
         position: relative;
         z-index: 10;
-
         max-height: 58px;
 
         @screen md {
@@ -203,11 +246,13 @@
         }
     }
 
-    a[aria-current] {
+    a[aria-current],
+    button[aria-current] {
         position: relative;
     }
 
-    a[aria-current]::after {
+    a[aria-current]::after,
+    button[aria-current]::after {
         position: absolute;
         content: "";
         height: 2px;
@@ -223,7 +268,8 @@
         background-color: transparent;
     }
 
-    a {
+    a,
+    button {
         display: flex;
         padding: 0.5rem 0.75rem;
         margin: 0;
@@ -241,7 +287,8 @@
         @apply text-black;
     }
 
-    a:hover {
+    a:hover,
+    button:hover {
         @apply text-primary;
         @apply bg-gray-lightest;
     }

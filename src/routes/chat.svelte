@@ -4,6 +4,9 @@
 
     import { room } from "../stores"
     import Bio from "../comp/users/Bio.svelte"
+
+    import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
+    import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
 
     import type { ChatUser } from "../server/users"
@@ -54,10 +57,6 @@
 
     // TODO: Read user data from database.
     onMount(() => {
-        if (typeof document !== "undefined") {
-            document.addEventListener("click", handleDocumentClick)
-            document.addEventListener("keydown", handleDocumentKeydown)
-        }
         socket = io()
         if (!socket) {
             return
@@ -66,10 +65,6 @@
     })
 
     onDestroy(() => {
-        if (typeof document !== "undefined") {
-            document.removeEventListener("click", handleDocumentClick)
-            document.removeEventListener("keydown", handleDocumentKeydown)
-        }
         if (!socket) {
             return
         }
@@ -187,40 +182,6 @@
     function toggleSplit() {
         split = !split
     }
-
-    function handleDocumentClick(event: MouseEvent) {
-        if (showBioUuid === null) {
-            // Not showing bio, so we don't care
-            return
-        }
-        const bio = document.getElementById("bio")
-        if (!bio || event.composedPath().includes(bio)) {
-            // Bio doesn't exist or user clicked inside bio
-            return
-        }
-        // Close bio
-        showBioUuid = null
-    }
-
-    function handleDocumentKeydown(event: KeyboardEvent) {
-        if (showBioUuid === null) {
-            // Not showing bio, so we don't care
-            return
-        }
-        event = event || window.event
-        if (!event) {
-            return
-        }
-        let isEscape = false
-        if ("key" in event) {
-            isEscape = event.key === "Escape" || event.key === "Esc"
-        } else {
-            isEscape = (event as KeyboardEvent).keyCode === 27
-        }
-        if (isEscape) {
-            showBioUuid = null
-        }
-    }
 </script>
 
 <svelte:head>
@@ -246,18 +207,23 @@
                             aria-label={user.username}
                         >
                             {#if showBioUuid !== null && showBioUuid === user.uuid}
+                                <ClickAwayListener
+                                    elementId="user-bio"
+                                    on:clickaway={() => (showBioUuid = null)}
+                                />
+                                <EscapeKeyListener
+                                    on:keydown={() => (showBioUuid = null)}
+                                />
                                 <div
                                     class="relative"
                                     in:scale={{ duration: 200, delay: 0 }}
                                     out:scale={{ duration: 200, delay: 0 }}
                                     aria-label={`User Bio`}
+                                    style="height: 0; width: 0; margin-left: 100%;"
                                 >
-                                    <div
-                                        class="absolute"
-                                        style="left: calc(100% + 4px);"
-                                    >
+                                    <div class="absolute" style="left: 4px;">
                                         <div
-                                            id="bio"
+                                            id="user-bio"
                                             class="fixed bg-white shadow-lg rounded-md"
                                             style="z-index: 1; min-width: 240px;"
                                         >

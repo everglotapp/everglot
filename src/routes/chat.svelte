@@ -199,7 +199,7 @@
                 Active Members
             </h3>
             <ul class="users">
-                {#each users as user}
+                {#each users as user, i}
                     {#if user.username === ""}
                         <li class="user" title="Everglot Bot" />
                     {:else}
@@ -210,7 +210,7 @@
                         >
                             {#if showBioUuid !== null && showBioUuid === user.uuid}
                                 <ClickAwayListener
-                                    elementId="user-bio"
+                                    elementId={`user-bio-${i}`}
                                     on:clickaway={() => (showBioUuid = null)}
                                 />
                                 <EscapeKeyListener
@@ -225,7 +225,7 @@
                                 >
                                     <div class="absolute" style="left: 4px;">
                                         <div
-                                            id="user-bio"
+                                            id={`user-bio-${i}`}
                                             class="fixed bg-white shadow-lg rounded-md"
                                             style="z-index: 1; min-width: 240px;"
                                         >

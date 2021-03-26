@@ -2,21 +2,21 @@ import moment from "moment"
 
 import type { User } from "../types/generated/graphql"
 
-export type Message = {
+export type ChatMessage = {
     text: string
     time: string
     username: string
-    uuid: User["uuid"] | null
+    userUuid: User["uuid"] | null
 }
 
 export function formatMessage(
-    username: Message["username"],
+    username: User["username"],
     text: string,
     uuid: User["uuid"] | null = null
-): Message {
+): ChatMessage {
     return {
         username: username!,
-        uuid,
+        userUuid: uuid,
         text,
         time: moment().format("h:mm a"),
     }

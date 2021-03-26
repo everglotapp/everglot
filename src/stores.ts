@@ -9,7 +9,7 @@ import {
 import type { User, Language } from "./types/generated/graphql"
 
 export const username = writable<string | null>(null)
-export const room = writable<string>("")
+export const room = writable<string>("English")
 
 export const currentUser = operationStore<{
     users: {

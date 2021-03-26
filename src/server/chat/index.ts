@@ -1,7 +1,7 @@
 import type { Server } from "http"
 import { Server as SocketIO } from "socket.io"
 
-import session from "./middlewares/session"
+import session from "../middlewares/session"
 
 import { formatMessage } from "./messages"
 import {
@@ -13,7 +13,7 @@ import {
     userGreeted,
 } from "./users"
 
-import { performQuery } from "./gql"
+import { performQuery } from "../gql"
 
 import { hangmanGames } from "./hangman"
 import type { HangmanLanguage } from "./hangman"

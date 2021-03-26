@@ -54,6 +54,7 @@
 
     // TODO: Read user data from database.
     onMount(() => {
+        document.addEventListener("click", handleDocumentClick)
         socket = io()
         if (!socket) {
             return
@@ -62,6 +63,7 @@
     })
 
     onDestroy(() => {
+        document.removeEventListener("click", handleDocumentClick)
         if (!socket) {
             return
         }
@@ -175,6 +177,19 @@
     function toggleSplit() {
         split = !split
     }
+
+    function handleDocumentClick(event: MouseEvent) {
+        if (showBioUuid === null) {
+            return
+        }
+        const bio = document.getElementById("bio")
+        if (!bio || event.composedPath().includes(bio)) {
+            // Bio doesn't exist or user clicked inside bio
+            return
+        }
+        // Close bio
+        showBioUuid = null
+    }
 </script>
 
 <svelte:head>
@@ -194,18 +209,24 @@
                     {#if user.username === ""}
                         <li class="user" title="Everglot Bot" />
                     {:else}
-                        <li class="user" title={user.username}>
+                        <li
+                            class="user"
+                            title={user.username}
+                            aria-label={user.username}
+                        >
                             {#if showBioUuid !== null && showBioUuid === user.uuid}
                                 <div
                                     class="relative"
                                     in:scale={{ duration: 200, delay: 0 }}
                                     out:scale={{ duration: 200, delay: 0 }}
+                                    aria-label={`User Bio`}
                                 >
                                     <div
                                         class="absolute"
                                         style="left: calc(100% + 4px);"
                                     >
                                         <div
+                                            id="bio"
                                             class="fixed bg-white shadow-lg rounded-md"
                                             style="z-index: 1; min-width: 240px;"
                                         >
@@ -214,25 +235,25 @@
                                     </div>
                                 </div>
                             {/if}
-                            <div class="avatar">
+                            <div
+                                class="avatar"
+                                on:click={(event) => {
+                                    event.stopPropagation()
+                                    showBioUuid =
+                                        showBioUuid === user.uuid
+                                            ? null
+                                            : user.uuid
+                                }}
+                                tabindex="0"
+                            >
                                 {#if (user.avatarUrl || "").startsWith("https://")}
                                     <img
                                         src={user.avatarUrl || ""}
-                                        alt={`Avatar of ${user.username}`}
-                                        on:click={() =>
-                                            (showBioUuid =
-                                                showBioUuid === user.uuid
-                                                    ? null
-                                                    : user.uuid)}
+                                        alt={user.username}
+                                        role="presentation"
                                     />
                                 {:else}
-                                    <span
-                                        class="initial"
-                                        on:click={() =>
-                                            (showBioUuid =
-                                                showBioUuid === user.uuid
-                                                    ? null
-                                                    : user.uuid)}
+                                    <span class="initial" role="presentation"
                                         >{user.username.charAt(0)}</span
                                     >
                                 {/if}

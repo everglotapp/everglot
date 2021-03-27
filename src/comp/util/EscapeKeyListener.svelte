@@ -1,20 +1,8 @@
 <script lang="ts">
-    import { createEventDispatcher, onMount, onDestroy } from "svelte"
-
-    onMount(() => {
-        if (typeof document !== "undefined") {
-            document.addEventListener("keydown", handleDocumentKeydown)
-        }
-    })
-
-    onDestroy(() => {
-        if (typeof document !== "undefined") {
-            document.removeEventListener("keydown", handleDocumentKeydown)
-        }
-    })
+    import { createEventDispatcher } from "svelte"
 
     const dispatch = createEventDispatcher()
-    function handleDocumentKeydown(event: KeyboardEvent) {
+    function handleKeydown(event: KeyboardEvent) {
         event = event || window.event
         if (!event) {
             return
@@ -31,3 +19,5 @@
         dispatch("keydown", { event })
     }
 </script>
+
+<svelte:window on:keydown={handleKeydown} />

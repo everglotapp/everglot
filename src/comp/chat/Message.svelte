@@ -42,21 +42,7 @@
     }}
 >
     <div class="author" id={`message-${uuid}-author`}>
-        {#if userUuid}
-            <span class="username">{user ? user.username : "…"}</span>
-        {:else}
-            <span class="username">Everglot<br /> Bot</span>
-        {/if}
-        {#if !userUuid && $room && $room.length}
-            <span class="room"> [{$room}]</span>
-        {/if}
         {#if user !== null}
-            <Avatar
-                username={user.username || ""}
-                url={user.avatarUrl || ""}
-                size={32}
-                on:click={() => (showBio = !showBio)}
-            />
             {#if showBio}
                 <ClickAwayListener
                     elementId={`message-${uuid}-author`}
@@ -80,6 +66,22 @@
                     </div>
                 </div>
             {/if}
+        {/if}
+        {#if userUuid}
+            <span class="username">{user ? user.username : "…"}</span>
+        {:else}
+            <span class="username">Everglot<br /> Bot</span>
+        {/if}
+        {#if !userUuid && $room && $room.length}
+            <span class="room"> [{$room}]</span>
+        {/if}
+        {#if user !== null}
+            <Avatar
+                username={user.username || ""}
+                url={user.avatarUrl || ""}
+                size={32}
+                on:click={() => (showBio = !showBio)}
+            />
         {/if}
     </div>
     <div class="main">

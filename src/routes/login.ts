@@ -91,6 +91,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             })
             return
         }
+
         const queryResult = await db?.query<{
             id: number
         }>({
@@ -113,7 +114,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         if (!userExists) {
             // TODO: Inform user that email does not exist?
             console.log(
-                `User tried to login with an id token that does not exist: ${idToken}`
+                `User tried to login with an id token that does not exist: ${idToken}, Email: ${email}`
             )
             res.redirect("/join")
             return

@@ -52,7 +52,7 @@
                 {/if}
                 <Avatar
                     url={user.avatarUrl || ""}
-                    username={user.username}
+                    username={user.username || ""}
                     on:click={() => (showBioId = showBioId === i ? null : i)}
                 />
             </li>

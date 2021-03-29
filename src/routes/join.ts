@@ -99,7 +99,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 return
             }
             email = payload.email || null
-            if (!email) {
+            if (!email || !email.length) {
                 throw new Error("Empty email")
             }
             avatarUrl = payload.picture || null

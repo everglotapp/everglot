@@ -10,6 +10,7 @@
 
     let errorMessage: string | null = null
     let submitting = false
+    let blockGoogleSignIn = false
 
     const handleSubmit = async (_event: Event) => {
         if (submitting) {
@@ -72,8 +73,19 @@
     }
 
     onMount(() => {
+        const signedOut = new URL(window.location.href).searchParams.get(
+            "signedout"
+        )
+        if (signedOut === "1") {
+            // @ts-ignore
+            window.gapi?.auth2?.getAuthInstance()?.signOut()
+            blockGoogleSignIn = true
+        }
         // @ts-ignore
         window.onSignIn = async (googleUser: any) => {
+            if (blockGoogleSignIn) {
+                return
+            }
             const response = await doSubmit({
                 method: AuthMethod.GOOGLE,
                 idToken: googleUser?.getAuthResponse()?.id_token,
@@ -148,6 +160,7 @@
             class="g-signin2 flex justify-center mt-2 mb-1"
             data-onsuccess="onSignIn"
             data-longtitle="true"
+            on:click={() => (blockGoogleSignIn = false)}
         />
         <ButtonLarge
             href="join"

@@ -27,7 +27,7 @@
             },
             redirect: "follow", // if user isn't signed in anymore
         })
-        return goto("/login")
+        return goto("/login?signedout=1")
     }
 
     let showSettingsDropdown = false

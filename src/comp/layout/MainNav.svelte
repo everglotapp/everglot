@@ -18,6 +18,18 @@
 
     export let segment: string | undefined
 
+    async function handleLogout() {
+        await fetch("/logout", {
+            method: "post",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            redirect: "follow", // if user isn't signed in anymore
+        })
+        return goto("/login")
+    }
+
     let showSettingsDropdown = false
 </script>
 
@@ -170,21 +182,8 @@
                                             variant="TEXT"
                                             color="SECONDARY"
                                             tag="button"
-                                            href="/profile"
-                                            on:click={() => {
-                                                fetch("/logout", {
-                                                    method: "post",
-                                                    headers: {
-                                                        Accept:
-                                                            "application/json",
-                                                        "Content-Type":
-                                                            "application/json",
-                                                    },
-                                                    redirect: "follow", // if user isn't signed in anymore
-                                                }).then(() => {
-                                                    goto("/login")
-                                                })
-                                            }}
+                                            href=""
+                                            on:click={handleLogout}
                                             ><span
                                                 class="hidden md:inline md:mr-1"
                                                 >Logout</span

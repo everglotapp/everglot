@@ -30,9 +30,16 @@
     query(languageCodeMappings)
 
     $: if (!$currentUser.fetching && $currentUser.data?.users.nodes[0]) {
-        const { username, userLanguages } = $currentUser.data.users.nodes[0]
-        if (username !== null && userLanguages.totalCount) {
-            goto("/groups", { replaceState: true, noscroll: false })
+        const {
+            username: currentUserUsername,
+            userLanguages,
+        } = $currentUser.data.users.nodes[0]
+        if (currentUserUsername !== null) {
+            if (userLanguages.totalCount) {
+                goto("/groups", { replaceState: true, noscroll: false })
+            } else {
+                $username = currentUserUsername || $username
+            }
         }
     }
 

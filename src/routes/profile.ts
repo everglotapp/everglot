@@ -158,30 +158,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     `Failed to update username and gender of user ${userId}`
                 )
             }
-            console.log(
-                await client.query({
-                    text: SQL_DELETE_USER_LANGUAGES,
-                    values: [userId],
-                })
-            )
-            if (
-                !(
-                    await client.query({
-                        text: SQL_DELETE_USER_LANGUAGES,
-                        values: [userId],
-                    })
-                )?.fields.length
-            ) {
-                throw new Error(`Failed to delete languages of user ${userId}`)
-            }
             const { teach, learn, cefrLevels } = req.body
             for (const code of teach) {
-                console.log(
-                    await client.query({
-                        text: SQL_ASSIGN_NATIVE_LANGUAGE,
-                        values: [userId, code],
-                    })
-                )
                 if (
                     (
                         await client.query({
@@ -204,19 +182,13 @@ export async function post(req: Request, res: Response, _next: () => void) {
                         `User claimed to learn the language with code "${code}" which they already speak natively.`
                     )
                 }
-                console.log(
-                    await client.query({
-                        text: SQL_ASSIGN_NON_NATIVE_LANGUAGE,
-                        values: [userId, code, cefrLevels[code]],
-                    })
-                )
                 if (
                     (
                         await client.query({
                             text: SQL_ASSIGN_NON_NATIVE_LANGUAGE,
                             values: [userId, code, cefrLevels[code]],
                         })
-                    )?.fields.length
+                    )?.rowCount !== 1
                 ) {
                     throw new Error(
                         `Failed to assign target language with code "${code}" to user ${userId}.`
@@ -245,11 +217,6 @@ UPDATE users SET
     gender = $3,
     last_active_at = NOW()
 WHERE id = $1
-RETURNING id`
-
-const SQL_DELETE_USER_LANGUAGES = `
-DELETE FROM user_languages
-WHERE user_id = $1
 RETURNING id`
 
 const SQL_ASSIGN_NATIVE_LANGUAGE = `

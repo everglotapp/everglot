@@ -36,7 +36,7 @@
             return
         }
         if (res.success === true) {
-            goto("/profile", { replaceState: true, noscroll: true })
+            goto("/")
         } else {
             errorMessage = res.message
         }
@@ -83,7 +83,7 @@
                 return
             }
             if (res.success === true) {
-                goto("/profile", { replaceState: true, noscroll: true })
+                goto("/profile")
             } else {
                 errorMessage = res.message
             }

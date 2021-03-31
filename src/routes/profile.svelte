@@ -32,7 +32,7 @@
     $: if (!$currentUser.fetching && $currentUser.data?.users.nodes[0]) {
         const { username, userLanguages } = $currentUser.data.users.nodes[0]
         if (username !== null && userLanguages.totalCount) {
-            goto("/groups")
+            goto("/groups", { replaceState: true, noscroll: false })
         }
     }
 

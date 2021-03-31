@@ -31,7 +31,7 @@
 
     $: if (!$currentUser.fetching && $currentUser.data?.users.nodes[0]) {
         const { username, userLanguages } = $currentUser.data.users.nodes[0]
-        if (username === null || userLanguages.totalCount === 0) {
+        if (username !== null && userLanguages.totalCount) {
             goto("/groups")
         }
     }

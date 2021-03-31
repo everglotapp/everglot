@@ -12,11 +12,7 @@ import { ensureJson, serverError } from "../helpers"
 import { createDatabasePool } from "../server/db"
 import { performQuery } from "../server/gql"
 
-export async function get(req: Request, res: Response, next: () => void) {
-    if (!req.session.user_id) {
-        res.redirect("/")
-        return
-    }
+async function userHasCompletedProfile(userId: number): Promise<boolean> {
     const queryResult = await performQuery(
         `query User($id: Int!) {
             user(id: $id) {
@@ -27,22 +23,37 @@ export async function get(req: Request, res: Response, next: () => void) {
             }
           }
           `,
-        { id: req.session.user_id }
+        { id: userId }
     )
     if (queryResult.data) {
         const {
             user: { username, userLanguages },
         } = queryResult.data
         if (username !== null && userLanguages.totalCount) {
-            res.redirect("/groups")
-            return
+            return true
         }
+    }
+    return false
+}
+
+export async function get(req: Request, res: Response, next: () => void) {
+    if (!req.session.user_id) {
+        res.redirect("/")
+        return
+    }
+    if (await userHasCompletedProfile(req.session.user_id)) {
+        res.redirect("/groups")
+        return
     }
     next()
 }
 
 export async function post(req: Request, res: Response, _next: () => void) {
     if (!ensureJson(req, res)) {
+        return
+    }
+    if (await userHasCompletedProfile(req.session.user_id!)) {
+        res.redirect("/groups")
         return
     }
     const gender: Gender | null =

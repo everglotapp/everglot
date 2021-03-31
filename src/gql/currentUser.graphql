@@ -10,6 +10,9 @@ query CurrentUser {
             userLanguages {
                 totalCount
             }
+            languageByLocale {
+                alpha2
+            }
         }
     }
 }

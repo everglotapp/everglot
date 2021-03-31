@@ -10,6 +10,36 @@ import type { Request, Response } from "express"
 import { ensureJson, serverError } from "../helpers"
 
 import { createDatabasePool } from "../server/db"
+import { performQuery } from "../server/gql"
+
+export async function get(req: Request, res: Response, next: () => void) {
+    if (!req.session.user_id) {
+        res.redirect("/")
+        return
+    }
+    const queryResult = await performQuery(
+        `query User($id: Int!) {
+            user(id: $id) {
+              username
+              userLanguages {
+                totalCount
+              }
+            }
+          }
+          `,
+        { id: req.session.user_id }
+    )
+    if (queryResult.data) {
+        const {
+            user: { username, userLanguages },
+        } = queryResult.data
+        if (username !== null && userLanguages.totalCount) {
+            res.redirect("/groups")
+            return
+        }
+    }
+    next()
+}
 
 export async function post(req: Request, res: Response, _next: () => void) {
     if (!ensureJson(req, res)) {

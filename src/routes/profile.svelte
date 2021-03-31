@@ -29,16 +29,26 @@
 
     query(languageCodeMappings)
 
+    let prefilled = false
     $: if (!$currentUser.fetching && $currentUser.data?.users.nodes[0]) {
-        const {
-            username: currentUserUsername,
-            userLanguages,
-        } = $currentUser.data.users.nodes[0]
-        if (currentUserUsername !== null) {
-            if (userLanguages.totalCount) {
-                goto("/groups", { replaceState: true, noscroll: false })
-            } else {
-                $username = currentUserUsername || $username
+        const user = $currentUser.data.users.nodes[0]
+        if (user.username !== null && user.userLanguages.totalCount) {
+            // Profile has already been completed, a second time won't work.
+            goto("/groups", { replaceState: true, noscroll: false })
+        } else if (!prefilled) {
+            // Pre-fill form.
+            prefilled = true
+            $username = user.username || $username
+            if (user.languageByLocale !== null) {
+                const { alpha2 } = user.languageByLocale
+                if (teach.hasOwnProperty(alpha2)) {
+                    teach = { ...teach, [alpha2]: true }
+                } else {
+                    let foundItem = items.find((item) => item.value === alpha2)
+                    if (foundItem) {
+                        teachOther = [...teachOther, foundItem]
+                    }
+                }
             }
         }
     }
@@ -220,13 +230,7 @@
     </p>
 {:else}
     <div class="container max-w-2xl px-4 py-8 md:py-8">
-        <PageTitle>
-            {#if !$currentUser.fetching && $currentUser?.data?.users.nodes[0]?.username?.length}
-                Profile
-            {:else}
-                Tell us a little bit about yourself
-            {/if}
-        </PageTitle>
+        <PageTitle>Tell us a little bit about yourself</PageTitle>
 
         <form
             name="user-profile"

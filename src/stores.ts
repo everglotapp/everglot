@@ -18,6 +18,7 @@ export const currentUser = operationStore<{
             "bio" | "email" | "gender" | "username" | "uuid" | "avatarUrl"
         > & {
             userLanguages: { totalCount: number }
+            languageByLocale: Pick<Language, "alpha2"> | null
         })[]
     }
 }>(CurrentUser)

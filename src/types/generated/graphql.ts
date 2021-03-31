@@ -1897,7 +1897,10 @@ export type CurrentUserQuery = (
       & { userLanguages: (
         { __typename?: 'UserLanguagesConnection' }
         & Pick<UserLanguagesConnection, 'totalCount'>
-      ) }
+      ), languageByLocale?: Maybe<(
+        { __typename?: 'Language' }
+        & Pick<Language, 'alpha2'>
+      )> }
     )>> }
   )> }
 );
@@ -1941,6 +1944,9 @@ export const CurrentUser = gql`
       avatarUrl
       userLanguages {
         totalCount
+      }
+      languageByLocale {
+        alpha2
       }
     }
   }

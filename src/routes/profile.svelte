@@ -34,7 +34,7 @@
         const user = $currentUser.data.users.nodes[0]
         if (user.username !== null && user.userLanguages.totalCount) {
             // Profile has already been completed, a second time won't work.
-            goto("/groups", { replaceState: true, noscroll: false })
+            goto("/profile/success", { replaceState: true, noscroll: false })
         } else if (!prefilled) {
             // Pre-fill form.
             prefilled = true
@@ -176,7 +176,7 @@
             ...Object.keys(teach).filter((code) => teach[code]),
             ...teachOther.map((item) => item.value),
         ]
-        const response = await fetch("/profile/", {
+        const response = await fetch("/profile", {
             method: "post",
             headers: {
                 Accept: "application/json",
@@ -209,7 +209,7 @@
                 ? "German"
                 : // : learnOther[0].label // FIXME: learnOther[0] can be undefined here … why?
                   "English"
-            goto("/chat")
+            goto("/profile/success")
         } else {
             errorMessage = res.message
         }

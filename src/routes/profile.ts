@@ -140,21 +140,60 @@ export async function post(req: Request, res: Response, _next: () => void) {
         const client = await createDatabasePool().connect()
         try {
             await client.query("BEGIN")
-            console.assert(!!req.session.user_id)
-            await client.query({
-                text: SQL_UPDATE_USER_ATTRIBUTES,
-                values: [req.session.user_id, req.body.username, gender],
-            })
-            await client.query({
-                text: SQL_DELETE_USER_LANGUAGES,
-                values: [req.session.user_id],
-            })
+            const { user_id: userId } = req.session
+            if (!userId) {
+                throw new Error(
+                    "User is not logged in. This should never happen."
+                )
+            }
+            if (
+                !(
+                    await client.query({
+                        text: SQL_UPDATE_USER_ATTRIBUTES,
+                        values: [userId, req.body.username, gender],
+                    })
+                )?.fields.length
+            ) {
+                throw new Error(
+                    `Failed to update username and gender of user ${userId}`
+                )
+            }
+            console.log(
+                await client.query({
+                    text: SQL_DELETE_USER_LANGUAGES,
+                    values: [userId],
+                })
+            )
+            if (
+                !(
+                    await client.query({
+                        text: SQL_DELETE_USER_LANGUAGES,
+                        values: [userId],
+                    })
+                )?.fields.length
+            ) {
+                throw new Error(`Failed to delete languages of user ${userId}`)
+            }
             const { teach, learn, cefrLevels } = req.body
             for (const code of teach) {
-                await client.query({
-                    text: SQL_ASSIGN_NATIVE_LANGUAGE,
-                    values: [req.session.user_id, code],
-                })
+                console.log(
+                    await client.query({
+                        text: SQL_ASSIGN_NATIVE_LANGUAGE,
+                        values: [userId, code],
+                    })
+                )
+                if (
+                    (
+                        await client.query({
+                            text: SQL_ASSIGN_NATIVE_LANGUAGE,
+                            values: [userId, code],
+                        })
+                    )?.rowCount !== 1
+                ) {
+                    throw new Error(
+                        `Failed to assign native language ${code} to user ${userId}`
+                    )
+                }
             }
             for (const code of learn) {
                 if (!cefrLevels.hasOwnProperty(code)) {
@@ -165,10 +204,24 @@ export async function post(req: Request, res: Response, _next: () => void) {
                         `User claimed to learn the language with code "${code}" which they already speak natively.`
                     )
                 }
-                await client.query({
-                    text: SQL_ASSIGN_NON_NATIVE_LANGUAGE,
-                    values: [req.session.user_id, code, cefrLevels[code]],
-                })
+                console.log(
+                    await client.query({
+                        text: SQL_ASSIGN_NON_NATIVE_LANGUAGE,
+                        values: [userId, code, cefrLevels[code]],
+                    })
+                )
+                if (
+                    (
+                        await client.query({
+                            text: SQL_ASSIGN_NON_NATIVE_LANGUAGE,
+                            values: [userId, code, cefrLevels[code]],
+                        })
+                    )?.fields.length
+                ) {
+                    throw new Error(
+                        `Failed to assign target language with code "${code}" to user ${userId}.`
+                    )
+                }
             }
             await client.query("COMMIT")
             res.status(200).json({
@@ -188,14 +241,16 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
 const SQL_UPDATE_USER_ATTRIBUTES = `
 UPDATE users SET
-username = $2,
-gender = $3,
-last_active_at = NOW()
-WHERE users.id = $1`
+    username = $2,
+    gender = $3,
+    last_active_at = NOW()
+WHERE id = $1
+RETURNING id`
 
 const SQL_DELETE_USER_LANGUAGES = `
 DELETE FROM user_languages
-WHERE user_id = $1`
+WHERE user_id = $1
+RETURNING id`
 
 const SQL_ASSIGN_NATIVE_LANGUAGE = `
 INSERT INTO user_languages (
@@ -213,7 +268,8 @@ VALUES (
     ),
     null,
     true
-)`
+)
+RETURNING id`
 
 const SQL_ASSIGN_NON_NATIVE_LANGUAGE = `
 INSERT INTO user_languages (
@@ -235,4 +291,5 @@ VALUES (
         WHERE name = $3
     ),
     false
-)`
+)
+RETURNING id`

@@ -229,7 +229,7 @@
         <ErrorMessage>{$languageCodeMappings.error.message}</ErrorMessage>
     </p>
 {:else}
-    <div class="container max-w-2xl px-4 py-8 md:py-8">
+    <div class="container max-w-2xl px-4 py-8 md:py-8" in:scale|local>
         <PageTitle>Tell us a little bit about yourself</PageTitle>
 
         <form

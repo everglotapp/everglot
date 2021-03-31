@@ -29,6 +29,13 @@
 
     query(languageCodeMappings)
 
+    $: if (!$currentUser.fetching && $currentUser.data?.users.nodes[0]) {
+        const { username, userLanguages } = $currentUser.data.users.nodes[0]
+        if (username !== null && userLanguages.totalCount) {
+            goto("/groups")
+        }
+    }
+
     let teach: Record<string, boolean> = {
         de: false,
         en: false,

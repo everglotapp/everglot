@@ -18,7 +18,7 @@
     {#if $chatUsers.fetching}
         …
     {:else if user}
-        <span class="font-bold text-gray-bitdark">{user.username}</span>
+        <span class="font-bold text-gray-bitdark">{user.username || "?"}</span>
         <hr class="my-1" />
         <div>{user.bio}</div>
     {:else}

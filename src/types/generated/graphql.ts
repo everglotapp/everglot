@@ -391,7 +391,7 @@ export type User = Node & {
   passwordHash?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
   avatarUrl?: Maybe<Scalars['String']>;
-  locale: Scalars['Int'];
+  locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;
   /** Reads a single `Language` that is related to this `User`. */
   languageByLocale?: Maybe<Language>;
@@ -1894,6 +1894,10 @@ export type CurrentUserQuery = (
     & { nodes: Array<Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid' | 'avatarUrl'>
+      & { userLanguages: (
+        { __typename?: 'UserLanguagesConnection' }
+        & Pick<UserLanguagesConnection, 'totalCount'>
+      ) }
     )>> }
   )> }
 );
@@ -1935,6 +1939,9 @@ export const CurrentUser = gql`
       username
       uuid
       avatarUrl
+      userLanguages {
+        totalCount
+      }
     }
   }
 }

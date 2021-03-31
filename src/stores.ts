@@ -13,10 +13,12 @@ export const room = writable<string>("English")
 
 export const currentUser = operationStore<{
     users: {
-        nodes: Pick<
+        nodes: (Pick<
             User,
             "bio" | "email" | "gender" | "username" | "uuid" | "avatarUrl"
-        >[]
+        > & {
+            userLanguages: { totalCount: number }
+        })[]
     }
 }>(CurrentUser)
 

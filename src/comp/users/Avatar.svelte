@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let username = ""
+    export let username: string = ""
     export let url = ""
     export let size = 50
 

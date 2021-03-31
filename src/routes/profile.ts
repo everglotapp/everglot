@@ -53,7 +53,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
     if (await userHasCompletedProfile(req.session.user_id!)) {
-        res.redirect("/groups")
+        res.status(403).json({
+            success: false,
+            message: "You already completed your profile.",
+        })
         return
     }
     const gender: Gender | null =

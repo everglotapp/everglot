@@ -85,7 +85,7 @@
                             : undefined}
                         href="/groups"
                         class="nav-item-with-icon"
-                        ><span>My Groups</span>
+                        ><span>Groups</span>
                         <svg
                             width="32"
                             height="32"
@@ -245,7 +245,7 @@
         @apply text-center;
 
         @screen md {
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 2rem;
         }
     }
 

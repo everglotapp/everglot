@@ -8,19 +8,19 @@
 
 <div class="container flex w-auto gap-x-4">
     <div
-        class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center flex justify-center"
+        class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center flex justify-center shadow-sm"
     >
         <ButtonLarge tag="button">German</ButtonLarge>
     </div>
 
     <div
-        class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center flex justify-center"
+        class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center flex justify-center shadow-sm"
     >
         <ButtonLarge tag="button">English</ButtonLarge>
     </div>
 
     <div
-        class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center flex justify-center"
+        class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center flex justify-center shadow-sm"
     >
         <ButtonLarge tag="button">Chinese</ButtonLarge>
     </div>

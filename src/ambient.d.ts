@@ -39,3 +39,4 @@ declare module "*.webp" {
 }
 
 declare module "svelte-feather-icons"
+declare module "fakerator"

@@ -44,6 +44,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: GroupUserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupUserFilter
   ): GroupUsersConnection
 
   """Reads and enables pagination through a set of `Group`."""
@@ -73,6 +78,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: GroupCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupFilter
   ): GroupsConnection
 
   """Reads and enables pagination through a set of `LanguageSkillLevel`."""
@@ -102,6 +112,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: LanguageSkillLevelCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: LanguageSkillLevelFilter
   ): LanguageSkillLevelsConnection
 
   """Reads and enables pagination through a set of `Language`."""
@@ -131,6 +146,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: LanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: LanguageFilter
   ): LanguagesConnection
 
   """Reads and enables pagination through a set of `UserLanguage`."""
@@ -160,6 +180,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserLanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserLanguageFilter
   ): UserLanguagesConnection
 
   """Reads and enables pagination through a set of `UserSession`."""
@@ -189,6 +214,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserSessionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserSessionFilter
   ): UserSessionsConnection
 
   """Reads and enables pagination through a set of `User`."""
@@ -218,6 +248,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
   ): UsersConnection
   groupUser(id: Int!): GroupUser
   group(id: Int!): Group
@@ -231,6 +266,119 @@ type Query implements Node {
   userByEmail(email: String!): User
   userByUuid(uuid: UUID!): User
   currentUserId: Int
+
+  """Reads and enables pagination through a set of `User`."""
+  usersWithoutGroup(
+    ntv: Boolean
+    lid: Int
+    lsklid: Int
+
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): UsersConnection
+
+  """Reads and enables pagination through a set of `User`."""
+  usersWithoutGroups(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): UsersConnection
+
+  """Reads and enables pagination through a set of `User`."""
+  usersWithoutLearnerGroup(
+    lid: Int
+    lsklid: Int
+
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): UsersConnection
+
+  """Reads and enables pagination through a set of `User`."""
+  usersWithoutNativeGroup(
+    lid: Int
+
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): UsersConnection
 
   """Reads a single `GroupUser` using its globally unique `ID`."""
   groupUserByNodeId(
@@ -386,6 +534,11 @@ type User implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserLanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserLanguageFilter
   ): UserLanguagesConnection!
 
   """Reads and enables pagination through a set of `GroupUser`."""
@@ -415,6 +568,11 @@ type User implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: GroupUserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupUserFilter
   ): GroupUsersConnection!
 }
 
@@ -462,6 +620,11 @@ type Language implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
   ): UsersConnection!
 
   """Reads and enables pagination through a set of `UserLanguage`."""
@@ -491,6 +654,11 @@ type Language implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserLanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserLanguageFilter
   ): UserLanguagesConnection!
 
   """Reads and enables pagination through a set of `Group`."""
@@ -520,6 +688,11 @@ type Language implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: GroupCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupFilter
   ): GroupsConnection!
 }
 
@@ -644,6 +817,317 @@ input UserCondition {
   googleId: String
 }
 
+"""
+A filter to be used against `User` object types. All fields are combined with a logical ‘and.’
+"""
+input UserFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `username` field."""
+  username: StringFilter
+
+  """Filter by the object’s `email` field."""
+  email: StringFilter
+
+  """Filter by the object’s `unconfirmedEmail` field."""
+  unconfirmedEmail: StringFilter
+
+  """Filter by the object’s `gender` field."""
+  gender: StringFilter
+
+  """Filter by the object’s `bio` field."""
+  bio: StringFilter
+
+  """Filter by the object’s `lastActiveAt` field."""
+  lastActiveAt: DatetimeFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Filter by the object’s `passwordHash` field."""
+  passwordHash: StringFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `avatarUrl` field."""
+  avatarUrl: StringFilter
+
+  """Filter by the object’s `locale` field."""
+  locale: IntFilter
+
+  """Filter by the object’s `googleId` field."""
+  googleId: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [UserFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [UserFilter!]
+
+  """Negates the expression."""
+  not: UserFilter
+}
+
+"""
+A filter to be used against Int fields. All fields are combined with a logical ‘and.’
+"""
+input IntFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Int
+
+  """Not equal to the specified value."""
+  notEqualTo: Int
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Int
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Int
+
+  """Included in the specified list."""
+  in: [Int!]
+
+  """Not included in the specified list."""
+  notIn: [Int!]
+
+  """Less than the specified value."""
+  lessThan: Int
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Int
+
+  """Greater than the specified value."""
+  greaterThan: Int
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Int
+}
+
+"""
+A filter to be used against String fields. All fields are combined with a logical ‘and.’
+"""
+input StringFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: String
+
+  """Not equal to the specified value."""
+  notEqualTo: String
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: String
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: String
+
+  """Included in the specified list."""
+  in: [String!]
+
+  """Not included in the specified list."""
+  notIn: [String!]
+
+  """Less than the specified value."""
+  lessThan: String
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: String
+
+  """Greater than the specified value."""
+  greaterThan: String
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: String
+
+  """Contains the specified string (case-sensitive)."""
+  includes: String
+
+  """Does not contain the specified string (case-sensitive)."""
+  notIncludes: String
+
+  """Contains the specified string (case-insensitive)."""
+  includesInsensitive: String
+
+  """Does not contain the specified string (case-insensitive)."""
+  notIncludesInsensitive: String
+
+  """Starts with the specified string (case-sensitive)."""
+  startsWith: String
+
+  """Does not start with the specified string (case-sensitive)."""
+  notStartsWith: String
+
+  """Starts with the specified string (case-insensitive)."""
+  startsWithInsensitive: String
+
+  """Does not start with the specified string (case-insensitive)."""
+  notStartsWithInsensitive: String
+
+  """Ends with the specified string (case-sensitive)."""
+  endsWith: String
+
+  """Does not end with the specified string (case-sensitive)."""
+  notEndsWith: String
+
+  """Ends with the specified string (case-insensitive)."""
+  endsWithInsensitive: String
+
+  """Does not end with the specified string (case-insensitive)."""
+  notEndsWithInsensitive: String
+
+  """
+  Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  like: String
+
+  """
+  Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  notLike: String
+
+  """
+  Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  likeInsensitive: String
+
+  """
+  Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  notLikeInsensitive: String
+
+  """Equal to the specified value (case-insensitive)."""
+  equalToInsensitive: String
+
+  """Not equal to the specified value (case-insensitive)."""
+  notEqualToInsensitive: String
+
+  """
+  Not equal to the specified value, treating null like an ordinary value (case-insensitive).
+  """
+  distinctFromInsensitive: String
+
+  """
+  Equal to the specified value, treating null like an ordinary value (case-insensitive).
+  """
+  notDistinctFromInsensitive: String
+
+  """Included in the specified list (case-insensitive)."""
+  inInsensitive: [String!]
+
+  """Not included in the specified list (case-insensitive)."""
+  notInInsensitive: [String!]
+
+  """Less than the specified value (case-insensitive)."""
+  lessThanInsensitive: String
+
+  """Less than or equal to the specified value (case-insensitive)."""
+  lessThanOrEqualToInsensitive: String
+
+  """Greater than the specified value (case-insensitive)."""
+  greaterThanInsensitive: String
+
+  """Greater than or equal to the specified value (case-insensitive)."""
+  greaterThanOrEqualToInsensitive: String
+}
+
+"""
+A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
+"""
+input DatetimeFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Datetime
+
+  """Not equal to the specified value."""
+  notEqualTo: Datetime
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Datetime
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Datetime
+
+  """Included in the specified list."""
+  in: [Datetime!]
+
+  """Not included in the specified list."""
+  notIn: [Datetime!]
+
+  """Less than the specified value."""
+  lessThan: Datetime
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Datetime
+
+  """Greater than the specified value."""
+  greaterThan: Datetime
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Datetime
+}
+
+"""
+A filter to be used against UUID fields. All fields are combined with a logical ‘and.’
+"""
+input UUIDFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: UUID
+
+  """Not equal to the specified value."""
+  notEqualTo: UUID
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: UUID
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: UUID
+
+  """Included in the specified list."""
+  in: [UUID!]
+
+  """Not included in the specified list."""
+  notIn: [UUID!]
+
+  """Less than the specified value."""
+  lessThan: UUID
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: UUID
+
+  """Greater than the specified value."""
+  greaterThan: UUID
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: UUID
+}
+
 """A connection to a list of `UserLanguage` values."""
 type UserLanguagesConnection {
   """A list of `UserLanguage` objects."""
@@ -720,6 +1204,11 @@ type LanguageSkillLevel implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserLanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserLanguageFilter
   ): UserLanguagesConnection!
 
   """Reads and enables pagination through a set of `Group`."""
@@ -749,6 +1238,11 @@ type LanguageSkillLevel implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: GroupCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupFilter
   ): GroupsConnection!
 }
 
@@ -793,6 +1287,80 @@ input UserLanguageCondition {
 
   """Checks for equality with the object’s `createdAt` field."""
   createdAt: Datetime
+}
+
+"""
+A filter to be used against `UserLanguage` object types. All fields are combined with a logical ‘and.’
+"""
+input UserLanguageFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `languageId` field."""
+  languageId: IntFilter
+
+  """Filter by the object’s `languageSkillLevelId` field."""
+  languageSkillLevelId: IntFilter
+
+  """Filter by the object’s `native` field."""
+  native: BooleanFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [UserLanguageFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [UserLanguageFilter!]
+
+  """Negates the expression."""
+  not: UserLanguageFilter
+}
+
+"""
+A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
+"""
+input BooleanFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Boolean
+
+  """Not equal to the specified value."""
+  notEqualTo: Boolean
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Boolean
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Boolean
+
+  """Included in the specified list."""
+  in: [Boolean!]
+
+  """Not included in the specified list."""
+  notIn: [Boolean!]
+
+  """Less than the specified value."""
+  lessThan: Boolean
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Boolean
+
+  """Greater than the specified value."""
+  greaterThan: Boolean
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Boolean
 }
 
 """A connection to a list of `Group` values."""
@@ -857,6 +1425,11 @@ type Group implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: GroupUserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupUserFilter
   ): GroupUsersConnection!
 }
 
@@ -901,6 +1474,80 @@ input GroupUserCondition {
 
   """Checks for equality with the object’s `lastActive` field."""
   lastActive: Datetime
+}
+
+"""
+A filter to be used against `GroupUser` object types. All fields are combined with a logical ‘and.’
+"""
+input GroupUserFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `groupId` field."""
+  groupId: IntFilter
+
+  """Filter by the object’s `userType` field."""
+  userType: UserTypeFilter
+
+  """Filter by the object’s `joinedOn` field."""
+  joinedOn: DatetimeFilter
+
+  """Filter by the object’s `lastActive` field."""
+  lastActive: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [GroupUserFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GroupUserFilter!]
+
+  """Negates the expression."""
+  not: GroupUserFilter
+}
+
+"""
+A filter to be used against UserType fields. All fields are combined with a logical ‘and.’
+"""
+input UserTypeFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: UserType
+
+  """Not equal to the specified value."""
+  notEqualTo: UserType
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: UserType
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: UserType
+
+  """Included in the specified list."""
+  in: [UserType!]
+
+  """Not included in the specified list."""
+  notIn: [UserType!]
+
+  """Less than the specified value."""
+  lessThan: UserType
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: UserType
+
+  """Greater than the specified value."""
+  greaterThan: UserType
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: UserType
 }
 
 """A `Group` edge in the connection."""
@@ -952,6 +1599,38 @@ input GroupCondition {
 
   """Checks for equality with the object’s `createdAt` field."""
   createdAt: Datetime
+}
+
+"""
+A filter to be used against `Group` object types. All fields are combined with a logical ‘and.’
+"""
+input GroupFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `groupName` field."""
+  groupName: StringFilter
+
+  """Filter by the object’s `global` field."""
+  global: BooleanFilter
+
+  """Filter by the object’s `languageId` field."""
+  languageId: IntFilter
+
+  """Filter by the object’s `languageSkillLevelId` field."""
+  languageSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [GroupFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GroupFilter!]
+
+  """Negates the expression."""
+  not: GroupFilter
 }
 
 """A `UserLanguage` edge in the connection."""
@@ -1023,6 +1702,26 @@ input LanguageSkillLevelCondition {
   name: String
 }
 
+"""
+A filter to be used against `LanguageSkillLevel` object types. All fields are combined with a logical ‘and.’
+"""
+input LanguageSkillLevelFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [LanguageSkillLevelFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [LanguageSkillLevelFilter!]
+
+  """Negates the expression."""
+  not: LanguageSkillLevelFilter
+}
+
 """A connection to a list of `Language` values."""
 type LanguagesConnection {
   """A list of `Language` objects."""
@@ -1080,6 +1779,32 @@ input LanguageCondition {
 
   """Checks for equality with the object’s `createdAt` field."""
   createdAt: Datetime
+}
+
+"""
+A filter to be used against `Language` object types. All fields are combined with a logical ‘and.’
+"""
+input LanguageFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `alpha2` field."""
+  alpha2: StringFilter
+
+  """Filter by the object’s `englishName` field."""
+  englishName: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [LanguageFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [LanguageFilter!]
+
+  """Negates the expression."""
+  not: LanguageFilter
 }
 
 """A connection to a list of `UserSession` values."""
@@ -1149,6 +1874,26 @@ input UserSessionCondition {
 
   """Checks for equality with the object’s `expire` field."""
   expire: Datetime
+}
+
+"""
+A filter to be used against `UserSession` object types. All fields are combined with a logical ‘and.’
+"""
+input UserSessionFilter {
+  """Filter by the object’s `sid` field."""
+  sid: StringFilter
+
+  """Filter by the object’s `expire` field."""
+  expire: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [UserSessionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [UserSessionFilter!]
+
+  """Negates the expression."""
+  not: UserSessionFilter
 }
 
 """

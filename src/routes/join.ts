@@ -9,6 +9,11 @@ import { v4 as uuidv4 } from "uuid"
 
 import validate from "deep-email-validator"
 import { OAuth2Client } from "google-auth-library"
+import {
+    createGroup,
+    getUsersWithoutLearnerGroup,
+    getUsersWithoutNativeGroup,
+} from "../server/groups"
 
 const BCRYPT_WORK_FACTOR = 14
 
@@ -17,6 +22,9 @@ import type { Request, Response } from "express"
 type InvalidEmailReason = "smtp" | "regex" | "typo" | "mx" | "disposable"
 
 export function get(req: Request, res: Response, next: () => void) {
+    // createGroup(false, "fuckooff", 1, 1)
+    // getUsersWithoutLearnerGroup(37, 1)
+    // getUsersWithoutNativeGroup(33)
     if (req.session.user_id) {
         res.redirect("/")
         return

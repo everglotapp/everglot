@@ -1,5 +1,15 @@
 {
   "css.validate": false,
   "less.validate": false,
-  "scss.validate": false
+  "scss.validate": false,
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
 }

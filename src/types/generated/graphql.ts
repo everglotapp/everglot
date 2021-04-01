@@ -35,6 +35,10 @@ export type Query = Node & {
   nodeId: Scalars['ID'];
   /** Fetches an object given its globally unique `ID`. */
   node?: Maybe<Node>;
+  /** Reads and enables pagination through a set of `GroupUser`. */
+  groupUsers?: Maybe<GroupUsersConnection>;
+  /** Reads and enables pagination through a set of `Group`. */
+  groups?: Maybe<GroupsConnection>;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
   languageSkillLevels?: Maybe<LanguageSkillLevelsConnection>;
   /** Reads and enables pagination through a set of `Language`. */
@@ -45,6 +49,8 @@ export type Query = Node & {
   userSessions?: Maybe<UserSessionsConnection>;
   /** Reads and enables pagination through a set of `User`. */
   users?: Maybe<UsersConnection>;
+  groupUser?: Maybe<GroupUser>;
+  group?: Maybe<Group>;
   languageSkillLevel?: Maybe<LanguageSkillLevel>;
   language?: Maybe<Language>;
   languageByAlpha2?: Maybe<Language>;
@@ -55,6 +61,18 @@ export type Query = Node & {
   userByEmail?: Maybe<User>;
   userByUuid?: Maybe<User>;
   currentUserId?: Maybe<Scalars['Int']>;
+  /** Reads and enables pagination through a set of `User`. */
+  usersWithoutGroup?: Maybe<UsersConnection>;
+  /** Reads and enables pagination through a set of `User`. */
+  usersWithoutGroups?: Maybe<UsersConnection>;
+  /** Reads and enables pagination through a set of `User`. */
+  usersWithoutLearnerGroup?: Maybe<UsersConnection>;
+  /** Reads and enables pagination through a set of `User`. */
+  usersWithoutNativeGroup?: Maybe<UsersConnection>;
+  /** Reads a single `GroupUser` using its globally unique `ID`. */
+  groupUserByNodeId?: Maybe<GroupUser>;
+  /** Reads a single `Group` using its globally unique `ID`. */
+  groupByNodeId?: Maybe<Group>;
   /** Reads a single `LanguageSkillLevel` using its globally unique `ID`. */
   languageSkillLevelByNodeId?: Maybe<LanguageSkillLevel>;
   /** Reads a single `Language` using its globally unique `ID`. */
@@ -75,6 +93,32 @@ export type QueryNodeArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryGroupUsersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  condition?: Maybe<GroupUserCondition>;
+  filter?: Maybe<GroupUserFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGroupsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryLanguageSkillLevelsArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
@@ -83,6 +127,7 @@ export type QueryLanguageSkillLevelsArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
   condition?: Maybe<LanguageSkillLevelCondition>;
+  filter?: Maybe<LanguageSkillLevelFilter>;
 };
 
 
@@ -95,6 +140,7 @@ export type QueryLanguagesArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<LanguagesOrderBy>>;
   condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
 };
 
 
@@ -107,6 +153,7 @@ export type QueryUserLanguagesArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
   condition?: Maybe<UserLanguageCondition>;
+  filter?: Maybe<UserLanguageFilter>;
 };
 
 
@@ -119,6 +166,7 @@ export type QueryUserSessionsArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<UserSessionsOrderBy>>;
   condition?: Maybe<UserSessionCondition>;
+  filter?: Maybe<UserSessionFilter>;
 };
 
 
@@ -131,6 +179,19 @@ export type QueryUsersArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<UsersOrderBy>>;
   condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGroupUserArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGroupArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -189,6 +250,68 @@ export type QueryUserByUuidArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryUsersWithoutGroupArgs = {
+  ntv?: Maybe<Scalars['Boolean']>;
+  lid?: Maybe<Scalars['Int']>;
+  lsklid?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUsersWithoutGroupsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUsersWithoutLearnerGroupArgs = {
+  lid?: Maybe<Scalars['Int']>;
+  lsklid?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUsersWithoutNativeGroupArgs = {
+  lid?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGroupUserByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGroupByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryLanguageSkillLevelByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
@@ -223,70 +346,40 @@ export type Node = {
   nodeId: Scalars['ID'];
 };
 
-/** A connection to a list of `LanguageSkillLevel` values. */
-export type LanguageSkillLevelsConnection = {
-  __typename?: 'LanguageSkillLevelsConnection';
-  /** A list of `LanguageSkillLevel` objects. */
-  nodes: Array<Maybe<LanguageSkillLevel>>;
-  /** A list of edges which contains the `LanguageSkillLevel` and cursor to aid in pagination. */
-  edges: Array<LanguageSkillLevelsEdge>;
+/** A connection to a list of `GroupUser` values. */
+export type GroupUsersConnection = {
+  __typename?: 'GroupUsersConnection';
+  /** A list of `GroupUser` objects. */
+  nodes: Array<Maybe<GroupUser>>;
+  /** A list of edges which contains the `GroupUser` and cursor to aid in pagination. */
+  edges: Array<GroupUsersEdge>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
-  /** The count of *all* `LanguageSkillLevel` you could get from the connection. */
+  /** The count of *all* `GroupUser` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
-export type LanguageSkillLevel = Node & {
-  __typename?: 'LanguageSkillLevel';
-  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
-  id: Scalars['Int'];
-  name?: Maybe<Scalars['String']>;
-  /** Reads and enables pagination through a set of `UserLanguage`. */
-  userLanguages: UserLanguagesConnection;
-};
-
-
-export type LanguageSkillLevelUserLanguagesArgs = {
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  before?: Maybe<Scalars['Cursor']>;
-  after?: Maybe<Scalars['Cursor']>;
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
-  condition?: Maybe<UserLanguageCondition>;
-};
-
-/** A connection to a list of `UserLanguage` values. */
-export type UserLanguagesConnection = {
-  __typename?: 'UserLanguagesConnection';
-  /** A list of `UserLanguage` objects. */
-  nodes: Array<Maybe<UserLanguage>>;
-  /** A list of edges which contains the `UserLanguage` and cursor to aid in pagination. */
-  edges: Array<UserLanguagesEdge>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** The count of *all* `UserLanguage` you could get from the connection. */
-  totalCount: Scalars['Int'];
-};
-
-export type UserLanguage = Node & {
-  __typename?: 'UserLanguage';
+export type GroupUser = Node & {
+  __typename?: 'GroupUser';
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   id: Scalars['Int'];
   userId: Scalars['Int'];
-  languageId: Scalars['Int'];
-  languageSkillLevelId?: Maybe<Scalars['Int']>;
-  native: Scalars['Boolean'];
-  createdAt: Scalars['Datetime'];
-  /** Reads a single `User` that is related to this `UserLanguage`. */
+  groupId: Scalars['Int'];
+  userType: UserType;
+  joinedOn: Scalars['Datetime'];
+  lastActive?: Maybe<Scalars['Datetime']>;
+  /** Reads a single `User` that is related to this `GroupUser`. */
   user?: Maybe<User>;
-  /** Reads a single `Language` that is related to this `UserLanguage`. */
-  language?: Maybe<Language>;
-  /** Reads a single `LanguageSkillLevel` that is related to this `UserLanguage`. */
-  languageSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** Reads a single `Group` that is related to this `GroupUser`. */
+  group?: Maybe<Group>;
 };
+
+export enum UserType {
+  Learner = 'LEARNER',
+  Native = 'NATIVE',
+  Global = 'GLOBAL'
+}
 
 
 export type User = Node & {
@@ -310,6 +403,8 @@ export type User = Node & {
   languageByLocale?: Maybe<Language>;
   /** Reads and enables pagination through a set of `UserLanguage`. */
   userLanguages: UserLanguagesConnection;
+  /** Reads and enables pagination through a set of `GroupUser`. */
+  groupUsers: GroupUsersConnection;
 };
 
 
@@ -321,6 +416,19 @@ export type UserUserLanguagesArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
   condition?: Maybe<UserLanguageCondition>;
+  filter?: Maybe<UserLanguageFilter>;
+};
+
+
+export type UserGroupUsersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  condition?: Maybe<GroupUserCondition>;
+  filter?: Maybe<GroupUserFilter>;
 };
 
 
@@ -337,6 +445,8 @@ export type Language = Node & {
   usersByLocale: UsersConnection;
   /** Reads and enables pagination through a set of `UserLanguage`. */
   userLanguages: UserLanguagesConnection;
+  /** Reads and enables pagination through a set of `Group`. */
+  groups: GroupsConnection;
 };
 
 
@@ -348,6 +458,7 @@ export type LanguageUsersByLocaleArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<UsersOrderBy>>;
   condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
 };
 
 
@@ -359,6 +470,19 @@ export type LanguageUserLanguagesArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
   condition?: Maybe<UserLanguageCondition>;
+  filter?: Maybe<UserLanguageFilter>;
+};
+
+
+export type LanguageGroupsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
 };
 
 /** A connection to a list of `User` values. */
@@ -460,6 +584,265 @@ export type UserCondition = {
   googleId?: Maybe<Scalars['String']>;
 };
 
+/** A filter to be used against `User` object types. All fields are combined with a logical ‘and.’ */
+export type UserFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `username` field. */
+  username?: Maybe<StringFilter>;
+  /** Filter by the object’s `email` field. */
+  email?: Maybe<StringFilter>;
+  /** Filter by the object’s `unconfirmedEmail` field. */
+  unconfirmedEmail?: Maybe<StringFilter>;
+  /** Filter by the object’s `gender` field. */
+  gender?: Maybe<StringFilter>;
+  /** Filter by the object’s `bio` field. */
+  bio?: Maybe<StringFilter>;
+  /** Filter by the object’s `lastActiveAt` field. */
+  lastActiveAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `passwordHash` field. */
+  passwordHash?: Maybe<StringFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `avatarUrl` field. */
+  avatarUrl?: Maybe<StringFilter>;
+  /** Filter by the object’s `locale` field. */
+  locale?: Maybe<IntFilter>;
+  /** Filter by the object’s `googleId` field. */
+  googleId?: Maybe<StringFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<UserFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<UserFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<UserFilter>;
+};
+
+/** A filter to be used against Int fields. All fields are combined with a logical ‘and.’ */
+export type IntFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['Int']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['Int']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['Int']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['Int']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['Int']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['Int']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['Int']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['Int']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['Int']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['Int']>;
+};
+
+/** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
+export type StringFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['String']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['String']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['String']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['String']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['String']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['String']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['String']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['String']>;
+  /** Contains the specified string (case-sensitive). */
+  includes?: Maybe<Scalars['String']>;
+  /** Does not contain the specified string (case-sensitive). */
+  notIncludes?: Maybe<Scalars['String']>;
+  /** Contains the specified string (case-insensitive). */
+  includesInsensitive?: Maybe<Scalars['String']>;
+  /** Does not contain the specified string (case-insensitive). */
+  notIncludesInsensitive?: Maybe<Scalars['String']>;
+  /** Starts with the specified string (case-sensitive). */
+  startsWith?: Maybe<Scalars['String']>;
+  /** Does not start with the specified string (case-sensitive). */
+  notStartsWith?: Maybe<Scalars['String']>;
+  /** Starts with the specified string (case-insensitive). */
+  startsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Does not start with the specified string (case-insensitive). */
+  notStartsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Ends with the specified string (case-sensitive). */
+  endsWith?: Maybe<Scalars['String']>;
+  /** Does not end with the specified string (case-sensitive). */
+  notEndsWith?: Maybe<Scalars['String']>;
+  /** Ends with the specified string (case-insensitive). */
+  endsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Does not end with the specified string (case-insensitive). */
+  notEndsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  like?: Maybe<Scalars['String']>;
+  /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  notLike?: Maybe<Scalars['String']>;
+  /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  likeInsensitive?: Maybe<Scalars['String']>;
+  /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  notLikeInsensitive?: Maybe<Scalars['String']>;
+  /** Equal to the specified value (case-insensitive). */
+  equalToInsensitive?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value (case-insensitive). */
+  notEqualToInsensitive?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
+  distinctFromInsensitive?: Maybe<Scalars['String']>;
+  /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
+  notDistinctFromInsensitive?: Maybe<Scalars['String']>;
+  /** Included in the specified list (case-insensitive). */
+  inInsensitive?: Maybe<Array<Scalars['String']>>;
+  /** Not included in the specified list (case-insensitive). */
+  notInInsensitive?: Maybe<Array<Scalars['String']>>;
+  /** Less than the specified value (case-insensitive). */
+  lessThanInsensitive?: Maybe<Scalars['String']>;
+  /** Less than or equal to the specified value (case-insensitive). */
+  lessThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
+  /** Greater than the specified value (case-insensitive). */
+  greaterThanInsensitive?: Maybe<Scalars['String']>;
+  /** Greater than or equal to the specified value (case-insensitive). */
+  greaterThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
+};
+
+/** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
+export type DatetimeFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['Datetime']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['Datetime']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['Datetime']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['Datetime']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['Datetime']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['Datetime']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['Datetime']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['Datetime']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['Datetime']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against UUID fields. All fields are combined with a logical ‘and.’ */
+export type UuidFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['UUID']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['UUID']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['UUID']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['UUID']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['UUID']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['UUID']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['UUID']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['UUID']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['UUID']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['UUID']>;
+};
+
+/** A connection to a list of `UserLanguage` values. */
+export type UserLanguagesConnection = {
+  __typename?: 'UserLanguagesConnection';
+  /** A list of `UserLanguage` objects. */
+  nodes: Array<Maybe<UserLanguage>>;
+  /** A list of edges which contains the `UserLanguage` and cursor to aid in pagination. */
+  edges: Array<UserLanguagesEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `UserLanguage` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+export type UserLanguage = Node & {
+  __typename?: 'UserLanguage';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  userId: Scalars['Int'];
+  languageId: Scalars['Int'];
+  languageSkillLevelId?: Maybe<Scalars['Int']>;
+  native: Scalars['Boolean'];
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `User` that is related to this `UserLanguage`. */
+  user?: Maybe<User>;
+  /** Reads a single `Language` that is related to this `UserLanguage`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `UserLanguage`. */
+  languageSkillLevel?: Maybe<LanguageSkillLevel>;
+};
+
+export type LanguageSkillLevel = Node & {
+  __typename?: 'LanguageSkillLevel';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  name?: Maybe<Scalars['String']>;
+  /** Reads and enables pagination through a set of `UserLanguage`. */
+  userLanguages: UserLanguagesConnection;
+  /** Reads and enables pagination through a set of `Group`. */
+  groups: GroupsConnection;
+};
+
+
+export type LanguageSkillLevelUserLanguagesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  condition?: Maybe<UserLanguageCondition>;
+  filter?: Maybe<UserLanguageFilter>;
+};
+
+
+export type LanguageSkillLevelGroupsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
+};
+
 /** Methods to use when ordering `UserLanguage`. */
 export enum UserLanguagesOrderBy {
   Natural = 'NATURAL',
@@ -498,6 +881,249 @@ export type UserLanguageCondition = {
   createdAt?: Maybe<Scalars['Datetime']>;
 };
 
+/** A filter to be used against `UserLanguage` object types. All fields are combined with a logical ‘and.’ */
+export type UserLanguageFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `languageId` field. */
+  languageId?: Maybe<IntFilter>;
+  /** Filter by the object’s `languageSkillLevelId` field. */
+  languageSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `native` field. */
+  native?: Maybe<BooleanFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<UserLanguageFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<UserLanguageFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<UserLanguageFilter>;
+};
+
+/** A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’ */
+export type BooleanFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['Boolean']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['Boolean']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['Boolean']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['Boolean']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['Boolean']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['Boolean']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['Boolean']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['Boolean']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['Boolean']>;
+};
+
+/** A connection to a list of `Group` values. */
+export type GroupsConnection = {
+  __typename?: 'GroupsConnection';
+  /** A list of `Group` objects. */
+  nodes: Array<Maybe<Group>>;
+  /** A list of edges which contains the `Group` and cursor to aid in pagination. */
+  edges: Array<GroupsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Group` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+export type Group = Node & {
+  __typename?: 'Group';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  groupName?: Maybe<Scalars['String']>;
+  global: Scalars['Boolean'];
+  languageId: Scalars['Int'];
+  languageSkillLevelId: Scalars['Int'];
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `Language` that is related to this `Group`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Group`. */
+  languageSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** Reads and enables pagination through a set of `GroupUser`. */
+  groupUsers: GroupUsersConnection;
+};
+
+
+export type GroupGroupUsersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  condition?: Maybe<GroupUserCondition>;
+  filter?: Maybe<GroupUserFilter>;
+};
+
+/** Methods to use when ordering `GroupUser`. */
+export enum GroupUsersOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+  GroupIdAsc = 'GROUP_ID_ASC',
+  GroupIdDesc = 'GROUP_ID_DESC',
+  UserTypeAsc = 'USER_TYPE_ASC',
+  UserTypeDesc = 'USER_TYPE_DESC',
+  JoinedOnAsc = 'JOINED_ON_ASC',
+  JoinedOnDesc = 'JOINED_ON_DESC',
+  LastActiveAsc = 'LAST_ACTIVE_ASC',
+  LastActiveDesc = 'LAST_ACTIVE_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/**
+ * A condition to be used against `GroupUser` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
+export type GroupUserCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `groupId` field. */
+  groupId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `userType` field. */
+  userType?: Maybe<UserType>;
+  /** Checks for equality with the object’s `joinedOn` field. */
+  joinedOn?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `lastActive` field. */
+  lastActive?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `GroupUser` object types. All fields are combined with a logical ‘and.’ */
+export type GroupUserFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `groupId` field. */
+  groupId?: Maybe<IntFilter>;
+  /** Filter by the object’s `userType` field. */
+  userType?: Maybe<UserTypeFilter>;
+  /** Filter by the object’s `joinedOn` field. */
+  joinedOn?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `lastActive` field. */
+  lastActive?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<GroupUserFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<GroupUserFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<GroupUserFilter>;
+};
+
+/** A filter to be used against UserType fields. All fields are combined with a logical ‘and.’ */
+export type UserTypeFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<UserType>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<UserType>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<UserType>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<UserType>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<UserType>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<UserType>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<UserType>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<UserType>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<UserType>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<UserType>;
+};
+
+/** A `Group` edge in the connection. */
+export type GroupsEdge = {
+  __typename?: 'GroupsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Group` at the end of the edge. */
+  node?: Maybe<Group>;
+};
+
+/** Methods to use when ordering `Group`. */
+export enum GroupsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  GroupNameAsc = 'GROUP_NAME_ASC',
+  GroupNameDesc = 'GROUP_NAME_DESC',
+  GlobalAsc = 'GLOBAL_ASC',
+  GlobalDesc = 'GLOBAL_DESC',
+  LanguageIdAsc = 'LANGUAGE_ID_ASC',
+  LanguageIdDesc = 'LANGUAGE_ID_DESC',
+  LanguageSkillLevelIdAsc = 'LANGUAGE_SKILL_LEVEL_ID_ASC',
+  LanguageSkillLevelIdDesc = 'LANGUAGE_SKILL_LEVEL_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/** A condition to be used against `Group` object types. All fields are tested for equality and combined with a logical ‘and.’ */
+export type GroupCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `groupName` field. */
+  groupName?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `global` field. */
+  global?: Maybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `languageId` field. */
+  languageId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `languageSkillLevelId` field. */
+  languageSkillLevelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `Group` object types. All fields are combined with a logical ‘and.’ */
+export type GroupFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `groupName` field. */
+  groupName?: Maybe<StringFilter>;
+  /** Filter by the object’s `global` field. */
+  global?: Maybe<BooleanFilter>;
+  /** Filter by the object’s `languageId` field. */
+  languageId?: Maybe<IntFilter>;
+  /** Filter by the object’s `languageSkillLevelId` field. */
+  languageSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<GroupFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<GroupFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<GroupFilter>;
+};
+
 /** A `UserLanguage` edge in the connection. */
 export type UserLanguagesEdge = {
   __typename?: 'UserLanguagesEdge';
@@ -505,6 +1131,28 @@ export type UserLanguagesEdge = {
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `UserLanguage` at the end of the edge. */
   node?: Maybe<UserLanguage>;
+};
+
+/** A `GroupUser` edge in the connection. */
+export type GroupUsersEdge = {
+  __typename?: 'GroupUsersEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `GroupUser` at the end of the edge. */
+  node?: Maybe<GroupUser>;
+};
+
+/** A connection to a list of `LanguageSkillLevel` values. */
+export type LanguageSkillLevelsConnection = {
+  __typename?: 'LanguageSkillLevelsConnection';
+  /** A list of `LanguageSkillLevel` objects. */
+  nodes: Array<Maybe<LanguageSkillLevel>>;
+  /** A list of edges which contains the `LanguageSkillLevel` and cursor to aid in pagination. */
+  edges: Array<LanguageSkillLevelsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `LanguageSkillLevel` you could get from the connection. */
+  totalCount: Scalars['Int'];
 };
 
 /** A `LanguageSkillLevel` edge in the connection. */
@@ -536,6 +1184,20 @@ export type LanguageSkillLevelCondition = {
   id?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `name` field. */
   name?: Maybe<Scalars['String']>;
+};
+
+/** A filter to be used against `LanguageSkillLevel` object types. All fields are combined with a logical ‘and.’ */
+export type LanguageSkillLevelFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `name` field. */
+  name?: Maybe<StringFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<LanguageSkillLevelFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<LanguageSkillLevelFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<LanguageSkillLevelFilter>;
 };
 
 /** A connection to a list of `Language` values. */
@@ -588,6 +1250,24 @@ export type LanguageCondition = {
   englishName?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `createdAt` field. */
   createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `Language` object types. All fields are combined with a logical ‘and.’ */
+export type LanguageFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `alpha2` field. */
+  alpha2?: Maybe<StringFilter>;
+  /** Filter by the object’s `englishName` field. */
+  englishName?: Maybe<StringFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<LanguageFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<LanguageFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<LanguageFilter>;
 };
 
 /** A connection to a list of `UserSession` values. */
@@ -648,9 +1328,27 @@ export type UserSessionCondition = {
   expire?: Maybe<Scalars['Datetime']>;
 };
 
+/** A filter to be used against `UserSession` object types. All fields are combined with a logical ‘and.’ */
+export type UserSessionFilter = {
+  /** Filter by the object’s `sid` field. */
+  sid?: Maybe<StringFilter>;
+  /** Filter by the object’s `expire` field. */
+  expire?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<UserSessionFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<UserSessionFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<UserSessionFilter>;
+};
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Creates a single `GroupUser`. */
+  createGroupUser?: Maybe<CreateGroupUserPayload>;
+  /** Creates a single `Group`. */
+  createGroup?: Maybe<CreateGroupPayload>;
   /** Creates a single `LanguageSkillLevel`. */
   createLanguageSkillLevel?: Maybe<CreateLanguageSkillLevelPayload>;
   /** Creates a single `Language`. */
@@ -661,6 +1359,14 @@ export type Mutation = {
   createUserSession?: Maybe<CreateUserSessionPayload>;
   /** Creates a single `User`. */
   createUser?: Maybe<CreateUserPayload>;
+  /** Updates a single `GroupUser` using its globally unique id and a patch. */
+  updateGroupUserByNodeId?: Maybe<UpdateGroupUserPayload>;
+  /** Updates a single `GroupUser` using a unique key and a patch. */
+  updateGroupUser?: Maybe<UpdateGroupUserPayload>;
+  /** Updates a single `Group` using its globally unique id and a patch. */
+  updateGroupByNodeId?: Maybe<UpdateGroupPayload>;
+  /** Updates a single `Group` using a unique key and a patch. */
+  updateGroup?: Maybe<UpdateGroupPayload>;
   /** Updates a single `LanguageSkillLevel` using its globally unique id and a patch. */
   updateLanguageSkillLevelByNodeId?: Maybe<UpdateLanguageSkillLevelPayload>;
   /** Updates a single `LanguageSkillLevel` using a unique key and a patch. */
@@ -689,6 +1395,14 @@ export type Mutation = {
   updateUserByEmail?: Maybe<UpdateUserPayload>;
   /** Updates a single `User` using a unique key and a patch. */
   updateUserByUuid?: Maybe<UpdateUserPayload>;
+  /** Deletes a single `GroupUser` using its globally unique id. */
+  deleteGroupUserByNodeId?: Maybe<DeleteGroupUserPayload>;
+  /** Deletes a single `GroupUser` using a unique key. */
+  deleteGroupUser?: Maybe<DeleteGroupUserPayload>;
+  /** Deletes a single `Group` using its globally unique id. */
+  deleteGroupByNodeId?: Maybe<DeleteGroupPayload>;
+  /** Deletes a single `Group` using a unique key. */
+  deleteGroup?: Maybe<DeleteGroupPayload>;
   /** Deletes a single `LanguageSkillLevel` using its globally unique id. */
   deleteLanguageSkillLevelByNodeId?: Maybe<DeleteLanguageSkillLevelPayload>;
   /** Deletes a single `LanguageSkillLevel` using a unique key. */
@@ -721,6 +1435,18 @@ export type Mutation = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateGroupUserArgs = {
+  input: CreateGroupUserInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateGroupArgs = {
+  input: CreateGroupInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateLanguageSkillLevelArgs = {
   input: CreateLanguageSkillLevelInput;
 };
@@ -747,6 +1473,30 @@ export type MutationCreateUserSessionArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGroupUserByNodeIdArgs = {
+  input: UpdateGroupUserByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGroupUserArgs = {
+  input: UpdateGroupUserInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGroupByNodeIdArgs = {
+  input: UpdateGroupByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGroupArgs = {
+  input: UpdateGroupInput;
 };
 
 
@@ -835,6 +1585,30 @@ export type MutationUpdateUserByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGroupUserByNodeIdArgs = {
+  input: DeleteGroupUserByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGroupUserArgs = {
+  input: DeleteGroupUserInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGroupByNodeIdArgs = {
+  input: DeleteGroupByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGroupArgs = {
+  input: DeleteGroupInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteLanguageSkillLevelByNodeIdArgs = {
   input: DeleteLanguageSkillLevelByNodeIdInput;
 };
@@ -915,6 +1689,100 @@ export type MutationDeleteUserByEmailArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByUuidArgs = {
   input: DeleteUserByUuidInput;
+};
+
+/** The output of our create `GroupUser` mutation. */
+export type CreateGroupUserPayload = {
+  __typename?: 'CreateGroupUserPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GroupUser` that was created by this mutation. */
+  groupUser?: Maybe<GroupUser>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `GroupUser`. */
+  user?: Maybe<User>;
+  /** Reads a single `Group` that is related to this `GroupUser`. */
+  group?: Maybe<Group>;
+  /** An edge for our `GroupUser`. May be used by Relay 1. */
+  groupUserEdge?: Maybe<GroupUsersEdge>;
+};
+
+
+/** The output of our create `GroupUser` mutation. */
+export type CreateGroupUserPayloadGroupUserEdgeArgs = {
+  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+};
+
+/** All input for the create `GroupUser` mutation. */
+export type CreateGroupUserInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GroupUser` to be created by this mutation. */
+  groupUser: GroupUserInput;
+};
+
+/** An input for mutations affecting `GroupUser` */
+export type GroupUserInput = {
+  id?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+  groupId?: Maybe<Scalars['Int']>;
+  userType: UserType;
+  joinedOn?: Maybe<Scalars['Datetime']>;
+  lastActive?: Maybe<Scalars['Datetime']>;
+};
+
+/** The output of our create `Group` mutation. */
+export type CreateGroupPayload = {
+  __typename?: 'CreateGroupPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Group` that was created by this mutation. */
+  group?: Maybe<Group>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `Group`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Group`. */
+  languageSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `Group`. May be used by Relay 1. */
+  groupEdge?: Maybe<GroupsEdge>;
+};
+
+
+/** The output of our create `Group` mutation. */
+export type CreateGroupPayloadGroupEdgeArgs = {
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+};
+
+/** All input for the create `Group` mutation. */
+export type CreateGroupInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Group` to be created by this mutation. */
+  group: GroupInput;
+};
+
+/** An input for mutations affecting `Group` */
+export type GroupInput = {
+  id?: Maybe<Scalars['Int']>;
+  groupName?: Maybe<Scalars['String']>;
+  global?: Maybe<Scalars['Boolean']>;
+  languageId?: Maybe<Scalars['Int']>;
+  languageSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
 };
 
 /** The output of our create `LanguageSkillLevel` mutation. */
@@ -1137,6 +2005,128 @@ export type UserInput = {
   avatarUrl?: Maybe<Scalars['String']>;
   locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;
+};
+
+/** The output of our update `GroupUser` mutation. */
+export type UpdateGroupUserPayload = {
+  __typename?: 'UpdateGroupUserPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GroupUser` that was updated by this mutation. */
+  groupUser?: Maybe<GroupUser>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `GroupUser`. */
+  user?: Maybe<User>;
+  /** Reads a single `Group` that is related to this `GroupUser`. */
+  group?: Maybe<Group>;
+  /** An edge for our `GroupUser`. May be used by Relay 1. */
+  groupUserEdge?: Maybe<GroupUsersEdge>;
+};
+
+
+/** The output of our update `GroupUser` mutation. */
+export type UpdateGroupUserPayloadGroupUserEdgeArgs = {
+  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+};
+
+/** All input for the `updateGroupUserByNodeId` mutation. */
+export type UpdateGroupUserByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `GroupUser` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `GroupUser` being updated. */
+  patch: GroupUserPatch;
+};
+
+/** Represents an update to a `GroupUser`. Fields that are set will be updated. */
+export type GroupUserPatch = {
+  id?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+  groupId?: Maybe<Scalars['Int']>;
+  userType?: Maybe<UserType>;
+  joinedOn?: Maybe<Scalars['Datetime']>;
+  lastActive?: Maybe<Scalars['Datetime']>;
+};
+
+/** All input for the `updateGroupUser` mutation. */
+export type UpdateGroupUserInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `GroupUser` being updated. */
+  patch: GroupUserPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `Group` mutation. */
+export type UpdateGroupPayload = {
+  __typename?: 'UpdateGroupPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Group` that was updated by this mutation. */
+  group?: Maybe<Group>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `Group`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Group`. */
+  languageSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `Group`. May be used by Relay 1. */
+  groupEdge?: Maybe<GroupsEdge>;
+};
+
+
+/** The output of our update `Group` mutation. */
+export type UpdateGroupPayloadGroupEdgeArgs = {
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+};
+
+/** All input for the `updateGroupByNodeId` mutation. */
+export type UpdateGroupByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Group` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `Group` being updated. */
+  patch: GroupPatch;
+};
+
+/** Represents an update to a `Group`. Fields that are set will be updated. */
+export type GroupPatch = {
+  id?: Maybe<Scalars['Int']>;
+  groupName?: Maybe<Scalars['String']>;
+  global?: Maybe<Scalars['Boolean']>;
+  languageId?: Maybe<Scalars['Int']>;
+  languageSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** All input for the `updateGroup` mutation. */
+export type UpdateGroupInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Group` being updated. */
+  patch: GroupPatch;
+  id: Scalars['Int'];
 };
 
 /** The output of our update `LanguageSkillLevel` mutation. */
@@ -1478,6 +2468,102 @@ export type UpdateUserByUuidInput = {
   /** An object where the defined keys will be set on the `User` being updated. */
   patch: UserPatch;
   uuid: Scalars['UUID'];
+};
+
+/** The output of our delete `GroupUser` mutation. */
+export type DeleteGroupUserPayload = {
+  __typename?: 'DeleteGroupUserPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GroupUser` that was deleted by this mutation. */
+  groupUser?: Maybe<GroupUser>;
+  deletedGroupUserNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `GroupUser`. */
+  user?: Maybe<User>;
+  /** Reads a single `Group` that is related to this `GroupUser`. */
+  group?: Maybe<Group>;
+  /** An edge for our `GroupUser`. May be used by Relay 1. */
+  groupUserEdge?: Maybe<GroupUsersEdge>;
+};
+
+
+/** The output of our delete `GroupUser` mutation. */
+export type DeleteGroupUserPayloadGroupUserEdgeArgs = {
+  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+};
+
+/** All input for the `deleteGroupUserByNodeId` mutation. */
+export type DeleteGroupUserByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `GroupUser` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteGroupUser` mutation. */
+export type DeleteGroupUserInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `Group` mutation. */
+export type DeleteGroupPayload = {
+  __typename?: 'DeleteGroupPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Group` that was deleted by this mutation. */
+  group?: Maybe<Group>;
+  deletedGroupNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `Group`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Group`. */
+  languageSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `Group`. May be used by Relay 1. */
+  groupEdge?: Maybe<GroupsEdge>;
+};
+
+
+/** The output of our delete `Group` mutation. */
+export type DeleteGroupPayloadGroupEdgeArgs = {
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+};
+
+/** All input for the `deleteGroupByNodeId` mutation. */
+export type DeleteGroupByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Group` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteGroup` mutation. */
+export type DeleteGroupInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
 };
 
 /** The output of our delete `LanguageSkillLevel` mutation. */

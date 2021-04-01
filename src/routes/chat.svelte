@@ -55,6 +55,10 @@
 
     // TODO: Read user data from database.
     onMount(() => {
+        const lang = new URL(window.location.href).searchParams.get("lang")
+        if (lang && ["English", "German", "Chinese"].includes(lang)) {
+            $room = lang
+        }
         socket = io()
         if (!socket) {
             return

@@ -10,18 +10,18 @@
     <div
         class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center flex justify-center shadow-sm"
     >
-        <ButtonLarge tag="button">German</ButtonLarge>
+        <ButtonLarge href="/chat?lang=German">German</ButtonLarge>
     </div>
 
     <div
         class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center flex justify-center shadow-sm"
     >
-        <ButtonLarge tag="button">English</ButtonLarge>
+        <ButtonLarge href="/chat?lang=English">English</ButtonLarge>
     </div>
 
     <div
         class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center flex justify-center shadow-sm"
     >
-        <ButtonLarge tag="button">Chinese</ButtonLarge>
+        <ButtonLarge href="/chat?lang=Chinese">Chinese</ButtonLarge>
     </div>
 </div>

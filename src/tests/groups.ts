@@ -143,23 +143,19 @@ describe("groups", () => {
         await client.query(`DELETE FROM app_public.group_user WHERE TRUE`)
         await client.query(`DELETE FROM app_public.groups WHERE TRUE`)
         await client.query(`DELETE FROM app_public.users WHERE TRUE`)
+        users = []
     })
 
-    // afterEach(async () => {
-    //     const client = await pool.connect()
-    //     expect(client).toBeTruthy()
-    //     await client.query(`DELETE FROM app_public.user_languages WHERE TRUE`)
-    //     userLanguages = []
-    //     await client.query(`DELETE FROM app_public.group_user WHERE TRUE`)
-    //     await client.query(`DELETE FROM app_public.groups WHERE TRUE`)
-    //     let user = null
-    //     while ((user = users.pop())) {
-    //         await client.query(`DELETE FROM app_public.users WHERE id = $1`, [
-    //             user.id,
-    //         ])
-    //     }
-    //     expect(users).toEqual([])
-    // })
+    afterEach(async () => {
+        const client = await pool.connect()
+        expect(client).toBeTruthy()
+        await client.query(`DELETE FROM app_public.user_languages WHERE TRUE`)
+        userLanguages = []
+        await client.query(`DELETE FROM app_public.group_user WHERE TRUE`)
+        await client.query(`DELETE FROM app_public.groups WHERE TRUE`)
+        await client.query(`DELETE FROM app_public.users WHERE TRUE`)
+        users = []
+    })
 
     test("group forming works", async () => {
         const createTestUser = async ({
@@ -233,50 +229,5 @@ describe("groups", () => {
         const germanGroupIds = await tryFormingGroupsWithUser(user.id)
         expect(germanGroupIds).not.toEqual([])
         expect(germanGroupIds.length).toEqual(1)
-        // for (let i = 0; i < 10; ++i) {
-        //     const user = await createUser()
-        //     users.push(user)
-        //     userLanguages.push(
-        //         await createUserLanguage({
-        //             userId: user.id,
-        //             languageId: german.id,
-        //             languageSkillLevelId: 1,
-        //             native: false,
-        //         })
-        //     )
-        //     expect(await tryFormingGroupsWithUser(user.id)).toEqual([])
-        // }
-        // for (let i = 0; i < 10; ++i) {
-        //     const user = await createUser()
-        //     users.push(user)
-        //     userLanguages.push(
-        //         await createUserLanguage({
-        //             userId: user.id,
-        //             languageId: german.id,
-        //             languageSkillLevelId: null,
-        //             native: true,
-        //         })
-        //     )
-        //     if (i === 1 || i === 3) {
-        //         const groupIds = await tryFormingGroupsWithUser(user.id)
-        //         expect(groupIds).not.toEqual([])
-        //         expect(groupIds.length).toEqual(1)
-        //     } else {
-        //         expect(await tryFormingGroupsWithUser(user.id)).toEqual([])
-        //     }
-        // }
     })
 })
-
-// test('deep', () => {
-//   // there will be no TS error here, and you'll have completion in modern IDEs
-//   mockedFoo.a.b.c.hello('me')
-//   // same here
-//   expect(mockedFoo.a.b.c.hello.mock.calls).toHaveLength(1)
-// })
-
-// test('direct', () => {
-//   foo.name()
-//   // here only foo.name is mocked (or its methods if it's an object)
-//   expect(mocked(foo.name).mock.calls).toHaveLength(1)
-// })

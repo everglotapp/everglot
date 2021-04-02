@@ -1,65 +1,21 @@
 import { performQuery } from "./gql"
 
-import { UserType } from "../types/generated/graphql"
+import { Group, GroupUser, User, UserType } from "../types/generated/graphql"
 
 import { db } from "../server/db"
 
 export const GROUP_LEARNER_SIZE = 4
 export const GROUP_NATIVE_SIZE = 2
 
-// export async function createGroup(global: Boolean, language: string, language_skill_level: string) {
-//   const queryResult = await db?.query({
-//     text: `INSERT INTO groups (
-//             global,
-//             groupName,
-//             languageId,
-//             languageSkillLevelId
-//           )
-//           VALUES (
-//               $1,
-//               $2,
-//               (
-//                 SELECT id
-//                 FROM languages
-//                 WHERE alpha2 = $3
-//                 LIMIT 1
-//               ),
-//               (
-//                 SELECT id
-//                 FROM language_skill_levels
-//                 WHERE name = $4
-//                 LIMIT 1
-//               )
-//           )
-//           RETURNING id`,
-//     values: [global, language + language_skill_level, language, language_skill_level],
-//   })
-//   return queryResult
-// }
-
-// export const test = async () => {
-//     const res = await performQuery(
-//     `mutation MyMutation($global: Boolean,) {
-//       createGroup(
-//         input: {group: {global: false, groupName: "dasdasd", languageId: 1, languageSkillLevelId: 1}}
-//       ) {
-//         group {
-//           id
-//         }
-//       }
-//     }`,
-//     { id: userId }
-//     )
-//     console.log(res.data?.user.id)
-// }
-
-export async function createGroup(
+async function createGroup(
     global: Boolean,
     group_name: string,
     languageId: number,
     languageSkillLevelId: number
-): Promise<number | null> {
-    const res = await performQuery(
+): Promise<Group["id"] | null> {
+    const res = await performQuery<{
+        createGroup: { group: { id: Group["id"] } }
+    }>(
         `mutation MyMutation($global: Boolean!, $group_name: String!, $languageId: Int!, $languageSkillLevelId: Int!) {
       createGroup(
         input: {group: {global: $global, groupName: $group_name, languageId: $languageId, languageSkillLevelId: $languageSkillLevelId}}
@@ -82,7 +38,7 @@ export async function createGroup(
     return res.data?.createGroup.group.id
 }
 
-export async function getUsersWithoutLearnerGroup(
+async function getUsersWithoutLearnerGroup(
     languageId: number,
     languageSkillLevelId: number,
     learnerSize: number
@@ -103,14 +59,22 @@ export async function getUsersWithoutLearnerGroup(
             learnerSize: learnerSize,
         }
     )
-    console.log(res.data?.usersWithoutLearnerGroup.nodes)
+    // console.log(
+    //     `users without learner group:`,
+    //     {
+    //         lid: languageId,
+    //         lsklid: languageSkillLevelId,
+    //         learnerSize: learnerSize,
+    //     },
+    //     res.data?.usersWithoutLearnerGroup.nodes.map((node) => node.id)
+    // )
     if (!res.data) {
         return null
     }
     return res.data.usersWithoutLearnerGroup.nodes.map((node) => node.id)
 }
 
-export async function getUsersWithoutNativeGroup(
+async function getUsersWithoutNativeGroup(
     languageId: number,
     nativeSize: number
 ): Promise<number[] | null> {
@@ -126,19 +90,25 @@ export async function getUsersWithoutNativeGroup(
     }`,
         { lid: languageId, nativeSize: nativeSize }
     )
-    console.log(res.data?.usersWithoutNativeGroup.nodes)
+    // console.log(
+    //     "users without native group:",
+    //     { lid: languageId, nativeSize: nativeSize },
+    //     res.data?.usersWithoutNativeGroup.nodes.map((node) => node.id)
+    // )
     if (!res.data) {
         return null
     }
     return res.data.usersWithoutNativeGroup.nodes.map((node) => node.id)
 }
 
-export async function addUserToGroup(
+async function addUserToGroup(
     userId: number,
     groupId: number,
     userType: UserType
 ): Promise<number | null> {
-    const res = await performQuery(
+    const res = await performQuery<{
+        createGroupUser: { groupUser: { id: GroupUser["id"] } }
+    }>(
         `mutation MyMutation($userType: UserType!, $userId: Int!, $groupId: Int!) {
       createGroupUser(
         input: {groupUser: {userType: $userType, userId: $userId, groupId: $groupId}}
@@ -153,15 +123,15 @@ export async function addUserToGroup(
     if (!res.data) {
         return null
     }
-    return res.data?.createGroup.group.id
+    return res.data?.createGroupUser.groupUser.id
 }
 
-export async function createAndAssignGroup(
+async function createAndAssignGroup(
     learnerIds: Array<number>,
     nativeIds: Array<number>,
     languageId: number,
     languageSkillLevelId: number
-) {
+): Promise<Group["id"] | null> {
     const groupId = await createGroup(
         false,
         "random",
@@ -169,64 +139,137 @@ export async function createAndAssignGroup(
         languageSkillLevelId
     )
     if (groupId === null) {
-        return false
+        return null
     }
     for (const learner of learnerIds) {
-        if (!addUserToGroup(learner, groupId, UserType.Learner)) {
-            return false
+        if (!(await addUserToGroup(learner, groupId, UserType.Learner))) {
+            return null
         }
     }
     for (const native of nativeIds) {
-        if (!addUserToGroup(native, groupId, UserType.Native)) {
-            return false
+        if (!(await addUserToGroup(native, groupId, UserType.Native))) {
+            return null
         }
     }
-    return true
+    return groupId
 }
 
-// export async function assignGroups() {
-//   const all_suported_langs_id = []
-//   const all_levels_id = []
-//   for (var lang of all_suported_langs) {
-//     for (var level of all_levels ) {
-//       while (len(getUsersWithoutLearnerGroup(lang, level, GROUP_LEARNER_SIZE)) == GROUP_LEARNER_SIZE && len(getUsersWithoutNativeGroup(lang, GROUP_NATIVE_SIZE) == GROUP_NATIVE_SIZE) {
-//        const learnerIds = getUsersWithoutLearnerGroup(lang, level, GROUP_NATIVE_SIZE)
-//        const nativeIds = getUsersWithoutNativeGroup(lang, GROUP_NATIVE_SIZE)
-//        createAndAssignGroup(learnerIds, nativeIds, lang, level)
-//       }
-//     }
-//   }
-//  }
-
-export async function assignGroup(
+async function formGroup(
     languageId: number,
     languageSkillLevelId: number
-): Promise<boolean> {
+): Promise<Group["id"] | null> {
     const learnerIds = await getUsersWithoutLearnerGroup(
         languageId,
         languageSkillLevelId,
         GROUP_LEARNER_SIZE
     )
     if (!learnerIds) {
-        return false
+        return null
     }
     const nativeIds = await getUsersWithoutNativeGroup(
         languageId,
         GROUP_NATIVE_SIZE
     )
     if (!nativeIds) {
-        return false
+        return null
     }
     if (
-        learnerIds.length == GROUP_LEARNER_SIZE &&
-        nativeIds.length == GROUP_NATIVE_SIZE
+        learnerIds.length === GROUP_LEARNER_SIZE &&
+        nativeIds.length === GROUP_NATIVE_SIZE
     ) {
-        createAndAssignGroup(
+        return await createAndAssignGroup(
             learnerIds,
             nativeIds,
             languageId,
             languageSkillLevelId
         )
     }
-    return true
+    return null
+}
+
+async function getUserLanguageInfo(
+    userId: User["id"]
+): Promise<
+    | {
+          languageId: number
+          languageSkillLevelId: number | null
+          native: boolean
+      }[]
+    | null
+> {
+    const res = await performQuery<{
+        user: {
+            id: number
+            userLanguages: {
+                nodes: {
+                    languageId: number
+                    languageSkillLevelId: number | null
+                    native: boolean
+                }[]
+            }
+        }
+    }>(
+        `query MyQuery($id: Int!) {
+            user(id: $id) {
+              id
+              userLanguages {
+                nodes {
+                  languageId
+                  languageSkillLevelId
+                  native
+                }
+              }
+            }
+          }
+        `,
+        { id: userId }
+    )
+    // console.log(res.data?.user.userLanguages.nodes)
+    if (!res.data) {
+        return null
+    }
+    return res.data.user.userLanguages.nodes
+}
+
+/**
+ * Try to form new groups when a user registration makes their formation possible.
+ * @param userId ID of user who signed up
+ * @returns
+ */
+export async function tryFormingGroupsWithUser(
+    userId: number
+): Promise<Group["id"][]> {
+    const userLanguageInfo = await getUserLanguageInfo(userId)
+    if (!userLanguageInfo) {
+        return []
+    }
+    const groupIds = []
+    for (const language of userLanguageInfo) {
+        if (language.native) {
+            const allLanguageLevelIds = [1, 2, 3, 4, 5, 6]
+            while (allLanguageLevelIds.length > 0) {
+                const randomIndex = Math.floor(
+                    Math.random() * allLanguageLevelIds.length
+                )
+                const groupId = await formGroup(
+                    language.languageId,
+                    allLanguageLevelIds[randomIndex]
+                )
+                if (groupId !== null) {
+                    groupIds.push(groupId)
+                    break
+                }
+                allLanguageLevelIds.splice(randomIndex, 1)
+            }
+        } else {
+            const groupId = await formGroup(
+                language.languageId,
+                language.languageSkillLevelId!
+            )
+            if (groupId) {
+                groupIds.push(groupId)
+            }
+        }
+    }
+    return groupIds
 }

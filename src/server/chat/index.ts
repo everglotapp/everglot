@@ -26,6 +26,7 @@ export function start(server: Server, pool: Pool) {
     /** Reuse session/authentication from Express server. */
     const sessionMiddleware = session(pool)
     io.use((socket: EverglotChatSocket, next) => {
+        // @ts-ignore
         sessionMiddleware(socket.request, {}, next)
     })
 

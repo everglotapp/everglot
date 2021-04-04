@@ -141,7 +141,7 @@ describe("groups", () => {
         await client.query(`SET ROLE TO everglot_app_user`)
         await client.query(`DELETE FROM app_public.user_languages WHERE TRUE`)
         userLanguages = []
-        await client.query(`DELETE FROM app_public.group_user WHERE TRUE`)
+        await client.query(`DELETE FROM app_public.group_users WHERE TRUE`)
         await client.query(`DELETE FROM app_public.groups WHERE TRUE`)
         await client.query(`DELETE FROM app_public.users WHERE TRUE`)
         users = []
@@ -154,7 +154,7 @@ describe("groups", () => {
         await client.query(`SET ROLE TO everglot_app_user`)
         await client.query(`DELETE FROM app_public.user_languages WHERE TRUE`)
         userLanguages = []
-        await client.query(`DELETE FROM app_public.group_user WHERE TRUE`)
+        await client.query(`DELETE FROM app_public.group_users WHERE TRUE`)
         await client.query(`DELETE FROM app_public.groups WHERE TRUE`)
         await client.query(`DELETE FROM app_public.users WHERE TRUE`)
         users = []

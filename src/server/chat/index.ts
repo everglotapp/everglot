@@ -1,7 +1,7 @@
 import type { Server } from "http"
 import { Server as SocketIO } from "socket.io"
 
-import session from "./middlewares/session"
+import session from "../middlewares/session"
 
 import { formatMessage } from "./messages"
 import {
@@ -13,14 +13,12 @@ import {
     userGreeted,
 } from "./users"
 
-import { performQuery } from "./gql"
+import { performQuery } from "../gql"
 
 import { hangmanGames } from "./hangman"
 import type { HangmanLanguage } from "./hangman"
 
 import type { Pool } from "pg"
-
-const botName = "Everglot Bot"
 
 export function start(server: Server, pool: Pool) {
     const io = new SocketIO(server)
@@ -80,7 +78,6 @@ export function start(server: Server, pool: Pool) {
                     .emit(
                         "message",
                         formatMessage(
-                            botName,
                             `${chatUser.user.username} has joined the chat`
                         )
                     )
@@ -119,11 +116,7 @@ export function start(server: Server, pool: Pool) {
             if (msg) {
                 io.to(chatUser.room).emit(
                     "message",
-                    formatMessage(
-                        chatUser.user.username,
-                        msg,
-                        chatUser.user.uuid
-                    )
+                    formatMessage(msg, chatUser.user.uuid)
                 )
                 if (msg.startsWith("!help")) {
                     sendBotMessage(
@@ -200,7 +193,7 @@ export function start(server: Server, pool: Pool) {
 
         function sendBotMessage(msg: string, room: string, delay = 300) {
             setTimeout(() => {
-                io.to(room).emit("message", formatMessage(botName, msg))
+                io.to(room).emit("message", formatMessage(msg))
             }, delay)
         }
     })

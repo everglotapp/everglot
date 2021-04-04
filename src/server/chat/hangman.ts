@@ -1,4 +1,4 @@
-import { ALPHABET } from "../constants"
+import { ALPHABET } from "../../constants"
 
 export type HangmanLanguage = "English" | "German"
 

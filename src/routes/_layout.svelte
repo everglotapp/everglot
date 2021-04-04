@@ -59,6 +59,7 @@
     query(currentUser)
 
     export let segment: string | undefined = undefined
+    segment = segment // get rid of unused prop warning
     // @ts-ignore (left side of comma operator isn't ignored by svelte)
     $: segment, change()
 
@@ -72,11 +73,11 @@
     })
 
     const timeout = 150
-    let transitionTriggeringSwitch = true
+    let transitionTriggeringCount = 0
 
     const change = () => {
-        transitionTriggeringSwitch = !transitionTriggeringSwitch
         $currentUser.context = { requestPolicy: "network-only" }
+        transitionTriggeringCount = (transitionTriggeringCount + 1) % 3
     }
 </script>
 
@@ -86,7 +87,7 @@
     {/if}
 
     <main>
-        {#if transitionTriggeringSwitch}
+        {#if transitionTriggeringCount === 0}
             <div
                 class="main-inner"
                 in:scale={{ duration: timeout, delay: timeout }}
@@ -94,7 +95,15 @@
             >
                 <slot />
             </div>
-        {:else}
+        {:else if transitionTriggeringCount === 1}
+            <div
+                class="main-inner"
+                in:scale={{ duration: timeout, delay: timeout }}
+                out:scale={{ duration: timeout }}
+            >
+                <slot />
+            </div>
+        {:else if transitionTriggeringCount === 2}
             <div
                 class="main-inner"
                 in:scale={{ duration: timeout, delay: timeout }}

@@ -1,10 +1,15 @@
 <script lang="ts">
+    import { scale } from "svelte/transition"
     import { goto } from "@sapper/app"
 
     import { LogOutIcon } from "svelte-feather-icons"
     import { query } from "@urql/svelte"
 
+    import Avatar from "../users/Avatar.svelte"
+
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import ClickAwayListener from "../util/ClickAwayListener.svelte"
+    import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
     import { currentUser } from "../../stores"
 
@@ -12,6 +17,20 @@
     $: currentUserNode = $currentUser.data?.users.nodes[0]
 
     export let segment: string | undefined
+
+    async function handleLogout() {
+        await fetch("/logout", {
+            method: "post",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            redirect: "follow", // if user isn't signed in anymore
+        })
+        return goto("/login?signedout=1")
+    }
+
+    let showSettingsDropdown = false
 </script>
 
 <div class="nav-container">
@@ -27,6 +46,9 @@
             class="flex flex-1 mx-auto justify-between items-center"
             style="max-width: 820px;"
         >
+            <div class="hidden md:flex justify-center items-center">
+                <!-- TODO: Search -->
+            </div>
             <div class="flex justify-center">
                 <div class="flex">
                     <a
@@ -34,28 +56,6 @@
                         href="/global"
                         class="nav-item-with-icon"
                         ><span>Global</span>
-                        <svg
-                            width="32"
-                            height="32"
-                            viewBox="0 0 53 53"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <g>
-                                <path
-                                    d="M26.5 0.442627C14.0736 0.442627 4 10.8597 4 23.7097C4 36.5597 14.0736 46.9767 26.5 46.9767C38.9264 46.9767 49 36.5597 49 23.7097C49 10.8597 38.9264 0.442627 26.5 0.442627ZM18.9107 42.291C14.1483 40.2055 10.3808 36.2513 8.4348 31.2963C6.48885 26.3412 6.52352 20.7902 8.53122 15.8616C8.62686 15.6287 8.72687 15.3978 8.83122 15.1689L13.75 19.7471V25.8775L20.9781 33.7921H24.625V38.547L20.2139 42.8044C19.775 42.6496 19.3406 42.4785 18.9107 42.291ZM40.2886 37.9683C38.4801 39.844 36.3309 41.3314 33.9645 42.345C31.5982 43.3586 29.0613 43.8784 26.5 43.8744C25.5677 43.8745 24.6365 43.8063 23.7136 43.6702L27.625 39.8951V30.6898H22.2719L16.75 24.6441V18.3654L10.3469 12.4065C12.4654 9.17966 15.4386 6.6527 18.9103 5.12832C21.881 3.8288 25.1173 3.31243 28.3287 3.62556C31.54 3.9387 34.6259 5.07154 37.3094 6.9224L33.0378 12.6017L34.4899 16.3559L33.507 17.3724L26.1365 15.8481L22 19.0563V27.5875H38.5L43.2198 34.0951C42.3991 35.505 41.4147 36.8057 40.2886 37.9683ZM46 23.7097C46.0044 26.1904 45.5634 28.6505 44.6994 30.9648L40 24.4852H25V20.6074L26.8635 19.1621L34.493 20.7401L38.0101 17.1032L36.4622 13.1017L39.6685 8.83835C39.8786 9.03767 40.0851 9.2419 40.2882 9.45104C42.1021 11.3211 43.5406 13.5436 44.5208 15.9906C45.5011 18.4377 46.0038 21.061 46 23.7097Z"
-                                    fill="#45CDCD"
-                                />
-                            </g>
-                        </svg>
-                    </a>
-                    <a
-                        aria-current={segment === "languages"
-                            ? "page"
-                            : undefined}
-                        href="/languages"
-                        class="nav-item-with-icon"
-                        ><span>Languages</span>
                         <svg
                             width="32"
                             height="32"
@@ -79,42 +79,13 @@
                             </g>
                         </svg>
                     </a>
-                </div>
-            </div>
-            <div class="hidden md:flex justify-center items-center">
-                <!-- TODO: Search -->
-                <div class="my-auto">
-                    <ButtonSmall
-                        variant="TEXT"
-                        color="SECONDARY"
-                        tag="button"
-                        href="/profile"
-                        on:click={() => {
-                            fetch("/logout", {
-                                method: "post",
-                                headers: {
-                                    Accept: "application/json",
-                                    "Content-Type": "application/json",
-                                },
-                                redirect: "follow", // if user isn't signed in anymore
-                            }).then(() => {
-                                goto("/login")
-                            })
-                        }}
-                        ><span class="hidden md:inline md:mr-1">Logout</span
-                        ><LogOutIcon size="24" /></ButtonSmall
-                    >
-                </div>
-            </div>
-            <div class="flex justify-center">
-                <div class="flex">
                     <a
                         aria-current={segment === "chat" || segment === "groups"
                             ? "page"
                             : undefined}
                         href="/groups"
                         class="nav-item-with-icon"
-                        ><span>My Groups</span>
+                        ><span>Groups</span>
                         <svg
                             width="32"
                             height="32"
@@ -158,29 +129,68 @@
                             </g>
                         </svg>
                     </a>
-                    <a
+                    {#if showSettingsDropdown}
+                        <ClickAwayListener
+                            elementId="main-nav-settings"
+                            on:clickaway={() => (showSettingsDropdown = false)}
+                        />
+                        <EscapeKeyListener
+                            on:keydown={() => (showSettingsDropdown = false)}
+                        />
+                        <div
+                            class="relative"
+                            in:scale={{ duration: 200, delay: 0 }}
+                            out:scale={{ duration: 200, delay: 0 }}
+                            aria-label={`Settings`}
+                        >
+                            <div
+                                class="absolute"
+                                style="top: calc(100% + 2px);"
+                            >
+                                <div
+                                    class="fixed bg-white shadow-lg rounded-md"
+                                    style="z-index: 1;"
+                                >
+                                    <div class="my-auto">
+                                        <ButtonSmall
+                                            variant="TEXT"
+                                            color="SECONDARY"
+                                            tag="button"
+                                            href=""
+                                            on:click={handleLogout}
+                                            ><span
+                                                class="hidden md:inline md:mr-1"
+                                                >Logout</span
+                                            ><LogOutIcon
+                                                size="24"
+                                            /></ButtonSmall
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
+                    <button
                         aria-current={segment === "profile"
                             ? "page"
                             : undefined}
-                        href="/profile"
-                        class="nav-item-with-icon justify-center"
+                        on:click={() =>
+                            (showSettingsDropdown = !showSettingsDropdown)}
+                        class="nav-item-with-icon justify-center cursor-pointer"
+                        id="main-nav-settings"
                     >
-                        <div class="avatar">
-                            {#if !$currentUser.fetching}
-                                {#if currentUserNode?.avatarUrl && (currentUserNode?.avatarUrl || "").startsWith("https://")}
-                                    <img
-                                        src={currentUserNode?.avatarUrl || ""}
-                                        alt={`Avatar of ${currentUserNode?.username}`}
-                                    />
-                                {:else}
-                                    <span class="initial"
-                                        >{currentUserNode?.username?.charAt(
-                                            0
-                                        )}</span
-                                    >
-                                {/if}
-                            {/if}
-                        </div></a
+                        {#if !$currentUser.fetching}
+                            <Avatar
+                                url={currentUserNode?.avatarUrl || ""}
+                                username={currentUserNode?.username || ""}
+                                size={42}
+                            />
+                        {:else}
+                            <div
+                                class="bg-gray-lightest"
+                                style="border-radius: 50%; width: 50px; height: 50px;"
+                            />
+                        {/if}</button
                     >
                 </div>
             </div>
@@ -195,7 +205,6 @@
 
         position: relative;
         z-index: 10;
-
         max-height: 58px;
 
         @screen md {
@@ -203,11 +212,13 @@
         }
     }
 
-    a[aria-current] {
+    a[aria-current],
+    button[aria-current] {
         position: relative;
     }
 
-    a[aria-current]::after {
+    a[aria-current]::after,
+    button[aria-current]::after {
         position: absolute;
         content: "";
         height: 2px;
@@ -223,7 +234,8 @@
         background-color: transparent;
     }
 
-    a {
+    a,
+    button {
         display: flex;
         padding: 0.5rem 0.75rem;
         margin: 0;
@@ -233,7 +245,7 @@
         @apply text-center;
 
         @screen md {
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 2rem;
         }
     }
 
@@ -241,7 +253,8 @@
         @apply text-black;
     }
 
-    a:hover {
+    a:hover,
+    button:hover {
         @apply text-primary;
         @apply bg-gray-lightest;
     }

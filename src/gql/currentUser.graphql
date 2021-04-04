@@ -7,6 +7,12 @@ query CurrentUser {
             username
             uuid
             avatarUrl
+            userLanguages {
+                totalCount
+            }
+            languageByLocale {
+                alpha2
+            }
         }
     }
 }

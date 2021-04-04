@@ -1,11 +1,10 @@
-query CurrentUser {
-  users(first: 1) {
+query ChatUsers {
+  chatUsers {
     nodes {
-      bio
-      email
-      gender
       username
       uuid
+      bio
+      avatarUrl
       __typename
     }
     __typename

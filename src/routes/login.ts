@@ -1,5 +1,3 @@
-import bcrypt from "bcrypt"
-
 import { db } from "../server/db"
 import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import { ensureJson, serverError } from "../helpers"
@@ -73,6 +71,17 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 throw new Error("Empty sub (Google user ID)")
             }
             googleId = payload.sub || null
+            if (
+                payload.email_verified &&
+                payload.email &&
+                payload.email.length
+            ) {
+                /**
+                 * Alternatively signs in with email if the user signed up
+                 * with the same email as the one verified by Google.
+                 */
+                email = payload.email
+            }
         } catch (e: any) {
             console.error(e.stack)
             res.status(422).json({
@@ -82,25 +91,30 @@ export async function post(req: Request, res: Response, _next: () => void) {
             })
             return
         }
+
         const queryResult = await db?.query<{
             id: number
-            email: string
-            password_hash: string
         }>({
             text: `
                 SELECT id
                 FROM users
                 WHERE
                     google_id = $1
+                OR (
+                    google_id IS NULL
+                    AND email IS NOT NULL
+                    AND CHAR_LENGTH(email) >= 3
+                    AND email = $2
+                )
                 LIMIT 1`,
-            values: [googleId],
+            values: [googleId, email],
         })
 
         const userExists = Boolean(queryResult?.rowCount === 1)
         if (!userExists) {
             // TODO: Inform user that email does not exist?
             console.log(
-                `User tried to login with an id token that does not exist: ${idToken}`
+                `User tried to login with an id token that does not exist: ${idToken}, Email: ${email}`
             )
             res.redirect("/join")
             return

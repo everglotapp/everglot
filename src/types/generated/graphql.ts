@@ -10,15 +10,15 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122). */
+  UUID: any;
+  /** A location in a connection that can be used for resuming pagination. */
+  Cursor: any;
   /**
    * A point in time as described by the [ISO
    * 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
    */
   Datetime: any;
-  /** A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122). */
-  UUID: any;
-  /** A location in a connection that can be used for resuming pagination. */
-  Cursor: any;
   /** A JavaScript object encoded in the JSON format as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
 };
@@ -35,6 +35,8 @@ export type Query = Node & {
   nodeId: Scalars['ID'];
   /** Fetches an object given its globally unique `ID`. */
   node?: Maybe<Node>;
+  /** Reads and enables pagination through a set of `ChatUser`. */
+  chatUsers?: Maybe<ChatUsersConnection>;
   /** Reads and enables pagination through a set of `GroupUser`. */
   groupUsers?: Maybe<GroupUsersConnection>;
   /** Reads and enables pagination through a set of `Group`. */
@@ -64,8 +66,6 @@ export type Query = Node & {
   /** Reads and enables pagination through a set of `User`. */
   usersWithoutGroup?: Maybe<UsersConnection>;
   /** Reads and enables pagination through a set of `User`. */
-  usersWithoutGroups?: Maybe<UsersConnection>;
-  /** Reads and enables pagination through a set of `User`. */
   usersWithoutLearnerGroup?: Maybe<UsersConnection>;
   /** Reads and enables pagination through a set of `User`. */
   usersWithoutNativeGroup?: Maybe<UsersConnection>;
@@ -89,6 +89,19 @@ export type Query = Node & {
 /** The root query type which gives access points into the data universe. */
 export type QueryNodeArgs = {
   nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChatUsersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<ChatUsersOrderBy>>;
+  condition?: Maybe<ChatUserCondition>;
+  filter?: Maybe<ChatUserFilter>;
 };
 
 
@@ -264,17 +277,6 @@ export type QueryUsersWithoutGroupArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
-export type QueryUsersWithoutGroupsArgs = {
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  before?: Maybe<Scalars['Cursor']>;
-  after?: Maybe<Scalars['Cursor']>;
-  filter?: Maybe<UserFilter>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
 export type QueryUsersWithoutLearnerGroupArgs = {
   lid?: Maybe<Scalars['Int']>;
   lsklid?: Maybe<Scalars['Int']>;
@@ -346,6 +348,201 @@ export type Node = {
   nodeId: Scalars['ID'];
 };
 
+/** A connection to a list of `ChatUser` values. */
+export type ChatUsersConnection = {
+  __typename?: 'ChatUsersConnection';
+  /** A list of `ChatUser` objects. */
+  nodes: Array<Maybe<ChatUser>>;
+  /** A list of edges which contains the `ChatUser` and cursor to aid in pagination. */
+  edges: Array<ChatUsersEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `ChatUser` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+export type ChatUser = {
+  __typename?: 'ChatUser';
+  username?: Maybe<Scalars['String']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  bio?: Maybe<Scalars['String']>;
+  avatarUrl?: Maybe<Scalars['String']>;
+};
+
+
+/** A `ChatUser` edge in the connection. */
+export type ChatUsersEdge = {
+  __typename?: 'ChatUsersEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `ChatUser` at the end of the edge. */
+  node?: Maybe<ChatUser>;
+};
+
+
+/** Information about pagination in a connection. */
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['Cursor']>;
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['Cursor']>;
+};
+
+/** Methods to use when ordering `ChatUser`. */
+export enum ChatUsersOrderBy {
+  Natural = 'NATURAL',
+  UsernameAsc = 'USERNAME_ASC',
+  UsernameDesc = 'USERNAME_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  BioAsc = 'BIO_ASC',
+  BioDesc = 'BIO_DESC',
+  AvatarUrlAsc = 'AVATAR_URL_ASC',
+  AvatarUrlDesc = 'AVATAR_URL_DESC'
+}
+
+/**
+ * A condition to be used against `ChatUser` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
+export type ChatUserCondition = {
+  /** Checks for equality with the object’s `username` field. */
+  username?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `bio` field. */
+  bio?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `avatarUrl` field. */
+  avatarUrl?: Maybe<Scalars['String']>;
+};
+
+/** A filter to be used against `ChatUser` object types. All fields are combined with a logical ‘and.’ */
+export type ChatUserFilter = {
+  /** Filter by the object’s `username` field. */
+  username?: Maybe<StringFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `bio` field. */
+  bio?: Maybe<StringFilter>;
+  /** Filter by the object’s `avatarUrl` field. */
+  avatarUrl?: Maybe<StringFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<ChatUserFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<ChatUserFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<ChatUserFilter>;
+};
+
+/** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
+export type StringFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['String']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['String']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['String']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['String']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['String']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['String']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['String']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['String']>;
+  /** Contains the specified string (case-sensitive). */
+  includes?: Maybe<Scalars['String']>;
+  /** Does not contain the specified string (case-sensitive). */
+  notIncludes?: Maybe<Scalars['String']>;
+  /** Contains the specified string (case-insensitive). */
+  includesInsensitive?: Maybe<Scalars['String']>;
+  /** Does not contain the specified string (case-insensitive). */
+  notIncludesInsensitive?: Maybe<Scalars['String']>;
+  /** Starts with the specified string (case-sensitive). */
+  startsWith?: Maybe<Scalars['String']>;
+  /** Does not start with the specified string (case-sensitive). */
+  notStartsWith?: Maybe<Scalars['String']>;
+  /** Starts with the specified string (case-insensitive). */
+  startsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Does not start with the specified string (case-insensitive). */
+  notStartsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Ends with the specified string (case-sensitive). */
+  endsWith?: Maybe<Scalars['String']>;
+  /** Does not end with the specified string (case-sensitive). */
+  notEndsWith?: Maybe<Scalars['String']>;
+  /** Ends with the specified string (case-insensitive). */
+  endsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Does not end with the specified string (case-insensitive). */
+  notEndsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  like?: Maybe<Scalars['String']>;
+  /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  notLike?: Maybe<Scalars['String']>;
+  /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  likeInsensitive?: Maybe<Scalars['String']>;
+  /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  notLikeInsensitive?: Maybe<Scalars['String']>;
+  /** Equal to the specified value (case-insensitive). */
+  equalToInsensitive?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value (case-insensitive). */
+  notEqualToInsensitive?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
+  distinctFromInsensitive?: Maybe<Scalars['String']>;
+  /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
+  notDistinctFromInsensitive?: Maybe<Scalars['String']>;
+  /** Included in the specified list (case-insensitive). */
+  inInsensitive?: Maybe<Array<Scalars['String']>>;
+  /** Not included in the specified list (case-insensitive). */
+  notInInsensitive?: Maybe<Array<Scalars['String']>>;
+  /** Less than the specified value (case-insensitive). */
+  lessThanInsensitive?: Maybe<Scalars['String']>;
+  /** Less than or equal to the specified value (case-insensitive). */
+  lessThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
+  /** Greater than the specified value (case-insensitive). */
+  greaterThanInsensitive?: Maybe<Scalars['String']>;
+  /** Greater than or equal to the specified value (case-insensitive). */
+  greaterThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
+};
+
+/** A filter to be used against UUID fields. All fields are combined with a logical ‘and.’ */
+export type UuidFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['UUID']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['UUID']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['UUID']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['UUID']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['UUID']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['UUID']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['UUID']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['UUID']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['UUID']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['UUID']>;
+};
+
 /** A connection to a list of `GroupUser` values. */
 export type GroupUsersConnection = {
   __typename?: 'GroupUsersConnection';
@@ -397,7 +594,7 @@ export type User = Node & {
   passwordHash?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
   avatarUrl?: Maybe<Scalars['String']>;
-  locale: Scalars['Int'];
+  locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;
   /** Reads a single `Language` that is related to this `User`. */
   languageByLocale?: Maybe<Language>;
@@ -430,7 +627,6 @@ export type UserGroupUsersArgs = {
   condition?: Maybe<GroupUserCondition>;
   filter?: Maybe<GroupUserFilter>;
 };
-
 
 export type Language = Node & {
   __typename?: 'Language';
@@ -505,20 +701,6 @@ export type UsersEdge = {
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `User` at the end of the edge. */
   node?: Maybe<User>;
-};
-
-
-/** Information about pagination in a connection. */
-export type PageInfo = {
-  __typename?: 'PageInfo';
-  /** When paginating forwards, are there more items? */
-  hasNextPage: Scalars['Boolean'];
-  /** When paginating backwards, are there more items? */
-  hasPreviousPage: Scalars['Boolean'];
-  /** When paginating backwards, the cursor to continue. */
-  startCursor?: Maybe<Scalars['Cursor']>;
-  /** When paginating forwards, the cursor to continue. */
-  endCursor?: Maybe<Scalars['Cursor']>;
 };
 
 /** Methods to use when ordering `User`. */
@@ -646,84 +828,6 @@ export type IntFilter = {
   greaterThanOrEqualTo?: Maybe<Scalars['Int']>;
 };
 
-/** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
-export type StringFilter = {
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
-  /** Equal to the specified value. */
-  equalTo?: Maybe<Scalars['String']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Scalars['String']>;
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Scalars['String']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Scalars['String']>;
-  /** Included in the specified list. */
-  in?: Maybe<Array<Scalars['String']>>;
-  /** Not included in the specified list. */
-  notIn?: Maybe<Array<Scalars['String']>>;
-  /** Less than the specified value. */
-  lessThan?: Maybe<Scalars['String']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Scalars['String']>;
-  /** Greater than the specified value. */
-  greaterThan?: Maybe<Scalars['String']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Scalars['String']>;
-  /** Contains the specified string (case-sensitive). */
-  includes?: Maybe<Scalars['String']>;
-  /** Does not contain the specified string (case-sensitive). */
-  notIncludes?: Maybe<Scalars['String']>;
-  /** Contains the specified string (case-insensitive). */
-  includesInsensitive?: Maybe<Scalars['String']>;
-  /** Does not contain the specified string (case-insensitive). */
-  notIncludesInsensitive?: Maybe<Scalars['String']>;
-  /** Starts with the specified string (case-sensitive). */
-  startsWith?: Maybe<Scalars['String']>;
-  /** Does not start with the specified string (case-sensitive). */
-  notStartsWith?: Maybe<Scalars['String']>;
-  /** Starts with the specified string (case-insensitive). */
-  startsWithInsensitive?: Maybe<Scalars['String']>;
-  /** Does not start with the specified string (case-insensitive). */
-  notStartsWithInsensitive?: Maybe<Scalars['String']>;
-  /** Ends with the specified string (case-sensitive). */
-  endsWith?: Maybe<Scalars['String']>;
-  /** Does not end with the specified string (case-sensitive). */
-  notEndsWith?: Maybe<Scalars['String']>;
-  /** Ends with the specified string (case-insensitive). */
-  endsWithInsensitive?: Maybe<Scalars['String']>;
-  /** Does not end with the specified string (case-insensitive). */
-  notEndsWithInsensitive?: Maybe<Scalars['String']>;
-  /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  like?: Maybe<Scalars['String']>;
-  /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLike?: Maybe<Scalars['String']>;
-  /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  likeInsensitive?: Maybe<Scalars['String']>;
-  /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLikeInsensitive?: Maybe<Scalars['String']>;
-  /** Equal to the specified value (case-insensitive). */
-  equalToInsensitive?: Maybe<Scalars['String']>;
-  /** Not equal to the specified value (case-insensitive). */
-  notEqualToInsensitive?: Maybe<Scalars['String']>;
-  /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  distinctFromInsensitive?: Maybe<Scalars['String']>;
-  /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  notDistinctFromInsensitive?: Maybe<Scalars['String']>;
-  /** Included in the specified list (case-insensitive). */
-  inInsensitive?: Maybe<Array<Scalars['String']>>;
-  /** Not included in the specified list (case-insensitive). */
-  notInInsensitive?: Maybe<Array<Scalars['String']>>;
-  /** Less than the specified value (case-insensitive). */
-  lessThanInsensitive?: Maybe<Scalars['String']>;
-  /** Less than or equal to the specified value (case-insensitive). */
-  lessThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
-  /** Greater than the specified value (case-insensitive). */
-  greaterThanInsensitive?: Maybe<Scalars['String']>;
-  /** Greater than or equal to the specified value (case-insensitive). */
-  greaterThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
-};
-
 /** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
 export type DatetimeFilter = {
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
@@ -748,32 +852,6 @@ export type DatetimeFilter = {
   greaterThan?: Maybe<Scalars['Datetime']>;
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo?: Maybe<Scalars['Datetime']>;
-};
-
-/** A filter to be used against UUID fields. All fields are combined with a logical ‘and.’ */
-export type UuidFilter = {
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
-  /** Equal to the specified value. */
-  equalTo?: Maybe<Scalars['UUID']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Scalars['UUID']>;
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Scalars['UUID']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Scalars['UUID']>;
-  /** Included in the specified list. */
-  in?: Maybe<Array<Scalars['UUID']>>;
-  /** Not included in the specified list. */
-  notIn?: Maybe<Array<Scalars['UUID']>>;
-  /** Less than the specified value. */
-  lessThan?: Maybe<Scalars['UUID']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Scalars['UUID']>;
-  /** Greater than the specified value. */
-  greaterThan?: Maybe<Scalars['UUID']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `UserLanguage` values. */
@@ -1345,6 +1423,8 @@ export type UserSessionFilter = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Creates a single `ChatUser`. */
+  createChatUser?: Maybe<CreateChatUserPayload>;
   /** Creates a single `GroupUser`. */
   createGroupUser?: Maybe<CreateGroupUserPayload>;
   /** Creates a single `Group`. */
@@ -1431,6 +1511,12 @@ export type Mutation = {
   deleteUserByEmail?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
   deleteUserByUuid?: Maybe<DeleteUserPayload>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateChatUserArgs = {
+  input: CreateChatUserInput;
 };
 
 
@@ -1689,6 +1775,47 @@ export type MutationDeleteUserByEmailArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByUuidArgs = {
   input: DeleteUserByUuidInput;
+};
+
+/** The output of our create `ChatUser` mutation. */
+export type CreateChatUserPayload = {
+  __typename?: 'CreateChatUserPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChatUser` that was created by this mutation. */
+  chatUser?: Maybe<ChatUser>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** An edge for our `ChatUser`. May be used by Relay 1. */
+  chatUserEdge?: Maybe<ChatUsersEdge>;
+};
+
+
+/** The output of our create `ChatUser` mutation. */
+export type CreateChatUserPayloadChatUserEdgeArgs = {
+  orderBy?: Maybe<Array<ChatUsersOrderBy>>;
+};
+
+/** All input for the create `ChatUser` mutation. */
+export type CreateChatUserInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChatUser` to be created by this mutation. */
+  chatUser: ChatUserInput;
+};
+
+/** An input for mutations affecting `ChatUser` */
+export type ChatUserInput = {
+  username?: Maybe<Scalars['String']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  bio?: Maybe<Scalars['String']>;
+  avatarUrl?: Maybe<Scalars['String']>;
 };
 
 /** The output of our create `GroupUser` mutation. */
@@ -2835,6 +2962,20 @@ export type DeleteUserByUuidInput = {
   uuid: Scalars['UUID'];
 };
 
+export type ChatUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ChatUsersQuery = (
+  { __typename?: 'Query' }
+  & { chatUsers?: Maybe<(
+    { __typename?: 'ChatUsersConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'ChatUser' }
+      & Pick<ChatUser, 'username' | 'uuid' | 'bio' | 'avatarUrl'>
+    )>> }
+  )> }
+);
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2845,6 +2986,13 @@ export type CurrentUserQuery = (
     & { nodes: Array<Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid' | 'avatarUrl'>
+      & { userLanguages: (
+        { __typename?: 'UserLanguagesConnection' }
+        & Pick<UserLanguagesConnection, 'totalCount'>
+      ), languageByLocale?: Maybe<(
+        { __typename?: 'Language' }
+        & Pick<Language, 'alpha2'>
+      )> }
     )>> }
   )> }
 );
@@ -2864,6 +3012,18 @@ export type LanguageCodeMappingsQuery = (
 );
 
 
+export const ChatUsers = gql`
+    query ChatUsers {
+  chatUsers {
+    nodes {
+      username
+      uuid
+      bio
+      avatarUrl
+    }
+  }
+}
+    `;
 export const CurrentUser = gql`
     query CurrentUser {
   users(first: 1) {
@@ -2874,6 +3034,12 @@ export const CurrentUser = gql`
       username
       uuid
       avatarUrl
+      userLanguages {
+        totalCount
+      }
+      languageByLocale {
+        alpha2
+      }
     }
   }
 }

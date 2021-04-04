@@ -1,4 +1,13 @@
 
+declare module '*/chatUsers.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const ChatUsers: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/currentUser.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

@@ -1,8 +1,7 @@
 import { performQuery } from "./gql"
 
-import { Group, GroupUser, User, UserType } from "../types/generated/graphql"
-
-import { db } from "../server/db"
+import { UserType } from "../types/generated/graphql"
+import type { Group, GroupUser, User } from "../types/generated/graphql"
 
 export const GROUP_LEARNER_SIZE = 4
 export const GROUP_NATIVE_SIZE = 2
@@ -71,6 +70,8 @@ async function getUsersWithoutLearnerGroup(
     if (!res.data) {
         return null
     }
+
+    console.log(res.data)
     return res.data.usersWithoutLearnerGroup.nodes.map((node) => node.id)
 }
 

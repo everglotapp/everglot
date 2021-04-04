@@ -29,6 +29,30 @@
 
     query(languageCodeMappings)
 
+    let prefilled = false
+    $: if (!$currentUser.fetching && $currentUser.data?.users.nodes[0]) {
+        const user = $currentUser.data.users.nodes[0]
+        if (user.username !== null && user.userLanguages.totalCount) {
+            // Profile has already been completed, a second time won't work.
+            goto("/profile/success", { replaceState: true, noscroll: false })
+        } else if (!prefilled) {
+            // Pre-fill form.
+            prefilled = true
+            $username = user.username || $username
+            if (user.languageByLocale !== null) {
+                const { alpha2 } = user.languageByLocale
+                if (teach.hasOwnProperty(alpha2)) {
+                    teach = { ...teach, [alpha2]: true }
+                } else {
+                    let foundItem = items.find((item) => item.value === alpha2)
+                    if (foundItem) {
+                        teachOther = [...teachOther, foundItem]
+                    }
+                }
+            }
+        }
+    }
+
     let teach: Record<string, boolean> = {
         de: false,
         en: false,
@@ -152,7 +176,7 @@
             ...Object.keys(teach).filter((code) => teach[code]),
             ...teachOther.map((item) => item.value),
         ]
-        const response = await fetch("/profile/", {
+        const response = await fetch("/profile", {
             method: "post",
             headers: {
                 Accept: "application/json",
@@ -185,7 +209,7 @@
                 ? "German"
                 : // : learnOther[0].label // FIXME: learnOther[0] can be undefined here … why?
                   "English"
-            goto("/chat")
+            goto("/profile/success")
         } else {
             errorMessage = res.message
         }
@@ -197,20 +221,16 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-{#if $languageCodeMappings.fetching}{:else if $languageCodeMappings.error}
+{#if $languageCodeMappings.fetching}
+    <div />
+{:else if $languageCodeMappings.error}
     <p class="container max-w-2xl px-4 py-8 md:py-8">
         Something went wrong.
         <ErrorMessage>{$languageCodeMappings.error.message}</ErrorMessage>
     </p>
 {:else}
-    <div class="container max-w-2xl px-4 py-8 md:py-8">
-        <PageTitle>
-            {#if !$currentUser.fetching && $currentUser?.data?.users.nodes[0]?.username?.length}
-                Profile
-            {:else}
-                Tell us a little bit about yourself
-            {/if}
-        </PageTitle>
+    <div class="container max-w-2xl px-4 py-8 md:py-8" in:scale|local>
+        <PageTitle>Tell us a little bit about yourself</PageTitle>
 
         <form
             name="user-profile"

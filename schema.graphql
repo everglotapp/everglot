@@ -44,7 +44,80 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: ChatUserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ChatUserFilter
   ): ChatUsersConnection
+
+  """Reads and enables pagination through a set of `GroupUser`."""
+  groupUsers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupUserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupUserFilter
+  ): GroupUsersConnection
+
+  """Reads and enables pagination through a set of `Group`."""
+  groups(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupFilter
+  ): GroupsConnection
 
   """Reads and enables pagination through a set of `LanguageSkillLevel`."""
   languageSkillLevels(
@@ -73,6 +146,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: LanguageSkillLevelCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: LanguageSkillLevelFilter
   ): LanguageSkillLevelsConnection
 
   """Reads and enables pagination through a set of `Language`."""
@@ -102,6 +180,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: LanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: LanguageFilter
   ): LanguagesConnection
 
   """Reads and enables pagination through a set of `UserLanguage`."""
@@ -131,6 +214,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserLanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserLanguageFilter
   ): UserLanguagesConnection
 
   """Reads and enables pagination through a set of `UserSession`."""
@@ -160,6 +248,11 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserSessionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserSessionFilter
   ): UserSessionsConnection
 
   """Reads and enables pagination through a set of `User`."""
@@ -189,7 +282,14 @@ type Query implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
   ): UsersConnection
+  groupUser(id: Int!): GroupUser
+  group(id: Int!): Group
   languageSkillLevel(id: Int!): LanguageSkillLevel
   language(id: Int!): Language
   languageByAlpha2(alpha2: String!): Language
@@ -200,6 +300,105 @@ type Query implements Node {
   userByEmail(email: String!): User
   userByUuid(uuid: UUID!): User
   currentUserId: Int
+
+  """Reads and enables pagination through a set of `User`."""
+  usersWithoutGroup(
+    ntv: Boolean
+    lid: Int
+    lsklid: Int
+
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): UsersConnection
+
+  """Reads and enables pagination through a set of `User`."""
+  usersWithoutLearnerGroup(
+    lid: Int
+    lsklid: Int
+
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): UsersConnection
+
+  """Reads and enables pagination through a set of `User`."""
+  usersWithoutNativeGroup(
+    lid: Int
+
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): UsersConnection
+
+  """Reads a single `GroupUser` using its globally unique `ID`."""
+  groupUserByNodeId(
+    """The globally unique `ID` to be used in selecting a single `GroupUser`."""
+    nodeId: ID!
+  ): GroupUser
+
+  """Reads a single `Group` using its globally unique `ID`."""
+  groupByNodeId(
+    """The globally unique `ID` to be used in selecting a single `Group`."""
+    nodeId: ID!
+  ): Group
 
   """Reads a single `LanguageSkillLevel` using its globally unique `ID`."""
   languageSkillLevelByNodeId(
@@ -333,102 +532,246 @@ input ChatUserCondition {
   avatarUrl: String
 }
 
-"""A connection to a list of `LanguageSkillLevel` values."""
-type LanguageSkillLevelsConnection {
-  """A list of `LanguageSkillLevel` objects."""
-  nodes: [LanguageSkillLevel]!
+"""
+A filter to be used against `ChatUser` object types. All fields are combined with a logical ‘and.’
+"""
+input ChatUserFilter {
+  """Filter by the object’s `username` field."""
+  username: StringFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `bio` field."""
+  bio: StringFilter
+
+  """Filter by the object’s `avatarUrl` field."""
+  avatarUrl: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [ChatUserFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ChatUserFilter!]
+
+  """Negates the expression."""
+  not: ChatUserFilter
+}
+
+"""
+A filter to be used against String fields. All fields are combined with a logical ‘and.’
+"""
+input StringFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: String
+
+  """Not equal to the specified value."""
+  notEqualTo: String
 
   """
-  A list of edges which contains the `LanguageSkillLevel` and cursor to aid in pagination.
+  Not equal to the specified value, treating null like an ordinary value.
   """
-  edges: [LanguageSkillLevelsEdge!]!
+  distinctFrom: String
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: String
+
+  """Included in the specified list."""
+  in: [String!]
+
+  """Not included in the specified list."""
+  notIn: [String!]
+
+  """Less than the specified value."""
+  lessThan: String
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: String
+
+  """Greater than the specified value."""
+  greaterThan: String
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: String
+
+  """Contains the specified string (case-sensitive)."""
+  includes: String
+
+  """Does not contain the specified string (case-sensitive)."""
+  notIncludes: String
+
+  """Contains the specified string (case-insensitive)."""
+  includesInsensitive: String
+
+  """Does not contain the specified string (case-insensitive)."""
+  notIncludesInsensitive: String
+
+  """Starts with the specified string (case-sensitive)."""
+  startsWith: String
+
+  """Does not start with the specified string (case-sensitive)."""
+  notStartsWith: String
+
+  """Starts with the specified string (case-insensitive)."""
+  startsWithInsensitive: String
+
+  """Does not start with the specified string (case-insensitive)."""
+  notStartsWithInsensitive: String
+
+  """Ends with the specified string (case-sensitive)."""
+  endsWith: String
+
+  """Does not end with the specified string (case-sensitive)."""
+  notEndsWith: String
+
+  """Ends with the specified string (case-insensitive)."""
+  endsWithInsensitive: String
+
+  """Does not end with the specified string (case-insensitive)."""
+  notEndsWithInsensitive: String
+
+  """
+  Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  like: String
+
+  """
+  Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  notLike: String
+
+  """
+  Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  likeInsensitive: String
+
+  """
+  Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  notLikeInsensitive: String
+
+  """Equal to the specified value (case-insensitive)."""
+  equalToInsensitive: String
+
+  """Not equal to the specified value (case-insensitive)."""
+  notEqualToInsensitive: String
+
+  """
+  Not equal to the specified value, treating null like an ordinary value (case-insensitive).
+  """
+  distinctFromInsensitive: String
+
+  """
+  Equal to the specified value, treating null like an ordinary value (case-insensitive).
+  """
+  notDistinctFromInsensitive: String
+
+  """Included in the specified list (case-insensitive)."""
+  inInsensitive: [String!]
+
+  """Not included in the specified list (case-insensitive)."""
+  notInInsensitive: [String!]
+
+  """Less than the specified value (case-insensitive)."""
+  lessThanInsensitive: String
+
+  """Less than or equal to the specified value (case-insensitive)."""
+  lessThanOrEqualToInsensitive: String
+
+  """Greater than the specified value (case-insensitive)."""
+  greaterThanInsensitive: String
+
+  """Greater than or equal to the specified value (case-insensitive)."""
+  greaterThanOrEqualToInsensitive: String
+}
+
+"""
+A filter to be used against UUID fields. All fields are combined with a logical ‘and.’
+"""
+input UUIDFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: UUID
+
+  """Not equal to the specified value."""
+  notEqualTo: UUID
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: UUID
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: UUID
+
+  """Included in the specified list."""
+  in: [UUID!]
+
+  """Not included in the specified list."""
+  notIn: [UUID!]
+
+  """Less than the specified value."""
+  lessThan: UUID
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: UUID
+
+  """Greater than the specified value."""
+  greaterThan: UUID
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: UUID
+}
+
+"""A connection to a list of `GroupUser` values."""
+type GroupUsersConnection {
+  """A list of `GroupUser` objects."""
+  nodes: [GroupUser]!
+
+  """
+  A list of edges which contains the `GroupUser` and cursor to aid in pagination.
+  """
+  edges: [GroupUsersEdge!]!
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  """
-  The count of *all* `LanguageSkillLevel` you could get from the connection.
-  """
+  """The count of *all* `GroupUser` you could get from the connection."""
   totalCount: Int!
 }
 
-type LanguageSkillLevel implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  name: String
-
-  """Reads and enables pagination through a set of `UserLanguage`."""
-  userLanguages(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `UserLanguage`."""
-    orderBy: [UserLanguagesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: UserLanguageCondition
-  ): UserLanguagesConnection!
-}
-
-"""A connection to a list of `UserLanguage` values."""
-type UserLanguagesConnection {
-  """A list of `UserLanguage` objects."""
-  nodes: [UserLanguage]!
-
-  """
-  A list of edges which contains the `UserLanguage` and cursor to aid in pagination.
-  """
-  edges: [UserLanguagesEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `UserLanguage` you could get from the connection."""
-  totalCount: Int!
-}
-
-type UserLanguage implements Node {
+type GroupUser implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
   nodeId: ID!
   id: Int!
   userId: Int!
-  languageId: Int!
-  languageSkillLevelId: Int
-  native: Boolean!
-  createdAt: Datetime!
+  groupId: Int!
+  userType: UserType!
+  joinedOn: Datetime!
+  lastActive: Datetime
 
-  """Reads a single `User` that is related to this `UserLanguage`."""
+  """Reads a single `User` that is related to this `GroupUser`."""
   user: User
 
-  """Reads a single `Language` that is related to this `UserLanguage`."""
-  language: Language
+  """Reads a single `Group` that is related to this `GroupUser`."""
+  group: Group
+}
 
-  """
-  Reads a single `LanguageSkillLevel` that is related to this `UserLanguage`.
-  """
-  languageSkillLevel: LanguageSkillLevel
+enum UserType {
+  LEARNER
+  NATIVE
+  GLOBAL
 }
 
 """
@@ -486,7 +829,46 @@ type User implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserLanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserLanguageFilter
   ): UserLanguagesConnection!
+
+  """Reads and enables pagination through a set of `GroupUser`."""
+  groupUsers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupUserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupUserFilter
+  ): GroupUsersConnection!
 }
 
 type Language implements Node {
@@ -528,6 +910,11 @@ type Language implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
   ): UsersConnection!
 
   """Reads and enables pagination through a set of `UserLanguage`."""
@@ -557,7 +944,46 @@ type Language implements Node {
     A condition to be used in determining which values should be returned by the collection.
     """
     condition: UserLanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserLanguageFilter
   ): UserLanguagesConnection!
+
+  """Reads and enables pagination through a set of `Group`."""
+  groups(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupFilter
+  ): GroupsConnection!
 }
 
 """A connection to a list of `User` values."""
@@ -663,6 +1089,261 @@ input UserCondition {
   googleId: String
 }
 
+"""
+A filter to be used against `User` object types. All fields are combined with a logical ‘and.’
+"""
+input UserFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `username` field."""
+  username: StringFilter
+
+  """Filter by the object’s `email` field."""
+  email: StringFilter
+
+  """Filter by the object’s `unconfirmedEmail` field."""
+  unconfirmedEmail: StringFilter
+
+  """Filter by the object’s `gender` field."""
+  gender: StringFilter
+
+  """Filter by the object’s `bio` field."""
+  bio: StringFilter
+
+  """Filter by the object’s `lastActiveAt` field."""
+  lastActiveAt: DatetimeFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Filter by the object’s `passwordHash` field."""
+  passwordHash: StringFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `avatarUrl` field."""
+  avatarUrl: StringFilter
+
+  """Filter by the object’s `locale` field."""
+  locale: IntFilter
+
+  """Filter by the object’s `googleId` field."""
+  googleId: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [UserFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [UserFilter!]
+
+  """Negates the expression."""
+  not: UserFilter
+}
+
+"""
+A filter to be used against Int fields. All fields are combined with a logical ‘and.’
+"""
+input IntFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Int
+
+  """Not equal to the specified value."""
+  notEqualTo: Int
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Int
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Int
+
+  """Included in the specified list."""
+  in: [Int!]
+
+  """Not included in the specified list."""
+  notIn: [Int!]
+
+  """Less than the specified value."""
+  lessThan: Int
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Int
+
+  """Greater than the specified value."""
+  greaterThan: Int
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Int
+}
+
+"""
+A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
+"""
+input DatetimeFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Datetime
+
+  """Not equal to the specified value."""
+  notEqualTo: Datetime
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Datetime
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Datetime
+
+  """Included in the specified list."""
+  in: [Datetime!]
+
+  """Not included in the specified list."""
+  notIn: [Datetime!]
+
+  """Less than the specified value."""
+  lessThan: Datetime
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Datetime
+
+  """Greater than the specified value."""
+  greaterThan: Datetime
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Datetime
+}
+
+"""A connection to a list of `UserLanguage` values."""
+type UserLanguagesConnection {
+  """A list of `UserLanguage` objects."""
+  nodes: [UserLanguage]!
+
+  """
+  A list of edges which contains the `UserLanguage` and cursor to aid in pagination.
+  """
+  edges: [UserLanguagesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `UserLanguage` you could get from the connection."""
+  totalCount: Int!
+}
+
+type UserLanguage implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  userId: Int!
+  languageId: Int!
+  languageSkillLevelId: Int
+  native: Boolean!
+  createdAt: Datetime!
+
+  """Reads a single `User` that is related to this `UserLanguage`."""
+  user: User
+
+  """Reads a single `Language` that is related to this `UserLanguage`."""
+  language: Language
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `UserLanguage`.
+  """
+  languageSkillLevel: LanguageSkillLevel
+}
+
+type LanguageSkillLevel implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  name: String
+
+  """Reads and enables pagination through a set of `UserLanguage`."""
+  userLanguages(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `UserLanguage`."""
+    orderBy: [UserLanguagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserLanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserLanguageFilter
+  ): UserLanguagesConnection!
+
+  """Reads and enables pagination through a set of `Group`."""
+  groups(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupFilter
+  ): GroupsConnection!
+}
+
 """Methods to use when ordering `UserLanguage`."""
 enum UserLanguagesOrderBy {
   NATURAL
@@ -706,6 +1387,350 @@ input UserLanguageCondition {
   createdAt: Datetime
 }
 
+"""
+A filter to be used against `UserLanguage` object types. All fields are combined with a logical ‘and.’
+"""
+input UserLanguageFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `languageId` field."""
+  languageId: IntFilter
+
+  """Filter by the object’s `languageSkillLevelId` field."""
+  languageSkillLevelId: IntFilter
+
+  """Filter by the object’s `native` field."""
+  native: BooleanFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [UserLanguageFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [UserLanguageFilter!]
+
+  """Negates the expression."""
+  not: UserLanguageFilter
+}
+
+"""
+A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
+"""
+input BooleanFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Boolean
+
+  """Not equal to the specified value."""
+  notEqualTo: Boolean
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Boolean
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Boolean
+
+  """Included in the specified list."""
+  in: [Boolean!]
+
+  """Not included in the specified list."""
+  notIn: [Boolean!]
+
+  """Less than the specified value."""
+  lessThan: Boolean
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Boolean
+
+  """Greater than the specified value."""
+  greaterThan: Boolean
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Boolean
+}
+
+"""A connection to a list of `Group` values."""
+type GroupsConnection {
+  """A list of `Group` objects."""
+  nodes: [Group]!
+
+  """
+  A list of edges which contains the `Group` and cursor to aid in pagination.
+  """
+  edges: [GroupsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Group` you could get from the connection."""
+  totalCount: Int!
+}
+
+type Group implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  groupName: String
+  global: Boolean!
+  languageId: Int!
+  languageSkillLevelId: Int!
+  createdAt: Datetime!
+
+  """Reads a single `Language` that is related to this `Group`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Group`."""
+  languageSkillLevel: LanguageSkillLevel
+
+  """Reads and enables pagination through a set of `GroupUser`."""
+  groupUsers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupUserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupUserFilter
+  ): GroupUsersConnection!
+}
+
+"""Methods to use when ordering `GroupUser`."""
+enum GroupUsersOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  GROUP_ID_ASC
+  GROUP_ID_DESC
+  USER_TYPE_ASC
+  USER_TYPE_DESC
+  JOINED_ON_ASC
+  JOINED_ON_DESC
+  LAST_ACTIVE_ASC
+  LAST_ACTIVE_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `GroupUser` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input GroupUserCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `groupId` field."""
+  groupId: Int
+
+  """Checks for equality with the object’s `userType` field."""
+  userType: UserType
+
+  """Checks for equality with the object’s `joinedOn` field."""
+  joinedOn: Datetime
+
+  """Checks for equality with the object’s `lastActive` field."""
+  lastActive: Datetime
+}
+
+"""
+A filter to be used against `GroupUser` object types. All fields are combined with a logical ‘and.’
+"""
+input GroupUserFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `groupId` field."""
+  groupId: IntFilter
+
+  """Filter by the object’s `userType` field."""
+  userType: UserTypeFilter
+
+  """Filter by the object’s `joinedOn` field."""
+  joinedOn: DatetimeFilter
+
+  """Filter by the object’s `lastActive` field."""
+  lastActive: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [GroupUserFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GroupUserFilter!]
+
+  """Negates the expression."""
+  not: GroupUserFilter
+}
+
+"""
+A filter to be used against UserType fields. All fields are combined with a logical ‘and.’
+"""
+input UserTypeFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: UserType
+
+  """Not equal to the specified value."""
+  notEqualTo: UserType
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: UserType
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: UserType
+
+  """Included in the specified list."""
+  in: [UserType!]
+
+  """Not included in the specified list."""
+  notIn: [UserType!]
+
+  """Less than the specified value."""
+  lessThan: UserType
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: UserType
+
+  """Greater than the specified value."""
+  greaterThan: UserType
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: UserType
+}
+
+"""A `Group` edge in the connection."""
+type GroupsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Group` at the end of the edge."""
+  node: Group
+}
+
+"""Methods to use when ordering `Group`."""
+enum GroupsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  GROUP_NAME_ASC
+  GROUP_NAME_DESC
+  GLOBAL_ASC
+  GLOBAL_DESC
+  LANGUAGE_ID_ASC
+  LANGUAGE_ID_DESC
+  LANGUAGE_SKILL_LEVEL_ID_ASC
+  LANGUAGE_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Group` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input GroupCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `groupName` field."""
+  groupName: String
+
+  """Checks for equality with the object’s `global` field."""
+  global: Boolean
+
+  """Checks for equality with the object’s `languageId` field."""
+  languageId: Int
+
+  """Checks for equality with the object’s `languageSkillLevelId` field."""
+  languageSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `Group` object types. All fields are combined with a logical ‘and.’
+"""
+input GroupFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `groupName` field."""
+  groupName: StringFilter
+
+  """Filter by the object’s `global` field."""
+  global: BooleanFilter
+
+  """Filter by the object’s `languageId` field."""
+  languageId: IntFilter
+
+  """Filter by the object’s `languageSkillLevelId` field."""
+  languageSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [GroupFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GroupFilter!]
+
+  """Negates the expression."""
+  not: GroupFilter
+}
+
 """A `UserLanguage` edge in the connection."""
 type UserLanguagesEdge {
   """A cursor for use in pagination."""
@@ -713,6 +1738,34 @@ type UserLanguagesEdge {
 
   """The `UserLanguage` at the end of the edge."""
   node: UserLanguage
+}
+
+"""A `GroupUser` edge in the connection."""
+type GroupUsersEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GroupUser` at the end of the edge."""
+  node: GroupUser
+}
+
+"""A connection to a list of `LanguageSkillLevel` values."""
+type LanguageSkillLevelsConnection {
+  """A list of `LanguageSkillLevel` objects."""
+  nodes: [LanguageSkillLevel]!
+
+  """
+  A list of edges which contains the `LanguageSkillLevel` and cursor to aid in pagination.
+  """
+  edges: [LanguageSkillLevelsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `LanguageSkillLevel` you could get from the connection.
+  """
+  totalCount: Int!
 }
 
 """A `LanguageSkillLevel` edge in the connection."""
@@ -745,6 +1798,26 @@ input LanguageSkillLevelCondition {
 
   """Checks for equality with the object’s `name` field."""
   name: String
+}
+
+"""
+A filter to be used against `LanguageSkillLevel` object types. All fields are combined with a logical ‘and.’
+"""
+input LanguageSkillLevelFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [LanguageSkillLevelFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [LanguageSkillLevelFilter!]
+
+  """Negates the expression."""
+  not: LanguageSkillLevelFilter
 }
 
 """A connection to a list of `Language` values."""
@@ -804,6 +1877,32 @@ input LanguageCondition {
 
   """Checks for equality with the object’s `createdAt` field."""
   createdAt: Datetime
+}
+
+"""
+A filter to be used against `Language` object types. All fields are combined with a logical ‘and.’
+"""
+input LanguageFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `alpha2` field."""
+  alpha2: StringFilter
+
+  """Filter by the object’s `englishName` field."""
+  englishName: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [LanguageFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [LanguageFilter!]
+
+  """Negates the expression."""
+  not: LanguageFilter
 }
 
 """A connection to a list of `UserSession` values."""
@@ -876,6 +1975,26 @@ input UserSessionCondition {
 }
 
 """
+A filter to be used against `UserSession` object types. All fields are combined with a logical ‘and.’
+"""
+input UserSessionFilter {
+  """Filter by the object’s `sid` field."""
+  sid: StringFilter
+
+  """Filter by the object’s `expire` field."""
+  expire: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [UserSessionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [UserSessionFilter!]
+
+  """Negates the expression."""
+  not: UserSessionFilter
+}
+
+"""
 The root mutation type which contains root level fields which mutate data.
 """
 type Mutation {
@@ -886,6 +2005,22 @@ type Mutation {
     """
     input: CreateChatUserInput!
   ): CreateChatUserPayload
+
+  """Creates a single `GroupUser`."""
+  createGroupUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGroupUserInput!
+  ): CreateGroupUserPayload
+
+  """Creates a single `Group`."""
+  createGroup(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGroupInput!
+  ): CreateGroupPayload
 
   """Creates a single `LanguageSkillLevel`."""
   createLanguageSkillLevel(
@@ -926,6 +2061,38 @@ type Mutation {
     """
     input: CreateUserInput!
   ): CreateUserPayload
+
+  """Updates a single `GroupUser` using its globally unique id and a patch."""
+  updateGroupUserByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGroupUserByNodeIdInput!
+  ): UpdateGroupUserPayload
+
+  """Updates a single `GroupUser` using a unique key and a patch."""
+  updateGroupUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGroupUserInput!
+  ): UpdateGroupUserPayload
+
+  """Updates a single `Group` using its globally unique id and a patch."""
+  updateGroupByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGroupByNodeIdInput!
+  ): UpdateGroupPayload
+
+  """Updates a single `Group` using a unique key and a patch."""
+  updateGroup(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGroupInput!
+  ): UpdateGroupPayload
 
   """
   Updates a single `LanguageSkillLevel` using its globally unique id and a patch.
@@ -1044,6 +2211,38 @@ type Mutation {
     """
     input: UpdateUserByUuidInput!
   ): UpdateUserPayload
+
+  """Deletes a single `GroupUser` using its globally unique id."""
+  deleteGroupUserByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGroupUserByNodeIdInput!
+  ): DeleteGroupUserPayload
+
+  """Deletes a single `GroupUser` using a unique key."""
+  deleteGroupUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGroupUserInput!
+  ): DeleteGroupUserPayload
+
+  """Deletes a single `Group` using its globally unique id."""
+  deleteGroupByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGroupByNodeIdInput!
+  ): DeleteGroupPayload
+
+  """Deletes a single `Group` using a unique key."""
+  deleteGroup(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGroupInput!
+  ): DeleteGroupPayload
 
   """Deletes a single `LanguageSkillLevel` using its globally unique id."""
   deleteLanguageSkillLevelByNodeId(
@@ -1199,6 +2398,108 @@ input ChatUserInput {
   uuid: UUID
   bio: String
   avatarUrl: String
+}
+
+"""The output of our create `GroupUser` mutation."""
+type CreateGroupUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GroupUser` that was created by this mutation."""
+  groupUser: GroupUser
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `GroupUser`."""
+  user: User
+
+  """Reads a single `Group` that is related to this `GroupUser`."""
+  group: Group
+
+  """An edge for our `GroupUser`. May be used by Relay 1."""
+  groupUserEdge(
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupUsersEdge
+}
+
+"""All input for the create `GroupUser` mutation."""
+input CreateGroupUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `GroupUser` to be created by this mutation."""
+  groupUser: GroupUserInput!
+}
+
+"""An input for mutations affecting `GroupUser`"""
+input GroupUserInput {
+  id: Int
+  userId: Int
+  groupId: Int
+  userType: UserType!
+  joinedOn: Datetime
+  lastActive: Datetime
+}
+
+"""The output of our create `Group` mutation."""
+type CreateGroupPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Group` that was created by this mutation."""
+  group: Group
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Language` that is related to this `Group`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Group`."""
+  languageSkillLevel: LanguageSkillLevel
+
+  """An edge for our `Group`. May be used by Relay 1."""
+  groupEdge(
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupsEdge
+}
+
+"""All input for the create `Group` mutation."""
+input CreateGroupInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Group` to be created by this mutation."""
+  group: GroupInput!
+}
+
+"""An input for mutations affecting `Group`"""
+input GroupInput {
+  id: Int
+  groupName: String
+  global: Boolean
+  languageId: Int
+  languageSkillLevelId: Int
+  createdAt: Datetime
 }
 
 """The output of our create `LanguageSkillLevel` mutation."""
@@ -1438,6 +2739,156 @@ input UserInput {
   avatarUrl: String
   locale: Int
   googleId: String
+}
+
+"""The output of our update `GroupUser` mutation."""
+type UpdateGroupUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GroupUser` that was updated by this mutation."""
+  groupUser: GroupUser
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `GroupUser`."""
+  user: User
+
+  """Reads a single `Group` that is related to this `GroupUser`."""
+  group: Group
+
+  """An edge for our `GroupUser`. May be used by Relay 1."""
+  groupUserEdge(
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupUsersEdge
+}
+
+"""All input for the `updateGroupUserByNodeId` mutation."""
+input UpdateGroupUserByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `GroupUser` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `GroupUser` being updated.
+  """
+  patch: GroupUserPatch!
+}
+
+"""
+Represents an update to a `GroupUser`. Fields that are set will be updated.
+"""
+input GroupUserPatch {
+  id: Int
+  userId: Int
+  groupId: Int
+  userType: UserType
+  joinedOn: Datetime
+  lastActive: Datetime
+}
+
+"""All input for the `updateGroupUser` mutation."""
+input UpdateGroupUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `GroupUser` being updated.
+  """
+  patch: GroupUserPatch!
+  id: Int!
+}
+
+"""The output of our update `Group` mutation."""
+type UpdateGroupPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Group` that was updated by this mutation."""
+  group: Group
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Language` that is related to this `Group`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Group`."""
+  languageSkillLevel: LanguageSkillLevel
+
+  """An edge for our `Group`. May be used by Relay 1."""
+  groupEdge(
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupsEdge
+}
+
+"""All input for the `updateGroupByNodeId` mutation."""
+input UpdateGroupByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Group` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Group` being updated.
+  """
+  patch: GroupPatch!
+}
+
+"""
+Represents an update to a `Group`. Fields that are set will be updated.
+"""
+input GroupPatch {
+  id: Int
+  groupName: String
+  global: Boolean
+  languageId: Int
+  languageSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateGroup` mutation."""
+input UpdateGroupInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Group` being updated.
+  """
+  patch: GroupPatch!
+  id: Int!
 }
 
 """The output of our update `LanguageSkillLevel` mutation."""
@@ -1857,6 +3308,114 @@ input UpdateUserByUuidInput {
   """
   patch: UserPatch!
   uuid: UUID!
+}
+
+"""The output of our delete `GroupUser` mutation."""
+type DeleteGroupUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GroupUser` that was deleted by this mutation."""
+  groupUser: GroupUser
+  deletedGroupUserNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `GroupUser`."""
+  user: User
+
+  """Reads a single `Group` that is related to this `GroupUser`."""
+  group: Group
+
+  """An edge for our `GroupUser`. May be used by Relay 1."""
+  groupUserEdge(
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupUsersEdge
+}
+
+"""All input for the `deleteGroupUserByNodeId` mutation."""
+input DeleteGroupUserByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `GroupUser` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteGroupUser` mutation."""
+input DeleteGroupUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""The output of our delete `Group` mutation."""
+type DeleteGroupPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Group` that was deleted by this mutation."""
+  group: Group
+  deletedGroupNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Language` that is related to this `Group`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Group`."""
+  languageSkillLevel: LanguageSkillLevel
+
+  """An edge for our `Group`. May be used by Relay 1."""
+  groupEdge(
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupsEdge
+}
+
+"""All input for the `deleteGroupByNodeId` mutation."""
+input DeleteGroupByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Group` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteGroup` mutation."""
+input DeleteGroupInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
 }
 
 """The output of our delete `LanguageSkillLevel` mutation."""

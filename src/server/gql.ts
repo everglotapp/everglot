@@ -1,4 +1,4 @@
-import { graphql } from "graphql"
+import { ExecutionResult, graphql } from "graphql"
 import { withPostGraphileContext, watchPostGraphileSchema } from "postgraphile"
 
 import { createDatabasePool } from "./db"
@@ -9,7 +9,9 @@ import { DATABASE_ROLE_SERVER, DATABASE_SCHEMA } from "./db"
 
 let schema: GraphQLSchema | null
 
-export async function performQuery(
+//export declare type QueryResult<TResult = ExecutionResult>> Promise<TResult>) => Promise<TResult>;
+
+export async function performQuery<TData = { [key: string]: any }>(
     query: Source | string,
     variables:
         | {
@@ -17,13 +19,13 @@ export async function performQuery(
           }
         | undefined,
     operationName: string | undefined = undefined
-) {
-    return await withPostGraphileContext(
+): Promise<ExecutionResult<TData>> {
+    return <any>await withPostGraphileContext(
         {
             pgPool: createDatabasePool(),
             pgDefaultRole: DATABASE_ROLE_SERVER,
         },
-        async (context) => {
+        async function (context) {
             // Execute your GraphQL query in this function with the provided
             // `context` object, which should NOT be used outside of this
             // function.

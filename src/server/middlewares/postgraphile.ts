@@ -1,6 +1,7 @@
 import { postgraphile, makePluginHook } from "postgraphile"
 import PersistedOperationsPlugin from "@graphile/persisted-operations"
 import PgSimplifyInflectorPlugin from "@graphile-contrib/pg-simplify-inflector"
+import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter"
 import type { PostGraphileOptions } from "postgraphile"
 
 import type { Request, RequestHandler } from "express"
@@ -16,7 +17,7 @@ export function getPostGraphileOptions(): PostGraphileOptions {
     const pluginHook = makePluginHook([PersistedOperationsPlugin])
     // TODO: use a restricted user account for postgraphile access
     return {
-        appendPlugins: [PgSimplifyInflectorPlugin],
+        appendPlugins: [PgSimplifyInflectorPlugin, ConnectionFilterPlugin],
         watchPg: true,
         graphiql: dev,
         enhanceGraphiql: dev,

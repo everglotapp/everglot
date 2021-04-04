@@ -5,28 +5,16 @@ import {
     CurrentUser,
     LanguageCodeMappings,
     ChatUsers,
+    CurrentUserQuery,
+    LanguageCodeMappingsQuery,
+    ChatUsersQuery,
 } from "./types/generated/graphql"
-import type { User, Language } from "./types/generated/graphql"
 
 export const username = writable<string | null>(null)
 export const room = writable<string>("English")
 
-export const currentUser = operationStore<{
-    currentUser: Pick<
-        User,
-        "bio" | "email" | "gender" | "username" | "uuid" | "avatarUrl"
-    > & {
-        userLanguages: { totalCount: number }
-        languageByLocale: Pick<Language, "alpha2"> | null
-    }
-}>(CurrentUser)
-
-export const languageCodeMappings = operationStore<{
-    languages: { nodes: Pick<Language, "englishName" | "alpha2">[] }
-}>(LanguageCodeMappings)
-
-export const chatUsers = operationStore<{
-    chatUsers: {
-        nodes: Pick<User, "uuid" | "bio" | "username" | "avatarUrl">[]
-    }
-}>(ChatUsers)
+export const currentUser = operationStore<CurrentUserQuery>(CurrentUser)
+export const languageCodeMappings = operationStore<LanguageCodeMappingsQuery>(
+    LanguageCodeMappings
+)
+export const chatUsers = operationStore<ChatUsersQuery>(ChatUsers)

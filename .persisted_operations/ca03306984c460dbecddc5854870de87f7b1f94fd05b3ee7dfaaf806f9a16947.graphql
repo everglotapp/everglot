@@ -1,0 +1,35 @@
+query ChatUsers($groupId: Int!) {
+  group(id: $groupId) {
+    usersByGroupUserGroupIdAndUserId {
+      nodes {
+        bio
+        avatarUrl
+        uuid
+        username
+        lastActiveAt
+        groupUsers {
+          nodes {
+            userType
+            group {
+              id
+              language {
+                englishName
+                __typename
+              }
+              languageSkillLevel {
+                name
+                __typename
+              }
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

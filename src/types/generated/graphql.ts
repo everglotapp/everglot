@@ -10,15 +10,15 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122). */
-  UUID: any;
-  /** A location in a connection that can be used for resuming pagination. */
-  Cursor: any;
   /**
    * A point in time as described by the [ISO
    * 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
    */
   Datetime: any;
+  /** A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122). */
+  UUID: any;
+  /** A location in a connection that can be used for resuming pagination. */
+  Cursor: any;
   /** A JavaScript object encoded in the JSON format as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
 };
@@ -35,8 +35,6 @@ export type Query = Node & {
   nodeId: Scalars['ID'];
   /** Fetches an object given its globally unique `ID`. */
   node?: Maybe<Node>;
-  /** Reads and enables pagination through a set of `ChatUser`. */
-  chatUsers?: Maybe<ChatUsersConnection>;
   /** Reads and enables pagination through a set of `GroupUser`. */
   groupUsers?: Maybe<GroupUsersConnection>;
   /** Reads and enables pagination through a set of `Group`. */
@@ -62,9 +60,10 @@ export type Query = Node & {
   user?: Maybe<User>;
   userByEmail?: Maybe<User>;
   userByUuid?: Maybe<User>;
+  currentUser?: Maybe<User>;
   currentUserId?: Maybe<Scalars['Int']>;
-  /** Reads and enables pagination through a set of `User`. */
-  usersWithoutGroup?: Maybe<UsersConnection>;
+  groupIsGlobal?: Maybe<Scalars['Boolean']>;
+  userIsInGroup?: Maybe<Scalars['Boolean']>;
   /** Reads and enables pagination through a set of `User`. */
   usersWithoutLearnerGroup?: Maybe<UsersConnection>;
   /** Reads and enables pagination through a set of `User`. */
@@ -89,19 +88,6 @@ export type Query = Node & {
 /** The root query type which gives access points into the data universe. */
 export type QueryNodeArgs = {
   nodeId: Scalars['ID'];
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryChatUsersArgs = {
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  before?: Maybe<Scalars['Cursor']>;
-  after?: Maybe<Scalars['Cursor']>;
-  orderBy?: Maybe<Array<ChatUsersOrderBy>>;
-  condition?: Maybe<ChatUserCondition>;
-  filter?: Maybe<ChatUserFilter>;
 };
 
 
@@ -263,16 +249,14 @@ export type QueryUserByUuidArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
-export type QueryUsersWithoutGroupArgs = {
-  ntv?: Maybe<Scalars['Boolean']>;
-  lid?: Maybe<Scalars['Int']>;
-  lsklid?: Maybe<Scalars['Int']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  before?: Maybe<Scalars['Cursor']>;
-  after?: Maybe<Scalars['Cursor']>;
-  filter?: Maybe<UserFilter>;
+export type QueryGroupIsGlobalArgs = {
+  gid: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserIsInGroupArgs = {
+  gid: Scalars['Int'];
 };
 
 
@@ -348,201 +332,6 @@ export type Node = {
   nodeId: Scalars['ID'];
 };
 
-/** A connection to a list of `ChatUser` values. */
-export type ChatUsersConnection = {
-  __typename?: 'ChatUsersConnection';
-  /** A list of `ChatUser` objects. */
-  nodes: Array<Maybe<ChatUser>>;
-  /** A list of edges which contains the `ChatUser` and cursor to aid in pagination. */
-  edges: Array<ChatUsersEdge>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** The count of *all* `ChatUser` you could get from the connection. */
-  totalCount: Scalars['Int'];
-};
-
-export type ChatUser = {
-  __typename?: 'ChatUser';
-  username?: Maybe<Scalars['String']>;
-  uuid?: Maybe<Scalars['UUID']>;
-  bio?: Maybe<Scalars['String']>;
-  avatarUrl?: Maybe<Scalars['String']>;
-};
-
-
-/** A `ChatUser` edge in the connection. */
-export type ChatUsersEdge = {
-  __typename?: 'ChatUsersEdge';
-  /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
-  /** The `ChatUser` at the end of the edge. */
-  node?: Maybe<ChatUser>;
-};
-
-
-/** Information about pagination in a connection. */
-export type PageInfo = {
-  __typename?: 'PageInfo';
-  /** When paginating forwards, are there more items? */
-  hasNextPage: Scalars['Boolean'];
-  /** When paginating backwards, are there more items? */
-  hasPreviousPage: Scalars['Boolean'];
-  /** When paginating backwards, the cursor to continue. */
-  startCursor?: Maybe<Scalars['Cursor']>;
-  /** When paginating forwards, the cursor to continue. */
-  endCursor?: Maybe<Scalars['Cursor']>;
-};
-
-/** Methods to use when ordering `ChatUser`. */
-export enum ChatUsersOrderBy {
-  Natural = 'NATURAL',
-  UsernameAsc = 'USERNAME_ASC',
-  UsernameDesc = 'USERNAME_DESC',
-  UuidAsc = 'UUID_ASC',
-  UuidDesc = 'UUID_DESC',
-  BioAsc = 'BIO_ASC',
-  BioDesc = 'BIO_DESC',
-  AvatarUrlAsc = 'AVATAR_URL_ASC',
-  AvatarUrlDesc = 'AVATAR_URL_DESC'
-}
-
-/**
- * A condition to be used against `ChatUser` object types. All fields are tested
- * for equality and combined with a logical ‘and.’
- */
-export type ChatUserCondition = {
-  /** Checks for equality with the object’s `username` field. */
-  username?: Maybe<Scalars['String']>;
-  /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
-  /** Checks for equality with the object’s `bio` field. */
-  bio?: Maybe<Scalars['String']>;
-  /** Checks for equality with the object’s `avatarUrl` field. */
-  avatarUrl?: Maybe<Scalars['String']>;
-};
-
-/** A filter to be used against `ChatUser` object types. All fields are combined with a logical ‘and.’ */
-export type ChatUserFilter = {
-  /** Filter by the object’s `username` field. */
-  username?: Maybe<StringFilter>;
-  /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
-  /** Filter by the object’s `bio` field. */
-  bio?: Maybe<StringFilter>;
-  /** Filter by the object’s `avatarUrl` field. */
-  avatarUrl?: Maybe<StringFilter>;
-  /** Checks for all expressions in this list. */
-  and?: Maybe<Array<ChatUserFilter>>;
-  /** Checks for any expressions in this list. */
-  or?: Maybe<Array<ChatUserFilter>>;
-  /** Negates the expression. */
-  not?: Maybe<ChatUserFilter>;
-};
-
-/** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
-export type StringFilter = {
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
-  /** Equal to the specified value. */
-  equalTo?: Maybe<Scalars['String']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Scalars['String']>;
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Scalars['String']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Scalars['String']>;
-  /** Included in the specified list. */
-  in?: Maybe<Array<Scalars['String']>>;
-  /** Not included in the specified list. */
-  notIn?: Maybe<Array<Scalars['String']>>;
-  /** Less than the specified value. */
-  lessThan?: Maybe<Scalars['String']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Scalars['String']>;
-  /** Greater than the specified value. */
-  greaterThan?: Maybe<Scalars['String']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Scalars['String']>;
-  /** Contains the specified string (case-sensitive). */
-  includes?: Maybe<Scalars['String']>;
-  /** Does not contain the specified string (case-sensitive). */
-  notIncludes?: Maybe<Scalars['String']>;
-  /** Contains the specified string (case-insensitive). */
-  includesInsensitive?: Maybe<Scalars['String']>;
-  /** Does not contain the specified string (case-insensitive). */
-  notIncludesInsensitive?: Maybe<Scalars['String']>;
-  /** Starts with the specified string (case-sensitive). */
-  startsWith?: Maybe<Scalars['String']>;
-  /** Does not start with the specified string (case-sensitive). */
-  notStartsWith?: Maybe<Scalars['String']>;
-  /** Starts with the specified string (case-insensitive). */
-  startsWithInsensitive?: Maybe<Scalars['String']>;
-  /** Does not start with the specified string (case-insensitive). */
-  notStartsWithInsensitive?: Maybe<Scalars['String']>;
-  /** Ends with the specified string (case-sensitive). */
-  endsWith?: Maybe<Scalars['String']>;
-  /** Does not end with the specified string (case-sensitive). */
-  notEndsWith?: Maybe<Scalars['String']>;
-  /** Ends with the specified string (case-insensitive). */
-  endsWithInsensitive?: Maybe<Scalars['String']>;
-  /** Does not end with the specified string (case-insensitive). */
-  notEndsWithInsensitive?: Maybe<Scalars['String']>;
-  /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  like?: Maybe<Scalars['String']>;
-  /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLike?: Maybe<Scalars['String']>;
-  /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  likeInsensitive?: Maybe<Scalars['String']>;
-  /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLikeInsensitive?: Maybe<Scalars['String']>;
-  /** Equal to the specified value (case-insensitive). */
-  equalToInsensitive?: Maybe<Scalars['String']>;
-  /** Not equal to the specified value (case-insensitive). */
-  notEqualToInsensitive?: Maybe<Scalars['String']>;
-  /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  distinctFromInsensitive?: Maybe<Scalars['String']>;
-  /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  notDistinctFromInsensitive?: Maybe<Scalars['String']>;
-  /** Included in the specified list (case-insensitive). */
-  inInsensitive?: Maybe<Array<Scalars['String']>>;
-  /** Not included in the specified list (case-insensitive). */
-  notInInsensitive?: Maybe<Array<Scalars['String']>>;
-  /** Less than the specified value (case-insensitive). */
-  lessThanInsensitive?: Maybe<Scalars['String']>;
-  /** Less than or equal to the specified value (case-insensitive). */
-  lessThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
-  /** Greater than the specified value (case-insensitive). */
-  greaterThanInsensitive?: Maybe<Scalars['String']>;
-  /** Greater than or equal to the specified value (case-insensitive). */
-  greaterThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
-};
-
-/** A filter to be used against UUID fields. All fields are combined with a logical ‘and.’ */
-export type UuidFilter = {
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
-  /** Equal to the specified value. */
-  equalTo?: Maybe<Scalars['UUID']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Scalars['UUID']>;
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Scalars['UUID']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Scalars['UUID']>;
-  /** Included in the specified list. */
-  in?: Maybe<Array<Scalars['UUID']>>;
-  /** Not included in the specified list. */
-  notIn?: Maybe<Array<Scalars['UUID']>>;
-  /** Less than the specified value. */
-  lessThan?: Maybe<Scalars['UUID']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Scalars['UUID']>;
-  /** Greater than the specified value. */
-  greaterThan?: Maybe<Scalars['UUID']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Scalars['UUID']>;
-};
-
 /** A connection to a list of `GroupUser` values. */
 export type GroupUsersConnection = {
   __typename?: 'GroupUsersConnection';
@@ -602,6 +391,12 @@ export type User = Node & {
   userLanguages: UserLanguagesConnection;
   /** Reads and enables pagination through a set of `GroupUser`. */
   groupUsers: GroupUsersConnection;
+  /** Reads and enables pagination through a set of `Language`. */
+  languagesByUserLanguageUserIdAndLanguageId: UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
+  languageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelId: UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Group`. */
+  groupsByGroupUserUserIdAndGroupId: UserGroupsByGroupUserUserIdAndGroupIdManyToManyConnection;
 };
 
 
@@ -628,6 +423,43 @@ export type UserGroupUsersArgs = {
   filter?: Maybe<GroupUserFilter>;
 };
 
+
+export type UserLanguagesByUserLanguageUserIdAndLanguageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
+};
+
+
+export type UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  condition?: Maybe<LanguageSkillLevelCondition>;
+  filter?: Maybe<LanguageSkillLevelFilter>;
+};
+
+
+export type UserGroupsByGroupUserUserIdAndGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
+};
+
+
 export type Language = Node & {
   __typename?: 'Language';
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
@@ -643,6 +475,12 @@ export type Language = Node & {
   userLanguages: UserLanguagesConnection;
   /** Reads and enables pagination through a set of `Group`. */
   groups: GroupsConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByUserLanguageLanguageIdAndUserId: LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
+  languageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelId: LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
+  languageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelId: LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdManyToManyConnection;
 };
 
 
@@ -681,6 +519,42 @@ export type LanguageGroupsArgs = {
   filter?: Maybe<GroupFilter>;
 };
 
+
+export type LanguageUsersByUserLanguageLanguageIdAndUserIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  condition?: Maybe<LanguageSkillLevelCondition>;
+  filter?: Maybe<LanguageSkillLevelFilter>;
+};
+
+
+export type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  condition?: Maybe<LanguageSkillLevelCondition>;
+  filter?: Maybe<LanguageSkillLevelFilter>;
+};
+
 /** A connection to a list of `User` values. */
 export type UsersConnection = {
   __typename?: 'UsersConnection';
@@ -701,6 +575,20 @@ export type UsersEdge = {
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `User` at the end of the edge. */
   node?: Maybe<User>;
+};
+
+
+/** Information about pagination in a connection. */
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['Cursor']>;
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['Cursor']>;
 };
 
 /** Methods to use when ordering `User`. */
@@ -828,6 +716,84 @@ export type IntFilter = {
   greaterThanOrEqualTo?: Maybe<Scalars['Int']>;
 };
 
+/** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
+export type StringFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['String']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['String']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['String']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['String']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['String']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['String']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['String']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['String']>;
+  /** Contains the specified string (case-sensitive). */
+  includes?: Maybe<Scalars['String']>;
+  /** Does not contain the specified string (case-sensitive). */
+  notIncludes?: Maybe<Scalars['String']>;
+  /** Contains the specified string (case-insensitive). */
+  includesInsensitive?: Maybe<Scalars['String']>;
+  /** Does not contain the specified string (case-insensitive). */
+  notIncludesInsensitive?: Maybe<Scalars['String']>;
+  /** Starts with the specified string (case-sensitive). */
+  startsWith?: Maybe<Scalars['String']>;
+  /** Does not start with the specified string (case-sensitive). */
+  notStartsWith?: Maybe<Scalars['String']>;
+  /** Starts with the specified string (case-insensitive). */
+  startsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Does not start with the specified string (case-insensitive). */
+  notStartsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Ends with the specified string (case-sensitive). */
+  endsWith?: Maybe<Scalars['String']>;
+  /** Does not end with the specified string (case-sensitive). */
+  notEndsWith?: Maybe<Scalars['String']>;
+  /** Ends with the specified string (case-insensitive). */
+  endsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Does not end with the specified string (case-insensitive). */
+  notEndsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  like?: Maybe<Scalars['String']>;
+  /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  notLike?: Maybe<Scalars['String']>;
+  /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  likeInsensitive?: Maybe<Scalars['String']>;
+  /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  notLikeInsensitive?: Maybe<Scalars['String']>;
+  /** Equal to the specified value (case-insensitive). */
+  equalToInsensitive?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value (case-insensitive). */
+  notEqualToInsensitive?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
+  distinctFromInsensitive?: Maybe<Scalars['String']>;
+  /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
+  notDistinctFromInsensitive?: Maybe<Scalars['String']>;
+  /** Included in the specified list (case-insensitive). */
+  inInsensitive?: Maybe<Array<Scalars['String']>>;
+  /** Not included in the specified list (case-insensitive). */
+  notInInsensitive?: Maybe<Array<Scalars['String']>>;
+  /** Less than the specified value (case-insensitive). */
+  lessThanInsensitive?: Maybe<Scalars['String']>;
+  /** Less than or equal to the specified value (case-insensitive). */
+  lessThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
+  /** Greater than the specified value (case-insensitive). */
+  greaterThanInsensitive?: Maybe<Scalars['String']>;
+  /** Greater than or equal to the specified value (case-insensitive). */
+  greaterThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
+};
+
 /** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
 export type DatetimeFilter = {
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
@@ -852,6 +818,32 @@ export type DatetimeFilter = {
   greaterThan?: Maybe<Scalars['Datetime']>;
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against UUID fields. All fields are combined with a logical ‘and.’ */
+export type UuidFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['UUID']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['UUID']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['UUID']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['UUID']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['UUID']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['UUID']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['UUID']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['UUID']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['UUID']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `UserLanguage` values. */
@@ -895,6 +887,12 @@ export type LanguageSkillLevel = Node & {
   userLanguages: UserLanguagesConnection;
   /** Reads and enables pagination through a set of `Group`. */
   groups: GroupsConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByUserLanguageLanguageSkillLevelIdAndUserId: LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Language`. */
+  languagesByUserLanguageLanguageSkillLevelIdAndLanguageId: LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Language`. */
+  languagesByGroupLanguageSkillLevelIdAndLanguageId: LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToManyConnection;
 };
 
 
@@ -919,6 +917,42 @@ export type LanguageSkillLevelGroupsArgs = {
   orderBy?: Maybe<Array<GroupsOrderBy>>;
   condition?: Maybe<GroupCondition>;
   filter?: Maybe<GroupFilter>;
+};
+
+
+export type LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
+};
+
+
+export type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
 };
 
 /** Methods to use when ordering `UserLanguage`. */
@@ -1036,6 +1070,8 @@ export type Group = Node & {
   languageSkillLevel?: Maybe<LanguageSkillLevel>;
   /** Reads and enables pagination through a set of `GroupUser`. */
   groupUsers: GroupUsersConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByGroupUserGroupIdAndUserId: GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection;
 };
 
 
@@ -1048,6 +1084,18 @@ export type GroupGroupUsersArgs = {
   orderBy?: Maybe<Array<GroupUsersOrderBy>>;
   condition?: Maybe<GroupUserCondition>;
   filter?: Maybe<GroupUserFilter>;
+};
+
+
+export type GroupUsersByGroupUserGroupIdAndUserIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
 };
 
 /** Methods to use when ordering `GroupUser`. */
@@ -1136,6 +1184,43 @@ export type UserTypeFilter = {
   greaterThanOrEqualTo?: Maybe<UserType>;
 };
 
+/** A connection to a list of `User` values, with data from `GroupUser`. */
+export type GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection = {
+  __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `GroupUser`, and the cursor to aid in pagination. */
+  edges: Array<GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `GroupUser`. */
+export type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge = {
+  __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `GroupUser`. */
+  groupUsers: GroupUsersConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `GroupUser`. */
+export type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdgeGroupUsersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  condition?: Maybe<GroupUserCondition>;
+  filter?: Maybe<GroupUserFilter>;
+};
+
 /** A `Group` edge in the connection. */
 export type GroupsEdge = {
   __typename?: 'GroupsEdge';
@@ -1202,102 +1287,78 @@ export type GroupFilter = {
   not?: Maybe<GroupFilter>;
 };
 
-/** A `UserLanguage` edge in the connection. */
-export type UserLanguagesEdge = {
-  __typename?: 'UserLanguagesEdge';
-  /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
-  /** The `UserLanguage` at the end of the edge. */
-  node?: Maybe<UserLanguage>;
-};
-
-/** A `GroupUser` edge in the connection. */
-export type GroupUsersEdge = {
-  __typename?: 'GroupUsersEdge';
-  /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
-  /** The `GroupUser` at the end of the edge. */
-  node?: Maybe<GroupUser>;
-};
-
-/** A connection to a list of `LanguageSkillLevel` values. */
-export type LanguageSkillLevelsConnection = {
-  __typename?: 'LanguageSkillLevelsConnection';
-  /** A list of `LanguageSkillLevel` objects. */
-  nodes: Array<Maybe<LanguageSkillLevel>>;
-  /** A list of edges which contains the `LanguageSkillLevel` and cursor to aid in pagination. */
-  edges: Array<LanguageSkillLevelsEdge>;
+/** A connection to a list of `User` values, with data from `UserLanguage`. */
+export type LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdManyToManyConnection = {
+  __typename?: 'LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `UserLanguage`, and the cursor to aid in pagination. */
+  edges: Array<LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdManyToManyEdge>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
-  /** The count of *all* `LanguageSkillLevel` you could get from the connection. */
+  /** The count of *all* `User` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
-/** A `LanguageSkillLevel` edge in the connection. */
-export type LanguageSkillLevelsEdge = {
-  __typename?: 'LanguageSkillLevelsEdge';
+/** A `User` edge in the connection, with data from `UserLanguage`. */
+export type LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdManyToManyEdge = {
+  __typename?: 'LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdManyToManyEdge';
   /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
-  /** The `LanguageSkillLevel` at the end of the edge. */
-  node?: Maybe<LanguageSkillLevel>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `UserLanguage`. */
+  userLanguages: UserLanguagesConnection;
 };
 
-/** Methods to use when ordering `LanguageSkillLevel`. */
-export enum LanguageSkillLevelsOrderBy {
-  Natural = 'NATURAL',
-  IdAsc = 'ID_ASC',
-  IdDesc = 'ID_DESC',
-  NameAsc = 'NAME_ASC',
-  NameDesc = 'NAME_DESC',
-  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
-}
 
-/**
- * A condition to be used against `LanguageSkillLevel` object types. All fields are
- * tested for equality and combined with a logical ‘and.’
- */
-export type LanguageSkillLevelCondition = {
-  /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `name` field. */
-  name?: Maybe<Scalars['String']>;
+/** A `User` edge in the connection, with data from `UserLanguage`. */
+export type LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdManyToManyEdgeUserLanguagesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  condition?: Maybe<UserLanguageCondition>;
+  filter?: Maybe<UserLanguageFilter>;
 };
 
-/** A filter to be used against `LanguageSkillLevel` object types. All fields are combined with a logical ‘and.’ */
-export type LanguageSkillLevelFilter = {
-  /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
-  /** Filter by the object’s `name` field. */
-  name?: Maybe<StringFilter>;
-  /** Checks for all expressions in this list. */
-  and?: Maybe<Array<LanguageSkillLevelFilter>>;
-  /** Checks for any expressions in this list. */
-  or?: Maybe<Array<LanguageSkillLevelFilter>>;
-  /** Negates the expression. */
-  not?: Maybe<LanguageSkillLevelFilter>;
-};
-
-/** A connection to a list of `Language` values. */
-export type LanguagesConnection = {
-  __typename?: 'LanguagesConnection';
+/** A connection to a list of `Language` values, with data from `UserLanguage`. */
+export type LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdManyToManyConnection = {
+  __typename?: 'LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdManyToManyConnection';
   /** A list of `Language` objects. */
   nodes: Array<Maybe<Language>>;
-  /** A list of edges which contains the `Language` and cursor to aid in pagination. */
-  edges: Array<LanguagesEdge>;
+  /** A list of edges which contains the `Language`, info from the `UserLanguage`, and the cursor to aid in pagination. */
+  edges: Array<LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdManyToManyEdge>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Language` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
-/** A `Language` edge in the connection. */
-export type LanguagesEdge = {
-  __typename?: 'LanguagesEdge';
+/** A `Language` edge in the connection, with data from `UserLanguage`. */
+export type LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdManyToManyEdge = {
+  __typename?: 'LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdManyToManyEdge';
   /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `Language` at the end of the edge. */
   node?: Maybe<Language>;
+  /** Reads and enables pagination through a set of `UserLanguage`. */
+  userLanguages: UserLanguagesConnection;
+};
+
+
+/** A `Language` edge in the connection, with data from `UserLanguage`. */
+export type LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdManyToManyEdgeUserLanguagesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  condition?: Maybe<UserLanguageCondition>;
+  filter?: Maybe<UserLanguageFilter>;
 };
 
 /** Methods to use when ordering `Language`. */
@@ -1346,6 +1407,363 @@ export type LanguageFilter = {
   or?: Maybe<Array<LanguageFilter>>;
   /** Negates the expression. */
   not?: Maybe<LanguageFilter>;
+};
+
+/** A connection to a list of `Language` values, with data from `Group`. */
+export type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToManyConnection = {
+  __typename?: 'LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToManyConnection';
+  /** A list of `Language` objects. */
+  nodes: Array<Maybe<Language>>;
+  /** A list of edges which contains the `Language`, info from the `Group`, and the cursor to aid in pagination. */
+  edges: Array<LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Language` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Language` edge in the connection, with data from `Group`. */
+export type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToManyEdge = {
+  __typename?: 'LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Language` at the end of the edge. */
+  node?: Maybe<Language>;
+  /** Reads and enables pagination through a set of `Group`. */
+  groups: GroupsConnection;
+};
+
+
+/** A `Language` edge in the connection, with data from `Group`. */
+export type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToManyEdgeGroupsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
+};
+
+/** A `UserLanguage` edge in the connection. */
+export type UserLanguagesEdge = {
+  __typename?: 'UserLanguagesEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `UserLanguage` at the end of the edge. */
+  node?: Maybe<UserLanguage>;
+};
+
+/** A connection to a list of `User` values, with data from `UserLanguage`. */
+export type LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyConnection = {
+  __typename?: 'LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `UserLanguage`, and the cursor to aid in pagination. */
+  edges: Array<LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `UserLanguage`. */
+export type LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyEdge = {
+  __typename?: 'LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `UserLanguage`. */
+  userLanguages: UserLanguagesConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `UserLanguage`. */
+export type LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyEdgeUserLanguagesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  condition?: Maybe<UserLanguageCondition>;
+  filter?: Maybe<UserLanguageFilter>;
+};
+
+/** A connection to a list of `LanguageSkillLevel` values, with data from `UserLanguage`. */
+export type LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyConnection = {
+  __typename?: 'LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyConnection';
+  /** A list of `LanguageSkillLevel` objects. */
+  nodes: Array<Maybe<LanguageSkillLevel>>;
+  /** A list of edges which contains the `LanguageSkillLevel`, info from the `UserLanguage`, and the cursor to aid in pagination. */
+  edges: Array<LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `LanguageSkillLevel` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `LanguageSkillLevel` edge in the connection, with data from `UserLanguage`. */
+export type LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyEdge = {
+  __typename?: 'LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `LanguageSkillLevel` at the end of the edge. */
+  node?: Maybe<LanguageSkillLevel>;
+  /** Reads and enables pagination through a set of `UserLanguage`. */
+  userLanguages: UserLanguagesConnection;
+};
+
+
+/** A `LanguageSkillLevel` edge in the connection, with data from `UserLanguage`. */
+export type LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyEdgeUserLanguagesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  condition?: Maybe<UserLanguageCondition>;
+  filter?: Maybe<UserLanguageFilter>;
+};
+
+/** Methods to use when ordering `LanguageSkillLevel`. */
+export enum LanguageSkillLevelsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  NameAsc = 'NAME_ASC',
+  NameDesc = 'NAME_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/**
+ * A condition to be used against `LanguageSkillLevel` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type LanguageSkillLevelCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `name` field. */
+  name?: Maybe<Scalars['String']>;
+};
+
+/** A filter to be used against `LanguageSkillLevel` object types. All fields are combined with a logical ‘and.’ */
+export type LanguageSkillLevelFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `name` field. */
+  name?: Maybe<StringFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<LanguageSkillLevelFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<LanguageSkillLevelFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<LanguageSkillLevelFilter>;
+};
+
+/** A connection to a list of `LanguageSkillLevel` values, with data from `Group`. */
+export type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdManyToManyConnection = {
+  __typename?: 'LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdManyToManyConnection';
+  /** A list of `LanguageSkillLevel` objects. */
+  nodes: Array<Maybe<LanguageSkillLevel>>;
+  /** A list of edges which contains the `LanguageSkillLevel`, info from the `Group`, and the cursor to aid in pagination. */
+  edges: Array<LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `LanguageSkillLevel` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `LanguageSkillLevel` edge in the connection, with data from `Group`. */
+export type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdManyToManyEdge = {
+  __typename?: 'LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `LanguageSkillLevel` at the end of the edge. */
+  node?: Maybe<LanguageSkillLevel>;
+  /** Reads and enables pagination through a set of `Group`. */
+  groups: GroupsConnection;
+};
+
+
+/** A `LanguageSkillLevel` edge in the connection, with data from `Group`. */
+export type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdManyToManyEdgeGroupsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
+};
+
+/** A connection to a list of `Language` values, with data from `UserLanguage`. */
+export type UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection = {
+  __typename?: 'UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection';
+  /** A list of `Language` objects. */
+  nodes: Array<Maybe<Language>>;
+  /** A list of edges which contains the `Language`, info from the `UserLanguage`, and the cursor to aid in pagination. */
+  edges: Array<UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Language` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Language` edge in the connection, with data from `UserLanguage`. */
+export type UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyEdge = {
+  __typename?: 'UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Language` at the end of the edge. */
+  node?: Maybe<Language>;
+  /** Reads and enables pagination through a set of `UserLanguage`. */
+  userLanguages: UserLanguagesConnection;
+};
+
+
+/** A `Language` edge in the connection, with data from `UserLanguage`. */
+export type UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyEdgeUserLanguagesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  condition?: Maybe<UserLanguageCondition>;
+  filter?: Maybe<UserLanguageFilter>;
+};
+
+/** A connection to a list of `LanguageSkillLevel` values, with data from `UserLanguage`. */
+export type UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdManyToManyConnection = {
+  __typename?: 'UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdManyToManyConnection';
+  /** A list of `LanguageSkillLevel` objects. */
+  nodes: Array<Maybe<LanguageSkillLevel>>;
+  /** A list of edges which contains the `LanguageSkillLevel`, info from the `UserLanguage`, and the cursor to aid in pagination. */
+  edges: Array<UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `LanguageSkillLevel` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `LanguageSkillLevel` edge in the connection, with data from `UserLanguage`. */
+export type UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdManyToManyEdge = {
+  __typename?: 'UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `LanguageSkillLevel` at the end of the edge. */
+  node?: Maybe<LanguageSkillLevel>;
+  /** Reads and enables pagination through a set of `UserLanguage`. */
+  userLanguages: UserLanguagesConnection;
+};
+
+
+/** A `LanguageSkillLevel` edge in the connection, with data from `UserLanguage`. */
+export type UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdManyToManyEdgeUserLanguagesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  condition?: Maybe<UserLanguageCondition>;
+  filter?: Maybe<UserLanguageFilter>;
+};
+
+/** A connection to a list of `Group` values, with data from `GroupUser`. */
+export type UserGroupsByGroupUserUserIdAndGroupIdManyToManyConnection = {
+  __typename?: 'UserGroupsByGroupUserUserIdAndGroupIdManyToManyConnection';
+  /** A list of `Group` objects. */
+  nodes: Array<Maybe<Group>>;
+  /** A list of edges which contains the `Group`, info from the `GroupUser`, and the cursor to aid in pagination. */
+  edges: Array<UserGroupsByGroupUserUserIdAndGroupIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Group` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Group` edge in the connection, with data from `GroupUser`. */
+export type UserGroupsByGroupUserUserIdAndGroupIdManyToManyEdge = {
+  __typename?: 'UserGroupsByGroupUserUserIdAndGroupIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Group` at the end of the edge. */
+  node?: Maybe<Group>;
+  /** Reads and enables pagination through a set of `GroupUser`. */
+  groupUsers: GroupUsersConnection;
+};
+
+
+/** A `Group` edge in the connection, with data from `GroupUser`. */
+export type UserGroupsByGroupUserUserIdAndGroupIdManyToManyEdgeGroupUsersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  condition?: Maybe<GroupUserCondition>;
+  filter?: Maybe<GroupUserFilter>;
+};
+
+/** A `GroupUser` edge in the connection. */
+export type GroupUsersEdge = {
+  __typename?: 'GroupUsersEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `GroupUser` at the end of the edge. */
+  node?: Maybe<GroupUser>;
+};
+
+/** A connection to a list of `LanguageSkillLevel` values. */
+export type LanguageSkillLevelsConnection = {
+  __typename?: 'LanguageSkillLevelsConnection';
+  /** A list of `LanguageSkillLevel` objects. */
+  nodes: Array<Maybe<LanguageSkillLevel>>;
+  /** A list of edges which contains the `LanguageSkillLevel` and cursor to aid in pagination. */
+  edges: Array<LanguageSkillLevelsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `LanguageSkillLevel` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `LanguageSkillLevel` edge in the connection. */
+export type LanguageSkillLevelsEdge = {
+  __typename?: 'LanguageSkillLevelsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `LanguageSkillLevel` at the end of the edge. */
+  node?: Maybe<LanguageSkillLevel>;
+};
+
+/** A connection to a list of `Language` values. */
+export type LanguagesConnection = {
+  __typename?: 'LanguagesConnection';
+  /** A list of `Language` objects. */
+  nodes: Array<Maybe<Language>>;
+  /** A list of edges which contains the `Language` and cursor to aid in pagination. */
+  edges: Array<LanguagesEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Language` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Language` edge in the connection. */
+export type LanguagesEdge = {
+  __typename?: 'LanguagesEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Language` at the end of the edge. */
+  node?: Maybe<Language>;
 };
 
 /** A connection to a list of `UserSession` values. */
@@ -1423,8 +1841,6 @@ export type UserSessionFilter = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
   __typename?: 'Mutation';
-  /** Creates a single `ChatUser`. */
-  createChatUser?: Maybe<CreateChatUserPayload>;
   /** Creates a single `GroupUser`. */
   createGroupUser?: Maybe<CreateGroupUserPayload>;
   /** Creates a single `Group`. */
@@ -1511,12 +1927,6 @@ export type Mutation = {
   deleteUserByEmail?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
   deleteUserByUuid?: Maybe<DeleteUserPayload>;
-};
-
-
-/** The root mutation type which contains root level fields which mutate data. */
-export type MutationCreateChatUserArgs = {
-  input: CreateChatUserInput;
 };
 
 
@@ -1775,47 +2185,6 @@ export type MutationDeleteUserByEmailArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByUuidArgs = {
   input: DeleteUserByUuidInput;
-};
-
-/** The output of our create `ChatUser` mutation. */
-export type CreateChatUserPayload = {
-  __typename?: 'CreateChatUserPayload';
-  /**
-   * The exact same `clientMutationId` that was provided in the mutation input,
-   * unchanged and unused. May be used by a client to track mutations.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** The `ChatUser` that was created by this mutation. */
-  chatUser?: Maybe<ChatUser>;
-  /** Our root query field type. Allows us to run any query from our mutation payload. */
-  query?: Maybe<Query>;
-  /** An edge for our `ChatUser`. May be used by Relay 1. */
-  chatUserEdge?: Maybe<ChatUsersEdge>;
-};
-
-
-/** The output of our create `ChatUser` mutation. */
-export type CreateChatUserPayloadChatUserEdgeArgs = {
-  orderBy?: Maybe<Array<ChatUsersOrderBy>>;
-};
-
-/** All input for the create `ChatUser` mutation. */
-export type CreateChatUserInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** The `ChatUser` to be created by this mutation. */
-  chatUser: ChatUserInput;
-};
-
-/** An input for mutations affecting `ChatUser` */
-export type ChatUserInput = {
-  username?: Maybe<Scalars['String']>;
-  uuid?: Maybe<Scalars['UUID']>;
-  bio?: Maybe<Scalars['String']>;
-  avatarUrl?: Maybe<Scalars['String']>;
 };
 
 /** The output of our create `GroupUser` mutation. */
@@ -2962,17 +3331,40 @@ export type DeleteUserByUuidInput = {
   uuid: Scalars['UUID'];
 };
 
-export type ChatUsersQueryVariables = Exact<{ [key: string]: never; }>;
+export type ChatUsersQueryVariables = Exact<{
+  groupId: Scalars['Int'];
+}>;
 
 
 export type ChatUsersQuery = (
   { __typename?: 'Query' }
-  & { chatUsers?: Maybe<(
-    { __typename?: 'ChatUsersConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'ChatUser' }
-      & Pick<ChatUser, 'username' | 'uuid' | 'bio' | 'avatarUrl'>
-    )>> }
+  & { group?: Maybe<(
+    { __typename?: 'Group' }
+    & { usersByGroupUserGroupIdAndUserId: (
+      { __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection' }
+      & { nodes: Array<Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'bio' | 'avatarUrl' | 'uuid' | 'username' | 'lastActiveAt'>
+        & { groupUsers: (
+          { __typename?: 'GroupUsersConnection' }
+          & { nodes: Array<Maybe<(
+            { __typename?: 'GroupUser' }
+            & Pick<GroupUser, 'userType'>
+            & { group?: Maybe<(
+              { __typename?: 'Group' }
+              & Pick<Group, 'id'>
+              & { language?: Maybe<(
+                { __typename?: 'Language' }
+                & Pick<Language, 'englishName'>
+              )>, languageSkillLevel?: Maybe<(
+                { __typename?: 'LanguageSkillLevel' }
+                & Pick<LanguageSkillLevel, 'name'>
+              )> }
+            )> }
+          )>> }
+        ) }
+      )>> }
+    ) }
   )> }
 );
 
@@ -2981,19 +3373,16 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CurrentUserQuery = (
   { __typename?: 'Query' }
-  & { users?: Maybe<(
-    { __typename?: 'UsersConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid' | 'avatarUrl'>
-      & { userLanguages: (
-        { __typename?: 'UserLanguagesConnection' }
-        & Pick<UserLanguagesConnection, 'totalCount'>
-      ), languageByLocale?: Maybe<(
-        { __typename?: 'Language' }
-        & Pick<Language, 'alpha2'>
-      )> }
-    )>> }
+  & { currentUser?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid' | 'avatarUrl'>
+    & { userLanguages: (
+      { __typename?: 'UserLanguagesConnection' }
+      & Pick<UserLanguagesConnection, 'totalCount'>
+    ), languageByLocale?: Maybe<(
+      { __typename?: 'Language' }
+      & Pick<Language, 'alpha2'>
+    )> }
   )> }
 );
 
@@ -3013,33 +3402,48 @@ export type LanguageCodeMappingsQuery = (
 
 
 export const ChatUsers = gql`
-    query ChatUsers {
-  chatUsers {
-    nodes {
-      username
-      uuid
-      bio
-      avatarUrl
+    query ChatUsers($groupId: Int!) {
+  group(id: $groupId) {
+    usersByGroupUserGroupIdAndUserId {
+      nodes {
+        bio
+        avatarUrl
+        uuid
+        username
+        lastActiveAt
+        groupUsers {
+          nodes {
+            userType
+            group {
+              id
+              language {
+                englishName
+              }
+              languageSkillLevel {
+                name
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
     `;
 export const CurrentUser = gql`
     query CurrentUser {
-  users(first: 1) {
-    nodes {
-      bio
-      email
-      gender
-      username
-      uuid
-      avatarUrl
-      userLanguages {
-        totalCount
-      }
-      languageByLocale {
-        alpha2
-      }
+  currentUser {
+    bio
+    email
+    gender
+    username
+    uuid
+    avatarUrl
+    userLanguages {
+      totalCount
+    }
+    languageByLocale {
+      alpha2
     }
   }
 }

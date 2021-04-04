@@ -30,8 +30,8 @@
     query(languageCodeMappings)
 
     let prefilled = false
-    $: if (!$currentUser.fetching && $currentUser.data?.users.nodes[0]) {
-        const user = $currentUser.data.users.nodes[0]
+    $: if (!$currentUser.fetching && $currentUser.data?.currentUser) {
+        const user = $currentUser.data.currentUser
         if (user.username !== null && user.userLanguages.totalCount) {
             // Profile has already been completed, a second time won't work.
             goto("/profile/success", { replaceState: true, noscroll: false })

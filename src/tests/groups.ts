@@ -8,11 +8,6 @@ import type { Language, User, UserLanguage } from "../types/generated/graphql"
 
 import { tryFormingGroupsWithUser } from "../server/groups"
 
-// import { foo } from './foo'
-// jest.mock('./foo')
-
-// // here the whole foo var is mocked deeply
-// const mockedFoo = mocked(foo, true)
 import Fakerator from "fakerator"
 const fakerator = Fakerator()
 
@@ -148,18 +143,18 @@ describe("groups", () => {
         await client.query(`SET ROLE TO evg_server`)
     })
 
-    afterEach(async () => {
-        const client = await pool.connect()
-        expect(client).toBeTruthy()
-        await client.query(`SET ROLE TO everglot_app_user`)
-        await client.query(`DELETE FROM app_public.user_languages WHERE TRUE`)
-        userLanguages = []
-        await client.query(`DELETE FROM app_public.group_users WHERE TRUE`)
-        await client.query(`DELETE FROM app_public.groups WHERE TRUE`)
-        await client.query(`DELETE FROM app_public.users WHERE TRUE`)
-        users = []
-        await client.query(`SET ROLE TO evg_server`)
-    })
+    // afterEach(async () => {
+    //     const client = await pool.connect()
+    //     expect(client).toBeTruthy()
+    //     await client.query(`SET ROLE TO everglot_app_user`)
+    //     await client.query(`DELETE FROM app_public.user_languages WHERE TRUE`)
+    //     userLanguages = []
+    //     await client.query(`DELETE FROM app_public.group_users WHERE TRUE`)
+    //     await client.query(`DELETE FROM app_public.groups WHERE TRUE`)
+    //     await client.query(`DELETE FROM app_public.users WHERE TRUE`)
+    //     users = []
+    //     await client.query(`SET ROLE TO evg_server`)
+    // })
 
     test("group forming works", async () => {
         const createTestUser = async ({

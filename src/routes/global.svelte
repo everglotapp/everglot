@@ -5,13 +5,25 @@
     import { query } from "@urql/svelte"
 
     import { allGroups } from "../stores"
-    import type { AllGroupsQuery, MakeMaybe } from "../types/generated/graphql"
+    import type { Maybe, Language, Group } from "../types/generated/graphql"
 
     query(allGroups)
 
     type GroupLanguage = "en" | "de" | "zh"
-    let groups: Record<GroupLanguage, MakeMaybe<AllGroupsQuery, "groups">> = {
-        en: [] as Pick<AllGroupsQuery["groups"], "nodes">,
+    type GroupNode = {
+        __typename?: "Group" | undefined
+    } & Pick<Group, "uuid" | "groupName" | "global"> & {
+            language?:
+                | Maybe<
+                      {
+                          __typename?: "Language" | undefined
+                      } & Pick<Language, "alpha2" | "englishName">
+                  >
+                | undefined
+        }
+
+    let groups: Record<GroupLanguage, GroupNode[]> = {
+        en: [],
         de: [],
         zh: [],
     }
@@ -26,11 +38,16 @@
                         groupIsForLanguage(group, lang)
                 ),
             }),
-            {}
+            {
+                en: [],
+                de: [],
+                zh: [],
+            }
         )
     }
-    const groupIsGlobal = (group) => group.global === true
-    const groupIsForLanguage = (group, lang) => group.language?.alpha2 === lang
+    const groupIsGlobal = (group: GroupNode) => group.global === true
+    const groupIsForLanguage = (group: GroupNode, lang: Language["alpha2"]) =>
+        group.language?.alpha2 === lang
 </script>
 
 <svelte:head>

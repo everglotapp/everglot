@@ -47,8 +47,8 @@
 
     $: chatUsers =
         chatUsersStore && !$chatUsersStore.fetching && !$chatUsersStore.error
-            ? $chatUsersStore.data?.group?.usersByGroupUserGroupIdAndUserId
-                  ?.nodes || []
+            ? $chatUsersStore.data?.groupByUuid
+                  ?.usersByGroupUserGroupIdAndUserId?.nodes || []
             : []
 
     // TODO: Check if user is signed in, if not redirect to sign in.

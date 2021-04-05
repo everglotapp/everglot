@@ -127,7 +127,9 @@ describe("groups", () => {
     beforeAll(async () => {
         await start()
         english = await getLanguage({ alpha2: "en" })
+        expect(english).toBeTruthy()
         german = await getLanguage({ alpha2: "de" })
+        expect(english).toBeTruthy()
     })
 
     beforeEach(async () => {
@@ -158,30 +160,31 @@ describe("groups", () => {
 
     test("group forming works", async () => {
         const createTestUser = async ({
-            nativeLang,
-            nonNativeLang,
+            teaching,
+            learning,
         }: {
-            nativeLang: Partial<Language>
-            nonNativeLang: Partial<Language>
+            teaching: Partial<Language>
+            learning: Partial<Language>
         }): Promise<Partial<User>> => {
             const user = await createUser()
+            expect(user).not.toBeNull()
             users.push(user)
-            userLanguages.push(
-                await createUserLanguage({
-                    userId: user.id,
-                    languageId: nativeLang.id,
-                    languageSkillLevelId: null,
-                    native: true,
-                })
-            )
-            userLanguages.push(
-                await createUserLanguage({
-                    userId: user.id,
-                    languageId: nonNativeLang.id,
-                    languageSkillLevelId: 1,
-                    native: false,
-                })
-            )
+            const teachingMembership = await createUserLanguage({
+                userId: user.id,
+                languageId: teaching.id,
+                languageSkillLevelId: null,
+                native: true,
+            })
+            expect(teachingMembership).not.toBeNull()
+            userLanguages.push(teachingMembership)
+            const learningMembership = await createUserLanguage({
+                userId: user.id,
+                languageId: learning.id,
+                languageSkillLevelId: 1,
+                native: false,
+            })
+            expect(learningMembership).not.toBeNull()
+            userLanguages.push(learningMembership)
             return user
         }
 
@@ -189,43 +192,48 @@ describe("groups", () => {
         for (let i = 0; i < GROUP_LEARNER_SIZE; ++i) {
             console.log("Adding English learner", i)
             user = await createTestUser({
-                nativeLang: german,
-                nonNativeLang: english,
+                teaching: german!,
+                learning: english!,
             })
-            expect(await tryFormingGroupsWithUser(user.id)).toEqual([])
+            expect(user).not.toBeNull()
+            expect(await tryFormingGroupsWithUser(user.id!)).toEqual([])
         }
 
         for (let i = 0; i < GROUP_NATIVE_SIZE - 1; ++i) {
             console.log("Adding English native speaker", i)
             user = await createTestUser({
-                nativeLang: english,
-                nonNativeLang: german,
+                teaching: english!,
+                learning: german!,
             })
-            expect(await tryFormingGroupsWithUser(user.id)).toEqual([])
+            expect(user).not.toBeNull()
+            expect(await tryFormingGroupsWithUser(user.id!)).toEqual([])
         }
 
         console.log("Adding English native speaker", GROUP_NATIVE_SIZE)
         user = await createTestUser({
-            nativeLang: english,
-            nonNativeLang: german,
+            teaching: english!,
+            learning: german!,
         })
-        const englishGroupIds = await tryFormingGroupsWithUser(user.id)
+        expect(user).not.toBeNull()
+        const englishGroupIds = await tryFormingGroupsWithUser(user.id!)
         expect(englishGroupIds).not.toEqual([])
         expect(englishGroupIds.length).toEqual(1)
 
         console.log("Adding a 3rd German learner")
         user = await createTestUser({
-            nativeLang: english,
-            nonNativeLang: german,
+            teaching: english!,
+            learning: german!,
         })
-        expect(await tryFormingGroupsWithUser(user.id)).toEqual([])
+        expect(user).not.toBeNull()
+        expect(await tryFormingGroupsWithUser(user.id!)).toEqual([])
 
         console.log("Adding a 4th German learner")
         user = await createTestUser({
-            nativeLang: english,
-            nonNativeLang: german,
+            teaching: english!,
+            learning: german!,
         })
-        const germanGroupIds = await tryFormingGroupsWithUser(user.id)
+        expect(user).not.toBeNull()
+        const germanGroupIds = await tryFormingGroupsWithUser(user.id!)
         expect(germanGroupIds).not.toEqual([])
         expect(germanGroupIds.length).toEqual(1)
     })

@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
+    import { v4 as uuidv4 } from "uuid"
 
     import fetch from "cross-fetch"
     import {
@@ -61,7 +62,7 @@
     export let segment: string | undefined = undefined
     segment = segment // get rid of unused prop warning
     // @ts-ignore (left side of comma operator isn't ignored by svelte)
-    $: segment, change()
+    $: segment, doTransition()
 
     $: showMainNav = segment !== "login" && segment !== "join"
     $: showFooter = segment !== "chat"
@@ -73,11 +74,14 @@
     })
 
     const timeout = 150
-    let transitionTriggeringCount = 0
 
-    const change = () => {
-        $currentUser.context = { requestPolicy: "network-only" }
-        transitionTriggeringCount = (transitionTriggeringCount + 1) % 3
+    let transitionId = uuidv4()
+    const doTransition = () => {
+        transitionId = uuidv4()
+        $currentUser.context = {
+            requestPolicy: "network-only",
+            transitionId, // This forces a re-execution by changing the object contents.
+        }
     }
 </script>
 
@@ -87,7 +91,7 @@
     {/if}
 
     <main>
-        {#if transitionTriggeringCount === 0}
+        {#key transitionId}
             <div
                 class="main-inner"
                 in:scale={{ duration: timeout, delay: timeout }}
@@ -95,23 +99,7 @@
             >
                 <slot />
             </div>
-        {:else if transitionTriggeringCount === 1}
-            <div
-                class="main-inner"
-                in:scale={{ duration: timeout, delay: timeout }}
-                out:scale={{ duration: timeout }}
-            >
-                <slot />
-            </div>
-        {:else if transitionTriggeringCount === 2}
-            <div
-                class="main-inner"
-                in:scale={{ duration: timeout, delay: timeout }}
-                out:scale={{ duration: timeout }}
-            >
-                <slot />
-            </div>
-        {/if}
+        {/key}
     </main>
 
     {#if showFooter}

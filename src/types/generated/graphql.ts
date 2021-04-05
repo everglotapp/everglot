@@ -1945,6 +1945,7 @@ export type Mutation = {
   deleteUserByEmail?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
   deleteUserByUuid?: Maybe<DeleteUserPayload>;
+  registerUserActivity?: Maybe<RegisterUserActivityPayload>;
 };
 
 
@@ -2215,6 +2216,12 @@ export type MutationDeleteUserByEmailArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByUuidArgs = {
   input: DeleteUserByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationRegisterUserActivityArgs = {
+  input: RegisterUserActivityInput;
 };
 
 /** The output of our create `GroupUser` mutation. */
@@ -3383,6 +3390,29 @@ export type DeleteUserByUuidInput = {
    */
   clientMutationId?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
+};
+
+/** The output of our `registerUserActivity` mutation. */
+export type RegisterUserActivityPayload = {
+  __typename?: 'RegisterUserActivityPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  datetime?: Maybe<Scalars['Datetime']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+/** All input for the `registerUserActivity` mutation. */
+export type RegisterUserActivityInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['Int']>;
 };
 
 export type AllGroupsQueryVariables = Exact<{ [key: string]: never; }>;

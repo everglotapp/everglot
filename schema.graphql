@@ -3186,6 +3186,12 @@ type Mutation {
     """
     input: DeleteUserByUuidInput!
   ): DeleteUserPayload
+  registerUserActivity(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: RegisterUserActivityInput!
+  ): RegisterUserActivityPayload
 }
 
 """The output of our create `GroupUser` mutation."""
@@ -4527,4 +4533,29 @@ input DeleteUserByUuidInput {
   """
   clientMutationId: String
   uuid: UUID!
+}
+
+"""The output of our `registerUserActivity` mutation."""
+type RegisterUserActivityPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  datetime: Datetime
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""All input for the `registerUserActivity` mutation."""
+input RegisterUserActivityInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  userId: Int
 }

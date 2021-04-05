@@ -100,7 +100,7 @@
                     requestPolicy: "network-only",
                     pause,
                 }
-            }, 5000)
+            }, 15000)
         }
 
         socket = io()

@@ -45,9 +45,9 @@
     const getActiveStatus = (lastActiveDate: Date): ActiveStatus => {
         const now = Date.now()
         const lastActive = lastActiveDate.getTime()
-        const FIVE_MINUTES = 5 * 60 * 1000
+        const THREE_MINS = 3 * 60 * 1000
         const ONE_HOUR = 60 * 60 * 1000
-        if (now - lastActive < FIVE_MINUTES) {
+        if (now - lastActive < THREE_MINS) {
             return ActiveStatus.ACTIVE
         } else if (now - lastActive < ONE_HOUR) {
             return ActiveStatus.IDLE

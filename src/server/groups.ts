@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid"
+
 import { performQuery } from "./gql"
 
 import { UserType } from "../types/generated/graphql"
@@ -8,16 +10,25 @@ export const GROUP_NATIVE_SIZE = 2
 
 async function createGroup(
     global: Boolean,
-    group_name: string,
+    groupName: string,
     languageId: number,
-    languageSkillLevelId: number
+    languageSkillLevelId: number,
+    uuid: string
 ): Promise<Group["id"] | null> {
     const res = await performQuery<{
         createGroup: { group: { id: Group["id"] } }
     }>(
-        `mutation MyMutation($global: Boolean!, $group_name: String!, $languageId: Int!, $languageSkillLevelId: Int!) {
+        `mutation MyMutation($global: Boolean!, $groupName: String!, $languageId: Int!, $languageSkillLevelId: Int!, $uuid: UUID!) {
       createGroup(
-        input: {group: {global: $global, groupName: $group_name, languageId: $languageId, languageSkillLevelId: $languageSkillLevelId}}
+        input: {
+            group: {
+                global: $global,
+                groupName: $groupName,
+                languageId: $languageId,
+                languageSkillLevelId: $languageSkillLevelId,
+                uuid: $uuid
+            }
+        }
       ) {
         group {
           id
@@ -25,10 +36,11 @@ async function createGroup(
       }
     }`,
         {
-            global: global,
-            group_name: group_name,
-            languageId: languageId,
-            languageSkillLevelId: languageSkillLevelId,
+            global,
+            groupName,
+            languageId,
+            languageSkillLevelId,
+            uuid,
         }
     )
     if (!res.data) {
@@ -112,7 +124,13 @@ async function addUserToGroup(
     }>(
         `mutation MyMutation($userType: UserType!, $userId: Int!, $groupId: Int!) {
       createGroupUser(
-        input: {groupUser: {userType: $userType, userId: $userId, groupId: $groupId}}
+        input: {
+            groupUser: {
+                userType: $userType,
+                userId: $userId,
+                groupId: $groupId
+            }
+        }
       ) {
         groupUser {
           id
@@ -137,7 +155,8 @@ async function createAndAssignGroup(
         false,
         "random",
         languageId,
-        languageSkillLevelId
+        languageSkillLevelId,
+        uuidv4()
     )
     if (groupId === null) {
         return null

@@ -1,10 +1,27 @@
-query ChatUsers {
-    chatUsers {
-        nodes {
-            username
-            uuid
-            bio
-            avatarUrl
+query ChatUsers($groupUuid: UUID!) {
+    groupByUuid(uuid: $groupUuid) {
+        usersByGroupUserGroupIdAndUserId {
+            nodes {
+                bio
+                avatarUrl
+                uuid
+                username
+                lastActiveAt
+                groupUsers {
+                    nodes {
+                        userType
+                        group {
+                            id
+                            language {
+                                englishName
+                            }
+                            languageSkillLevel {
+                                name
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

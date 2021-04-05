@@ -1,18 +1,16 @@
 query CurrentUser {
-    users(first: 1) {
-        nodes {
-            bio
-            email
-            gender
-            username
-            uuid
-            avatarUrl
-            userLanguages {
-                totalCount
-            }
-            languageByLocale {
-                alpha2
-            }
+    currentUser {
+        bio
+        email
+        gender
+        username
+        uuid
+        avatarUrl
+        userLanguages {
+            totalCount
+        }
+        languageByLocale {
+            alpha2
         }
     }
 }

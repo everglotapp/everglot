@@ -8,11 +8,6 @@ import type { Language, User, UserLanguage } from "../types/generated/graphql"
 
 import { tryFormingGroupsWithUser } from "../server/groups"
 
-// import { foo } from './foo'
-// jest.mock('./foo')
-
-// // here the whole foo var is mocked deeply
-// const mockedFoo = mocked(foo, true)
 import Fakerator from "fakerator"
 const fakerator = Fakerator()
 

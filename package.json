@@ -21,6 +21,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@graphile-contrib/pg-many-to-many": "^1.0.0",
     "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
     "@graphile/persisted-operations": "^0.1.0",
     "bcrypt": "^5.0.1",
@@ -33,6 +34,7 @@
     "graphql": "^15.5.0",
     "moment": "^2.29.1",
     "node-pg-migrate": "^5.9.0",
+    "peer": "^0.6.1",
     "pg": "^8.5.1",
     "postgraphile": "^4.11.0",
     "postgraphile-plugin-connection-filter": "^2.1.1",

@@ -1,0 +1,13 @@
+query AllGroups {
+    groups {
+        nodes {
+            uuid
+            groupName
+            global
+            language {
+                alpha2
+                englishName
+            }
+        }
+    }
+}

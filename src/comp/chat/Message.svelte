@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { query } from "@urql/svelte"
     import { scale } from "svelte/transition"
 
-    import { chatUsers, room } from "../../stores"
+    import { room } from "../../stores"
 
     import Avatar from "../users/Avatar.svelte"
     import Bio from "../users/Bio.svelte"
@@ -10,27 +9,15 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
-    import type { User } from "../../types/generated/graphql"
+    import type { User, Maybe } from "../../types/generated/graphql"
 
-    query(chatUsers)
+    type MessageUser = Pick<User, "uuid" | "bio" | "username" | "avatarUrl">
 
-    export let uuid: string = ""
-    export let userUuid: string | null = null
+    export let user: Maybe<MessageUser> = null
+
+    export let uuid = ""
     export let time = ""
     export let text = ""
-
-    let user: Pick<
-        User,
-        "uuid" | "bio" | "username" | "avatarUrl"
-    > | null = null
-    $: if (!$chatUsers.fetching && chatUsers.data?.chatUsers) {
-        user =
-            (userUuid && userUuid.length
-                ? chatUsers.data.chatUsers.nodes.find(
-                      (u) => u.uuid === userUuid
-                  ) || null
-                : null) || null
-    }
 
     let showBio = false
 </script>
@@ -61,18 +48,18 @@
                             class="fixed bg-white shadow-lg rounded-md"
                             style="z-index: 1; min-width: 240px;"
                         >
-                            <Bio uuid={userUuid} />
+                            <Bio {user} />
                         </div>
                     </div>
                 </div>
             {/if}
         {/if}
-        {#if userUuid}
+        {#if user && user.uuid}
             <span class="username">{user ? user.username : "…"}</span>
         {:else}
             <span class="username">Everglot<br /> Bot</span>
         {/if}
-        {#if !userUuid && $room && $room.length}
+        {#if !(user && user.uuid) && $room && $room.length}
             <span class="room"> [{$room}]</span>
         {/if}
         {#if user !== null}

@@ -14,7 +14,6 @@
     import { currentUser } from "../../stores"
 
     query(currentUser)
-    $: currentUserNode = $currentUser.data?.users.nodes[0]
 
     export let segment: string | undefined
 
@@ -181,8 +180,10 @@
                     >
                         {#if !$currentUser.fetching}
                             <Avatar
-                                url={currentUserNode?.avatarUrl || ""}
-                                username={currentUserNode?.username || ""}
+                                url={currentUser.data?.currentUser?.avatarUrl ||
+                                    ""}
+                                username={currentUser.data?.currentUser
+                                    ?.username || ""}
                                 size={42}
                             />
                         {:else}

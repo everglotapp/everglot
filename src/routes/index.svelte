@@ -13,8 +13,8 @@
                     redirectTimeout = null
                 }, 800)
             }
-        } else if ($currentUser.data?.users.nodes[0]) {
-            const { username, userLanguages } = $currentUser.data.users.nodes[0]
+        } else if ($currentUser.data?.currentUser) {
+            const { username, userLanguages } = $currentUser.data.currentUser
             if (username !== null && userLanguages.totalCount) {
                 goto("/groups", { replaceState: true, noscroll: false })
             }

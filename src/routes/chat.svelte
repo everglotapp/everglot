@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte"
     import { scale, slide } from "svelte/transition"
+    import { query, operationStore } from "@urql/svelte"
 
     import { room } from "../stores"
     import Message from "../comp/chat/Message.svelte"
@@ -10,7 +11,13 @@
 
     import type { ChatUser } from "../server/chat/users"
     import type { ChatMessage } from "../server/chat/messages"
-    import type { Language, User } from "../types/generated/graphql"
+    import { ChatUsers } from "../types/generated/graphql"
+    import type {
+        Language,
+        User,
+        ChatUsersQuery,
+        ChatUsersQueryVariables,
+    } from "../types/generated/graphql"
 
     import { ChevronsRightIcon } from "svelte-feather-icons"
 
@@ -25,6 +32,24 @@
     })[] = []
     let myUuid: User["uuid"] | null = null
     let msg: string = ""
+
+    const chatUsersStore = operationStore<
+        ChatUsersQuery,
+        ChatUsersQueryVariables
+    >(
+        ChatUsers,
+        {
+            groupUuid: "",
+        },
+        { pause: true }
+    )
+    query(chatUsersStore)
+
+    $: chatUsers =
+        chatUsersStore && !$chatUsersStore.fetching && !$chatUsersStore.error
+            ? $chatUsersStore.data?.groupByUuid
+                  ?.usersByGroupUserGroupIdAndUserId?.nodes || []
+            : []
 
     // TODO: Check if user is signed in, if not redirect to sign in.
     function subscribe(): void {
@@ -59,6 +84,15 @@
         if (lang && ["English", "German", "Chinese"].includes(lang)) {
             $room = lang
         }
+
+        const groupUuid = new URL(window.location.href).searchParams.get(
+            "group"
+        )
+        if (groupUuid && groupUuid.length) {
+            $chatUsersStore.variables!.groupUuid = groupUuid
+            $chatUsersStore.context!.pause = false
+        }
+
         socket = io()
         if (!socket) {
             return
@@ -188,7 +222,11 @@
 </svelte:head>
 
 <div class="wrapper">
-    <Sidebar {users} {split} handleToggleSplit={() => (split = !split)} />
+    <Sidebar
+        users={chatUsers}
+        {split}
+        handleToggleSplit={() => (split = !split)}
+    />
     <div class="section-wrapper">
         <section>
             <header>
@@ -229,7 +267,11 @@
                                 {#each messages as message (message.uuid)}
                                     <Message
                                         uuid={message.uuid}
-                                        userUuid={message.userUuid}
+                                        user={chatUsers.find(
+                                            (user) =>
+                                                user &&
+                                                user.uuid === message.userUuid
+                                        ) || null}
                                         time={message.time}
                                         text={message.text}
                                     />

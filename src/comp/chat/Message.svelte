@@ -9,11 +9,10 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
-    import type { User, Maybe } from "../../types/generated/graphql"
+    import type { BioUser } from "../users/Bio.svelte"
+    import type { Maybe, User } from "../../types/generated/graphql"
 
-    type MessageUser = Pick<User, "uuid" | "bio" | "username" | "avatarUrl">
-
-    export let user: Maybe<MessageUser> = null
+    export let user: Maybe<BioUser & Pick<User, "uuid">> = null
 
     export let uuid = ""
     export let time = ""

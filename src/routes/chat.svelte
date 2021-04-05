@@ -343,6 +343,7 @@
 
         @screen md {
             grid-template-rows: 70px 1fr;
+
             @apply bottom-0;
             @apply p-0;
         }

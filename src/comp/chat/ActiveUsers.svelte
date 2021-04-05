@@ -7,10 +7,10 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
+    import type { BioUser } from "../users/Bio.svelte"
     import type { Maybe, User } from "../../types/generated/graphql"
 
-    type ActiveUser = Pick<User, "uuid" | "bio" | "username" | "avatarUrl">
-    export let users: Maybe<ActiveUser>[] = []
+    export let users: Maybe<BioUser & Pick<User, "uuid">>[] = []
     let showBioId: number | null = null
 </script>
 

@@ -1,11 +1,29 @@
+<script lang="ts" context="module">
+    import type {
+        Maybe,
+        User,
+        ChatUsersQuery,
+    } from "../../types/generated/graphql"
+
+    type UserAttributes = Pick<
+        User,
+        "bio" | "username" | "avatarUrl" | "lastActiveAt"
+    >
+    type OtherAttributes = Pick<
+        NonNullable<
+            NonNullable<
+                ChatUsersQuery["groupByUuid"]
+            >["usersByGroupUserGroupIdAndUserId"]["nodes"][0]
+        >,
+        "userLanguages"
+    >
+    export interface BioUser extends UserAttributes, OtherAttributes {}
+</script>
+
 <script lang="ts">
     import Avatar from "./Avatar.svelte"
 
-    import type { ChatUsersQuery } from "../../types/generated/graphql"
-
-    export let user: NonNullable<
-        ChatUsersQuery["groupByUuid"]
-    >["usersByGroupUserGroupIdAndUserId"]["nodes"][0]
+    export let user: Maybe<BioUser>
     $: languages = user
         ? [
               ...new Set(
@@ -25,10 +43,13 @@
     }
     $: activeStatus = user ? getActiveStatus(new Date(user.lastActiveAt)) : null
     const getActiveStatus = (lastActiveDate: Date): ActiveStatus => {
-        const now = new Date()
-        if (now - lastActiveDate < 60000) {
+        const now = Date.now()
+        const lastActive = lastActiveDate.getTime()
+        const FIVE_MINUTES = 5 * 60 * 1000
+        const ONE_HOUR = 60 * 60 * 1000
+        if (now - lastActive < FIVE_MINUTES) {
             return ActiveStatus.ACTIVE
-        } else if (now - lastActiveDate < 300000) {
+        } else if (now - lastActive < ONE_HOUR) {
             return ActiveStatus.IDLE
         }
         return ActiveStatus.OFFLINE

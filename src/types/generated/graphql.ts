@@ -1069,7 +1069,7 @@ export type Group = Node & {
   groupName?: Maybe<Scalars['String']>;
   global: Scalars['Boolean'];
   languageId: Scalars['Int'];
-  languageSkillLevelId: Scalars['Int'];
+  languageSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt: Scalars['Datetime'];
   uuid: Scalars['UUID'];
   /** Reads a single `Language` that is related to this `Group`. */
@@ -3417,7 +3417,16 @@ export type ChatUsersQuery = (
       & { nodes: Array<Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'bio' | 'avatarUrl' | 'uuid' | 'username' | 'lastActiveAt'>
-        & { groupUsers: (
+        & { userLanguages: (
+          { __typename?: 'UserLanguagesConnection' }
+          & { nodes: Array<Maybe<(
+            { __typename?: 'UserLanguage' }
+            & { language?: Maybe<(
+              { __typename?: 'Language' }
+              & Pick<Language, 'englishName'>
+            )> }
+          )>> }
+        ), groupUsers: (
           { __typename?: 'GroupUsersConnection' }
           & { nodes: Array<Maybe<(
             { __typename?: 'GroupUser' }
@@ -3498,6 +3507,13 @@ export const ChatUsers = gql`
         uuid
         username
         lastActiveAt
+        userLanguages {
+          nodes {
+            language {
+              englishName
+            }
+          }
+        }
         groupUsers {
           nodes {
             userType

@@ -8,9 +8,7 @@
 </script>
 
 <div class="sidebar">
-    <div
-        class="users-container py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4"
-    >
+    <div class="users-container py-3 px-4 text-lg w-full mb-4">
         <h3 class="px-4 text-gray-bitdark text-sm font-bold mb-4">
             Active Members
         </h3>

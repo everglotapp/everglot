@@ -36,7 +36,6 @@
         @apply items-center;
         @apply bg-gray-light;
         @apply shadow-md;
-        @apply cursor-pointer;
         @apply overflow-hidden;
         @apply text-gray-dark;
         @apply font-bold;

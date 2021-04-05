@@ -1,0 +1,11 @@
+query AllGroups {
+    groups {
+        nodes {
+            groupName
+            global
+            language {
+                englishName
+            }
+        }
+    }
+}

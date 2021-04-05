@@ -8,6 +8,8 @@ import {
     CurrentUserQuery,
     LanguageCodeMappingsQuery,
     ChatUsersQuery,
+    AllGroupsQuery,
+    AllGroups,
 } from "./types/generated/graphql"
 
 export const username = writable<string | null>(null)
@@ -18,3 +20,4 @@ export const languageCodeMappings = operationStore<LanguageCodeMappingsQuery>(
     LanguageCodeMappings
 )
 export const chatUsers = operationStore<ChatUsersQuery>(ChatUsers)
+export const allGroups = operationStore<AllGroupsQuery>(AllGroups)

@@ -51,6 +51,7 @@ export type Query = Node & {
   users?: Maybe<UsersConnection>;
   groupUser?: Maybe<GroupUser>;
   group?: Maybe<Group>;
+  groupByUuid?: Maybe<Group>;
   languageSkillLevel?: Maybe<LanguageSkillLevel>;
   language?: Maybe<Language>;
   languageByAlpha2?: Maybe<Language>;
@@ -191,6 +192,12 @@ export type QueryGroupUserArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryGroupArgs = {
   id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGroupByUuidArgs = {
+  uuid: Scalars['UUID'];
 };
 
 
@@ -1064,6 +1071,7 @@ export type Group = Node & {
   languageId: Scalars['Int'];
   languageSkillLevelId: Scalars['Int'];
   createdAt: Scalars['Datetime'];
+  uuid: Scalars['UUID'];
   /** Reads a single `Language` that is related to this `Group`. */
   language?: Maybe<Language>;
   /** Reads a single `LanguageSkillLevel` that is related to this `Group`. */
@@ -1245,6 +1253,8 @@ export enum GroupsOrderBy {
   LanguageSkillLevelIdDesc = 'LANGUAGE_SKILL_LEVEL_ID_DESC',
   CreatedAtAsc = 'CREATED_AT_ASC',
   CreatedAtDesc = 'CREATED_AT_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
@@ -1263,6 +1273,8 @@ export type GroupCondition = {
   languageSkillLevelId?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `createdAt` field. */
   createdAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `Group` object types. All fields are combined with a logical ‘and.’ */
@@ -1279,6 +1291,8 @@ export type GroupFilter = {
   languageSkillLevelId?: Maybe<IntFilter>;
   /** Filter by the object’s `createdAt` field. */
   createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
   /** Checks for all expressions in this list. */
   and?: Maybe<Array<GroupFilter>>;
   /** Checks for any expressions in this list. */
@@ -1863,6 +1877,8 @@ export type Mutation = {
   updateGroupByNodeId?: Maybe<UpdateGroupPayload>;
   /** Updates a single `Group` using a unique key and a patch. */
   updateGroup?: Maybe<UpdateGroupPayload>;
+  /** Updates a single `Group` using a unique key and a patch. */
+  updateGroupByUuid?: Maybe<UpdateGroupPayload>;
   /** Updates a single `LanguageSkillLevel` using its globally unique id and a patch. */
   updateLanguageSkillLevelByNodeId?: Maybe<UpdateLanguageSkillLevelPayload>;
   /** Updates a single `LanguageSkillLevel` using a unique key and a patch. */
@@ -1899,6 +1915,8 @@ export type Mutation = {
   deleteGroupByNodeId?: Maybe<DeleteGroupPayload>;
   /** Deletes a single `Group` using a unique key. */
   deleteGroup?: Maybe<DeleteGroupPayload>;
+  /** Deletes a single `Group` using a unique key. */
+  deleteGroupByUuid?: Maybe<DeleteGroupPayload>;
   /** Deletes a single `LanguageSkillLevel` using its globally unique id. */
   deleteLanguageSkillLevelByNodeId?: Maybe<DeleteLanguageSkillLevelPayload>;
   /** Deletes a single `LanguageSkillLevel` using a unique key. */
@@ -1993,6 +2011,12 @@ export type MutationUpdateGroupByNodeIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGroupArgs = {
   input: UpdateGroupInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGroupByUuidArgs = {
+  input: UpdateGroupByUuidInput;
 };
 
 
@@ -2101,6 +2125,12 @@ export type MutationDeleteGroupByNodeIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGroupArgs = {
   input: DeleteGroupInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGroupByUuidArgs = {
+  input: DeleteGroupByUuidInput;
 };
 
 
@@ -2279,6 +2309,7 @@ export type GroupInput = {
   languageId?: Maybe<Scalars['Int']>;
   languageSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
+  uuid: Scalars['UUID'];
 };
 
 /** The output of our create `LanguageSkillLevel` mutation. */
@@ -2611,6 +2642,7 @@ export type GroupPatch = {
   languageId?: Maybe<Scalars['Int']>;
   languageSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
+  uuid?: Maybe<Scalars['UUID']>;
 };
 
 /** All input for the `updateGroup` mutation. */
@@ -2623,6 +2655,18 @@ export type UpdateGroupInput = {
   /** An object where the defined keys will be set on the `Group` being updated. */
   patch: GroupPatch;
   id: Scalars['Int'];
+};
+
+/** All input for the `updateGroupByUuid` mutation. */
+export type UpdateGroupByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Group` being updated. */
+  patch: GroupPatch;
+  uuid: Scalars['UUID'];
 };
 
 /** The output of our update `LanguageSkillLevel` mutation. */
@@ -3062,6 +3106,16 @@ export type DeleteGroupInput = {
   id: Scalars['Int'];
 };
 
+/** All input for the `deleteGroupByUuid` mutation. */
+export type DeleteGroupByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
 /** The output of our delete `LanguageSkillLevel` mutation. */
 export type DeleteLanguageSkillLevelPayload = {
   __typename?: 'DeleteLanguageSkillLevelPayload';
@@ -3331,6 +3385,24 @@ export type DeleteUserByUuidInput = {
   uuid: Scalars['UUID'];
 };
 
+export type AllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllGroupsQuery = (
+  { __typename?: 'Query' }
+  & { groups?: Maybe<(
+    { __typename?: 'GroupsConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'Group' }
+      & Pick<Group, 'groupName' | 'global'>
+      & { language?: Maybe<(
+        { __typename?: 'Language' }
+        & Pick<Language, 'englishName'>
+      )> }
+    )>> }
+  )> }
+);
+
 export type ChatUsersQueryVariables = Exact<{
   groupId: Scalars['Int'];
 }>;
@@ -3401,6 +3473,19 @@ export type LanguageCodeMappingsQuery = (
 );
 
 
+export const AllGroups = gql`
+    query AllGroups {
+  groups {
+    nodes {
+      groupName
+      global
+      language {
+        englishName
+      }
+    }
+  }
+}
+    `;
 export const ChatUsers = gql`
     query ChatUsers($groupId: Int!) {
   group(id: $groupId) {

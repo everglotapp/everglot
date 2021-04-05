@@ -1,4 +1,13 @@
 
+declare module '*/allGroups.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const AllGroups: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/chatUsers.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

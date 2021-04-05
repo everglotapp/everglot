@@ -45,7 +45,7 @@
                                 class="fixed bg-white shadow-lg rounded-md"
                                 style="z-index: 1; min-width: 240px;"
                             >
-                                <Bio uuid={user.uuid} />
+                                <Bio {user} />
                             </div>
                         </div>
                     </div>

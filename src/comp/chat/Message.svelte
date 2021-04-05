@@ -61,7 +61,11 @@
                             class="fixed bg-white shadow-lg rounded-md"
                             style="z-index: 1; min-width: 240px;"
                         >
-                            <Bio uuid={userUuid} />
+                            <Bio
+                                user={chatUsers.data?.find(
+                                    (user) => user.uuid === userUuid
+                                )}
+                            />
                         </div>
                     </div>
                 </div>

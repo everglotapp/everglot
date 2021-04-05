@@ -7,55 +7,58 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
-    import type { User } from "../../types/generated/graphql"
+    import type { Maybe, User } from "../../types/generated/graphql"
 
-    export let users: (Pick<
-        Pick<User, "uuid" | "id" | "username" | "avatarUrl">,
-        "uuid" | "username" | "avatarUrl"
-    > & { username: string })[] = []
+    type ActiveUser = Pick<User, "uuid" | "bio" | "username" | "avatarUrl">
+    export let users: Maybe<ActiveUser>[] = []
     let showBioId: number | null = null
 </script>
 
 <ul class="users">
     {#each users as user, i}
-        {#if user.username === ""}
-            <li class="user" title="Everglot Bot" />
-        {:else}
-            <li
-                id={`user-bio-${i}`}
-                class="user"
-                title={user.username}
-                aria-label={user.username}
-            >
-                {#if showBioId !== null && showBioId === i}
-                    <ClickAwayListener
-                        elementId={`user-bio-${i}`}
-                        on:clickaway={() => (showBioId = null)}
-                    />
-                    <EscapeKeyListener on:keydown={() => (showBioId = null)} />
-                    <div
-                        class="relative"
-                        in:scale={{ duration: 200, delay: 0 }}
-                        out:scale={{ duration: 200, delay: 0 }}
-                        aria-label={`User Bio`}
-                        style="height: 0; width: 0; margin-left: 100%;"
-                    >
-                        <div class="absolute" style="left: 4px;">
-                            <div
-                                class="fixed bg-white shadow-lg rounded-md"
-                                style="z-index: 1; min-width: 240px;"
-                            >
-                                <Bio {user} />
+        {#if user}
+            {#if user.username === ""}
+                <li class="user" title="Everglot Bot" />
+            {:else}
+                <li
+                    id={`user-bio-${i}`}
+                    class="user"
+                    title={user.username || undefined}
+                    aria-label={user.username}
+                >
+                    {#if showBioId !== null && showBioId === i}
+                        <ClickAwayListener
+                            elementId={`user-bio-${i}`}
+                            on:clickaway={() => (showBioId = null)}
+                        />
+                        <EscapeKeyListener
+                            on:keydown={() => (showBioId = null)}
+                        />
+                        <div
+                            class="relative"
+                            in:scale={{ duration: 200, delay: 0 }}
+                            out:scale={{ duration: 200, delay: 0 }}
+                            aria-label={`User Bio`}
+                            style="height: 0; width: 0; margin-left: 100%;"
+                        >
+                            <div class="absolute" style="left: 4px;">
+                                <div
+                                    class="fixed bg-white shadow-lg rounded-md"
+                                    style="z-index: 1; min-width: 240px;"
+                                >
+                                    <Bio {user} />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {/if}
-                <Avatar
-                    url={user.avatarUrl || ""}
-                    username={user.username || ""}
-                    on:click={() => (showBioId = showBioId === i ? null : i)}
-                />
-            </li>
+                    {/if}
+                    <Avatar
+                        url={user.avatarUrl || ""}
+                        username={user.username || ""}
+                        on:click={() =>
+                            (showBioId = showBioId === i ? null : i)}
+                    />
+                </li>
+            {/if}
         {/if}
     {/each}
 </ul>

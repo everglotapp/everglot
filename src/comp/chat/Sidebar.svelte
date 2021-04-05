@@ -1,15 +1,10 @@
 <script lang="ts">
     import ActiveUsers from "./ActiveUsers.svelte"
 
-    import type { User } from "../../types/generated/graphql"
-
     export let handleToggleSplit: () => void
     export let split = false
 
-    export let users: (Pick<
-        Pick<User, "uuid" | "id" | "username" | "avatarUrl">,
-        "uuid" | "username" | "avatarUrl"
-    > & { username: string })[] = []
+    export let users: any[] = []
 </script>
 
 <div class="sidebar">

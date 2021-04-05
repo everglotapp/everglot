@@ -4,10 +4,8 @@ import { operationStore } from "@urql/svelte"
 import {
     CurrentUser,
     LanguageCodeMappings,
-    ChatUsers,
     CurrentUserQuery,
     LanguageCodeMappingsQuery,
-    ChatUsersQuery,
     AllGroupsQuery,
     AllGroups,
 } from "./types/generated/graphql"
@@ -19,5 +17,4 @@ export const currentUser = operationStore<CurrentUserQuery>(CurrentUser)
 export const languageCodeMappings = operationStore<LanguageCodeMappingsQuery>(
     LanguageCodeMappings
 )
-export const chatUsers = operationStore<ChatUsersQuery>(ChatUsers)
 export const allGroups = operationStore<AllGroupsQuery>(AllGroups)

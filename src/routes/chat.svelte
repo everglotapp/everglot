@@ -43,7 +43,7 @@
         {
             groupUuid: "",
         },
-        { pause: true }
+        { pause: true, requestPolicy: "network-only" }
     )
     query(chatUsersStore)
 

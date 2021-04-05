@@ -1,5 +1,5 @@
-query ChatUsers($groupId: Int!) {
-  group(id: $groupId) {
+query ChatUsers($groupUuid: UUID!) {
+  groupByUuid(uuid: $groupUuid) {
     usersByGroupUserGroupIdAndUserId {
       nodes {
         bio

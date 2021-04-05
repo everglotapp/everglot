@@ -2,7 +2,6 @@
     import { onMount, onDestroy } from "svelte"
     import { scale, slide } from "svelte/transition"
     import { query, operationStore } from "@urql/svelte"
-    import type { OperationStore } from "@urql/svelte"
 
     import { room } from "../stores"
     import Message from "../comp/chat/Message.svelte"
@@ -40,7 +39,7 @@
     >(
         ChatUsers,
         {
-            groupId: NaN,
+            groupUuid: "",
         },
         { pause: true }
     )
@@ -86,9 +85,11 @@
             $room = lang
         }
 
-        const groupId = new URL(window.location.href).searchParams.get("id")
-        if (groupId && Number.isInteger(Number(groupId))) {
-            $chatUsersStore.variables!.groupId = Number(groupId)
+        const groupUuid = new URL(window.location.href).searchParams.get(
+            "group"
+        )
+        if (groupUuid && groupUuid.length) {
+            $chatUsersStore.variables!.groupUuid = groupUuid
             $chatUsersStore.context!.pause = false
         }
 

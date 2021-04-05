@@ -3394,23 +3394,23 @@ export type AllGroupsQuery = (
     { __typename?: 'GroupsConnection' }
     & { nodes: Array<Maybe<(
       { __typename?: 'Group' }
-      & Pick<Group, 'groupName' | 'global'>
+      & Pick<Group, 'uuid' | 'groupName' | 'global'>
       & { language?: Maybe<(
         { __typename?: 'Language' }
-        & Pick<Language, 'englishName'>
+        & Pick<Language, 'alpha2' | 'englishName'>
       )> }
     )>> }
   )> }
 );
 
 export type ChatUsersQueryVariables = Exact<{
-  groupId: Scalars['Int'];
+  groupUuid: Scalars['UUID'];
 }>;
 
 
 export type ChatUsersQuery = (
   { __typename?: 'Query' }
-  & { group?: Maybe<(
+  & { groupByUuid?: Maybe<(
     { __typename?: 'Group' }
     & { usersByGroupUserGroupIdAndUserId: (
       { __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection' }
@@ -3477,9 +3477,11 @@ export const AllGroups = gql`
     query AllGroups {
   groups {
     nodes {
+      uuid
       groupName
       global
       language {
+        alpha2
         englishName
       }
     }
@@ -3487,8 +3489,8 @@ export const AllGroups = gql`
 }
     `;
 export const ChatUsers = gql`
-    query ChatUsers($groupId: Int!) {
-  group(id: $groupId) {
+    query ChatUsers($groupUuid: UUID!) {
+  groupByUuid(uuid: $groupUuid) {
     usersByGroupUserGroupIdAndUserId {
       nodes {
         bio

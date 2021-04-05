@@ -15,6 +15,10 @@
             : []
 </script>
 
+<svelte:head>
+    <title>Groups – Everglot</title>
+</svelte:head>
+
 <div class="container flex w-auto gap-x-4">
     <div
         class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"

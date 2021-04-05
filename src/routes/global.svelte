@@ -4,27 +4,35 @@
     import { query } from "@urql/svelte"
 
     import { allGroups } from "../stores"
+    import type { AllGroupsQuery, MakeMaybe } from "../types/generated/graphql"
 
     query(allGroups)
 
-    $: groups =
-        allGroups && !$allGroups.fetching && !$allGroups.error
-            ? ["en", "de", "zh"].reduce(
-                  (map, lang) => ({
-                      ...map,
-                      [lang]: $allGroups.data?.groups?.nodes
-                          .filter(
-                              (group) =>
-                                  group &&
-                                  group.global === true &&
-                                  group.language?.alpha2 === lang
-                          )
-                          .map((group) => group!),
-                  }),
-                  {}
-              )
-            : { en: [], de: [], zh: [] }
+    type GroupLanguage = "en" | "de" | "zh"
+    let groups: Record<GroupLanguage, MakeMaybe<AllGroupsQuery, "groups">> = {
+        en: [] as Pick<AllGroupsQuery["groups"], "nodes">,
+        de: [],
+        zh: [],
+    }
+    $: if (allGroups && !$allGroups.fetching && !$allGroups.error) {
+        groups = ["en", "de", "zh"].reduce(
+            (map, lang) => ({
+                ...map,
+                [lang]: $allGroups.data?.groups?.nodes.filter(
+                    (group) =>
+                        group &&
+                        group.global === true &&
+                        group.language?.alpha2 === lang
+                ),
+            }),
+            {}
+        )
+    }
 </script>
+
+<svelte:head>
+    <title>Global – Everglot</title>
+</svelte:head>
 
 <div class="container flex w-auto gap-x-4">
     <div
@@ -35,7 +43,8 @@
             <div
                 class="max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
             >
-                <ButtonLarge href={`/chat?lang=German&group=${group.uuid}`}
+                <ButtonLarge
+                    href={`/chat?lang=${group.language?.englishName}&group=${group.uuid}`}
                     >{group.groupName}</ButtonLarge
                 >
             </div>
@@ -50,7 +59,8 @@
             <div
                 class="max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
             >
-                <ButtonLarge href={`/chat?lang=German&group=${group.uuid}`}
+                <ButtonLarge
+                    href={`/chat?lang=${group.language?.englishName}&group=${group.uuid}`}
                     >{group.groupName}</ButtonLarge
                 >
             </div>
@@ -65,7 +75,8 @@
             <div
                 class="max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
             >
-                <ButtonLarge href={`/chat?lang=German&group=${group.uuid}`}
+                <ButtonLarge
+                    href={`/chat?lang=${group.language?.englishName}&group=${group.uuid}`}
                     >{group.groupName}</ButtonLarge
                 >
             </div>

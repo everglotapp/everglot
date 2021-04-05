@@ -3,6 +3,9 @@
 exports.shorthands = undefined
 
 exports.up = (pgm) => {
+    pgm.dropPolicy({ schema: "app_public", name: "users" }, "select_client", {
+        ifExists: false,
+    })
     pgm.createPolicy({ schema: "app_public", name: "users" }, "select_client", {
         command: "SELECT",
         role: "evg_client",
@@ -19,5 +22,10 @@ exports.up = (pgm) => {
 exports.down = (pgm) => {
     pgm.dropPolicy({ schema: "app_public", name: "users" }, "select_client", {
         ifExists: false,
+    })
+    pgm.createPolicy({ schema: "app_public", name: "users" }, "select_client", {
+        command: "SELECT",
+        role: "evg_client",
+        using: `id = app_public.current_user_id()`,
     })
 }

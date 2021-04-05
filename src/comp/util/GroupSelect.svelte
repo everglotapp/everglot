@@ -2,15 +2,14 @@
     import { createEventDispatcher } from "svelte"
     import Select from "svelte-select"
 
-    export let items: unknown[]
+    export let items: { value: string; label: string }[]
     export let selected: unknown[] | null
     export let hideInput: boolean = false
     export let disabled: boolean = false
     export let placeholder: string = "Other …"
 
     const dispatch = createEventDispatcher()
-
-    function handleSelect(event: CustomEvent) {
+    function handleSelect(event: CustomEvent<typeof items[number] | null>) {
         dispatch("select", event.detail)
     }
 </script>
@@ -45,7 +44,9 @@
         --multiSelectPadding: theme("padding.0") theme("padding.2");
         --inputFontSize: theme("fontSize.base");
         --inputLeft: theme("spacing.1");
-        @apply text-white font-bold;
+
+        @apply text-white;
+        @apply font-bold;
     }
 
     .wrapper :global(input) {
@@ -77,7 +78,9 @@
     .wrapper:not(.hideInput)
         :global(.selectContainer .multiSelectItem + input) {
         border-left: 2px solid theme("colors.primary.DEFAULT");
-        @apply rounded-none pl-2;
+
+        @apply rounded-none;
+        @apply pl-2;
     }
 
     .wrapper :global(.selectContainer.focused input),

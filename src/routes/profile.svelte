@@ -5,6 +5,8 @@
     import type { Language } from "../types/generated/graphql"
     import { query } from "@urql/svelte"
 
+    import SvelteSelect from "svelte-select"
+
     import {
         currentUser,
         username,
@@ -301,6 +303,41 @@
                                     ?.englishName}:
                             </label>
                             <div>
+                                <SvelteSelect
+                                    placeholder="Your level …"
+                                    items={[
+                                        { value: "", label: "Please select …" },
+                                        {
+                                            value: CefrLevel.A1,
+                                            label: "A1 – Beginner",
+                                        },
+                                        {
+                                            value: CefrLevel.A2,
+                                            label: "A2 – Elementary",
+                                        },
+                                        {
+                                            value: CefrLevel.B1,
+                                            label: "B1 – Intermediate",
+                                        },
+                                        {
+                                            value: CefrLevel.B2,
+                                            label: "B2 – Upper intermediate",
+                                        },
+                                        {
+                                            value: CefrLevel.C1,
+                                            label: "C1 – Advanced",
+                                        },
+                                        {
+                                            value: CefrLevel.C2,
+                                            label: "C2 – Proficient",
+                                        },
+                                    ]}
+                                    selectedValue={learningLevels[code]}
+                                    on:select={(event) =>
+                                        (learningLevels[code] =
+                                            event.detail.value)}
+                                    isMulti={false}
+                                />
                                 <select
                                     id={`level_${code}`}
                                     bind:value={learningLevels[code]}

@@ -109,14 +109,14 @@
     }
 
     .active-status.online {
-        background: green;
+        background: #82ed93;
     }
 
     .active-status.idle {
-        @apply bg-gray;
+        background: #f9ef0a;
     }
 
     .active-status.offline {
-        background: red;
+        background: #e5e5e5;
     }
 </style>

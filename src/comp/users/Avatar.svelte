@@ -18,7 +18,7 @@
             alt={initial}
             role="presentation"
             aria-label={`Avatar of ${username}`}
-            style={`width: ${size}px; max-height: ${size}px;`}
+            style={`max-height: ${size}px;`}
         />
     {:else}
         <span class="initial" role="presentation">

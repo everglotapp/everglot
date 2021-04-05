@@ -5,15 +5,22 @@
     import { query } from "@urql/svelte"
 
     import { allGroups } from "../stores"
+    import type { AllGroupsQuery } from "../types/generated/graphql"
 
     query(allGroups)
 
-    $: groups =
-        allGroups && !$allGroups.fetching && !$allGroups.error
-            ? $allGroups.data?.groups?.nodes
-                  .filter((group) => group && group.global === false)
-                  .map((group) => group!)
-            : []
+    type GroupNode = NonNullable<
+        NonNullable<AllGroupsQuery["groups"]>["nodes"][0]
+    >
+
+    let groups: GroupNode[] = []
+    $: if (allGroups && !$allGroups.fetching && !$allGroups.error) {
+        groups =
+            $allGroups.data?.groups?.nodes
+                .filter((group) => group && groupIsPrivate(group))
+                .map((group) => group!) || []
+    }
+    const groupIsPrivate = (group: GroupNode) => group.global === false
 </script>
 
 <svelte:head>
@@ -25,7 +32,7 @@
         …
     {:else if $allGroups.error}
         error
-    {:else if !$allGroups.data?.groups?.nodes.some((group) => group && group.global === false)}
+    {:else if !$allGroups.data?.groups?.nodes.some(groupIsPrivate)}
         <RedirectOnce to={"/profile"} />
     {:else}
         <div

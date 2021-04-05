@@ -1069,7 +1069,7 @@ export type Group = Node & {
   groupName?: Maybe<Scalars['String']>;
   global: Scalars['Boolean'];
   languageId: Scalars['Int'];
-  languageSkillLevelId: Scalars['Int'];
+  languageSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt: Scalars['Datetime'];
   uuid: Scalars['UUID'];
   /** Reads a single `Language` that is related to this `Group`. */
@@ -1945,6 +1945,7 @@ export type Mutation = {
   deleteUserByEmail?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
   deleteUserByUuid?: Maybe<DeleteUserPayload>;
+  registerUserActivity?: Maybe<RegisterUserActivityPayload>;
 };
 
 
@@ -2215,6 +2216,12 @@ export type MutationDeleteUserByEmailArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByUuidArgs = {
   input: DeleteUserByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationRegisterUserActivityArgs = {
+  input: RegisterUserActivityInput;
 };
 
 /** The output of our create `GroupUser` mutation. */
@@ -3385,6 +3392,29 @@ export type DeleteUserByUuidInput = {
   uuid: Scalars['UUID'];
 };
 
+/** The output of our `registerUserActivity` mutation. */
+export type RegisterUserActivityPayload = {
+  __typename?: 'RegisterUserActivityPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  datetime?: Maybe<Scalars['Datetime']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+/** All input for the `registerUserActivity` mutation. */
+export type RegisterUserActivityInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['Int']>;
+};
+
 export type AllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3417,7 +3447,16 @@ export type ChatUsersQuery = (
       & { nodes: Array<Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'bio' | 'avatarUrl' | 'uuid' | 'username' | 'lastActiveAt'>
-        & { groupUsers: (
+        & { userLanguages: (
+          { __typename?: 'UserLanguagesConnection' }
+          & { nodes: Array<Maybe<(
+            { __typename?: 'UserLanguage' }
+            & { language?: Maybe<(
+              { __typename?: 'Language' }
+              & Pick<Language, 'englishName'>
+            )> }
+          )>> }
+        ), groupUsers: (
           { __typename?: 'GroupUsersConnection' }
           & { nodes: Array<Maybe<(
             { __typename?: 'GroupUser' }
@@ -3498,6 +3537,13 @@ export const ChatUsers = gql`
         uuid
         username
         lastActiveAt
+        userLanguages {
+          nodes {
+            language {
+              englishName
+            }
+          }
+        }
         groupUsers {
           nodes {
             userType

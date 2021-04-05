@@ -7,6 +7,16 @@ query ChatUsers($groupUuid: UUID!) {
         uuid
         username
         lastActiveAt
+        userLanguages {
+          nodes {
+            language {
+              englishName
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
         groupUsers {
           nodes {
             userType

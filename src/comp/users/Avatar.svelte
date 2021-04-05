@@ -18,7 +18,7 @@
             alt={initial}
             role="presentation"
             aria-label={`Avatar of ${username}`}
-            style={`width: ${size}px; max-height: ${size}px;`}
+            style={`max-height: ${size}px;`}
         />
     {:else}
         <span class="initial" role="presentation">
@@ -36,7 +36,6 @@
         @apply items-center;
         @apply bg-gray-light;
         @apply shadow-md;
-        @apply cursor-pointer;
         @apply overflow-hidden;
         @apply text-gray-dark;
         @apply font-bold;

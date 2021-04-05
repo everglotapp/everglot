@@ -33,6 +33,8 @@
     let myUuid: User["uuid"] | null = null
     let msg: string = ""
 
+    let updateInterval: number | null = null
+
     const chatUsersStore = operationStore<
         ChatUsersQuery,
         ChatUsersQueryVariables
@@ -41,7 +43,7 @@
         {
             groupUuid: "",
         },
-        { pause: true }
+        { pause: true, requestPolicy: "network-only" }
     )
     query(chatUsersStore)
 
@@ -91,6 +93,14 @@
         if (groupUuid && groupUuid.length) {
             $chatUsersStore.variables!.groupUuid = groupUuid
             $chatUsersStore.context!.pause = false
+            let pause = false
+            updateInterval = setInterval(() => {
+                pause = !pause
+                $chatUsersStore.context = {
+                    requestPolicy: "network-only",
+                    pause,
+                }
+            }, 15000)
         }
 
         socket = io()
@@ -107,6 +117,10 @@
         unsubscribe()
         socket.emit("leaveRoom")
         socket = null
+        if (updateInterval) {
+            clearInterval(updateInterval)
+            updateInterval = null
+        }
     })
 
     const getChatMessageContainers = () =>
@@ -343,6 +357,7 @@
 
         @screen md {
             grid-template-rows: 70px 1fr;
+
             @apply bottom-0;
             @apply p-0;
         }

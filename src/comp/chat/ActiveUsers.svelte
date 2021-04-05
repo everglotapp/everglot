@@ -7,10 +7,10 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
+    import type { BioUser } from "../users/Bio.svelte"
     import type { Maybe, User } from "../../types/generated/graphql"
 
-    type ActiveUser = Pick<User, "uuid" | "bio" | "username" | "avatarUrl">
-    export let users: Maybe<ActiveUser>[] = []
+    export let users: Maybe<BioUser & Pick<User, "uuid">>[] = []
     let showBioId: number | null = null
 </script>
 
@@ -22,7 +22,7 @@
             {:else}
                 <li
                     id={`user-bio-${i}`}
-                    class="user"
+                    class="user cursor-pointer"
                     title={user.username || undefined}
                     aria-label={user.username}
                 >
@@ -43,7 +43,7 @@
                         >
                             <div class="absolute" style="left: 4px;">
                                 <div
-                                    class="fixed bg-white shadow-lg rounded-md"
+                                    class="fixed bg-white shadow-lg rounded-lg"
                                     style="z-index: 1; min-width: 240px;"
                                 >
                                     <Bio {user} />

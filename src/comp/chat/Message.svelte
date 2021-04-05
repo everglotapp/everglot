@@ -9,11 +9,10 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
-    import type { User, Maybe } from "../../types/generated/graphql"
+    import type { BioUser } from "../users/Bio.svelte"
+    import type { Maybe, User } from "../../types/generated/graphql"
 
-    type MessageUser = Pick<User, "uuid" | "bio" | "username" | "avatarUrl">
-
-    export let user: Maybe<MessageUser> = null
+    export let user: Maybe<BioUser & Pick<User, "uuid">> = null
 
     export let uuid = ""
     export let time = ""
@@ -45,7 +44,7 @@
                 >
                     <div class="absolute" style="left: 4px;">
                         <div
-                            class="fixed bg-white shadow-lg rounded-md"
+                            class="fixed bg-white shadow-lg rounded-lg"
                             style="z-index: 1; min-width: 240px;"
                         >
                             <Bio {user} />
@@ -62,14 +61,16 @@
         {#if !(user && user.uuid) && $room && $room.length}
             <span class="room"> [{$room}]</span>
         {/if}
-        {#if user !== null}
-            <Avatar
-                username={user.username || ""}
-                url={user.avatarUrl || ""}
-                size={32}
-                on:click={() => (showBio = !showBio)}
-            />
-        {/if}
+        <div class="cursor-pointer">
+            {#if user !== null}
+                <Avatar
+                    username={user.username || ""}
+                    url={user.avatarUrl || ""}
+                    size={32}
+                    on:click={() => (showBio = !showBio)}
+                />
+            {/if}
+        </div>
     </div>
     <div class="main">
         <div class="time">{time}</div>

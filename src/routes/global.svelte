@@ -5,22 +5,14 @@
     import { query } from "@urql/svelte"
 
     import { allGroups } from "../stores"
-    import type { Maybe, Language, Group } from "../types/generated/graphql"
+    import type { Language, AllGroupsQuery } from "../types/generated/graphql"
 
     query(allGroups)
 
     type GroupLanguage = "en" | "de" | "zh"
-    type GroupNode = {
-        __typename?: "Group" | undefined
-    } & Pick<Group, "uuid" | "groupName" | "global"> & {
-            language?:
-                | Maybe<
-                      {
-                          __typename?: "Language" | undefined
-                      } & Pick<Language, "alpha2" | "englishName">
-                  >
-                | undefined
-        }
+    type GroupNode = NonNullable<
+        NonNullable<AllGroupsQuery["groups"]>["nodes"][0]
+    >
 
     let groups: Record<GroupLanguage, GroupNode[]> = {
         en: [],

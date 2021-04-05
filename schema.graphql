@@ -1643,7 +1643,7 @@ type Group implements Node {
   groupName: String
   global: Boolean!
   languageId: Int!
-  languageSkillLevelId: Int!
+  languageSkillLevelId: Int
   createdAt: Datetime!
   uuid: UUID!
 

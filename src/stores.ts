@@ -14,6 +14,12 @@ import {
     GroupUser,
     Language,
     LanguageSkillLevel,
+    GroupChatQuery,
+    GroupChatQueryVariables,
+    GroupChat,
+    GroupChatMessagesQuery,
+    GroupChatMessages,
+    GroupChatMessagesQueryVariables,
 } from "./types/generated/graphql"
 
 export const username = writable<string | null>(null)
@@ -24,6 +30,28 @@ export const languageCodeMappings = operationStore<LanguageCodeMappingsQuery>(
     LanguageCodeMappings
 )
 export const allGroups = operationStore<AllGroupsQuery>(AllGroups)
+
+export const groupChat = operationStore<
+    GroupChatQuery,
+    GroupChatQueryVariables
+>(
+    GroupChat,
+    {
+        groupUuid: "",
+    },
+    { pause: true, requestPolicy: "network-only" }
+)
+
+export const groupChatMessages = operationStore<
+    GroupChatMessagesQuery,
+    GroupChatMessagesQueryVariables
+>(
+    GroupChatMessages,
+    {
+        groupUuid: "",
+    },
+    { pause: true, requestPolicy: "network-only" }
+)
 
 export type ChatUserNode = Maybe<
     {

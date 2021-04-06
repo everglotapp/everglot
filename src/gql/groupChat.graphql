@@ -1,5 +1,12 @@
-query ChatUsers($groupUuid: UUID!) {
+query GroupChat($groupUuid: UUID!) {
     groupByUuid(uuid: $groupUuid) {
+        groupName
+        language {
+            englishName
+        }
+        languageSkillLevel {
+            name
+        }
         usersByGroupUserGroupIdAndUserId {
             nodes {
                 bio

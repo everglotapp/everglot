@@ -1,4 +1,4 @@
-import type { Language, User } from "../../types/generated/graphql"
+import type { Language, User, Group } from "../../types/generated/graphql"
 
 type SocketHistory = {
     greeted: boolean
@@ -8,7 +8,7 @@ const socketHistories: Record<string, SocketHistory> = {}
 export type ChatUser = {
     socketId: string
     user: Pick<User, "id" | "username" | "uuid" | "avatarUrl">
-    room: Language["englishName"]
+    groupUuid: Group["uuid"]
 }
 
 const users: ChatUser[] = []
@@ -17,9 +17,9 @@ const users: ChatUser[] = []
 export function userJoin(
     socketId: string,
     user: Pick<User, "id" | "username" | "uuid" | "avatarUrl">,
-    room: Language["englishName"]
+    groupUuid: Group["uuid"]
 ) {
-    const chatUser = { socketId, user, room }
+    const chatUser = { socketId, user, groupUuid }
 
     users.push(chatUser)
     socketHistories[socketId] ||= { greeted: false }
@@ -42,9 +42,9 @@ export function userLeave(socketId: string) {
 }
 
 // Get room users
-export function getRoomUsers(room: Language["englishName"]) {
+export function getGroupChatUsers(groupUuid: Group["uuid"]) {
     return users
-        .filter((user) => user.room === room)
+        .filter((user) => user.groupUuid === groupUuid)
         .map(({ user: { uuid, username, avatarUrl } }) => ({
             uuid,
             username,

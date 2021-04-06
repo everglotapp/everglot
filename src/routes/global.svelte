@@ -63,7 +63,7 @@
                     class="max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
                 >
                     <ButtonLarge
-                        href={`/chat?lang=${group.language?.englishName}&group=${group.uuid}`}
+                        href={`/chat?group=${group.uuid}`}
                         >{group.groupName}</ButtonLarge
                     >
                 </div>
@@ -79,7 +79,7 @@
                     class="max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
                 >
                     <ButtonLarge
-                        href={`/chat?lang=${group.language?.englishName}&group=${group.uuid}`}
+                        href={`/chat?group=${group.uuid}`}
                         >{group.groupName}</ButtonLarge
                     >
                 </div>
@@ -95,7 +95,7 @@
                     class="max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
                 >
                     <ButtonLarge
-                        href={`/chat?lang=${group.language?.englishName}&group=${group.uuid}`}
+                        href={`/chat?group=${group.uuid}`}
                         >{group.groupName}</ButtonLarge
                     >
                 </div>

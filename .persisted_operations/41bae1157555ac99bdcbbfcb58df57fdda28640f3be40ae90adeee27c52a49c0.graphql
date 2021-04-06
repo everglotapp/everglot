@@ -1,0 +1,15 @@
+mutation CreateMessage($parentMessageId: Int, $recipientGroupId: Int, $recipientId: Int, $senderId: Int, $uuid: UUID!, $body: String!) {
+  createMessage(input: {message: {body: $body, parentMessageId: $parentMessageId, uuid: $uuid, senderId: $senderId, recipientGroupId: $recipientGroupId, recipientId: $recipientId}}) {
+    sender {
+      uuid
+      __typename
+    }
+    message {
+      id
+      uuid
+      createdAt
+      __typename
+    }
+    __typename
+  }
+}

@@ -4496,11 +4496,47 @@ export type AllGroupsQuery = (
       & { language?: Maybe<(
         { __typename?: 'Language' }
         & Pick<Language, 'alpha2' | 'englishName'>
+      )>, languageSkillLevel?: Maybe<(
+        { __typename?: 'LanguageSkillLevel' }
+        & Pick<LanguageSkillLevel, 'name'>
       )>, groupUsers: (
         { __typename?: 'GroupUsersConnection' }
         & Pick<GroupUsersConnection, 'totalCount'>
       ) }
     )>> }
+  )> }
+);
+
+export type ChatUserQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type ChatUserQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'uuid' | 'avatarUrl'>
+  )> }
+);
+
+export type CreateGroupMutationVariables = Exact<{
+  global: Scalars['Boolean'];
+  groupName: Scalars['String'];
+  languageId: Scalars['Int'];
+  languageSkillLevelId: Scalars['Int'];
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type CreateGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { createGroup?: Maybe<(
+    { __typename?: 'CreateGroupPayload' }
+    & { group?: Maybe<(
+      { __typename?: 'Group' }
+      & Pick<Group, 'id'>
+    )> }
   )> }
 );
 
@@ -4524,6 +4560,47 @@ export type CreateMessageMutation = (
     )>, message?: Maybe<(
       { __typename?: 'Message' }
       & Pick<Message, 'id' | 'uuid' | 'createdAt'>
+    )> }
+  )> }
+);
+
+export type CreateUserMutationVariables = Exact<{
+  email: Scalars['String'];
+  gender: Scalars['String'];
+  passwordHash: Scalars['String'];
+  username: Scalars['String'];
+  uuid: Scalars['UUID'];
+  avatarUrl: Scalars['String'];
+  locale?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type CreateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { createUser?: Maybe<(
+    { __typename?: 'CreateUserPayload' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )> }
+  )> }
+);
+
+export type CreateUserLanguageMutationVariables = Exact<{
+  languageId: Scalars['Int'];
+  languageSkillLevelId?: Maybe<Scalars['Int']>;
+  native: Scalars['Boolean'];
+  userId: Scalars['Int'];
+}>;
+
+
+export type CreateUserLanguageMutation = (
+  { __typename?: 'Mutation' }
+  & { createUserLanguage?: Maybe<(
+    { __typename?: 'CreateUserLanguagePayload' }
+    & { userLanguage?: Maybe<(
+      { __typename?: 'UserLanguage' }
+      & Pick<UserLanguage, 'id'>
     )> }
   )> }
 );
@@ -4649,6 +4726,56 @@ export type LanguageCodeMappingsQuery = (
   )> }
 );
 
+export type LanguageIdByAlpha2QueryVariables = Exact<{
+  alpha2: Scalars['String'];
+}>;
+
+
+export type LanguageIdByAlpha2Query = (
+  { __typename?: 'Query' }
+  & { languageByAlpha2?: Maybe<(
+    { __typename?: 'Language' }
+    & Pick<Language, 'id'>
+  )> }
+);
+
+export type UserHasCompletedProfileQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserHasCompletedProfileQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'username'>
+    & { userLanguages: (
+      { __typename?: 'UserLanguagesConnection' }
+      & Pick<UserLanguagesConnection, 'totalCount'>
+    ) }
+  )> }
+);
+
+export type UserLanguageInfoQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserLanguageInfoQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+    & { userLanguages: (
+      { __typename?: 'UserLanguagesConnection' }
+      & { nodes: Array<Maybe<(
+        { __typename?: 'UserLanguage' }
+        & Pick<UserLanguage, 'languageId' | 'languageSkillLevelId' | 'native'>
+      )>> }
+    ) }
+  )> }
+);
+
 
 export const AllGroups = gql`
     query AllGroups {
@@ -4661,9 +4788,33 @@ export const AllGroups = gql`
         alpha2
         englishName
       }
+      languageSkillLevel {
+        name
+      }
       groupUsers {
         totalCount
       }
+    }
+  }
+}
+    `;
+export const ChatUser = gql`
+    query ChatUser($id: Int!) {
+  user(id: $id) {
+    id
+    username
+    uuid
+    avatarUrl
+  }
+}
+    `;
+export const CreateGroup = gql`
+    mutation CreateGroup($global: Boolean!, $groupName: String!, $languageId: Int!, $languageSkillLevelId: Int!, $uuid: UUID!) {
+  createGroup(
+    input: {group: {global: $global, groupName: $groupName, languageId: $languageId, languageSkillLevelId: $languageSkillLevelId, uuid: $uuid}}
+  ) {
+    group {
+      id
     }
   }
 }
@@ -4680,6 +4831,28 @@ export const CreateMessage = gql`
       id
       uuid
       createdAt
+    }
+  }
+}
+    `;
+export const CreateUser = gql`
+    mutation CreateUser($email: String!, $gender: String!, $passwordHash: String!, $username: String!, $uuid: UUID!, $avatarUrl: String!, $locale: Int) {
+  createUser(
+    input: {user: {email: $email, gender: $gender, passwordHash: $passwordHash, username: $username, uuid: $uuid, avatarUrl: $avatarUrl, locale: $locale}}
+  ) {
+    user {
+      id
+    }
+  }
+}
+    `;
+export const CreateUserLanguage = gql`
+    mutation CreateUserLanguage($languageId: Int!, $languageSkillLevelId: Int, $native: Boolean!, $userId: Int!) {
+  createUserLanguage(
+    input: {userLanguage: {languageId: $languageId, languageSkillLevelId: $languageSkillLevelId, native: $native, userId: $userId}}
+  ) {
+    userLanguage {
+      id
     }
   }
 }
@@ -4774,6 +4947,37 @@ export const LanguageCodeMappings = gql`
     nodes {
       alpha2
       englishName
+    }
+  }
+}
+    `;
+export const LanguageIdByAlpha2 = gql`
+    query LanguageIdByAlpha2($alpha2: String!) {
+  languageByAlpha2(alpha2: $alpha2) {
+    id
+  }
+}
+    `;
+export const UserHasCompletedProfile = gql`
+    query UserHasCompletedProfile($id: Int!) {
+  user(id: $id) {
+    username
+    userLanguages {
+      totalCount
+    }
+  }
+}
+    `;
+export const UserLanguageInfo = gql`
+    query UserLanguageInfo($id: Int!) {
+  user(id: $id) {
+    id
+    userLanguages {
+      nodes {
+        languageId
+        languageSkillLevelId
+        native
+      }
     }
   }
 }

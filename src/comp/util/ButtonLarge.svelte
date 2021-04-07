@@ -6,7 +6,7 @@
             PRIMARY:
                 "border border-primary bg-primary hover:bg-primary-bitlight text-white shadow-md focus:border-primary-light focus:bg-primary-light focus:ring-primary-dark",
             SECONDARY:
-                "border border-gray-lightest bg-gray-lightest hover:bg-gray text-gray-dark shadow-md focus:border-gray focus:bg-gray focus:ring-gray-dark focus:border-gray",
+                "border border-gray-lightest bg-gray-lightest hover:bg-gray-light hover:border-gray-light text-gray-bitdark shadow-md focus:border-gray focus:bg-gray focus:ring-gray-dark focus:border-gray",
         },
         OUTLINED: {
             PRIMARY:
@@ -48,6 +48,7 @@
         class={`${computedClasses} ${className}`}
         {href}
         disabled={disabled ? true : undefined}
+        on:click
     >
         <slot />
     </a>

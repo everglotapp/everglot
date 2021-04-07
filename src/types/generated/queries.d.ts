@@ -8,10 +8,46 @@ declare module '*/allGroups.graphql' {
 }
     
 
+declare module '*/chatUser.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const ChatUser: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createGroup.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateGroup: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createMessage.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const CreateMessage: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createUser.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateUser: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createUserLanguage.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateUserLanguage: DocumentNode;
 
   export default defaultDocument;
 }
@@ -57,6 +93,33 @@ declare module '*/languageCodeMappings.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const LanguageCodeMappings: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/languageIdByAlpha2.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const LanguageIdByAlpha2: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userHasCompletedProfile.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserHasCompletedProfile: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userLanguageInfo.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserLanguageInfo: DocumentNode;
 
   export default defaultDocument;
 }

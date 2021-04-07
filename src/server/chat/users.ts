@@ -1,4 +1,4 @@
-import type { Language, User, Group } from "../../types/generated/graphql"
+import type { User, Group } from "../../types/generated/graphql"
 
 type SocketHistory = {
     greeted: boolean

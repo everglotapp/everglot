@@ -11,21 +11,22 @@ import { ensureJson, serverError } from "../helpers"
 
 import { createDatabasePool } from "../server/db"
 import { performQuery } from "../server/gql"
+import { UserHasCompletedProfileQuery } from "../types/generated/graphql"
 
 async function userHasCompletedProfile(userId: number): Promise<boolean> {
-    const queryResult = await performQuery(
-        `query User($id: Int!) {
+    const queryResult = await performQuery<UserHasCompletedProfileQuery>(
+        `query UserHasCompletedProfile($id: Int!) {
             user(id: $id) {
-              username
-              userLanguages {
-                totalCount
-              }
+                username
+                userLanguages {
+                    totalCount
+                }
             }
-          }
-          `,
+        }
+        `,
         { id: userId }
     )
-    if (queryResult.data) {
+    if (queryResult.data && queryResult.data.user) {
         const {
             user: { username, userLanguages },
         } = queryResult.data

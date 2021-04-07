@@ -1,0 +1,21 @@
+mutation CreateUserLanguage(
+    $languageId: Int!
+    $languageSkillLevelId: Int
+    $native: Boolean!
+    $userId: Int!
+) {
+    createUserLanguage(
+        input: {
+            userLanguage: {
+                languageId: $languageId
+                languageSkillLevelId: $languageSkillLevelId
+                native: $native
+                userId: $userId
+            }
+        }
+    ) {
+        userLanguage {
+            id
+        }
+    }
+}

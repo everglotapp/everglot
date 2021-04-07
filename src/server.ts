@@ -31,9 +31,9 @@ const dev = NODE_ENV === "development"
     chat.start(server, db)
 
     /** Start Peer.JS WebRTC server. */
-    const peerjs = PeerServer({
-        port: 9000,
-        path: "/webrtc",
-        proxied: dev ? false : true,
-    })
+    // const peerjs = PeerServer({
+    //     port: 9000,
+    //     path: "/webrtc",
+    //     proxied: dev ? false : true,
+    // })
 })()

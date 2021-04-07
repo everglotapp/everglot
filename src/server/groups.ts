@@ -2,7 +2,11 @@ import { v4 as uuidv4 } from "uuid"
 
 import { performQuery } from "./gql"
 
-import { GroupIdByUuidQuery, UserType } from "../types/generated/graphql"
+import {
+    CreateGroupMutation,
+    GroupIdByUuidQuery,
+    UserType,
+} from "../types/generated/graphql"
 import type { Group, GroupUser, User } from "../types/generated/graphql"
 
 export const GROUP_LEARNER_SIZE = 4
@@ -15,26 +19,30 @@ async function createGroup(
     languageSkillLevelId: number,
     uuid: string
 ): Promise<Group["id"] | null> {
-    const res = await performQuery<{
-        createGroup: { group: { id: Group["id"] } }
-    }>(
-        `mutation MyMutation($global: Boolean!, $groupName: String!, $languageId: Int!, $languageSkillLevelId: Int!, $uuid: UUID!) {
-      createGroup(
-        input: {
-            group: {
-                global: $global,
-                groupName: $groupName,
-                languageId: $languageId,
-                languageSkillLevelId: $languageSkillLevelId,
-                uuid: $uuid
+    const res = await performQuery<CreateGroupMutation>(
+        `mutation CreateGroup(
+            $global: Boolean!
+            $groupName: String!
+            $languageId: Int!
+            $languageSkillLevelId: Int!
+            $uuid: UUID!
+        ) {
+            createGroup(
+                input: {
+                    group: {
+                        global: $global
+                        groupName: $groupName
+                        languageId: $languageId
+                        languageSkillLevelId: $languageSkillLevelId
+                        uuid: $uuid
+                    }
+                }
+            ) {
+                group {
+                    id
+                }
             }
-        }
-      ) {
-        group {
-          id
-        }
-      }
-    }`,
+        }`,
         {
             global,
             groupName,
@@ -43,10 +51,7 @@ async function createGroup(
             uuid,
         }
     )
-    if (!res.data) {
-        return null
-    }
-    return res.data?.createGroup.group.id
+    return res.data?.createGroup?.group?.id || null
 }
 
 async function getUsersWithoutLearnerGroup(

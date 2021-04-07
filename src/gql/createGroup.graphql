@@ -1,0 +1,23 @@
+mutation CreateGroup(
+    $global: Boolean!
+    $groupName: String!
+    $languageId: Int!
+    $languageSkillLevelId: Int!
+    $uuid: UUID!
+) {
+    createGroup(
+        input: {
+            group: {
+                global: $global
+                groupName: $groupName
+                languageId: $languageId
+                languageSkillLevelId: $languageSkillLevelId
+                uuid: $uuid
+            }
+        }
+    ) {
+        group {
+            id
+        }
+    }
+}

@@ -1,0 +1,27 @@
+mutation CreateUser(
+    $email: String!
+    $gender: String!
+    $passwordHash: String!
+    $username: String!
+    $uuid: UUID!
+    $avatarUrl: String!
+    $locale: Int
+) {
+    createUser(
+        input: {
+            user: {
+                email: $email
+                gender: $gender
+                passwordHash: $passwordHash
+                username: $username
+                uuid: $uuid
+                avatarUrl: $avatarUrl
+                locale: $locale
+            }
+        }
+    ) {
+        user {
+            id
+        }
+    }
+}

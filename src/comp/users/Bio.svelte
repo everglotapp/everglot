@@ -61,15 +61,7 @@
         <span class="text-sm italic">error</span>
     {:else}
         <div class="flex flex-row font-medium gap-x-6">
-            <div class="pt-8">
-                <span>Languages</span>
-                <div class="pl-2 pt-1">
-                    {#each languages as language}
-                        <div class="text-primary">{language}</div>
-                    {/each}
-                </div>
-            </div>
-            <div>
+            <div class="relative">
                 <span class="font-bold text-gray-bitdark">{user.username}</span>
                 {#if activeStatus}
                     <div class={`active-status ${activeStatus}`} />
@@ -80,6 +72,14 @@
                         url={user.avatarUrl || undefined}
                         size={64}
                     />
+                </div>
+            </div>
+            <div class="pt-8">
+                <span>Languages</span>
+                <div class="pl-2 pt-1">
+                    {#each languages as language}
+                        <div class="text-primary">{language}</div>
+                    {/each}
                 </div>
             </div>
         </div>
@@ -99,8 +99,8 @@
     }
 
     .active-status {
-        top: 56px;
-        right: 16px;
+        top: 32px;
+        right: 10px;
         width: 10px;
         height: 10px;
         border-radius: 50%;

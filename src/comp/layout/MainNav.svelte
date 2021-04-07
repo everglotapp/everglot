@@ -42,7 +42,7 @@
             >
         </div>
         <div
-            class="flex flex-1 mx-auto justify-between items-center"
+            class="flex flex-1 mx-auto justify-end items-center"
             style="max-width: 820px;"
         >
             <div class="hidden md:flex justify-center items-center">
@@ -143,13 +143,10 @@
                             aria-label={`Settings`}
                         >
                             <div
-                                class="absolute"
+                                class="settings-dropdown"
                                 style="top: calc(100% + 2px);"
                             >
-                                <div
-                                    class="fixed bg-white shadow-lg rounded-md"
-                                    style="z-index: 1;"
-                                >
+                                <div style="z-index: 1;">
                                     <div class="my-auto">
                                         <ButtonSmall
                                             variant="TEXT"
@@ -157,9 +154,7 @@
                                             tag="button"
                                             href=""
                                             on:click={handleLogout}
-                                            ><span
-                                                class="hidden md:inline md:mr-1"
-                                                >Logout</span
+                                            ><span class="mr-1">Logout</span
                                             ><LogOutIcon
                                                 size="24"
                                             /></ButtonSmall
@@ -295,5 +290,21 @@
 
     .avatar > .initial {
         height: 1.625rem;
+    }
+
+    .settings-dropdown {
+        @apply absolute;
+    }
+
+    .settings-dropdown > div {
+        @apply fixed;
+        @apply bg-white;
+        @apply shadow-lg;
+        @apply rounded-md;
+        @apply right-2;
+
+        @screen md {
+            right: unset;
+        }
     }
 </style>

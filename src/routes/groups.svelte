@@ -27,7 +27,7 @@
     <title>Groups – Everglot</title>
 </svelte:head>
 
-<div class="container flex w-auto gap-x-4">
+<div class="container flex w-auto gap-x-4 flex-wrap justify-center pb-16">
     {#if $allGroups.fetching}
         …
     {:else if $allGroups.error}
@@ -36,7 +36,7 @@
         <RedirectOnce to={"/profile"} />
     {:else}
         <div
-            class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
+            class="mt-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
         >
             <h3 class="text-xl text-gray-bitdark">Your groups</h3>
             {#each groups as group (group.uuid)}

@@ -46,7 +46,7 @@
     <title>Global – Everglot</title>
 </svelte:head>
 
-<div class="container flex w-auto gap-x-4">
+<div class="container flex w-auto gap-x-4 flex-wrap justify-center pb-16">
     {#if $allGroups.fetching}
         …
     {:else if $allGroups.error}
@@ -55,7 +55,7 @@
         <RedirectOnce to={"/profile"} />
     {:else}
         <div
-            class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
+            class="mt-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
         >
             <h3 class="text-xl text-gray-bitdark">German</h3>
             {#each groups["de"] as group (group.uuid)}
@@ -71,7 +71,7 @@
         </div>
 
         <div
-            class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
+            class="mt-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
         >
             <h3 class="text-xl text-gray-bitdark">English</h3>
             {#each groups["en"] as group (group.uuid)}
@@ -87,7 +87,7 @@
         </div>
 
         <div
-            class="my-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
+            class="mt-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
         >
             <h3 class="text-xl text-gray-bitdark">Chinese</h3>
             {#each groups["zh"] as group (group.uuid)}

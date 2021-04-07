@@ -66,8 +66,6 @@
     }
 
     .user {
-        height: 40;
-
         @apply flex;
         @apply items-center;
         @apply w-full;

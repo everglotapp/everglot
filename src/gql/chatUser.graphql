@@ -1,0 +1,8 @@
+query ChatUser($id: Int!) {
+    user(id: $id) {
+        id
+        username
+        uuid
+        avatarUrl
+    }
+}

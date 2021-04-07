@@ -14,7 +14,7 @@
     >
 
     let groups: GroupNode[] = []
-    $: if (allGroups && !$allGroups.fetching && !$allGroups.error) {
+    $: if (!$allGroups.fetching && !$allGroups.error) {
         groups =
             $allGroups.data?.groups?.nodes
                 .filter((group) => group && groupIsPrivate(group))

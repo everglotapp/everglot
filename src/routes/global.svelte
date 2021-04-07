@@ -19,7 +19,7 @@
         de: [],
         zh: [],
     }
-    $: if (allGroups && !$allGroups.fetching && !$allGroups.error) {
+    $: if (!$allGroups.fetching && !$allGroups.error) {
         groups = ["en", "de", "zh"].reduce(
             (map, lang) => ({
                 ...map,
@@ -90,7 +90,7 @@
         >
             {#each groups[lang] as group (group.uuid)}
                 <ButtonLarge
-                    className="w-full justify-center"
+                    className="w-full justify-between"
                     color="SECONDARY"
                     variant="FILLED"
                     href={`/chat?group=${group.uuid}`}

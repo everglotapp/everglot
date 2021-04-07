@@ -16,7 +16,7 @@
         } else if ($currentUser.data?.currentUser) {
             const { username, userLanguages } = $currentUser.data.currentUser
             if (username !== null && userLanguages.totalCount) {
-                goto("/groups", { replaceState: true, noscroll: false })
+                goto("/global", { replaceState: true, noscroll: false })
             }
         }
     })

@@ -11,9 +11,24 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
-    import { currentUser } from "../../stores"
+    import { currentUser, allGroups } from "../../stores"
+    import type { AllGroupsQuery } from "../../types/generated/graphql"
 
     query(currentUser)
+    query(allGroups)
+
+    type GroupNode = NonNullable<
+        NonNullable<AllGroupsQuery["groups"]>["nodes"][0]
+    >
+
+    let groups: GroupNode[] = []
+    $: if (!$allGroups.fetching && !$allGroups.error) {
+        groups =
+            $allGroups.data?.groups?.nodes
+                .filter((group) => group && groupIsPrivate(group))
+                .map((group) => group!) || []
+    }
+    const groupIsPrivate = (group: GroupNode) => group.global === false
 
     export let segment: string | undefined
 
@@ -30,6 +45,24 @@
     }
 
     let showSettingsDropdown = false
+    let showGroupsDropdown = false
+
+    $: hasPrivateGroups = !$allGroups.fetching && groups.length
+    function handleClickGroups(event: MouseEvent) {
+        event.preventDefault()
+        if (hasPrivateGroups) {
+            showGroupsDropdown = true
+            return
+        }
+        if (!$currentUser.fetching && $currentUser.data?.currentUser) {
+            const user = $currentUser.data.currentUser
+            if (user.username !== null && user.userLanguages.totalCount) {
+                goto("/profile/success", { replaceState: false })
+                return
+            }
+        }
+        goto("/profile", { replaceState: false })
+    }
 </script>
 
 <div class="nav-container">
@@ -78,12 +111,55 @@
                             </g>
                         </svg>
                     </a>
+                    {#if !$allGroups.fetching}
+                        {#if showGroupsDropdown}
+                            <ClickAwayListener
+                                elementId="groups-dropdown-clickaway"
+                                on:clickaway={() =>
+                                    (showGroupsDropdown = false)}
+                            />
+                            <EscapeKeyListener
+                                on:keydown={() => (showGroupsDropdown = false)}
+                            />
+                            <div
+                                class="relative"
+                                in:scale={{ duration: 200, delay: 0 }}
+                                out:scale={{ duration: 200, delay: 0 }}
+                                aria-label={`Groups`}
+                            >
+                                <div
+                                    class="dropdown groups-dropdown"
+                                    style="top: calc(100% + 2px);"
+                                >
+                                    <div style="z-index: 1;">
+                                        {#if $allGroups.error}
+                                            error
+                                        {:else}
+                                            {#each groups as group (group.uuid)}
+                                                <div class="my-auto">
+                                                    <ButtonSmall
+                                                        variant="TEXT"
+                                                        color="SECONDARY"
+                                                        href={`/chat?group=${group.uuid}`}
+                                                        >{group.groupName}</ButtonSmall
+                                                    >
+                                                </div>
+                                            {/each}
+                                        {/if}
+                                    </div>
+                                </div>
+                            </div>
+                        {/if}
+                    {/if}
                     <a
                         aria-current={segment === "chat" || segment === "groups"
                             ? "page"
                             : undefined}
-                        href="/groups"
+                        href=""
+                        tag="button"
+                        id="groups-dropdown-clickaway"
                         class="nav-item-with-icon"
+                        on:click={handleClickGroups}
                         ><span>Groups</span>
                         <svg
                             width="32"
@@ -130,7 +206,7 @@
                     </a>
                     {#if showSettingsDropdown}
                         <ClickAwayListener
-                            elementId="main-nav-settings"
+                            elementId="settings-dropdown-clickaway"
                             on:clickaway={() => (showSettingsDropdown = false)}
                         />
                         <EscapeKeyListener
@@ -143,7 +219,7 @@
                             aria-label={`Settings`}
                         >
                             <div
-                                class="settings-dropdown"
+                                class="dropdown settings-dropdown"
                                 style="top: calc(100% + 2px);"
                             >
                                 <div style="z-index: 1;">
@@ -171,7 +247,7 @@
                         on:click={() =>
                             (showSettingsDropdown = !showSettingsDropdown)}
                         class="nav-item-with-icon justify-center cursor-pointer"
-                        id="main-nav-settings"
+                        id="settings-dropdown-clickaway"
                     >
                         {#if !$currentUser.fetching}
                             <Avatar
@@ -292,11 +368,11 @@
         height: 1.625rem;
     }
 
-    .settings-dropdown {
+    .dropdown {
         @apply absolute;
     }
 
-    .settings-dropdown > div {
+    .dropdown > div {
         @apply fixed;
         @apply bg-white;
         @apply shadow-lg;

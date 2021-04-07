@@ -4504,6 +4504,19 @@ export type AllGroupsQuery = (
   )> }
 );
 
+export type ChatUserQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type ChatUserQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'uuid' | 'avatarUrl'>
+  )> }
+);
+
 export type CreateMessageMutationVariables = Exact<{
   parentMessageId?: Maybe<Scalars['Int']>;
   recipientGroupId?: Maybe<Scalars['Int']>;
@@ -4665,6 +4678,16 @@ export const AllGroups = gql`
         totalCount
       }
     }
+  }
+}
+    `;
+export const ChatUser = gql`
+    query ChatUser($id: Int!) {
+  user(id: $id) {
+    id
+    username
+    uuid
+    avatarUrl
   }
 }
     `;

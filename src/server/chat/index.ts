@@ -19,7 +19,7 @@ import { hangmanGames } from "./hangman"
 import type { HangmanLanguage } from "./hangman"
 
 import type { Pool } from "pg"
-import type { Group } from "../../types/generated/graphql"
+import type { ChatUserQuery, Group } from "../../types/generated/graphql"
 import { getGroupIdByUuid } from "../groups"
 
 export function start(server: Server, pool: Pool) {
@@ -37,7 +37,7 @@ export function start(server: Server, pool: Pool) {
         const { session } = socket.request
 
         socket.on("joinRoom", async ({ groupUuid }: { groupUuid: string }) => {
-            const res = await performQuery(
+            const res = await performQuery<ChatUserQuery>(
                 `query ChatUser($id: Int!) {
                         user(id: $id) {
                             id
@@ -48,8 +48,16 @@ export function start(server: Server, pool: Pool) {
                     }`,
                 { id: session.user_id }
             )
-            if (!res.data) {
-                console.log("Empty username for joining user", session.user_id)
+            console.log(res)
+            if (
+                !res.data ||
+                !res.data.user ||
+                !res.data?.user?.username?.length
+            ) {
+                console.log("Insufficient chat user result", {
+                    sessionUserId: session.user_id,
+                    res,
+                })
                 return
             }
             const chatUser = userJoin(socket.id, res.data.user, groupUuid)

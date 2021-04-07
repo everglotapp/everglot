@@ -43,6 +43,8 @@ export type Query = Node & {
   languageSkillLevels?: Maybe<LanguageSkillLevelsConnection>;
   /** Reads and enables pagination through a set of `Language`. */
   languages?: Maybe<LanguagesConnection>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messages?: Maybe<MessagesConnection>;
   /** Reads and enables pagination through a set of `UserLanguage`. */
   userLanguages?: Maybe<UserLanguagesConnection>;
   /** Reads and enables pagination through a set of `UserSession`. */
@@ -56,6 +58,8 @@ export type Query = Node & {
   language?: Maybe<Language>;
   languageByAlpha2?: Maybe<Language>;
   languageByEnglishName?: Maybe<Language>;
+  message?: Maybe<Message>;
+  messageByUuid?: Maybe<Message>;
   userLanguage?: Maybe<UserLanguage>;
   userSession?: Maybe<UserSession>;
   user?: Maybe<User>;
@@ -77,6 +81,8 @@ export type Query = Node & {
   languageSkillLevelByNodeId?: Maybe<LanguageSkillLevel>;
   /** Reads a single `Language` using its globally unique `ID`. */
   languageByNodeId?: Maybe<Language>;
+  /** Reads a single `Message` using its globally unique `ID`. */
+  messageByNodeId?: Maybe<Message>;
   /** Reads a single `UserLanguage` using its globally unique `ID`. */
   userLanguageByNodeId?: Maybe<UserLanguage>;
   /** Reads a single `UserSession` using its globally unique `ID`. */
@@ -141,6 +147,19 @@ export type QueryLanguagesArgs = {
   orderBy?: Maybe<Array<LanguagesOrderBy>>;
   condition?: Maybe<LanguageCondition>;
   filter?: Maybe<LanguageFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryMessagesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
 };
 
 
@@ -222,6 +241,18 @@ export type QueryLanguageByAlpha2Args = {
 /** The root query type which gives access points into the data universe. */
 export type QueryLanguageByEnglishNameArgs = {
   englishName: Scalars['String'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryMessageArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryMessageByUuidArgs = {
+  uuid: Scalars['UUID'];
 };
 
 
@@ -317,6 +348,12 @@ export type QueryLanguageByNodeIdArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryMessageByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryUserLanguageByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
@@ -398,12 +435,28 @@ export type User = Node & {
   userLanguages: UserLanguagesConnection;
   /** Reads and enables pagination through a set of `GroupUser`. */
   groupUsers: GroupUsersConnection;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesBySenderId: MessagesConnection;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByRecipientId: MessagesConnection;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByUserLanguageUserIdAndLanguageId: UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
   languageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelId: UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Group`. */
   groupsByGroupUserUserIdAndGroupId: UserGroupsByGroupUserUserIdAndGroupIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByMessageSenderIdAndRecipientId: UserUsersByMessageSenderIdAndRecipientIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Group`. */
+  groupsByMessageSenderIdAndRecipientGroupId: UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByMessageSenderIdAndParentMessageId: UserMessagesByMessageSenderIdAndParentMessageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByMessageRecipientIdAndSenderId: UserUsersByMessageRecipientIdAndSenderIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Group`. */
+  groupsByMessageRecipientIdAndRecipientGroupId: UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByMessageRecipientIdAndParentMessageId: UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyConnection;
 };
 
 
@@ -428,6 +481,30 @@ export type UserGroupUsersArgs = {
   orderBy?: Maybe<Array<GroupUsersOrderBy>>;
   condition?: Maybe<GroupUserCondition>;
   filter?: Maybe<GroupUserFilter>;
+};
+
+
+export type UserMessagesBySenderIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+
+export type UserMessagesByRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
 };
 
 
@@ -464,6 +541,78 @@ export type UserGroupsByGroupUserUserIdAndGroupIdArgs = {
   orderBy?: Maybe<Array<GroupsOrderBy>>;
   condition?: Maybe<GroupCondition>;
   filter?: Maybe<GroupFilter>;
+};
+
+
+export type UserUsersByMessageSenderIdAndRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type UserGroupsByMessageSenderIdAndRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
+};
+
+
+export type UserMessagesByMessageSenderIdAndParentMessageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+
+export type UserUsersByMessageRecipientIdAndSenderIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type UserGroupsByMessageRecipientIdAndRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
+};
+
+
+export type UserMessagesByMessageRecipientIdAndParentMessageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
 };
 
 
@@ -1078,8 +1227,16 @@ export type Group = Node & {
   languageSkillLevel?: Maybe<LanguageSkillLevel>;
   /** Reads and enables pagination through a set of `GroupUser`. */
   groupUsers: GroupUsersConnection;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByRecipientGroupId: MessagesConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByGroupUserGroupIdAndUserId: GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByMessageRecipientGroupIdAndSenderId: GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByMessageRecipientGroupIdAndRecipientId: GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByMessageRecipientGroupIdAndParentMessageId: GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyConnection;
 };
 
 
@@ -1095,6 +1252,18 @@ export type GroupGroupUsersArgs = {
 };
 
 
+export type GroupMessagesByRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+
 export type GroupUsersByGroupUserGroupIdAndUserIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
@@ -1104,6 +1273,42 @@ export type GroupUsersByGroupUserGroupIdAndUserIdArgs = {
   orderBy?: Maybe<Array<UsersOrderBy>>;
   condition?: Maybe<UserCondition>;
   filter?: Maybe<UserFilter>;
+};
+
+
+export type GroupUsersByMessageRecipientGroupIdAndSenderIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type GroupUsersByMessageRecipientGroupIdAndRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
 };
 
 /** Methods to use when ordering `GroupUser`. */
@@ -1192,50 +1397,275 @@ export type UserTypeFilter = {
   greaterThanOrEqualTo?: Maybe<UserType>;
 };
 
-/** A connection to a list of `User` values, with data from `GroupUser`. */
-export type GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection = {
-  __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection';
+/** A connection to a list of `Message` values. */
+export type MessagesConnection = {
+  __typename?: 'MessagesConnection';
+  /** A list of `Message` objects. */
+  nodes: Array<Maybe<Message>>;
+  /** A list of edges which contains the `Message` and cursor to aid in pagination. */
+  edges: Array<MessagesEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Message` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+export type Message = Node & {
+  __typename?: 'Message';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  senderId?: Maybe<Scalars['Int']>;
+  recipientId?: Maybe<Scalars['Int']>;
+  recipientGroupId?: Maybe<Scalars['Int']>;
+  body: Scalars['String'];
+  parentMessageId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `User` that is related to this `Message`. */
+  sender?: Maybe<User>;
+  /** Reads a single `User` that is related to this `Message`. */
+  recipient?: Maybe<User>;
+  /** Reads a single `Group` that is related to this `Message`. */
+  recipientGroup?: Maybe<Group>;
+  /** Reads a single `Message` that is related to this `Message`. */
+  parentMessage?: Maybe<Message>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByParentMessageId: MessagesConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByMessageParentMessageIdAndSenderId: MessageUsersByMessageParentMessageIdAndSenderIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByMessageParentMessageIdAndRecipientId: MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Group`. */
+  groupsByMessageParentMessageIdAndRecipientGroupId: MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyConnection;
+};
+
+
+export type MessageMessagesByParentMessageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+
+export type MessageUsersByMessageParentMessageIdAndSenderIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type MessageUsersByMessageParentMessageIdAndRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type MessageGroupsByMessageParentMessageIdAndRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
+};
+
+/** Methods to use when ordering `Message`. */
+export enum MessagesOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  SenderIdAsc = 'SENDER_ID_ASC',
+  SenderIdDesc = 'SENDER_ID_DESC',
+  RecipientIdAsc = 'RECIPIENT_ID_ASC',
+  RecipientIdDesc = 'RECIPIENT_ID_DESC',
+  RecipientGroupIdAsc = 'RECIPIENT_GROUP_ID_ASC',
+  RecipientGroupIdDesc = 'RECIPIENT_GROUP_ID_DESC',
+  BodyAsc = 'BODY_ASC',
+  BodyDesc = 'BODY_DESC',
+  ParentMessageIdAsc = 'PARENT_MESSAGE_ID_ASC',
+  ParentMessageIdDesc = 'PARENT_MESSAGE_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/** A condition to be used against `Message` object types. All fields are tested for equality and combined with a logical ‘and.’ */
+export type MessageCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `senderId` field. */
+  senderId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `recipientId` field. */
+  recipientId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `recipientGroupId` field. */
+  recipientGroupId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `body` field. */
+  body?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `parentMessageId` field. */
+  parentMessageId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `Message` object types. All fields are combined with a logical ‘and.’ */
+export type MessageFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `senderId` field. */
+  senderId?: Maybe<IntFilter>;
+  /** Filter by the object’s `recipientId` field. */
+  recipientId?: Maybe<IntFilter>;
+  /** Filter by the object’s `recipientGroupId` field. */
+  recipientGroupId?: Maybe<IntFilter>;
+  /** Filter by the object’s `body` field. */
+  body?: Maybe<StringFilter>;
+  /** Filter by the object’s `parentMessageId` field. */
+  parentMessageId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<MessageFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<MessageFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `User` values, with data from `Message`. */
+export type MessageUsersByMessageParentMessageIdAndSenderIdManyToManyConnection = {
+  __typename?: 'MessageUsersByMessageParentMessageIdAndSenderIdManyToManyConnection';
   /** A list of `User` objects. */
   nodes: Array<Maybe<User>>;
-  /** A list of edges which contains the `User`, info from the `GroupUser`, and the cursor to aid in pagination. */
-  edges: Array<GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge>;
+  /** A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination. */
+  edges: Array<MessageUsersByMessageParentMessageIdAndSenderIdManyToManyEdge>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `User` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
-/** A `User` edge in the connection, with data from `GroupUser`. */
-export type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge = {
-  __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge';
+/** A `User` edge in the connection, with data from `Message`. */
+export type MessageUsersByMessageParentMessageIdAndSenderIdManyToManyEdge = {
+  __typename?: 'MessageUsersByMessageParentMessageIdAndSenderIdManyToManyEdge';
   /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `User` at the end of the edge. */
   node?: Maybe<User>;
-  /** Reads and enables pagination through a set of `GroupUser`. */
-  groupUsers: GroupUsersConnection;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesBySenderId: MessagesConnection;
 };
 
 
-/** A `User` edge in the connection, with data from `GroupUser`. */
-export type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdgeGroupUsersArgs = {
+/** A `User` edge in the connection, with data from `Message`. */
+export type MessageUsersByMessageParentMessageIdAndSenderIdManyToManyEdgeMessagesBySenderIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   before?: Maybe<Scalars['Cursor']>;
   after?: Maybe<Scalars['Cursor']>;
-  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
-  condition?: Maybe<GroupUserCondition>;
-  filter?: Maybe<GroupUserFilter>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
 };
 
-/** A `Group` edge in the connection. */
-export type GroupsEdge = {
-  __typename?: 'GroupsEdge';
+/** A connection to a list of `User` values, with data from `Message`. */
+export type MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyConnection = {
+  __typename?: 'MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination. */
+  edges: Array<MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Message`. */
+export type MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyEdge = {
+  __typename?: 'MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByRecipientId: MessagesConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Message`. */
+export type MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyEdgeMessagesByRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `Group` values, with data from `Message`. */
+export type MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyConnection = {
+  __typename?: 'MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyConnection';
+  /** A list of `Group` objects. */
+  nodes: Array<Maybe<Group>>;
+  /** A list of edges which contains the `Group`, info from the `Message`, and the cursor to aid in pagination. */
+  edges: Array<MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Group` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Group` edge in the connection, with data from `Message`. */
+export type MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyEdge = {
+  __typename?: 'MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyEdge';
   /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `Group` at the end of the edge. */
   node?: Maybe<Group>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByRecipientGroupId: MessagesConnection;
+};
+
+
+/** A `Group` edge in the connection, with data from `Message`. */
+export type MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyEdgeMessagesByRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
 };
 
 /** Methods to use when ordering `Group`. */
@@ -1299,6 +1729,172 @@ export type GroupFilter = {
   or?: Maybe<Array<GroupFilter>>;
   /** Negates the expression. */
   not?: Maybe<GroupFilter>;
+};
+
+/** A `Message` edge in the connection. */
+export type MessagesEdge = {
+  __typename?: 'MessagesEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Message` at the end of the edge. */
+  node?: Maybe<Message>;
+};
+
+/** A connection to a list of `User` values, with data from `GroupUser`. */
+export type GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection = {
+  __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `GroupUser`, and the cursor to aid in pagination. */
+  edges: Array<GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `GroupUser`. */
+export type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge = {
+  __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `GroupUser`. */
+  groupUsers: GroupUsersConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `GroupUser`. */
+export type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdgeGroupUsersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  condition?: Maybe<GroupUserCondition>;
+  filter?: Maybe<GroupUserFilter>;
+};
+
+/** A connection to a list of `User` values, with data from `Message`. */
+export type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyConnection = {
+  __typename?: 'GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination. */
+  edges: Array<GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Message`. */
+export type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdge = {
+  __typename?: 'GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesBySenderId: MessagesConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Message`. */
+export type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdgeMessagesBySenderIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `User` values, with data from `Message`. */
+export type GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyConnection = {
+  __typename?: 'GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination. */
+  edges: Array<GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Message`. */
+export type GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyEdge = {
+  __typename?: 'GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByRecipientId: MessagesConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Message`. */
+export type GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyEdgeMessagesByRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `Message` values, with data from `Message`. */
+export type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyConnection = {
+  __typename?: 'GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyConnection';
+  /** A list of `Message` objects. */
+  nodes: Array<Maybe<Message>>;
+  /** A list of edges which contains the `Message`, info from the `Message`, and the cursor to aid in pagination. */
+  edges: Array<GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Message` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Message` edge in the connection, with data from `Message`. */
+export type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEdge = {
+  __typename?: 'GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Message` at the end of the edge. */
+  node?: Maybe<Message>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByParentMessageId: MessagesConnection;
+};
+
+
+/** A `Message` edge in the connection, with data from `Message`. */
+export type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEdgeMessagesByParentMessageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+/** A `Group` edge in the connection. */
+export type GroupsEdge = {
+  __typename?: 'GroupsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Group` at the end of the edge. */
+  node?: Maybe<Group>;
 };
 
 /** A connection to a list of `User` values, with data from `UserLanguage`. */
@@ -1727,6 +2323,228 @@ export type UserGroupsByGroupUserUserIdAndGroupIdManyToManyEdgeGroupUsersArgs = 
   filter?: Maybe<GroupUserFilter>;
 };
 
+/** A connection to a list of `User` values, with data from `Message`. */
+export type UserUsersByMessageSenderIdAndRecipientIdManyToManyConnection = {
+  __typename?: 'UserUsersByMessageSenderIdAndRecipientIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination. */
+  edges: Array<UserUsersByMessageSenderIdAndRecipientIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Message`. */
+export type UserUsersByMessageSenderIdAndRecipientIdManyToManyEdge = {
+  __typename?: 'UserUsersByMessageSenderIdAndRecipientIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByRecipientId: MessagesConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Message`. */
+export type UserUsersByMessageSenderIdAndRecipientIdManyToManyEdgeMessagesByRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `Group` values, with data from `Message`. */
+export type UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyConnection = {
+  __typename?: 'UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyConnection';
+  /** A list of `Group` objects. */
+  nodes: Array<Maybe<Group>>;
+  /** A list of edges which contains the `Group`, info from the `Message`, and the cursor to aid in pagination. */
+  edges: Array<UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Group` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Group` edge in the connection, with data from `Message`. */
+export type UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyEdge = {
+  __typename?: 'UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Group` at the end of the edge. */
+  node?: Maybe<Group>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByRecipientGroupId: MessagesConnection;
+};
+
+
+/** A `Group` edge in the connection, with data from `Message`. */
+export type UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyEdgeMessagesByRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `Message` values, with data from `Message`. */
+export type UserMessagesByMessageSenderIdAndParentMessageIdManyToManyConnection = {
+  __typename?: 'UserMessagesByMessageSenderIdAndParentMessageIdManyToManyConnection';
+  /** A list of `Message` objects. */
+  nodes: Array<Maybe<Message>>;
+  /** A list of edges which contains the `Message`, info from the `Message`, and the cursor to aid in pagination. */
+  edges: Array<UserMessagesByMessageSenderIdAndParentMessageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Message` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Message` edge in the connection, with data from `Message`. */
+export type UserMessagesByMessageSenderIdAndParentMessageIdManyToManyEdge = {
+  __typename?: 'UserMessagesByMessageSenderIdAndParentMessageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Message` at the end of the edge. */
+  node?: Maybe<Message>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByParentMessageId: MessagesConnection;
+};
+
+
+/** A `Message` edge in the connection, with data from `Message`. */
+export type UserMessagesByMessageSenderIdAndParentMessageIdManyToManyEdgeMessagesByParentMessageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `User` values, with data from `Message`. */
+export type UserUsersByMessageRecipientIdAndSenderIdManyToManyConnection = {
+  __typename?: 'UserUsersByMessageRecipientIdAndSenderIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination. */
+  edges: Array<UserUsersByMessageRecipientIdAndSenderIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Message`. */
+export type UserUsersByMessageRecipientIdAndSenderIdManyToManyEdge = {
+  __typename?: 'UserUsersByMessageRecipientIdAndSenderIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesBySenderId: MessagesConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Message`. */
+export type UserUsersByMessageRecipientIdAndSenderIdManyToManyEdgeMessagesBySenderIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `Group` values, with data from `Message`. */
+export type UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyConnection = {
+  __typename?: 'UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyConnection';
+  /** A list of `Group` objects. */
+  nodes: Array<Maybe<Group>>;
+  /** A list of edges which contains the `Group`, info from the `Message`, and the cursor to aid in pagination. */
+  edges: Array<UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Group` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Group` edge in the connection, with data from `Message`. */
+export type UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyEdge = {
+  __typename?: 'UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Group` at the end of the edge. */
+  node?: Maybe<Group>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByRecipientGroupId: MessagesConnection;
+};
+
+
+/** A `Group` edge in the connection, with data from `Message`. */
+export type UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyEdgeMessagesByRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `Message` values, with data from `Message`. */
+export type UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyConnection = {
+  __typename?: 'UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyConnection';
+  /** A list of `Message` objects. */
+  nodes: Array<Maybe<Message>>;
+  /** A list of edges which contains the `Message`, info from the `Message`, and the cursor to aid in pagination. */
+  edges: Array<UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Message` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Message` edge in the connection, with data from `Message`. */
+export type UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyEdge = {
+  __typename?: 'UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Message` at the end of the edge. */
+  node?: Maybe<Message>;
+  /** Reads and enables pagination through a set of `Message`. */
+  messagesByParentMessageId: MessagesConnection;
+};
+
+
+/** A `Message` edge in the connection, with data from `Message`. */
+export type UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyEdgeMessagesByParentMessageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  condition?: Maybe<MessageCondition>;
+  filter?: Maybe<MessageFilter>;
+};
+
 /** A `GroupUser` edge in the connection. */
 export type GroupUsersEdge = {
   __typename?: 'GroupUsersEdge';
@@ -1863,6 +2681,8 @@ export type Mutation = {
   createLanguageSkillLevel?: Maybe<CreateLanguageSkillLevelPayload>;
   /** Creates a single `Language`. */
   createLanguage?: Maybe<CreateLanguagePayload>;
+  /** Creates a single `Message`. */
+  createMessage?: Maybe<CreateMessagePayload>;
   /** Creates a single `UserLanguage`. */
   createUserLanguage?: Maybe<CreateUserLanguagePayload>;
   /** Creates a single `UserSession`. */
@@ -1891,6 +2711,12 @@ export type Mutation = {
   updateLanguageByAlpha2?: Maybe<UpdateLanguagePayload>;
   /** Updates a single `Language` using a unique key and a patch. */
   updateLanguageByEnglishName?: Maybe<UpdateLanguagePayload>;
+  /** Updates a single `Message` using its globally unique id and a patch. */
+  updateMessageByNodeId?: Maybe<UpdateMessagePayload>;
+  /** Updates a single `Message` using a unique key and a patch. */
+  updateMessage?: Maybe<UpdateMessagePayload>;
+  /** Updates a single `Message` using a unique key and a patch. */
+  updateMessageByUuid?: Maybe<UpdateMessagePayload>;
   /** Updates a single `UserLanguage` using its globally unique id and a patch. */
   updateUserLanguageByNodeId?: Maybe<UpdateUserLanguagePayload>;
   /** Updates a single `UserLanguage` using a unique key and a patch. */
@@ -1929,6 +2755,12 @@ export type Mutation = {
   deleteLanguageByAlpha2?: Maybe<DeleteLanguagePayload>;
   /** Deletes a single `Language` using a unique key. */
   deleteLanguageByEnglishName?: Maybe<DeleteLanguagePayload>;
+  /** Deletes a single `Message` using its globally unique id. */
+  deleteMessageByNodeId?: Maybe<DeleteMessagePayload>;
+  /** Deletes a single `Message` using a unique key. */
+  deleteMessage?: Maybe<DeleteMessagePayload>;
+  /** Deletes a single `Message` using a unique key. */
+  deleteMessageByUuid?: Maybe<DeleteMessagePayload>;
   /** Deletes a single `UserLanguage` using its globally unique id. */
   deleteUserLanguageByNodeId?: Maybe<DeleteUserLanguagePayload>;
   /** Deletes a single `UserLanguage` using a unique key. */
@@ -1970,6 +2802,12 @@ export type MutationCreateLanguageSkillLevelArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateLanguageArgs = {
   input: CreateLanguageInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateMessageArgs = {
+  input: CreateMessageInput;
 };
 
 
@@ -2054,6 +2892,24 @@ export type MutationUpdateLanguageByAlpha2Args = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateLanguageByEnglishNameArgs = {
   input: UpdateLanguageByEnglishNameInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateMessageByNodeIdArgs = {
+  input: UpdateMessageByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateMessageArgs = {
+  input: UpdateMessageInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateMessageByUuidArgs = {
+  input: UpdateMessageByUuidInput;
 };
 
 
@@ -2168,6 +3024,24 @@ export type MutationDeleteLanguageByAlpha2Args = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteLanguageByEnglishNameArgs = {
   input: DeleteLanguageByEnglishNameInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteMessageByNodeIdArgs = {
+  input: DeleteMessageByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteMessageArgs = {
+  input: DeleteMessageInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteMessageByUuidArgs = {
+  input: DeleteMessageByUuidInput;
 };
 
 
@@ -2397,6 +3271,59 @@ export type LanguageInput = {
   /** ISO 3166-1 alpha-2 standardized code */
   alpha2: Scalars['String'];
   englishName: Scalars['String'];
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** The output of our create `Message` mutation. */
+export type CreateMessagePayload = {
+  __typename?: 'CreateMessagePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Message` that was created by this mutation. */
+  message?: Maybe<Message>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Message`. */
+  sender?: Maybe<User>;
+  /** Reads a single `User` that is related to this `Message`. */
+  recipient?: Maybe<User>;
+  /** Reads a single `Group` that is related to this `Message`. */
+  recipientGroup?: Maybe<Group>;
+  /** Reads a single `Message` that is related to this `Message`. */
+  parentMessage?: Maybe<Message>;
+  /** An edge for our `Message`. May be used by Relay 1. */
+  messageEdge?: Maybe<MessagesEdge>;
+};
+
+
+/** The output of our create `Message` mutation. */
+export type CreateMessagePayloadMessageEdgeArgs = {
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+};
+
+/** All input for the create `Message` mutation. */
+export type CreateMessageInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Message` to be created by this mutation. */
+  message: MessageInput;
+};
+
+/** An input for mutations affecting `Message` */
+export type MessageInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid: Scalars['UUID'];
+  senderId?: Maybe<Scalars['Int']>;
+  recipientId?: Maybe<Scalars['Int']>;
+  recipientGroupId?: Maybe<Scalars['Int']>;
+  body: Scalars['String'];
+  parentMessageId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
 };
 
@@ -2808,6 +3735,85 @@ export type UpdateLanguageByEnglishNameInput = {
   /** An object where the defined keys will be set on the `Language` being updated. */
   patch: LanguagePatch;
   englishName: Scalars['String'];
+};
+
+/** The output of our update `Message` mutation. */
+export type UpdateMessagePayload = {
+  __typename?: 'UpdateMessagePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Message` that was updated by this mutation. */
+  message?: Maybe<Message>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Message`. */
+  sender?: Maybe<User>;
+  /** Reads a single `User` that is related to this `Message`. */
+  recipient?: Maybe<User>;
+  /** Reads a single `Group` that is related to this `Message`. */
+  recipientGroup?: Maybe<Group>;
+  /** Reads a single `Message` that is related to this `Message`. */
+  parentMessage?: Maybe<Message>;
+  /** An edge for our `Message`. May be used by Relay 1. */
+  messageEdge?: Maybe<MessagesEdge>;
+};
+
+
+/** The output of our update `Message` mutation. */
+export type UpdateMessagePayloadMessageEdgeArgs = {
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+};
+
+/** All input for the `updateMessageByNodeId` mutation. */
+export type UpdateMessageByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Message` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `Message` being updated. */
+  patch: MessagePatch;
+};
+
+/** Represents an update to a `Message`. Fields that are set will be updated. */
+export type MessagePatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  senderId?: Maybe<Scalars['Int']>;
+  recipientId?: Maybe<Scalars['Int']>;
+  recipientGroupId?: Maybe<Scalars['Int']>;
+  body?: Maybe<Scalars['String']>;
+  parentMessageId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** All input for the `updateMessage` mutation. */
+export type UpdateMessageInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Message` being updated. */
+  patch: MessagePatch;
+  id: Scalars['Int'];
+};
+
+/** All input for the `updateMessageByUuid` mutation. */
+export type UpdateMessageByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Message` being updated. */
+  patch: MessagePatch;
+  uuid: Scalars['UUID'];
 };
 
 /** The output of our update `UserLanguage` mutation. */
@@ -3232,6 +4238,68 @@ export type DeleteLanguageByEnglishNameInput = {
   englishName: Scalars['String'];
 };
 
+/** The output of our delete `Message` mutation. */
+export type DeleteMessagePayload = {
+  __typename?: 'DeleteMessagePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Message` that was deleted by this mutation. */
+  message?: Maybe<Message>;
+  deletedMessageNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Message`. */
+  sender?: Maybe<User>;
+  /** Reads a single `User` that is related to this `Message`. */
+  recipient?: Maybe<User>;
+  /** Reads a single `Group` that is related to this `Message`. */
+  recipientGroup?: Maybe<Group>;
+  /** Reads a single `Message` that is related to this `Message`. */
+  parentMessage?: Maybe<Message>;
+  /** An edge for our `Message`. May be used by Relay 1. */
+  messageEdge?: Maybe<MessagesEdge>;
+};
+
+
+/** The output of our delete `Message` mutation. */
+export type DeleteMessagePayloadMessageEdgeArgs = {
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+};
+
+/** All input for the `deleteMessageByNodeId` mutation. */
+export type DeleteMessageByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Message` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteMessage` mutation. */
+export type DeleteMessageInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** All input for the `deleteMessageByUuid` mutation. */
+export type DeleteMessageByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
 /** The output of our delete `UserLanguage` mutation. */
 export type DeleteUserLanguagePayload = {
   __typename?: 'DeleteUserLanguagePayload';
@@ -3433,16 +4501,65 @@ export type AllGroupsQuery = (
   )> }
 );
 
-export type ChatUsersQueryVariables = Exact<{
+export type CreateMessageMutationVariables = Exact<{
+  parentMessageId?: Maybe<Scalars['Int']>;
+  recipientGroupId?: Maybe<Scalars['Int']>;
+  recipientId?: Maybe<Scalars['Int']>;
+  senderId?: Maybe<Scalars['Int']>;
+  uuid: Scalars['UUID'];
+  body: Scalars['String'];
+}>;
+
+
+export type CreateMessageMutation = (
+  { __typename?: 'Mutation' }
+  & { createMessage?: Maybe<(
+    { __typename?: 'CreateMessagePayload' }
+    & { sender?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'uuid'>
+    )>, message?: Maybe<(
+      { __typename?: 'Message' }
+      & Pick<Message, 'id' | 'uuid' | 'createdAt'>
+    )> }
+  )> }
+);
+
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid' | 'avatarUrl'>
+    & { userLanguages: (
+      { __typename?: 'UserLanguagesConnection' }
+      & Pick<UserLanguagesConnection, 'totalCount'>
+    ), languageByLocale?: Maybe<(
+      { __typename?: 'Language' }
+      & Pick<Language, 'alpha2'>
+    )> }
+  )> }
+);
+
+export type GroupChatQueryVariables = Exact<{
   groupUuid: Scalars['UUID'];
 }>;
 
 
-export type ChatUsersQuery = (
+export type GroupChatQuery = (
   { __typename?: 'Query' }
   & { groupByUuid?: Maybe<(
     { __typename?: 'Group' }
-    & { usersByGroupUserGroupIdAndUserId: (
+    & Pick<Group, 'groupName'>
+    & { language?: Maybe<(
+      { __typename?: 'Language' }
+      & Pick<Language, 'englishName'>
+    )>, languageSkillLevel?: Maybe<(
+      { __typename?: 'LanguageSkillLevel' }
+      & Pick<LanguageSkillLevel, 'name'>
+    )>, usersByGroupUserGroupIdAndUserId: (
       { __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection' }
       & { nodes: Array<Maybe<(
         { __typename?: 'User' }
@@ -3479,21 +4596,39 @@ export type ChatUsersQuery = (
   )> }
 );
 
-export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+export type GroupChatMessagesQueryVariables = Exact<{
+  groupUuid: Scalars['UUID'];
+}>;
 
 
-export type CurrentUserQuery = (
+export type GroupChatMessagesQuery = (
   { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid' | 'avatarUrl'>
-    & { userLanguages: (
-      { __typename?: 'UserLanguagesConnection' }
-      & Pick<UserLanguagesConnection, 'totalCount'>
-    ), languageByLocale?: Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'alpha2'>
-    )> }
+  & { groupByUuid?: Maybe<(
+    { __typename?: 'Group' }
+    & { messagesByRecipientGroupId: (
+      { __typename?: 'MessagesConnection' }
+      & { nodes: Array<Maybe<(
+        { __typename?: 'Message' }
+        & Pick<Message, 'body' | 'createdAt' | 'uuid'>
+        & { sender?: Maybe<(
+          { __typename?: 'User' }
+          & Pick<User, 'uuid'>
+        )> }
+      )>> }
+    ) }
+  )> }
+);
+
+export type GroupIdByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type GroupIdByUuidQuery = (
+  { __typename?: 'Query' }
+  & { groupByUuid?: Maybe<(
+    { __typename?: 'Group' }
+    & Pick<Group, 'id'>
   )> }
 );
 
@@ -3527,9 +4662,50 @@ export const AllGroups = gql`
   }
 }
     `;
-export const ChatUsers = gql`
-    query ChatUsers($groupUuid: UUID!) {
+export const CreateMessage = gql`
+    mutation CreateMessage($parentMessageId: Int, $recipientGroupId: Int, $recipientId: Int, $senderId: Int, $uuid: UUID!, $body: String!) {
+  createMessage(
+    input: {message: {body: $body, parentMessageId: $parentMessageId, uuid: $uuid, senderId: $senderId, recipientGroupId: $recipientGroupId, recipientId: $recipientId}}
+  ) {
+    sender {
+      uuid
+    }
+    message {
+      id
+      uuid
+      createdAt
+    }
+  }
+}
+    `;
+export const CurrentUser = gql`
+    query CurrentUser {
+  currentUser {
+    bio
+    email
+    gender
+    username
+    uuid
+    avatarUrl
+    userLanguages {
+      totalCount
+    }
+    languageByLocale {
+      alpha2
+    }
+  }
+}
+    `;
+export const GroupChat = gql`
+    query GroupChat($groupUuid: UUID!) {
   groupByUuid(uuid: $groupUuid) {
+    groupName
+    language {
+      englishName
+    }
+    languageSkillLevel {
+      name
+    }
     usersByGroupUserGroupIdAndUserId {
       nodes {
         bio
@@ -3563,21 +4739,26 @@ export const ChatUsers = gql`
   }
 }
     `;
-export const CurrentUser = gql`
-    query CurrentUser {
-  currentUser {
-    bio
-    email
-    gender
-    username
-    uuid
-    avatarUrl
-    userLanguages {
-      totalCount
+export const GroupChatMessages = gql`
+    query GroupChatMessages($groupUuid: UUID!) {
+  groupByUuid(uuid: $groupUuid) {
+    messagesByRecipientGroupId(orderBy: CREATED_AT_ASC, last: 1000) {
+      nodes {
+        body
+        createdAt
+        sender {
+          uuid
+        }
+        uuid
+      }
     }
-    languageByLocale {
-      alpha2
-    }
+  }
+}
+    `;
+export const GroupIdByUuid = gql`
+    query GroupIdByUuid($uuid: UUID!) {
+  groupByUuid(uuid: $uuid) {
+    id
   }
 }
     `;

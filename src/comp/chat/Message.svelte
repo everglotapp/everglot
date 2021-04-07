@@ -58,9 +58,6 @@
         {:else}
             <span class="username">Everglot<br /> Bot</span>
         {/if}
-        {#if !(user && user.uuid) && $room && $room.length}
-            <span class="room"> [{$room}]</span>
-        {/if}
         <div class="cursor-pointer">
             {#if user !== null}
                 <Avatar

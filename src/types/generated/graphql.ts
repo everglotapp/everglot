@@ -4496,7 +4496,10 @@ export type AllGroupsQuery = (
       & { language?: Maybe<(
         { __typename?: 'Language' }
         & Pick<Language, 'alpha2' | 'englishName'>
-      )> }
+      )>, groupUsers: (
+        { __typename?: 'GroupUsersConnection' }
+        & Pick<GroupUsersConnection, 'totalCount'>
+      ) }
     )>> }
   )> }
 );
@@ -4657,6 +4660,9 @@ export const AllGroups = gql`
       language {
         alpha2
         englishName
+      }
+      groupUsers {
+        totalCount
       }
     }
   }

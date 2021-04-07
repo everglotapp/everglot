@@ -40,13 +40,17 @@
     const groupIsGlobal = (group: GroupNode) => group.global === true
     const groupIsForLanguage = (group: GroupNode, lang: Language["alpha2"]) =>
         group.language?.alpha2 === lang
+
+    let lang: "en" | "de" | "zh" = "en"
 </script>
 
 <svelte:head>
     <title>Global – Everglot</title>
 </svelte:head>
 
-<div class="container flex w-auto gap-x-4 flex-wrap justify-center pb-16">
+<div
+    class="container flex gap-x-4 flex-wrap justify-center md:justify-start py-16 w-full max-w-sm md:max-w-4xl"
+>
     {#if $allGroups.fetching}
         …
     {:else if $allGroups.error}
@@ -54,52 +58,90 @@
     {:else if !$allGroups.data?.groups?.nodes.some(groupIsGlobal)}
         <RedirectOnce to={"/profile"} />
     {:else}
-        <div
-            class="mt-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
-        >
-            <h3 class="text-xl text-gray-bitdark">German</h3>
-            {#each groups["de"] as group (group.uuid)}
-                <div
-                    class="max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
+        <div class="sidebar">
+            <div class="languages-container px-4 text-lg w-full mb-4">
+                <h3
+                    class="px-4 text-gray-bitdark text-sm font-bold mb-4 text-center"
                 >
-                    <ButtonLarge
-                        href={`/chat?group=${group.uuid}`}
-                        >{group.groupName}</ButtonLarge
+                    Language
+                </h3>
+                <div class="languages" role="tablist">
+                    <button
+                        on:click={() => (lang = "en")}
+                        aria-selected={lang === "en"}
+                        role="tab">English</button
+                    >
+                    <button
+                        on:click={() => (lang = "de")}
+                        aria-selected={lang === "de"}
+                        role="tab">German</button
+                    >
+                    <button
+                        on:click={() => (lang = "zh")}
+                        aria-selected={lang === "zh"}
+                        role="tab">Chinese</button
                     >
                 </div>
-            {/each}
+            </div>
         </div>
-
         <div
-            class="mt-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
+            class="groups text-xl font-light p-8 rounded-xl text-center justify-center shadow-sm"
+            role="tabpanel"
         >
-            <h3 class="text-xl text-gray-bitdark">English</h3>
-            {#each groups["en"] as group (group.uuid)}
-                <div
-                    class="max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
+            {#each groups[lang] as group (group.uuid)}
+                <ButtonLarge
+                    className="w-full justify-center"
+                    color="SECONDARY"
+                    variant="FILLED"
+                    href={`/chat?group=${group.uuid}`}
+                    ><span class="name">{group.groupName}</span>
+                    <span class="members-count"
+                        >{group.groupUsers.totalCount} members</span
+                    ></ButtonLarge
                 >
-                    <ButtonLarge
-                        href={`/chat?group=${group.uuid}`}
-                        >{group.groupName}</ButtonLarge
-                    >
-                </div>
-            {/each}
-        </div>
-
-        <div
-            class="mt-16 max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
-        >
-            <h3 class="text-xl text-gray-bitdark">Chinese</h3>
-            {#each groups["zh"] as group (group.uuid)}
-                <div
-                    class="max-w-sm text-xl font-light p-8 bg-gray-lightest rounded-xl text-center justify-center shadow-sm"
-                >
-                    <ButtonLarge
-                        href={`/chat?group=${group.uuid}`}
-                        >{group.groupName}</ButtonLarge
-                    >
-                </div>
             {/each}
         </div>
     {/if}
 </div>
+
+<style>
+    .sidebar {
+        min-width: 16rem;
+
+        @apply py-8;
+        @apply flex-shrink;
+    }
+
+    .languages button {
+        @apply flex;
+        @apply w-full;
+        @apply py-2;
+        @apply px-3;
+        @apply items-center;
+    }
+
+    .languages button:hover {
+        @apply bg-primary-lightest;
+    }
+
+    .languages button[aria-selected="true"] {
+        border-left-width: 3px;
+
+        @apply text-primary;
+        @apply border-primary;
+    }
+
+    .groups {
+        @apply flex-grow;
+    }
+
+    .groups .name {
+        @apply mr-3;
+        @apply align-middle;
+    }
+
+    .groups .members-count {
+        @apply text-sm;
+        @apply align-middle;
+    }
+</style>

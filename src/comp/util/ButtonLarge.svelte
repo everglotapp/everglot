@@ -6,7 +6,7 @@
             PRIMARY:
                 "border border-primary bg-primary hover:bg-primary-bitlight text-white shadow-md focus:border-primary-light focus:bg-primary-light focus:ring-primary-dark",
             SECONDARY:
-                "border border-primary bg-primary hover:bg-primary-bitlight text-white shadow-md focus:border-primary-light focus:bg-primary-light focus:ring-primary-dark",
+                "border border-gray-lightest bg-gray-lightest hover:bg-gray text-gray-dark shadow-md focus:border-gray focus:bg-gray focus:ring-gray-dark focus:border-gray",
         },
         OUTLINED: {
             PRIMARY:
@@ -57,12 +57,14 @@
     @layer components {
         button,
         a {
-            @apply py-3 px-10 inline-flex rounded-xl font-bold cursor-pointer transition-colors;
-        }
-
-        button:focus,
-        a:focus {
-            @apply ring-primary border-primary;
+            @apply py-3;
+            @apply px-10;
+            @apply inline-flex;
+            @apply rounded-xl;
+            @apply font-bold;
+            @apply cursor-pointer;
+            @apply transition-colors;
+            @apply items-center;
         }
 
         button:disabled,

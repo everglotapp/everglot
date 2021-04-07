@@ -20,6 +20,7 @@ import type { HangmanLanguage } from "./hangman"
 
 import type { Pool } from "pg"
 import type { Group } from "../../types/generated/graphql"
+import { getGroupIdByUuid } from "../groups"
 
 export function start(server: Server, pool: Pool) {
     const io = new SocketIO(server)
@@ -111,10 +112,19 @@ export function start(server: Server, pool: Pool) {
             }
 
             if (msg) {
+                const recipientGroupId = await getGroupIdByUuid(
+                    chatUser.groupUuid
+                )
+                if (!recipientGroupId) {
+                    console.log(
+                        "Failed to get group ID by UUID",
+                        chatUser.groupUuid
+                    )
+                    return
+                }
                 const message = await createMessage({
                     body: msg,
-                    //TODO: Query Group ID
-                    recipientGroupId: 1,
+                    recipientGroupId,
                     recipientId: null,
                     senderId: chatUser.user.id,
                 })

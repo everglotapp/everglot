@@ -4619,6 +4619,19 @@ export type GroupChatMessagesQuery = (
   )> }
 );
 
+export type GroupIdByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type GroupIdByUuidQuery = (
+  { __typename?: 'Query' }
+  & { groupByUuid?: Maybe<(
+    { __typename?: 'Group' }
+    & Pick<Group, 'id'>
+  )> }
+);
+
 export type LanguageCodeMappingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -4739,6 +4752,13 @@ export const GroupChatMessages = gql`
         uuid
       }
     }
+  }
+}
+    `;
+export const GroupIdByUuid = gql`
+    query GroupIdByUuid($uuid: UUID!) {
+  groupByUuid(uuid: $uuid) {
+    id
   }
 }
     `;

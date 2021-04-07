@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid"
 
 import { performQuery } from "./gql"
 
-import { UserType } from "../types/generated/graphql"
+import { GroupIdByUuidQuery, UserType } from "../types/generated/graphql"
 import type { Group, GroupUser, User } from "../types/generated/graphql"
 
 export const GROUP_LEARNER_SIZE = 4
@@ -292,4 +292,22 @@ export async function tryFormingGroupsWithUser(
         }
     }
     return groupIds
+}
+
+export async function getGroupIdByUuid(
+    uuid: Group["uuid"]
+): Promise<number | null> {
+    const res = await performQuery<GroupIdByUuidQuery>(
+        `query GroupIdByUuid($uuid: UUID!) {
+            groupByUuid(uuid: $uuid) {
+                id
+            }
+        }`,
+        { uuid }
+    )
+    // console.log(res.data?.user.userLanguages.nodes)
+    if (!res.data) {
+        return null
+    }
+    return res.data.groupByUuid?.id || null
 }

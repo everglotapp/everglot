@@ -44,6 +44,15 @@ declare module '*/groupChatMessages.graphql' {
 }
     
 
+declare module '*/groupIdbyUuid.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const GroupIdByUuid: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/languageCodeMappings.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

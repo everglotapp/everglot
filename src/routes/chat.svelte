@@ -65,8 +65,8 @@
             $groupChatMessages.context = {
                 pause: true,
             }
-            const existingUuids = messages.map(message => message.uuid);
-            const messageIsNew = (message) => !existingUuids.includes(message.uuid);
+            const existingUuids = messages.map(({uuid}) => uuid);
+            const messageIsNew = ({uuid}: any) => !existingUuids.includes(uuid);
             messages = [...recvMessages.filter(messageIsNew).map(message => ({
                 text: message!.body,
                 time: message!.createdAt,
@@ -75,7 +75,7 @@
             })), ...messages]
             if (typeof window !== "undefined") {
                 getChatMessageContainers().forEach((container) =>
-                    scrollToBottom(container, true)
+                    setTimeout(() => scrollToBottom(container, true), 150)
                 )
             }
         }

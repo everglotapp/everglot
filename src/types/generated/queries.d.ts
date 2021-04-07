@@ -115,3 +115,12 @@ declare module '*/userHasCompletedProfile.graphql' {
   export default defaultDocument;
 }
     
+
+declare module '*/userLanguageInfo.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserLanguageInfo: DocumentNode;
+
+  export default defaultDocument;
+}
+    

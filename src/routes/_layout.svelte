@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
-    import { v4 as uuidv4 } from "uuid"
+    import { v4 as uuidv4, validate as uuidValidate } from "uuid"
 
     import fetch from "cross-fetch"
     import {
@@ -14,7 +14,7 @@
     import { persistedFetchExchange } from "@urql/exchange-persisted-fetch"
     import persistedOperations from "../graphql.client.json"
 
-    import { currentUser } from "../stores"
+    import { currentUser, groupUuid } from "../stores"
 
     import MainNav from "../comp/layout/MainNav.svelte"
     import Footer from "../comp/layout/Footer.svelte"
@@ -62,7 +62,7 @@
     export let segment: string | undefined = undefined
     segment = segment // get rid of unused prop warning
     // @ts-ignore (left side of comma operator isn't ignored by svelte)
-    $: segment, doTransition()
+    $: segment, handlePageChange()
 
     $: showMainNav = segment !== "login" && segment !== "join"
     $: showFooter = segment !== "chat"
@@ -71,6 +71,10 @@
     onMount(() => {
         // TODO: is this really necessary?
         segment = window.location.pathname.split("/")[1]
+        const group = new URL(window.location.href).searchParams.get("group")
+        if (group && group.length && uuidValidate(group)) {
+            $groupUuid = group
+        }
     })
 
     const timeout = 150
@@ -78,6 +82,9 @@
     let transitionId = uuidv4()
     const doTransition = () => {
         transitionId = uuidv4()
+    }
+    const handlePageChange = () => {
+        doTransition()
         $currentUser.context = {
             requestPolicy: "network-only",
             transitionId, // This forces a re-execution by changing the object contents.

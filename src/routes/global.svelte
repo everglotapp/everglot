@@ -94,7 +94,7 @@
                     color="SECONDARY"
                     variant="FILLED"
                     href={`/chat?group=${group.uuid}`}
-                    on:click={($groupUuid = group.uuid)}
+                    on:click={() => ($groupUuid = group.uuid)}
                     ><span class="name">{group.groupName}</span>
                     <span class="members-count"
                         >{group.groupUsers.totalCount} members</span

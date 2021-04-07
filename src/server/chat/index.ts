@@ -1,5 +1,6 @@
 import type { Server } from "http"
 import { Server as SocketIO } from "socket.io"
+import { validate as uuidValidate } from "uuid"
 
 import session from "../middlewares/session"
 
@@ -59,13 +60,21 @@ export function start(server: Server, pool: Pool) {
                 })
                 return
             }
+            // TODO: Check that this is an actual group UUID and that
+            // the user is part of this group.
+            if (!groupUuid || !uuidValidate(groupUuid)) {
+                console.log("Bad group UUID", {
+                    groupUuid,
+                })
+                return
+            }
             const chatUser = userJoin(socket.id, res.data.user, groupUuid)
-            socket.join(chatUser.groupUuid)
+            socket.join(groupUuid)
             if (userIsNew(chatUser)) {
                 // Welcome current user
                 sendBotMessage(
                     `Welcome to Everglot, ${chatUser.user.username}! Write !help to see available commands.`,
-                    chatUser.groupUuid
+                    groupUuid
                 )
 
                 userGreeted(chatUser)
@@ -124,8 +133,10 @@ export function start(server: Server, pool: Pool) {
                 )
                 if (!recipientGroupId) {
                     console.log(
-                        "Failed to get group ID by UUID",
-                        chatUser.groupUuid
+                        "Failed to get group ID by UUID for user message",
+                        {
+                            groupUuid: chatUser.groupUuid,
+                        }
                     )
                     return
                 }
@@ -222,16 +233,28 @@ export function start(server: Server, pool: Pool) {
             })
         })
 
-        function sendBotMessage(msg: string, room: Group["uuid"], delay = 300) {
+        function sendBotMessage(
+            msg: string,
+            groupUuid: Group["uuid"],
+            delay = 300
+        ) {
             setTimeout(async () => {
+                const recipientGroupId = await getGroupIdByUuid(groupUuid)
+                if (!recipientGroupId) {
+                    console.log(
+                        "Failed to get group ID by UUID for bot message",
+                        { groupUuid, msg }
+                    )
+                    return
+                }
                 const message = await createMessage({
                     body: msg,
-                    recipientGroupId: 1,
+                    recipientGroupId,
                     recipientId: null,
                     senderId: null,
                 })
                 if (message && message.message) {
-                    io.to(room).emit("message", {
+                    io.to(groupUuid).emit("message", {
                         uuid: message.message.uuid,
                         userUuid: message.sender?.uuid || null,
                         text: msg,

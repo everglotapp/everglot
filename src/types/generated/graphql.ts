@@ -4496,6 +4496,9 @@ export type AllGroupsQuery = (
       & { language?: Maybe<(
         { __typename?: 'Language' }
         & Pick<Language, 'alpha2' | 'englishName'>
+      )>, languageSkillLevel?: Maybe<(
+        { __typename?: 'LanguageSkillLevel' }
+        & Pick<LanguageSkillLevel, 'name'>
       )>, groupUsers: (
         { __typename?: 'GroupUsersConnection' }
         & Pick<GroupUsersConnection, 'totalCount'>
@@ -4784,6 +4787,9 @@ export const AllGroups = gql`
       language {
         alpha2
         englishName
+      }
+      languageSkillLevel {
+        name
       }
       groupUsers {
         totalCount

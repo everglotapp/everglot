@@ -48,6 +48,7 @@
         class={`${computedClasses} ${className}`}
         {href}
         disabled={disabled ? true : undefined}
+        on:click
     >
         <slot />
     </a>

@@ -1,7 +1,12 @@
 <script lang="ts">
-    import { onMount, onDestroy } from "svelte"
-    import { scale, slide } from "svelte/transition"
+    import { onDestroy } from "svelte"
+    import { scale, slide, blur } from "svelte/transition"
     import { query } from "@urql/svelte"
+    import { validate as uuidValidate } from "uuid"
+
+    import { io } from "socket.io-client"
+    import type SocketIO from "socket.io-client"
+    import type { Socket } from "socket.io"
 
     import Message from "../comp/chat/Message.svelte"
     import Sidebar from "../comp/chat/Sidebar.svelte"
@@ -16,24 +21,23 @@
 
     import { ChevronsRightIcon } from "svelte-feather-icons"
 
-    import { io } from "socket.io-client"
-    import type SocketIO from "socket.io-client"
-
-    let socket: SocketIO.Socket | null = null
-
     let messages: ChatMessage[] = []
     let myUuid: User["uuid"] | null = null
-    let msg: string = ""
+    let msg = ""
 
     let updateInterval: number | null = null
 
     query(groupChat)
     query(groupChatMessages)
 
-    $: if ($groupUuid && $groupUuid.length) {
-        $groupChat.variables!.groupUuid = groupUuid
+    $: if ($groupUuid && $groupUuid.length && uuidValidate($groupUuid)) {
+        messages = []
+
+        joinChat($groupUuid)
+
+        $groupChat.variables!.groupUuid = $groupUuid
         $groupChat.context!.pause = false
-        $groupChatMessages.variables!.groupUuid = groupUuid
+        $groupChatMessages.variables!.groupUuid = $groupUuid
         $groupChatMessages.context = {
             requestPolicy: "network-only",
             pause: false,
@@ -100,56 +104,50 @@
         }
     }
 
-    // TODO: Check if user is signed in, if not redirect to sign in.
-    function subscribe(): void {
-        if (!socket) {
-            return
-        }
-
-        // Join chatroom
-        socket.emit("joinRoom", {
-            groupUuid: $groupUuid,
-        })
-
-        // Welcome from server
-        socket.on("welcome", onWelcome)
-        // Get room and users
-        socket.on("roomUsers", onRoomUsers)
-        // Message from server
-        socket.on("message", onMessage)
-    }
-
-    function unsubscribe(): void {
-        if (!socket) {
-            return
-        }
-        socket.off("roomUsers", onRoomUsers)
-        socket.off("message", onMessage)
-    }
-
-    // TODO: Read user data from database.
-    onMount(() => {
-        $groupUuid = new URL(window.location.href).searchParams.get("group")
-
-        socket = io()
-        if (!socket) {
-            return
-        }
-        subscribe()
-    })
-
     onDestroy(() => {
-        if (!socket) {
-            return
-        }
-        unsubscribe()
-        socket.emit("leaveRoom")
-        socket = null
+        leaveChat()
         if (updateInterval) {
             clearInterval(updateInterval)
             updateInterval = null
         }
     })
+
+    let socket: SocketIO.Socket | null = null
+    function joinChat(groupUuid: string) {
+        if (socket || typeof window === "undefined") {
+            return
+        }
+        socket = io()
+        socket.emit("joinRoom", {
+            groupUuid,
+        })
+        if (socket) {
+            // Welcome from server
+            socket.on("welcome", onWelcome)
+            // Get room and users
+            socket.on("roomUsers", onRoomUsers)
+            // Message from server
+            socket.on("message", onMessage)
+        }
+    }
+
+    function leaveChat(): boolean {
+        if (!socket) {
+            return false
+        }
+        socket.emit("leaveRoom")
+        return true
+    }
+
+    function sendMessage(msg: string): boolean {
+        if (!socket) {
+            console.log("Not sending", msg, "no socket")
+            return false
+        }
+        console.log("Sending", msg)
+        socket.emit("chatMessage", msg)
+        return true
+    }
 
     const getChatMessageContainers = () =>
         Array.from(
@@ -211,8 +209,7 @@
             // TODO: do this only if message was sent successfully.
             msg = ""
         }
-
-        socket?.emit("chatMessage", trimmedMsg)
+        sendMessage(trimmedMsg)
     }
 
     /**
@@ -224,7 +221,7 @@
         room: Group["uuid"]
         users: Pick<ChatUser["user"], "username" | "uuid" | "avatarUrl">[]
     }): void {
-        if (recvRoom !== groupUuid) {
+        if (recvRoom !== $groupUuid) {
             return
         }
         getChatMessageContainers().forEach((container) =>
@@ -257,27 +254,31 @@
 </svelte:head>
 
 <div class="wrapper">
-    <Sidebar
-        users={chatUsers}
-        {split}
-        handleToggleSplit={() => (split = !split)}
-    />
+    {#key $groupUuid}
+        <Sidebar
+            users={chatUsers}
+            {split}
+            handleToggleSplit={() => (split = !split)}
+        />
+    {/key}
     <div class="section-wrapper">
         <section>
             <header>
-                {#if !$groupChat.fetching && $groupChat.data}
-                    <span class="text-xl py-2">{groupName || ""}</span>
-                    <div
-                        class="inline"
-                        style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
-                    />
-                    <span
-                        >{language?.englishName || ""}
-                        {languageSkillLevel?.name || ""}</span
-                    >
-                {:else if $groupChat.error}
-                    error
-                {/if}
+                {#key $groupUuid}
+                    {#if !$groupChat.fetching && $groupChat.data}
+                        <span class="text-xl py-2">{groupName || ""}</span>
+                        <div
+                            class="inline"
+                            style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
+                        />
+                        <span
+                            >{language?.englishName || ""}
+                            {languageSkillLevel?.name || ""}</span
+                        >
+                    {:else if $groupChat.error}
+                        error
+                    {/if}
+                {/key}
             </header>
             <div class="views-wrapper">
                 <div class="views" class:split>
@@ -287,66 +288,77 @@
                             in:scale={{ duration: 200, delay: 0 }}
                             out:slide={{ duration: 200 }}
                         >
-                            <div class="view-inner view-left-inner px-3">
+                            {#key $groupUuid}
                                 <div
-                                    class="flex flex-row bg-gray-light max-h-12 px-2 items-center"
+                                    class="view-inner view-left-inner px-3"
+                                    transition:blur={{ duration: 300 }}
                                 >
                                     <div
-                                        class="text-lg py-1 px-3 bg-primary text-white rounded-tl-md rounded-tr-md"
+                                        class="flex flex-row bg-gray-light max-h-12 px-2 items-center"
                                     >
-                                        Games
-                                    </div>
-                                    <div class="text-lg py-1 px-3">
-                                        Subtitles
+                                        <div
+                                            class="text-lg py-1 px-3 bg-primary text-white rounded-tl-md rounded-tr-md"
+                                        >
+                                            Games
+                                        </div>
+                                        <div class="text-lg py-1 px-3">
+                                            Subtitles
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            {/key}
                         </div>
                     {/if}
                     <div class="view view-right rounded-tr-md">
-                        <div class="view-inner view-right-inner">
-                            <div class="messages">
-                                {#each messages as message (message.uuid)}
-                                    <Message
-                                        uuid={message.uuid}
-                                        user={chatUsers.find(
-                                            (user) =>
-                                                user &&
-                                                user.uuid === message.userUuid
-                                        ) || null}
-                                        time={message.time}
-                                        text={message.text}
-                                    />
-                                {/each}
-                            </div>
+                        {#key $groupUuid}
                             <div
-                                class="submit-form-container rounded-bl-md rounded-br-md"
+                                class="view-inner view-right-inner"
+                                transition:blur={{ duration: 800 }}
                             >
-                                <form
-                                    on:submit|preventDefault={onSend}
-                                    class="submit-form justify-end items-center"
+                                <div class="messages">
+                                    {#each messages as message (message.uuid)}
+                                        <Message
+                                            uuid={message.uuid}
+                                            user={chatUsers.find(
+                                                (user) =>
+                                                    user &&
+                                                    user.uuid ===
+                                                        message.userUuid
+                                            ) || null}
+                                            time={message.time}
+                                            text={message.text}
+                                        />
+                                    {/each}
+                                </div>
+                                <div
+                                    class="submit-form-container rounded-bl-md rounded-br-md"
                                 >
-                                    <input
-                                        id="msg"
-                                        type="text"
-                                        placeholder="Enter text message …"
-                                        required
-                                        autocomplete="off"
-                                        class="border-none shadow-md px-4 py-4 w-full rounded-md"
-                                        bind:value={msg}
-                                    />
-                                    <ButtonSmall
-                                        className="ml-4 px-6"
-                                        tag="button"
-                                        on:click={onSend}
-                                        >Send<ChevronsRightIcon
-                                            size="24"
-                                            class="ml-1"
-                                        /></ButtonSmall
+                                    <form
+                                        on:submit|preventDefault={onSend}
+                                        class="submit-form justify-end items-center"
                                     >
-                                </form>
+                                        <input
+                                            id="msg"
+                                            type="text"
+                                            placeholder="Enter text message …"
+                                            required
+                                            autocomplete="off"
+                                            class="border-none shadow-md px-4 py-4 w-full rounded-md"
+                                            bind:value={msg}
+                                        />
+                                        <ButtonSmall
+                                            className="ml-4 px-6"
+                                            tag="button"
+                                            on:click={onSend}
+                                            >Send<ChevronsRightIcon
+                                                size="24"
+                                                class="ml-1"
+                                            /></ButtonSmall
+                                        >
+                                    </form>
+                                </div>
                             </div>
-                        </div>
+                        {/key}
                     </div>
                 </div>
             </div>

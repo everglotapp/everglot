@@ -85,7 +85,7 @@
             </div>
         </div>
         <div
-            class="groups max-w-sm text-xl font-light p-8 rounded-xl text-center justify-center shadow-sm"
+            class="groups text-xl font-light p-8 rounded-xl text-center justify-center shadow-sm"
             role="tabpanel"
         >
             {#each groups[lang] as group (group.uuid)}
@@ -125,7 +125,7 @@
     }
 
     .languages button[aria-selected="true"] {
-        border-right-width: 3px;
+        border-left-width: 3px;
 
         @apply text-primary;
         @apply border-primary;

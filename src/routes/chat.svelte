@@ -1,9 +1,8 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte"
     import { scale, slide } from "svelte/transition"
-    import { query, operationStore } from "@urql/svelte"
+    import { query } from "@urql/svelte"
 
-    import { room } from "../stores"
     import Message from "../comp/chat/Message.svelte"
     import Sidebar from "../comp/chat/Sidebar.svelte"
 
@@ -11,12 +10,11 @@
 
     import type { ChatUser } from "../server/chat/users"
     import type { ChatMessage } from "../server/chat/messages"
-    import { ChatUsers } from "../types/generated/graphql"
+
+    import { groupChat, groupChatMessages } from "../stores"
     import type {
-        Language,
         User,
-        ChatUsersQuery,
-        ChatUsersQueryVariables,
+        Group,
     } from "../types/generated/graphql"
 
     import { ChevronsRightIcon } from "svelte-feather-icons"
@@ -26,32 +24,62 @@
 
     let socket: SocketIO.Socket | null = null
 
+    let groupUuid: string | null = null
     let messages: ChatMessage[] = []
-    let users: (Pick<ChatUser["user"], "uuid" | "username" | "avatarUrl"> & {
-        username: string
-    })[] = []
     let myUuid: User["uuid"] | null = null
     let msg: string = ""
 
     let updateInterval: number | null = null
 
-    const chatUsersStore = operationStore<
-        ChatUsersQuery,
-        ChatUsersQueryVariables
-    >(
-        ChatUsers,
-        {
-            groupUuid: "",
-        },
-        { pause: true, requestPolicy: "network-only" }
-    )
-    query(chatUsersStore)
+    query(groupChat)
+    query(groupChatMessages)
 
     $: chatUsers =
-        chatUsersStore && !$chatUsersStore.fetching && !$chatUsersStore.error
-            ? $chatUsersStore.data?.groupByUuid
+        !$groupChat.fetching && !$groupChat.error
+            ? $groupChat.data?.groupByUuid
                   ?.usersByGroupUserGroupIdAndUserId?.nodes || []
             : []
+
+    $: language =
+        !$groupChat.fetching && !$groupChat.error
+            ? $groupChat.data?.groupByUuid
+                ?.language || null
+            : null
+
+    $: languageSkillLevel =
+        !$groupChat.fetching && !$groupChat.error
+            ? $groupChat.data?.groupByUuid
+                ?.languageSkillLevel || null
+            : null
+
+    $: groupName =
+        !$groupChat.fetching && !$groupChat.error
+            ? $groupChat.data?.groupByUuid
+                ?.groupName || null
+            : null
+
+    $: if (!$groupChat.fetching && !$groupChat.error) {
+        const recvMessages = $groupChatMessages.data?.groupByUuid
+                ?.messagesByRecipientGroupId?.nodes.filter(Boolean) || []
+        if (recvMessages.length) {
+            $groupChatMessages.context = {
+                pause: true,
+            }
+            const existingUuids = messages.map(({uuid}) => uuid);
+            const messageIsNew = ({uuid}: any) => !existingUuids.includes(uuid);
+            messages = [...recvMessages.filter(messageIsNew).map(message => ({
+                text: message!.body,
+                time: message!.createdAt,
+                uuid: message!.uuid,
+                userUuid: message!.sender?.uuid || null,
+            })), ...messages]
+            if (typeof window !== "undefined") {
+                getChatMessageContainers().forEach((container) =>
+                    setTimeout(() => scrollToBottom(container, true), 150)
+                )
+            }
+        }
+    }
 
     // TODO: Check if user is signed in, if not redirect to sign in.
     function subscribe(): void {
@@ -61,7 +89,7 @@
 
         // Join chatroom
         socket.emit("joinRoom", {
-            room: $room,
+            groupUuid,
         })
 
         // Welcome from server
@@ -82,21 +110,21 @@
 
     // TODO: Read user data from database.
     onMount(() => {
-        const lang = new URL(window.location.href).searchParams.get("lang")
-        if (lang && ["English", "German", "Chinese"].includes(lang)) {
-            $room = lang
-        }
-
-        const groupUuid = new URL(window.location.href).searchParams.get(
+        groupUuid = new URL(window.location.href).searchParams.get(
             "group"
         )
         if (groupUuid && groupUuid.length) {
-            $chatUsersStore.variables!.groupUuid = groupUuid
-            $chatUsersStore.context!.pause = false
+            $groupChat.variables!.groupUuid = groupUuid
+            $groupChat.context!.pause = false
+            $groupChatMessages.variables!.groupUuid = groupUuid
+            $groupChatMessages.context = {
+                requestPolicy: "network-only",
+                pause: false,
+            }
             let pause = false
             updateInterval = setInterval(() => {
                 pause = !pause
-                $chatUsersStore.context = {
+                $groupChat.context = {
                     requestPolicy: "network-only",
                     pause,
                 }
@@ -192,20 +220,13 @@
      */
     function onRoomUsers({
         room: recvRoom,
-        users: recvUsers,
     }: {
-        room: Language["englishName"]
+        room: Group["uuid"]
         users: Pick<ChatUser["user"], "username" | "uuid" | "avatarUrl">[]
     }): void {
-        if (recvRoom !== $room) {
+        if (recvRoom !== groupUuid) {
             return
         }
-        users = [
-            ...recvUsers.map((user) => ({
-                ...user,
-                username: user.username!,
-            })),
-        ]
         getChatMessageContainers().forEach((container) =>
             scrollToBottom(container, true)
         )
@@ -244,12 +265,16 @@
     <div class="section-wrapper">
         <section>
             <header>
-                <span class="text-xl py-2">Group 1</span>
+                {#if !$groupChat.fetching && $groupChat.data}
+                <span class="text-xl py-2">{groupName || ""}</span>
                 <div
                     class="inline"
                     style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
                 />
-                <span>General Channel</span>
+                <span>{language?.englishName || ""} {languageSkillLevel?.name || ""}</span>
+                {:else if $groupChat.error}
+                    error
+                {/if}
             </header>
             <div class="views-wrapper">
                 <div class="views" class:split>

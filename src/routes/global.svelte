@@ -93,7 +93,7 @@
                     className="w-full justify-center"
                     color="SECONDARY"
                     variant="FILLED"
-                    href={`/chat?lang=${group.language?.englishName}&group=${group.uuid}`}
+                    href={`/chat?group=${group.uuid}`}
                     ><span class="name">{group.groupName}</span>
                     <span class="members-count"
                         >{group.groupUsers.totalCount} members</span

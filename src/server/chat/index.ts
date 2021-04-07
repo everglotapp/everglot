@@ -3,12 +3,12 @@ import { Server as SocketIO } from "socket.io"
 
 import session from "../middlewares/session"
 
-import { formatMessage } from "./messages"
+import { createMessage, formatMessage } from "./messages"
 import {
     userJoin,
     getCurrentUser,
     userLeave,
-    getRoomUsers,
+    getGroupChatUsers,
     userIsNew,
     userGreeted,
 } from "./users"
@@ -19,6 +19,8 @@ import { hangmanGames } from "./hangman"
 import type { HangmanLanguage } from "./hangman"
 
 import type { Pool } from "pg"
+import type { Group } from "../../types/generated/graphql"
+import { getGroupIdByUuid } from "../groups"
 
 export function start(server: Server, pool: Pool) {
     const io = new SocketIO(server)
@@ -26,6 +28,7 @@ export function start(server: Server, pool: Pool) {
     /** Reuse session/authentication from Express server. */
     const sessionMiddleware = session(pool)
     io.use((socket: EverglotChatSocket, next) => {
+        // @ts-ignore
         sessionMiddleware(socket.request, {}, next)
     })
 
@@ -33,11 +36,9 @@ export function start(server: Server, pool: Pool) {
     io.on("connection", (socket: EverglotChatSocket) => {
         const { session } = socket.request
 
-        socket.on(
-            "joinRoom",
-            async ({ room }: { room: string; username: string }) => {
-                const res = await performQuery(
-                    `query ChatUser($id: Int!) {
+        socket.on("joinRoom", async ({ groupUuid }: { groupUuid: string }) => {
+            const res = await performQuery(
+                `query ChatUser($id: Int!) {
                         user(id: $id) {
                             id
                             username
@@ -45,61 +46,58 @@ export function start(server: Server, pool: Pool) {
                             avatarUrl
                         }
                     }`,
-                    { id: session.user_id }
+                { id: session.user_id }
+            )
+            if (!res.data) {
+                console.log("Empty username for joining user", session.user_id)
+                return
+            }
+            const chatUser = userJoin(socket.id, res.data.user, groupUuid)
+            socket.join(chatUser.groupUuid)
+            if (userIsNew(chatUser)) {
+                // Welcome current user
+                sendBotMessage(
+                    `Welcome to Everglot, ${chatUser.user.username}! Write !help to see available commands.`,
+                    chatUser.groupUuid
                 )
-                if (!res.data) {
-                    console.log(
-                        "Empty username for joining user",
-                        session.user_id
+
+                userGreeted(chatUser)
+            }
+
+            socket.emit("welcome", {
+                user: {
+                    uuid: chatUser.user.uuid,
+                },
+            })
+
+            // Broadcast when a user connects
+            socket.broadcast
+                .to(chatUser.groupUuid)
+                .emit(
+                    "message",
+                    formatMessage(
+                        `${chatUser.user.username} has joined the chat`
                     )
-                    return
-                }
-                const chatUser = userJoin(socket.id, res.data.user, room)
-                socket.join(chatUser.room)
-                if (userIsNew(chatUser)) {
-                    // Welcome current user
+                )
+
+            // Send users and room info
+            io.to(chatUser.groupUuid).emit("roomUsers", {
+                room: chatUser.groupUuid,
+                users: getGroupChatUsers(chatUser.groupUuid),
+            })
+
+            // TODO: Get language from group.
+            if (["English", "German"].includes(chatUser.groupUuid)) {
+                const hangman =
+                    hangmanGames[chatUser.groupUuid as HangmanLanguage]
+                if (hangman.running) {
                     sendBotMessage(
-                        `Welcome to Everglot, ${chatUser.user.username}! Write !help to see available commands.`,
-                        chatUser.room
+                        `Current word: ${hangman.publicWord}`,
+                        chatUser.groupUuid
                     )
-
-                    userGreeted(chatUser)
-                }
-
-                socket.emit("welcome", {
-                    user: {
-                        uuid: chatUser.user.uuid,
-                    },
-                })
-
-                // Broadcast when a user connects
-                socket.broadcast
-                    .to(chatUser.room)
-                    .emit(
-                        "message",
-                        formatMessage(
-                            `${chatUser.user.username} has joined the chat`
-                        )
-                    )
-
-                // Send users and room info
-                io.to(chatUser.room).emit("roomUsers", {
-                    room: chatUser.room,
-                    users: getRoomUsers(chatUser.room),
-                })
-
-                if (["English", "German"].includes(chatUser.room)) {
-                    const hangman =
-                        hangmanGames[chatUser.room as HangmanLanguage]
-                    if (hangman.running) {
-                        sendBotMessage(
-                            `Current word: ${hangman.publicWord}`,
-                            chatUser.room
-                        )
-                    }
                 }
             }
-        )
+        })
 
         // Listen for chatMessage
         socket.on("leaveRoom", () => {
@@ -107,26 +105,52 @@ export function start(server: Server, pool: Pool) {
         })
 
         // Listen for chatMessage
-        socket.on("chatMessage", (msg) => {
+        socket.on("chatMessage", async (msg) => {
             const chatUser = getCurrentUser(socket.id)
             if (!chatUser) {
                 return
             }
 
             if (msg) {
-                io.to(chatUser.room).emit(
-                    "message",
-                    formatMessage(msg, chatUser.user.uuid)
+                const recipientGroupId = await getGroupIdByUuid(
+                    chatUser.groupUuid
                 )
+                if (!recipientGroupId) {
+                    console.log(
+                        "Failed to get group ID by UUID",
+                        chatUser.groupUuid
+                    )
+                    return
+                }
+                const message = await createMessage({
+                    body: msg,
+                    recipientGroupId,
+                    recipientId: null,
+                    senderId: chatUser.user.id,
+                })
+                if (message && message.message && message.sender) {
+                    io.to(chatUser.groupUuid).emit("message", {
+                        uuid: message.message.uuid,
+                        userUuid: message.sender.uuid,
+                        text: msg,
+                        time: message.message.createdAt,
+                    })
+                } else {
+                    console.log("User text message creation failed", message)
+                    return
+                }
+
                 if (msg.startsWith("!help")) {
                     sendBotMessage(
                         "Available commands: !hangman, !help",
-                        chatUser.room
+                        chatUser.groupUuid
                     )
                     return
-                } else if (Object.keys(hangmanGames).includes(chatUser.room)) {
+                } else if (
+                    Object.keys(hangmanGames).includes(chatUser.groupUuid)
+                ) {
                     const hangman =
-                        hangmanGames[chatUser.room as HangmanLanguage]
+                        hangmanGames[chatUser.groupUuid as HangmanLanguage]
                     if (hangman.running) {
                         if (msg.length === 1) {
                             if (
@@ -136,12 +160,12 @@ export function start(server: Server, pool: Pool) {
                                 hangman.pickLetter(msg)
                                 sendBotMessage(
                                     `Current word: ${hangman.publicWord}`,
-                                    chatUser.room
+                                    chatUser.groupUuid
                                 )
                                 if (hangman.nextRound()) {
                                     sendBotMessage(
                                         `You guessed correctly! Here's the next word: ${hangman.publicWord}`,
-                                        chatUser.room
+                                        chatUser.groupUuid
                                     )
                                 }
                             }
@@ -151,13 +175,13 @@ export function start(server: Server, pool: Pool) {
                         if (hangman.running) {
                             sendBotMessage(
                                 "Hangman is already running.",
-                                chatUser.room
+                                chatUser.groupUuid
                             )
                         } else {
                             hangman.start()
                             sendBotMessage(
                                 `Started a hangman game: ${hangman.publicWord}`,
-                                chatUser.room
+                                chatUser.groupUuid
                             )
                         }
                     }
@@ -165,7 +189,7 @@ export function start(server: Server, pool: Pool) {
                     if (msg.startsWith("!hangman")) {
                         sendBotMessage(
                             "So far, hangman is only supported in English and German.",
-                            chatUser.room
+                            chatUser.groupUuid
                         )
                     }
                 }
@@ -181,19 +205,34 @@ export function start(server: Server, pool: Pool) {
 
             sendBotMessage(
                 `${chatUser.user.username} has left the chat`,
-                chatUser.room
+                chatUser.groupUuid
             )
 
             // Send users and room info
-            io.to(chatUser.room).emit("roomUsers", {
-                room: chatUser.room,
-                users: getRoomUsers(chatUser.room),
+            io.to(chatUser.groupUuid).emit("roomUsers", {
+                room: chatUser.groupUuid,
+                users: getGroupChatUsers(chatUser.groupUuid),
             })
         })
 
-        function sendBotMessage(msg: string, room: string, delay = 300) {
-            setTimeout(() => {
-                io.to(room).emit("message", formatMessage(msg))
+        function sendBotMessage(msg: string, room: Group["uuid"], delay = 300) {
+            setTimeout(async () => {
+                const message = await createMessage({
+                    body: msg,
+                    recipientGroupId: 1,
+                    recipientId: null,
+                    senderId: null,
+                })
+                if (message && message.message) {
+                    io.to(room).emit("message", {
+                        uuid: message.message.uuid,
+                        userUuid: message.sender?.uuid || null,
+                        text: msg,
+                        time: message.message.createdAt,
+                    })
+                } else {
+                    console.log("Bot message creation failed", message)
+                }
             }, delay)
         }
     })

@@ -153,6 +153,40 @@ type Query implements Node {
     filter: LanguageFilter
   ): LanguagesConnection
 
+  """Reads and enables pagination through a set of `Message`."""
+  messages(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection
+
   """Reads and enables pagination through a set of `UserLanguage`."""
   userLanguages(
     """Only read the first `n` values of the set."""
@@ -261,6 +295,8 @@ type Query implements Node {
   language(id: Int!): Language
   languageByAlpha2(alpha2: String!): Language
   languageByEnglishName(englishName: String!): Language
+  message(id: Int!): Message
+  messageByUuid(uuid: UUID!): Message
   userLanguage(id: Int!): UserLanguage
   userSession(sid: String!): UserSession
   user(id: Int!): User
@@ -353,6 +389,12 @@ type Query implements Node {
     """The globally unique `ID` to be used in selecting a single `Language`."""
     nodeId: ID!
   ): Language
+
+  """Reads a single `Message` using its globally unique `ID`."""
+  messageByNodeId(
+    """The globally unique `ID` to be used in selecting a single `Message`."""
+    nodeId: ID!
+  ): Message
 
   """Reads a single `UserLanguage` using its globally unique `ID`."""
   userLanguageByNodeId(
@@ -523,6 +565,74 @@ type User implements Node {
     filter: GroupUserFilter
   ): GroupUsersConnection!
 
+  """Reads and enables pagination through a set of `Message`."""
+  messagesBySenderId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+
   """Reads and enables pagination through a set of `Language`."""
   languagesByUserLanguageUserIdAndLanguageId(
     """Only read the first `n` values of the set."""
@@ -624,6 +734,210 @@ type User implements Node {
     """
     filter: GroupFilter
   ): UserGroupsByGroupUserUserIdAndGroupIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByMessageSenderIdAndRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): UserUsersByMessageSenderIdAndRecipientIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Group`."""
+  groupsByMessageSenderIdAndRecipientGroupId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupFilter
+  ): UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByMessageSenderIdAndParentMessageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): UserMessagesByMessageSenderIdAndParentMessageIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByMessageRecipientIdAndSenderId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): UserUsersByMessageRecipientIdAndSenderIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Group`."""
+  groupsByMessageRecipientIdAndRecipientGroupId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupFilter
+  ): UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByMessageRecipientIdAndParentMessageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyConnection!
 }
 
 """
@@ -1687,6 +2001,40 @@ type Group implements Node {
     filter: GroupUserFilter
   ): GroupUsersConnection!
 
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByRecipientGroupId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+
   """Reads and enables pagination through a set of `User`."""
   usersByGroupUserGroupIdAndUserId(
     """Only read the first `n` values of the set."""
@@ -1720,6 +2068,108 @@ type Group implements Node {
     """
     filter: UserFilter
   ): GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByMessageRecipientGroupIdAndSenderId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByMessageRecipientGroupIdAndRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByMessageRecipientGroupIdAndParentMessageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyConnection!
 }
 
 """Methods to use when ordering `GroupUser`."""
@@ -1839,33 +2289,51 @@ input UserTypeFilter {
   greaterThanOrEqualTo: UserType
 }
 
-"""A connection to a list of `User` values, with data from `GroupUser`."""
-type GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection {
-  """A list of `User` objects."""
-  nodes: [User]!
+"""A connection to a list of `Message` values."""
+type MessagesConnection {
+  """A list of `Message` objects."""
+  nodes: [Message]!
 
   """
-  A list of edges which contains the `User`, info from the `GroupUser`, and the cursor to aid in pagination.
+  A list of edges which contains the `Message` and cursor to aid in pagination.
   """
-  edges: [GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge!]!
+  edges: [MessagesEdge!]!
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  """The count of *all* `User` you could get from the connection."""
+  """The count of *all* `Message` you could get from the connection."""
   totalCount: Int!
 }
 
-"""A `User` edge in the connection, with data from `GroupUser`."""
-type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
+type Message implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  senderId: Int
+  recipientId: Int
+  recipientGroupId: Int
+  body: String!
+  parentMessageId: Int
+  createdAt: Datetime!
 
-  """The `User` at the end of the edge."""
-  node: User
+  """Reads a single `User` that is related to this `Message`."""
+  sender: User
 
-  """Reads and enables pagination through a set of `GroupUser`."""
-  groupUsers(
+  """Reads a single `User` that is related to this `Message`."""
+  recipient: User
+
+  """Reads a single `Group` that is related to this `Message`."""
+  recipientGroup: Group
+
+  """Reads a single `Message` that is related to this `Message`."""
+  parentMessage: Message
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByParentMessageId(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -1884,28 +2352,391 @@ type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `GroupUser`."""
-    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
 
     """
     A condition to be used in determining which values should be returned by the collection.
     """
-    condition: GroupUserCondition
+    condition: MessageCondition
 
     """
     A filter to be used in determining which values should be returned by the collection.
     """
-    filter: GroupUserFilter
-  ): GroupUsersConnection!
+    filter: MessageFilter
+  ): MessagesConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByMessageParentMessageIdAndSenderId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): MessageUsersByMessageParentMessageIdAndSenderIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByMessageParentMessageIdAndRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Group`."""
+  groupsByMessageParentMessageIdAndRecipientGroupId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupFilter
+  ): MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyConnection!
 }
 
-"""A `Group` edge in the connection."""
-type GroupsEdge {
+"""Methods to use when ordering `Message`."""
+enum MessagesOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  SENDER_ID_ASC
+  SENDER_ID_DESC
+  RECIPIENT_ID_ASC
+  RECIPIENT_ID_DESC
+  RECIPIENT_GROUP_ID_ASC
+  RECIPIENT_GROUP_ID_DESC
+  BODY_ASC
+  BODY_DESC
+  PARENT_MESSAGE_ID_ASC
+  PARENT_MESSAGE_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Message` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input MessageCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `senderId` field."""
+  senderId: Int
+
+  """Checks for equality with the object’s `recipientId` field."""
+  recipientId: Int
+
+  """Checks for equality with the object’s `recipientGroupId` field."""
+  recipientGroupId: Int
+
+  """Checks for equality with the object’s `body` field."""
+  body: String
+
+  """Checks for equality with the object’s `parentMessageId` field."""
+  parentMessageId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `Message` object types. All fields are combined with a logical ‘and.’
+"""
+input MessageFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `senderId` field."""
+  senderId: IntFilter
+
+  """Filter by the object’s `recipientId` field."""
+  recipientId: IntFilter
+
+  """Filter by the object’s `recipientGroupId` field."""
+  recipientGroupId: IntFilter
+
+  """Filter by the object’s `body` field."""
+  body: StringFilter
+
+  """Filter by the object’s `parentMessageId` field."""
+  parentMessageId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [MessageFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [MessageFilter!]
+
+  """Negates the expression."""
+  not: MessageFilter
+}
+
+"""A connection to a list of `User` values, with data from `Message`."""
+type MessageUsersByMessageParentMessageIdAndSenderIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [MessageUsersByMessageParentMessageIdAndSenderIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Message`."""
+type MessageUsersByMessageParentMessageIdAndSenderIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesBySenderId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""A connection to a list of `User` values, with data from `Message`."""
+type MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Message`."""
+type MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""A connection to a list of `Group` values, with data from `Message`."""
+type MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyConnection {
+  """A list of `Group` objects."""
+  nodes: [Group]!
+
+  """
+  A list of edges which contains the `Group`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Group` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Group` edge in the connection, with data from `Message`."""
+type MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyEdge {
   """A cursor for use in pagination."""
   cursor: Cursor
 
   """The `Group` at the end of the edge."""
   node: Group
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByRecipientGroupId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
 }
 
 """Methods to use when ordering `Group`."""
@@ -1988,6 +2819,264 @@ input GroupFilter {
 
   """Negates the expression."""
   not: GroupFilter
+}
+
+"""A `Message` edge in the connection."""
+type MessagesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Message` at the end of the edge."""
+  node: Message
+}
+
+"""A connection to a list of `User` values, with data from `GroupUser`."""
+type GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `GroupUser`, and the cursor to aid in pagination.
+  """
+  edges: [GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `GroupUser`."""
+type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `GroupUser`."""
+  groupUsers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupUserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupUserFilter
+  ): GroupUsersConnection!
+}
+
+"""A connection to a list of `User` values, with data from `Message`."""
+type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Message`."""
+type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesBySenderId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""A connection to a list of `User` values, with data from `Message`."""
+type GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Message`."""
+type GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""A connection to a list of `Message` values, with data from `Message`."""
+type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyConnection {
+  """A list of `Message` objects."""
+  nodes: [Message]!
+
+  """
+  A list of edges which contains the `Message`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Message` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Message` edge in the connection, with data from `Message`."""
+type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Message` at the end of the edge."""
+  node: Message
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByParentMessageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""A `Group` edge in the connection."""
+type GroupsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Group` at the end of the edge."""
+  node: Group
 }
 
 """
@@ -2665,6 +3754,366 @@ type UserGroupsByGroupUserUserIdAndGroupIdManyToManyEdge {
   ): GroupUsersConnection!
 }
 
+"""A connection to a list of `User` values, with data from `Message`."""
+type UserUsersByMessageSenderIdAndRecipientIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [UserUsersByMessageSenderIdAndRecipientIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Message`."""
+type UserUsersByMessageSenderIdAndRecipientIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""A connection to a list of `Group` values, with data from `Message`."""
+type UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyConnection {
+  """A list of `Group` objects."""
+  nodes: [Group]!
+
+  """
+  A list of edges which contains the `Group`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Group` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Group` edge in the connection, with data from `Message`."""
+type UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Group` at the end of the edge."""
+  node: Group
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByRecipientGroupId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""A connection to a list of `Message` values, with data from `Message`."""
+type UserMessagesByMessageSenderIdAndParentMessageIdManyToManyConnection {
+  """A list of `Message` objects."""
+  nodes: [Message]!
+
+  """
+  A list of edges which contains the `Message`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [UserMessagesByMessageSenderIdAndParentMessageIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Message` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Message` edge in the connection, with data from `Message`."""
+type UserMessagesByMessageSenderIdAndParentMessageIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Message` at the end of the edge."""
+  node: Message
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByParentMessageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""A connection to a list of `User` values, with data from `Message`."""
+type UserUsersByMessageRecipientIdAndSenderIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [UserUsersByMessageRecipientIdAndSenderIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Message`."""
+type UserUsersByMessageRecipientIdAndSenderIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesBySenderId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""A connection to a list of `Group` values, with data from `Message`."""
+type UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyConnection {
+  """A list of `Group` objects."""
+  nodes: [Group]!
+
+  """
+  A list of edges which contains the `Group`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Group` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Group` edge in the connection, with data from `Message`."""
+type UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Group` at the end of the edge."""
+  node: Group
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByRecipientGroupId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""A connection to a list of `Message` values, with data from `Message`."""
+type UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyConnection {
+  """A list of `Message` objects."""
+  nodes: [Message]!
+
+  """
+  A list of edges which contains the `Message`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Message` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Message` edge in the connection, with data from `Message`."""
+type UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Message` at the end of the edge."""
+  node: Message
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByParentMessageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
 """A `GroupUser` edge in the connection."""
 type GroupUsersEdge {
   """A cursor for use in pagination."""
@@ -2853,6 +4302,14 @@ type Mutation {
     input: CreateLanguageInput!
   ): CreateLanguagePayload
 
+  """Creates a single `Message`."""
+  createMessage(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateMessageInput!
+  ): CreateMessagePayload
+
   """Creates a single `UserLanguage`."""
   createUserLanguage(
     """
@@ -2966,6 +4423,30 @@ type Mutation {
     """
     input: UpdateLanguageByEnglishNameInput!
   ): UpdateLanguagePayload
+
+  """Updates a single `Message` using its globally unique id and a patch."""
+  updateMessageByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateMessageByNodeIdInput!
+  ): UpdateMessagePayload
+
+  """Updates a single `Message` using a unique key and a patch."""
+  updateMessage(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateMessageInput!
+  ): UpdateMessagePayload
+
+  """Updates a single `Message` using a unique key and a patch."""
+  updateMessageByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateMessageByUuidInput!
+  ): UpdateMessagePayload
 
   """
   Updates a single `UserLanguage` using its globally unique id and a patch.
@@ -3122,6 +4603,30 @@ type Mutation {
     """
     input: DeleteLanguageByEnglishNameInput!
   ): DeleteLanguagePayload
+
+  """Deletes a single `Message` using its globally unique id."""
+  deleteMessageByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteMessageByNodeIdInput!
+  ): DeleteMessagePayload
+
+  """Deletes a single `Message` using a unique key."""
+  deleteMessage(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteMessageInput!
+  ): DeleteMessagePayload
+
+  """Deletes a single `Message` using a unique key."""
+  deleteMessageByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteMessageByUuidInput!
+  ): DeleteMessagePayload
 
   """Deletes a single `UserLanguage` using its globally unique id."""
   deleteUserLanguageByNodeId(
@@ -3380,6 +4885,65 @@ input LanguageInput {
   """ISO 3166-1 alpha-2 standardized code"""
   alpha2: String!
   englishName: String!
+  createdAt: Datetime
+}
+
+"""The output of our create `Message` mutation."""
+type CreateMessagePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Message` that was created by this mutation."""
+  message: Message
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `Message`."""
+  sender: User
+
+  """Reads a single `User` that is related to this `Message`."""
+  recipient: User
+
+  """Reads a single `Group` that is related to this `Message`."""
+  recipientGroup: Group
+
+  """Reads a single `Message` that is related to this `Message`."""
+  parentMessage: Message
+
+  """An edge for our `Message`. May be used by Relay 1."""
+  messageEdge(
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): MessagesEdge
+}
+
+"""All input for the create `Message` mutation."""
+input CreateMessageInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Message` to be created by this mutation."""
+  message: MessageInput!
+}
+
+"""An input for mutations affecting `Message`"""
+input MessageInput {
+  id: Int
+  uuid: UUID!
+  senderId: Int
+  recipientId: Int
+  recipientGroupId: Int
+  body: String!
+  parentMessageId: Int
   createdAt: Datetime
 }
 
@@ -3866,6 +5430,104 @@ input UpdateLanguageByEnglishNameInput {
   """
   patch: LanguagePatch!
   englishName: String!
+}
+
+"""The output of our update `Message` mutation."""
+type UpdateMessagePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Message` that was updated by this mutation."""
+  message: Message
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `Message`."""
+  sender: User
+
+  """Reads a single `User` that is related to this `Message`."""
+  recipient: User
+
+  """Reads a single `Group` that is related to this `Message`."""
+  recipientGroup: Group
+
+  """Reads a single `Message` that is related to this `Message`."""
+  parentMessage: Message
+
+  """An edge for our `Message`. May be used by Relay 1."""
+  messageEdge(
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): MessagesEdge
+}
+
+"""All input for the `updateMessageByNodeId` mutation."""
+input UpdateMessageByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Message` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Message` being updated.
+  """
+  patch: MessagePatch!
+}
+
+"""
+Represents an update to a `Message`. Fields that are set will be updated.
+"""
+input MessagePatch {
+  id: Int
+  uuid: UUID
+  senderId: Int
+  recipientId: Int
+  recipientGroupId: Int
+  body: String
+  parentMessageId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateMessage` mutation."""
+input UpdateMessageInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Message` being updated.
+  """
+  patch: MessagePatch!
+  id: Int!
+}
+
+"""All input for the `updateMessageByUuid` mutation."""
+input UpdateMessageByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Message` being updated.
+  """
+  patch: MessagePatch!
+  uuid: UUID!
 }
 
 """The output of our update `UserLanguage` mutation."""
@@ -4355,6 +6017,76 @@ input DeleteLanguageByEnglishNameInput {
   """
   clientMutationId: String
   englishName: String!
+}
+
+"""The output of our delete `Message` mutation."""
+type DeleteMessagePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Message` that was deleted by this mutation."""
+  message: Message
+  deletedMessageNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `Message`."""
+  sender: User
+
+  """Reads a single `User` that is related to this `Message`."""
+  recipient: User
+
+  """Reads a single `Group` that is related to this `Message`."""
+  recipientGroup: Group
+
+  """Reads a single `Message` that is related to this `Message`."""
+  parentMessage: Message
+
+  """An edge for our `Message`. May be used by Relay 1."""
+  messageEdge(
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): MessagesEdge
+}
+
+"""All input for the `deleteMessageByNodeId` mutation."""
+input DeleteMessageByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Message` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteMessage` mutation."""
+input DeleteMessageInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deleteMessageByUuid` mutation."""
+input DeleteMessageByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
 }
 
 """The output of our delete `UserLanguage` mutation."""

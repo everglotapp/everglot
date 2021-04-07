@@ -48,7 +48,6 @@ export function start(server: Server, pool: Pool) {
                     }`,
                 { id: session.user_id }
             )
-            console.log(res)
             if (
                 !res.data ||
                 !res.data.user ||

@@ -11,7 +11,7 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
-    import { currentUser, allGroups } from "../../stores"
+    import { currentUser, allGroups, groupUuid } from "../../stores"
     import type { AllGroupsQuery } from "../../types/generated/graphql"
 
     query(currentUser)
@@ -47,19 +47,23 @@
     let showSettingsDropdown = false
     let showGroupsDropdown = false
 
-    $: hasPrivateGroups = !$allGroups.fetching && groups.length
+    $: userHasPrivateGroups = !$allGroups.fetching && groups.length
+    $: currentUserObject = $currentUser.fetching
+        ? null
+        : $currentUser.data?.currentUser
+    $: userHasCompletedProfile =
+        currentUserObject &&
+        currentUserObject.username !== null &&
+        currentUserObject.userLanguages.totalCount
     function handleClickGroups(event: MouseEvent) {
         event.preventDefault()
-        if (hasPrivateGroups) {
+        if (userHasPrivateGroups) {
             showGroupsDropdown = true
             return
         }
-        if (!$currentUser.fetching && $currentUser.data?.currentUser) {
-            const user = $currentUser.data.currentUser
-            if (user.username !== null && user.userLanguages.totalCount) {
-                goto("/profile/success", { replaceState: false })
-                return
-            }
+        if (userHasCompletedProfile) {
+            goto("/profile/success", { replaceState: false })
+            return
         }
         goto("/profile", { replaceState: false })
     }
@@ -141,6 +145,9 @@
                                                         variant="TEXT"
                                                         color="SECONDARY"
                                                         href={`/chat?group=${group.uuid}`}
+                                                        on:click={() =>
+                                                            ($groupUuid =
+                                                                group.uuid)}
                                                         >{group.groupName}</ButtonSmall
                                                     >
                                                 </div>

@@ -5,27 +5,37 @@
 
     let redirectTimeout: number | null = null
 
+    $: currentUserObject = $currentUser.fetching
+        ? null
+        : $currentUser.data?.currentUser
+    $: userHasCompletedProfile =
+        currentUserObject &&
+        currentUserObject.username !== null &&
+        currentUserObject.userLanguages.totalCount
+
+    function clearRedirectTimeout(): void {
+        if (redirectTimeout) {
+            clearTimeout(redirectTimeout)
+            redirectTimeout = null
+        }
+    }
+
     onMount(() => {
         if ($currentUser.fetching) {
             if (redirectTimeout === null) {
                 redirectTimeout = window.setTimeout(() => {
                     goto("/profile", { replaceState: true, noscroll: false })
-                    redirectTimeout = null
+                    clearRedirectTimeout()
                 }, 800)
             }
-        } else if ($currentUser.data?.currentUser) {
-            const { username, userLanguages } = $currentUser.data.currentUser
-            if (username !== null && userLanguages.totalCount) {
-                goto("/global", { replaceState: true, noscroll: false })
-            }
+        } else if (userHasCompletedProfile) {
+            clearRedirectTimeout()
+            goto("/global", { replaceState: true, noscroll: false })
         }
     })
 
     onDestroy(() => {
-        if (redirectTimeout !== null) {
-            window.clearTimeout(redirectTimeout)
-            redirectTimeout = null
-        }
+        clearRedirectTimeout()
     })
 </script>
 

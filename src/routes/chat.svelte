@@ -11,11 +11,8 @@
     import type { ChatUser } from "../server/chat/users"
     import type { ChatMessage } from "../server/chat/messages"
 
-    import { groupChat, groupChatMessages } from "../stores"
-    import type {
-        User,
-        Group,
-    } from "../types/generated/graphql"
+    import { groupUuid, groupChat, groupChatMessages } from "../stores"
+    import type { User, Group } from "../types/generated/graphql"
 
     import { ChevronsRightIcon } from "svelte-feather-icons"
 
@@ -24,7 +21,6 @@
 
     let socket: SocketIO.Socket | null = null
 
-    let groupUuid: string | null = null
     let messages: ChatMessage[] = []
     let myUuid: User["uuid"] | null = null
     let msg: string = ""
@@ -34,45 +30,68 @@
     query(groupChat)
     query(groupChatMessages)
 
+    $: if ($groupUuid && $groupUuid.length) {
+        $groupChat.variables!.groupUuid = groupUuid
+        $groupChat.context!.pause = false
+        $groupChatMessages.variables!.groupUuid = groupUuid
+        $groupChatMessages.context = {
+            requestPolicy: "network-only",
+            pause: false,
+        }
+        let pause = false
+        updateInterval =
+            updateInterval ||
+            setInterval(() => {
+                pause = !pause
+                $groupChat.context = {
+                    requestPolicy: "network-only",
+                    pause,
+                }
+            }, 15000)
+    }
+
     $: chatUsers =
         !$groupChat.fetching && !$groupChat.error
-            ? $groupChat.data?.groupByUuid
-                  ?.usersByGroupUserGroupIdAndUserId?.nodes || []
+            ? $groupChat.data?.groupByUuid?.usersByGroupUserGroupIdAndUserId
+                  ?.nodes || []
             : []
 
     $: language =
         !$groupChat.fetching && !$groupChat.error
-            ? $groupChat.data?.groupByUuid
-                ?.language || null
+            ? $groupChat.data?.groupByUuid?.language || null
             : null
 
     $: languageSkillLevel =
         !$groupChat.fetching && !$groupChat.error
-            ? $groupChat.data?.groupByUuid
-                ?.languageSkillLevel || null
+            ? $groupChat.data?.groupByUuid?.languageSkillLevel || null
             : null
 
     $: groupName =
         !$groupChat.fetching && !$groupChat.error
-            ? $groupChat.data?.groupByUuid
-                ?.groupName || null
+            ? $groupChat.data?.groupByUuid?.groupName || null
             : null
 
     $: if (!$groupChat.fetching && !$groupChat.error) {
-        const recvMessages = $groupChatMessages.data?.groupByUuid
-                ?.messagesByRecipientGroupId?.nodes.filter(Boolean) || []
+        const recvMessages =
+            $groupChatMessages.data?.groupByUuid?.messagesByRecipientGroupId?.nodes.filter(
+                Boolean
+            ) || []
         if (recvMessages.length) {
             $groupChatMessages.context = {
                 pause: true,
             }
-            const existingUuids = messages.map(({uuid}) => uuid);
-            const messageIsNew = ({uuid}: any) => !existingUuids.includes(uuid);
-            messages = [...recvMessages.filter(messageIsNew).map(message => ({
-                text: message!.body,
-                time: message!.createdAt,
-                uuid: message!.uuid,
-                userUuid: message!.sender?.uuid || null,
-            })), ...messages]
+            const existingUuids = messages.map(({ uuid }) => uuid)
+            const messageIsNew = ({ uuid }: any) =>
+                !existingUuids.includes(uuid)
+            messages = [
+                ...recvMessages.filter(messageIsNew).map((message) => ({
+                    text: message!.body,
+                    time: message!.createdAt,
+                    uuid: message!.uuid,
+                    userUuid: message!.sender?.uuid || null,
+                })),
+                ...messages,
+            ]
             if (typeof window !== "undefined") {
                 getChatMessageContainers().forEach((container) =>
                     setTimeout(() => scrollToBottom(container, true), 150)
@@ -89,7 +108,7 @@
 
         // Join chatroom
         socket.emit("joinRoom", {
-            groupUuid,
+            groupUuid: $groupUuid,
         })
 
         // Welcome from server
@@ -110,26 +129,7 @@
 
     // TODO: Read user data from database.
     onMount(() => {
-        groupUuid = new URL(window.location.href).searchParams.get(
-            "group"
-        )
-        if (groupUuid && groupUuid.length) {
-            $groupChat.variables!.groupUuid = groupUuid
-            $groupChat.context!.pause = false
-            $groupChatMessages.variables!.groupUuid = groupUuid
-            $groupChatMessages.context = {
-                requestPolicy: "network-only",
-                pause: false,
-            }
-            let pause = false
-            updateInterval = setInterval(() => {
-                pause = !pause
-                $groupChat.context = {
-                    requestPolicy: "network-only",
-                    pause,
-                }
-            }, 15000)
-        }
+        $groupUuid = new URL(window.location.href).searchParams.get("group")
 
         socket = io()
         if (!socket) {
@@ -266,12 +266,15 @@
         <section>
             <header>
                 {#if !$groupChat.fetching && $groupChat.data}
-                <span class="text-xl py-2">{groupName || ""}</span>
-                <div
-                    class="inline"
-                    style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
-                />
-                <span>{language?.englishName || ""} {languageSkillLevel?.name || ""}</span>
+                    <span class="text-xl py-2">{groupName || ""}</span>
+                    <div
+                        class="inline"
+                        style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
+                    />
+                    <span
+                        >{language?.englishName || ""}
+                        {languageSkillLevel?.name || ""}</span
+                    >
                 {:else if $groupChat.error}
                     error
                 {/if}

@@ -24,6 +24,7 @@ import {
 
 export const username = writable<string | null>(null)
 export const room = writable<string>("English")
+export const groupUuid = writable<string | null>(null)
 
 export const currentUser = operationStore<CurrentUserQuery>(CurrentUser)
 export const languageCodeMappings = operationStore<LanguageCodeMappingsQuery>(

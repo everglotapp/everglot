@@ -29,25 +29,33 @@
 
     query(languageCodeMappings)
 
+    $: currentUserObject = $currentUser.fetching
+        ? null
+        : $currentUser.data?.currentUser || null
+    $: userHasCompletedProfile =
+        currentUserObject &&
+        currentUserObject.username !== null &&
+        currentUserObject.userLanguages.totalCount
+
     let prefilled = false
-    $: if (!$currentUser.fetching && $currentUser.data?.currentUser) {
-        const user = $currentUser.data.currentUser
-        if (user.username !== null && user.userLanguages.totalCount) {
-            // Profile has already been completed, a second time won't work.
-            goto("/profile/success", { replaceState: true, noscroll: false })
-        } else if (!prefilled) {
-            // Pre-fill form.
-            prefilled = true
-            $username = user.username || $username
-            if (user.languageByLocale !== null) {
-                const { alpha2 } = user.languageByLocale
-                if (teach.hasOwnProperty(alpha2)) {
-                    teach = { ...teach, [alpha2]: true }
-                } else {
-                    let foundItem = items.find((item) => item.value === alpha2)
-                    if (foundItem) {
-                        teachOther = [...teachOther, foundItem]
-                    }
+
+    $: if (userHasCompletedProfile) {
+        // Profile has already been completed, a second time won't work.
+        goto("/profile/success", { replaceState: true, noscroll: false })
+    }
+
+    $: if (currentUserObject !== null && !prefilled) {
+        // Pre-fill form.
+        prefilled = true
+        $username = currentUserObject?.username || $username
+        if (currentUserObject?.languageByLocale) {
+            const { alpha2 } = currentUserObject.languageByLocale
+            if (teach.hasOwnProperty(alpha2)) {
+                teach = { ...teach, [alpha2]: true }
+            } else {
+                let foundItem = items.find((item) => item.value === alpha2)
+                if (foundItem) {
+                    teachOther = [...teachOther, foundItem]
                 }
             }
         }
@@ -65,12 +73,11 @@
     let errorMessage: string | null = null
 
     let languages: Pick<Language, "englishName" | "alpha2">[] = []
-    $: if (
-        $languageCodeMappings &&
-        !$languageCodeMappings.fetching &&
-        $languageCodeMappings.data
-    ) {
-        languages = $languageCodeMappings.data.languages.nodes
+    $: if (!$languageCodeMappings.fetching && $languageCodeMappings.data) {
+        languages =
+            $languageCodeMappings.data?.languages?.nodes
+                .filter(Boolean)
+                .map((node) => node!) || []
     }
     type LanguageItem = { value: string; label: string }
     let items: LanguageItem[] = []

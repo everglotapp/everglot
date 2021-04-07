@@ -4,7 +4,7 @@
 
     import { query } from "@urql/svelte"
 
-    import { allGroups } from "../stores"
+    import { allGroups, groupUuid } from "../stores"
     import type { Language, AllGroupsQuery } from "../types/generated/graphql"
 
     query(allGroups)
@@ -94,6 +94,7 @@
                     color="SECONDARY"
                     variant="FILLED"
                     href={`/chat?group=${group.uuid}`}
+                    on:click={($groupUuid = group.uuid)}
                     ><span class="name">{group.groupName}</span>
                     <span class="members-count"
                         >{group.groupUsers.totalCount} members</span
@@ -113,6 +114,9 @@
     }
 
     .languages button {
+        border-left-width: 3px;
+
+        @apply border-transparent;
         @apply flex;
         @apply w-full;
         @apply py-2;
@@ -125,8 +129,6 @@
     }
 
     .languages button[aria-selected="true"] {
-        border-left-width: 3px;
-
         @apply text-primary;
         @apply border-primary;
     }

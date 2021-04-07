@@ -8,14 +8,14 @@
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
     import type { BioUser } from "../users/Bio.svelte"
-    import type { Maybe, User } from "../../types/generated/graphql"
+    import type { User } from "../../types/generated/graphql"
 
-    export let users: Maybe<BioUser & Pick<User, "uuid">>[] = []
+    export let users: (BioUser & Pick<User, "uuid">)[] = []
     let showBioId: number | null = null
 </script>
 
 <ul class="users">
-    {#each users as user, i}
+    {#each users as user, i (user.uuid)}
         {#if user}
             {#if user.username === ""}
                 <li class="user" title="Everglot Bot" />

@@ -4662,6 +4662,23 @@ export type LanguageCodeMappingsQuery = (
   )> }
 );
 
+export type UserHasCompletedProfileQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserHasCompletedProfileQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'username'>
+    & { userLanguages: (
+      { __typename?: 'UserLanguagesConnection' }
+      & Pick<UserLanguagesConnection, 'totalCount'>
+    ) }
+  )> }
+);
+
 
 export const AllGroups = gql`
     query AllGroups {
@@ -4797,6 +4814,16 @@ export const LanguageCodeMappings = gql`
     nodes {
       alpha2
       englishName
+    }
+  }
+}
+    `;
+export const UserHasCompletedProfile = gql`
+    query UserHasCompletedProfile($id: Int!) {
+  user(id: $id) {
+    username
+    userLanguages {
+      totalCount
     }
   }
 }

@@ -70,3 +70,12 @@ declare module '*/languageCodeMappings.graphql' {
   export default defaultDocument;
 }
     
+
+declare module '*/userHasCompletedProfile.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserHasCompletedProfile: DocumentNode;
+
+  export default defaultDocument;
+}
+    

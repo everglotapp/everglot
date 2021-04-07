@@ -1,0 +1,10 @@
+query UserHasCompletedProfile($id: Int!) {
+  user(id: $id) {
+    username
+    userLanguages {
+      totalCount
+      __typename
+    }
+    __typename
+  }
+}

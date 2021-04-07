@@ -8,6 +8,9 @@ query AllGroups {
                 alpha2
                 englishName
             }
+            groupUsers {
+                totalCount
+            }
         }
     }
 }

@@ -4840,6 +4840,49 @@ export type UserLanguageInfoQuery = (
   )> }
 );
 
+export type UserProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserProfileQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'avatarUrl'>
+    & { userLanguages: (
+      { __typename?: 'UserLanguagesConnection' }
+      & Pick<UserLanguagesConnection, 'totalCount'>
+      & { nodes: Array<Maybe<(
+        { __typename?: 'UserLanguage' }
+        & Pick<UserLanguage, 'native'>
+        & { language?: Maybe<(
+          { __typename?: 'Language' }
+          & Pick<Language, 'englishName'>
+        )>, languageSkillLevel?: Maybe<(
+          { __typename?: 'LanguageSkillLevel' }
+          & Pick<LanguageSkillLevel, 'name'>
+        )> }
+      )>> }
+    ), groupUsers: (
+      { __typename?: 'GroupUsersConnection' }
+      & { nodes: Array<Maybe<(
+        { __typename?: 'GroupUser' }
+        & Pick<GroupUser, 'userType' | 'joinedOn'>
+        & { group?: Maybe<(
+          { __typename?: 'Group' }
+          & Pick<Group, 'groupName'>
+          & { language?: Maybe<(
+            { __typename?: 'Language' }
+            & Pick<Language, 'englishName'>
+          )>, languageSkillLevel?: Maybe<(
+            { __typename?: 'LanguageSkillLevel' }
+            & Pick<LanguageSkillLevel, 'name'>
+          )> }
+        )> }
+      )>> }
+    ) }
+  )> }
+);
+
 
 export const AllGroups = gql`
     query AllGroups {
@@ -5055,6 +5098,44 @@ export const UserLanguageInfo = gql`
         languageId
         languageSkillLevelId
         native
+      }
+    }
+  }
+}
+    `;
+export const UserProfile = gql`
+    query UserProfile {
+  currentUser {
+    bio
+    email
+    gender
+    username
+    avatarUrl
+    userLanguages {
+      totalCount
+      nodes {
+        language {
+          englishName
+        }
+        languageSkillLevel {
+          name
+        }
+        native
+      }
+    }
+    groupUsers {
+      nodes {
+        group {
+          groupName
+          language {
+            englishName
+          }
+          languageSkillLevel {
+            name
+          }
+        }
+        userType
+        joinedOn
       }
     }
   }

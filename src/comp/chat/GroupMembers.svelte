@@ -15,7 +15,19 @@
 
 <ul class="users">
     {#if $allGroupsStore.fetching}
-        <div />
+        <div class="bg-gray-lightest mx-auto h-8 mb-1" />
+        <div class="bg-gray-lightest mx-auto h-8 mb-1" />
+        <div class="bg-gray-lightest mx-auto h-8 mb-1" />
+        <div class="bg-gray-lightest mx-auto h-8 mb-1" />
+        <div class="bg-gray-lightest mx-auto h-8 mb-1" />
+    {:else if !$chatUsers.length}
+        <div class="text-center py-5 font-bold text-gray">
+            <p>So far nobody is here 😥</p>
+            <p>
+                Why don't you go ahead and join this group to get the ball
+                rolling? Somebody has to go first!
+            </p>
+        </div>
     {:else if $groupIsGlobal}
         <div class="mb-4">
             {#each $chatUsers as user, i (user.uuid)}

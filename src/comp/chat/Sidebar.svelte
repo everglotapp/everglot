@@ -1,16 +1,19 @@
 <script lang="ts">
     import GroupMembers from "./GroupMembers.svelte"
 
+    import SidebarHeadline from "../typography/SidebarHeadline.svelte"
+
     export let handleToggleSplit: () => void
     export let split = false
 </script>
 
 <div class="sidebar">
     <div class="users-container py-3 px-4 text-lg w-full mb-4">
-        <h3 class="px-4 text-gray-bitdark text-center mb-4">Members</h3>
+        <SidebarHeadline>Members</SidebarHeadline>
         <GroupMembers />
     </div>
     <div class="toggles py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4">
+        <SidebarHeadline>Controls</SidebarHeadline>
         <div class="toggle-row">
             <svg
                 width="35"

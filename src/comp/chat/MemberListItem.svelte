@@ -1,6 +1,8 @@
 <script lang="ts">
     import { scale } from "svelte/transition"
 
+    import type { Maybe } from "../../types/generated/graphql"
+
     import Bio from "../users/Bio.svelte"
     import Avatar from "../users/Avatar.svelte"
 
@@ -8,27 +10,28 @@
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
     export let id: string
-    export let user: any
+    export let avatarUrl: Maybe<string> | undefined
+    export let username: Maybe<string> | undefined
+    export let uuid: string | undefined
+
     export let showBio = false
-    export let handleClickAway: ((e: CustomEvent<any>) => any) | undefined
-    export let handleEscapeKey: ((e: CustomEvent<any>) => any) | undefined
+    export let handleClickAway: (e: CustomEvent<any>) => any
+    export let handleEscapeKey: (e: CustomEvent<any>) => any
 </script>
 
 <li
     {id}
     class="user cursor-pointer"
-    title={user.username || undefined}
-    aria-label={user.username}
+    title={username || undefined}
+    aria-label={username}
     on:click
+    in:scale={{ duration: 200 }}
+    style="transform-origin: center;"
 >
     <div class="avatar">
-        <Avatar
-            url={user.avatarUrl || ""}
-            username={user.username || ""}
-            size={32}
-        />
+        <Avatar url={avatarUrl || ""} username={username || ""} size={32} />
     </div>
-    <span class="username">{user.username}</span>
+    <span class="username">{username || ""}</span>
     {#if showBio}
         <ClickAwayListener elementId={id} on:clickaway={handleClickAway} />
         <EscapeKeyListener on:keydown={handleEscapeKey} />
@@ -47,7 +50,7 @@
                         delay: 0,
                     }}
                 >
-                    <Bio userUuid={user.uuid} />
+                    <Bio userUuid={uuid} />
                 </div>
             </div>
         </div>

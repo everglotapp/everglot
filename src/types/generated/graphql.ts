@@ -2777,6 +2777,7 @@ export type Mutation = {
   deleteUserByEmail?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
   deleteUserByUuid?: Maybe<DeleteUserPayload>;
+  joinGlobalGroup?: Maybe<JoinGlobalGroupPayload>;
   registerUserActivity?: Maybe<RegisterUserActivityPayload>;
 };
 
@@ -3090,6 +3091,12 @@ export type MutationDeleteUserByEmailArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByUuidArgs = {
   input: DeleteUserByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationJoinGlobalGroupArgs = {
+  input: JoinGlobalGroupInput;
 };
 
 
@@ -4460,6 +4467,41 @@ export type DeleteUserByUuidInput = {
   uuid: Scalars['UUID'];
 };
 
+/** The output of our `joinGlobalGroup` mutation. */
+export type JoinGlobalGroupPayload = {
+  __typename?: 'JoinGlobalGroupPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  groupUser?: Maybe<GroupUser>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `GroupUser`. */
+  user?: Maybe<User>;
+  /** Reads a single `Group` that is related to this `GroupUser`. */
+  group?: Maybe<Group>;
+  /** An edge for our `GroupUser`. May be used by Relay 1. */
+  groupUserEdge?: Maybe<GroupUsersEdge>;
+};
+
+
+/** The output of our `joinGlobalGroup` mutation. */
+export type JoinGlobalGroupPayloadGroupUserEdgeArgs = {
+  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+};
+
+/** All input for the `joinGlobalGroup` mutation. */
+export type JoinGlobalGroupInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  groupUuid: Scalars['UUID'];
+};
+
 /** The output of our `registerUserActivity` mutation. */
 export type RegisterUserActivityPayload = {
   __typename?: 'RegisterUserActivityPayload';
@@ -4709,6 +4751,28 @@ export type GroupIdByUuidQuery = (
   & { groupByUuid?: Maybe<(
     { __typename?: 'Group' }
     & Pick<Group, 'id'>
+  )> }
+);
+
+export type JoinGlobalGroupMutationVariables = Exact<{
+  groupUuid: Scalars['UUID'];
+}>;
+
+
+export type JoinGlobalGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { joinGlobalGroup?: Maybe<(
+    { __typename?: 'JoinGlobalGroupPayload' }
+    & { groupUser?: Maybe<(
+      { __typename?: 'GroupUser' }
+      & { group?: Maybe<(
+        { __typename?: 'Group' }
+        & Pick<Group, 'uuid'>
+      )>, user?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'uuid'>
+      )> }
+    )> }
   )> }
 );
 
@@ -4981,6 +5045,20 @@ export const GroupIdByUuid = gql`
     query GroupIdByUuid($uuid: UUID!) {
   groupByUuid(uuid: $uuid) {
     id
+  }
+}
+    `;
+export const JoinGlobalGroup = gql`
+    mutation JoinGlobalGroup($groupUuid: UUID!) {
+  joinGlobalGroup(input: {groupUuid: $groupUuid}) {
+    groupUser {
+      group {
+        uuid
+      }
+      user {
+        uuid
+      }
+    }
   }
 }
     `;

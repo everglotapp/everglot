@@ -6,19 +6,19 @@ import { AllGroupsQuery, AllGroups, Language } from "../types/generated/graphql"
 export const allGroupsStore = operationStore<AllGroupsQuery>(AllGroups)
 
 export const privateGroups = derived(allGroupsStore, ($allGroupsStore) =>
-    $allGroupsStore.fetching || $allGroupsStore.error
-        ? []
-        : $allGroupsStore.data?.groups?.nodes
+    $allGroupsStore.data && !$allGroupsStore.error
+        ? $allGroupsStore.data?.groups?.nodes
               .filter((group) => group && groupIsPrivate(group))
               .map((group) => group!) || []
+        : []
 )
 
 export const globalGroups = derived(allGroupsStore, ($allGroupsStore) =>
-    $allGroupsStore.fetching || $allGroupsStore.error
-        ? []
-        : $allGroupsStore.data?.groups?.nodes
+    $allGroupsStore.data && !$allGroupsStore.error
+        ? $allGroupsStore.data?.groups?.nodes
               .filter((group) => group && groupIsGlobal(group))
               .map((group) => group!) || []
+        : []
 )
 
 export type GroupNode = NonNullable<

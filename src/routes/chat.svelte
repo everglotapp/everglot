@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte"
-    import { scale, slide, blur } from "svelte/transition"
-    import { query } from "@urql/svelte"
+    import { scale, fly, blur } from "svelte/transition"
+    import { mutation, query } from "@urql/svelte"
 
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
@@ -10,6 +10,7 @@
     import Message from "../comp/chat/Message.svelte"
     import Sidebar from "../comp/chat/Sidebar.svelte"
 
+    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
 
     import type { ChatUser } from "../server/chat/users"
@@ -22,8 +23,15 @@
         language,
         languageSkillLevel,
         groupName,
+        currentUserIsGroupMember,
+        currentGroupIsGlobal,
     } from "../stores/chat"
-    import type { Group, User } from "../types/generated/graphql"
+    import type {
+        Group,
+        User,
+        JoinGlobalGroupMutation,
+    } from "../types/generated/graphql"
+    import { JoinGlobalGroup } from "../types/generated/graphql"
 
     import { ChevronsRightIcon } from "svelte-feather-icons"
 
@@ -35,6 +43,10 @@
 
     query(groupChatStore)
     query(groupChatMessagesStore)
+
+    const joinGlobalGroup = mutation<JoinGlobalGroupMutation>({
+        query: JoinGlobalGroup,
+    })
 
     $: if ($groupUuid && joinedRoom !== $groupUuid) {
         // console.log("Switching room", {
@@ -100,13 +112,13 @@
 
     $: if (
         !$groupChatMessagesStore.fetching &&
+        $groupChatMessagesStore.data &&
         !$groupChatMessagesStore.error
     ) {
-        const recvMessages =
-            $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId?.nodes.filter(
-                Boolean
-            ) || []
-        if (recvMessages.length) {
+        const { groupByUuid } = $groupChatMessagesStore.data
+        const receivedMessages =
+            groupByUuid?.messagesByRecipientGroupId?.nodes.filter(Boolean) || []
+        if (receivedMessages.length) {
             $groupChatMessagesStore.context = {
                 pause: true,
             }
@@ -114,7 +126,7 @@
             const messageIsNew = ({ uuid }: any) =>
                 !existingUuids.includes(uuid)
             messages = [
-                ...recvMessages.filter(messageIsNew).map((message) => ({
+                ...receivedMessages.filter(messageIsNew).map((message) => ({
                     text: message!.body,
                     time: message!.createdAt,
                     uuid: message!.uuid,
@@ -327,8 +339,9 @@
                     {#if split}
                         <div
                             class="view view-left hidden"
-                            in:scale={{ duration: 200, delay: 0 }}
-                            out:slide={{ duration: 200 }}
+                            in:fly={{ duration: 200, x: -600 }}
+                            out:fly={{ duration: 200, x: -600 }}
+                            style="transform-origin: center left;"
                         >
                             {#key $groupUuid}
                                 <div
@@ -374,24 +387,50 @@
                                         on:submit|preventDefault={handleSendMessage}
                                         class="submit-form justify-end items-center"
                                     >
-                                        <input
-                                            id="send-msg-input"
-                                            type="text"
-                                            placeholder="Enter text message …"
-                                            required
-                                            autocomplete="off"
-                                            class="border-none shadow-md px-4 py-4 w-full rounded-md"
-                                            bind:value={msg}
-                                        />
-                                        <ButtonSmall
-                                            className="ml-4 px-6"
-                                            tag="button"
-                                            on:click={handleSendMessage}
-                                            >Send<ChevronsRightIcon
-                                                size="24"
-                                                class="ml-1"
-                                            /></ButtonSmall
-                                        >
+                                        {#if $groupChatStore.data && $currentGroupIsGlobal && !$currentUserIsGroupMember}
+                                            <ButtonLarge
+                                                className="ml-4 px-6 w-full justify-center"
+                                                tag="button"
+                                                on:click={async () => {
+                                                    const res = await joinGlobalGroup(
+                                                        {
+                                                            groupUuid: $groupUuid,
+                                                        }
+                                                    )
+                                                    if (res.data) {
+                                                        fetchGroupMetadata()
+                                                    } else {
+                                                        // TODO: Show error feedback
+                                                    }
+                                                }}>Join group</ButtonLarge
+                                            >
+                                        {:else if joinedRoom}
+                                            <input
+                                                id="send-msg-input"
+                                                type="text"
+                                                placeholder="Enter text message …"
+                                                required
+                                                autocomplete="off"
+                                                class="border-none shadow-md px-4 py-4 w-full rounded-md"
+                                                bind:value={msg}
+                                                in:scale={{ duration: 200 }}
+                                            />
+                                            <ButtonSmall
+                                                className="ml-4 px-6"
+                                                tag="button"
+                                                on:click={handleSendMessage}
+                                                >Send<ChevronsRightIcon
+                                                    size="24"
+                                                    class="ml-1"
+                                                /></ButtonSmall
+                                            >
+                                        {:else}
+                                            <div
+                                                class="w-full h-full font-bold text-center text-lg text-gray-bitdark"
+                                            >
+                                                Connecting …
+                                            </div>
+                                        {/if}
                                     </form>
                                 </div>
                             </div>
@@ -417,6 +456,7 @@
         @apply h-full;
         @apply flex;
         @apply flex-col;
+        @apply overflow-hidden;
     }
 
     section {

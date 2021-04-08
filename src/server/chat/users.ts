@@ -9,6 +9,7 @@ export type ChatUser = {
     socketId: string
     user: Pick<User, "id" | "username" | "uuid" | "avatarUrl">
     groupUuid: Group["uuid"]
+    joinedAt: Date
 }
 
 const users: ChatUser[] = []
@@ -19,7 +20,7 @@ export function userJoin(
     user: Pick<User, "id" | "username" | "uuid" | "avatarUrl">,
     groupUuid: Group["uuid"]
 ) {
-    const chatUser = { socketId, user, groupUuid }
+    const chatUser = { socketId, user, groupUuid, joinedAt: new Date() }
 
     users.push(chatUser)
     socketHistories[socketId] ||= { greeted: false }

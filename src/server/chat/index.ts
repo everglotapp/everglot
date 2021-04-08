@@ -81,6 +81,7 @@ export function start(server: Server, pool: Pool) {
             }
 
             socket.emit("welcome", {
+                groupUuid,
                 user: {
                     uuid: chatUser.user.uuid,
                 },
@@ -95,12 +96,6 @@ export function start(server: Server, pool: Pool) {
                         `${chatUser.user.username} has joined the chat`
                     )
                 )
-
-            // Send users and room info
-            io.to(chatUser.groupUuid).emit("roomUsers", {
-                room: chatUser.groupUuid,
-                users: getGroupChatUsers(chatUser.groupUuid),
-            })
 
             // TODO: Get language from group.
             if (["English", "German"].includes(chatUser.groupUuid)) {
@@ -225,12 +220,6 @@ export function start(server: Server, pool: Pool) {
                 `${chatUser.user.username} has left the chat`,
                 chatUser.groupUuid
             )
-
-            // Send users and room info
-            io.to(chatUser.groupUuid).emit("roomUsers", {
-                room: chatUser.groupUuid,
-                users: getGroupChatUsers(chatUser.groupUuid),
-            })
         })
 
         function sendBotMessage(

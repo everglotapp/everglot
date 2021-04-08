@@ -129,13 +129,17 @@
                             <EscapeKeyListener
                                 on:keydown={() => (showGroupsDropdown = false)}
                             />
-                            <div class="relative" aria-label={`Groups`}>
+                            <div
+                                class="relative"
+                                aria-label={`Groups`}
+                                style="top: 100%; height: 0; width: 0;"
+                            >
                                 <div
                                     class="dropdown groups-dropdown"
-                                    style="top: calc(100% + 2px); height: 0; width: 0;"
+                                    style="top: 2px;"
                                 >
                                     <div
-                                        style="z-index: 1; transform-origin: top left;"
+                                        class="dropdown-inner groups-dropdown-inner"
                                         in:scale={{ duration: 200, delay: 0 }}
                                         out:scale={{ duration: 200, delay: 0 }}
                                     >
@@ -238,14 +242,14 @@
                         <div
                             class="relative"
                             aria-label={`Settings`}
-                            style="height: 0; width: 0;"
+                            style="top: 100%; height: 0; width: 0;"
                         >
                             <div
                                 class="dropdown settings-dropdown"
-                                style="top: calc(100% + 2px);"
+                                style="top: 2px;"
                             >
                                 <div
-                                    style="z-index: 1; transform-origin: top left;"
+                                    class="dropdown-inner settings-dropdown-inner"
                                     in:scale={{ duration: 200, delay: 0 }}
                                     out:scale={{ duration: 200, delay: 0 }}
                                 >
@@ -404,6 +408,26 @@
 
         @screen md {
             right: unset;
+        }
+    }
+
+    .dropdown-inner {
+        z-index: 1;
+    }
+
+    .groups-dropdown-inner {
+        transform-origin: top right;
+
+        @screen md {
+            transform-origin: top left;
+        }
+    }
+
+    .settings-dropdown-inner {
+        transform-origin: top right;
+
+        @screen md {
+            transform-origin: top left;
         }
     }
 

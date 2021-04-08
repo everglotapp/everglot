@@ -77,6 +77,8 @@
 
 <style>
     .message {
+        transform-origin: top center;
+
         @apply mb-3;
         @apply break-words;
         @apply bg-primary-lightest;

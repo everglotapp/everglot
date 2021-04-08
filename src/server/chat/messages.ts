@@ -1,12 +1,9 @@
-import moment from "moment"
-
 import { v4 as uuidv4 } from "uuid"
 
 import { performQuery } from "../gql"
 
 import type {
     User,
-    Message,
     CreateMessageMutation,
     CreateMessageMutationVariables,
 } from "../../types/generated/graphql"
@@ -26,7 +23,7 @@ export function formatMessage(
         uuid: uuidv4(),
         userUuid,
         text,
-        time: moment().format("h:mm a"),
+        time: new Date().toISOString(),
     }
 }
 

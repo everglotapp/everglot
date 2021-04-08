@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onDestroy } from "svelte"
+    import { onMount, onDestroy } from "svelte"
     import { scale, slide, blur } from "svelte/transition"
     import { query } from "@urql/svelte"
     import { validate as uuidValidate } from "uuid"
@@ -17,7 +17,7 @@
     import type { ChatMessage } from "../server/chat/messages"
 
     import { groupUuid, groupChat, groupChatMessages } from "../stores"
-    import type { User, Group } from "../types/generated/graphql"
+    import type { Group, User } from "../types/generated/graphql"
 
     import { ChevronsRightIcon } from "svelte-feather-icons"
 
@@ -25,33 +25,76 @@
     let myUuid: User["uuid"] | null = null
     let msg = ""
 
-    let updateInterval: number | null = null
+    let fetchGroupMetadataInterval: number | null = null
 
     query(groupChat)
     query(groupChatMessages)
 
-    $: if ($groupUuid && $groupUuid.length && uuidValidate($groupUuid)) {
+    $: if (
+        $groupUuid &&
+        $groupUuid.length &&
+        uuidValidate($groupUuid) &&
+        joinedRoom !== $groupUuid
+    ) {
+        // console.log("Switching room", {
+        //     oldRoom: joinedRoom,
+        //     newRoom: $groupUuid,
+        //     oldMessagesCount: messages.length,
+        // })
+        // Remove all messages from screen
         messages = []
 
-        joinChat($groupUuid)
+        // Fetch group messages just once
+        $groupChatMessages.variables = { groupUuid: $groupUuid }
+        fetchGroupChatMessages()
 
-        $groupChat.variables!.groupUuid = $groupUuid
-        $groupChat.context!.pause = false
-        $groupChatMessages.variables!.groupUuid = $groupUuid
+        // "Subscribe" to group metadata (name, language, members)
+        $groupChat.variables = { groupUuid: $groupUuid }
+        fetchGroupMetadata()
+        if (fetchGroupMetadataInterval === null) {
+            fetchGroupMetadataInterval = setInterval(fetchGroupMetadata, 30000)
+        }
+
+        leaveRoom()
+        joinRoom($groupUuid)
+    }
+
+    function fetchGroupMetadata() {
+        if (!$groupChat.variables?.groupUuid) {
+            // console.log("Not fetching group metadata", $groupChat.variables)
+            return
+        }
+        // console.log("Fetching group metadata", $groupChat.variables)
+        $groupChat.context = {
+            requestPolicy: "network-only",
+            pause: true,
+        }
+        $groupChat.context = {
+            requestPolicy: "network-only",
+            pause: false,
+        }
+    }
+
+    function fetchGroupChatMessages() {
+        if (!$groupChatMessages.variables?.groupUuid) {
+            // console.log(
+            //     "Not fetching group chat messages",
+            //     $groupChatMessages.variables
+            // )
+            return
+        }
+        // console.log(
+        //     "Fetching group chat messages",
+        //     $groupChatMessages.variables
+        // )
+        $groupChatMessages.context = {
+            requestPolicy: "network-only",
+            pause: true,
+        }
         $groupChatMessages.context = {
             requestPolicy: "network-only",
             pause: false,
         }
-        let pause = false
-        updateInterval =
-            updateInterval ||
-            setInterval(() => {
-                pause = !pause
-                $groupChat.context = {
-                    requestPolicy: "network-only",
-                    pause,
-                }
-            }, 15000)
     }
 
     $: chatUsers =
@@ -75,7 +118,7 @@
             ? $groupChat.data?.groupByUuid?.groupName || null
             : null
 
-    $: if (!$groupChat.fetching && !$groupChat.error) {
+    $: if (!$groupChatMessages.fetching && !$groupChatMessages.error) {
         const recvMessages =
             $groupChatMessages.data?.groupByUuid?.messagesByRecipientGroupId?.nodes.filter(
                 Boolean
@@ -104,19 +147,28 @@
         }
     }
 
+    onMount(() => {
+        connect()
+    })
+
     onDestroy(() => {
-        leaveChat()
-        if (updateInterval) {
-            clearInterval(updateInterval)
-            updateInterval = null
+        leaveRoom()
+        if (socket) {
+            socket.disconnect()
+        }
+        if (fetchGroupMetadataInterval) {
+            clearInterval(fetchGroupMetadataInterval)
+            fetchGroupMetadataInterval = null
         }
     })
 
     let socket: SocketIO.Socket | null = null
-    function joinChat(groupUuid: string) {
+    let joinedRoom: string | null = null
+    function connect() {
         if (socket || typeof window === "undefined") {
             return
         }
+        // console.log("Connecting to chat")
         socket = io()
         socket.emit("joinRoom", {
             groupUuid,
@@ -124,27 +176,42 @@
         if (socket) {
             // Welcome from server
             socket.on("welcome", onWelcome)
-            // Get room and users
-            socket.on("roomUsers", onRoomUsers)
             // Message from server
             socket.on("message", onMessage)
         }
     }
+    function joinRoom(room: string) {
+        if (!socket) {
+            return
+        }
+        if (joinedRoom === room) {
+            // console.log("Not joining room, already joined", { room })
+            return
+        }
+        // console.log("Joining room", { room })
+        socket.emit("joinRoom", {
+            groupUuid: room,
+        })
+    }
 
-    function leaveChat(): boolean {
+    function leaveRoom(): boolean {
         if (!socket) {
             return false
         }
+        if (joinedRoom === null) {
+            return false
+        }
+        // console.log("Leaving room", { joinedRoom })
         socket.emit("leaveRoom")
         return true
     }
 
     function sendMessage(msg: string): boolean {
         if (!socket) {
-            console.log("Not sending", msg, "no socket")
+            // console.log("Not sending", msg, "no socket")
             return false
         }
-        console.log("Sending", msg)
+        // console.log("Sending", msg)
         socket.emit("chatMessage", msg)
         return true
     }
@@ -193,13 +260,22 @@
 
     function onWelcome({
         user,
+        groupUuid,
     }: {
         user: Pick<ChatUser["user"], "uuid">
+        groupUuid: Group["uuid"]
     }): void {
+        joinedRoom = groupUuid
         myUuid = user.uuid
+        // console.log("Successfully joined chat", { joinedRoom, myUuid })
     }
 
-    function onSend(): void {
+    function handleSendMessage(): void {
+        const element = document.getElementById("send-msg-input")
+        if (element) {
+            element.focus()
+        }
+
         const trimmedMsg = msg.trim()
 
         if (!trimmedMsg) {
@@ -210,23 +286,6 @@
             msg = ""
         }
         sendMessage(trimmedMsg)
-    }
-
-    /**
-     * Called after joining a chat when the server sends the room's users.
-     */
-    function onRoomUsers({
-        room: recvRoom,
-    }: {
-        room: Group["uuid"]
-        users: Pick<ChatUser["user"], "username" | "uuid" | "avatarUrl">[]
-    }): void {
-        if (recvRoom !== $groupUuid) {
-            return
-        }
-        getChatMessageContainers().forEach((container) =>
-            scrollToBottom(container, true)
-        )
     }
 
     function onMessage(message: ChatMessage): void {
@@ -313,7 +372,7 @@
                         {#key $groupUuid}
                             <div
                                 class="view-inner view-right-inner"
-                                transition:blur|local={{ duration: 800 }}
+                                transition:blur|local={{ duration: 400 }}
                             >
                                 <div class="messages">
                                     {#each messages as message (message.uuid)}
@@ -334,11 +393,11 @@
                                     class="submit-form-container rounded-bl-md rounded-br-md"
                                 >
                                     <form
-                                        on:submit|preventDefault={onSend}
+                                        on:submit|preventDefault={handleSendMessage}
                                         class="submit-form justify-end items-center"
                                     >
                                         <input
-                                            id="msg"
+                                            id="send-msg-input"
                                             type="text"
                                             placeholder="Enter text message …"
                                             required
@@ -349,7 +408,7 @@
                                         <ButtonSmall
                                             className="ml-4 px-6"
                                             tag="button"
-                                            on:click={onSend}
+                                            on:click={handleSendMessage}
                                             >Send<ChevronsRightIcon
                                                 size="24"
                                                 class="ml-1"

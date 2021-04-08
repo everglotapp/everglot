@@ -40,15 +40,15 @@
                     <EscapeKeyListener on:keydown={() => (showBioId = null)} />
                     <div
                         class="relative flex-shrink self-start"
-                        in:scale={{ duration: 200, delay: 0 }}
-                        out:scale={{ duration: 200, delay: 0 }}
                         aria-label={`User Bio`}
                         style="height: 0; width: 0;"
                     >
                         <div class="absolute" style="left: -42px;">
                             <div
                                 class="fixed bg-white shadow-lg rounded-lg"
-                                style="z-index: 1; min-width: 240px;"
+                                style="z-index: 1; min-width: 240px; transform-origin: top left;"
+                                in:scale|local={{ duration: 200, delay: 0 }}
+                                out:scale|local={{ duration: 200, delay: 0 }}
                             >
                                 <Bio {user} />
                             </div>

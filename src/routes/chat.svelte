@@ -291,7 +291,7 @@
                             {#key $groupUuid}
                                 <div
                                     class="view-inner view-left-inner px-3"
-                                    transition:blur={{ duration: 300 }}
+                                    transition:blur|local={{ duration: 300 }}
                                 >
                                     <div
                                         class="flex flex-row bg-gray-light max-h-12 px-2 items-center"
@@ -313,7 +313,7 @@
                         {#key $groupUuid}
                             <div
                                 class="view-inner view-right-inner"
-                                transition:blur={{ duration: 800 }}
+                                transition:blur|local={{ duration: 800 }}
                             >
                                 <div class="messages">
                                     {#each messages as message (message.uuid)}

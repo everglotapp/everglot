@@ -129,25 +129,26 @@
                             <EscapeKeyListener
                                 on:keydown={() => (showGroupsDropdown = false)}
                             />
-                            <div
-                                class="relative"
-                                in:scale={{ duration: 200, delay: 0 }}
-                                out:scale={{ duration: 200, delay: 0 }}
-                                aria-label={`Groups`}
-                            >
+                            <div class="relative" aria-label={`Groups`}>
                                 <div
                                     class="dropdown groups-dropdown"
-                                    style="top: calc(100% + 2px);"
+                                    style="top: calc(100% + 2px); height: 0; width: 0;"
                                 >
-                                    <div style="z-index: 1;">
+                                    <div
+                                        style="z-index: 1; transform-origin: top left;"
+                                        in:scale={{ duration: 200, delay: 0 }}
+                                        out:scale={{ duration: 200, delay: 0 }}
+                                    >
                                         {#if $allGroups.error}
                                             error
                                         {:else}
                                             {#each groups as group (group.uuid)}
                                                 <div
-                                                    aria-selected={group.uuid ===
+                                                    aria-current={group.uuid ===
                                                         $groupUuid &&
-                                                        segment === "chat"}
+                                                    segment === "chat"
+                                                        ? "page"
+                                                        : undefined}
                                                     class="group"
                                                 >
                                                     <ButtonSmall
@@ -236,15 +237,18 @@
                         />
                         <div
                             class="relative"
-                            in:scale={{ duration: 200, delay: 0 }}
-                            out:scale={{ duration: 200, delay: 0 }}
                             aria-label={`Settings`}
+                            style="height: 0; width: 0;"
                         >
                             <div
                                 class="dropdown settings-dropdown"
                                 style="top: calc(100% + 2px);"
                             >
-                                <div style="z-index: 1;">
+                                <div
+                                    style="z-index: 1; transform-origin: top left;"
+                                    in:scale={{ duration: 200, delay: 0 }}
+                                    out:scale={{ duration: 200, delay: 0 }}
+                                >
                                     <div class="my-auto">
                                         <ButtonSmall
                                             variant="TEXT"
@@ -409,7 +413,7 @@
         @apply font-normal;
     }
 
-    .group[aria-selected="true"] {
+    .group[aria-current] {
         @apply font-bold;
         @apply text-primary;
         @apply bg-primary-lightest;

@@ -341,7 +341,7 @@
     button[aria-current]::after {
         position: absolute;
         content: "";
-        height: 5px;
+        height: 3px;
         border-top-left-radius: 200px;
         border-top-right-radius: 200px;
         display: block;
@@ -354,6 +354,13 @@
         @screen md {
             left: 1.5rem;
             right: 1.5rem;
+            bottom: unset;
+            top: 0;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-bottom-left-radius: 200px;
+            border-bottom-right-radius: 200px;
+            height: 3px;
         }
     }
 

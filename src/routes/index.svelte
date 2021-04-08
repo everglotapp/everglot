@@ -16,17 +16,19 @@
         }
     }
 
+    $: if ($userHasCompletedProfile) {
+        clearRedirectTimeout()
+        goto("/global", { replaceState: true, noscroll: false })
+    }
+
     onMount(() => {
         if ($currentUserStore.fetching) {
             if (redirectTimeout === null) {
                 redirectTimeout = window.setTimeout(() => {
-                    goto("/profile", { replaceState: true, noscroll: false })
+                    goto("/signup", { replaceState: true, noscroll: false })
                     clearRedirectTimeout()
                 }, 800)
             }
-        } else if ($userHasCompletedProfile) {
-            clearRedirectTimeout()
-            goto("/global", { replaceState: true, noscroll: false })
         }
     })
 
@@ -35,4 +37,4 @@
     })
 </script>
 
-<div class="mx-auto">…</div>
+<div />

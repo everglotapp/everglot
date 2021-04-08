@@ -48,10 +48,10 @@
             return
         }
         if (userHasCompletedProfile) {
-            goto("/profile/success", { replaceState: false })
+            goto("/signup/success", { replaceState: false })
             return
         }
-        goto("/profile", { replaceState: false })
+        goto("/signup", { replaceState: false })
     }
 </script>
 
@@ -237,17 +237,52 @@
                                     in:scale={{ duration: 200, delay: 0 }}
                                     out:scale={{ duration: 200, delay: 0 }}
                                 >
-                                    <div class="my-auto">
-                                        <ButtonSmall
-                                            variant="TEXT"
-                                            color="SECONDARY"
-                                            tag="button"
-                                            on:click={handleLogout}
-                                            ><span class="mr-1">Logout</span
-                                            ><LogOutIcon
-                                                size="24"
-                                            /></ButtonSmall
-                                        >
+                                    <div class="my-auto pt-2">
+                                        {#if $currentUser}
+                                            <span
+                                                class="px-4 pb-2 text-gray-bitdark font-bold"
+                                                >{$currentUser.username ||
+                                                    ""}</span
+                                            >
+                                            <hr class="mt-2" />
+                                        {/if}
+                                        <div>
+                                            <ButtonSmall
+                                                variant="TEXT"
+                                                color="SECONDARY"
+                                                tag="button"
+                                                className="w-full"
+                                                on:click={(event) =>
+                                                    event.preventDefault()}
+                                                ><span>Profile</span
+                                                ></ButtonSmall
+                                            >
+                                        </div>
+                                        <div>
+                                            <ButtonSmall
+                                                variant="TEXT"
+                                                color="SECONDARY"
+                                                tag="button"
+                                                className="w-full"
+                                                on:click={(event) =>
+                                                    event.preventDefault()}
+                                                ><span>Invite friends</span
+                                                ></ButtonSmall
+                                            >
+                                        </div>
+                                        <div>
+                                            <ButtonSmall
+                                                variant="TEXT"
+                                                color="SECONDARY"
+                                                tag="button"
+                                                className="w-full"
+                                                on:click={handleLogout}
+                                                ><span class="mr-1">Logout</span
+                                                ><LogOutIcon
+                                                    size="24"
+                                                /></ButtonSmall
+                                            >
+                                        </div>
                                     </div>
                                 </div>
                             </div>

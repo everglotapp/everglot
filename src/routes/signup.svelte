@@ -36,7 +36,7 @@
 
     $: if ($userHasCompletedProfile) {
         // Profile has already been completed, a second time won't work.
-        goto("/profile/success", { replaceState: true, noscroll: false })
+        goto("/signup/success", { replaceState: true, noscroll: false })
     }
 
     $: if ($currentUser !== null && !prefilled) {
@@ -178,7 +178,7 @@
             ...Object.keys(teach).filter((code) => teach[code]),
             ...teachOther.map((item) => item.value),
         ]
-        const response = await fetch("/profile", {
+        const response = await fetch("/signup", {
             method: "post",
             headers: {
                 Accept: "application/json",
@@ -211,7 +211,7 @@
                 ? "German"
                 : // : learnOther[0].label // FIXME: learnOther[0] can be undefined here … why?
                   "English"
-            goto("/profile/success")
+            goto("/signup/success")
         } else {
             errorMessage = res.message
         }

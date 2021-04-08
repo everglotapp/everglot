@@ -54,7 +54,7 @@
     {:else if $allGroupsStore.error}
         error
     {:else if !$globalGroups.length}
-        <RedirectOnce to={"/profile"} />
+        <RedirectOnce to={"/signup"} />
     {:else}
         <div class="sidebar">
             <div class="languages-container px-4 text-lg w-full mb-4">

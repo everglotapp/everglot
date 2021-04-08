@@ -36,14 +36,14 @@ export const groupChatMessagesStore = operationStore<
     { pause: true, requestPolicy: "network-only" }
 )
 
-export const groupIsGlobal = derived(
+export const currentGroupIsGlobal = derived(
     [groupUuid, globalGroups],
     ([$groupUuid, $globalGroups]) =>
         $globalGroups.some((group) => group.uuid === $groupUuid)
 )
 
 export const chatUsers = derived(groupChatStore, ($groupChatStore) =>
-    !$groupChatStore.fetching && !$groupChatStore.error
+    $groupChatStore.data && !$groupChatStore.error
         ? $groupChatStore.data?.groupByUuid?.usersByGroupUserGroupIdAndUserId?.nodes
               ?.filter(Boolean)
               .map((node) => node!) || []

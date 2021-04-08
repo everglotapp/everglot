@@ -18,7 +18,7 @@
         groupUuid,
     } from "../../stores"
     import { allGroupsStore, privateGroups } from "../../stores/groups"
-    import { groupIsGlobal } from "../../stores/chat"
+    import { currentGroupIsGlobal } from "../../stores/chat"
 
     query(currentUserStore)
     query(allGroupsStore)
@@ -77,7 +77,7 @@
                     {#if $userHasCompletedProfile}
                         <a
                             aria-current={segment === "global" ||
-                            (segment === "chat" && $groupIsGlobal)
+                            (segment === "chat" && $currentGroupIsGlobal)
                                 ? "page"
                                 : undefined}
                             href="/global"
@@ -168,7 +168,8 @@
                     {/if}
                     {#if $userHasCompletedProfile}
                         <button
-                            aria-current={segment === "chat" && !$groupIsGlobal
+                            aria-current={segment === "chat" &&
+                            !$currentGroupIsGlobal
                                 ? "page"
                                 : undefined}
                             id="groups-dropdown-clickaway"

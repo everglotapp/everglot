@@ -1,6 +1,6 @@
 <script lang="ts">
     import {
-        groupIsGlobal,
+        currentGroupIsGlobal,
         chatUsers,
         chatLearners,
         chatNativeSpeakers,
@@ -23,7 +23,7 @@
         <div class="bg-gray-lightest mx-auto h-8 mb-1" />
         <div class="bg-gray-lightest mx-auto h-8 mb-1" />
         <div class="bg-gray-lightest mx-auto h-8 mb-1" />
-    {:else if $groupIsGlobal && !$chatUsers.length}
+    {:else if $currentGroupIsGlobal && !$chatUsers.length}
         <div class="text-center py-5 font-bold text-base text-gray-bitdark">
             <p>So far nobody is here 😥</p>
             <p>
@@ -39,7 +39,7 @@
                 >
             </div>
         </div>
-    {:else if $groupIsGlobal}
+    {:else if $currentGroupIsGlobal}
         <div class="mb-4">
             {#each $chatUsers as user, i (user.uuid)}
                 {#if user}

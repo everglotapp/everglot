@@ -24,7 +24,7 @@
         languageSkillLevel,
         groupName,
         currentUserIsGroupMember,
-        groupIsGlobal,
+        currentGroupIsGlobal,
     } from "../stores/chat"
     import type { Group, User } from "../types/generated/graphql"
 
@@ -103,13 +103,13 @@
 
     $: if (
         !$groupChatMessagesStore.fetching &&
+        $groupChatMessagesStore.data &&
         !$groupChatMessagesStore.error
     ) {
-        const recvMessages =
-            $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId?.nodes.filter(
-                Boolean
-            ) || []
-        if (recvMessages.length) {
+        const { groupByUuid } = $groupChatMessagesStore.data
+        const receivedMessages =
+            groupByUuid?.messagesByRecipientGroupId?.nodes.filter(Boolean) || []
+        if (receivedMessages.length) {
             $groupChatMessagesStore.context = {
                 pause: true,
             }
@@ -117,7 +117,7 @@
             const messageIsNew = ({ uuid }: any) =>
                 !existingUuids.includes(uuid)
             messages = [
-                ...recvMessages.filter(messageIsNew).map((message) => ({
+                ...receivedMessages.filter(messageIsNew).map((message) => ({
                     text: message!.body,
                     time: message!.createdAt,
                     uuid: message!.uuid,
@@ -378,7 +378,7 @@
                                         on:submit|preventDefault={handleSendMessage}
                                         class="submit-form justify-end items-center"
                                     >
-                                        {#if $groupChatStore.data && $groupIsGlobal && !$currentUserIsGroupMember}
+                                        {#if $groupChatStore.data && $currentGroupIsGlobal && !$currentUserIsGroupMember}
                                             <ButtonLarge
                                                 className="ml-4 px-6 w-full justify-center"
                                                 tag="button"

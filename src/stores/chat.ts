@@ -2,6 +2,7 @@ import { derived } from "svelte/store"
 import { operationStore } from "@urql/svelte"
 
 import { groupUuid } from "./index"
+import { globalGroups } from "./groups"
 
 import {
     GroupChatQuery,
@@ -35,10 +36,17 @@ export const groupChatMessagesStore = operationStore<
     { pause: true, requestPolicy: "network-only" }
 )
 
+export const groupIsGlobal = derived(
+    [groupUuid, globalGroups],
+    ([$groupUuid, $globalGroups]) =>
+        $globalGroups.find((group) => group.uuid === $groupUuid)
+)
+
 export const chatUsers = derived(groupChatStore, ($groupChatStore) =>
     !$groupChatStore.fetching && !$groupChatStore.error
-        ? $groupChatStore.data?.groupByUuid?.usersByGroupUserGroupIdAndUserId
-              ?.nodes || []
+        ? $groupChatStore.data?.groupByUuid?.usersByGroupUserGroupIdAndUserId?.nodes
+              ?.filter(Boolean)
+              .map((node) => node!) || []
         : []
 )
 

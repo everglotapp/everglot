@@ -1,12 +1,18 @@
 <script lang="ts">
+    import { scale } from "svelte/transition"
+
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
 
     import { query } from "@urql/svelte"
 
     import { groupUuid } from "../stores"
-    import { allGroupsStore, globalGroups, groupIsForLanguage } from "../groups"
-    import type { GroupNode } from "../groups"
+    import {
+        allGroupsStore,
+        globalGroups,
+        groupIsForLanguage,
+    } from "../stores/groups"
+    import type { GroupNode } from "../stores/groups"
 
     query(allGroupsStore)
 
@@ -44,7 +50,7 @@
     class="container flex gap-x-4 flex-wrap justify-center md:justify-start py-16 w-full max-w-sm md:max-w-4xl"
 >
     {#if $allGroupsStore.fetching}
-        …
+        <div />
     {:else if $allGroupsStore.error}
         error
     {:else if !$globalGroups.length}
@@ -80,19 +86,27 @@
             class="groups text-xl font-light p-8 rounded-xl text-center justify-center shadow-sm"
             role="tabpanel"
         >
-            {#each groups[lang] as group (group.uuid)}
-                <ButtonLarge
-                    className="w-full justify-between"
-                    color="SECONDARY"
-                    variant="FILLED"
-                    href={`/chat?group=${group.uuid}`}
-                    on:click={() => ($groupUuid = group.uuid)}
-                    ><span class="name">{group.groupName}</span>
-                    <span class="members-count"
-                        >{group.groupUsers.totalCount} members</span
-                    ></ButtonLarge
+            {#key lang}
+                <div
+                    class="relative flex"
+                    in:scale|local={{ duration: 100, delay: 100 }}
+                    out:scale|local={{ duration: 100 }}
                 >
-            {/each}
+                    {#each groups[lang] as group (group.uuid)}
+                        <ButtonLarge
+                            className="w-full justify-between"
+                            color="SECONDARY"
+                            variant="FILLED"
+                            href={`/chat?group=${group.uuid}`}
+                            on:click={() => ($groupUuid = group.uuid)}
+                            ><span class="name">{group.groupName}</span>
+                            <span class="members-count"
+                                >{group.groupUsers.totalCount} members</span
+                            ></ButtonLarge
+                        >
+                    {/each}
+                </div>
+            {/key}
         </div>
     {/if}
 </div>

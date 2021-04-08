@@ -6,12 +6,6 @@ import {
     LanguageCodeMappings,
     CurrentUserQuery,
     LanguageCodeMappingsQuery,
-    Maybe,
-    User,
-    Group,
-    GroupUser,
-    Language,
-    LanguageSkillLevel,
 } from "../types/generated/graphql"
 
 export const username = writable<string | null>(null)

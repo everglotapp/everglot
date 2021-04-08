@@ -1,7 +1,7 @@
 <script lang="ts">
     import { scale } from "svelte/transition"
 
-    import { room } from "../../stores"
+    import { chatUsers } from "../../stores/chat"
 
     import Avatar from "../users/Avatar.svelte"
     import Bio from "../users/Bio.svelte"
@@ -9,10 +9,12 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
-    import type { BioUser } from "../users/Bio.svelte"
-    import type { Maybe, User } from "../../types/generated/graphql"
+    import type { User } from "../../types/generated/graphql"
 
-    export let user: Maybe<BioUser & Pick<User, "uuid">> = null
+    export let userUuid: User["uuid"] | null
+    $: user = userUuid
+        ? $chatUsers.find((u) => u?.uuid === userUuid) || null
+        : null
 
     export let uuid = ""
     export let time = ""
@@ -47,7 +49,7 @@
                             in:scale|local={{ duration: 200, delay: 0 }}
                             out:scale|local={{ duration: 200, delay: 0 }}
                         >
-                            <Bio {user} />
+                            <Bio {userUuid} />
                         </div>
                     </div>
                 </div>
@@ -59,7 +61,7 @@
             <span class="username">Everglot<br /> Bot</span>
         {/if}
         <div class="cursor-pointer">
-            {#if user !== null}
+            {#if user}
                 <Avatar
                     username={user.username || ""}
                     url={user.avatarUrl || ""}

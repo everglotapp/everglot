@@ -25,7 +25,7 @@ query GroupChat($groupUuid: UUID!) {
                     nodes {
                         userType
                         group {
-                            id
+                            uuid
                             language {
                                 englishName
                             }

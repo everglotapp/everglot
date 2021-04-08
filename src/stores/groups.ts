@@ -1,9 +1,10 @@
 import { derived } from "svelte/store"
 import { operationStore } from "@urql/svelte"
 
-import { AllGroupsQuery, AllGroups, Language } from "./types/generated/graphql"
+import { AllGroupsQuery, AllGroups, Language } from "../types/generated/graphql"
 
 export const allGroupsStore = operationStore<AllGroupsQuery>(AllGroups)
+
 export const privateGroups = derived(allGroupsStore, ($allGroupsStore) =>
     $allGroupsStore.fetching || $allGroupsStore.error
         ? []
@@ -11,6 +12,7 @@ export const privateGroups = derived(allGroupsStore, ($allGroupsStore) =>
               .filter((group) => group && groupIsPrivate(group))
               .map((group) => group!) || []
 )
+
 export const globalGroups = derived(allGroupsStore, ($allGroupsStore) =>
     $allGroupsStore.fetching || $allGroupsStore.error
         ? []
@@ -24,7 +26,7 @@ export type GroupNode = NonNullable<
 >
 
 export const groupIsPrivate = (group: GroupNode) => group.global === false
-export const groupIsGlobal = (group: GroupNode) => group.global === false
+export const groupIsGlobal = (group: GroupNode) => group.global === true
 export const groupIsForLanguage = (
     group: GroupNode,
     lang: Language["alpha2"]

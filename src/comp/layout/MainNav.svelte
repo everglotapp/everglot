@@ -17,7 +17,7 @@
         userHasCompletedProfile,
         groupUuid,
     } from "../../stores"
-    import { allGroupsStore, privateGroups } from "../../groups"
+    import { allGroupsStore, privateGroups } from "../../stores/groups"
 
     query(currentUserStore)
     query(allGroupsStore)

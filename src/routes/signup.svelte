@@ -19,7 +19,7 @@
         Gender,
         CefrLevel,
         MIN_USERNAME_LENGTH,
-    } from "../users/users"
+    } from "../users"
 
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"

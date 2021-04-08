@@ -16,6 +16,11 @@
         }
     }
 
+    $: if ($userHasCompletedProfile) {
+        clearRedirectTimeout()
+        goto("/global", { replaceState: true, noscroll: false })
+    }
+
     onMount(() => {
         if ($currentUserStore.fetching) {
             if (redirectTimeout === null) {
@@ -24,9 +29,6 @@
                     clearRedirectTimeout()
                 }, 800)
             }
-        } else if ($userHasCompletedProfile) {
-            clearRedirectTimeout()
-            goto("/global", { replaceState: true, noscroll: false })
         }
     })
 
@@ -35,4 +37,4 @@
     })
 </script>
 
-<div class="mx-auto">…</div>
+<div />

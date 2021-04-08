@@ -1,6 +1,8 @@
 <script lang="ts">
     import { scale } from "svelte/transition"
 
+    import type { Maybe } from "../../types/generated/graphql"
+
     import Bio from "../users/Bio.svelte"
     import Avatar from "../users/Avatar.svelte"
 
@@ -8,8 +10,8 @@
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
     export let id: string
-    export let avatarUrl: string | undefined
-    export let username: string | undefined
+    export let avatarUrl: Maybe<string> | undefined
+    export let username: Maybe<string> | undefined
     export let uuid: string | undefined
 
     export let showBio = false
@@ -20,9 +22,11 @@
 <li
     {id}
     class="user cursor-pointer"
-    title={username}
+    title={username || undefined}
     aria-label={username}
     on:click
+    in:scale={{ duration: 200 }}
+    style="transform-origin: center;"
 >
     <div class="avatar">
         <Avatar url={avatarUrl || ""} username={username || ""} size={32} />

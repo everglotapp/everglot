@@ -15,7 +15,9 @@
 </script>
 
 <ul class="users">
-    {#if $allGroupsStore.fetching}
+    {#if $allGroupsStore.error}
+        <i>error</i>
+    {:else if !$allGroupsStore.data}
         <div class="bg-gray-lightest mx-auto h-8 mb-1" />
         <div class="bg-gray-lightest mx-auto h-8 mb-1" />
         <div class="bg-gray-lightest mx-auto h-8 mb-1" />

@@ -39,7 +39,7 @@ export const groupChatMessagesStore = operationStore<
 export const groupIsGlobal = derived(
     [groupUuid, globalGroups],
     ([$groupUuid, $globalGroups]) =>
-        $globalGroups.find((group) => group.uuid === $groupUuid)
+        $globalGroups.some((group) => group.uuid === $groupUuid)
 )
 
 export const chatUsers = derived(groupChatStore, ($groupChatStore) =>

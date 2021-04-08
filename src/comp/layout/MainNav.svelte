@@ -18,6 +18,7 @@
         groupUuid,
     } from "../../stores"
     import { allGroupsStore, privateGroups } from "../../stores/groups"
+    import { groupIsGlobal } from "../../stores/chat"
 
     query(currentUserStore)
     query(allGroupsStore)
@@ -75,7 +76,8 @@
                 <div class="flex">
                     {#if $userHasCompletedProfile}
                         <a
-                            aria-current={segment === "global"
+                            aria-current={segment === "global" ||
+                            (segment === "chat" && $groupIsGlobal)
                                 ? "page"
                                 : undefined}
                             href="/global"
@@ -148,10 +150,13 @@
                                                         on:click={() =>
                                                             ($groupUuid =
                                                                 group.uuid)}
-                                                        >{group.groupName} ({group.language.alpha2.toUpperCase()}
+                                                        >{group.groupName || ""}
+                                                        ({group.language?.alpha2.toUpperCase() ||
+                                                            ""}
                                                         {group
-                                                            .languageSkillLevel
-                                                            .name})</ButtonSmall
+                                                            ?.languageSkillLevel
+                                                            ?.name ||
+                                                            ""})</ButtonSmall
                                                     >
                                                 </div>
                                             {/each}
@@ -163,8 +168,7 @@
                     {/if}
                     {#if $userHasCompletedProfile}
                         <button
-                            aria-current={segment === "chat" ||
-                            segment === "groups"
+                            aria-current={segment === "chat" && !$groupIsGlobal
                                 ? "page"
                                 : undefined}
                             id="groups-dropdown-clickaway"
@@ -336,13 +340,20 @@
     button[aria-current]::after {
         position: absolute;
         content: "";
-        height: 2px;
+        height: 5px;
+        border-top-left-radius: 200px;
+        border-top-right-radius: 200px;
         display: block;
         bottom: 0;
-        left: 0;
-        right: 0;
+        left: 0.5rem;
+        right: 0.5rem;
 
         @apply bg-accent;
+
+        @screen md {
+            left: 1.5rem;
+            right: 1.5rem;
+        }
     }
 
     a[aria-current].logo::after {

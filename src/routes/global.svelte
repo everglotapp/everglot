@@ -2,6 +2,7 @@
     import { scale } from "svelte/transition"
 
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+    import SidebarHeadline from "../comp/typography/SidebarHeadline.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
 
     import { query } from "@urql/svelte"
@@ -47,7 +48,7 @@
 </svelte:head>
 
 <div
-    class="container flex gap-x-4 flex-wrap justify-center md:justify-start py-16 w-full max-w-sm md:max-w-4xl"
+    class="container flex gap-x-4 flex-wrap justify-center md:justify-start py-4 md:py-16 w-full max-w-sm md:max-w-4xl"
 >
     {#if $allGroupsStore.fetching}
         <div />
@@ -58,11 +59,7 @@
     {:else}
         <div class="sidebar">
             <div class="languages-container px-4 text-lg w-full mb-4">
-                <h3
-                    class="px-4 text-gray-bitdark text-sm font-bold mb-4 text-center"
-                >
-                    Language
-                </h3>
+                <SidebarHeadline>Language</SidebarHeadline>
                 <div class="languages" role="tablist">
                     <button
                         on:click={() => (lang = "en")}
@@ -86,27 +83,26 @@
             class="groups text-xl font-light p-8 rounded-xl text-center justify-center shadow-sm"
             role="tabpanel"
         >
-            {#key lang}
+            {#each groups[lang] as group (group.uuid)}
                 <div
-                    class="relative flex"
-                    in:scale|local={{ duration: 100, delay: 100 }}
+                    class="flex"
+                    in:scale|local={{ duration: 100, delay: 200 }}
                     out:scale|local={{ duration: 100 }}
+                    style="transform-origin: center;"
                 >
-                    {#each groups[lang] as group (group.uuid)}
-                        <ButtonLarge
-                            className="w-full justify-between"
-                            color="SECONDARY"
-                            variant="FILLED"
-                            href={`/chat?group=${group.uuid}`}
-                            on:click={() => ($groupUuid = group.uuid)}
-                            ><span class="name">{group.groupName}</span>
-                            <span class="members-count"
-                                >{group.groupUsers.totalCount} members</span
-                            ></ButtonLarge
-                        >
-                    {/each}
+                    <ButtonLarge
+                        className="w-full justify-between"
+                        color="SECONDARY"
+                        variant="FILLED"
+                        href={`/chat?group=${group.uuid}`}
+                        on:click={() => ($groupUuid = group.uuid)}
+                        ><span class="name">{group.groupName}</span>
+                        <span class="members-count"
+                            >{group.groupUsers.totalCount} members</span
+                        ></ButtonLarge
+                    >
                 </div>
-            {/key}
+            {/each}
         </div>
     {/if}
 </div>
@@ -135,8 +131,8 @@
     }
 
     .languages button[aria-selected="true"] {
-        @apply text-primary;
-        @apply border-primary;
+        @apply border-accent;
+        @apply bg-primary-lightest;
     }
 
     .groups {

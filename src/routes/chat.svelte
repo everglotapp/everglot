@@ -393,6 +393,7 @@
                                                 autocomplete="off"
                                                 class="border-none shadow-md px-4 py-4 w-full rounded-md"
                                                 bind:value={msg}
+                                                in:scale={{ duration: 200 }}
                                             />
                                             <ButtonSmall
                                                 className="ml-4 px-6"

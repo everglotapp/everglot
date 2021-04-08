@@ -156,7 +156,6 @@
 
         @apply flex;
         @apply flex-col;
-        @apply justify-center;
         @apply items-center;
         @apply text-gray-bitdark;
         @apply pt-1;

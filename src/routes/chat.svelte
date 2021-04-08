@@ -2,7 +2,6 @@
     import { onMount, onDestroy } from "svelte"
     import { scale, slide, blur } from "svelte/transition"
     import { query } from "@urql/svelte"
-    import { validate as uuidValidate } from "uuid"
 
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
@@ -16,7 +15,14 @@
     import type { ChatUser } from "../server/chat/users"
     import type { ChatMessage } from "../server/chat/messages"
 
-    import { groupUuid, groupChat, groupChatMessages } from "../stores"
+    import { groupUuid } from "../stores"
+    import {
+        groupChatStore,
+        groupChatMessagesStore,
+        language,
+        languageSkillLevel,
+        groupName,
+    } from "../stores/chat"
     import type { Group, User } from "../types/generated/graphql"
 
     import { ChevronsRightIcon } from "svelte-feather-icons"
@@ -27,8 +33,8 @@
 
     let fetchGroupMetadataInterval: number | null = null
 
-    query(groupChat)
-    query(groupChatMessages)
+    query(groupChatStore)
+    query(groupChatMessagesStore)
 
     $: if ($groupUuid && joinedRoom !== $groupUuid) {
         // console.log("Switching room", {
@@ -40,11 +46,11 @@
         messages = []
 
         // Fetch group messages just once
-        $groupChatMessages.variables = { groupUuid: $groupUuid }
+        $groupChatMessagesStore.variables = { groupUuid: $groupUuid }
         fetchGroupChatMessages()
 
         // "Subscribe" to group metadata (name, language, members)
-        $groupChat.variables = { groupUuid: $groupUuid }
+        $groupChatStore.variables = { groupUuid: $groupUuid }
         fetchGroupMetadata()
         if (fetchGroupMetadataInterval === null) {
             fetchGroupMetadataInterval = setInterval(fetchGroupMetadata, 30000)
@@ -55,23 +61,23 @@
     }
 
     function fetchGroupMetadata() {
-        if (!$groupChat.variables?.groupUuid) {
+        if (!$groupChatStore.variables?.groupUuid) {
             // console.log("Not fetching group metadata", $groupChat.variables)
             return
         }
         // console.log("Fetching group metadata", $groupChat.variables)
-        $groupChat.context = {
+        $groupChatStore.context = {
             requestPolicy: "network-only",
             pause: true,
         }
-        $groupChat.context = {
+        $groupChatStore.context = {
             requestPolicy: "network-only",
             pause: false,
         }
     }
 
     function fetchGroupChatMessages() {
-        if (!$groupChatMessages.variables?.groupUuid) {
+        if (!$groupChatMessagesStore.variables?.groupUuid) {
             // console.log(
             //     "Not fetching group chat messages",
             //     $groupChatMessages.variables
@@ -82,44 +88,26 @@
         //     "Fetching group chat messages",
         //     $groupChatMessages.variables
         // )
-        $groupChatMessages.context = {
+        $groupChatMessagesStore.context = {
             requestPolicy: "network-only",
             pause: true,
         }
-        $groupChatMessages.context = {
+        $groupChatMessagesStore.context = {
             requestPolicy: "network-only",
             pause: false,
         }
     }
 
-    $: chatUsers =
-        !$groupChat.fetching && !$groupChat.error
-            ? $groupChat.data?.groupByUuid?.usersByGroupUserGroupIdAndUserId
-                  ?.nodes || []
-            : []
-
-    $: language =
-        !$groupChat.fetching && !$groupChat.error
-            ? $groupChat.data?.groupByUuid?.language || null
-            : null
-
-    $: languageSkillLevel =
-        !$groupChat.fetching && !$groupChat.error
-            ? $groupChat.data?.groupByUuid?.languageSkillLevel || null
-            : null
-
-    $: groupName =
-        !$groupChat.fetching && !$groupChat.error
-            ? $groupChat.data?.groupByUuid?.groupName || null
-            : null
-
-    $: if (!$groupChatMessages.fetching && !$groupChatMessages.error) {
+    $: if (
+        !$groupChatMessagesStore.fetching &&
+        !$groupChatMessagesStore.error
+    ) {
         const recvMessages =
-            $groupChatMessages.data?.groupByUuid?.messagesByRecipientGroupId?.nodes.filter(
+            $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId?.nodes.filter(
                 Boolean
             ) || []
         if (recvMessages.length) {
-            $groupChatMessages.context = {
+            $groupChatMessagesStore.context = {
                 pause: true,
             }
             const existingUuids = messages.map(({ uuid }) => uuid)
@@ -313,27 +301,23 @@
 
 <div class="wrapper">
     {#key $groupUuid}
-        <Sidebar
-            users={chatUsers}
-            {split}
-            handleToggleSplit={() => (split = !split)}
-        />
+        <Sidebar {split} handleToggleSplit={() => (split = !split)} />
     {/key}
     <div class="section-wrapper">
         <section>
             <header>
                 {#key $groupUuid}
-                    {#if !$groupChat.fetching && $groupChat.data}
-                        <span class="text-xl py-2">{groupName || ""}</span>
+                    {#if !$groupChatStore.fetching && $groupChatStore.data}
+                        <span class="text-xl py-2">{$groupName || ""}</span>
                         <div
                             class="inline"
                             style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
                         />
                         <span
-                            >{language?.englishName || ""}
-                            {languageSkillLevel?.name || ""}</span
+                            >{$language?.englishName || ""}
+                            {$languageSkillLevel?.name || ""}</span
                         >
-                    {:else if $groupChat.error}
+                    {:else if $groupChatStore.error}
                         error
                     {/if}
                 {/key}
@@ -377,12 +361,7 @@
                                     {#each messages as message (message.uuid)}
                                         <Message
                                             uuid={message.uuid}
-                                            user={chatUsers.find(
-                                                (user) =>
-                                                    user &&
-                                                    user.uuid ===
-                                                        message.userUuid
-                                            ) || null}
+                                            userUuid={message.userUuid}
                                             time={message.time}
                                             text={message.text}
                                         />

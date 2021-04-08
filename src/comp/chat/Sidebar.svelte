@@ -3,16 +3,12 @@
 
     export let handleToggleSplit: () => void
     export let split = false
-
-    export let users: any[] = []
 </script>
 
 <div class="sidebar">
     <div class="users-container py-3 px-4 text-lg w-full mb-4">
-        <h3 class="px-4 text-gray-bitdark text-sm font-bold mb-4">
-            Active Members
-        </h3>
-        <GroupMembers {users} />
+        <h3 class="px-4 text-gray-bitdark text-sm font-bold mb-4">Members</h3>
+        <GroupMembers />
     </div>
     <div class="toggles py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4">
         <div class="toggle-row">

@@ -1,21 +1,19 @@
 <script lang="ts">
     import { scale } from "svelte/transition"
 
+    import { chatUsers } from "../../stores/chat"
+
     import Bio from "../users/Bio.svelte"
     import Avatar from "../users/Avatar.svelte"
 
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
-    import type { BioUser } from "../users/Bio.svelte"
-    import type { User } from "../../types/generated/graphql"
-
-    export let users: (BioUser & Pick<User, "uuid">)[] = []
     let showBioId: number | null = null
 </script>
 
 <ul class="users">
-    {#each users as user, i (user.uuid)}
+    {#each $chatUsers as user, i (user.uuid)}
         {#if user}
             <li
                 id={`group-member-${i}`}
@@ -50,7 +48,7 @@
                                 in:scale|local={{ duration: 200, delay: 0 }}
                                 out:scale|local={{ duration: 200, delay: 0 }}
                             >
-                                <Bio {user} />
+                                <Bio userUuid={user.uuid} />
                             </div>
                         </div>
                     </div>

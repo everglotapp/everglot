@@ -1,29 +1,15 @@
-<script lang="ts" context="module">
-    import type {
-        Maybe,
-        User,
-        ChatUsersQuery,
-    } from "../../types/generated/graphql"
-
-    type UserAttributes = Pick<
-        User,
-        "bio" | "username" | "avatarUrl" | "lastActiveAt"
-    >
-    type OtherAttributes = Pick<
-        NonNullable<
-            NonNullable<
-                ChatUsersQuery["groupByUuid"]
-            >["usersByGroupUserGroupIdAndUserId"]["nodes"][0]
-        >,
-        "userLanguages"
-    >
-    export interface BioUser extends UserAttributes, OtherAttributes {}
-</script>
-
 <script lang="ts">
-    import Avatar from "./Avatar.svelte"
+    import { chatUsers } from "../../stores/chat"
 
-    export let user: Maybe<BioUser>
+    import Avatar from "./Avatar.svelte"
+    import type { User } from "../../types/generated/graphql"
+
+    export let userUuid: User["uuid"] | null
+
+    $: user = userUuid
+        ? $chatUsers.find((u) => u?.uuid === userUuid) || null
+        : null
+
     $: languages = user
         ? [
               ...new Set(
@@ -36,6 +22,7 @@
               ),
           ]
         : []
+
     enum ActiveStatus {
         ACTIVE = "online",
         IDLE = "idle",

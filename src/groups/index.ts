@@ -1,7 +1,7 @@
 import { derived } from "svelte/store"
 import { operationStore } from "@urql/svelte"
 
-import { AllGroupsQuery, AllGroups, Language } from "./types/generated/graphql"
+import { AllGroupsQuery, AllGroups, Language } from "../types/generated/graphql"
 
 export const allGroupsStore = operationStore<AllGroupsQuery>(AllGroups)
 export const privateGroups = derived(allGroupsStore, ($allGroupsStore) =>

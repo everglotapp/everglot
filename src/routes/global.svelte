@@ -4,30 +4,25 @@
 
     import { query } from "@urql/svelte"
 
-    import { allGroups, groupUuid } from "../stores"
-    import type { Language, AllGroupsQuery } from "../types/generated/graphql"
+    import { groupUuid } from "../stores"
+    import { allGroupsStore, globalGroups, groupIsForLanguage } from "../groups"
+    import type { GroupNode } from "../groups"
 
-    query(allGroups)
+    query(allGroupsStore)
 
     type GroupLanguage = "en" | "de" | "zh"
-    type GroupNode = NonNullable<
-        NonNullable<AllGroupsQuery["groups"]>["nodes"][0]
-    >
 
     let groups: Record<GroupLanguage, GroupNode[]> = {
         en: [],
         de: [],
         zh: [],
     }
-    $: if (!$allGroups.fetching && !$allGroups.error) {
+    $: if (!$allGroupsStore.fetching && !$allGroupsStore.error) {
         groups = ["en", "de", "zh"].reduce(
             (map, lang) => ({
                 ...map,
-                [lang]: $allGroups.data?.groups?.nodes.filter(
-                    (group) =>
-                        group &&
-                        groupIsGlobal(group) &&
-                        groupIsForLanguage(group, lang)
+                [lang]: $globalGroups.filter((group) =>
+                    groupIsForLanguage(group, lang)
                 ),
             }),
             {
@@ -37,9 +32,6 @@
             }
         )
     }
-    const groupIsGlobal = (group: GroupNode) => group.global === true
-    const groupIsForLanguage = (group: GroupNode, lang: Language["alpha2"]) =>
-        group.language?.alpha2 === lang
 
     let lang: "en" | "de" | "zh" = "en"
 </script>
@@ -51,11 +43,11 @@
 <div
     class="container flex gap-x-4 flex-wrap justify-center md:justify-start py-16 w-full max-w-sm md:max-w-4xl"
 >
-    {#if $allGroups.fetching}
+    {#if $allGroupsStore.fetching}
         …
-    {:else if $allGroups.error}
+    {:else if $allGroupsStore.error}
         error
-    {:else if !$allGroups.data?.groups?.nodes.some(groupIsGlobal)}
+    {:else if !$globalGroups.length}
         <RedirectOnce to={"/profile"} />
     {:else}
         <div class="sidebar">

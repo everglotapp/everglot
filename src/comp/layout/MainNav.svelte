@@ -11,24 +11,16 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
-    import { currentUser, allGroups, groupUuid } from "../../stores"
-    import type { AllGroupsQuery } from "../../types/generated/graphql"
+    import {
+        currentUser,
+        currentUserStore,
+        userHasCompletedProfile,
+        groupUuid,
+    } from "../../stores"
+    import { allGroupsStore, privateGroups } from "../../groups"
 
-    query(currentUser)
-    query(allGroups)
-
-    type GroupNode = NonNullable<
-        NonNullable<AllGroupsQuery["groups"]>["nodes"][0]
-    >
-
-    let groups: GroupNode[] = []
-    $: if (!$allGroups.fetching && !$allGroups.error) {
-        groups =
-            $allGroups.data?.groups?.nodes
-                .filter((group) => group && groupIsPrivate(group))
-                .map((group) => group!) || []
-    }
-    const groupIsPrivate = (group: GroupNode) => group.global === false
+    query(currentUserStore)
+    query(allGroupsStore)
 
     export let segment: string | undefined
 
@@ -47,14 +39,8 @@
     let showSettingsDropdown = false
     let showGroupsDropdown = false
 
-    $: userHasPrivateGroups = !$allGroups.fetching && groups.length
-    $: currentUserObject = $currentUser.fetching
-        ? null
-        : $currentUser.data?.currentUser
-    $: userHasCompletedProfile =
-        currentUserObject &&
-        currentUserObject.username !== null &&
-        currentUserObject.userLanguages.totalCount
+    $: userHasPrivateGroups = $privateGroups.length
+
     function handleClickGroups(event: MouseEvent) {
         event.preventDefault()
         if (userHasPrivateGroups) {
@@ -87,7 +73,7 @@
             </div>
             <div class="flex justify-center">
                 <div class="flex">
-                    {#if userHasCompletedProfile}
+                    {#if $userHasCompletedProfile}
                         <a
                             aria-current={segment === "global"
                                 ? "page"
@@ -119,7 +105,7 @@
                             </svg>
                         </a>
                     {/if}
-                    {#if !$allGroups.fetching}
+                    {#if !$allGroupsStore.fetching}
                         {#if showGroupsDropdown}
                             <ClickAwayListener
                                 elementId="groups-dropdown-clickaway"
@@ -143,10 +129,10 @@
                                         in:scale={{ duration: 200, delay: 0 }}
                                         out:scale={{ duration: 200, delay: 0 }}
                                     >
-                                        {#if $allGroups.error}
+                                        {#if $allGroupsStore.error}
                                             error
                                         {:else}
-                                            {#each groups as group (group.uuid)}
+                                            {#each $privateGroups as group (group.uuid)}
                                                 <div
                                                     aria-current={group.uuid ===
                                                         $groupUuid &&
@@ -175,14 +161,12 @@
                             </div>
                         {/if}
                     {/if}
-                    {#if userHasCompletedProfile}
-                        <a
+                    {#if $userHasCompletedProfile}
+                        <button
                             aria-current={segment === "chat" ||
                             segment === "groups"
                                 ? "page"
                                 : undefined}
-                            href=""
-                            tag="button"
                             id="groups-dropdown-clickaway"
                             class="nav-item-with-icon"
                             on:click={handleClickGroups}
@@ -229,7 +213,7 @@
                                     />
                                 </g>
                             </svg>
-                        </a>
+                        </button>
                     {/if}
                     {#if showSettingsDropdown}
                         <ClickAwayListener
@@ -258,7 +242,6 @@
                                             variant="TEXT"
                                             color="SECONDARY"
                                             tag="button"
-                                            href=""
                                             on:click={handleLogout}
                                             ><span class="mr-1">Logout</span
                                             ><LogOutIcon
@@ -276,12 +259,10 @@
                         class="nav-item-with-icon justify-center cursor-pointer"
                         id="settings-dropdown-clickaway"
                     >
-                        {#if !$currentUser.fetching}
+                        {#if !$currentUserStore.fetching}
                             <Avatar
-                                url={currentUser.data?.currentUser?.avatarUrl ||
-                                    ""}
-                                username={currentUser.data?.currentUser
-                                    ?.username || ""}
+                                url={$currentUser?.avatarUrl || ""}
+                                username={$currentUser?.username || ""}
                                 size={42}
                             />
                         {:else}
@@ -341,6 +322,7 @@
         text-decoration: none;
 
         @apply text-gray-bitdark;
+        @apply font-bold;
         @apply text-center;
 
         @screen md {
@@ -349,6 +331,8 @@
     }
 
     a.logo {
+        padding: 0.75rem 1rem;
+
         @apply text-black;
     }
 

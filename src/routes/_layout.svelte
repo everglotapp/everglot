@@ -14,7 +14,7 @@
     import { persistedFetchExchange } from "@urql/exchange-persisted-fetch"
     import persistedOperations from "../graphql.client.json"
 
-    import { currentUser, groupUuid } from "../stores"
+    import { currentUserStore, groupUuid } from "../stores"
 
     import MainNav from "../comp/layout/MainNav.svelte"
     import Footer from "../comp/layout/Footer.svelte"
@@ -57,7 +57,7 @@
         ],
     })
 
-    query(currentUser)
+    query(currentUserStore)
 
     export let segment: string | undefined = undefined
     segment = segment // get rid of unused prop warning
@@ -85,7 +85,7 @@
     }
     const handlePageChange = () => {
         doTransition()
-        $currentUser.context = {
+        $currentUserStore.context = {
             requestPolicy: "network-only",
             transitionId, // This forces a re-execution by changing the object contents.
         }

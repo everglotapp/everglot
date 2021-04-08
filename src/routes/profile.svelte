@@ -7,6 +7,8 @@
 
     import {
         currentUser,
+        currentUserStore,
+        userHasCompletedProfile,
         username,
         room,
         languageCodeMappings,
@@ -28,28 +30,21 @@
     import { ArrowRightIcon, ClockIcon } from "svelte-feather-icons"
 
     query(languageCodeMappings)
-
-    $: currentUserObject = $currentUser.fetching
-        ? null
-        : $currentUser.data?.currentUser || null
-    $: userHasCompletedProfile =
-        currentUserObject &&
-        currentUserObject.username !== null &&
-        currentUserObject.userLanguages.totalCount
+    query(currentUserStore)
 
     let prefilled = false
 
-    $: if (userHasCompletedProfile) {
+    $: if ($userHasCompletedProfile) {
         // Profile has already been completed, a second time won't work.
         goto("/profile/success", { replaceState: true, noscroll: false })
     }
 
-    $: if (currentUserObject !== null && !prefilled) {
+    $: if ($currentUser !== null && !prefilled) {
         // Pre-fill form.
         prefilled = true
-        $username = currentUserObject?.username || $username
-        if (currentUserObject?.languageByLocale) {
-            const { alpha2 } = currentUserObject.languageByLocale
+        $username = $currentUser.username || $username
+        if ($currentUser.languageByLocale) {
+            const { alpha2 } = $currentUser.languageByLocale
             if (teach.hasOwnProperty(alpha2)) {
                 teach = { ...teach, [alpha2]: true }
             } else {

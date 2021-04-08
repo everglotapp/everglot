@@ -30,12 +30,7 @@
     query(groupChat)
     query(groupChatMessages)
 
-    $: if (
-        $groupUuid &&
-        $groupUuid.length &&
-        uuidValidate($groupUuid) &&
-        joinedRoom !== $groupUuid
-    ) {
+    $: if ($groupUuid && joinedRoom !== $groupUuid) {
         // console.log("Switching room", {
         //     oldRoom: joinedRoom,
         //     newRoom: $groupUuid,
@@ -149,6 +144,9 @@
 
     onMount(() => {
         connect()
+        if ($groupUuid) {
+            joinRoom($groupUuid)
+        }
     })
 
     onDestroy(() => {
@@ -170,9 +168,6 @@
         }
         // console.log("Connecting to chat")
         socket = io()
-        socket.emit("joinRoom", {
-            groupUuid,
-        })
         if (socket) {
             // Welcome from server
             socket.on("welcome", onWelcome)
@@ -182,6 +177,10 @@
     }
     function joinRoom(room: string) {
         if (!socket) {
+            return
+        }
+        if (!room || !room.length) {
+            // console.log("Not joining empty room", { room })
             return
         }
         if (joinedRoom === room) {

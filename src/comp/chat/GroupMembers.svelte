@@ -1,15 +1,42 @@
 <script lang="ts">
+    import { mutation } from "@urql/svelte"
+    import { groupUuid } from "../../stores"
     import {
         currentGroupIsGlobal,
         chatUsers,
         chatLearners,
         chatNativeSpeakers,
+        groupChatStore,
     } from "../../stores/chat"
 
     import { allGroupsStore } from "../../stores/groups"
 
     import MemberListItem from "./MemberListItem.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
+
+    import type { JoinGlobalGroupMutation } from "../../types/generated/graphql"
+    import { JoinGlobalGroup } from "../../types/generated/graphql"
+
+    const joinGlobalGroup = mutation<JoinGlobalGroupMutation>({
+        query: JoinGlobalGroup,
+    })
+    async function handleJoinGroup() {
+        const res = await joinGlobalGroup({
+            groupUuid: $groupUuid,
+        })
+        if (res.data) {
+            $groupChatStore.context = {
+                requestPolicy: "network-only",
+                pause: true,
+            }
+            $groupChatStore.context = {
+                requestPolicy: "network-only",
+                pause: false,
+            }
+        } else {
+            // TODO: Show error feedback
+        }
+    }
 
     let showBioUuid: number | null = null
 </script>
@@ -34,9 +61,8 @@
                 <ButtonSmall
                     className="w-full justify-center"
                     tag="button"
-                    variant="TEXT"
-                    disabled
-                    on:click={() => {}}>Join group</ButtonSmall
+                    variant="OUTLINED"
+                    on:click={handleJoinGroup}>Join group</ButtonSmall
                 >
             </div>
         </div>

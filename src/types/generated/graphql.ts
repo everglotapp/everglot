@@ -4660,7 +4660,7 @@ export type GroupChatQuery = (
             & Pick<GroupUser, 'userType'>
             & { group?: Maybe<(
               { __typename?: 'Group' }
-              & Pick<Group, 'id'>
+              & Pick<Group, 'uuid'>
               & { language?: Maybe<(
                 { __typename?: 'Language' }
                 & Pick<Language, 'englishName'>
@@ -4903,7 +4903,7 @@ export const GroupChat = gql`
           nodes {
             userType
             group {
-              id
+              uuid
               language {
                 englishName
               }

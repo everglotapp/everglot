@@ -1,6 +1,8 @@
 import { derived } from "svelte/store"
 import { operationStore } from "@urql/svelte"
 
+import { groupUuid } from "./index"
+
 import {
     GroupChatQuery,
     GroupChatQueryVariables,
@@ -8,6 +10,7 @@ import {
     GroupChatMessagesQuery,
     GroupChatMessages,
     GroupChatMessagesQueryVariables,
+    UserType,
 } from "../types/generated/graphql"
 
 export const groupChatStore = operationStore<
@@ -37,6 +40,35 @@ export const chatUsers = derived(groupChatStore, ($groupChatStore) =>
         ? $groupChatStore.data?.groupByUuid?.usersByGroupUserGroupIdAndUserId
               ?.nodes || []
         : []
+)
+
+export const chatNativeSpeakers = derived(
+    [chatUsers, groupUuid],
+    ([$chatUsers, $groupUuid]) =>
+        $groupUuid
+            ? $chatUsers.filter((user) => {
+                  const membership = user?.groupUsers.nodes.find(
+                      (groupUser) => groupUser?.group?.uuid === $groupUuid
+                  )
+                  return membership?.userType === UserType.Native
+              })
+            : []
+)
+
+export const chatLearners = derived(
+    [chatUsers, groupUuid],
+    ([$chatUsers, $groupUuid]) =>
+        $groupUuid
+            ? $chatUsers
+                  .filter((user) => {
+                      const membership = user?.groupUsers.nodes.find(
+                          (groupUser) => groupUser?.group?.uuid === $groupUuid
+                      )
+                      return membership?.userType === UserType.Learner
+                  })
+                  .filter(Boolean)
+                  .map((user) => user!)
+            : []
 )
 
 export const language = derived(groupChatStore, ($groupChatStore) =>

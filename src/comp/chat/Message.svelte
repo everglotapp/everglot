@@ -22,6 +22,9 @@
     export let text = ""
 
     let showBio = false
+    const MAX_BODY_LEN = 500
+    $: body = text.substring(0, MAX_BODY_LEN)
+    $: bodyCutOff = text.length > MAX_BODY_LEN
 </script>
 
 <div
@@ -95,7 +98,7 @@
                 }}
             />
         </div>
-        <div class="body">{text}</div>
+        <div class="body">{body}{bodyCutOff ? "…" : ""}</div>
     </div>
 </div>
 

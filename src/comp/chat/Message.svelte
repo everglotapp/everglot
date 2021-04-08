@@ -9,6 +9,7 @@
 
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
+    import ButtonSmall from "../util/ButtonSmall.svelte"
 
     import type { User } from "../../types/generated/graphql"
 
@@ -22,8 +23,10 @@
     export let text = ""
 
     let showBio = false
-    const MAX_BODY_LEN = 500
-    $: body = text.substring(0, MAX_BODY_LEN)
+    let showMore = false
+
+    const MAX_BODY_LEN = 580
+    $: body = showMore ? text : text.substring(0, MAX_BODY_LEN)
     $: bodyCutOff = text.length > MAX_BODY_LEN
 </script>
 
@@ -98,7 +101,30 @@
                 }}
             />
         </div>
-        <div class="body">{body}{bodyCutOff ? "…" : ""}</div>
+        <div class="body">{body}{bodyCutOff && !showMore ? "…" : ""}</div>
+        {#if bodyCutOff}
+            <div>
+                {#if showMore}
+                    <ButtonSmall
+                        className="w-full justify-center"
+                        variant="TEXT"
+                        color="SECONDARY"
+                        tag="button"
+                        on:click={() => (showMore = false)}
+                        >Show less</ButtonSmall
+                    >
+                {:else}
+                    <ButtonSmall
+                        className="w-full justify-center"
+                        variant="TEXT"
+                        color="SECONDARY"
+                        tag="button"
+                        on:click={() => (showMore = true)}
+                        >Show more</ButtonSmall
+                    >
+                {/if}
+            </div>
+        {/if}
     </div>
 </div>
 

@@ -124,3 +124,12 @@ declare module '*/userLanguageInfo.graphql' {
   export default defaultDocument;
 }
     
+
+declare module '*/userProfile.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserProfile: DocumentNode;
+
+  export default defaultDocument;
+}
+    

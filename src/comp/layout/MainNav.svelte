@@ -250,10 +250,8 @@
                                             <ButtonSmall
                                                 variant="TEXT"
                                                 color="SECONDARY"
-                                                tag="button"
                                                 className="w-full"
-                                                on:click={(event) =>
-                                                    event.preventDefault()}
+                                                href="/profile"
                                                 ><span>Profile</span
                                                 ></ButtonSmall
                                             >

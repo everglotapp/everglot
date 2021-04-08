@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte"
     import { scale, fly, blur } from "svelte/transition"
-    import { query } from "@urql/svelte"
+    import { mutation, query } from "@urql/svelte"
 
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
@@ -26,7 +26,12 @@
         currentUserIsGroupMember,
         currentGroupIsGlobal,
     } from "../stores/chat"
-    import type { Group, User } from "../types/generated/graphql"
+    import type {
+        Group,
+        User,
+        JoinGlobalGroupMutation,
+    } from "../types/generated/graphql"
+    import { JoinGlobalGroup } from "../types/generated/graphql"
 
     import { ChevronsRightIcon } from "svelte-feather-icons"
 
@@ -38,6 +43,10 @@
 
     query(groupChatStore)
     query(groupChatMessagesStore)
+
+    const joinGlobalGroup = mutation<JoinGlobalGroupMutation>({
+        query: JoinGlobalGroup,
+    })
 
     $: if ($groupUuid && joinedRoom !== $groupUuid) {
         // console.log("Switching room", {
@@ -382,8 +391,18 @@
                                             <ButtonLarge
                                                 className="ml-4 px-6 w-full justify-center"
                                                 tag="button"
-                                                on:click={() => {}}
-                                                >Join group</ButtonLarge
+                                                on:click={async () => {
+                                                    const res = await joinGlobalGroup(
+                                                        {
+                                                            groupUuid: $groupUuid,
+                                                        }
+                                                    )
+                                                    if (res.data) {
+                                                        fetchGroupMetadata()
+                                                    } else {
+                                                        // TODO: Show error feedback
+                                                    }
+                                                }}>Join group</ButtonLarge
                                             >
                                         {:else if joinedRoom}
                                             <input

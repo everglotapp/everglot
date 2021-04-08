@@ -4754,6 +4754,28 @@ export type GroupIdByUuidQuery = (
   )> }
 );
 
+export type JoinGlobalGroupMutationVariables = Exact<{
+  groupUuid: Scalars['UUID'];
+}>;
+
+
+export type JoinGlobalGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { joinGlobalGroup?: Maybe<(
+    { __typename?: 'JoinGlobalGroupPayload' }
+    & { groupUser?: Maybe<(
+      { __typename?: 'GroupUser' }
+      & { group?: Maybe<(
+        { __typename?: 'Group' }
+        & Pick<Group, 'uuid'>
+      )>, user?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'uuid'>
+      )> }
+    )> }
+  )> }
+);
+
 export type LanguageCodeMappingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -4980,6 +5002,20 @@ export const GroupIdByUuid = gql`
     query GroupIdByUuid($uuid: UUID!) {
   groupByUuid(uuid: $uuid) {
     id
+  }
+}
+    `;
+export const JoinGlobalGroup = gql`
+    mutation JoinGlobalGroup($groupUuid: UUID!) {
+  joinGlobalGroup(input: {groupUuid: $groupUuid}) {
+    groupUser {
+      group {
+        uuid
+      }
+      user {
+        uuid
+      }
+    }
   }
 }
     `;

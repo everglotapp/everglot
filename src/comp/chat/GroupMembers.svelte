@@ -35,6 +35,7 @@
                     className="w-full justify-center"
                     tag="button"
                     variant="TEXT"
+                    disabled
                     on:click={() => {}}>Join group</ButtonSmall
                 >
             </div>

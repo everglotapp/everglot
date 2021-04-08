@@ -89,6 +89,15 @@ declare module '*/groupIdbyUuid.graphql' {
 }
     
 
+declare module '*/joinGlobalGroup.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const JoinGlobalGroup: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/languageCodeMappings.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

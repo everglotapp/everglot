@@ -1,5 +1,6 @@
 <script lang="ts">
     import { scale } from "svelte/transition"
+    import { svelteTime } from "svelte-time"
 
     import { chatUsers } from "../../stores/chat"
 
@@ -29,11 +30,11 @@
         duration: 200,
     }}
 >
-    <div class="author" id={`message-${uuid}-author`}>
+    <div class="avatar" id={`message-${uuid}-avatar`}>
         {#if user !== null}
             {#if showBio}
                 <ClickAwayListener
-                    elementId={`message-${uuid}-author`}
+                    elementId={`message-${uuid}-avatar`}
                     on:clickaway={() => (showBio = false)}
                 />
                 <EscapeKeyListener on:keydown={() => (showBio = false)} />
@@ -55,25 +56,46 @@
                 </div>
             {/if}
         {/if}
-        {#if user && user.uuid}
-            <span class="username">{user ? user.username : "…"}</span>
-        {:else}
-            <span class="username">Everglot<br /> Bot</span>
-        {/if}
         <div class="cursor-pointer">
             {#if user}
                 <Avatar
                     username={user.username || ""}
                     url={user.avatarUrl || ""}
-                    size={32}
+                    size={36}
                     on:click={() => (showBio = !showBio)}
                 />
             {/if}
         </div>
     </div>
-    <div class="main">
-        <div class="time">{time}</div>
-        <div class="text">{text}</div>
+    <div class="main w-full">
+        <div class="meta">
+            <div class="flex items-center">
+                {#if userUuid}
+                    {#if user?.username}
+                        <span class="username mr-2">{user.username}</span>
+                    {:else}
+                        <span class="username mr-2 italic">unknown</span>
+                    {/if}
+                {:else}
+                    <span class="username bot mr-2">Everglot Bot</span>
+                {/if}
+                <time
+                    use:svelteTime={{
+                        timestamp: time,
+                        format: "h:mm A",
+                    }}
+                    title={time}
+                />
+            </div>
+            <time
+                class="self-end text-sm text-gray"
+                use:svelteTime={{
+                    timestamp: time,
+                    format: "MMMM D, YYYY",
+                }}
+            />
+        </div>
+        <div class="body">{text}</div>
     </div>
 </div>
 
@@ -83,7 +105,6 @@
 
         @apply mb-3;
         @apply break-words;
-        @apply bg-primary-lightest;
         @apply rounded-md;
         @apply shadow-sm;
         @apply flex;
@@ -91,45 +112,61 @@
 
     .main {
         @apply p-2;
+        @apply bg-gray-lightest;
     }
 
-    .main .text {
+    .main .body {
         @apply px-2;
     }
 
-    .author {
+    .avatar {
         font-size: 15px;
         font-weight: bold;
         width: 5rem;
-        padding-top: 1px;
-        padding-bottom: 1px;
+        max-width: 5rem;
 
         @apply flex;
         @apply flex-col;
-        @apply items-center;
         @apply justify-center;
+        @apply items-center;
         @apply text-gray-bitdark;
-        @apply text-center;
-        @apply bg-gray-lightest;
-        @apply rounded-tl-md;
-        @apply rounded-bl-md;
+        @apply pt-1;
+    }
+
+    .meta {
+        @apply text-gray-bitdark;
+        @apply text-sm;
+        @apply mb-1;
+        @apply flex;
+        @apply w-full;
+        @apply justify-between;
     }
 
     .username {
         line-height: 1rem;
+        max-width: 6rem;
 
+        @apply inline-block;
+        @apply whitespace-nowrap;
+        @apply overflow-hidden;
+        @apply overflow-ellipsis;
         @apply text-primary-dark;
-        @apply mb-1;
-    }
-
-    .room {
-        @apply text-gray-bitdark;
-    }
-
-    .time {
-        @apply text-gray-bitdark;
-        @apply text-sm;
         @apply font-bold;
-        @apply mb-1;
+
+        @screen sm {
+            max-width: 12rem;
+        }
+
+        @screen md {
+            max-width: 16rem;
+        }
+    }
+
+    .username.bot {
+        @apply text-primary;
+    }
+
+    .meta time {
+        @apply font-bold;
     }
 </style>

@@ -39,7 +39,6 @@
         _query: string,
         document: DocumentNode
     ): Promise<string> {
-        console.log({ _query, document })
         // Note that we're assuming that the first definition is a operation
         // definition rather than a FragmentDefinitionNode.
         // Also we're ignoring the query variable meaning that we

@@ -9,6 +9,7 @@
     import { allGroupsStore } from "../../stores/groups"
 
     import MemberListItem from "./MemberListItem.svelte"
+    import ButtonSmall from "../util/ButtonSmall.svelte"
 
     let showBioUuid: number | null = null
 </script>
@@ -20,13 +21,21 @@
         <div class="bg-gray-lightest mx-auto h-8 mb-1" />
         <div class="bg-gray-lightest mx-auto h-8 mb-1" />
         <div class="bg-gray-lightest mx-auto h-8 mb-1" />
-    {:else if !$chatUsers.length}
-        <div class="text-center py-5 font-bold text-gray">
+    {:else if $groupIsGlobal && !$chatUsers.length}
+        <div class="text-center py-5 font-bold text-base text-gray-bitdark">
             <p>So far nobody is here 😥</p>
             <p>
                 Why don't you go ahead and join this group to get the ball
-                rolling? Somebody has to go first!
+                rolling? Somebody always has to go first!
             </p>
+            <div class="px-8">
+                <ButtonSmall
+                    className="w-full justify-center"
+                    tag="button"
+                    variant="TEXT"
+                    on:click={() => {}}>Join group</ButtonSmall
+                >
+            </div>
         </div>
     {:else if $groupIsGlobal}
         <div class="mb-4">

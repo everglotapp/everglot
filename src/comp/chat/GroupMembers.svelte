@@ -43,7 +43,9 @@
                 {#if user}
                     <MemberListItem
                         id={`group-global-member-${i}`}
-                        {user}
+                        uuid={user.uuid}
+                        avatarUrl={user.avatarUrl}
+                        username={user.username}
                         showBio={showBioUuid === user.uuid}
                         handleClickAway={() => (showBioUuid = null)}
                         handleEscapeKey={() => (showBioUuid = null)}
@@ -63,7 +65,9 @@
                 {#if user}
                     <MemberListItem
                         id={`group-learning-member-${i}`}
-                        {user}
+                        uuid={user.uuid}
+                        avatarUrl={user.avatarUrl}
+                        username={user.username}
                         showBio={showBioUuid === user.uuid}
                         handleClickAway={() => (showBioUuid = null)}
                         handleEscapeKey={() => (showBioUuid = null)}
@@ -82,7 +86,9 @@
                 {#if user}
                     <MemberListItem
                         id={`group-native-member-${i}`}
-                        {user}
+                        uuid={user.uuid}
+                        avatarUrl={user.avatarUrl}
+                        username={user.username}
                         showBio={showBioUuid === user.uuid}
                         handleClickAway={() => (showBioUuid = null)}
                         handleEscapeKey={() => (showBioUuid = null)}

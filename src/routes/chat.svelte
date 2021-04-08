@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte"
-    import { scale, slide, blur } from "svelte/transition"
+    import { scale, fly, blur } from "svelte/transition"
     import { query } from "@urql/svelte"
 
     import { io } from "socket.io-client"
@@ -330,8 +330,9 @@
                     {#if split}
                         <div
                             class="view view-left hidden"
-                            in:scale={{ duration: 200, delay: 0 }}
-                            out:slide={{ duration: 200 }}
+                            in:fly={{ duration: 200, x: -600 }}
+                            out:fly={{ duration: 200, x: -600 }}
+                            style="transform-origin: center left;"
                         >
                             {#key $groupUuid}
                                 <div
@@ -436,6 +437,7 @@
         @apply h-full;
         @apply flex;
         @apply flex-col;
+        @apply overflow-hidden;
     }
 
     section {

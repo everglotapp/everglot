@@ -8,27 +8,26 @@
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
     export let id: string
-    export let user: any
+    export let avatarUrl: string | undefined
+    export let username: string | undefined
+    export let uuid: string | undefined
+
     export let showBio = false
-    export let handleClickAway: ((e: CustomEvent<any>) => any) | undefined
-    export let handleEscapeKey: ((e: CustomEvent<any>) => any) | undefined
+    export let handleClickAway: (e: CustomEvent<any>) => any
+    export let handleEscapeKey: (e: CustomEvent<any>) => any
 </script>
 
 <li
     {id}
     class="user cursor-pointer"
-    title={user.username || undefined}
-    aria-label={user.username}
+    title={username}
+    aria-label={username}
     on:click
 >
     <div class="avatar">
-        <Avatar
-            url={user.avatarUrl || ""}
-            username={user.username || ""}
-            size={32}
-        />
+        <Avatar url={avatarUrl || ""} username={username || ""} size={32} />
     </div>
-    <span class="username">{user.username}</span>
+    <span class="username">{username || ""}</span>
     {#if showBio}
         <ClickAwayListener elementId={id} on:clickaway={handleClickAway} />
         <EscapeKeyListener on:keydown={handleEscapeKey} />
@@ -47,7 +46,7 @@
                         delay: 0,
                     }}
                 >
-                    <Bio userUuid={user.uuid} />
+                    <Bio userUuid={uuid} />
                 </div>
             </div>
         </div>

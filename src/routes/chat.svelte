@@ -10,6 +10,7 @@
     import Message from "../comp/chat/Message.svelte"
     import Sidebar from "../comp/chat/Sidebar.svelte"
 
+    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
 
     import type { ChatUser } from "../server/chat/users"
@@ -22,6 +23,8 @@
         language,
         languageSkillLevel,
         groupName,
+        currentUserIsGroupMember,
+        groupIsGlobal,
     } from "../stores/chat"
     import type { Group, User } from "../types/generated/graphql"
 
@@ -374,24 +377,39 @@
                                         on:submit|preventDefault={handleSendMessage}
                                         class="submit-form justify-end items-center"
                                     >
-                                        <input
-                                            id="send-msg-input"
-                                            type="text"
-                                            placeholder="Enter text message …"
-                                            required
-                                            autocomplete="off"
-                                            class="border-none shadow-md px-4 py-4 w-full rounded-md"
-                                            bind:value={msg}
-                                        />
-                                        <ButtonSmall
-                                            className="ml-4 px-6"
-                                            tag="button"
-                                            on:click={handleSendMessage}
-                                            >Send<ChevronsRightIcon
-                                                size="24"
-                                                class="ml-1"
-                                            /></ButtonSmall
-                                        >
+                                        {#if $groupChatStore.data && $groupIsGlobal && !$currentUserIsGroupMember}
+                                            <ButtonLarge
+                                                className="ml-4 px-6 w-full justify-center"
+                                                tag="button"
+                                                on:click={() => {}}
+                                                >Join group</ButtonLarge
+                                            >
+                                        {:else if joinedRoom}
+                                            <input
+                                                id="send-msg-input"
+                                                type="text"
+                                                placeholder="Enter text message …"
+                                                required
+                                                autocomplete="off"
+                                                class="border-none shadow-md px-4 py-4 w-full rounded-md"
+                                                bind:value={msg}
+                                            />
+                                            <ButtonSmall
+                                                className="ml-4 px-6"
+                                                tag="button"
+                                                on:click={handleSendMessage}
+                                                >Send<ChevronsRightIcon
+                                                    size="24"
+                                                    class="ml-1"
+                                                /></ButtonSmall
+                                            >
+                                        {:else}
+                                            <div
+                                                class="w-full h-full font-bold text-center text-lg text-gray-bitdark"
+                                            >
+                                                Connecting …
+                                            </div>
+                                        {/if}
                                     </form>
                                 </div>
                             </div>

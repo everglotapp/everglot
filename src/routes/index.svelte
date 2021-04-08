@@ -20,7 +20,7 @@
         if ($currentUserStore.fetching) {
             if (redirectTimeout === null) {
                 redirectTimeout = window.setTimeout(() => {
-                    goto("/profile", { replaceState: true, noscroll: false })
+                    goto("/signup", { replaceState: true, noscroll: false })
                     clearRedirectTimeout()
                 }, 800)
             }

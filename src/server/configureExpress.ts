@@ -15,8 +15,6 @@ import { registerUserActivity } from "./users"
 const { NODE_ENV } = process.env
 const dev = NODE_ENV === "development"
 
-const EVERGLOT_WEBRTC_SERVER_PEER = "EVERGLOT_SERVER"
-
 export default function configureExpress(app: Express, pool: Pool): Express {
     app.use(compression({ threshold: 0 }), sirv("static", { dev }), json())
 
@@ -29,8 +27,8 @@ export default function configureExpress(app: Express, pool: Pool): Express {
 
     /** Start Peer.JS WebRTC server. */
     const peerjs = PeerServer({
-        path: "/",
-        proxied: EVERGLOT_WEBRTC_SERVER_PEER,
+        path: "/webrtc",
+        proxied: APP_IS_BEHIND_REVERSE_PROXY,
     })
     app.use("/webrtc", peerjs)
 

@@ -6,11 +6,11 @@
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
     import type { Socket } from "socket.io"
-    // import Peer from "peerjs"
 
     import Message from "../comp/chat/Message.svelte"
     import Sidebar from "../comp/chat/Sidebar.svelte"
 
+    import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
 
@@ -150,20 +150,21 @@
     }
 
     onMount(async () => {
-        // @ts-ignore see https://github.com/peers/peerjs/issues/552#issuecomment-770401843
-        window.parcelRequire = undefined
-        const module = await import("peerjs")
-        // @ts-ignore
-        const Peer = module.default.peerjs.Peer as !typeof module.prototype
-
         connectToChat()
         if ($groupUuid) {
             joinChatRoom($groupUuid)
         }
 
+        // @ts-ignore see https://github.com/peers/peerjs/issues/552#issuecomment-770401843
+        window.parcelRequire = undefined
+        const module = await import("peerjs")
+
+        // @ts-ignore
+        Peer = module.peerjs.Peer as typeof module.default
+
         peer = new Peer(undefined, {
             host: "/",
-            port: window.location.port,
+            port: Number(window.location.port),
             path: "/webrtc/",
         })
     })
@@ -334,143 +335,149 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-<div class="wrapper">
-    {#key $groupUuid}
-        <Sidebar
-            {split}
-            {audio}
-            {mic}
-            handleToggleSplit={() => (split = !split)}
-            handleToggleMic={() => (mic = !mic)}
-            handleToggleAudio={() => (audio = !audio)}
-        />
-    {/key}
-    <div class="section-wrapper">
-        <section>
-            <header>
-                {#key $groupUuid}
-                    {#if !$groupChatStore.fetching && $groupChatStore.data}
-                        <span class="text-xl py-2">{$groupName || ""}</span>
-                        <div
-                            class="inline"
-                            style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
-                        />
-                        <span
-                            >{$language?.englishName || ""}
-                            {$languageSkillLevel?.name || ""}</span
-                        >
-                    {:else if $groupChatStore.error}
-                        error
-                    {/if}
-                {/key}
-            </header>
-            <div class="views-wrapper">
-                <div class="views" class:split>
-                    {#if split}
-                        <div
-                            class="view view-left hidden"
-                            in:fly={{ duration: 200, x: -600 }}
-                            out:fly={{ duration: 200, x: -600 }}
-                            style="transform-origin: center left;"
-                        >
-                            {#key $groupUuid}
-                                <div
-                                    class="view-inner view-left-inner px-3"
-                                    transition:blur|local={{ duration: 300 }}
-                                >
+{#if !$groupChatStore.fetching && !($groupChatStore.data && $groupChatStore.data?.groupByUuid)}
+    <RedirectOnce to="/" />
+{:else}
+    <div class="wrapper">
+        {#key $groupUuid}
+            <Sidebar
+                {split}
+                {audio}
+                {mic}
+                handleToggleSplit={() => (split = !split)}
+                handleToggleMic={() => (mic = !mic)}
+                handleToggleAudio={() => (audio = !audio)}
+            />
+        {/key}
+        <div class="section-wrapper">
+            <section>
+                <header>
+                    {#key $groupUuid}
+                        {#if !$groupChatStore.fetching && $groupChatStore.data}
+                            <span class="text-xl py-2">{$groupName || ""}</span>
+                            <div
+                                class="inline"
+                                style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
+                            />
+                            <span
+                                >{$language?.englishName || ""}
+                                {$languageSkillLevel?.name || ""}</span
+                            >
+                        {:else if $groupChatStore.error}
+                            error
+                        {/if}
+                    {/key}
+                </header>
+                <div class="views-wrapper">
+                    <div class="views" class:split>
+                        {#if split}
+                            <div
+                                class="view view-left hidden"
+                                in:fly={{ duration: 200, x: -600 }}
+                                out:fly={{ duration: 200, x: -600 }}
+                                style="transform-origin: center left;"
+                            >
+                                {#key $groupUuid}
                                     <div
-                                        class="flex flex-row bg-gray-light max-h-12 px-2 items-center"
+                                        class="view-inner view-left-inner px-3"
+                                        transition:blur|local={{
+                                            duration: 300,
+                                        }}
                                     >
                                         <div
-                                            class="text-lg py-1 px-3 bg-primary text-white rounded-tl-md rounded-tr-md"
+                                            class="flex flex-row bg-gray-light max-h-12 px-2 items-center"
                                         >
-                                            Games
+                                            <div
+                                                class="text-lg py-1 px-3 bg-primary text-white rounded-tl-md rounded-tr-md"
+                                            >
+                                                Games
+                                            </div>
+                                            <div class="text-lg py-1 px-3">
+                                                Subtitles
+                                            </div>
                                         </div>
-                                        <div class="text-lg py-1 px-3">
-                                            Subtitles
-                                        </div>
+                                    </div>
+                                {/key}
+                            </div>
+                        {/if}
+                        <div class="view view-right rounded-tr-md">
+                            {#key $groupUuid}
+                                <div
+                                    class="view-inner view-right-inner"
+                                    transition:blur|local={{ duration: 400 }}
+                                >
+                                    <div class="messages">
+                                        {#each messages as message (message.uuid)}
+                                            <Message
+                                                uuid={message.uuid}
+                                                userUuid={message.userUuid}
+                                                time={message.time}
+                                                text={message.text}
+                                            />
+                                        {/each}
+                                    </div>
+                                    <div
+                                        class="submit-form-container rounded-bl-md rounded-br-md"
+                                    >
+                                        <form
+                                            on:submit|preventDefault={handleSendMessage}
+                                            class="submit-form justify-end items-center"
+                                        >
+                                            {#if $groupChatStore.data && $currentGroupIsGlobal && !$currentUserIsGroupMember}
+                                                <ButtonLarge
+                                                    className="ml-4 px-6 w-full justify-center"
+                                                    tag="button"
+                                                    on:click={async () => {
+                                                        const res = await joinGlobalGroup(
+                                                            {
+                                                                groupUuid: $groupUuid,
+                                                            }
+                                                        )
+                                                        if (res.data) {
+                                                            fetchGroupMetadata()
+                                                        } else {
+                                                            // TODO: Show error feedback
+                                                        }
+                                                    }}>Join group</ButtonLarge
+                                                >
+                                            {:else if joinedRoom}
+                                                <input
+                                                    id="send-msg-input"
+                                                    type="text"
+                                                    placeholder="Enter text message …"
+                                                    required
+                                                    autocomplete="off"
+                                                    class="border-none shadow-md px-4 py-4 w-full rounded-md"
+                                                    bind:value={msg}
+                                                    in:scale={{ duration: 200 }}
+                                                />
+                                                <ButtonSmall
+                                                    className="ml-4 px-6"
+                                                    tag="button"
+                                                    on:click={handleSendMessage}
+                                                    >Send<ChevronsRightIcon
+                                                        size="24"
+                                                        class="ml-1"
+                                                    /></ButtonSmall
+                                                >
+                                            {:else}
+                                                <div
+                                                    class="w-full h-full font-bold text-center text-lg text-gray-bitdark"
+                                                >
+                                                    Connecting …
+                                                </div>
+                                            {/if}
+                                        </form>
                                     </div>
                                 </div>
                             {/key}
                         </div>
-                    {/if}
-                    <div class="view view-right rounded-tr-md">
-                        {#key $groupUuid}
-                            <div
-                                class="view-inner view-right-inner"
-                                transition:blur|local={{ duration: 400 }}
-                            >
-                                <div class="messages">
-                                    {#each messages as message (message.uuid)}
-                                        <Message
-                                            uuid={message.uuid}
-                                            userUuid={message.userUuid}
-                                            time={message.time}
-                                            text={message.text}
-                                        />
-                                    {/each}
-                                </div>
-                                <div
-                                    class="submit-form-container rounded-bl-md rounded-br-md"
-                                >
-                                    <form
-                                        on:submit|preventDefault={handleSendMessage}
-                                        class="submit-form justify-end items-center"
-                                    >
-                                        {#if $groupChatStore.data && $currentGroupIsGlobal && !$currentUserIsGroupMember}
-                                            <ButtonLarge
-                                                className="ml-4 px-6 w-full justify-center"
-                                                tag="button"
-                                                on:click={async () => {
-                                                    const res = await joinGlobalGroup(
-                                                        {
-                                                            groupUuid: $groupUuid,
-                                                        }
-                                                    )
-                                                    if (res.data) {
-                                                        fetchGroupMetadata()
-                                                    } else {
-                                                        // TODO: Show error feedback
-                                                    }
-                                                }}>Join group</ButtonLarge
-                                            >
-                                        {:else if joinedRoom}
-                                            <input
-                                                id="send-msg-input"
-                                                type="text"
-                                                placeholder="Enter text message …"
-                                                required
-                                                autocomplete="off"
-                                                class="border-none shadow-md px-4 py-4 w-full rounded-md"
-                                                bind:value={msg}
-                                                in:scale={{ duration: 200 }}
-                                            />
-                                            <ButtonSmall
-                                                className="ml-4 px-6"
-                                                tag="button"
-                                                on:click={handleSendMessage}
-                                                >Send<ChevronsRightIcon
-                                                    size="24"
-                                                    class="ml-1"
-                                                /></ButtonSmall
-                                            >
-                                        {:else}
-                                            <div
-                                                class="w-full h-full font-bold text-center text-lg text-gray-bitdark"
-                                            >
-                                                Connecting …
-                                            </div>
-                                        {/if}
-                                    </form>
-                                </div>
-                            </div>
-                        {/key}
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
-</div>
+{/if}
 
 <style>
     .wrapper {

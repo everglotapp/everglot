@@ -4,9 +4,7 @@ import chat from "./server/chat"
 import gql from "./server/gql"
 import { createDatabasePool } from "./server/db"
 
-const { NODE_ENV, PORT } = process.env
-
-const dev = NODE_ENV === "development"
+const { PORT } = process.env
 
 ;(async () => {
     /** Configure database clients. */

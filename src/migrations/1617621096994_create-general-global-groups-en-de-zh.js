@@ -36,9 +36,8 @@ exports.up = (pgm) => {
 
 exports.down = (pgm) => {
     pgm.db.query(`
-        delete from app_public.messages
-        where recipient_group_id is not null
-        and recipient_group_id in (
+        delete from app_public.group_users
+        where group_id in (
             select id
             from app_public.groups
             where global is true

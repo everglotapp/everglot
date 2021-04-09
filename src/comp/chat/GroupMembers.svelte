@@ -3,6 +3,7 @@
     import { groupUuid } from "../../stores"
     import {
         currentGroupIsGlobal,
+        currentUserIsGroupMember,
         chatUsers,
         chatLearners,
         chatNativeSpeakers,
@@ -57,14 +58,14 @@
                 Why don't you go ahead and join this group to get the ball
                 rolling? Somebody always has to go first!
             </p>
-            <div class="px-8">
-                <ButtonSmall
-                    className="w-full justify-center"
-                    tag="button"
-                    variant="OUTLINED"
-                    on:click={handleJoinGroup}>Join group</ButtonSmall
-                >
-            </div>
+        </div>
+        <div class="px-8">
+            <ButtonSmall
+                className="w-full justify-center"
+                tag="button"
+                variant="OUTLINED"
+                on:click={handleJoinGroup}>Join group</ButtonSmall
+            >
         </div>
     {:else if $currentGroupIsGlobal}
         <div class="mb-4">
@@ -84,6 +85,16 @@
                     />
                 {/if}
             {/each}
+            {#if !$currentUserIsGroupMember}
+                <div class="px-8">
+                    <ButtonSmall
+                        className="w-full justify-center"
+                        tag="button"
+                        variant="OUTLINED"
+                        on:click={handleJoinGroup}>Join group</ButtonSmall
+                    >
+                </div>
+            {/if}
         </div>
     {:else}
         <h4 class="text-gray-bitdark text-sm font-bold text-left mb-1">

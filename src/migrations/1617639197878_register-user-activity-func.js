@@ -19,7 +19,7 @@ exports.up = (pgm) => {
 
 exports.down = (pgm) => {
     pgm.sql(
-        `REVOKE EXECUTE ON FUNCTION app_public.register_user_activity(uid int) FROM evg_server`
+        `REVOKE EXECUTE ON FUNCTION app_public.register_user_activity(user_id int) FROM evg_server`
     )
-    pgm.sql(`drop function app_public.register_user_activity(uid int);`)
+    pgm.sql(`drop function app_public.register_user_activity(user_id int);`)
 }

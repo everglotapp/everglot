@@ -4803,6 +4803,19 @@ export type LanguageIdByAlpha2Query = (
   )> }
 );
 
+export type RegisterUserActivityMutationVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type RegisterUserActivityMutation = (
+  { __typename?: 'Mutation' }
+  & { registerUserActivity?: Maybe<(
+    { __typename?: 'RegisterUserActivityPayload' }
+    & Pick<RegisterUserActivityPayload, 'datetime'>
+  )> }
+);
+
 export type UserHasCompletedProfileQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -5076,6 +5089,13 @@ export const LanguageIdByAlpha2 = gql`
     query LanguageIdByAlpha2($alpha2: String!) {
   languageByAlpha2(alpha2: $alpha2) {
     id
+  }
+}
+    `;
+export const RegisterUserActivity = gql`
+    mutation RegisterUserActivity($userId: Int!) {
+  registerUserActivity(input: {userId: $userId}) {
+    datetime
   }
 }
     `;

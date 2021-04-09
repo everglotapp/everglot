@@ -135,13 +135,13 @@
         @apply mb-3;
         @apply break-words;
         @apply rounded-md;
-        @apply shadow-sm;
         @apply flex;
     }
 
     .main {
         @apply p-2;
         @apply bg-gray-lightest;
+        @apply shadow-sm;
     }
 
     .main .body {
@@ -151,8 +151,8 @@
     .avatar {
         font-size: 15px;
         font-weight: bold;
-        width: 5rem;
-        max-width: 5rem;
+        width: 4.5rem;
+        max-width: 4.5rem;
 
         @apply flex;
         @apply flex-col;

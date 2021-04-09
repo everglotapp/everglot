@@ -116,6 +116,15 @@ declare module '*/languageIdByAlpha2.graphql' {
 }
     
 
+declare module '*/registerUserActivity.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const RegisterUserActivity: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/userHasCompletedProfile.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

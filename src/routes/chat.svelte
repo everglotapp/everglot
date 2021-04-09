@@ -411,6 +411,12 @@
                                                 Subtitles
                                             </div>
                                         </div>
+                                        <div
+                                            class="toggle-split-screen"
+                                            on:click={() => (split = false)}
+                                        >
+                                            {"<"}
+                                        </div>
                                     </div>
                                 {/key}
                             </div>
@@ -630,6 +636,23 @@
 
     .submit-form-container form {
         display: flex;
+    }
+
+    .toggle-split-screen {
+        width: 30px;
+        height: 30px;
+        border: 2px solid theme("colors.primary.DEFAULT");
+        position: absolute;
+        right: -2px;
+        top: 0.5rem;
+        border-radius: 50%;
+
+        @apply flex;
+        @apply justify-center;
+        @apply font-bold;
+        @apply text-primary;
+        @apply cursor-pointer;
+        @apply bg-gray-lightest;
     }
 
     @media (max-width: 700px) {

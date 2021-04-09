@@ -452,6 +452,10 @@
         z-index: 1;
     }
 
+    .dropdown-inner :global(a) {
+        margin: 0;
+    }
+
     .groups-dropdown-inner {
         transform-origin: top right;
 

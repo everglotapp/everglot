@@ -35,7 +35,7 @@
     } from "../types/generated/graphql"
     import { JoinGlobalGroup } from "../types/generated/graphql"
 
-    import { ChevronsRightIcon } from "svelte-feather-icons"
+    import { ChevronLeftIcon, ChevronsRightIcon } from "svelte-feather-icons"
 
     let messages: ChatMessage[] = []
     let myUuid: User["uuid"] | null = null
@@ -415,7 +415,7 @@
                                             class="toggle-split-screen"
                                             on:click={() => (split = false)}
                                         >
-                                            {"<"}
+                                            <ChevronLeftIcon size="24" />
                                         </div>
                                     </div>
                                 {/key}
@@ -608,6 +608,11 @@
         @apply h-full;
     }
 
+    .view-left-inner {
+        @apply border-r;
+        @apply border-gray-light;
+    }
+
     .view-right-inner {
         @apply px-3;
 
@@ -643,16 +648,23 @@
         height: 30px;
         border: 2px solid theme("colors.primary.DEFAULT");
         position: absolute;
-        right: -2px;
+        right: -16px;
         top: 0.5rem;
         border-radius: 50%;
 
         @apply flex;
         @apply justify-center;
+        @apply items-center;
         @apply font-bold;
+        @apply text-lg;
         @apply text-primary;
         @apply cursor-pointer;
         @apply bg-gray-lightest;
+        @apply z-10;
+    }
+
+    .toggle-split-screen > :global(svg) {
+        margin-left: -2px;
     }
 
     @media (max-width: 700px) {

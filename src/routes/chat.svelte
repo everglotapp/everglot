@@ -343,7 +343,7 @@
             this page.</ErrorMessage
         >
     </div>
-{:else if !$groupChatStore.fetching && !($groupChatStore.data && $groupChatStore.data?.groupByUuid)}
+{:else if $groupUuid && !$groupChatStore.fetching && !($groupChatStore.data && $groupChatStore.data?.groupByUuid)}
     <RedirectOnce to="/" />
 {:else}
     <div class="wrapper">
@@ -362,12 +362,15 @@
                 <header>
                     {#key $groupUuid}
                         {#if !$groupChatStore.fetching && $groupChatStore.data}
-                            <span class="text-xl py-2">{$groupName || ""}</span>
+                            <span
+                                class="text-xl py-2 font-bold text-gray-lightest"
+                                >{$groupName || ""}</span
+                            >
                             <div
                                 class="inline"
                                 style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
                             />
-                            <span
+                            <span class="text-xl py-2"
                                 >{$language?.englishName || ""}
                                 {$languageSkillLevel?.name || ""}</span
                             >

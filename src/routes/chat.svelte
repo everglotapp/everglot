@@ -365,7 +365,7 @@
             <section>
                 <header>
                     {#key $groupUuid}
-                        {#if !$groupChatStore.fetching && $groupChatStore.data}
+                        {#if $groupChatStore.data && !$groupChatStore.error}
                             <span
                                 class="text-xl py-2 font-bold text-gray-lightest"
                                 >{$groupName || ""}</span

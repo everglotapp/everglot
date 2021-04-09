@@ -610,7 +610,7 @@
 
     .view-left-inner {
         @apply border-r;
-        @apply border-gray-light;
+        @apply border-gray-lightest;
     }
 
     .view-right-inner {

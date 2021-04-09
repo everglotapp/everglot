@@ -55,8 +55,8 @@
                 {/if}
                 <div class="mx-auto mt-1" style="width: 64px; height: 64px;">
                     <Avatar
-                        username={user.username || undefined}
-                        url={user.avatarUrl || undefined}
+                        username={user.username || ""}
+                        url={user.avatarUrl || ""}
                         size={64}
                     />
                 </div>

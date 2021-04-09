@@ -1,6 +1,7 @@
 import compression from "compression"
 import sirv from "sirv"
 import { json } from "express"
+import { ExpressPeerServer } from "peer"
 
 import * as sapper from "@sapper/server"
 
@@ -10,13 +11,26 @@ import session from "./middlewares/session"
 import type { Express } from "express"
 import type { Pool } from "pg"
 import { registerUserActivity } from "./users"
+import type { Server } from "http"
 
 const { NODE_ENV } = process.env
-export const dev = NODE_ENV === "development"
+const dev = NODE_ENV === "development"
 
-export const APP_IS_BEHIND_REVERSE_PROXY = true // could be an env variable
+const APP_IS_BEHIND_REVERSE_PROXY = true // could be an env variable
 
-export default function configureExpress(app: Express, pool: Pool): Express {
+const WEBRTC_PATH = "/webrtc"
+
+export default function configureExpress(
+    app: Express,
+    server: Server,
+    pool: Pool
+): Express {
+    /** Configure Peer.JS WebRTC server. */
+    const peerjs = ExpressPeerServer(server, {
+        path: "/",
+        proxied: APP_IS_BEHIND_REVERSE_PROXY ? "true" : "false",
+    })
+
     app.use(compression({ threshold: 0 }), sirv("static", { dev }), json())
 
     if (!dev) {
@@ -36,6 +50,8 @@ export default function configureExpress(app: Express, pool: Pool): Express {
         }
         next()
     })
+
+    app.use(WEBRTC_PATH, peerjs)
 
     app.use(async (req, _res, next) => {
         const { user_id: userId } = req.session

@@ -37,7 +37,7 @@
                 <div aria-selected={!split}>Off</div>
             </div>
         </div>
-        <div class="toggle-row">
+        <div class="toggle-row" style="filter: grayscale(1);">
             <svg
                 width="35"
                 height="35"
@@ -86,7 +86,7 @@
                     </clipPath>
                 </defs>
             </svg>
-            <span>Mic</span>
+            <span class="text-gray-bitdark">Mic</span>
             <div
                 class="toggle"
                 style="cursor: not-allowed;"
@@ -96,7 +96,7 @@
                 <div aria-selected={!mic}>Off</div>
             </div>
         </div>
-        <div class="toggle-row">
+        <div class="toggle-row" style="filter: grayscale(1);">
             <svg
                 width="35"
                 height="35"
@@ -109,7 +109,7 @@
                     fill="#45CDCD"
                 />
             </svg>
-            <span>Audio</span>
+            <span class="text-gray-bitdark">Audio</span>
             <div class="toggle" on:click={handleToggleAudio}>
                 <div aria-selected={audio}>On</div>
                 <div aria-selected={!audio}>Off</div>

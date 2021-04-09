@@ -267,6 +267,7 @@
                                                 color="SECONDARY"
                                                 tag="button"
                                                 className="w-full"
+                                                disabled
                                                 on:click={(event) =>
                                                     event.preventDefault()}
                                                 ><span>Invite friends</span

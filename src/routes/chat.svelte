@@ -166,7 +166,7 @@
         peer = new Peer(undefined, {
             host: "/",
             port: Number(window.location.port),
-            path: "/webrtc/",
+            path: "/webrtc",
         })
     })
 

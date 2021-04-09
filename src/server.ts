@@ -1,11 +1,15 @@
 import express from "express"
-import configureExpress from "./server/configureExpress"
+import http from "http"
+import { ExpressPeerServer } from "peer"
+import configureExpress, {
+    APP_IS_BEHIND_REVERSE_PROXY,
+} from "./server/configureExpress"
 import chat from "./server/chat"
 import gql from "./server/gql"
 import { createDatabasePool } from "./server/db"
 
 const { PORT } = process.env
-
+export const WEBRTC_PATH = "/webrtc"
 ;(async () => {
     /** Configure database clients. */
     const db = createDatabasePool()
@@ -17,13 +21,23 @@ const { PORT } = process.env
     /** Watch the PG database and update the GraphQL schema automatically. */
     await gql.start()
 
+    let app = express()
+    const server = http.createServer(app)
+
+    /** Configure Peer.JS WebRTC server. */
+    const peerjs = ExpressPeerServer(server, {
+        path: "/",
+        proxied: APP_IS_BEHIND_REVERSE_PROXY ? "true" : "false",
+    })
+    app.use(WEBRTC_PATH, peerjs)
+
     /** Configure HTTP server. */
-    const app = configureExpress(express(), db)
+    app = configureExpress(app, db)
     /** Disable header leaking information on the server. */
     app.disable("x-powered-by")
 
     /** Start HTTP server. */
-    const server = app.listen(PORT)
+    server.listen(PORT)
 
     /** Start Socket.IO (WebSocket) chat server. */
     chat.start(server, db)

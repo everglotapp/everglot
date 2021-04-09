@@ -4,7 +4,11 @@
     import SidebarHeadline from "../typography/SidebarHeadline.svelte"
 
     export let handleToggleSplit: () => void
+    export let handleToggleMic: () => void
+    export let handleToggleAudio: () => void
     export let split = false
+    export let mic = false
+    export let audio = false
 </script>
 
 <div class="sidebar">
@@ -83,9 +87,13 @@
                 </defs>
             </svg>
             <span>Mic</span>
-            <div class="toggle" style="cursor: not-allowed;">
-                <div>On</div>
-                <div aria-selected="true">Off</div>
+            <div
+                class="toggle"
+                style="cursor: not-allowed;"
+                on:click={handleToggleMic}
+            >
+                <div aria-selected={mic}>On</div>
+                <div aria-selected={!mic}>Off</div>
             </div>
         </div>
         <div class="toggle-row">
@@ -102,9 +110,9 @@
                 />
             </svg>
             <span>Audio</span>
-            <div class="toggle" style="cursor: not-allowed;">
-                <div>On</div>
-                <div aria-selected="true">Off</div>
+            <div class="toggle" on:click={handleToggleAudio}>
+                <div aria-selected={audio}>On</div>
+                <div aria-selected={!audio}>Off</div>
             </div>
         </div>
     </div>

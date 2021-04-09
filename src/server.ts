@@ -1,5 +1,5 @@
 import express from "express"
-import { PeerServer } from "peer"
+import { ExpressPeerServer } from "peer"
 import configureExpress from "./server/configureExpress"
 import chat from "./server/chat"
 import gql from "./server/gql"
@@ -8,6 +8,8 @@ import { createDatabasePool } from "./server/db"
 const { NODE_ENV, PORT } = process.env
 
 const dev = NODE_ENV === "development"
+
+const EVERGLOT_SERVER_PEER = "EVERGLOT_SERVER"
 
 ;(async () => {
     /** Configure database clients. */
@@ -31,9 +33,9 @@ const dev = NODE_ENV === "development"
     chat.start(server, db)
 
     /** Start Peer.JS WebRTC server. */
-    // const peerjs = PeerServer({
-    //     port: 9000,
-    //     path: "/webrtc",
-    //     proxied: dev ? false : true,
-    // })
+    const peerjs = ExpressPeerServer(server, {
+        path: "/",
+        proxied: dev ? false : true,
+    })
+    app.use("/webrtc", peerjs)
 })()

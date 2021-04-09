@@ -6,6 +6,7 @@
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
     import type { Socket } from "socket.io"
+    // import Peer from "peerjs"
 
     import Message from "../comp/chat/Message.svelte"
     import Sidebar from "../comp/chat/Sidebar.svelte"
@@ -39,6 +40,8 @@
     let myUuid: User["uuid"] | null = null
     let msg = ""
 
+    let Peer
+
     let fetchGroupMetadataInterval: number | null = null
 
     query(groupChatStore)
@@ -65,11 +68,15 @@
         $groupChatStore.variables = { groupUuid: $groupUuid }
         fetchGroupMetadata()
         if (fetchGroupMetadataInterval === null) {
-            fetchGroupMetadataInterval = setInterval(fetchGroupMetadata, 30000)
+            const FETCH_GROUP_METADATA_INTERVAL_SECS = 30
+            fetchGroupMetadataInterval = setInterval(
+                fetchGroupMetadata,
+                FETCH_GROUP_METADATA_INTERVAL_SECS * 1000
+            )
         }
 
-        leaveRoom()
-        joinRoom($groupUuid)
+        leaveChatRoom()
+        joinChatRoom($groupUuid)
     }
 
     function fetchGroupMetadata() {
@@ -142,15 +149,27 @@
         }
     }
 
-    onMount(() => {
-        connect()
+    onMount(async () => {
+        // @ts-ignore see https://github.com/peers/peerjs/issues/552#issuecomment-770401843
+        window.parcelRequire = undefined
+        const module = await import("peerjs")
+        // @ts-ignore
+        const Peer = module.default.peerjs.Peer as !typeof module.prototype
+
+        connectToChat()
         if ($groupUuid) {
-            joinRoom($groupUuid)
+            joinChatRoom($groupUuid)
         }
+
+        peer = new Peer(undefined, {
+            host: "/",
+            port: window.location.port,
+            path: "/webrtc/",
+        })
     })
 
     onDestroy(() => {
-        leaveRoom()
+        leaveChatRoom()
         if (socket) {
             socket.disconnect()
         }
@@ -160,9 +179,11 @@
         }
     })
 
+    let peer
+
     let socket: SocketIO.Socket | null = null
     let joinedRoom: string | null = null
-    function connect() {
+    function connectToChat() {
         if (socket || typeof window === "undefined") {
             return
         }
@@ -175,7 +196,7 @@
             socket.on("message", onMessage)
         }
     }
-    function joinRoom(room: string) {
+    function joinChatRoom(room: string) {
         if (!socket) {
             return
         }
@@ -193,7 +214,7 @@
         })
     }
 
-    function leaveRoom(): boolean {
+    function leaveChatRoom(): boolean {
         if (!socket) {
             return false
         }
@@ -305,6 +326,8 @@
     }
 
     let split = true
+    let audio = false
+    let mic = false
 </script>
 
 <svelte:head>
@@ -313,7 +336,14 @@
 
 <div class="wrapper">
     {#key $groupUuid}
-        <Sidebar {split} handleToggleSplit={() => (split = !split)} />
+        <Sidebar
+            {split}
+            {audio}
+            {mic}
+            handleToggleSplit={() => (split = !split)}
+            handleToggleMic={() => (mic = !mic)}
+            handleToggleAudio={() => (audio = !audio)}
+        />
     {/key}
     <div class="section-wrapper">
         <section>

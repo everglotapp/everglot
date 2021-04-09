@@ -20,6 +20,7 @@ query UserProfile {
         groupUsers {
             nodes {
                 group {
+                    uuid
                     groupName
                     language {
                         englishName

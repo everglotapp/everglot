@@ -4869,7 +4869,7 @@ export type UserProfileQuery = (
         & Pick<GroupUser, 'userType' | 'joinedOn'>
         & { group?: Maybe<(
           { __typename?: 'Group' }
-          & Pick<Group, 'groupName'>
+          & Pick<Group, 'uuid' | 'groupName'>
           & { language?: Maybe<(
             { __typename?: 'Language' }
             & Pick<Language, 'englishName'>
@@ -5126,6 +5126,7 @@ export const UserProfile = gql`
     groupUsers {
       nodes {
         group {
+          uuid
           groupName
           language {
             englishName

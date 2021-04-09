@@ -2,6 +2,7 @@
     import { scale } from "svelte/transition"
     import { svelteTime } from "svelte-time"
 
+    import { currentUser, currentUserStore } from "../../stores"
     import { chatUsers } from "../../stores/chat"
 
     import Avatar from "../users/Avatar.svelte"
@@ -28,6 +29,39 @@
     const MAX_BODY_LEN = 580
     $: body = showMore ? text : text.substring(0, MAX_BODY_LEN)
     $: bodyCutOff = text.length > MAX_BODY_LEN
+
+    $: usernameTag =
+        $currentUser && $currentUser.username && $currentUser.username.length
+            ? `@${$currentUser.username}`
+            : null
+
+    enum BodyElementType {
+        Text,
+        Tag,
+    }
+    type BodyElement = {
+        content: string
+        type: BodyElementType
+    }
+    let bodyElements: BodyElement[] = []
+    $: if (usernameTag) {
+        const newElements = []
+        const split = body.split(usernameTag).map((content) => ({
+            type: BodyElementType.Text,
+            content,
+        }))
+        for (let i = 0; i < split.length - 1; ++i) {
+            newElements.push(split[i])
+            newElements.push({
+                content: usernameTag,
+                type: BodyElementType.Tag,
+            })
+        }
+        newElements.push(split[split.length - 1])
+        bodyElements = newElements
+    } else {
+        bodyElements = [{ content: body, type: BodyElementType.Text }]
+    }
 </script>
 
 <div
@@ -101,7 +135,16 @@
                 }}
             />
         </div>
-        <div class="body">{body}{bodyCutOff && !showMore ? "…" : ""}</div>
+        <div class="body">
+            {#each bodyElements as element}
+                {#if element.type === BodyElementType.Text}
+                    <span>{element.content}</span>
+                {:else}
+                    <span class="tag">{element.content}</span>
+                {/if}
+            {/each}
+            {bodyCutOff && !showMore ? "…" : ""}
+        </div>
         {#if bodyCutOff}
             <div>
                 {#if showMore}
@@ -146,6 +189,11 @@
 
     .main .body {
         @apply px-2;
+    }
+
+    .main .body .tag {
+        @apply font-bold;
+        @apply text-gray-bitdark;
     }
 
     .avatar {

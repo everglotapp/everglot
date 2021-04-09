@@ -73,7 +73,7 @@ export function start(server: Server, pool: Pool) {
             if (userIsNew(chatUser)) {
                 // Welcome current user
                 sendBotMessage(
-                    `Welcome to Everglot, ${chatUser.user.username}! Write !help to see available commands.`,
+                    `Welcome to Everglot, @${chatUser.user.username}! Write !help to see available commands.`,
                     groupUuid
                 )
 

@@ -13,6 +13,7 @@
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
+    import ErrorMessage from "../comp/util/ErrorMessage.svelte"
 
     import type { ChatUser } from "../server/chat/users"
     import type { ChatMessage } from "../server/chat/messages"
@@ -335,7 +336,14 @@
     <title>Everglot – Language Community</title>
 </svelte:head>
 
-{#if !$groupChatStore.fetching && !($groupChatStore.data && $groupChatStore.data?.groupByUuid)}
+{#if !$groupChatStore.fetching && $groupChatStore.error}
+    <div class="container max-w-sm my-8">
+        <ErrorMessage
+            >Something went wrong while loading the chat. Maybe try reloading
+            this page.</ErrorMessage
+        >
+    </div>
+{:else if !$groupChatStore.fetching && !($groupChatStore.data && $groupChatStore.data?.groupByUuid)}
     <RedirectOnce to="/" />
 {:else}
     <div class="wrapper">

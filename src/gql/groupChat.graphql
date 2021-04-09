@@ -1,0 +1,41 @@
+query GroupChat($groupUuid: UUID!) {
+    groupByUuid(uuid: $groupUuid) {
+        groupName
+        language {
+            englishName
+        }
+        languageSkillLevel {
+            name
+        }
+        usersByGroupUserGroupIdAndUserId {
+            nodes {
+                bio
+                avatarUrl
+                uuid
+                username
+                lastActiveAt
+                userLanguages {
+                    nodes {
+                        language {
+                            englishName
+                        }
+                    }
+                }
+                groupUsers {
+                    nodes {
+                        userType
+                        group {
+                            uuid
+                            language {
+                                englishName
+                            }
+                            languageSkillLevel {
+                                name
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

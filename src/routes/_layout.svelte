@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
+    import { v4 as uuidv4, validate as uuidValidate } from "uuid"
 
     import fetch from "cross-fetch"
     import {
@@ -13,12 +14,44 @@
     import { persistedFetchExchange } from "@urql/exchange-persisted-fetch"
     import persistedOperations from "../graphql.client.json"
 
-    import { currentUser } from "../stores"
+    import { currentUserStore, groupUuid } from "../stores"
 
     import MainNav from "../comp/layout/MainNav.svelte"
     import Footer from "../comp/layout/Footer.svelte"
 
     import type { DocumentNode, OperationDefinitionNode } from "graphql"
+
+    import {
+        fromValue,
+        fromPromise,
+        filter,
+        merge,
+        mergeMap,
+        pipe,
+        share,
+        takeUntil,
+    } from "wonka"
+
+    import { makeFetchBody } from "@urql/core/internal"
+    import { persistedMutationFetchExchange } from "../persistedMutationFetchExchange"
+
+    async function generateHash(
+        _query: string,
+        document: DocumentNode
+    ): Promise<string> {
+        // Note that we're assuming that the first definition is a operation
+        // definition rather than a FragmentDefinitionNode.
+        // Also we're ignoring the query variable meaning that we
+        // cannot just use raw query strings. To change that, return its hash.
+        const operationName = (document
+            ?.definitions[0] as OperationDefinitionNode)?.name?.value
+        if (operationName) {
+            return persistedOperations[
+                operationName as keyof typeof persistedOperations
+            ]
+        }
+        throw new Error("Failed to resolve persisted operation hash")
+    }
 
     initUrqlClient({
         url: "/graphql",
@@ -26,42 +59,30 @@
         exchanges: [
             dedupExchange,
             cacheExchange,
+            persistedMutationFetchExchange({
+                // Disable until PostGraphile supports queries via GET
+                // https://github.com/graphile/postgraphile/issues/442
+                preferGetForPersistedQueries: false,
+                enforcePersistedQueries: true,
+                generateHash,
+            }),
             persistedFetchExchange({
                 // Disable until PostGraphile supports queries via GET
                 // https://github.com/graphile/postgraphile/issues/442
                 preferGetForPersistedQueries: false,
                 enforcePersistedQueries: true,
-                async generateHash(
-                    _query: string,
-                    document: DocumentNode
-                ): Promise<string> {
-                    // Note that we're assuming that the first definition is a operation
-                    // definition rather than a FragmentDefinitionNode.
-                    // Also we're ignoring the query variable meaning that we
-                    // cannot just use raw query strings. To change that, return its hash.
-                    const operationName = (document
-                        ?.definitions[0] as OperationDefinitionNode)?.name
-                        ?.value
-                    if (operationName) {
-                        return persistedOperations[
-                            operationName as keyof typeof persistedOperations
-                        ]
-                    }
-                    throw new Error(
-                        "Failed to resolve persisted operation hash"
-                    )
-                },
+                generateHash,
             }),
             fetchExchange,
         ],
     })
 
-    query(currentUser)
+    query(currentUserStore)
 
     export let segment: string | undefined = undefined
     segment = segment // get rid of unused prop warning
     // @ts-ignore (left side of comma operator isn't ignored by svelte)
-    $: segment, change()
+    $: segment, handlePageChange()
 
     $: showMainNav = segment !== "login" && segment !== "join"
     $: showFooter = segment !== "chat"
@@ -70,14 +91,24 @@
     onMount(() => {
         // TODO: is this really necessary?
         segment = window.location.pathname.split("/")[1]
+        const group = new URL(window.location.href).searchParams.get("group")
+        if (group && group.length && uuidValidate(group)) {
+            $groupUuid = group
+        }
     })
 
     const timeout = 150
-    let transitionTriggeringCount = 0
 
-    const change = () => {
-        $currentUser.context = { requestPolicy: "network-only" }
-        transitionTriggeringCount = (transitionTriggeringCount + 1) % 3
+    let transitionId = uuidv4()
+    const doTransition = () => {
+        transitionId = uuidv4()
+    }
+    const handlePageChange = () => {
+        doTransition()
+        $currentUserStore.context = {
+            requestPolicy: "network-only",
+            transitionId, // This forces a re-execution by changing the object contents.
+        }
     }
 </script>
 
@@ -87,7 +118,7 @@
     {/if}
 
     <main>
-        {#if transitionTriggeringCount === 0}
+        {#key transitionId}
             <div
                 class="main-inner"
                 in:scale={{ duration: timeout, delay: timeout }}
@@ -95,23 +126,7 @@
             >
                 <slot />
             </div>
-        {:else if transitionTriggeringCount === 1}
-            <div
-                class="main-inner"
-                in:scale={{ duration: timeout, delay: timeout }}
-                out:scale={{ duration: timeout }}
-            >
-                <slot />
-            </div>
-        {:else if transitionTriggeringCount === 2}
-            <div
-                class="main-inner"
-                in:scale={{ duration: timeout, delay: timeout }}
-                out:scale={{ duration: timeout }}
-            >
-                <slot />
-            </div>
-        {/if}
+        {/key}
     </main>
 
     {#if showFooter}

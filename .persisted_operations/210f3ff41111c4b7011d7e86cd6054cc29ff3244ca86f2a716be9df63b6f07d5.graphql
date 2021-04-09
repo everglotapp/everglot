@@ -1,0 +1,6 @@
+mutation RegisterUserActivity($userId: Int!) {
+  registerUserActivity(input: {userId: $userId}) {
+    datetime
+    __typename
+  }
+}

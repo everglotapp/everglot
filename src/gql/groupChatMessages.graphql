@@ -1,0 +1,14 @@
+query GroupChatMessages($groupUuid: UUID!) {
+    groupByUuid(uuid: $groupUuid) {
+        messagesByRecipientGroupId(orderBy: CREATED_AT_ASC, last: 1000) {
+            nodes {
+                body
+                createdAt
+                sender {
+                    uuid
+                }
+                uuid
+            }
+        }
+    }
+}

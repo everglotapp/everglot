@@ -11,21 +11,22 @@ import { ensureJson, serverError } from "../helpers"
 
 import { createDatabasePool } from "../server/db"
 import { performQuery } from "../server/gql"
+import { UserHasCompletedProfileQuery } from "../types/generated/graphql"
 
 async function userHasCompletedProfile(userId: number): Promise<boolean> {
-    const queryResult = await performQuery(
-        `query User($id: Int!) {
+    const queryResult = await performQuery<UserHasCompletedProfileQuery>(
+        `query UserHasCompletedProfile($id: Int!) {
             user(id: $id) {
-              username
-              userLanguages {
-                totalCount
-              }
+                username
+                userLanguages {
+                    totalCount
+                }
             }
-          }
-          `,
+        }
+        `,
         { id: userId }
     )
-    if (queryResult.data) {
+    if (queryResult.data && queryResult.data.user) {
         const {
             user: { username, userLanguages },
         } = queryResult.data
@@ -42,7 +43,7 @@ export async function get(req: Request, res: Response, next: () => void) {
         return
     }
     if (await userHasCompletedProfile(req.session.user_id)) {
-        res.redirect("/groups")
+        res.redirect("/global")
         return
     }
     next()
@@ -212,7 +213,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
 }
 
 const SQL_UPDATE_USER_ATTRIBUTES = `
-UPDATE users SET
+UPDATE app_public.users SET
     username = $2,
     gender = $3,
     last_active_at = NOW()
@@ -220,7 +221,7 @@ WHERE id = $1
 RETURNING id`
 
 const SQL_ASSIGN_NATIVE_LANGUAGE = `
-INSERT INTO user_languages (
+INSERT INTO app_public.user_languages (
     user_id,
     language_id,
     language_skill_level_id,
@@ -230,7 +231,7 @@ VALUES (
     $1,
     (
         SELECT id
-        FROM languages
+        FROM app_public.languages
         WHERE alpha2 = $2
     ),
     null,
@@ -239,7 +240,7 @@ VALUES (
 RETURNING id`
 
 const SQL_ASSIGN_NON_NATIVE_LANGUAGE = `
-INSERT INTO user_languages (
+INSERT INTO app_public.user_languages (
     user_id,
     language_id,
     language_skill_level_id,
@@ -249,12 +250,12 @@ VALUES (
     $1,
     (
         SELECT id
-        FROM languages
+        FROM app_public.languages
         WHERE alpha2 = $2
     ),
     (
         SELECT id
-        FROM language_skill_levels
+        FROM app_public.language_skill_levels
         WHERE name = $3
     ),
     false

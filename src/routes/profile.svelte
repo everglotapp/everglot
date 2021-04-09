@@ -1,552 +1,162 @@
 <script lang="ts">
-    import { goto } from "@sapper/app"
     import { scale } from "svelte/transition"
 
-    import type { Language } from "../types/generated/graphql"
-    import { query } from "@urql/svelte"
-
-    import {
-        currentUser,
-        username,
-        room,
-        languageCodeMappings,
-    } from "../stores"
-    import {
-        MAX_LEARNING,
-        MAX_TEACHING,
-        Gender,
-        CefrLevel,
-        MIN_USERNAME_LENGTH,
-    } from "../users"
-
-    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
-    import GroupSelect from "../comp/util/GroupSelect.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import PageTitle from "../comp/typography/PageTitle.svelte"
 
-    import { ArrowRightIcon, ClockIcon } from "svelte-feather-icons"
+    import { query, operationStore } from "@urql/svelte"
+    import { UserProfile, UserType } from "../types/generated/graphql"
+    import type { UserProfileQuery } from "../types/generated/graphql"
+    import { Gender } from "../users"
+    import Avatar from "../comp/users/Avatar.svelte"
+    import { groupUuid } from "../stores"
 
-    query(languageCodeMappings)
+    const userProfileStore = operationStore<UserProfileQuery>(UserProfile)
+    query(userProfileStore)
 
-    let prefilled = false
-    $: if (!$currentUser.fetching && $currentUser.data?.users.nodes[0]) {
-        const user = $currentUser.data.users.nodes[0]
-        if (user.username !== null && user.userLanguages.totalCount) {
-            // Profile has already been completed, a second time won't work.
-            goto("/profile/success", { replaceState: true, noscroll: false })
-        } else if (!prefilled) {
-            // Pre-fill form.
-            prefilled = true
-            $username = user.username || $username
-            if (user.languageByLocale !== null) {
-                const { alpha2 } = user.languageByLocale
-                if (teach.hasOwnProperty(alpha2)) {
-                    teach = { ...teach, [alpha2]: true }
-                } else {
-                    let foundItem = items.find((item) => item.value === alpha2)
-                    if (foundItem) {
-                        teachOther = [...teachOther, foundItem]
-                    }
-                }
-            }
-        }
-    }
-
-    let teach: Record<string, boolean> = {
-        de: false,
-        en: false,
-    }
-    let learn: Record<string, boolean> = {
-        de: false,
-        en: false,
-    }
-
-    let errorMessage: string | null = null
-
-    let languages: Pick<Language, "englishName" | "alpha2">[] = []
-    $: if (
-        $languageCodeMappings &&
-        !$languageCodeMappings.fetching &&
-        $languageCodeMappings.data
-    ) {
-        languages = $languageCodeMappings.data.languages.nodes
-    }
-    type LanguageItem = { value: string; label: string }
-    let items: LanguageItem[] = []
-    $: items = languages
-        .filter(({ alpha2 }) => alpha2 !== "en" && alpha2 !== "de")
-        .map(({ alpha2, englishName }) => ({
-            value: alpha2,
-            label: englishName,
-        }))
-
-    let learnOther: LanguageItem[] = []
-    let teachOther: LanguageItem[] = []
-
-    let learningLevels: Record<string, CefrLevel | ""> = {
-        en: "",
-        de: "",
-        ...Object.fromEntries(items.map((item) => [item.value, ""])),
-    }
-
-    $: totalTeaching =
-        Object.values(teach)
-            .map(Number)
-            .reduce((n, i) => n + i) + teachOther.length
-    $: totalLearning =
-        Object.values(learn)
-            .map(Number)
-            .reduce((n, i) => n + i) + learnOther.length
-
-    $: learningCodes = [
-        ...Object.keys(learn).filter((code) => learn[code]),
-        ...learnOther.map((item) => item.value),
-    ]
-
-    $: learnable =
-        totalLearning >= MAX_LEARNING
-            ? []
-            : items.filter((item) => {
-                  const lang = item.value
-                  return Object.keys(learn).includes(lang)
-                      ? !learn[lang as keyof typeof learn]
-                      : !teachOther.find(({ value }) => value === lang)
-              })
-    $: teachable =
-        totalTeaching >= MAX_TEACHING
-            ? []
-            : items.filter((item) => {
-                  const lang = item.value
-                  return Object.keys(teach).includes(lang)
-                      ? !teach[lang as keyof typeof teach]
-                      : !learnOther.find(({ value }) => value === lang)
-              })
-
-    function handleSelectLearnOther(event: CustomEvent<LanguageItem[] | null>) {
-        learnOther = [...(event.detail || [])]
-    }
-    function handleSelectTeachOther(event: CustomEvent<LanguageItem[] | null>) {
-        teachOther = [...(event.detail || [])]
-    }
-
-    function toggleLearn(lang: keyof typeof teach & keyof typeof learn) {
-        learn = {
-            ...learn,
-            [lang]: !learn[lang],
-        }
-        if (learn[lang]) {
-            teach = { ...teach, [lang]: false }
-        }
-    }
-
-    function toggleTeach(lang: keyof typeof teach & keyof typeof learn) {
-        teach = {
-            ...teach,
-            [lang]: !teach[lang],
-        }
-        if (teach[lang]) {
-            learn = { ...learn, [lang]: false }
-        }
-    }
-
-    let gender: Gender | null = null
-    function toggleGender(pickedGender: Gender) {
-        return (gender = gender === pickedGender ? null : pickedGender)
-    }
-
-    let submitting = false
-    async function handleSubmit() {
-        if (submitting) {
-            return
-        }
-
-        const form = document.forms[0]
-        if (form.name !== "user-profile") {
-            return
-        }
-        // TODO: replace with JS form validation
-        if (!form.reportValidity()) {
-            // TODO: give feedback that submission failed and why
-            return
-        }
-        submitting = true
-        errorMessage = null
-        const teachingCodes = [
-            ...Object.keys(teach).filter((code) => teach[code]),
-            ...teachOther.map((item) => item.value),
-        ]
-        const response = await fetch("/profile", {
-            method: "post",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username: $username,
-                gender,
-                teach: teachingCodes,
-                learn: learningCodes,
-                cefrLevels: Object.entries(learningLevels).reduce(
-                    (levels, [code, level]) =>
-                        learningCodes.includes(code)
-                            ? { ...levels, [code]: level }
-                            : levels,
-                    {}
-                ),
-            }),
-            redirect: "follow", // if user isn't signed in anymore
-        })
-        const res = await response.json()
-        if (!res.hasOwnProperty("success")) {
-            submitting = false
-            return
-        }
-        if (res.success === true) {
-            $room = learn.en
-                ? "English"
-                : learn.de
-                ? "German"
-                : // : learnOther[0].label // FIXME: learnOther[0] can be undefined here … why?
-                  "English"
-            goto("/profile/success")
-        } else {
-            errorMessage = res.message
-        }
-        submitting = false
-    }
+    $: userProfile =
+        $userProfileStore.data && !$userProfileStore.error
+            ? $userProfileStore.data.currentUser
+            : null
+    $: userLanguages =
+        userProfile?.userLanguages?.nodes
+            .filter(Boolean)
+            .map((node) => node!) || []
+    $: groupUsers =
+        userProfile?.groupUsers?.nodes.filter(Boolean).map((node) => node!) ||
+        []
 </script>
 
 <svelte:head>
-    <title>Everglot – Language Community</title>
+    <title>My Profile – Everglot</title>
 </svelte:head>
 
-{#if $languageCodeMappings.fetching}
-    <div />
-{:else if $languageCodeMappings.error}
-    <p class="container max-w-2xl px-4 py-8 md:py-8">
-        Something went wrong.
-        <ErrorMessage>{$languageCodeMappings.error.message}</ErrorMessage>
-    </p>
-{:else}
-    <div class="container max-w-2xl px-4 py-8 md:py-8" in:scale|local>
-        <PageTitle>Tell us a little bit about yourself</PageTitle>
+<div class="container gap-x-4 py-16 px-2 w-full max-w-sm md:max-w-md">
+    {#if $userProfileStore.fetching}
+        <div>loading</div>
+    {:else if $userProfileStore.error}
+        <ErrorMessage>Failed to load your profile</ErrorMessage>
+    {:else}
+        <PageTitle>My Profile</PageTitle>
+        <div class="flex flex-row flex-wrap-reverse">
+            <div class="w-full md:w-2/3">
+                <h4>Email:</h4>
+                <div class="mb-4">{userProfile?.email}</div>
+                <div><a href="/changepassword">Change my password</a></div>
+                <h4>Username:</h4>
+                <div>{userProfile?.username}</div>
+                <h4>Gender:</h4>
+                <div>
+                    {#if userProfile?.gender == Gender.MALE}
+                        Male
+                    {:else if userProfile?.gender == Gender.FEMALE}
+                        Female
+                    {:else if userProfile?.gender == Gender.OTHER}
+                        Other
+                    {:else}
+                        Unknown
+                    {/if}
+                </div>
+            </div>
+            <div class="w-full md:w-1/3">
+                <div
+                    in:scale|local={{ delay: 400, duration: 100 }}
+                    class="mx-auto"
+                    style="border-radius: 50%; width: 96px; height: 96px;"
+                >
+                    <Avatar
+                        username={userProfile?.username || ""}
+                        url={userProfile?.avatarUrl || ""}
+                        size={96}
+                    />
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <h4>My Languages:</h4>
+            <ul>
+                {#each userLanguages as language}
+                    <li>
+                        {language.language?.englishName}
+                        {#if language?.native}
+                            (Native)
+                        {:else}
+                            ({language?.languageSkillLevel?.name})
+                        {/if}
+                    </li>
+                {/each}
+            </ul>
 
-        <form
-            name="user-profile"
-            action="/chat"
-            class="py-8 md:px-8"
-            on:submit|preventDefault={handleSubmit}
-        >
-            <fieldset class="mb-2">
-                <div class="form-control">
-                    <label for="username">Pick a username*</label>
-                    <p class="helper-text">
-                        The others will see you under this name.
-                    </p>
-                    <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        placeholder="Username …"
-                        required
-                        minlength={MIN_USERNAME_LENGTH}
-                        pattern={`.{${MIN_USERNAME_LENGTH},}`}
-                        title={`${MIN_USERNAME_LENGTH} characters minimum`}
-                        bind:value={$username}
-                    />
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend
-                    >What language(s) are you interested in ({MAX_LEARNING} max)?*</legend
-                >
-                <p class="helper-text">
-                    Please only choose languages that you really want to learn
-                    or already are learning.
-                </p>
-                <div class="form-control">
-                    <ButtonSmall
-                        tag="button"
-                        className="mr-1 mb-1"
-                        variant={learn.de ? "FILLED" : "OUTLINED"}
-                        disabled={teach.de ||
-                            (!learn.de && totalLearning >= MAX_LEARNING)}
-                        on:click={() => toggleLearn("de")}>German</ButtonSmall
-                    >
-                    <ButtonSmall
-                        tag="button"
-                        className="mr-1 mb-1"
-                        variant={learn.en ? "FILLED" : "OUTLINED"}
-                        disabled={teach.en ||
-                            (!learn.en && totalLearning >= MAX_LEARNING)}
-                        on:click={() => toggleLearn("en")}>English</ButtonSmall
-                    >
-                    <GroupSelect
-                        items={learnable}
-                        selected={learnOther.length ? learnOther : null}
-                        hideInput={totalLearning >= MAX_LEARNING}
-                        disabled={learn.de && learn.en}
-                        on:select={handleSelectLearnOther}
-                    />
-                </div>
-            </fieldset>
-            {#if learningCodes.length}
-                <fieldset class="mt-1 mb-3">
-                    <legend>Your level in …</legend>
-                    {#each learningCodes as code}
-                        <div class="level flex items-center py-1">
-                            <label for={`level_${code}`}>
-                                {languages.find(({ alpha2 }) => alpha2 === code)
-                                    ?.englishName}:
-                            </label>
-                            <div>
-                                <select
-                                    id={`level_${code}`}
-                                    bind:value={learningLevels[code]}
-                                    required
-                                    placeholder="Your level …"
-                                >
-                                    <option value="">Please select …</option>
-                                    <option value={CefrLevel.A1}
-                                        >A1 – Beginner</option
-                                    >
-                                    <option value={CefrLevel.A2}
-                                        >A2 – Elementary</option
-                                    >
-                                    <option value={CefrLevel.B1}
-                                        >B1 – Intermediate</option
-                                    >
-                                    <option value={CefrLevel.B2}
-                                        >B2 – Upper intermediate</option
-                                    >
-                                    <option value={CefrLevel.C1}
-                                        >C1 – Advanced</option
-                                    >
-                                    <option value={CefrLevel.C2}
-                                        >C2 – Proficient</option
-                                    >
-                                </select>
-                            </div>
-                        </div>
-                    {/each}
-                    {#if Object.keys(learningLevels).some((code) => learningLevels[code] === CefrLevel.A1 || learningLevels[code] === CefrLevel.A2)}
-                        <div
-                            class="warning-skill"
-                            in:scale={{ duration: 150, delay: 150 }}
-                            out:scale={{ duration: 150 }}
+            <h4>My Groups:</h4>
+            <ul>
+                {#each groupUsers as group}
+                    <li>
+                        <ButtonSmall
+                            href={`/chat?group=${group.group?.uuid}`}
+                            on:click={() => ($groupUuid = group.group?.uuid)}
+                            variant="TEXT"
+                            color="SECONDARY"
                         >
-                            <div class="warning-inner-with-icon">
-                                <div>
-                                    <span style="font-size: 32px;"
-                                        >&#x1F62C;</span
-                                    >
-                                </div>
-                                <div>
-                                    <p>
-                                        Everglot can be quite difficult for
-                                        beginners and elementary level learners.
-                                    </p>
-                                    <p>
-                                        You can still continue. Please be aware
-                                        that in the beginning it could be hard
-                                        for you to follow along.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    {/if}
-                    {#if learnOther.length === 1}
-                        <div
-                            class="warning-learn-other"
-                            in:scale={{ duration: 150, delay: 150 }}
-                            out:scale={{ duration: 150 }}
-                        >
-                            <div class="warning-inner-with-icon">
-                                <div><ClockIcon size="32" /></div>
-                                <div>
-                                    <p>
-                                        Sorry, {learnOther[0].label} is not supported,
-                                        yet.
-                                    </p>
-                                    <p>
-                                        Don't worry, we will place you on a
-                                        waiting list for a {learnOther[0].label}
-                                        study group and notify you as soon as it's
-                                        ready.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>{:else if learnOther.length === 2}
-                        <div
-                            class="warning-learn-other"
-                            in:scale={{ duration: 150, delay: 150 }}
-                            out:scale={{ duration: 150 }}
-                        >
-                            <div class="warning-inner-with-icon">
-                                <div><ClockIcon size="32" /></div>
-                                <div>
-                                    <p>
-                                        Sorry, {learnOther[0].label} and {learnOther[1]
-                                            .label} are not supported, yet.
-                                    </p>
-                                    <p>
-                                        Don't worry, we will place you on a
-                                        waiting list for {learnOther[0].label} and
-                                        {learnOther[1].label} study groups and notify
-                                        you as soon as they're ready.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    {/if}
-                </fieldset>
-            {/if}
-            <fieldset class="my-4">
-                <legend
-                    >What language(s) could you help others out with ({MAX_TEACHING}
-                    max)?*</legend
-                >
-                <p class="helper-text">
-                    These are languages that you either speak natively or on a
-                    near-native level.
-                </p>
-                <div class="form-control">
-                    <ButtonSmall
-                        tag="button"
-                        className="mr-1"
-                        variant={teach.de ? "FILLED" : "OUTLINED"}
-                        disabled={learn.de ||
-                            (!teach.de && totalTeaching >= MAX_TEACHING)}
-                        on:click={() => toggleTeach("de")}>German</ButtonSmall
-                    >
-                    <ButtonSmall
-                        tag="button"
-                        className="mr-1"
-                        variant={teach.en ? "FILLED" : "OUTLINED"}
-                        disabled={learn.en ||
-                            (!teach.en && totalTeaching >= MAX_TEACHING)}
-                        on:click={() => toggleTeach("en")}>English</ButtonSmall
-                    >
-                    <GroupSelect
-                        items={teachable}
-                        selected={teachOther.length ? teachOther : null}
-                        hideInput={totalTeaching >= MAX_TEACHING}
-                        disabled={teach.de && teach.en}
-                        on:select={handleSelectTeachOther}
-                    />
-                </div>
-            </fieldset>
-            <fieldset class="mb-4">
-                <legend>What gender do you identify as?</legend>
-                <p class="helper-text">
-                    We'll use this information only to optimize group
-                    compositions.
-                </p>
-                <div class="form-control">
-                    <ButtonSmall
-                        tag="button"
-                        className="mr-1 mb-1"
-                        variant={gender === Gender.FEMALE
-                            ? "FILLED"
-                            : "OUTLINED"}
-                        on:click={() => toggleGender(Gender.FEMALE)}
-                        >Female</ButtonSmall
-                    >
-                    <ButtonSmall
-                        tag="button"
-                        className="mr-1 mb-1"
-                        variant={gender === Gender.MALE ? "FILLED" : "OUTLINED"}
-                        on:click={() => toggleGender(Gender.MALE)}
-                        >Male</ButtonSmall
-                    >
-                    <ButtonSmall
-                        tag="button"
-                        variant={gender === Gender.OTHER
-                            ? "FILLED"
-                            : "OUTLINED"}
-                        on:click={() => toggleGender(Gender.OTHER)}
-                        >Other</ButtonSmall
-                    >
-                </div>
-            </fieldset>
-            {#if errorMessage}
-                <div class="mb-2">
-                    <ErrorMessage>{errorMessage}</ErrorMessage>
-                </div>
-            {/if}
-            <ButtonLarge
-                tag="button"
-                className="w-full justify-center"
-                on:click={handleSubmit}
-                disabled={submitting}
-                >Next<ArrowRightIcon
-                    class="ml-2 self-center"
-                    size="24"
-                /></ButtonLarge
-            >
-        </form>
-    </div>
-{/if}
+                            {group.group?.groupName}
+                            {#if group.userType === UserType.Global}
+                                ({group.group?.language?.englishName})
+                            {:else}
+                                ({group.group?.language?.englishName}
+                                {group.group?.languageSkillLevel?.name})
+                            {/if}
+                        </ButtonSmall>
+                    </li>
+                {/each}
+            </ul>
+        </div>
+    {/if}
+</div>
 
 <style>
-    .helper-text {
-        @apply text-sm;
-        @apply text-gray-bitdark;
-        @apply my-0;
-        @apply mb-1;
+    h4 {
+        margin-top: 1rem;
+        margin-bottom: 0.25rem;
     }
 
-    input {
-        @apply px-4;
-        @apply py-3;
-        @apply mb-3;
-        @apply my-1;
+    .sidebar {
+        min-width: 16rem;
+
+        @apply py-8;
+        @apply flex-shrink;
     }
 
-    .level {
-        @apply justify-between;
-        @apply max-w-xs;
-        @apply mb-2;
-    }
+    .languages button {
+        border-left-width: 3px;
 
-    .level label {
-        @apply font-normal !important;
-        @apply text-base !important;
-        @apply m-0 !important;
-    }
-
-    .level select {
-        @apply pr-8 !important;
-    }
-
-    .warning-skill {
-        @apply px-6;
-        @apply py-4;
-        @apply my-1;
-        @apply rounded-2xl;
-        @apply bg-gray-lightest;
-        @apply text-gray-dark;
-    }
-
-    .warning-learn-other {
-        @apply px-6;
-        @apply py-4;
-        @apply my-1;
-        @apply rounded-2xl;
-        @apply bg-gray-lightest;
-        @apply font-bold;
-        @apply text-gray-dark;
-    }
-
-    .warning-skill p:last-child,
-    .warning-learn-other p:last-child {
-        @apply m-0;
-    }
-
-    .warning-inner-with-icon {
+        @apply border-transparent;
         @apply flex;
+        @apply w-full;
+        @apply py-2;
+        @apply px-3;
         @apply items-center;
-        @apply space-x-6;
+    }
+
+    .languages button:hover {
+        @apply bg-primary-lightest;
+    }
+
+    .languages button[aria-selected="true"] {
+        @apply text-primary;
+        @apply border-primary;
+    }
+
+    .groups {
+        @apply flex-grow;
+    }
+
+    .groups .name {
+        @apply mr-3;
+        @apply align-middle;
+    }
+
+    .groups .members-count {
+        @apply text-sm;
+        @apply align-middle;
     }
 </style>

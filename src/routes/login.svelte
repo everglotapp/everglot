@@ -95,7 +95,7 @@
                 return
             }
             if (res.success === true) {
-                goto("/profile")
+                goto("/signup")
             } else {
                 errorMessage = res.message
             }

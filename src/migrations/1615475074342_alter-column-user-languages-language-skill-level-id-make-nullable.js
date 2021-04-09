@@ -11,9 +11,13 @@ exports.up = (pgm) => {
 }
 
 exports.down = (pgm) => {
+    pgm.db.query(`
+        delete from user_languages
+        where language_skill_level_id is null
+    `)
     pgm.alterColumn("user_languages", "language_skill_level_id", {
-        type: "serial",
+        type: "int",
         references: "language_skill_levels",
-        notNull: false,
+        notNull: true,
     })
 }

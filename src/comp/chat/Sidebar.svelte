@@ -1,27 +1,19 @@
 <script lang="ts">
-    import ActiveUsers from "./ActiveUsers.svelte"
+    import GroupMembers from "./GroupMembers.svelte"
 
-    import type { User } from "../../types/generated/graphql"
+    import SidebarHeadline from "../typography/SidebarHeadline.svelte"
 
     export let handleToggleSplit: () => void
     export let split = false
-
-    export let users: (Pick<
-        Pick<User, "uuid" | "id" | "username" | "avatarUrl">,
-        "uuid" | "username" | "avatarUrl"
-    > & { username: string })[] = []
 </script>
 
 <div class="sidebar">
-    <div
-        class="users-container py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4"
-    >
-        <h3 class="px-4 text-gray-bitdark text-sm font-bold mb-4">
-            Active Members
-        </h3>
-        <ActiveUsers {users} />
+    <div class="users-container py-3 px-4 text-lg w-full mb-4">
+        <SidebarHeadline>Members</SidebarHeadline>
+        <GroupMembers />
     </div>
     <div class="toggles py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4">
+        <SidebarHeadline>Controls</SidebarHeadline>
         <div class="toggle-row">
             <svg
                 width="35"
@@ -129,7 +121,6 @@
 
     .users-container {
         @apply my-4;
-        @apply text-center;
     }
 
     .toggle-row {

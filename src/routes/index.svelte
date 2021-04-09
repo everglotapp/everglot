@@ -1,32 +1,40 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte"
     import { goto } from "@sapper/app"
-    import { currentUser } from "../stores"
+    import { currentUserStore, userHasCompletedProfile } from "../stores"
+
+    import { query } from "@urql/svelte"
+
+    query(currentUserStore)
 
     let redirectTimeout: number | null = null
 
+    function clearRedirectTimeout(): void {
+        if (redirectTimeout) {
+            clearTimeout(redirectTimeout)
+            redirectTimeout = null
+        }
+    }
+
+    $: if ($userHasCompletedProfile) {
+        clearRedirectTimeout()
+        goto("/global", { replaceState: true, noscroll: false })
+    }
+
     onMount(() => {
-        if ($currentUser.fetching) {
+        if ($currentUserStore.fetching) {
             if (redirectTimeout === null) {
                 redirectTimeout = window.setTimeout(() => {
-                    goto("/profile", { replaceState: true, noscroll: false })
-                    redirectTimeout = null
+                    goto("/signup", { replaceState: true, noscroll: false })
+                    clearRedirectTimeout()
                 }, 800)
-            }
-        } else if ($currentUser.data?.users.nodes[0]) {
-            const { username, userLanguages } = $currentUser.data.users.nodes[0]
-            if (username !== null && userLanguages.totalCount) {
-                goto("/groups", { replaceState: true, noscroll: false })
             }
         }
     })
 
     onDestroy(() => {
-        if (redirectTimeout !== null) {
-            window.clearTimeout(redirectTimeout)
-            redirectTimeout = null
-        }
+        clearRedirectTimeout()
     })
 </script>
 
-<div class="mx-auto">…</div>
+<div />

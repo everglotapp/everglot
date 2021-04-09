@@ -1,0 +1,6 @@
+query GroupIdByUuid($uuid: UUID!) {
+  groupByUuid(uuid: $uuid) {
+    id
+    __typename
+  }
+}

@@ -41,7 +41,7 @@
             return
         }
         if (res.success === true) {
-            goto("/profile")
+            goto("/signup")
         } else {
             errorMessage = res.message
         }
@@ -87,7 +87,7 @@
                 return
             }
             if (res.success === true) {
-                goto("/profile")
+                goto("/signup")
             } else {
                 errorMessage = res.message
             }

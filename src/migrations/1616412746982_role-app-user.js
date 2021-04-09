@@ -9,5 +9,8 @@ exports.up = (pgm) => {
 }
 
 exports.down = (pgm) => {
+    pgm.db.query(`
+        drop owned by ${NAME}
+    `)
     pgm.dropRole(NAME)
 }

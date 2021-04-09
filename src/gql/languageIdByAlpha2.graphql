@@ -1,0 +1,5 @@
+query LanguageIdByAlpha2($alpha2: String!) {
+    languageByAlpha2(alpha2: $alpha2) {
+        id
+    }
+}

@@ -150,24 +150,12 @@
         }
     }
 
-    onMount(async () => {
+    onMount(() => {
         connectToChat()
         if ($groupUuid) {
             joinChatRoom($groupUuid)
         }
-
-        // @ts-ignore see https://github.com/peers/peerjs/issues/552#issuecomment-770401843
-        window.parcelRequire = undefined
-        const module = await import("peerjs")
-
-        // @ts-ignore
-        Peer = module.peerjs.Peer as typeof module.default
-
-        peer = new Peer(undefined, {
-            host: "/",
-            port: Number(window.location.port),
-            path: "/webrtc",
-        })
+        connectToWebRTC()
     })
 
     onDestroy(() => {
@@ -198,6 +186,22 @@
             socket.on("message", onMessage)
         }
     }
+
+    async function connectToWebRTC() {
+        // @ts-ignore see https://github.com/peers/peerjs/issues/552#issuecomment-770401843
+        window.parcelRequire = undefined
+        const module = await import("peerjs")
+
+        // @ts-ignore
+        Peer = module.peerjs.Peer as typeof module.default
+
+        peer = new Peer(undefined, {
+            host: "/",
+            port: Number(window.location.port),
+            path: "/webrtc",
+        })
+    }
+
     function joinChatRoom(room: string) {
         if (!socket) {
             return

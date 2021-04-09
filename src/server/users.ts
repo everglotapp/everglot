@@ -1,23 +1,24 @@
 import { performQuery } from "./gql"
 
-import type { User } from "../types/generated/graphql"
+import type {
+    RegisterUserActivityMutation,
+    RegisterUserActivityMutationVariables,
+    User,
+} from "../types/generated/graphql"
 
-async function registerUserActivity(
-    userId
+export async function registerUserActivity(
+    vars: RegisterUserActivityMutationVariables
 ): Promise<User["lastActiveAt"] | null> {
-    const res = await performQuery<{
-        registerUserActivity: { datetime: User["lastActiveAt"] }
-    }>(
-        `mutation RegisterUserActivity ($userId: Int!) {
-            registerUserActivity(input: {userId: $userId}) {
-              datetime
+    const res = await performQuery<RegisterUserActivityMutation>(
+        `mutation RegisterUserActivity($userId: Int!) {
+            registerUserActivity(input: { userId: $userId }) {
+                datetime
             }
-          }
-          `,
-        { userId }
+        }`,
+        vars
     )
     if (!res.data) {
         return null
     }
-    return res.data?.registerUserActivity.datetime
+    return res.data?.registerUserActivity?.datetime || null
 }

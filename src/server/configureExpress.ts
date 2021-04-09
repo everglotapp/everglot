@@ -9,6 +9,7 @@ import session from "./middlewares/session"
 
 import type { Express } from "express"
 import type { Pool } from "pg"
+import { registerUserActivity } from "./users"
 
 const { NODE_ENV } = process.env
 const dev = NODE_ENV === "development"
@@ -31,6 +32,18 @@ export default function configureExpress(app: Express, pool: Pool): Express {
             // TODO: Add parameter with request path to redirect to after login
             res.redirect("/login")
             return
+        }
+        next()
+    })
+
+    app.use(async (req, _res, next) => {
+        const { user_id: userId } = req.session
+        if (userId) {
+            if (!(await registerUserActivity({ userId }))) {
+                console.log("Failed to register user activity", {
+                    userId,
+                })
+            }
         }
         next()
     })

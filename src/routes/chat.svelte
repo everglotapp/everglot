@@ -81,10 +81,6 @@
         joinChatRoom($groupUuid)
     }
 
-    $: if (!$currentUserStore.fetching && $currentUser && !peer) {
-        connectToWebRTC()
-    }
-
     function fetchGroupMetadata() {
         if (!$groupChatStore.variables?.groupUuid) {
             // console.log("Not fetching group metadata", $groupChat.variables)
@@ -192,7 +188,7 @@
 
     async function connectToWebRTC() {
         if (peer !== null) {
-            return
+            return peer
         }
         // @ts-ignore see https://github.com/peers/peerjs/issues/552#issuecomment-770401843
         window.parcelRequire = undefined
@@ -206,8 +202,13 @@
                 host: "/",
                 port: Number(window.location.port),
                 path: "/webrtc",
+                config: {
+                    iceServers: [{ urls: "stun:stun.t-online.de:3478" }],
+                    sdpSemantics: "unified-plan",
+                },
             })
         }
+        return peer
     }
 
     function joinChatRoom(room: string) {
@@ -337,6 +338,22 @@
             setTimeout(() => scrollToBottom(container, force), 150)
         })
         messages = [...messages, message]
+    }
+
+    const outgoing = []
+    const incoming = []
+
+    let called = false
+    $: if (!$currentUserStore.fetching && $currentUser && !peer) {
+        connectToWebRTC().then((peer) => {
+            if (peer && !called) {
+                const users =
+                    $groupChatStore.data?.groupByUuid?.usersByGroupUserGroupIdAndUserId.nodes
+                        .filter(Boolean)
+                        .map((user) => user!.uuid) || []
+                // TODO: call users and put into outgoing
+            }
+        })
     }
 
     let split = true

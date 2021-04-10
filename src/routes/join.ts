@@ -7,6 +7,8 @@ import { GOOGLE_SIGNIN_CLIENT_ID } from "../constants"
 import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
 
+import TokenGenerator from "uuid-token-generator"
+
 import validate from "deep-email-validator"
 import { OAuth2Client } from "google-auth-library"
 // import {
@@ -34,6 +36,22 @@ export function get(req: Request, res: Response, next: () => void) {
 
 // TODO: Create an invite tokens table and check token against it.
 const INVITE_TOKEN = "Tkb8T3mfZcsvNRBg6hKuwnL6o8s8vFuD"
+
+export async function tokenExists(token: String) {
+    const queryResult = await db?.query({
+        text: `SELECT exists (SELECT 1 FROM app_public.invite_tokens WHERE invite_token = $1 LIMIT 1)`,
+        values: [token],
+    })
+    const tokenExists = await queryResult?.rows[0].exists
+    console.log(token, tokenExists)
+    let success = queryResult?.rowCount === 1
+    if (!success) {
+        console.log(`Query token failed`, queryResult)
+        return false
+    }
+    return tokenExists
+}
+
 export async function post(req: Request, res: Response, _next: () => void) {
     if (!ensureJson(req, res)) {
         return
@@ -52,12 +70,20 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
+    // if (await tokenExists(INVITE_TOKEN)) {
+    //     console.log("Token 1 does exist")
+    // } else {
+    //     console.log("Token 1 doesn't exist")
+    // }
+    // if (await tokenExists("AOEXWkD5Km8cSGlpq4XMSO4Hk9W5X1vC2c1jGqdQOP9")) {
+    //     console.log("Token 2 does exist")
+    // } else {
+    //     console.log("Token 2 doesn't exist")
+    // }
+
     const inviteToken = req?.body?.token
-    if (
-        !inviteToken ||
-        typeof inviteToken !== "string" ||
-        inviteToken !== INVITE_TOKEN
-    ) {
+    const realToken = await tokenExists(inviteToken)
+    if (!inviteToken || typeof inviteToken !== "string" || !realToken) {
         res.status(422).json({
             success: false,
             message:
@@ -227,9 +253,34 @@ export async function post(req: Request, res: Response, _next: () => void) {
             RETURNING id`,
         values: [username, email, hash, uuid, googleId, avatarUrl, locale],
     })
+    const user_id = queryResult?.rows[0].id
+    console.log(queryResult?.rows[0].id)
     let success = queryResult?.rowCount === 1
     if (!success) {
         console.log(`User insertion failed`, queryResult)
+        serverError(res)
+        return
+    }
+
+    const tokgen2 = new TokenGenerator(256, TokenGenerator.BASE62)
+    const newInviteToken = tokgen2.generate()
+    const tokenQueryResult = await db?.query({
+        text: `INSERT INTO invite_tokens (
+                user_id,
+                signed_up_with_token,
+                invite_token
+            )
+            VALUES (
+                $1,
+                $2,
+                $3
+            )
+            RETURNING id`,
+        values: [user_id, inviteToken, newInviteToken],
+    })
+    let tokenSuccess = tokenQueryResult?.rowCount === 1
+    if (!tokenSuccess) {
+        console.log(`Token insertion failed`, tokenQueryResult)
         serverError(res)
         return
     }

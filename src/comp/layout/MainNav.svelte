@@ -265,10 +265,8 @@
                                             <ButtonSmall
                                                 variant="TEXT"
                                                 color="SECONDARY"
-                                                tag="button"
                                                 className="w-full"
-                                                on:click={(event) =>
-                                                    event.preventDefault()}
+                                                href="/join?token={$currentUser?.inviteTokens?.nodes[0]?.inviteToken}"
                                                 ><span>Invite friends</span
                                                 ></ButtonSmall
                                             >

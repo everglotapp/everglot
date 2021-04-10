@@ -24,9 +24,6 @@ import type { Request, Response } from "express"
 type InvalidEmailReason = "smtp" | "regex" | "typo" | "mx" | "disposable"
 
 export function get(req: Request, res: Response, next: () => void) {
-    // createGroup(false, "fuckooff", 1, 1)
-    // getUsersWithoutLearnerGroup(37, 1)
-    // getUsersWithoutNativeGroup(33)
     if (req.session.user_id) {
         res.redirect("/")
         return
@@ -34,8 +31,7 @@ export function get(req: Request, res: Response, next: () => void) {
     next()
 }
 
-// TODO: Create an invite tokens table and check token against it.
-const INVITE_TOKEN = "Tkb8T3mfZcsvNRBg6hKuwnL6o8s8vFuD"
+// const INVITE_TOKEN = "Tkb8T3mfZcsvNRBg6hKuwnL6o8s8vFuD"
 
 export async function tokenExists(token: String) {
     const queryResult = await db?.query({
@@ -69,17 +65,6 @@ export async function post(req: Request, res: Response, _next: () => void) {
         })
         return
     }
-
-    // if (await tokenExists(INVITE_TOKEN)) {
-    //     console.log("Token 1 does exist")
-    // } else {
-    //     console.log("Token 1 doesn't exist")
-    // }
-    // if (await tokenExists("AOEXWkD5Km8cSGlpq4XMSO4Hk9W5X1vC2c1jGqdQOP9")) {
-    //     console.log("Token 2 does exist")
-    // } else {
-    //     console.log("Token 2 doesn't exist")
-    // }
 
     const inviteToken = req?.body?.token
     const realToken = await tokenExists(inviteToken)

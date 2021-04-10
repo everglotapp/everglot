@@ -39,6 +39,8 @@ export type Query = Node & {
   groupUsers?: Maybe<GroupUsersConnection>;
   /** Reads and enables pagination through a set of `Group`. */
   groups?: Maybe<GroupsConnection>;
+  /** Reads and enables pagination through a set of `InviteToken`. */
+  inviteTokens?: Maybe<InviteTokensConnection>;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
   languageSkillLevels?: Maybe<LanguageSkillLevelsConnection>;
   /** Reads and enables pagination through a set of `Language`. */
@@ -54,6 +56,7 @@ export type Query = Node & {
   groupUser?: Maybe<GroupUser>;
   group?: Maybe<Group>;
   groupByUuid?: Maybe<Group>;
+  inviteToken?: Maybe<InviteToken>;
   languageSkillLevel?: Maybe<LanguageSkillLevel>;
   language?: Maybe<Language>;
   languageByAlpha2?: Maybe<Language>;
@@ -77,6 +80,8 @@ export type Query = Node & {
   groupUserByNodeId?: Maybe<GroupUser>;
   /** Reads a single `Group` using its globally unique `ID`. */
   groupByNodeId?: Maybe<Group>;
+  /** Reads a single `InviteToken` using its globally unique `ID`. */
+  inviteTokenByNodeId?: Maybe<InviteToken>;
   /** Reads a single `LanguageSkillLevel` using its globally unique `ID`. */
   languageSkillLevelByNodeId?: Maybe<LanguageSkillLevel>;
   /** Reads a single `Language` using its globally unique `ID`. */
@@ -121,6 +126,19 @@ export type QueryGroupsArgs = {
   orderBy?: Maybe<Array<GroupsOrderBy>>;
   condition?: Maybe<GroupCondition>;
   filter?: Maybe<GroupFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryInviteTokensArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+  condition?: Maybe<InviteTokenCondition>;
+  filter?: Maybe<InviteTokenFilter>;
 };
 
 
@@ -217,6 +235,12 @@ export type QueryGroupArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryGroupByUuidArgs = {
   uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryInviteTokenArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -336,6 +360,12 @@ export type QueryGroupByNodeIdArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryInviteTokenByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryLanguageSkillLevelByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
@@ -439,6 +469,8 @@ export type User = Node & {
   messagesBySenderId: MessagesConnection;
   /** Reads and enables pagination through a set of `Message`. */
   messagesByRecipientId: MessagesConnection;
+  /** Reads and enables pagination through a set of `InviteToken`. */
+  inviteTokens: InviteTokensConnection;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByUserLanguageUserIdAndLanguageId: UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
@@ -505,6 +537,18 @@ export type UserMessagesByRecipientIdArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+
+export type UserInviteTokensArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+  condition?: Maybe<InviteTokenCondition>;
+  filter?: Maybe<InviteTokenFilter>;
 };
 
 
@@ -2212,6 +2256,88 @@ export type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdM
   filter?: Maybe<GroupFilter>;
 };
 
+/** A connection to a list of `InviteToken` values. */
+export type InviteTokensConnection = {
+  __typename?: 'InviteTokensConnection';
+  /** A list of `InviteToken` objects. */
+  nodes: Array<Maybe<InviteToken>>;
+  /** A list of edges which contains the `InviteToken` and cursor to aid in pagination. */
+  edges: Array<InviteTokensEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `InviteToken` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+export type InviteToken = Node & {
+  __typename?: 'InviteToken';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  userId?: Maybe<Scalars['Int']>;
+  signedUpWithToken?: Maybe<Scalars['String']>;
+  inviteToken: Scalars['String'];
+  /** Reads a single `User` that is related to this `InviteToken`. */
+  user?: Maybe<User>;
+};
+
+/** A `InviteToken` edge in the connection. */
+export type InviteTokensEdge = {
+  __typename?: 'InviteTokensEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `InviteToken` at the end of the edge. */
+  node?: Maybe<InviteToken>;
+};
+
+/** Methods to use when ordering `InviteToken`. */
+export enum InviteTokensOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+  SignedUpWithTokenAsc = 'SIGNED_UP_WITH_TOKEN_ASC',
+  SignedUpWithTokenDesc = 'SIGNED_UP_WITH_TOKEN_DESC',
+  InviteTokenAsc = 'INVITE_TOKEN_ASC',
+  InviteTokenDesc = 'INVITE_TOKEN_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/**
+ * A condition to be used against `InviteToken` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
+export type InviteTokenCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `signedUpWithToken` field. */
+  signedUpWithToken?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `inviteToken` field. */
+  inviteToken?: Maybe<Scalars['String']>;
+};
+
+/** A filter to be used against `InviteToken` object types. All fields are combined with a logical ‘and.’ */
+export type InviteTokenFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `signedUpWithToken` field. */
+  signedUpWithToken?: Maybe<StringFilter>;
+  /** Filter by the object’s `inviteToken` field. */
+  inviteToken?: Maybe<StringFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<InviteTokenFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<InviteTokenFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<InviteTokenFilter>;
+};
+
 /** A connection to a list of `Language` values, with data from `UserLanguage`. */
 export type UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection = {
   __typename?: 'UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection';
@@ -2677,6 +2803,8 @@ export type Mutation = {
   createGroupUser?: Maybe<CreateGroupUserPayload>;
   /** Creates a single `Group`. */
   createGroup?: Maybe<CreateGroupPayload>;
+  /** Creates a single `InviteToken`. */
+  createInviteToken?: Maybe<CreateInviteTokenPayload>;
   /** Creates a single `LanguageSkillLevel`. */
   createLanguageSkillLevel?: Maybe<CreateLanguageSkillLevelPayload>;
   /** Creates a single `Language`. */
@@ -2699,6 +2827,10 @@ export type Mutation = {
   updateGroup?: Maybe<UpdateGroupPayload>;
   /** Updates a single `Group` using a unique key and a patch. */
   updateGroupByUuid?: Maybe<UpdateGroupPayload>;
+  /** Updates a single `InviteToken` using its globally unique id and a patch. */
+  updateInviteTokenByNodeId?: Maybe<UpdateInviteTokenPayload>;
+  /** Updates a single `InviteToken` using a unique key and a patch. */
+  updateInviteToken?: Maybe<UpdateInviteTokenPayload>;
   /** Updates a single `LanguageSkillLevel` using its globally unique id and a patch. */
   updateLanguageSkillLevelByNodeId?: Maybe<UpdateLanguageSkillLevelPayload>;
   /** Updates a single `LanguageSkillLevel` using a unique key and a patch. */
@@ -2743,6 +2875,10 @@ export type Mutation = {
   deleteGroup?: Maybe<DeleteGroupPayload>;
   /** Deletes a single `Group` using a unique key. */
   deleteGroupByUuid?: Maybe<DeleteGroupPayload>;
+  /** Deletes a single `InviteToken` using its globally unique id. */
+  deleteInviteTokenByNodeId?: Maybe<DeleteInviteTokenPayload>;
+  /** Deletes a single `InviteToken` using a unique key. */
+  deleteInviteToken?: Maybe<DeleteInviteTokenPayload>;
   /** Deletes a single `LanguageSkillLevel` using its globally unique id. */
   deleteLanguageSkillLevelByNodeId?: Maybe<DeleteLanguageSkillLevelPayload>;
   /** Deletes a single `LanguageSkillLevel` using a unique key. */
@@ -2791,6 +2927,12 @@ export type MutationCreateGroupUserArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateGroupArgs = {
   input: CreateGroupInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateInviteTokenArgs = {
+  input: CreateInviteTokenInput;
 };
 
 
@@ -2857,6 +2999,18 @@ export type MutationUpdateGroupArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGroupByUuidArgs = {
   input: UpdateGroupByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateInviteTokenByNodeIdArgs = {
+  input: UpdateInviteTokenByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateInviteTokenArgs = {
+  input: UpdateInviteTokenInput;
 };
 
 
@@ -2989,6 +3143,18 @@ export type MutationDeleteGroupArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGroupByUuidArgs = {
   input: DeleteGroupByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteInviteTokenByNodeIdArgs = {
+  input: DeleteInviteTokenByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteInviteTokenArgs = {
+  input: DeleteInviteTokenInput;
 };
 
 
@@ -3198,6 +3364,49 @@ export type GroupInput = {
   languageSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
   uuid: Scalars['UUID'];
+};
+
+/** The output of our create `InviteToken` mutation. */
+export type CreateInviteTokenPayload = {
+  __typename?: 'CreateInviteTokenPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `InviteToken` that was created by this mutation. */
+  inviteToken?: Maybe<InviteToken>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `InviteToken`. */
+  user?: Maybe<User>;
+  /** An edge for our `InviteToken`. May be used by Relay 1. */
+  inviteTokenEdge?: Maybe<InviteTokensEdge>;
+};
+
+
+/** The output of our create `InviteToken` mutation. */
+export type CreateInviteTokenPayloadInviteTokenEdgeArgs = {
+  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+};
+
+/** All input for the create `InviteToken` mutation. */
+export type CreateInviteTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `InviteToken` to be created by this mutation. */
+  inviteToken: InviteTokenInput;
+};
+
+/** An input for mutations affecting `InviteToken` */
+export type InviteTokenInput = {
+  id?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+  signedUpWithToken?: Maybe<Scalars['String']>;
+  inviteToken?: Maybe<Scalars['String']>;
 };
 
 /** The output of our create `LanguageSkillLevel` mutation. */
@@ -3608,6 +3817,63 @@ export type UpdateGroupByUuidInput = {
   /** An object where the defined keys will be set on the `Group` being updated. */
   patch: GroupPatch;
   uuid: Scalars['UUID'];
+};
+
+/** The output of our update `InviteToken` mutation. */
+export type UpdateInviteTokenPayload = {
+  __typename?: 'UpdateInviteTokenPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `InviteToken` that was updated by this mutation. */
+  inviteToken?: Maybe<InviteToken>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `InviteToken`. */
+  user?: Maybe<User>;
+  /** An edge for our `InviteToken`. May be used by Relay 1. */
+  inviteTokenEdge?: Maybe<InviteTokensEdge>;
+};
+
+
+/** The output of our update `InviteToken` mutation. */
+export type UpdateInviteTokenPayloadInviteTokenEdgeArgs = {
+  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+};
+
+/** All input for the `updateInviteTokenByNodeId` mutation. */
+export type UpdateInviteTokenByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `InviteToken` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `InviteToken` being updated. */
+  patch: InviteTokenPatch;
+};
+
+/** Represents an update to a `InviteToken`. Fields that are set will be updated. */
+export type InviteTokenPatch = {
+  id?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+  signedUpWithToken?: Maybe<Scalars['String']>;
+  inviteToken?: Maybe<Scalars['String']>;
+};
+
+/** All input for the `updateInviteToken` mutation. */
+export type UpdateInviteTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `InviteToken` being updated. */
+  patch: InviteTokenPatch;
+  id: Scalars['Int'];
 };
 
 /** The output of our update `LanguageSkillLevel` mutation. */
@@ -4136,6 +4402,52 @@ export type DeleteGroupByUuidInput = {
   uuid: Scalars['UUID'];
 };
 
+/** The output of our delete `InviteToken` mutation. */
+export type DeleteInviteTokenPayload = {
+  __typename?: 'DeleteInviteTokenPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `InviteToken` that was deleted by this mutation. */
+  inviteToken?: Maybe<InviteToken>;
+  deletedInviteTokenNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `InviteToken`. */
+  user?: Maybe<User>;
+  /** An edge for our `InviteToken`. May be used by Relay 1. */
+  inviteTokenEdge?: Maybe<InviteTokensEdge>;
+};
+
+
+/** The output of our delete `InviteToken` mutation. */
+export type DeleteInviteTokenPayloadInviteTokenEdgeArgs = {
+  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+};
+
+/** All input for the `deleteInviteTokenByNodeId` mutation. */
+export type DeleteInviteTokenByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `InviteToken` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteInviteToken` mutation. */
+export type DeleteInviteTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
 /** The output of our delete `LanguageSkillLevel` mutation. */
 export type DeleteLanguageSkillLevelPayload = {
   __typename?: 'DeleteLanguageSkillLevelPayload';
@@ -4522,7 +4834,7 @@ export type RegisterUserActivityInput = {
    * payload verbatim. May be used to track mutations by the client.
    */
   clientMutationId?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['Int']>;
+  userId: Scalars['Int'];
 };
 
 export type AllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -4661,7 +4973,13 @@ export type CurrentUserQuery = (
     ), languageByLocale?: Maybe<(
       { __typename?: 'Language' }
       & Pick<Language, 'alpha2'>
-    )> }
+    )>, inviteTokens: (
+      { __typename?: 'InviteTokensConnection' }
+      & { nodes: Array<Maybe<(
+        { __typename?: 'InviteToken' }
+        & Pick<InviteToken, 'inviteToken'>
+      )>> }
+    ) }
   )> }
 );
 
@@ -4991,6 +5309,11 @@ export const CurrentUser = gql`
     }
     languageByLocale {
       alpha2
+    }
+    inviteTokens {
+      nodes {
+        inviteToken
+      }
     }
   }
 }

@@ -1,0 +1,26 @@
+query CurrentUser {
+  currentUser {
+    bio
+    email
+    gender
+    username
+    uuid
+    avatarUrl
+    userLanguages {
+      totalCount
+      __typename
+    }
+    languageByLocale {
+      alpha2
+      __typename
+    }
+    inviteTokens {
+      nodes {
+        inviteToken
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

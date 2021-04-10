@@ -18,7 +18,7 @@
     import type { ChatUser } from "../server/chat/users"
     import type { ChatMessage } from "../server/chat/messages"
 
-    import { groupUuid } from "../stores"
+    import { groupUuid, currentUser, currentUserStore } from "../stores"
     import {
         groupChatStore,
         groupChatMessagesStore,
@@ -42,6 +42,7 @@
     let msg = ""
 
     let Peer
+    let peer: object | null = null
 
     let fetchGroupMetadataInterval: number | null = null
 
@@ -78,6 +79,10 @@
 
         leaveChatRoom()
         joinChatRoom($groupUuid)
+    }
+
+    $: if (!$currentUserStore.fetching && $currentUser && !peer) {
+        connectToWebRTC()
     }
 
     function fetchGroupMetadata() {
@@ -169,8 +174,6 @@
         }
     })
 
-    let peer
-
     let socket: SocketIO.Socket | null = null
     let joinedRoom: string | null = null
     function connectToChat() {
@@ -188,6 +191,9 @@
     }
 
     async function connectToWebRTC() {
+        if (peer !== null) {
+            return
+        }
         // @ts-ignore see https://github.com/peers/peerjs/issues/552#issuecomment-770401843
         window.parcelRequire = undefined
         const module = await import("peerjs")
@@ -195,11 +201,13 @@
         // @ts-ignore
         Peer = module.peerjs.Peer as typeof module.default
 
-        peer = new Peer(undefined, {
-            host: "/",
-            port: Number(window.location.port),
-            path: "/webrtc",
-        })
+        if ($currentUser) {
+            peer = new Peer($currentUser.uuid, {
+                host: "/",
+                port: Number(window.location.port),
+                path: "/webrtc",
+            })
+        }
     }
 
     function joinChatRoom(room: string) {

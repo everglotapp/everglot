@@ -53,6 +53,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
+    if (req.session.user_id) {
+        res.redirect("/")
+        return
+    }
+
     const authMethod = req?.body?.method
     if (
         !authMethod ||

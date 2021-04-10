@@ -2,14 +2,20 @@
     import { scale } from "svelte/transition"
     import { goto } from "@sapper/app"
 
-    import { LogOutIcon } from "svelte-feather-icons"
+    import {
+        LogOutIcon,
+        CheckCircleIcon,
+        AlertCircleIcon,
+    } from "svelte-feather-icons"
     import { query } from "@urql/svelte"
 
     import Avatar from "../users/Avatar.svelte"
 
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import ButtonLarge from "../util/ButtonLarge.svelte"
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
+    import Modal from "../util/Modal.svelte"
 
     import {
         currentUser,
@@ -53,6 +59,24 @@
             return
         }
         goto("/signup", { replaceState: false })
+    }
+
+    $: inviteToken = $currentUser?.inviteTokens?.nodes[0]?.inviteToken || null
+    $: inviteLink =
+        inviteToken && typeof window !== "undefined"
+            ? `${window.location.origin}/join?token=${inviteToken}`
+            : null
+    let showInviteModal = false
+    let copiedInviteLink: boolean | null = null
+
+    function handleCopyClipboard(event: MouseEvent) {
+        event.preventDefault()
+        if (navigator?.clipboard && inviteLink) {
+            navigator.clipboard
+                .writeText(inviteLink)
+                .then(() => (copiedInviteLink = true))
+                .catch(() => (copiedInviteLink = false))
+        }
     }
 </script>
 
@@ -261,16 +285,21 @@
                                                 ></ButtonSmall
                                             >
                                         </div>
-                                        <div>
-                                            <ButtonSmall
-                                                variant="TEXT"
-                                                color="SECONDARY"
-                                                className="w-full"
-                                                href="/join?token={$currentUser?.inviteTokens?.nodes[0]?.inviteToken}"
-                                                ><span>Invite friends</span
-                                                ></ButtonSmall
-                                            >
-                                        </div>
+                                        {#if $userHasCompletedProfile && inviteToken}
+                                            <div>
+                                                <ButtonSmall
+                                                    variant="TEXT"
+                                                    color="SECONDARY"
+                                                    className="w-full"
+                                                    tag="button"
+                                                    on:click={() => {
+                                                        showInviteModal = true
+                                                    }}
+                                                    ><span>Invite friends</span
+                                                    ></ButtonSmall
+                                                >
+                                            </div>
+                                        {/if}
                                         <div>
                                             <ButtonSmall
                                                 variant="TEXT"
@@ -313,6 +342,50 @@
         </div>
     </nav>
 </div>
+{#if showInviteModal && typeof window !== "undefined"}
+    <Modal>
+        <div class="py-8 px-14 bg-white shadow-lg rounded-lg">
+            Send this link to your friends to invite them to join Everglot!
+
+            <div class="mt-4 mb-2 px-2">
+                <span
+                    role="textbox"
+                    contenteditable
+                    class="py-2 px-3 border-gray-400 rounded-lg"
+                >
+                    {inviteLink}
+                </span>
+            </div>
+
+            <div class="flex justify-end">
+                <ButtonSmall
+                    tag="button"
+                    on:click={() => (showInviteModal = false)}
+                    variant="TEXT"
+                    color="SECONDARY">Close</ButtonSmall
+                >
+                <ButtonSmall tag="button" on:click={handleCopyClipboard}
+                    >Copy Link</ButtonSmall
+                >
+                {#if copiedInviteLink !== null}
+                    {#if copiedInviteLink}
+                        <CheckCircleIcon
+                            size="32"
+                            class="absolute"
+                            style="left: 16px;"
+                        />
+                    {:else}
+                        <AlertCircleIcon
+                            size="32"
+                            class="absolute"
+                            style="left: 16px;"
+                        />
+                    {/if}
+                {/if}
+            </div>
+        </div>
+    </Modal>
+{/if}
 
 <style>
     .nav-container {

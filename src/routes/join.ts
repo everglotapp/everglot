@@ -20,6 +20,7 @@ import { OAuth2Client } from "google-auth-library"
 const BCRYPT_WORK_FACTOR = 14
 
 import type { Request, Response } from "express"
+import type { InviteToken } from "../types/generated/graphql"
 
 type InvalidEmailReason = "smtp" | "regex" | "typo" | "mx" | "disposable"
 
@@ -33,19 +34,24 @@ export function get(req: Request, res: Response, next: () => void) {
 
 // const INVITE_TOKEN = "Tkb8T3mfZcsvNRBg6hKuwnL6o8s8vFuD"
 
-export async function tokenExists(token: String) {
+export async function getTokenIdByToken(
+    token: String
+): Promise<InviteToken["id"] | null> {
     const queryResult = await db?.query({
-        text: `SELECT exists (SELECT 1 FROM app_public.invite_tokens WHERE invite_token = $1 LIMIT 1)`,
+        text: `SELECT id
+        FROM app_public.invite_tokens
+        WHERE invite_token = $1
+        LIMIT 1`,
         values: [token],
     })
-    const tokenExists = await queryResult?.rows[0].exists
-    console.log(token, tokenExists)
+    const tokenId = await queryResult?.rows[0]?.id
+    console.log({ token, tokenId })
     let success = queryResult?.rowCount === 1
     if (!success) {
         console.log(`Query token failed`, queryResult)
-        return false
+        return null
     }
-    return tokenExists
+    return tokenId
 }
 
 export async function post(req: Request, res: Response, _next: () => void) {
@@ -72,8 +78,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
 
     const inviteToken = req?.body?.token
-    const realToken = await tokenExists(inviteToken)
-    if (!inviteToken || typeof inviteToken !== "string" || !realToken) {
+    const inviteTokenId = await getTokenIdByToken(inviteToken)
+    if (!inviteToken || typeof inviteToken !== "string" || !inviteTokenId) {
         res.status(422).json({
             success: false,
             message:
@@ -91,8 +97,12 @@ export async function post(req: Request, res: Response, _next: () => void) {
         googleId: string | null = null
 
     if (authMethod === AuthMethod.GOOGLE) {
-        const idToken = req?.body?.idToken
-        if (!idToken || typeof idToken !== "string" || !idToken.length) {
+        const googleIdToken = req?.body?.idToken
+        if (
+            !googleIdToken ||
+            typeof googleIdToken !== "string" ||
+            !googleIdToken.length
+        ) {
             res.status(422).json({
                 success: false,
                 message:
@@ -104,7 +114,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             const client = new OAuth2Client(GOOGLE_SIGNIN_CLIENT_ID)
             // Check integrity of ID token (make sure that it's valid and comes from Google)
             const ticket = await client.verifyIdToken({
-                idToken,
+                idToken: googleIdToken,
                 audience: GOOGLE_SIGNIN_CLIENT_ID,
             })
             if (!ticket) {
@@ -215,14 +225,15 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
     const uuid = uuidv4()
     const queryResult = await db?.query({
-        text: `INSERT INTO users (
+        text: `INSERT INTO app_public.users (
                 username,
                 email,
                 password_hash,
                 uuid,
                 google_id,
                 avatar_url,
-                locale
+                locale,
+                signed_up_with_token_id
             )
             VALUES (
                 $1,
@@ -236,15 +247,25 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     FROM languages
                     WHERE alpha2 = $7
                     LIMIT 1
-                )
+                ),
+                $8
             )
             ON CONFLICT (email)
                 DO NOTHING
             RETURNING id`,
-        values: [username, email, hash, uuid, googleId, avatarUrl, locale],
+        values: [
+            username,
+            email,
+            hash,
+            uuid,
+            googleId,
+            avatarUrl,
+            locale,
+            inviteTokenId,
+        ],
     })
-    const user_id = queryResult?.rows[0].id
-    console.log(queryResult?.rows[0].id)
+    const userId = queryResult?.rows[0]?.id
+    console.log({ userId })
     let success = queryResult?.rowCount === 1
     if (!success) {
         console.log(`User insertion failed`, queryResult)
@@ -257,16 +278,14 @@ export async function post(req: Request, res: Response, _next: () => void) {
     const tokenQueryResult = await db?.query({
         text: `INSERT INTO invite_tokens (
                 user_id,
-                signed_up_with_token,
                 invite_token
             )
             VALUES (
                 $1,
-                $2,
-                $3
+                $2
             )
             RETURNING id`,
-        values: [user_id, inviteToken, newInviteToken],
+        values: [userId, newInviteToken],
     })
     let tokenSuccess = tokenQueryResult?.rowCount === 1
     if (!tokenSuccess) {
@@ -280,7 +299,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             console.error(err.message)
             serverError(res)
         } else {
-            req.session.user_id = queryResult?.rows[0].id
+            req.session.user_id = userId
             res.status(200).json({ success: true })
         }
     })

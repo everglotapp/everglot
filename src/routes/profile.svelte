@@ -34,7 +34,7 @@
 
 <div class="container gap-x-4 py-16 px-2 w-full max-w-sm md:max-w-md">
     {#if $userProfileStore.fetching}
-        <div>loading</div>
+        <div />
     {:else if $userProfileStore.error}
         <ErrorMessage>Failed to load your profile</ErrorMessage>
     {:else}

@@ -12,5 +12,10 @@ query CurrentUser {
         languageByLocale {
             alpha2
         }
+        inviteTokens {
+            nodes {
+                inviteToken
+            }
+        }
     }
 }

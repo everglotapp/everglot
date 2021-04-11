@@ -1,8 +1,13 @@
 <script lang="ts">
+    import { tick } from "svelte"
     import { scale } from "svelte/transition"
     import { goto } from "@sapper/app"
 
-    import { LogOutIcon } from "svelte-feather-icons"
+    import {
+        LogOutIcon,
+        CheckCircleIcon,
+        AlertCircleIcon,
+    } from "svelte-feather-icons"
     import { query } from "@urql/svelte"
 
     import Avatar from "../users/Avatar.svelte"
@@ -10,6 +15,7 @@
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
+    import Modal from "../util/Modal.svelte"
 
     import {
         currentUser,
@@ -53,6 +59,59 @@
             return
         }
         goto("/signup", { replaceState: false })
+    }
+
+    $: inviteToken = $currentUser?.inviteTokens?.nodes[0]?.inviteToken || null
+    $: inviteLink =
+        inviteToken && typeof window !== "undefined"
+            ? `${window.location.origin}/join?token=${inviteToken}`
+            : null
+    let showInviteModal = false
+    let copiedInviteLink: boolean | null = null
+    let resetCopiedTimeout: number | undefined
+
+    function handleFocusInviteLink(event: FocusEvent) {
+        if (event.target && inviteLink && inviteLink.length) {
+            const element = event.target as Node
+            const range = document.createRange()
+            range.selectNodeContents(element)
+            const sel = window.getSelection()
+            sel?.removeAllRanges()
+            sel?.addRange(range)
+        }
+    }
+    const reset = () => (copiedInviteLink = null)
+    const debounceReset = () => {
+        clearTimeout(resetCopiedTimeout)
+        setTimeout(reset, 5000)
+    }
+    function handleCopyClipboard(event: MouseEvent) {
+        event.preventDefault()
+        clearTimeout(resetCopiedTimeout)
+        if (navigator?.clipboard && inviteLink) {
+            navigator.clipboard
+                .writeText(inviteLink)
+                .then(async () => {
+                    if (copiedInviteLink === true) {
+                        // If it succeeded before, make sure there is a transition so
+                        // that the user can see the new success happening
+                        copiedInviteLink = null
+                        await tick()
+                    }
+                    copiedInviteLink = true
+                    debounceReset()
+                })
+                .catch(async () => {
+                    if (copiedInviteLink === false) {
+                        // If it failed before, make sure there is a transition so
+                        // that the user can see the new failure happening
+                        copiedInviteLink = null
+                        await tick()
+                    }
+                    copiedInviteLink = false
+                    debounceReset()
+                })
+        }
     }
 </script>
 
@@ -261,19 +320,21 @@
                                                 ></ButtonSmall
                                             >
                                         </div>
-                                        <div>
-                                            <ButtonSmall
-                                                variant="TEXT"
-                                                color="SECONDARY"
-                                                tag="button"
-                                                className="w-full"
-                                                disabled
-                                                on:click={(event) =>
-                                                    event.preventDefault()}
-                                                ><span>Invite friends</span
-                                                ></ButtonSmall
-                                            >
-                                        </div>
+                                        {#if $userHasCompletedProfile && inviteToken}
+                                            <div>
+                                                <ButtonSmall
+                                                    variant="TEXT"
+                                                    color="SECONDARY"
+                                                    className="w-full"
+                                                    tag="button"
+                                                    on:click={() => {
+                                                        showInviteModal = true
+                                                    }}
+                                                    ><span>Invite friends</span
+                                                    ></ButtonSmall
+                                                >
+                                            </div>
+                                        {/if}
                                         <div>
                                             <ButtonSmall
                                                 variant="TEXT"
@@ -316,6 +377,72 @@
         </div>
     </nav>
 </div>
+{#if showInviteModal && typeof window !== "undefined"}
+    <EscapeKeyListener on:keydown={() => (showInviteModal = false)} />
+    <Modal>
+        <div class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg">
+            <p class="mb-6 text-center">
+                Send this link to your friends to invite them to join Everglot!
+            </p>
+
+            <div class="px-2">
+                <span
+                    role="textbox"
+                    aria-readonly="true"
+                    contenteditable
+                    on:focus|self={handleFocusInviteLink}
+                    on:cut|preventDefault
+                    on:paste|preventDefault
+                    on:keydown={(event) => {
+                        if (!event.metaKey && !event.ctrlKey) {
+                            // Allow copying and selecting, prevent changing the content
+                            event.preventDefault()
+                        }
+                    }}
+                    class="py-3 px-6 border border-gray-400 rounded-lg font-bold text-sm text-gray-bitdark hover:bg-gray-lightest cursor-pointer focus:cursor-text"
+                >
+                    {inviteLink}
+                </span>
+            </div>
+
+            <div class="flex justify-end mt-6">
+                <ButtonSmall
+                    tag="button"
+                    on:click={() => (showInviteModal = false)}
+                    variant="TEXT"
+                    color="SECONDARY"
+                    className="mr-1">Close</ButtonSmall
+                >
+                <ButtonSmall tag="button" on:click={handleCopyClipboard}
+                    >Copy Link</ButtonSmall
+                >
+            </div>
+            {#if copiedInviteLink !== null}
+                <div
+                    class="absolute bottom-8 left-8 md:bottom-10 md:left-10"
+                    in:scale={{ delay: 200, duration: 100 }}
+                    out:scale={{ duration: 100 }}
+                >
+                    <div
+                        class={`flex relative items-center ${
+                            copiedInviteLink
+                                ? "text-primary"
+                                : "text-primary-dark"
+                        }`}
+                    >
+                        {#if copiedInviteLink}
+                            <span class="mr-2 font-bold">Copied</span>
+                            <CheckCircleIcon size="24" strokeWidth="3" />
+                        {:else}
+                            <span class="mr-2 font-bold">Copying failed</span>
+                            <AlertCircleIcon size="24" strokeWidth="3" />
+                        {/if}
+                    </div>
+                </div>
+            {/if}
+        </div>
+    </Modal>
+{/if}
 
 <style>
     .nav-container {

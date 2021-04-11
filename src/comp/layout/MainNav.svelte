@@ -377,9 +377,18 @@
             <div class="px-2">
                 <span
                     role="textbox"
+                    aria-readonly="true"
                     contenteditable
                     on:focus|self={handleFocusInviteLink}
-                    class="py-3 px-6 border border-gray-400 rounded-lg font-bold text-sm text-gray-bitdark"
+                    on:cut|preventDefault
+                    on:paste|preventDefault
+                    on:keydown={(event) => {
+                        if (!event.metaKey && !event.ctrlKey) {
+                            // Allow copying and selecting, prevent changing the content
+                            event.preventDefault()
+                        }
+                    }}
+                    class="py-3 px-6 border border-gray-400 rounded-lg font-bold text-sm text-gray-bitdark hover:bg-gray-lightest cursor-pointer focus:cursor-text"
                 >
                     {inviteLink}
                 </span>

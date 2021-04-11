@@ -459,8 +459,11 @@ export type User = Node & {
   avatarUrl?: Maybe<Scalars['String']>;
   locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;
+  signedUpWithTokenId?: Maybe<Scalars['Int']>;
   /** Reads a single `Language` that is related to this `User`. */
   languageByLocale?: Maybe<Language>;
+  /** Reads a single `InviteToken` that is related to this `User`. */
+  signedUpWithToken?: Maybe<InviteToken>;
   /** Reads and enables pagination through a set of `UserLanguage`. */
   userLanguages: UserLanguagesConnection;
   /** Reads and enables pagination through a set of `GroupUser`. */
@@ -675,6 +678,8 @@ export type Language = Node & {
   userLanguages: UserLanguagesConnection;
   /** Reads and enables pagination through a set of `Group`. */
   groups: GroupsConnection;
+  /** Reads and enables pagination through a set of `InviteToken`. */
+  inviteTokensByUserLocaleAndSignedUpWithTokenId: LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByUserLanguageLanguageIdAndUserId: LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyConnection;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
@@ -717,6 +722,18 @@ export type LanguageGroupsArgs = {
   orderBy?: Maybe<Array<GroupsOrderBy>>;
   condition?: Maybe<GroupCondition>;
   filter?: Maybe<GroupFilter>;
+};
+
+
+export type LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+  condition?: Maybe<InviteTokenCondition>;
+  filter?: Maybe<InviteTokenFilter>;
 };
 
 
@@ -820,6 +837,8 @@ export enum UsersOrderBy {
   LocaleDesc = 'LOCALE_DESC',
   GoogleIdAsc = 'GOOGLE_ID_ASC',
   GoogleIdDesc = 'GOOGLE_ID_DESC',
+  SignedUpWithTokenIdAsc = 'SIGNED_UP_WITH_TOKEN_ID_ASC',
+  SignedUpWithTokenIdDesc = 'SIGNED_UP_WITH_TOKEN_ID_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
@@ -852,6 +871,8 @@ export type UserCondition = {
   locale?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `googleId` field. */
   googleId?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `signedUpWithTokenId` field. */
+  signedUpWithTokenId?: Maybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `User` object types. All fields are combined with a logical ‘and.’ */
@@ -882,6 +903,8 @@ export type UserFilter = {
   locale?: Maybe<IntFilter>;
   /** Filter by the object’s `googleId` field. */
   googleId?: Maybe<StringFilter>;
+  /** Filter by the object’s `signedUpWithTokenId` field. */
+  signedUpWithTokenId?: Maybe<IntFilter>;
   /** Checks for all expressions in this list. */
   and?: Maybe<Array<UserFilter>>;
   /** Checks for any expressions in this list. */
@@ -2109,6 +2132,168 @@ export type UserLanguagesEdge = {
   node?: Maybe<UserLanguage>;
 };
 
+/** A connection to a list of `InviteToken` values, with data from `User`. */
+export type LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyConnection = {
+  __typename?: 'LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyConnection';
+  /** A list of `InviteToken` objects. */
+  nodes: Array<Maybe<InviteToken>>;
+  /** A list of edges which contains the `InviteToken`, info from the `User`, and the cursor to aid in pagination. */
+  edges: Array<LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `InviteToken` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+export type InviteToken = Node & {
+  __typename?: 'InviteToken';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  userId?: Maybe<Scalars['Int']>;
+  inviteToken: Scalars['String'];
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `User` that is related to this `InviteToken`. */
+  user?: Maybe<User>;
+  /** Reads and enables pagination through a set of `User`. */
+  usersBySignedUpWithTokenId: UsersConnection;
+  /** Reads and enables pagination through a set of `Language`. */
+  languagesByUserSignedUpWithTokenIdAndLocale: InviteTokenLanguagesByUserSignedUpWithTokenIdAndLocaleManyToManyConnection;
+};
+
+
+export type InviteTokenUsersBySignedUpWithTokenIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type InviteTokenLanguagesByUserSignedUpWithTokenIdAndLocaleArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
+};
+
+/** A connection to a list of `Language` values, with data from `User`. */
+export type InviteTokenLanguagesByUserSignedUpWithTokenIdAndLocaleManyToManyConnection = {
+  __typename?: 'InviteTokenLanguagesByUserSignedUpWithTokenIdAndLocaleManyToManyConnection';
+  /** A list of `Language` objects. */
+  nodes: Array<Maybe<Language>>;
+  /** A list of edges which contains the `Language`, info from the `User`, and the cursor to aid in pagination. */
+  edges: Array<InviteTokenLanguagesByUserSignedUpWithTokenIdAndLocaleManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Language` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Language` edge in the connection, with data from `User`. */
+export type InviteTokenLanguagesByUserSignedUpWithTokenIdAndLocaleManyToManyEdge = {
+  __typename?: 'InviteTokenLanguagesByUserSignedUpWithTokenIdAndLocaleManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Language` at the end of the edge. */
+  node?: Maybe<Language>;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByLocale: UsersConnection;
+};
+
+
+/** A `Language` edge in the connection, with data from `User`. */
+export type InviteTokenLanguagesByUserSignedUpWithTokenIdAndLocaleManyToManyEdgeUsersByLocaleArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+/** A `InviteToken` edge in the connection, with data from `User`. */
+export type LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyEdge = {
+  __typename?: 'LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `InviteToken` at the end of the edge. */
+  node?: Maybe<InviteToken>;
+  /** Reads and enables pagination through a set of `User`. */
+  usersBySignedUpWithTokenId: UsersConnection;
+};
+
+
+/** A `InviteToken` edge in the connection, with data from `User`. */
+export type LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyEdgeUsersBySignedUpWithTokenIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+/** Methods to use when ordering `InviteToken`. */
+export enum InviteTokensOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+  InviteTokenAsc = 'INVITE_TOKEN_ASC',
+  InviteTokenDesc = 'INVITE_TOKEN_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/**
+ * A condition to be used against `InviteToken` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
+export type InviteTokenCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `inviteToken` field. */
+  inviteToken?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `InviteToken` object types. All fields are combined with a logical ‘and.’ */
+export type InviteTokenFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `inviteToken` field. */
+  inviteToken?: Maybe<StringFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<InviteTokenFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<InviteTokenFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<InviteTokenFilter>;
+};
+
 /** A connection to a list of `User` values, with data from `UserLanguage`. */
 export type LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyConnection = {
   __typename?: 'LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyConnection';
@@ -2269,18 +2454,6 @@ export type InviteTokensConnection = {
   totalCount: Scalars['Int'];
 };
 
-export type InviteToken = Node & {
-  __typename?: 'InviteToken';
-  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
-  id: Scalars['Int'];
-  userId?: Maybe<Scalars['Int']>;
-  signedUpWithToken?: Maybe<Scalars['String']>;
-  inviteToken: Scalars['String'];
-  /** Reads a single `User` that is related to this `InviteToken`. */
-  user?: Maybe<User>;
-};
-
 /** A `InviteToken` edge in the connection. */
 export type InviteTokensEdge = {
   __typename?: 'InviteTokensEdge';
@@ -2288,54 +2461,6 @@ export type InviteTokensEdge = {
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `InviteToken` at the end of the edge. */
   node?: Maybe<InviteToken>;
-};
-
-/** Methods to use when ordering `InviteToken`. */
-export enum InviteTokensOrderBy {
-  Natural = 'NATURAL',
-  IdAsc = 'ID_ASC',
-  IdDesc = 'ID_DESC',
-  UserIdAsc = 'USER_ID_ASC',
-  UserIdDesc = 'USER_ID_DESC',
-  SignedUpWithTokenAsc = 'SIGNED_UP_WITH_TOKEN_ASC',
-  SignedUpWithTokenDesc = 'SIGNED_UP_WITH_TOKEN_DESC',
-  InviteTokenAsc = 'INVITE_TOKEN_ASC',
-  InviteTokenDesc = 'INVITE_TOKEN_DESC',
-  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
-}
-
-/**
- * A condition to be used against `InviteToken` object types. All fields are tested
- * for equality and combined with a logical ‘and.’
- */
-export type InviteTokenCondition = {
-  /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `signedUpWithToken` field. */
-  signedUpWithToken?: Maybe<Scalars['String']>;
-  /** Checks for equality with the object’s `inviteToken` field. */
-  inviteToken?: Maybe<Scalars['String']>;
-};
-
-/** A filter to be used against `InviteToken` object types. All fields are combined with a logical ‘and.’ */
-export type InviteTokenFilter = {
-  /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
-  /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
-  /** Filter by the object’s `signedUpWithToken` field. */
-  signedUpWithToken?: Maybe<StringFilter>;
-  /** Filter by the object’s `inviteToken` field. */
-  inviteToken?: Maybe<StringFilter>;
-  /** Checks for all expressions in this list. */
-  and?: Maybe<Array<InviteTokenFilter>>;
-  /** Checks for any expressions in this list. */
-  or?: Maybe<Array<InviteTokenFilter>>;
-  /** Negates the expression. */
-  not?: Maybe<InviteTokenFilter>;
 };
 
 /** A connection to a list of `Language` values, with data from `UserLanguage`. */
@@ -2744,6 +2869,7 @@ export type UserSession = Node & {
   sid: Scalars['String'];
   sess: Scalars['JSON'];
   expire: Scalars['Datetime'];
+  createdAt: Scalars['Datetime'];
 };
 
 
@@ -2765,6 +2891,8 @@ export enum UserSessionsOrderBy {
   SessDesc = 'SESS_DESC',
   ExpireAsc = 'EXPIRE_ASC',
   ExpireDesc = 'EXPIRE_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
@@ -2780,6 +2908,8 @@ export type UserSessionCondition = {
   sess?: Maybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `expire` field. */
   expire?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
 };
 
 /** A filter to be used against `UserSession` object types. All fields are combined with a logical ‘and.’ */
@@ -2788,6 +2918,8 @@ export type UserSessionFilter = {
   sid?: Maybe<StringFilter>;
   /** Filter by the object’s `expire` field. */
   expire?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
   /** Checks for all expressions in this list. */
   and?: Maybe<Array<UserSessionFilter>>;
   /** Checks for any expressions in this list. */
@@ -3405,8 +3537,8 @@ export type CreateInviteTokenInput = {
 export type InviteTokenInput = {
   id?: Maybe<Scalars['Int']>;
   userId?: Maybe<Scalars['Int']>;
-  signedUpWithToken?: Maybe<Scalars['String']>;
   inviteToken?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
 };
 
 /** The output of our create `LanguageSkillLevel` mutation. */
@@ -3630,6 +3762,7 @@ export type UserSessionInput = {
   sid: Scalars['String'];
   sess: Scalars['JSON'];
   expire: Scalars['Datetime'];
+  createdAt?: Maybe<Scalars['Datetime']>;
 };
 
 /** The output of our create `User` mutation. */
@@ -3646,6 +3779,8 @@ export type CreateUserPayload = {
   query?: Maybe<Query>;
   /** Reads a single `Language` that is related to this `User`. */
   languageByLocale?: Maybe<Language>;
+  /** Reads a single `InviteToken` that is related to this `User`. */
+  signedUpWithToken?: Maybe<InviteToken>;
   /** An edge for our `User`. May be used by Relay 1. */
   userEdge?: Maybe<UsersEdge>;
 };
@@ -3682,6 +3817,7 @@ export type UserInput = {
   avatarUrl?: Maybe<Scalars['String']>;
   locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;
+  signedUpWithTokenId?: Maybe<Scalars['Int']>;
 };
 
 /** The output of our update `GroupUser` mutation. */
@@ -3860,8 +3996,8 @@ export type UpdateInviteTokenByNodeIdInput = {
 export type InviteTokenPatch = {
   id?: Maybe<Scalars['Int']>;
   userId?: Maybe<Scalars['Int']>;
-  signedUpWithToken?: Maybe<Scalars['String']>;
   inviteToken?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
 };
 
 /** All input for the `updateInviteToken` mutation. */
@@ -4192,6 +4328,7 @@ export type UserSessionPatch = {
   sid?: Maybe<Scalars['String']>;
   sess?: Maybe<Scalars['JSON']>;
   expire?: Maybe<Scalars['Datetime']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
 };
 
 /** All input for the `updateUserSession` mutation. */
@@ -4220,6 +4357,8 @@ export type UpdateUserPayload = {
   query?: Maybe<Query>;
   /** Reads a single `Language` that is related to this `User`. */
   languageByLocale?: Maybe<Language>;
+  /** Reads a single `InviteToken` that is related to this `User`. */
+  signedUpWithToken?: Maybe<InviteToken>;
   /** An edge for our `User`. May be used by Relay 1. */
   userEdge?: Maybe<UsersEdge>;
 };
@@ -4258,6 +4397,7 @@ export type UserPatch = {
   avatarUrl?: Maybe<Scalars['String']>;
   locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;
+  signedUpWithTokenId?: Maybe<Scalars['Int']>;
 };
 
 /** All input for the `updateUser` mutation. */
@@ -4728,6 +4868,8 @@ export type DeleteUserPayload = {
   query?: Maybe<Query>;
   /** Reads a single `Language` that is related to this `User`. */
   languageByLocale?: Maybe<Language>;
+  /** Reads a single `InviteToken` that is related to this `User`. */
+  signedUpWithToken?: Maybe<InviteToken>;
   /** An edge for our `User`. May be used by Relay 1. */
   userEdge?: Maybe<UsersEdge>;
 };

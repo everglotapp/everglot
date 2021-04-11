@@ -3479,6 +3479,7 @@ type InviteToken implements Node {
   id: Int!
   userId: Int
   inviteToken: String!
+  createdAt: Datetime!
 
   """Reads a single `User` that is related to this `InviteToken`."""
   user: User
@@ -3664,6 +3665,8 @@ enum InviteTokensOrderBy {
   USER_ID_DESC
   INVITE_TOKEN_ASC
   INVITE_TOKEN_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
 }
@@ -3681,6 +3684,9 @@ input InviteTokenCondition {
 
   """Checks for equality with the object’s `inviteToken` field."""
   inviteToken: String
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
 }
 
 """
@@ -3695,6 +3701,9 @@ input InviteTokenFilter {
 
   """Filter by the object’s `inviteToken` field."""
   inviteToken: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
 
   """Checks for all expressions in this list."""
   and: [InviteTokenFilter!]
@@ -4603,6 +4612,7 @@ type UserSession implements Node {
   sid: String!
   sess: JSON!
   expire: Datetime!
+  createdAt: Datetime!
 }
 
 """
@@ -4628,6 +4638,8 @@ enum UserSessionsOrderBy {
   SESS_DESC
   EXPIRE_ASC
   EXPIRE_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
 }
@@ -4645,6 +4657,9 @@ input UserSessionCondition {
 
   """Checks for equality with the object’s `expire` field."""
   expire: Datetime
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
 }
 
 """
@@ -4656,6 +4671,9 @@ input UserSessionFilter {
 
   """Filter by the object’s `expire` field."""
   expire: DatetimeFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
 
   """Checks for all expressions in this list."""
   and: [UserSessionFilter!]
@@ -5294,6 +5312,7 @@ input InviteTokenInput {
   id: Int
   userId: Int
   inviteToken: String
+  createdAt: Datetime
 }
 
 """The output of our create `LanguageSkillLevel` mutation."""
@@ -5537,6 +5556,7 @@ input UserSessionInput {
   sid: String!
   sess: JSON!
   expire: Datetime!
+  createdAt: Datetime
 }
 
 """The output of our create `User` mutation."""
@@ -5816,6 +5836,7 @@ input InviteTokenPatch {
   id: Int
   userId: Int
   inviteToken: String
+  createdAt: Datetime
 }
 
 """All input for the `updateInviteToken` mutation."""
@@ -6226,6 +6247,7 @@ input UserSessionPatch {
   sid: String
   sess: JSON
   expire: Datetime
+  createdAt: Datetime
 }
 
 """All input for the `updateUserSession` mutation."""

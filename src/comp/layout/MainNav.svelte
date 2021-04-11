@@ -399,7 +399,7 @@
             </div>
             {#if copiedInviteLink !== null}
                 <div
-                    class="absolute bottom-8 left-8"
+                    class="absolute bottom-8 left-8 md:bottom-10 md:left-10"
                     in:scale={{ delay: 200, duration: 100 }}
                     out:scale={{ duration: 100 }}
                 >

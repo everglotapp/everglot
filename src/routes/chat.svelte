@@ -171,9 +171,11 @@
         }
         if (peer) {
             peer.disconnect()
-            peer.destroy()
-            peer = null
         }
+        if (peer) {
+            peer.destroy()
+        }
+        peer = null
     })
 
     let socket: SocketIO.Socket | null = null

@@ -1,31 +1,15 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "lib": [
-      "DOM",
-      "ES2017",
-      "WebWorker",
-      "ES2019"
-    ],
+    "lib": ["DOM", "ES2017", "WebWorker", "ES2019"],
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strict": true,
     "strictFunctionTypes": false,
-    "typeRoots": [
-      "src/types/",
-      "src/types/generated",
-      "node_modules/@types/"
-    ],
-    "resolveJsonModule": true
+    "typeRoots": ["src/types/", "src/types/generated", "node_modules/@types/"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
-  "include": [
-    "src/**/*",
-    "src/*",
-    "src/node_modules/**/*"
-  ],
-  "exclude": [
-    "node_modules/*",
-    "__sapper__/*",
-    "static/*"
-  ]
+  "include": ["src/**/*", "src/*", "src/node_modules/**/*"],
+  "exclude": ["node_modules/*", "__sapper__/*", "static/*"]
 }

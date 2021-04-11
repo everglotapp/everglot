@@ -385,7 +385,9 @@
                 Send this link to your friends to invite them to join Everglot!
             </p>
 
-            <div class="px-2">
+            <div
+                class="py-3 px-6 border border-gray-400 rounded-lg hover:bg-gray-lightest"
+            >
                 <span
                     role="textbox"
                     aria-readonly="true"
@@ -399,7 +401,8 @@
                             event.preventDefault()
                         }
                     }}
-                    class="py-3 px-6 border border-gray-400 rounded-lg font-bold text-sm text-gray-bitdark hover:bg-gray-lightest cursor-pointer focus:cursor-text"
+                    class="rounded-lg font-bold text-sm text-gray-bitdark cursor-pointer focus:cursor-text outline-none break-all"
+                    style="overflow-wrap: anywhere;"
                 >
                     {inviteLink}
                 </span>
@@ -577,6 +580,10 @@
 
     .dropdown-inner {
         z-index: 1;
+    }
+
+    .dropdown-inner :global(a) {
+        margin: 0;
     }
 
     .groups-dropdown-inner {

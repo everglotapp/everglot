@@ -80,19 +80,19 @@ export const chatLearners = derived(
 )
 
 export const language = derived(groupChatStore, ($groupChatStore) =>
-    !$groupChatStore.fetching && !$groupChatStore.error
+    $groupChatStore.data && !$groupChatStore.error
         ? $groupChatStore.data?.groupByUuid?.language || null
         : null
 )
 
 export const languageSkillLevel = derived(groupChatStore, ($groupChatStore) =>
-    !$groupChatStore.fetching && !$groupChatStore.error
+    $groupChatStore.data && !$groupChatStore.error
         ? $groupChatStore.data?.groupByUuid?.languageSkillLevel || null
         : null
 )
 
 export const groupName = derived(groupChatStore, ($groupChatStore) =>
-    !$groupChatStore.fetching && !$groupChatStore.error
+    $groupChatStore.data && !$groupChatStore.error
         ? $groupChatStore.data?.groupByUuid?.groupName || null
         : null
 )

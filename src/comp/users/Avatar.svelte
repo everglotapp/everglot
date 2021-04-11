@@ -1,6 +1,6 @@
 <script lang="ts">
     export let username: string = ""
-    export let url = ""
+    export let url: string = ""
     export let size = 50
 
     $: initial = username.charAt(0)
@@ -12,7 +12,7 @@
     tabindex="0"
     style={`width: ${size}px; height: ${size}px;`}
 >
-    {#if url.startsWith("https://")}
+    {#if url?.startsWith("https://")}
         <img
             src={url}
             alt={initial}

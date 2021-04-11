@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { tick } from "svelte"
     import { scale } from "svelte/transition"
     import { goto } from "@sapper/app"
 
@@ -12,7 +13,6 @@
     import Avatar from "../users/Avatar.svelte"
 
     import ButtonSmall from "../util/ButtonSmall.svelte"
-    import ButtonLarge from "../util/ButtonLarge.svelte"
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
     import Modal from "../util/Modal.svelte"
@@ -68,14 +68,39 @@
             : null
     let showInviteModal = false
     let copiedInviteLink: boolean | null = null
+    let resetCopiedTimeout: number | undefined
 
+    function handleFocusInviteLink(event: FocusEvent) {
+        if (event.target && inviteLink && inviteLink.length) {
+            const element = event.target as Node
+            const range = document.createRange()
+            range.selectNodeContents(element)
+            const sel = window.getSelection()
+            sel?.removeAllRanges()
+            sel?.addRange(range)
+        }
+    }
+    const reset = () => (copiedInviteLink = null)
     function handleCopyClipboard(event: MouseEvent) {
         event.preventDefault()
+        reset()
         if (navigator?.clipboard && inviteLink) {
+            const debounceReset = () => {
+                clearTimeout(resetCopiedTimeout)
+                setTimeout(reset, 3000)
+            }
             navigator.clipboard
                 .writeText(inviteLink)
-                .then(() => (copiedInviteLink = true))
-                .catch(() => (copiedInviteLink = false))
+                .then(async () => {
+                    await tick()
+                    copiedInviteLink = true
+                    debounceReset()
+                })
+                .catch(async () => {
+                    await tick()
+                    copiedInviteLink = false
+                    debounceReset()
+                })
         }
     }
 </script>
@@ -344,45 +369,57 @@
 </div>
 {#if showInviteModal && typeof window !== "undefined"}
     <Modal>
-        <div class="py-8 px-14 bg-white shadow-lg rounded-lg">
-            Send this link to your friends to invite them to join Everglot!
+        <div class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg">
+            <p class="mb-6 text-center">
+                Send this link to your friends to invite them to join Everglot!
+            </p>
 
-            <div class="mt-4 mb-2 px-2">
+            <div class="px-2">
                 <span
                     role="textbox"
                     contenteditable
-                    class="py-2 px-3 border-gray-400 rounded-lg"
+                    on:focus|self={handleFocusInviteLink}
+                    class="py-3 px-6 border border-gray-400 rounded-lg font-bold text-sm text-gray-bitdark"
                 >
                     {inviteLink}
                 </span>
             </div>
 
-            <div class="flex justify-end">
+            <div class="flex justify-end mt-6">
                 <ButtonSmall
                     tag="button"
                     on:click={() => (showInviteModal = false)}
                     variant="TEXT"
-                    color="SECONDARY">Close</ButtonSmall
+                    color="SECONDARY"
+                    className="mr-1">Close</ButtonSmall
                 >
                 <ButtonSmall tag="button" on:click={handleCopyClipboard}
                     >Copy Link</ButtonSmall
                 >
-                {#if copiedInviteLink !== null}
-                    {#if copiedInviteLink}
-                        <CheckCircleIcon
-                            size="32"
-                            class="absolute"
-                            style="left: 16px;"
-                        />
-                    {:else}
-                        <AlertCircleIcon
-                            size="32"
-                            class="absolute"
-                            style="left: 16px;"
-                        />
-                    {/if}
-                {/if}
             </div>
+            {#if copiedInviteLink !== null}
+                <div
+                    class="absolute bottom-8 left-8"
+                    in:scale={{ delay: 200, duration: 100 }}
+                    out:scale={{ duration: 100 }}
+                >
+                    <div
+                        class={`flex relative items-center ${
+                            copiedInviteLink
+                                ? "text-primary"
+                                : "text-primary-dark"
+                        }`}
+                    >
+                        {#if copiedInviteLink}
+                            <span class="mr-2 font-bold">Copied</span>
+                            <CheckCircleIcon size="24" strokeWidth="3" />
+                        {:else}
+                            <span class="mr-2 font-bold">Copying failed</span>
+                            <AlertCircleIcon size="24" strokeWidth="3" />
+                        {/if}
+                    </div>
+                </div>
+            {/if}
         </div>
     </Modal>
 {/if}

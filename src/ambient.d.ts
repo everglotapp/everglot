@@ -40,5 +40,5 @@ declare module "*.webp" {
 
 declare module "svelte-feather-icons"
 declare module "fakerator"
-declare module "uuid-token-generator"
+declare module "uid-generator"
 declare module "@graphile-contrib/pg-many-to-many"

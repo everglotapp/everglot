@@ -7,7 +7,7 @@ import { GOOGLE_SIGNIN_CLIENT_ID } from "../constants"
 import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
 
-import TokenGenerator from "uuid-token-generator"
+import UIDGenerator from "uid-generator"
 
 import validate from "deep-email-validator"
 import { OAuth2Client } from "google-auth-library"
@@ -273,8 +273,13 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    const tokgen2 = new TokenGenerator(256, TokenGenerator.BASE62)
-    const newInviteToken = tokgen2.generate()
+    const uidgen = new UIDGenerator(256, UIDGenerator.BASE58)
+    const newInviteToken = await uidgen.generate()
+    if (!newInviteToken) {
+        console.log(`Invite token generation failed`, { newInviteToken })
+        serverError(res)
+        return
+    }
     const tokenQueryResult = await db?.query({
         text: `INSERT INTO invite_tokens (
                 user_id,

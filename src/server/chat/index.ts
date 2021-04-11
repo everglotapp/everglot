@@ -83,11 +83,17 @@ export function start(server: Server, pool: Pool) {
             const chatUser = userJoin(socket.id, res.data.user, groupUuid)
             socket.join(groupUuid)
             if (userIsNew(chatUser)) {
-                // Welcome current user
-                sendBotMessage(
-                    `Welcome to Everglot, @${chatUser.user.username}! Write !help to see available commands.`,
-                    groupUuid
-                )
+                if (alpha2 === "de") {
+                    sendBotMessage(
+                        `Willkommen bei Everglot, @${chatUser.user.username}! Schreibe !help, um alle verfügbaren Befehle zu sehen.`,
+                        groupUuid
+                    )
+                } else {
+                    sendBotMessage(
+                        `Welcome to Everglot, @${chatUser.user.username}! Write !help to see available commands.`,
+                        groupUuid
+                    )
+                }
 
                 userGreeted(chatUser)
             }
@@ -100,23 +106,41 @@ export function start(server: Server, pool: Pool) {
             })
 
             // Broadcast when a user connects
-            socket.broadcast
-                .to(chatUser.groupUuid)
-                .emit(
-                    "message",
-                    formatMessage(
-                        `${chatUser.user.username} has joined the chat`
+            if (alpha2 === "de") {
+                socket.broadcast
+                    .to(chatUser.groupUuid)
+                    .emit(
+                        "message",
+                        formatMessage(
+                            `${chatUser.user.username} ist dem Chat beigetreten.`
+                        )
                     )
-                )
+            } else {
+                socket.broadcast
+                    .to(chatUser.groupUuid)
+                    .emit(
+                        "message",
+                        formatMessage(
+                            `${chatUser.user.username} has joined the chat.`
+                        )
+                    )
+            }
 
             // TODO: Get language from group.
             if (["de", "en"].includes(alpha2)) {
                 const hangman = hangmanGames[alpha2 as HangmanLanguage]
                 if (hangman.running) {
-                    sendBotMessage(
-                        `Current word: ${hangman.publicWord}`,
-                        chatUser.groupUuid
-                    )
+                    if (alpha2 === "de") {
+                        sendBotMessage(
+                            `Aktuelles Wort: ${hangman.publicWord}`,
+                            chatUser.groupUuid
+                        )
+                    } else {
+                        sendBotMessage(
+                            `Current word: ${hangman.publicWord}`,
+                            chatUser.groupUuid
+                        )
+                    }
                 }
             }
         })
@@ -177,10 +201,17 @@ export function start(server: Server, pool: Pool) {
                 const alpha2 = group.groupByUuid?.language?.alpha2
 
                 if (msg.startsWith("!help")) {
-                    sendBotMessage(
-                        "Available commands: !hangman, !help",
-                        chatUser.groupUuid
-                    )
+                    if (alpha2 === "de") {
+                        sendBotMessage(
+                            "Verfügbare Befehle: !hangman, !help",
+                            chatUser.groupUuid
+                        )
+                    } else {
+                        sendBotMessage(
+                            "Available commands: !hangman, !help",
+                            chatUser.groupUuid
+                        )
+                    }
                     return
                 } else if (Object.keys(hangmanGames).includes(alpha2)) {
                     const hangman = hangmanGames[alpha2 as HangmanLanguage]
@@ -191,31 +222,59 @@ export function start(server: Server, pool: Pool) {
                                 hangman.letterAvailable(msg)
                             ) {
                                 hangman.pickLetter(msg)
-                                sendBotMessage(
-                                    `Current word: ${hangman.publicWord}`,
-                                    chatUser.groupUuid
-                                )
-                                if (hangman.nextRound()) {
+                                if (alpha2 === "de") {
                                     sendBotMessage(
-                                        `You guessed correctly! Here's the next word: ${hangman.publicWord}`,
+                                        `Aktuelles Wort: ${hangman.publicWord}`,
                                         chatUser.groupUuid
                                     )
+                                } else {
+                                    sendBotMessage(
+                                        `Current word: ${hangman.publicWord}`,
+                                        chatUser.groupUuid
+                                    )
+                                }
+                                if (hangman.nextRound()) {
+                                    if (alpha2 === "de") {
+                                        sendBotMessage(
+                                            `Du hast richtig geraten! Hier ist das nächste Wort: ${hangman.publicWord}`,
+                                            chatUser.groupUuid
+                                        )
+                                    } else {
+                                        sendBotMessage(
+                                            `You guessed correctly! Here's the next word: ${hangman.publicWord}`,
+                                            chatUser.groupUuid
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
                     if (msg.startsWith("!hangman")) {
                         if (hangman.running) {
-                            sendBotMessage(
-                                "Hangman is already running.",
-                                chatUser.groupUuid
-                            )
+                            if (alpha2 === "de") {
+                                sendBotMessage(
+                                    "Es läuft bereits ein Hangman-Spiel.",
+                                    chatUser.groupUuid
+                                )
+                            } else {
+                                sendBotMessage(
+                                    "Hangman is already running.",
+                                    chatUser.groupUuid
+                                )
+                            }
                         } else {
                             hangman.start()
-                            sendBotMessage(
-                                `Started a hangman game: ${hangman.publicWord}`,
-                                chatUser.groupUuid
-                            )
+                            if (alpha2 === "de") {
+                                sendBotMessage(
+                                    `Wir fangen ein Hangman-Spiel an: ${hangman.publicWord}`,
+                                    chatUser.groupUuid
+                                )
+                            } else {
+                                sendBotMessage(
+                                    `Started a hangman game: ${hangman.publicWord}`,
+                                    chatUser.groupUuid
+                                )
+                            }
                         }
                     }
                 } else {

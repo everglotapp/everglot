@@ -378,6 +378,7 @@
     </nav>
 </div>
 {#if showInviteModal && typeof window !== "undefined"}
+    <EscapeKeyListener on:keydown={() => (showInviteModal = false)} />
     <Modal>
         <div class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg">
             <p class="mb-6 text-center">

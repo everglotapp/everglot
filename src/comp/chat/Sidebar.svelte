@@ -122,7 +122,7 @@
         {:else}
             <div class="flex justify-center">
                 <ButtonLarge tag="button" on:click={handleCall} variant="TEXT"
-                    >Start call</ButtonLarge
+                    >Start Call</ButtonLarge
                 >
             </div>
         {/if}

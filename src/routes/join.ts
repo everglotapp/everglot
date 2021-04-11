@@ -274,7 +274,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
 
     const uidgen = new UIDGenerator(256, UIDGenerator.BASE58)
-    const newInviteToken = await uidgen.generate()
+    const newInviteToken = await uidgen.generate().catch(() => null)
     if (!newInviteToken) {
         console.log(`Invite token generation failed`, { newInviteToken })
         serverError(res)

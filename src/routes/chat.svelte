@@ -36,6 +36,7 @@
     import { JoinGlobalGroup } from "../types/generated/graphql"
 
     import { ChevronLeftIcon, ChevronsRightIcon } from "svelte-feather-icons"
+    import type { MediaConnection } from "peerjs"
 
     let messages: ChatMessage[] = []
     let myUuid: User["uuid"] | null = null
@@ -168,6 +169,11 @@
             clearInterval(fetchGroupMetadataInterval)
             fetchGroupMetadataInterval = null
         }
+        if (peer) {
+            peer.disconnect()
+            peer.destroy()
+            peer = null
+        }
     })
 
     let socket: SocketIO.Socket | null = null
@@ -207,7 +213,17 @@
                     sdpSemantics: "unified-plan",
                 },
             })
+
+            if (peer) {
+                peer.on("error", function (err) {
+                    console.log(err)
+                })
+                peer.on("disconnected", function (err) {
+                    peer = null
+                })
+            }
         }
+
         return peer
     }
 
@@ -340,18 +356,74 @@
         messages = [...messages, message]
     }
 
-    const outgoing = []
-    const incoming = []
+    let outgoing: Record<User["uuid"], MediaStream | null> = {}
+    let incoming: MediaStream[] = []
 
-    let called = false
-    $: if (!$currentUserStore.fetching && $currentUser && !peer) {
-        connectToWebRTC().then((peer) => {
-            if (peer && !called) {
-                const users =
-                    $groupChatStore.data?.groupByUuid?.usersByGroupUserGroupIdAndUserId.nodes
-                        .filter(Boolean)
-                        .map((user) => user!.uuid) || []
-                // TODO: call users and put into outgoing
+    let listeningForCalls = false
+    function listenForCalls() {
+        if (listeningForCalls) {
+            return
+        }
+        connectToWebRTC().then(async (peer) => {
+            if (!peer) {
+                return
+            }
+            peer.on("call", async (call: MediaConnection) => {
+                const stream = await navigator.mediaDevices
+                    .getUserMedia({ video: false, audio: true })
+                    .catch((err) => {
+                        console.error("Failed to get local stream", err)
+                        return null
+                    })
+                if (!stream) {
+                    return
+                }
+                call.answer(stream)
+                call.on("stream", (remoteStream) => {
+                    incoming = [...incoming, remoteStream]
+                    console.log("Answered", { remoteStream })
+                })
+            })
+            listeningForCalls = true
+        })
+    }
+    // @ts-ignore
+    $: peer, listenForCalls
+
+    // TODO: Get these from the peer server's list of active peers somehow
+    $: otherUserUuids =
+        $groupChatStore.data?.groupByUuid?.usersByGroupUserGroupIdAndUserId.nodes
+            .filter(Boolean)
+            .map((user) => user!.uuid) || []
+
+    function handleCall() {
+        connectToWebRTC().then(async (peer) => {
+            if (!peer) {
+                return
+            }
+            for (const otherUuid of otherUserUuids) {
+                // TODO: call user and put into outgoing
+                if (Object.keys(outgoing).includes(otherUuid)) {
+                    continue
+                }
+                const stream = await navigator.mediaDevices
+                    .getUserMedia({ video: false, audio: true })
+                    .catch((err) => {
+                        console.error("Failed to get local stream", err)
+                        return null
+                    })
+                if (!stream) {
+                    continue
+                }
+                const call: MediaConnection = peer.call(otherUuid, stream)
+                if (!call) {
+                    continue
+                }
+                outgoing = { ...outgoing, [otherUuid]: null }
+                call.on("stream", (remoteStream) => {
+                    outgoing[otherUuid] = remoteStream
+                    console.log("Called", { [otherUuid]: remoteStream })
+                })
             }
         })
     }
@@ -359,6 +431,7 @@
     let split = true
     let audio = false
     let mic = false
+    $: callInProgress = incoming.length || Object.values(outgoing).some(Boolean)
 </script>
 
 <svelte:head>
@@ -381,9 +454,11 @@
                 {split}
                 {audio}
                 {mic}
+                {callInProgress}
                 handleToggleSplit={() => (split = !split)}
                 handleToggleMic={() => (mic = !mic)}
                 handleToggleAudio={() => (audio = !audio)}
+                {handleCall}
             />
         {/key}
         <div class="section-wrapper">

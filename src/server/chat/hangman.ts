@@ -1,9 +1,9 @@
 import { ALPHABET } from "../../constants"
 
-export type HangmanLanguage = "English" | "German"
+export type HangmanLanguage = "en" | "de"
 
 const DICTIONARY: Record<HangmanLanguage, string[]> = {
-    English: [
+    en: [
         "me",
         "new",
         "old",
@@ -42,7 +42,7 @@ const DICTIONARY: Record<HangmanLanguage, string[]> = {
         "body",
         "eye",
     ],
-    German: [
+    de: [
         "ich",
         "du",
         "er",
@@ -151,6 +151,6 @@ export class HangmanGame {
 }
 
 export let hangmanGames: Record<HangmanLanguage, HangmanGame> = {
-    English: new HangmanGame("English"),
-    German: new HangmanGame("German"),
+    en: new HangmanGame("en"),
+    de: new HangmanGame("de"),
 }

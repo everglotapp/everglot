@@ -8,6 +8,15 @@ declare module '*/allGroups.graphql' {
 }
     
 
+declare module '*/chatGroupByUuid.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const ChatGroupByUuid: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/chatUser.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

@@ -5003,6 +5003,22 @@ export type AllGroupsQuery = (
   )> }
 );
 
+export type ChatGroupByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type ChatGroupByUuidQuery = (
+  { __typename?: 'Query' }
+  & { groupByUuid?: Maybe<(
+    { __typename?: 'Group' }
+    & { language?: Maybe<(
+      { __typename?: 'Language' }
+      & Pick<Language, 'alpha2'>
+    )> }
+  )> }
+);
+
 export type ChatUserQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -5374,6 +5390,15 @@ export const AllGroups = gql`
       groupUsers {
         totalCount
       }
+    }
+  }
+}
+    `;
+export const ChatGroupByUuid = gql`
+    query ChatGroupByUuid($uuid: UUID!) {
+  groupByUuid(uuid: $uuid) {
+    language {
+      alpha2
     }
   }
 }

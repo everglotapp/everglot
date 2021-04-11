@@ -1,0 +1,9 @@
+query ChatGroupByUuid($uuid: UUID!) {
+  groupByUuid(uuid: $uuid) {
+    language {
+      alpha2
+      __typename
+    }
+    __typename
+  }
+}

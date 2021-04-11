@@ -2,7 +2,7 @@ export const GOOGLE_SIGNIN_CLIENT_ID =
     "457984069949-bgc3aj14fi47olkp0arn7is4cr07cfla.apps.googleusercontent.com"
 
 export const ALPHABET = {
-    English: [
+    en: [
         "a",
         "b",
         "c",
@@ -56,7 +56,7 @@ export const ALPHABET = {
         "Y",
         "Z",
     ],
-    German: [
+    de: [
         "a",
         "ä",
         "b",

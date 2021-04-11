@@ -9,7 +9,6 @@ import {
     userJoin,
     getCurrentUser,
     userLeave,
-    getGroupChatUsers,
     userIsNew,
     userGreeted,
 } from "./users"
@@ -20,7 +19,12 @@ import { hangmanGames } from "./hangman"
 import type { HangmanLanguage } from "./hangman"
 
 import type { Pool } from "pg"
-import type { ChatUserQuery, Group } from "../../types/generated/graphql"
+import type {
+    ChatGroupByUuidQuery,
+    ChatUserQuery,
+    Group,
+    Language,
+} from "../../types/generated/graphql"
 import { getGroupIdByUuid } from "../groups"
 
 export function start(server: Server, pool: Pool) {
@@ -68,6 +72,14 @@ export function start(server: Server, pool: Pool) {
                 })
                 return
             }
+            const group = await getChatGroupByUuid(groupUuid)
+            if (!group || !group.groupByUuid?.language?.alpha2) {
+                console.log("Group not found", {
+                    groupUuid,
+                })
+                return
+            }
+            const alpha2 = group.groupByUuid?.language?.alpha2
             const chatUser = userJoin(socket.id, res.data.user, groupUuid)
             socket.join(groupUuid)
             if (userIsNew(chatUser)) {
@@ -98,9 +110,8 @@ export function start(server: Server, pool: Pool) {
                 )
 
             // TODO: Get language from group.
-            if (["English", "German"].includes(chatUser.groupUuid)) {
-                const hangman =
-                    hangmanGames[chatUser.groupUuid as HangmanLanguage]
+            if (["de", "en"].includes(alpha2)) {
+                const hangman = hangmanGames[alpha2 as HangmanLanguage]
                 if (hangman.running) {
                     sendBotMessage(
                         `Current word: ${hangman.publicWord}`,
@@ -153,17 +164,26 @@ export function start(server: Server, pool: Pool) {
                     return
                 }
 
+                const group = await getChatGroupByUuid(chatUser.groupUuid)
+                if (!group || !group.groupByUuid?.language?.alpha2) {
+                    console.log(
+                        "Failed to get group by UUID for user message",
+                        {
+                            groupUuid: chatUser.groupUuid,
+                        }
+                    )
+                    return
+                }
+                const alpha2 = group.groupByUuid?.language?.alpha2
+
                 if (msg.startsWith("!help")) {
                     sendBotMessage(
                         "Available commands: !hangman, !help",
                         chatUser.groupUuid
                     )
                     return
-                } else if (
-                    Object.keys(hangmanGames).includes(chatUser.groupUuid)
-                ) {
-                    const hangman =
-                        hangmanGames[chatUser.groupUuid as HangmanLanguage]
+                } else if (Object.keys(hangmanGames).includes(alpha2)) {
+                    const hangman = hangmanGames[alpha2 as HangmanLanguage]
                     if (hangman.running) {
                         if (msg.length === 1) {
                             if (
@@ -255,6 +275,26 @@ export function start(server: Server, pool: Pool) {
             }, delay)
         }
     })
+}
+
+async function getChatGroupByUuid(
+    uuid: Group["uuid"]
+): Promise<ChatGroupByUuidQuery | null> {
+    const res = await performQuery<ChatGroupByUuidQuery>(
+        `query ChatGroupByUuid($uuid: UUID!) {
+            groupByUuid(uuid: $uuid) {
+                language {
+                    alpha2
+                }
+            }
+        }`,
+        { uuid }
+    )
+    // console.log(res.data?.user.userLanguages.nodes)
+    if (!res.data?.groupByUuid) {
+        return null
+    }
+    return res.data || null
 }
 
 export default {

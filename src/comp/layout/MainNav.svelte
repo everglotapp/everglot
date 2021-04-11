@@ -81,23 +81,33 @@
         }
     }
     const reset = () => (copiedInviteLink = null)
+    const debounceReset = () => {
+        clearTimeout(resetCopiedTimeout)
+        setTimeout(reset, 5000)
+    }
     function handleCopyClipboard(event: MouseEvent) {
         event.preventDefault()
-        reset()
+        clearTimeout(resetCopiedTimeout)
         if (navigator?.clipboard && inviteLink) {
-            const debounceReset = () => {
-                clearTimeout(resetCopiedTimeout)
-                setTimeout(reset, 3000)
-            }
             navigator.clipboard
                 .writeText(inviteLink)
                 .then(async () => {
-                    await tick()
+                    if (copiedInviteLink === true) {
+                        // If it succeeded before, make sure there is a transition so
+                        // that the user can see the new success happening
+                        copiedInviteLink = null
+                        await tick()
+                    }
                     copiedInviteLink = true
                     debounceReset()
                 })
                 .catch(async () => {
-                    await tick()
+                    if (copiedInviteLink === false) {
+                        // If it failed before, make sure there is a transition so
+                        // that the user can see the new failure happening
+                        copiedInviteLink = null
+                        await tick()
+                    }
                     copiedInviteLink = false
                     debounceReset()
                 })

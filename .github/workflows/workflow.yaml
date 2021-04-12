@@ -7,10 +7,10 @@ on:
 jobs:
     test:
         runs-on: ubuntu-latest
-        if: github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/main'
         steps:
             - name: "Checkout"
-              uses: actions/checkout@master
+              uses: actions/checkout@main
             - name: "Create .env file"
               run: |
                   echo "POSTGRES_USER=everglot_app_user" > .env
@@ -26,6 +26,7 @@ jobs:
     build:
         name: Build, Push and Deploy
         runs-on: ubuntu-latest
+        if: github.ref == 'refs/heads/main'
         steps:
             - name: Checkout main
               uses: actions/checkout@v2

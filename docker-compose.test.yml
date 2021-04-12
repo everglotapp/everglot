@@ -3,8 +3,6 @@ version: "3"
 services:
     everglot-app:
         entrypoint: "npm run test"
-        volumes:
-            - ./:/home/node/app
         environment:
             NODE_ENV: "development"
     everglot-db:

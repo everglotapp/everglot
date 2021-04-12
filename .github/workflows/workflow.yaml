@@ -1,61 +1,73 @@
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            - master
+    pull_request:
 
 jobs:
-  build:
-    name: Build, Push and Deploy
-    runs-on: ubuntu-latest
-    steps:
+    test:
+        runs-on: ubuntu-latest
+        if: github.ref != 'refs/heads/master'
+        steps:
+            - name: "Checkout"
+              uses: actions/checkout@master
+            - name: Build
+              run: docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d everglot-db
+            - name: Migrate
+              run: docker-compose -f docker-compose.yml -f docker-compose.test.yml run --entrypoint "npm run migrate up" everglot-app
+            - name: Test
+              run: docker-compose -f docker-compose.yml -f docker-compose.test.yml run everglot-app
+    build:
+        name: Build, Push and Deploy
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout main
+              uses: actions/checkout@v2
+              with:
+                  ref: main
 
-    - name: Checkout main
-      uses: actions/checkout@v2
-      with:
-        ref: main
+            - name: Checkout k8s-setup repo
+              uses: actions/checkout@v2
+              with:
+                  repository: everglotapp/k8s-setup
+                  token: ${{ secrets.GH_ACCESS_TOKEN }}
+                  path: k8s-setup
+                  ref: main
 
-    - name: Checkout k8s-setup repo
-      uses: actions/checkout@v2
-      with:
-        repository: everglotapp/k8s-setup
-        token: ${{ secrets.GH_ACCESS_TOKEN }}
-        path: k8s-setup
-        ref: main
+            - name: Build container image
+              run: docker build -t registry.digitalocean.com/everglot/everglot:latest .
 
-    - name: Build container image
-      run: docker build -t registry.digitalocean.com/everglot/everglot:latest .
+            - name: Install doctl
+              uses: digitalocean/action-doctl@v2.1.0
+              with:
+                  token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-    - name: Install doctl
-      uses: digitalocean/action-doctl@v2.1.0
-      with:
-        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+            - name: Log in to DigitalOcean Container Registry with short-lived credentials
+              run: doctl registry login --expiry-seconds 600
 
-    - name: Log in to DigitalOcean Container Registry with short-lived credentials
-      run: doctl registry login --expiry-seconds 600
+            - name: Push image to DigitalOcean Container Registry
+              run: docker push registry.digitalocean.com/everglot/everglot:latest
 
-    - name: Push image to DigitalOcean Container Registry
-      run: docker push registry.digitalocean.com/everglot/everglot:latest
+            - name: Save DigitalOcean kubeconfig with short-lived credentials
+              run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-1-20-2-do-0-ams3-1612982708095
 
-    - name: Save DigitalOcean kubeconfig with short-lived credentials
-      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-1-20-2-do-0-ams3-1612982708095
+            - name: Delete Postgres Kubernetes Secrets if existed
+              run: kubectl delete secret postgres --ignore-not-found
 
-    - name: Delete Postgres Kubernetes Secrets if existed
-      run: kubectl delete secret postgres --ignore-not-found
+            - name: Inject Postgres Kubernetes Secrets from Github Secrets
+              run: kubectl create secret generic postgres --from-literal=postgres-password='${{ secrets.PGPASSWORD }}'
 
-    - name: Inject Postgres Kubernetes Secrets from Github Secrets
-      run: kubectl create secret generic postgres --from-literal=postgres-password='${{ secrets.PGPASSWORD }}'
+            - name: Delete Session Secrets from Kubernetes Secrets if existed
+              run: kubectl delete secret session --ignore-not-found
 
-    - name: Delete Session Secrets from Kubernetes Secrets if existed
-      run: kubectl delete secret session --ignore-not-found
+            - name: Inject Session Secrets from Github Secrets
+              run: kubectl create secret generic session --from-literal=session-cookie-validation-secrets='${{ secrets.SESSION_COOKIE_VALIDATION_SECRETS }}'
 
-    - name: Inject Session Secrets from Github Secrets
-      run: kubectl create secret generic session --from-literal=session-cookie-validation-secrets='${{ secrets.SESSION_COOKIE_VALIDATION_SECRETS }}'
+            - name: Deploy Config to DigitalOcean Kubernetes
+              run: kubectl apply -f $GITHUB_WORKSPACE/k8s-setup/everglot/service-deployment.yml
 
-    - name: Deploy Config to DigitalOcean Kubernetes
-      run: kubectl apply -f $GITHUB_WORKSPACE/k8s-setup/everglot/service-deployment.yml
+            - name: Rollout Deployment to DigitalOcean Kubernetes
+              run: kubectl rollout restart deployment/everglot
 
-    - name: Rollout Deployment to DigitalOcean Kubernetes
-      run: kubectl rollout restart deployment/everglot
-
-    - name: Verify deployment
-      run: kubectl rollout status deployment/everglot
+            - name: Verify deployment
+              run: kubectl rollout status deployment/everglot

@@ -1,4 +1,4 @@
-from node:alpine
+from node:lts-alpine
 
 # Install Yarn.
 # Necessary as of 2021-03-21 only to run the git-based NPM dependency deep-email-validator.
@@ -8,8 +8,8 @@ from node:alpine
 RUN set -eux \
     & apk add --no-cache \
     	nodejs \
-	yarn \
-	--repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
+        yarn \
+        --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 # Restrict app privileges.
 USER node

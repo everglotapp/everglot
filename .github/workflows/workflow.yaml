@@ -19,13 +19,13 @@ jobs:
                   echo "POSTGRES_DB=everglot_app_db" >> .env
                   echo "SESSION_COOKIE_VALIDATION_SECRETS=[\"MySecretCookieValidationSecret123\"]" >> .env
             - name: Build app docker image
-              run: docker-compose -f docker-compose.yml -f docker-compose.test.yml build --build-arg NODE_ENV=development --parallel everglot-app
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml build --build-arg NODE_ENV=development --parallel everglot-app
             - name: Start database
-              run: docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d everglot-db
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-db
             - name: Migrate database
-              run: docker-compose -f docker-compose.yml -f docker-compose.test.yml run --entrypoint "npm run migrate up" everglot-app
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint "npm run migrate up" everglot-app
             - name: Run tests
-              run: docker-compose -f docker-compose.yml -f docker-compose.test.yml run everglot-app
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run everglot-app
     build:
         name: Build, Push and Deploy
         runs-on: ubuntu-latest

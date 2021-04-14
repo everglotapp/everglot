@@ -3,11 +3,43 @@ const path = require("path")
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
     preset: "ts-jest",
+    // transform: {
+    //     "^.+\\.mjs?$": "babel-jest",
+    // "^.+\\.ts$": "ts-jest",
+    //     "^.+\\.svelte$": [
+    //         "jest-transform-svelte",
+    //         {
+    //             typescript: {},
+    //             stylus: {
+    //                 includePaths: ["src"],
+    //             },
+    //             postcss: {
+    //                 plugins: [require("autoprefixer")],
+    //             },
+    //         },
+    //     ],
+    // },
+    // transform: {},
     testEnvironment: "node",
-    rootDir: "src",
     globals: {
-        "ts-jest": { isolatedModules: true },
+        "ts-jest": {
+            // isolatedModules: true,
+            diagnostics: {
+                warnOnly: true,
+            },
+        },
     },
-    testPathIgnorePatterns: ["/node_modules/", "<rootDir>/__tests__/utils/"],
+    // extensionsToTreatAsEsm: [".ts"],
+    // modulePaths: ["<rootDir>/src/node_modules/"],
+    // moduleDirectories: ["node_modules", "src/node_modules"],
+    testPathIgnorePatterns: [
+        "/node_modules/",
+        "<rootDir>/src/__tests__/utils/",
+    ],
+    moduleFileExtensions: ["ts", "tsx", "js", "mjs", "json"],
+    transformIgnorePatterns: ["<rootDir>/node_modules/(?!@sapper)"],
+    // moduleNameMapper: {
+    //     "^src/(.*)": "<rootDir>/src/$1",
+    // },
     //preset: "@babel/preset-typescript",
 }

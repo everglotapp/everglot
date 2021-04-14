@@ -28,14 +28,14 @@ describe("groups", () => {
         expect(user).not.toBeNull()
         const teachingMembership = await createUserLanguage({
             userId: user.id,
-            languageId: teaching.id,
+            languageId: teaching.id!,
             languageSkillLevelId: null,
             native: true,
         })
         expect(teachingMembership).not.toBeNull()
         const learningMembership = await createUserLanguage({
             userId: user.id,
-            languageId: learning.id,
+            languageId: learning.id!,
             languageSkillLevelId: 1,
             native: false,
         })
@@ -45,7 +45,7 @@ describe("groups", () => {
 
     beforeAll(async () => {
         await start()
-        const client = await pool.connect()
+        await pool.connect()
         english = await getLanguage({ alpha2: "en" })
         expect(english).toBeTruthy()
         german = await getLanguage({ alpha2: "de" })
@@ -53,7 +53,7 @@ describe("groups", () => {
     })
 
     afterAll(() => {
-        pool.end
+        pool.end()
     })
 
     beforeEach(async () => {

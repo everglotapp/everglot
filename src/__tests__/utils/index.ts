@@ -63,9 +63,9 @@ export async function createUser() {
     )
     expect(res).not.toBeNull()
     expect(res.data).not.toBeNull()
-    expect(res.data.createUser.user).not.toBeNull()
+    expect(res.data!.createUser?.user).not.toBeNull()
     expect(res.errors).toBeFalsy()
-    user = { ...user, id: res.data?.createUser.user.id }
+    user = { ...user, id: res.data?.createUser?.user?.id }
     return user
 }
 
@@ -112,10 +112,10 @@ export async function createUserLanguage({
     )
     expect(res).not.toBeNull()
     expect(res.data).not.toBeNull()
-    expect(res.data.createUserLanguage.userLanguage).not.toBeNull()
+    expect(res.data?.createUserLanguage?.userLanguage).not.toBeNull()
     expect(res.errors).toBeFalsy()
     userLanguage = {
-        id: res.data?.createUserLanguage.userLanguage.id,
+        id: res.data?.createUserLanguage?.userLanguage?.id,
         languageId,
         languageSkillLevelId,
         native,
@@ -137,7 +137,7 @@ export async function getLanguage({ alpha2 }: { alpha2: Language["alpha2"] }) {
     )
     expect(res).not.toBeNull()
     expect(res.data).not.toBeNull()
-    expect(res.data.languageByAlpha2).not.toBeNull()
+    expect(res.data?.languageByAlpha2).not.toBeNull()
     expect(res.errors).toBeFalsy()
-    return { alpha2, id: res.data.languageByAlpha2.id }
+    return { alpha2, id: res.data?.languageByAlpha2?.id }
 }

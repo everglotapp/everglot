@@ -23,7 +23,6 @@ import type {
     ChatGroupByUuidQuery,
     ChatUserQuery,
     Group,
-    Language,
 } from "../../types/generated/graphql"
 import { getGroupIdByUuid } from "../groups"
 

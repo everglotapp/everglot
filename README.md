@@ -80,7 +80,7 @@ PGPASSWORD=everglot_app_pass \
     npm run migrate create "this is my migration name"
 ```
 
-Then change the new file. To run newly created and/or remaining migrations, call the `migrate` npm script with the up command as you did during the initial setup (to load the schema):
+Then change the new file. To run newly created and/or remaining [`node-pg-migrate`](https://salsita.github.io/node-pg-migrate/) migrations, call the `migrate` npm script with the `up` command just as you did during the initial setup when you set up the schema locally for the first time.
 
 ```bash
 PGHOST=localhost \
@@ -90,7 +90,7 @@ PGPASSWORD=everglot_app_pass \
     npm run migrate up
 ```
 
-You can also add a number after it to specify a maximum number of migrations to run. If you made a mistake roll them/it back using `migrate down`:
+Note that you can also add a number after `up`, `down` and `redo` to specify a maximum number of migrations to run. If you made a mistake roll back the faulty migrations using `migrate down`. You just have to make sure the `down` function reverts the wrong changes before you do so.
 
 ```bash
 PGHOST=localhost \
@@ -112,7 +112,21 @@ Then generate the typings and any missing persisted operation files using:
 npm run codegen
 ```
 
-Note: Subscriptions are not configured, yet (2021-03-17).
+Note: PostGraphile Subscriptions are not configured, yet (2021-03-17).
+
+## Testing
+
+The `docker-compose.test.yml` configuration is designed for running the application tests locally, whereas `docker-compose.ci.yml` is for running them in CI environments.
+
+It is important that you run commands regarding the testing environment in a different `docker-compose` project with the `-p` flag. That way your development containers for the app and for the database are not re-used for testing. The tests delete and add data to your database which you probably do not want during development.
+
+To execute the tests locally run:
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test run --entrypoint "npx jest --forceExit" everglot-app
+```
+
+`--forceExit` is currently necessary because something is still running somewhere which prevents the tests from exiting normally within 1 second.
 
 ## Deployment
 

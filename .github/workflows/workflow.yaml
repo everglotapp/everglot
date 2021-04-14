@@ -26,6 +26,8 @@ jobs:
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint "npm run migrate up" everglot-app
             - name: Run tests
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run everglot-app
+            - name: Start app
+              run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up everglot-app
     build:
         name: Build, Push and Deploy
         runs-on: ubuntu-latest

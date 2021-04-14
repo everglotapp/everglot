@@ -44,8 +44,12 @@ export async function performQuery<TData = { [key: string]: any }>(
     )
 }
 
+let releaseWatcher: (() => Promise<void>) | undefined
 export async function start() {
-    const releaseWatcher = await watchPostGraphileSchema(
+    if (releaseWatcher) {
+        return null
+    }
+    releaseWatcher = await watchPostGraphileSchema(
         createDatabasePool(),
         DATABASE_SCHEMA,
         getPostGraphileOptions(),
@@ -54,10 +58,18 @@ export async function start() {
             schema = newSchema
         }
     )
+}
+
+export async function stop() {
+    if (!releaseWatcher) {
+        return false
+    }
     await releaseWatcher()
+    return true
 }
 
 export default {
     start,
+    stop,
     performQuery,
 }

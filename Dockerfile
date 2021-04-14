@@ -9,6 +9,7 @@ RUN set -eux \
     & apk add --no-cache \
     	nodejs \
         yarn \
+        git \
         --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 # Restrict app privileges.
@@ -23,7 +24,17 @@ WORKDIR /home/node/app
 ARG NODE_ENV=development
 ENV NODE_ENV=$NODE_ENV
 
+# Configure project dependencies.
 COPY --chown=node:node package*.json ./
+
+# NOTE: We should not be installing npm dependencies via git if possible.
+# The followng two "git config"s are only necessary because we need a version of
+# "deep-email-validator" that is currently on GitHub but not on npm (2021-04-13).
+
+# Make sure GitHub is accessed via https.
+RUN git config --global url."https://github.com/".insteadOf git@github.com:
+# Make sure https is always used for git repositories instead of ssh.
+RUN git config --global url."https://".insteadOf ssh://
 
 # Install all dev dependencies to build the app.
 RUN NODE_ENV=development npm ci

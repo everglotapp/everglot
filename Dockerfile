@@ -46,10 +46,10 @@ COPY --chown=node:node . .
 RUN npm run build
 
 # Re-install without dev dependencies if not in development.
-RUN set -eux \
-    & [ "$NODE_ENV" = "development" ] || \
-        (rm -rf node_modules/ && \
-            npm ci)
+#RUN set -eux \
+#    & [ "$NODE_ENV" = "development" ] || \
+#        (rm -rf node_modules/ && \
+#            npm ci)
 
 EXPOSE 3000
 CMD [ "node", "__sapper__/build" ]

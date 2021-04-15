@@ -31,7 +31,7 @@ jobs:
             - name: Wait a bit for the app to start
               run: sleep 3
             - name: Run tests
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec everglot-app npm run test -- --forceExit
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T everglot-app npm run test -- --forceExit
     build:
         name: Build, Push and Deploy
         runs-on: ubuntu-latest

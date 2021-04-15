@@ -56,6 +56,5 @@ RUN set -eux\
     & [ "$NODE_ENV" != "development" ] || \
         (npm i --no-save @roarr/cli)
 
-ENTRYPOINT [ "/bin/sh", "entrypoints/prod.sh" ]
 EXPOSE 3000
 CMD [ "node", "__sapper__/build" ]

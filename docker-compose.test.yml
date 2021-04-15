@@ -7,8 +7,10 @@ services:
         environment:
             NODE_ENV: "development"
             ROARR_LOG: "true"
+            HOST: "0.0.0.0"
+            PORT: "3000"
         entrypoint: entrypoints/test.sh
-        command: "node __sapper__/build"
+        command: '/bin/sh -c "npm run start | npx "@roarr/cli" pretty-print"'
         ports:
             - "127.0.0.1:3000:3000"
 

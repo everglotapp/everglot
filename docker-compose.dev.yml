@@ -10,6 +10,8 @@ services:
         environment:
             NODE_ENV: "development"
             ROARR_LOG: "true"
+            HOST: "0.0.0.0"
+            PORT: "3000"
         entrypoint: entrypoints/dev.sh
         command: '/bin/sh -c "npm run dev | npx "@roarr/cli" pretty-print"'
     everglot-db:

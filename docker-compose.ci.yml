@@ -5,6 +5,10 @@ services:
         environment:
             NODE_ENV: "development"
             ROARR_LOG: "true"
+            HOST: "0.0.0.0"
+            PORT: "3000"
+        entrypoint: entrypoints/ci.sh
+        command: "npm run test -- --forceExit"
     everglot-db:
         environment:
             POSTGRES_USER: "everglot_app_user"

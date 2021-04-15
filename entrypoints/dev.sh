@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -x
 
 wait4ports "tcp://everglot-db:5432"
 

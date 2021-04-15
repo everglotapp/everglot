@@ -1,6 +1,8 @@
 import { ExecutionResult, graphql } from "graphql"
 import { withPostGraphileContext, watchPostGraphileSchema } from "postgraphile"
 
+import log from "../logger"
+
 import { createDatabasePool } from "./db"
 import { getPostGraphileOptions } from "./middlewares/postgraphile"
 
@@ -8,6 +10,10 @@ import type { GraphQLSchema, Source } from "graphql"
 import { DATABASE_ROLE_SERVER, DATABASE_SCHEMA } from "./db"
 
 let schema: GraphQLSchema | null
+
+const chlog = log.child({
+    namespace: "gql-server",
+})
 
 //export declare type QueryResult<TResult = ExecutionResult>> Promise<TResult>) => Promise<TResult>;
 
@@ -54,7 +60,7 @@ export async function start() {
         DATABASE_SCHEMA,
         getPostGraphileOptions(),
         (newSchema) => {
-            console.log("[PostGraphile Watcher] Generated new GraphQL schema")
+            chlog.info("Generated new GraphQL schema")
             schema = newSchema
         }
     )

@@ -1,3 +1,4 @@
+import log from "../logger"
 import type { Request, Response } from "express"
 
 export function serverError(
@@ -33,7 +34,7 @@ export function ensureJsonRequest(req: Request, res: Response): boolean {
         !req.headers.hasOwnProperty("content-type") ||
         req.headers["content-type"] !== CONTENT_TYPE_JSON
     ) {
-        console.log("Received non-JSON request to JSON only endpoint")
+        log.debug("Received non-JSON request to JSON only endpoint")
         res.status(415).json({
             success: false,
             message: "This endpoint only accepts JSON data",

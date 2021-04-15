@@ -2,6 +2,7 @@ import { db } from "../server/db"
 import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import { ensureJson, serverError } from "../helpers"
 import { GOOGLE_SIGNIN_CLIENT_ID } from "../constants"
+import log from "../logger"
 
 import validate from "deep-email-validator"
 import { OAuth2Client } from "google-auth-library"
@@ -83,7 +84,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 email = payload.email
             }
         } catch (e: any) {
-            console.error(e.stack)
+            log.error(e.stack)
             res.status(422).json({
                 success: false,
                 message:
@@ -112,8 +113,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
         const userExists = Boolean(queryResult?.rowCount === 1)
         if (!userExists) {
-            // TODO: Inform user that email does not exist?
-            console.log(
+            // TODO: How to inform user that id token does not exist? Privacy issue?
+            // Maybe not because payload was signed by Google?
+            // Could be relayed by a different server but that might not matter. Threat model required.
+            log.info(
                 `User tried to login with an id token that does not exist: ${idToken}, Email: ${email}`
             )
             res.redirect("/join")
@@ -122,9 +125,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
         const user = queryResult?.rows[0]!
         userId = user.id
-        console.log(
-            `Successful login! User ID: ${userId}, Google ID: ${googleId}`
-        )
+        log.info(`Successful login! User ID: ${userId}, Google ID: ${googleId}`)
     } else if (authMethod === AuthMethod.EMAIL) {
         email = req?.body?.email
         password = req?.body?.password
@@ -182,8 +183,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
         const userExists = Boolean(queryResult?.rowCount === 1)
         if (!userExists) {
-            // TODO: Inform user that email does not exist?
-            console.log(
+            // TODO: How to inform user that email does not exist? Privacy issue.
+            log.info(
                 `User tried to login with an email address that does not exist: ${email}`
             )
             serverError(res, LOGIN_FAILED_MESSAGE)
@@ -196,7 +197,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
         /** Avoid comparing null/undefined/empty string */
         if (!storedPasswordHash || !storedPasswordHash.length) {
-            console.error(
+            log.error(
                 `User stored password hash is empty. This should never happen! Email: ${email}`
             )
             serverError(res, LOGIN_FAILED_MESSAGE)
@@ -209,14 +210,14 @@ export async function post(req: Request, res: Response, _next: () => void) {
         )
 
         if (!passwordCorrect) {
-            console.log(
+            log.info(
                 `User tried to login with incorrect password. Email: ${email}`
             )
             serverError(res, LOGIN_FAILED_MESSAGE)
             return
         }
 
-        console.log(`Successful login! User ID: ${userId}, Email: ${email}`)
+        log.info(`Successful login! User ID: ${userId}, Email: ${email}`)
     } else {
         // this should never get called due to the check above
         throw new Error(`Unknown auth method ${authMethod}`)
@@ -224,7 +225,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
     req.session.regenerate(function (err: any) {
         if (err) {
-            console.error(err.message)
+            log.info("Failed to (re)generate session", err.message)
             serverError(res)
         } else {
             req.session.user_id = userId!

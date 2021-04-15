@@ -1,12 +1,13 @@
-//import { mocked } from "ts-jest/utils"
-import { start } from "../server/gql"
-import { createDatabasePool } from "../server/db"
+import log from "../../logger"
 
-import type { Language, User } from "../types/generated/graphql"
+import { start } from "../../server/gql"
+import { createDatabasePool } from "../../server/db"
 
-import { tryFormingGroupsWithUser } from "../server/groups"
+import type { Language, User } from "../../types/generated/graphql"
 
-import { getLanguage, createUser, createUserLanguage } from "./utils"
+import { tryFormingGroupsWithUser } from "../../server/groups"
+
+import { getLanguage, createUser, createUserLanguage } from "../utils"
 
 const GROUP_LEARNER_SIZE = 4
 const GROUP_NATIVE_SIZE = 2
@@ -83,7 +84,7 @@ describe("groups", () => {
     test("group forming works", async () => {
         let user = null
         for (let i = 0; i < GROUP_LEARNER_SIZE; ++i) {
-            console.log("Adding English learner", i)
+            log.debug("Adding English learner", i)
             user = await createTestUser({
                 teaching: german!,
                 learning: english!,
@@ -93,7 +94,7 @@ describe("groups", () => {
         }
 
         for (let i = 0; i < GROUP_NATIVE_SIZE - 1; ++i) {
-            console.log("Adding English native speaker", i)
+            log.debug("Adding English native speaker", i)
             user = await createTestUser({
                 teaching: english!,
                 learning: german!,
@@ -102,7 +103,7 @@ describe("groups", () => {
             expect(await tryFormingGroupsWithUser(user.id!)).toEqual([])
         }
 
-        console.log("Adding English native speaker", GROUP_NATIVE_SIZE)
+        log.debug("Adding English native speaker", GROUP_NATIVE_SIZE)
         user = await createTestUser({
             teaching: english!,
             learning: german!,
@@ -112,7 +113,7 @@ describe("groups", () => {
         expect(englishGroupIds).not.toEqual([])
         expect(englishGroupIds.length).toEqual(1)
 
-        console.log("Adding a 3rd German learner")
+        log.debug("Adding a 3rd German learner")
         user = await createTestUser({
             teaching: english!,
             learning: german!,
@@ -120,7 +121,7 @@ describe("groups", () => {
         expect(user).not.toBeNull()
         expect(await tryFormingGroupsWithUser(user.id!)).toEqual([])
 
-        console.log("Adding a 4th German learner")
+        log.debug("Adding a 4th German learner")
         user = await createTestUser({
             teaching: english!,
             learning: german!,

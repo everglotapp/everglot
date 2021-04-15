@@ -10,6 +10,7 @@ RUN set -eux \
     	nodejs \
         yarn \
         git \
+        wait4ports \
         --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 # Restrict app privileges.
@@ -51,5 +52,10 @@ RUN npm run build
 #        (rm -rf node_modules/ && \
 #            npm ci)
 
+RUN set -eux\
+    & [ "$NODE_ENV" != "development" ] || \
+        (npm i --no-save @roarr/cli)
+
+ENTRYPOINT [ "/bin/sh", "entrypoints/prod.sh" ]
 EXPOSE 3000
 CMD [ "node", "__sapper__/build" ]

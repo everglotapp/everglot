@@ -11,7 +11,7 @@ import { ensureJson, serverError } from "../helpers"
 
 import { createDatabasePool } from "../server/db"
 import { performQuery } from "../server/gql"
-import { UserHasCompletedProfileQuery } from "../types/generated/graphql"
+import type { UserHasCompletedProfileQuery } from "../types/generated/graphql"
 
 async function userHasCompletedProfile(userId: number): Promise<boolean> {
     const queryResult = await performQuery<UserHasCompletedProfileQuery>(

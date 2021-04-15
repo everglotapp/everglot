@@ -2,11 +2,16 @@ version: "3"
 
 services:
     everglot-app:
-        entrypoint: "npm run test -- --forceExit"
         volumes:
             - ./:/home/node/app
         environment:
             NODE_ENV: "development"
+            ROARR_LOG: "true"
+        entrypoint: entrypoints/test.sh
+        command: "node __sapper__/build"
+        ports:
+            - "127.0.0.1:3000:3000"
+
     everglot-db:
         environment:
             POSTGRES_USER: "everglot_app_user"

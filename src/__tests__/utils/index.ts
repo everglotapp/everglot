@@ -2,6 +2,7 @@ import Fakerator from "fakerator"
 
 import { hashSync } from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
+import { fetch as crossFetch } from "cross-fetch"
 
 import { performQuery } from "../../server/gql"
 
@@ -13,6 +14,8 @@ import type {
     CreateUserLanguageMutation,
     LanguageIdByAlpha2Query,
 } from "../../types/generated/graphql"
+
+const BASE_URL = "http://localhost:3000"
 
 const fakerator = Fakerator()
 
@@ -140,4 +143,8 @@ export async function getLanguage({ alpha2 }: { alpha2: Language["alpha2"] }) {
     expect(res.data?.languageByAlpha2).not.toBeNull()
     expect(res.errors).toBeFalsy()
     return { alpha2, id: res.data?.languageByAlpha2?.id }
+}
+
+export function fetch(path: string, ...args: any[]) {
+    return crossFetch(`${BASE_URL}${path}`, ...args)
 }

@@ -22,10 +22,16 @@ jobs:
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml build --build-arg NODE_ENV=development --parallel everglot-app
             - name: Start database
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-db
-            - name: Migrate database
+            - name: Wait a bit for the database to start
+              run: sleep 3
+            - name: Migrate database in an ephemeral container
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint "npm run migrate up" everglot-app
+            - name: Start app
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-app
+            - name: Wait a bit for the app to start
+              run: sleep 3
             - name: Run tests
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run everglot-app
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T everglot-app "npm run test -- --forceExit"
     build:
         name: Build, Push and Deploy
         runs-on: ubuntu-latest

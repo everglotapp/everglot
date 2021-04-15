@@ -2,6 +2,8 @@ import type { Server } from "http"
 import { Server as SocketIO } from "socket.io"
 import { validate as uuidValidate } from "uuid"
 
+import log from "../../logger"
+
 import session from "../middlewares/session"
 
 import { createMessage, formatMessage } from "./messages"
@@ -57,25 +59,34 @@ export function start(server: Server, pool: Pool) {
                 !res.data.user ||
                 !res.data?.user?.username?.length
             ) {
-                console.log("Insufficient chat user result", {
-                    sessionUserId: session.user_id,
-                    res,
-                })
+                log.warn(
+                    "Insufficient chat user result",
+                    JSON.stringify({
+                        sessionUserId: session.user_id,
+                        res,
+                    })
+                )
                 return
             }
             // TODO: Check that this is an actual group UUID and that
             // the user is part of this group.
             if (!groupUuid || !uuidValidate(groupUuid)) {
-                console.log("Bad group UUID", {
-                    groupUuid,
-                })
+                log.info(
+                    "Bad group UUID",
+                    JSON.stringify({
+                        groupUuid,
+                    })
+                )
                 return
             }
             const group = await getChatGroupByUuid(groupUuid)
             if (!group || !group.groupByUuid?.language?.alpha2) {
-                console.log("Group not found", {
-                    groupUuid,
-                })
+                log.info(
+                    "Group not found",
+                    JSON.stringify({
+                        groupUuid,
+                    })
+                )
                 return
             }
             const alpha2 = group.groupByUuid?.language?.alpha2
@@ -161,11 +172,11 @@ export function start(server: Server, pool: Pool) {
                     chatUser.groupUuid
                 )
                 if (!recipientGroupId) {
-                    console.log(
+                    log.error(
                         "Failed to get group ID by UUID for user message",
-                        {
+                        JSON.stringify({
                             groupUuid: chatUser.groupUuid,
-                        }
+                        })
                     )
                     return
                 }
@@ -183,17 +194,20 @@ export function start(server: Server, pool: Pool) {
                         time: message.message.createdAt,
                     })
                 } else {
-                    console.log("User text message creation failed", message)
+                    log.error(
+                        "User text message creation failed",
+                        JSON.stringify(message)
+                    )
                     return
                 }
 
                 const group = await getChatGroupByUuid(chatUser.groupUuid)
                 if (!group || !group.groupByUuid?.language?.alpha2) {
-                    console.log(
+                    log.error(
                         "Failed to get group by UUID for user message",
-                        {
+                        JSON.stringify({
                             groupUuid: chatUser.groupUuid,
-                        }
+                        })
                     )
                     return
                 }
@@ -308,9 +322,9 @@ export function start(server: Server, pool: Pool) {
             setTimeout(async () => {
                 const recipientGroupId = await getGroupIdByUuid(groupUuid)
                 if (!recipientGroupId) {
-                    console.log(
+                    log.error(
                         "Failed to get group ID by UUID for bot message",
-                        { groupUuid, msg }
+                        JSON.stringify({ groupUuid, msg })
                     )
                     return
                 }
@@ -328,7 +342,10 @@ export function start(server: Server, pool: Pool) {
                         time: message.message.createdAt,
                     })
                 } else {
-                    console.log("Bot message creation failed", message)
+                    log.error(
+                        "Bot message creation failed",
+                        JSON.stringify(message)
+                    )
                 }
             }, delay)
         }
@@ -348,7 +365,6 @@ async function getChatGroupByUuid(
         }`,
         { uuid }
     )
-    // console.log(res.data?.user.userLanguages.nodes)
     if (!res.data?.groupByUuid) {
         return null
     }

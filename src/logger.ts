@@ -1,7 +1,7 @@
 import log from "roarr"
 
 const Logger = log.child({
-    namespace: "Everglot",
+    namespace: "everglot",
 })
 
 export default Logger

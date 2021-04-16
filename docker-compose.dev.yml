@@ -2,7 +2,6 @@ version: "3"
 
 services:
     everglot-app:
-        entrypoint: "npm run dev"
         volumes:
             - ./:/home/node/app
         ports:
@@ -10,6 +9,12 @@ services:
             - "127.0.0.1:10000:10000"
         environment:
             NODE_ENV: "development"
+            ROARR_LOG: "true"
+            HOST: "0.0.0.0"
+            PORT: "3000"
+        entrypoint: entrypoints/dev.sh
+        command: ["/bin/sh", "-c", "npm run dev | roarr pretty-print"]
+
     everglot-db:
         environment:
             POSTGRES_USER: "everglot_app_user"

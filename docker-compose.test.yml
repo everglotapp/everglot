@@ -2,11 +2,16 @@ version: "3"
 
 services:
     everglot-app:
-        entrypoint: "npm run test -- --forceExit"
         volumes:
             - ./:/home/node/app
         environment:
             NODE_ENV: "development"
+            ROARR_LOG: "true"
+            HOST: "0.0.0.0"
+            PORT: "3000"
+        entrypoint: entrypoints/test.sh
+        command: ["/bin/sh", "-c", "npm run dev | roarr pretty-print"]
+
     everglot-db:
         environment:
             POSTGRES_USER: "everglot_app_user"

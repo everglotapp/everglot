@@ -1,5 +1,7 @@
 import { v4 as uuidv4 } from "uuid"
 
+import log from "../logger"
+
 import { performQuery } from "./gql"
 
 import {
@@ -168,32 +170,41 @@ async function createAndAssignGroup(
         uuid
     )
     if (groupId === null) {
-        console.log("Group creation failed", {
-            global,
-            name,
-            languageId,
-            languageSkillLevelId,
-            uuid,
-        })
+        log.info(
+            "Group creation failed",
+            JSON.stringify({
+                global,
+                name,
+                languageId,
+                languageSkillLevelId,
+                uuid,
+            })
+        )
         return null
     }
     for (const learner of learnerIds) {
         if (!(await addUserToGroup(learner, groupId, UserType.Learner))) {
-            console.log("User Group membership creation failed", {
-                learner,
-                groupId,
-                type: UserType.Learner,
-            })
+            log.info(
+                "User Group membership creation failed",
+                JSON.stringify({
+                    learner,
+                    groupId,
+                    type: UserType.Learner,
+                })
+            )
             return null
         }
     }
     for (const native of nativeIds) {
         if (!(await addUserToGroup(native, groupId, UserType.Native))) {
-            console.log("User Group membership creation failed", {
-                native,
-                groupId,
-                type: UserType.Native,
-            })
+            log.info(
+                "User Group membership creation failed",
+                JSON.stringify({
+                    native,
+                    groupId,
+                    type: UserType.Native,
+                })
+            )
             return null
         }
     }
@@ -210,13 +221,13 @@ async function formGroup(
         GROUP_LEARNER_SIZE
     )
     if (!learnerIds) {
-        // console.log(
-        //     "No one trying to learn this language at this skill level",
-        //     {
-        //         languageId,
-        //         languageSkillLevelId,
-        //     }
-        // )
+        log.debug(
+            "No one trying to learn this language at this skill level",
+            JSON.stringify({
+                languageId,
+                languageSkillLevelId,
+            })
+        )
         return null
     }
     const nativeIds = await getUsersWithoutNativeGroup(
@@ -224,9 +235,12 @@ async function formGroup(
         GROUP_NATIVE_SIZE
     )
     if (!nativeIds) {
-        // console.log("No one able to teach this language", {
-        //     languageId,
-        // })
+        log.debug(
+            "No one able to teach this language",
+            JSON.stringify({
+                languageId,
+            })
+        )
         return null
     }
     if (
@@ -239,13 +253,16 @@ async function formGroup(
             languageId,
             languageSkillLevelId
         )
-        console.log("Formed group", groupId)
+        log.info("Formed group", groupId)
         return groupId
     } else {
-        // console.log("Not enough learners or native speakers", {
-        //     learnerIds,
-        //     nativeIds,
-        // })
+        log.debug(
+            "Not enough learners or native speakers",
+            JSON.stringify({
+                learnerIds,
+                nativeIds,
+            })
+        )
     }
     return null
 }
@@ -275,15 +292,17 @@ async function getUserLanguageInfo(
         }`,
         { id: userId }
     )
-    // console.log(res.data?.user.userLanguages.nodes)
     if (!res.data || !res.data?.user?.userLanguages?.nodes) {
         return null
     }
     const nodes = res.data.user.userLanguages.nodes
     if (!nodes.every((node) => node)) {
-        console.log("Invalid user language", {
-            userLanguages: res.data.user.userLanguages.nodes,
-        })
+        log.error(
+            "Invalid user language",
+            JSON.stringify({
+                userLanguages: res.data.user.userLanguages.nodes,
+            })
+        )
         return null
     }
     return nodes.map((node) => node!)
@@ -299,7 +318,10 @@ export async function tryFormingGroupsWithUser(
 ): Promise<Group["id"][]> {
     const userLanguageInfo = await getUserLanguageInfo(userId)
     if (!userLanguageInfo) {
-        console.log("Empty user language info", { userId, userLanguageInfo })
+        log.error(
+            "Empty user language info",
+            JSON.stringify({ userId, userLanguageInfo })
+        )
         return []
     }
     const groupIds = []

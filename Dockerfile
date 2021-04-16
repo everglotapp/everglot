@@ -10,12 +10,8 @@ RUN set -eux \
     	nodejs \
         yarn \
         git \
+        wait4ports \
         --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
-
-# Restrict app privileges.
-USER node
-RUN mkdir -p /home/node/app
-WORKDIR /home/node/app
 
 # Pass NODE_ENV as a build arg to change the NPM dependencies.
 # If NODE_ENV is development the image will also include dev dependencies.
@@ -23,6 +19,17 @@ WORKDIR /home/node/app
 # TODO: Default production instead (as soon as we can install prod dependencies without dev dependencies).
 ARG NODE_ENV=development
 ENV NODE_ENV=$NODE_ENV
+
+RUN echo "$NODE_ENV"
+
+RUN set -eux\
+    & [ "$NODE_ENV" != "development" ] || \
+        (npm i -g @roarr/cli)
+
+# Restrict app privileges.
+USER node
+RUN mkdir -p /home/node/app
+WORKDIR /home/node/app
 
 # Configure project dependencies.
 COPY --chown=node:node package*.json ./
@@ -52,4 +59,4 @@ RUN npm run build
 #            npm ci)
 
 EXPOSE 3000
-CMD [ "node", "__sapper__/build" ]
+CMD [ "npm", "start" ]

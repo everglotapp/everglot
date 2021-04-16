@@ -2,9 +2,33 @@ version: "3"
 
 services:
     everglot-app:
-        entrypoint: "npm run test -- --forceExit"
+        environment:
+            NODE_ENV: "production"
+            ROARR_LOG: "true"
+            HOST: "0.0.0.0"
+            PORT: "3000"
+        entrypoint: entrypoints/ci-after-db.sh
+        command: ["npm", "start"]
+        # Avoid building the same image twice.
+        image: everglot-app-image
+
+    everglot-app-ci:
         environment:
             NODE_ENV: "development"
+            ROARR_LOG: "true"
+            PGUSER: ${POSTGRES_USER:?Please set POSTGRES_USER}
+            PGPASSWORD: ${POSTGRES_PASSWORD:?Please set POSTGRES_PASSWORD}
+            PGDATABASE: ${POSTGRES_DB:?Please set POSTGRES_DB}
+            PGHOST: ${PGHOST:-everglot-db}
+            PGPORT: ${PGPORT:-5432}
+            DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGHOST:-everglot-db}:${PGPORT}/${POSTGRES_DB}"
+            SESSION_COOKIE_VALIDATION_SECRETS: ${SESSION_COOKIE_VALIDATION_SECRETS:?Please set SESSION_COOKIE_VALIDATION_SECRETS}
+        entrypoint: entrypoints/ci-after-app.sh
+        # Avoid building the same image twice.
+        image: everglot-app-image
+        depends_on:
+            - everglot-app
+
     everglot-db:
         environment:
             POSTGRES_USER: "everglot_app_user"

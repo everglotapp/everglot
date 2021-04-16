@@ -118,15 +118,50 @@ Note: PostGraphile Subscriptions are not configured, yet (2021-03-17).
 
 The `docker-compose.test.yml` configuration is designed for running the application tests locally, whereas `docker-compose.ci.yml` is for running them in CI environments.
 
+### Local execution
+
 It is important that you run commands regarding the testing environment in a different `docker-compose` project with the `-p` flag. That way your development containers for the app and for the database are not re-used for testing. The tests delete and add data to your database which you probably do not want during development.
 
-To execute the tests locally run:
+First start the database:
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test run --entrypoint "npx jest --forceExit" everglot-app
+docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test up -d everglot-db
 ```
 
-`--forceExit` is currently necessary because something is still running somewhere which prevents the tests from exiting normally within 1 second.
+To only run unit tests:
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test exec everglot-app npm run test:unit
+```
+
+To run functional tests the app must be running separately as well:
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test up -d everglot-app
+```
+
+Run all tests:
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test exec everglot-app npm run test
+```
+
+Only run functional tests:
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test exec everglot-app npm run test src/__tests__/functional
+```
+
+Jest's `--forceExit` option (as defined in the `test` script within `package.json`) is currently necessary because something is still running somewhere which prevents the tests from exiting normally within 1 second.
+
+### In CI
+
+CI environments don't need a separate project and should use the `docker-compose.ci.yml` configuration.
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml -p test up -d
+docker-compose -f docker-compose.yml -f docker-compose.cu.yml -p test exec -T everglot-app npm run test
+```
 
 ## Deployment
 

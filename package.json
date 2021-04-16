@@ -17,8 +17,10 @@
     "validate": "svelte-check --ignore src/node_modules/@sapper --compiler-warnings 'module-script-reactive-declaration:ignore'",
     "migrate": "node-pg-migrate -m src/migrations",
     "codegen": "graphql-codegen --config codegen.yml",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "jest --forceExit",
+    "test:pretty": "jest --forceExit | roarr pretty-print",
+    "test:watch": "jest --watch --forceExit",
+    "test:watch:pretty": "jest --watch --forceExit | roarr pretty-print"
   },
   "engines": {
     "node": ">=12.0.0",

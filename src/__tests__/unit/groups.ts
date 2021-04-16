@@ -1,22 +1,44 @@
 import log from "../../logger"
 
 import { start } from "../../server/gql"
-import { createDatabasePool } from "../../server/db"
+import { connectToDatabase, disconnectFromDatabase } from "../../server/db"
 
 import type { Language, User } from "../../types/generated/graphql"
 
 import { tryFormingGroupsWithUser } from "../../server/groups"
 
 import { getLanguage, createUser, createUserLanguage } from "../utils"
+import { Pool } from "pg"
 
 const GROUP_LEARNER_SIZE = 4
 const GROUP_NATIVE_SIZE = 2
 
-const pool = createDatabasePool()
+jest.setTimeout(15000)
+
+async function truncateAllTables(db: Pool) {
+    const client = await db.connect()
+    try {
+        await client.query("begin")
+        await client.query(`set role to everglot_app_user`)
+        await client.query(`delete from app_public.user_languages where true`)
+        await client.query(`delete from app_public.group_users where true`)
+        await client.query(`delete from app_public.messages where true`)
+        await client.query(`delete from app_public.groups where true`)
+        await client.query(`delete from app_public.users where true`)
+        await client.query("commit")
+    } catch (e) {
+        await client.query("rollback")
+        throw e
+    } finally {
+        client.release()
+    }
+}
 
 describe("groups", () => {
     let english: Partial<Language> | null = null
     let german: Partial<Language> | null = null
+
+    let db: Pool = new Pool()
 
     const createTestUser = async ({
         teaching,
@@ -45,46 +67,35 @@ describe("groups", () => {
     }
 
     beforeAll(async () => {
+        const pool = await connectToDatabase()
+        expect(pool).toBeTruthy()
+        db = pool!
         await start()
-        await pool.connect()
         english = await getLanguage({ alpha2: "en" })
         expect(english).toBeTruthy()
         german = await getLanguage({ alpha2: "de" })
         expect(english).toBeTruthy()
     })
 
-    afterAll(() => {
-        pool.end()
-    })
-
     beforeEach(async () => {
-        const client = await pool.connect()
-        expect(client).toBeTruthy()
-        await client.query(`SET ROLE TO everglot_app_user`)
-        await client.query(`DELETE FROM app_public.user_languages WHERE TRUE`)
-        await client.query(`DELETE FROM app_public.group_users WHERE TRUE`)
-        await client.query(`DELETE FROM app_public.messages WHERE TRUE`)
-        await client.query(`DELETE FROM app_public.groups WHERE TRUE`)
-        await client.query(`DELETE FROM app_public.users WHERE TRUE`)
-        client.release()
+        await truncateAllTables(db)
     })
 
     afterEach(async () => {
-        const client = await pool.connect()
-        expect(client).toBeTruthy()
-        await client.query(`SET ROLE TO everglot_app_user`)
-        await client.query(`DELETE FROM app_public.user_languages WHERE TRUE`)
-        await client.query(`DELETE FROM app_public.group_users WHERE TRUE`)
-        await client.query(`DELETE FROM app_public.messages WHERE TRUE`)
-        await client.query(`DELETE FROM app_public.groups WHERE TRUE`)
-        await client.query(`DELETE FROM app_public.users WHERE TRUE`)
-        client.release()
+        await truncateAllTables(db)
+    })
+
+    afterAll(async () => {
+        await disconnectFromDatabase()
     })
 
     test("group forming works", async () => {
+        const chlog = log.child({
+            namespace: "group forming works",
+        })
         let user = null
         for (let i = 0; i < GROUP_LEARNER_SIZE; ++i) {
-            log.debug("Adding English learner", i)
+            chlog.debug("Adding English learner", i)
             user = await createTestUser({
                 teaching: german!,
                 learning: english!,
@@ -94,7 +105,7 @@ describe("groups", () => {
         }
 
         for (let i = 0; i < GROUP_NATIVE_SIZE - 1; ++i) {
-            log.debug("Adding English native speaker", i)
+            chlog.debug("Adding English native speaker", i)
             user = await createTestUser({
                 teaching: english!,
                 learning: german!,
@@ -103,7 +114,7 @@ describe("groups", () => {
             expect(await tryFormingGroupsWithUser(user.id!)).toEqual([])
         }
 
-        log.debug("Adding English native speaker", GROUP_NATIVE_SIZE)
+        chlog.debug("Adding English native speaker", GROUP_NATIVE_SIZE)
         user = await createTestUser({
             teaching: english!,
             learning: german!,
@@ -113,7 +124,7 @@ describe("groups", () => {
         expect(englishGroupIds).not.toEqual([])
         expect(englishGroupIds.length).toEqual(1)
 
-        log.debug("Adding a 3rd German learner")
+        chlog.debug("Adding a 3rd German learner")
         user = await createTestUser({
             teaching: english!,
             learning: german!,
@@ -121,7 +132,7 @@ describe("groups", () => {
         expect(user).not.toBeNull()
         expect(await tryFormingGroupsWithUser(user.id!)).toEqual([])
 
-        log.debug("Adding a 4th German learner")
+        chlog.debug("Adding a 4th German learner")
         user = await createTestUser({
             teaching: english!,
             learning: german!,

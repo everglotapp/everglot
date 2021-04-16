@@ -10,9 +10,7 @@ services:
             HOST: "0.0.0.0"
             PORT: "3000"
         entrypoint: entrypoints/test.sh
-        command: '/bin/sh -c "npm run start | npx @roarr/cli pretty-print"'
-        ports:
-            - "127.0.0.1:3000:3000"
+        command: '/bin/sh -c "npm run dev | roarr pretty-print"'
 
     everglot-db:
         environment:

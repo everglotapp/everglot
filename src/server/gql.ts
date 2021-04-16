@@ -60,10 +60,11 @@ export async function start() {
         DATABASE_SCHEMA,
         getPostGraphileOptions(),
         (newSchema) => {
-            chlog.info("Generated new GraphQL schema")
+            chlog.debug("Generated new GraphQL schema")
             schema = newSchema
         }
     )
+    return true
 }
 
 export async function stop() {

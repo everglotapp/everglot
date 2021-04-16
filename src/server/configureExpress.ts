@@ -49,7 +49,7 @@ export default function configureExpress(
 
     app.use((req, res, next) => {
         if (pathIsProtected(req.path) && !req.session.user_id) {
-            chlog.info(`Unauthorized access to path "${req.path}"`)
+            chlog.debug(`Unauthorized access to path "${req.path}"`)
             // TODO: Add parameter with request path to redirect to after login
             res.redirect("/login")
             return

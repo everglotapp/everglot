@@ -4,22 +4,10 @@ import log from "../logger"
 import configureExpress from "./configureExpress"
 import chat from "./chat"
 import gql from "./gql"
-import { createDatabasePool } from "./db"
+import { connectToDatabase, disconnectFromDatabase } from "./db"
 import type { Pool } from "pg"
 
 const { HOST = "127.0.0.1", PORT = 3000, RETRY = 5 } = process.env
-
-async function connectToDatabase() {
-    /** Configure database clients. */
-    const db = createDatabasePool()
-
-    /** Connect to database. */
-    await db.connect()
-    const chlog = log.child({ namespace: "db" })
-    chlog.info("Database connection established")
-
-    return db
-}
 
 /** Watch the PG database and update the GraphQL schema automatically. */
 async function initializeServersidePostgraphile() {
@@ -50,7 +38,7 @@ async function startWebServer(db: Pool): Promise<http.Server> {
             const chlog = log.child({
                 namespace: "express",
             })
-            chlog.info(
+            chlog.debug(
                 `Trying to start server. ${attemptsLeft} attempt(s) left.`
             )
             attemptsLeft -= 1
@@ -83,7 +71,7 @@ async function startWebServer(db: Pool): Promise<http.Server> {
                     }, 1000)
                 })
                 .on("close", () => {
-                    chlog.error(`Server closed.`)
+                    chlog.info(`Server closed.`)
                     reject()
                 })
         }
@@ -100,7 +88,18 @@ async function startWebServer(db: Pool): Promise<http.Server> {
 }
 
 export async function start() {
+    const version = process.env.npm_package_version
+    if (version) {
+        log.info(`Starting Everglot version ${version}`)
+    } else {
+        log.info(`Starting Everglot (version unknown).`)
+    }
+
     const db = await connectToDatabase()
+    if (!db) {
+        log.error(`Failed to start database. Exiting.`)
+        process.exit(1)
+    }
 
     await initializeServersidePostgraphile()
 
@@ -121,8 +120,7 @@ export async function stop() {
 
     await stopServersidePostgraphile()
 
-    const pool = createDatabasePool()
-    await pool.end()
+    await disconnectFromDatabase()
 }
 
 export default start

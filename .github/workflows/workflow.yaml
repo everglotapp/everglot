@@ -37,21 +37,11 @@ jobs:
             - name: Migrate database in an ephemeral container
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint "npm run migrate up" everglot-app
             - name: Start app
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-app
-            - name: Print free memory
-              run: free -m
-            - name: Wait a bit for the app to start
+              run: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d everglot-app
+            - name: Wait for the app to be running
               run: sleep 3
-            - name: Print free memory
-              run: free -m
             - name: Run tests
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec --privileged -T everglot-app /bin/sh -c "npm run test src/__tests__/unit -- --forceExit"
-            - name: Print free memory
-              run: free -m
-            - name: Run tests
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T everglot-app /bin/sh -c "npm run test src/__tests__/unit -- --forceExit"
-            - name: Print free memory
-              run: free -m
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T everglot-app npm run test:pretty
     build:
         name: Build, Push and Deploy
         runs-on: ubuntu-latest

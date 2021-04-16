@@ -8,9 +8,11 @@ import * as sapper from "@sapper/server"
 import postgraphile from "./middlewares/postgraphile"
 import session from "./middlewares/session"
 
+import log from "../logger"
+import { registerUserActivity } from "./users"
+
 import type { Express } from "express"
 import type { Pool } from "pg"
-import { registerUserActivity } from "./users"
 import type { Server } from "http"
 
 const { NODE_ENV } = process.env
@@ -19,6 +21,10 @@ const dev = NODE_ENV === "development"
 const APP_IS_BEHIND_REVERSE_PROXY = true // could be an env variable
 
 const WEBRTC_PATH = "/webrtc"
+
+const chlog = log.child({
+    namespace: "express",
+})
 
 export default function configureExpress(
     app: Express,
@@ -43,7 +49,7 @@ export default function configureExpress(
 
     app.use((req, res, next) => {
         if (pathIsProtected(req.path) && !req.session.user_id) {
-            console.log(`Unauthorized access to path "${req.path}"`)
+            chlog.info(`Unauthorized access to path "${req.path}"`)
             // TODO: Add parameter with request path to redirect to after login
             res.redirect("/login")
             return
@@ -57,9 +63,12 @@ export default function configureExpress(
         const { user_id: userId } = req.session
         if (userId) {
             if (!(await registerUserActivity({ userId }))) {
-                console.log("Failed to register user activity", {
-                    userId,
-                })
+                chlog.error(
+                    "Failed to register user activity",
+                    JSON.stringify({
+                        userId,
+                    })
+                )
             }
         }
         next()

@@ -4,6 +4,7 @@ import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import { ensureJson, serverError } from "../helpers"
 import { GOOGLE_SIGNIN_CLIENT_ID } from "../constants"
 
+import log from "../logger"
 import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
 
@@ -45,10 +46,10 @@ export async function getTokenIdByToken(
         values: [token],
     })
     const tokenId = await queryResult?.rows[0]?.id
-    console.log({ token, tokenId })
+    log.trace(JSON.stringify({ token, tokenId }))
     let success = queryResult?.rowCount === 1
     if (!success) {
-        console.log(`Query token failed`, queryResult)
+        log.info(`Query token failed`, JSON.stringify(queryResult))
         return null
     }
     return tokenId
@@ -175,7 +176,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 validators.hasOwnProperty(reason) &&
                 validators[reason as InvalidEmailReason]
             ) {
-                console.log(
+                log.info(
                     `User provided an invalid email "${email}": ${
                         validators[reason as InvalidEmailReason]!.reason
                     } (${JSON.stringify(emailValidation)})"`
@@ -190,7 +191,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     typo: "Did you misspell the email address by accident?",
                 }[reason as InvalidEmailReason]
             } else {
-                console.log(
+                log.info(
                     `User provided an invalid email "${email}": ${JSON.stringify(
                         emailValidation
                     )}"`
@@ -265,10 +266,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
         ],
     })
     const userId = queryResult?.rows[0]?.id
-    console.log({ userId })
+    log.trace(JSON.stringify({ userId }))
     let success = queryResult?.rowCount === 1
     if (!success) {
-        console.log(`User insertion failed`, queryResult)
+        log.info(`User insertion failed`, JSON.stringify(queryResult))
         serverError(res)
         return
     }
@@ -276,7 +277,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
     const uidgen = new UIDGenerator(256, UIDGenerator.BASE58)
     const newInviteToken = await uidgen.generate().catch(() => null)
     if (!newInviteToken) {
-        console.log(`Invite token generation failed`, { newInviteToken })
+        log.error(
+            `Invite token generation failed`,
+            JSON.stringify({ newInviteToken })
+        )
         serverError(res)
         return
     }
@@ -294,7 +298,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     })
     let tokenSuccess = tokenQueryResult?.rowCount === 1
     if (!tokenSuccess) {
-        console.log(`Token insertion failed`, tokenQueryResult)
+        log.error(`Token insertion failed`, JSON.stringify(tokenQueryResult))
         serverError(res)
         return
     }

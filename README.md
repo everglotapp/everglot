@@ -4,13 +4,13 @@ Everglot web application based on Express.js, Svelte/Sapper, Socket.io, PostgreS
 
 ## Configuration
 
-If you are going to use `docker-compose`, create an `.env` file in the same directory as this file. Otherwise set the following environment variables through some other means.
+If you are going to use `docker-compose` (highly recommended), create a file called `.env` in the same directory as this readme. Otherwise set the following environment variables through some other means.
 
 ```bash
 POSTGRES_USER=everglot_app_user
 POSTGRES_PASSWORD=everglot_app_pass
 POSTGRES_DB=everglot_app_db
-SESSION_COOKIE_VALIDATION_SECRETS=["SomeVeryLongRandomSecret"]
+SESSION_COOKIE_VALIDATION_SECRETS=["SomeVeryLongRandomSecret123"]
 ```
 
 In development you should keep the first three variables as they are. Definitely change the cookie validation secret(s).
@@ -40,12 +40,18 @@ Files from this directory are automatically mirrored. Sometimes you may find you
 
 You will likely want to run NPM commands outside of the containers. Install Node.js [through your package manager](https://nodejs.org/en/download/package-manager/) or with NVM (Node version manager).
 
-#### Dependencies
+### Dependencies
 
 Then install this project's development dependencies locally using
 
 ```bash
 npm i --also=dev
+```
+
+It is also highly recommended you install the Roarr CLI globally so that you can prettify log outputs when necessary. This is done by default within our Docker images for development and testing but you may want this if you interact with production servers.
+
+```bash
+npm i -g @roarr/cli
 ```
 
 ### Database Schema

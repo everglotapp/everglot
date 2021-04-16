@@ -8,7 +8,7 @@ services:
             HOST: "0.0.0.0"
             PORT: "3000"
         entrypoint: entrypoints/ci.sh
-        command: npm run test | roarr pretty-print
+
     everglot-db:
         environment:
             POSTGRES_USER: "everglot_app_user"

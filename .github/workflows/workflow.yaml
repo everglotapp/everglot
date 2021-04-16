@@ -24,24 +24,16 @@ jobs:
               run: free -m
             - name: Build app docker image
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml build --build-arg NODE_ENV=development --parallel everglot-app
-            - name: Print free memory
-              run: free -m
             - name: Start database
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-db
-            - name: Print free memory
-              run: free -m
-            - name: Wait a bit for the database to start
-              run: sleep 3
-            - name: Print free memory
-              run: free -m
-            - name: Migrate database in an ephemeral container
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint "npm run migrate up" everglot-app
+            - name: Migrate database in an isolated, ephemeral container
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run everglot-app npm run migrate up
             - name: Start app
-              run: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d everglot-app
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-app
             - name: Wait for the app to be running
-              run: sleep 3
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T everglot-app entrypoints/ci.sh wait4ports -t 10 "tcp://everglot-app:3000"
             - name: Run tests
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T everglot-app npm run test:pretty
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T everglot-app entrypoints/ci.sh npm run test:pretty
     build:
         name: Build, Push and Deploy
         runs-on: ubuntu-latest

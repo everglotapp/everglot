@@ -15,7 +15,7 @@ import type {
     LanguageIdByAlpha2Query,
 } from "../../types/generated/graphql"
 
-const BASE_URL = "http://localhost:3000"
+const BASE_URL = "http://everglot-app:3000"
 
 const fakerator = Fakerator()
 

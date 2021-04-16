@@ -12,16 +12,12 @@ jobs:
         steps:
             - name: "Checkout"
               uses: actions/checkout@main
-            - name: Print free memory
-              run: free -m
             - name: "Create .env file"
               run: |
                   echo "POSTGRES_USER=everglot_app_user" >> .env
                   echo "POSTGRES_PASSWORD=everglot_app_pass" >> .env
                   echo "POSTGRES_DB=everglot_app_db" >> .env
                   echo "SESSION_COOKIE_VALIDATION_SECRETS=[\"MySecretCookieValidationSecret123\"]" >> .env
-            - name: Print free memory
-              run: free -m
             - name: Build app docker image
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml build --build-arg NODE_ENV=development --parallel everglot-app
             - name: Start database
@@ -30,8 +26,12 @@ jobs:
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run everglot-app npm run migrate up
             - name: Start app
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-app
+            - name: Print docker service status
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml ps
             - name: Wait for the app to be running
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T everglot-app entrypoints/ci.sh wait4ports -t 10 "tcp://everglot-app:3000"
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run everglot-app entrypoints/ci.sh wait4ports -t 10 "tcp://everglot-app:3000"
+            - name: Print docker service status
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml ps
             - name: Run tests
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T everglot-app entrypoints/ci.sh npm run test:pretty
     build:

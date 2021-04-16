@@ -22,18 +22,10 @@ jobs:
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml build --build-arg NODE_ENV=development --parallel everglot-app
             - name: Start database
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-db
-            - name: Migrate database in an isolated, ephemeral container
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run everglot-app npm run migrate up
-            - name: Start app
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-app
-            - name: Print docker service status
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml ps
-            - name: Wait for the app to be running
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run everglot-app entrypoints/ci.sh wait4ports -t 10 "tcp://everglot-app:3000"
-            - name: Print docker service status
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml ps
+            - name: Migrate database and start app
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run -d everglot-app
             - name: Run tests
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T everglot-app entrypoints/ci.sh npm run test:pretty
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint entrypoints/ci.sh everglot-app npm run test:pretty
     build:
         name: Build, Push and Deploy
         runs-on: ubuntu-latest

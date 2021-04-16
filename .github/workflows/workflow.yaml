@@ -24,9 +24,9 @@ jobs:
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-db
             # Run app as if it were in production.
             - name: Migrate database and start app
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint entrypoints/ci-after-db.sh -e NODE_ENV=production -d everglot-app
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint entrypoints/ci-after-db.sh -d everglot-app
             - name: Run tests
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint entrypoints/ci-after-app.sh everglot-app npm run test:pretty
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint entrypoints/ci-after-app.sh everglot-app-ci npm run test:pretty
     build:
         name: Build, Push and Deploy
         runs-on: ubuntu-latest

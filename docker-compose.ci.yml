@@ -3,11 +3,23 @@ version: "3"
 services:
     everglot-app:
         environment:
-            NODE_ENV: "development"
+            NODE_ENV: "production"
             ROARR_LOG: "true"
             HOST: "0.0.0.0"
             PORT: "3000"
         entrypoint: entrypoints/ci-after-db.sh
+        # Avoid building the same image twice.
+        image: everglot-app-image
+
+    everglot-app-ci:
+        environment:
+            NODE_ENV: "development"
+            ROARR_LOG: "true"
+        entrypoint: entrypoints/ci-after-app.sh
+        # Avoid building the same image twice.
+        image: everglot-app-image
+        depends_on:
+            - everglot-app
 
     everglot-db:
         environment:

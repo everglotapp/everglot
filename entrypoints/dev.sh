@@ -1,4 +1,6 @@
 #!/bin/sh
+set -e
+
 wait4ports "tcp://everglot-db:5432"
 
 # Note: Migrations should be run manually in development!

@@ -137,10 +137,10 @@ docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test up -d ev
 To only run unit tests:
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test exec everglot-app npm run test:unit
+docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test exec everglot-app npm run test src/__tests__/unit
 ```
 
-To run functional tests the app must be running separately as well:
+To run functional tests the app must be running separately as well. This command can also be left out by simply not passing the `everglot-db` service in the `up -d` command above.
 
 ```bash
 docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test up -d everglot-app
@@ -162,11 +162,12 @@ Jest's `--forceExit` option (as defined in the `test` script within `package.jso
 
 ### In CI
 
-CI environments don't need a separate project and should use the `docker-compose.ci.yml` configuration.
+CI environments don't need a separate project and should use the `docker-compose.ci.yml` configuration with `entrypoints/wait-for-db.sh` for setup and `entrypoints/wait-for-app.sh` for testing.
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml -p test up -d
-docker-compose -f docker-compose.yml -f docker-compose.cu.yml -p test exec -T everglot-app npm run test
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-db
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml run -d --entrypoint entrypoints/wait-for-db.sh everglot-app
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint entrypoints/wait-for-app.sh everglot-app npm run test:pretty
 ```
 
 ## Deployment

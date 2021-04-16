@@ -8,7 +8,7 @@ services:
             HOST: "0.0.0.0"
             PORT: "3000"
         # Run app as if it were in production.
-        entrypoint: entrypoints/prod.sh
+        entrypoint: entrypoints/ci-after-db.sh
 
     everglot-db:
         environment:

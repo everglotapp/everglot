@@ -8,6 +8,7 @@ services:
             HOST: "0.0.0.0"
             PORT: "3000"
         entrypoint: entrypoints/ci-after-db.sh
+        command: ["npm", "start"]
         # Avoid building the same image twice.
         image: everglot-app-image
 

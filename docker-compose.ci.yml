@@ -7,7 +7,6 @@ services:
             ROARR_LOG: "true"
             HOST: "0.0.0.0"
             PORT: "3000"
-        # Run app as if it were in production.
         entrypoint: entrypoints/ci-after-db.sh
 
     everglot-db:

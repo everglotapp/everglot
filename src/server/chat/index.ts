@@ -1,6 +1,3 @@
-import path from "path"
-import { readFileSync } from "fs"
-
 import { Server as SocketIO } from "socket.io"
 import { validate as uuidValidate } from "uuid"
 
@@ -27,59 +24,77 @@ import type {
     ChatGroupByUuidQuery,
     ChatUserQuery,
     Group,
+    Language,
 } from "../../types/generated/graphql"
 import { getGroupIdByUuid } from "../groups"
 
-import { FluentBundle, FluentResource } from "@fluent/bundle"
+import { translate } from "./locales"
 
 import type { Server } from "http"
+import type { FluentVariable } from "@fluent/bundle"
 
 const chlog = log.child({
     namespace: "chat",
 })
 
-type SupportedLocale = "en" | "de"
-const SUPPORTED_LOCALES = ["en", "de"]
+class Bot {
+    groupUuid: Group["uuid"]
+    locale: Language["alpha2"]
+    io: SocketIO
 
-// Store all translations as a simple object which is available
-// synchronously and bundled with the rest of the code.
-const RESOURCES: Record<SupportedLocale, FluentResource> = {
-    en: new FluentResource(
-        readFileSync(
-            path.resolve(__dirname, "../../../locales/en/bot.ftl"),
-            "utf-8"
-        )
-    ),
-    de: new FluentResource(
-        readFileSync(
-            path.resolve(__dirname, "../../../locales/de/bot.ftl"),
-            "utf-8"
-        )
-    ),
-}
+    constructor(
+        groupUuid: Group["uuid"],
+        locale: Language["alpha2"],
+        io: SocketIO
+    ) {
+        this.groupUuid = groupUuid
+        this.locale = locale
+        this.io = io
+    }
 
-const BUNDLES: Record<
-    SupportedLocale,
-    FluentBundle | undefined
-> = SUPPORTED_LOCALES.reduce(
-    (map, locale: SupportedLocale) => {
-        const bundle = new FluentBundle(locale, { useIsolating: false })
-        const errors = bundle.addResource(RESOURCES[locale])
-        if (errors.length) {
+    async send(
+        fluentMessageId: string,
+        args?: Record<string, FluentVariable>,
+        errors?: Error[]
+    ) {
+        let welcome = await translate(this.locale)(
+            fluentMessageId,
+            args,
+            errors
+        )
+        if (welcome) {
+            this.sendMessage(welcome)
+        }
+    }
+
+    async sendMessage(msg: string, delay = 300) {
+        const recipientGroupId = await getGroupIdByUuid(this.groupUuid)
+        if (!recipientGroupId) {
             chlog
-                .child({
-                    errors,
-                })
-                .error(`Failed to load fluent resource`)
-            process.exit(1)
+                .child({ groupUuid: this.groupUuid, msg })
+                .error("Failed to get group ID by UUID for bot message")
+            return
         }
-        return {
-            ...map,
-            [locale]: bundle,
+        const message = await createMessage({
+            body: msg,
+            recipientGroupId,
+            recipientId: null,
+            senderId: null,
+        })
+        if (!message || !message.message) {
+            chlog.error("Bot message creation failed", JSON.stringify(message))
+            return
         }
-    },
-    { en: undefined, de: undefined }
-)
+        setTimeout(async () => {
+            this.io.to(this.groupUuid).emit("message", {
+                uuid: message.message!.uuid,
+                userUuid: message.sender?.uuid || null,
+                text: msg,
+                time: message.message!.createdAt,
+            })
+        }, delay)
+    }
+}
 
 export function start(server: Server, pool: Pool) {
     const io = new SocketIO(server)
@@ -90,6 +105,15 @@ export function start(server: Server, pool: Pool) {
         // @ts-ignore
         sessionMiddleware(socket.request, {}, next)
     })
+
+    const bots: Record<Group["uuid"], Bot> = {}
+    async function sendBotMessage(
+        msg: string,
+        groupUuid: Group["uuid"],
+        delay = 300
+    ) {
+        return bots[groupUuid].sendMessage(msg, delay)
+    }
 
     // Run when client connects
     io.on("connection", (socket: EverglotChatSocket) => {
@@ -142,22 +166,25 @@ export function start(server: Server, pool: Pool) {
                 )
                 return
             }
+            bots[groupUuid] ||= new Bot(
+                groupUuid,
+                group.groupByUuid?.language?.alpha2,
+                io
+            )
+
             const alpha2 = group.groupByUuid?.language?.alpha2
-            const locale = SUPPORTED_LOCALES.includes(alpha2)
-                ? (alpha2 as SupportedLocale)
-                : "en"
-            const bundle = BUNDLES[locale]
             const chatUser = userJoin(socket.id, res.data.user, groupUuid)
             socket.join(groupUuid)
             if (userIsNew(chatUser) && chatUser?.user?.username) {
-                let welcome = bundle.getMessage("welcome")
-                if (welcome?.value) {
-                    sendBotMessage(
-                        bundle.formatPattern(welcome.value, {
-                            username: chatUser.user.username,
-                        }),
-                        groupUuid
-                    )
+                bots[groupUuid].send("welcome", {
+                    username: chatUser.user.username,
+                })
+
+                let welcome = await translate(alpha2)("welcome", {
+                    username: chatUser.user.username,
+                })
+                if (welcome) {
+                    sendBotMessage(welcome, groupUuid)
                 }
 
                 userGreeted(chatUser)
@@ -368,42 +395,6 @@ export function start(server: Server, pool: Pool) {
                 chatUser.groupUuid
             )
         })
-
-        function sendBotMessage(
-            msg: string,
-            groupUuid: Group["uuid"],
-            delay = 300
-        ) {
-            setTimeout(async () => {
-                const recipientGroupId = await getGroupIdByUuid(groupUuid)
-                if (!recipientGroupId) {
-                    chlog.error(
-                        "Failed to get group ID by UUID for bot message",
-                        JSON.stringify({ groupUuid, msg })
-                    )
-                    return
-                }
-                const message = await createMessage({
-                    body: msg,
-                    recipientGroupId,
-                    recipientId: null,
-                    senderId: null,
-                })
-                if (message && message.message) {
-                    io.to(groupUuid).emit("message", {
-                        uuid: message.message.uuid,
-                        userUuid: message.sender?.uuid || null,
-                        text: msg,
-                        time: message.message.createdAt,
-                    })
-                } else {
-                    chlog.error(
-                        "Bot message creation failed",
-                        JSON.stringify(message)
-                    )
-                }
-            }, delay)
-        }
     })
 }
 

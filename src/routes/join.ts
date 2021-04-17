@@ -46,10 +46,10 @@ export async function getTokenIdByToken(
         values: [token],
     })
     const tokenId = await queryResult?.rows[0]?.id
-    log.trace(JSON.stringify({ token, tokenId }))
+    log.child({ token, tokenId }).trace("Got token ID by token")
     let success = queryResult?.rowCount === 1
     if (!success) {
-        log.info(`Query token failed`, JSON.stringify(queryResult))
+        log.child({ queryResult }).debug(`Querying token ID failed`)
         return null
     }
     return tokenId
@@ -176,11 +176,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 validators.hasOwnProperty(reason) &&
                 validators[reason as InvalidEmailReason]
             ) {
-                log.info(
-                    `User provided an invalid email "${email}": ${
-                        validators[reason as InvalidEmailReason]!.reason
-                    } (${JSON.stringify(emailValidation)})"`
-                )
+                log.child({
+                    email,
+                    reason: validators[reason as InvalidEmailReason]!.reason,
+                    emailValidation,
+                }).info("User provided an invalid email")
                 invalidEmailMsg = {
                     smtp:
                         "It looks like the email address you provided does not exist.",
@@ -191,11 +191,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     typo: "Did you misspell the email address by accident?",
                 }[reason as InvalidEmailReason]
             } else {
-                log.info(
-                    `User provided an invalid email "${email}": ${JSON.stringify(
-                        emailValidation
-                    )}"`
-                )
+                log.child({
+                    email,
+                    emailValidation,
+                }).info("User provided an invalid email")
             }
             res.status(422).json({
                 success: false,
@@ -266,10 +265,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
         ],
     })
     const userId = queryResult?.rows[0]?.id
-    log.trace(JSON.stringify({ userId }))
+    log.child({ userId }).trace("Tried to insert new user")
     let success = queryResult?.rowCount === 1
     if (!success) {
-        log.info(`User insertion failed`, JSON.stringify(queryResult))
+        log.child({ queryResult }).info(`User insertion failed`)
         serverError(res)
         return
     }
@@ -277,10 +276,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     const uidgen = new UIDGenerator(256, UIDGenerator.BASE58)
     const newInviteToken = await uidgen.generate().catch(() => null)
     if (!newInviteToken) {
-        log.error(
-            `Invite token generation failed`,
-            JSON.stringify({ newInviteToken })
-        )
+        log.child({ newInviteToken }).error(`Invite token generation failed`)
         serverError(res)
         return
     }
@@ -298,7 +294,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     })
     let tokenSuccess = tokenQueryResult?.rowCount === 1
     if (!tokenSuccess) {
-        log.error(`Token insertion failed`, JSON.stringify(tokenQueryResult))
+        log.child({ tokenQueryResult }).error(`Token insertion failed`)
         serverError(res)
         return
     }

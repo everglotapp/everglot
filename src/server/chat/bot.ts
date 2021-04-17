@@ -58,7 +58,7 @@ export class Bot {
             senderId: null,
         })
         if (!message || !message.message) {
-            chlog.error("Bot message creation failed", JSON.stringify(message))
+            chlog.child({ message }).error("Bot message creation failed")
             return
         }
         setTimeout(async () => {

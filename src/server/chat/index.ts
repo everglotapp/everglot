@@ -60,24 +60,23 @@ export function start(server: Server, pool: Pool) {
             // TODO: Check that this is an actual group UUID and that
             // the user is part of this group.
             if (!groupUuid || !uuidValidate(groupUuid)) {
-                chlog.info(
-                    "Bad group UUID",
-                    JSON.stringify({
+                chlog
+                    .child({
                         groupUuid,
                     })
-                )
+                    .info("Bad group UUID")
                 return
             }
             const group = await getChatGroupByUuid(groupUuid)
             if (!group || !group.groupByUuid?.language?.alpha2) {
-                chlog.info(
-                    "Group not found",
-                    JSON.stringify({
+                chlog
+                    .child({
                         groupUuid,
                     })
-                )
+                    .info("Group not found")
                 return
             }
+
             bots[groupUuid] ||= new Bot(
                 groupUuid,
                 group.groupByUuid?.language?.alpha2,
@@ -157,12 +156,13 @@ export function start(server: Server, pool: Pool) {
                     chatUser.groupUuid
                 )
                 if (!recipientGroupId) {
-                    chlog.error(
-                        "Failed to get group ID by UUID for user message",
-                        JSON.stringify({
+                    chlog
+                        .child({
                             groupUuid: chatUser.groupUuid,
                         })
-                    )
+                        .error(
+                            "Failed to get group ID by UUID for user message"
+                        )
                     return
                 }
                 const message = await createMessage({
@@ -179,21 +179,19 @@ export function start(server: Server, pool: Pool) {
                         time: message.message.createdAt,
                     })
                 } else {
-                    chlog.error(
-                        "User text message creation failed",
-                        JSON.stringify(message)
-                    )
+                    chlog
+                        .child({ message })
+                        .error("User text message creation failed")
                     return
                 }
 
                 const group = await getChatGroupByUuid(chatUser.groupUuid)
                 if (!group || !group.groupByUuid?.language?.alpha2) {
-                    chlog.error(
-                        "Failed to get group by UUID for user message",
-                        JSON.stringify({
+                    chlog
+                        .child({
                             groupUuid: chatUser.groupUuid,
                         })
-                    )
+                        .error("Failed to get group by UUID for user message")
                     return
                 }
                 const alpha2 = group.groupByUuid?.language?.alpha2

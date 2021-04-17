@@ -15,11 +15,12 @@
     import persistedOperations from "../graphql.client.json"
 
     import { negotiateLanguages } from "@fluent/langneg"
-    import { FluentBundle } from "@fluent/bundle"
+    import { FluentBundle, FluentResource } from "@fluent/bundle"
     import { FluentProvider } from "@nubolab-ffwd/svelte-fluent"
 
     import en from "../../locales/en/app.ftl"
     import de from "../../locales/de/app.ftl"
+    import zh from "../../locales/zh-CN/app.ftl"
 
     import { currentUserStore, groupUuid } from "../stores"
 
@@ -110,9 +111,10 @@
 
     // Store all translations as a simple object which is available
     // synchronously and bundled with the rest of the code.
-    const RESOURCES = {
+    const RESOURCES: Record<SupportedLocale, FluentResource> = {
         de,
         en,
+        zh,
     }
 
     function* generateBundles(userLocales: readonly string[]) {

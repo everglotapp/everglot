@@ -16,8 +16,9 @@ import {
 
 import { performQuery } from "../gql"
 
-import { HANGMAN_LANGUAGES, hangmanGames } from "./hangman"
-import type { HangmanLanguage } from "./hangman"
+import { hangmanGames } from "./hangman"
+import { HANGMAN_LOCALES } from "../../constants"
+import type { HangmanLocale } from "../../constants"
 
 import type { Pool } from "pg"
 import type {
@@ -106,8 +107,8 @@ export function start(server: Server, pool: Pool) {
                 username: chatUser.user.username || "?",
             })
 
-            if (HANGMAN_LANGUAGES.includes(alpha2)) {
-                const hangman = hangmanGames[alpha2 as HangmanLanguage]
+            if (HANGMAN_LOCALES.some((locale) => locale === alpha2)) {
+                const hangman = hangmanGames[alpha2 as HangmanLocale]
                 if (hangman.running) {
                     bots[chatUser.groupUuid].send("hangman-current-word", {
                         word: hangman.publicWord,
@@ -176,8 +177,10 @@ export function start(server: Server, pool: Pool) {
                 if (msg.startsWith("!help")) {
                     bots[chatUser.groupUuid].send("available-commands")
                     return
-                } else if (HANGMAN_LANGUAGES.includes(alpha2)) {
-                    const hangman = hangmanGames[alpha2 as HangmanLanguage]
+                } else if (
+                    HANGMAN_LOCALES.some((locale) => locale === alpha2)
+                ) {
+                    const hangman = hangmanGames[alpha2 as HangmanLocale]
                     if (hangman.running) {
                         if (msg.length === 1) {
                             if (

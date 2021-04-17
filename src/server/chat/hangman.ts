@@ -1,4 +1,5 @@
 import { ALPHABET } from "../../constants"
+import type { HangmanLocale } from "../../constants"
 
 import log from "../../logger"
 
@@ -6,9 +7,7 @@ const chlog = log.child({
     namespace: "hangman",
 })
 
-export type HangmanLanguage = "en" | "de"
-
-const DICTIONARY: Record<HangmanLanguage, string[]> = {
+const DICTIONARY: Record<HangmanLocale, string[]> = {
     en: [
         "me",
         "new",
@@ -86,12 +85,12 @@ const DICTIONARY: Record<HangmanLanguage, string[]> = {
 
 export class HangmanGame {
     running: boolean = false
-    language: HangmanLanguage
+    language: HangmanLocale
     picked: string[] = []
     available: string[] = []
     word: string
 
-    constructor(language: HangmanLanguage) {
+    constructor(language: HangmanLocale) {
         this.language = language
         this.available = ALPHABET[language].filter(
             (l: string) => l === l.toLowerCase()
@@ -159,8 +158,7 @@ export class HangmanGame {
     }
 }
 
-export let hangmanGames: Record<HangmanLanguage, HangmanGame> = {
+export let hangmanGames: Record<HangmanLocale, HangmanGame> = {
     en: new HangmanGame("en"),
     de: new HangmanGame("de"),
 }
-export const HANGMAN_LANGUAGES = Object.keys(hangmanGames)

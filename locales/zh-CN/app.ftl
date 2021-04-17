@@ -1,8 +1,8 @@
 panel-games = 游戏
 panel-subtitles = 字幕
 submit-form-join-group = 加入小组
-sidebar-join-group = 加入小组
 sidebar-members = 组员
+sidebar-members-join-group = 加入小组
 sidebar-controls = 控制面板
 sidebar-controls-display = 分屏
 sidebar-controls-mic = 麦克风

@@ -1,10 +1,13 @@
 export const GOOGLE_SIGNIN_CLIENT_ID =
     "457984069949-bgc3aj14fi47olkp0arn7is4cr07cfla.apps.googleusercontent.com"
 
-export const SUPPORTED_LOCALES = ["en", "de"] as const
+export const SUPPORTED_LOCALES = ["en", "de", "zh"] as const
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
 
-export const ALPHABET: Record<SupportedLocale, readonly string[]> = {
+export const HANGMAN_LOCALES = ["en", "de"] as const
+export type HangmanLocale = typeof HANGMAN_LOCALES[number]
+
+export const ALPHABET: Record<HangmanLocale, readonly string[]> = {
     en: [
         "a",
         "b",

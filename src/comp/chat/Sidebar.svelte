@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
+
     import GroupMembers from "./GroupMembers.svelte"
 
     import SidebarHeadline from "../typography/SidebarHeadline.svelte"
@@ -16,11 +18,11 @@
 
 <div class="sidebar">
     <div class="users-container py-3 px-4 text-lg w-full mb-4">
-        <SidebarHeadline>Members</SidebarHeadline>
+        <SidebarHeadline><Localized id="sidebar-members" /></SidebarHeadline>
         <GroupMembers />
     </div>
     <div class="toggles py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4">
-        <SidebarHeadline>Controls</SidebarHeadline>
+        <SidebarHeadline><Localized id="sidebar-controls" /></SidebarHeadline>
         <div class="toggle-row">
             <svg
                 width="35"
@@ -34,10 +36,14 @@
                     fill="#45CDCD"
                 />
             </svg>
-            <span>Display</span>
+            <span><Localized id="sidebar-controls-display" /></span>
             <div class="toggle" on:click={handleToggleSplit}>
-                <div aria-selected={split}>On</div>
-                <div aria-selected={!split}>Off</div>
+                <div aria-selected={split}>
+                    <Localized id="sidebar-controls-toggle-on" />
+                </div>
+                <div aria-selected={!split}>
+                    <Localized id="sidebar-controls-toggle-off" />
+                </div>
             </div>
         </div>
         {#if callInProgress}
@@ -90,14 +96,18 @@
                         </clipPath>
                     </defs>
                 </svg>
-                <span>Mic</span>
+                <span><Localized id="sidebar-controls-mic" /></span>
                 <div
                     class="toggle"
                     style="cursor: not-allowed;"
                     on:click={handleToggleMic}
                 >
-                    <div aria-selected={mic}>On</div>
-                    <div aria-selected={!mic}>Off</div>
+                    <div aria-selected={mic}>
+                        <Localized id="sidebar-controls-toggle-on" />
+                    </div>
+                    <div aria-selected={!mic}>
+                        <Localized id="sidebar-controls-toggle-off" />
+                    </div>
                 </div>
             </div>
             <div class="toggle-row">
@@ -113,16 +123,20 @@
                         fill="#45CDCD"
                     />
                 </svg>
-                <span>Audio</span>
+                <span><Localized id="sidebar-controls-audio" /></span>
                 <div class="toggle" on:click={handleToggleAudio}>
-                    <div aria-selected={audio}>On</div>
-                    <div aria-selected={!audio}>Off</div>
+                    <div aria-selected={audio}>
+                        <Localized id="sidebar-controls-toggle-on" />
+                    </div>
+                    <div aria-selected={!audio}>
+                        <Localized id="sidebar-controls-toggle-off" />
+                    </div>
                 </div>
             </div>
         {:else}
             <div class="flex justify-center">
                 <ButtonLarge tag="button" on:click={handleCall} variant="TEXT"
-                    >Start Call</ButtonLarge
+                    ><Localized id="sidebar-start-call" /></ButtonLarge
                 >
             </div>
         {/if}

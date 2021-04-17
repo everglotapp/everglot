@@ -96,7 +96,9 @@
                         variant="FILLED"
                         href={`/chat?group=${group.uuid}`}
                         on:click={() => ($groupUuid = group.uuid)}
-                        ><span class="name">{group.groupName}</span>
+                        ><span class="name" title={group.groupName || undefined}
+                            >{group.groupName}</span
+                        >
                         <span class="members-count"
                             >{group.groupUsers.totalCount} members</span
                         ></ButtonLarge
@@ -140,8 +142,13 @@
     }
 
     .groups .name {
+        max-width: 368px;
+
         @apply mr-3;
         @apply align-middle;
+        @apply whitespace-nowrap;
+        @apply overflow-hidden;
+        @apply overflow-ellipsis;
     }
 
     .groups .members-count {

@@ -2,11 +2,15 @@ import { FluentBundle, FluentResource, FluentVariable } from "@fluent/bundle"
 
 import log from "../../logger"
 
-import { importFluentResource } from "../../helpers/locales"
-import { ENABLE_FLUENT_BIDIRECTIONAL_SUPPORT } from "../../constants"
+import en from "../../../locales/en/bot.ftl"
+import de from "../../../locales/de/bot.ftl"
 
-type SupportedLocale = "en" | "de"
-const SUPPORTED_LOCALES = ["en", "de"]
+import {
+    SUPPORTED_LOCALES,
+    ENABLE_FLUENT_BIDIRECTIONAL_SUPPORT,
+} from "../../constants"
+
+import type { SupportedLocale } from "../../constants"
 
 const chlog = log.child({
     namespace: "bot-locale",
@@ -19,7 +23,9 @@ export function translate(userLocale: string) {
         errors?: Error[]
     ): Promise<string> {
         return new Promise((resolve, reject) => {
-            const locale = SUPPORTED_LOCALES.includes(userLocale)
+            const locale: SupportedLocale = SUPPORTED_LOCALES.find(
+                (l) => l === userLocale
+            )
                 ? (userLocale as SupportedLocale)
                 : "en"
             const bundle = BUNDLES[locale]!
@@ -37,8 +43,8 @@ export function translate(userLocale: string) {
 // Store all translations as a simple object which is available
 // synchronously and bundled with the rest of the code.
 const RESOURCES: Record<SupportedLocale, FluentResource> = {
-    en: importFluentResource("bot", "en"),
-    de: importFluentResource("bot", "de"),
+    en,
+    de,
 }
 
 const BUNDLES: Record<

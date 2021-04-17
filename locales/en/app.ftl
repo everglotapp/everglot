@@ -21,3 +21,16 @@ main-nav-groups = Groups
 main-nav-profile = Profile
 main-nav-invite-friends = Invite Friends
 main-nav-logout = Logout
+
+signup-success-title = Success!
+signup-success-msg =
+    You have been added to the waiting list.
+    We will send you an email when we have sorted you into a language group.
+    In the meantime, you can explore the platform.
+signup-success-explore = Explore Global Channels
+
+invite-modal-msg = Send this link to your friends to invite them to join Everglot!
+invite-modal-close = Closes
+invite-modal-copy = Copy Link
+invite-modal-copy-success = Copied
+invite-modal-copy-failed = Failed to copy

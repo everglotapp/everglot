@@ -393,7 +393,7 @@
     <Modal>
         <div class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg">
             <p class="mb-6 text-center">
-                Send this link to your friends to invite them to join Everglot!
+                <Localized id="invite-modal-msg" />
             </p>
 
             <div
@@ -425,10 +425,11 @@
                     on:click={() => (showInviteModal = false)}
                     variant="TEXT"
                     color="SECONDARY"
-                    className="mr-1">Close</ButtonSmall
+                    className="mr-1"
+                    ><Localized id="invite-modal-close" /></ButtonSmall
                 >
                 <ButtonSmall tag="button" on:click={handleCopyClipboard}
-                    >Copy Link</ButtonSmall
+                    ><Localized id="invite-modal-copy" /></ButtonSmall
                 >
             </div>
             {#if copiedInviteLink !== null}
@@ -445,10 +446,18 @@
                         }`}
                     >
                         {#if copiedInviteLink}
-                            <span class="mr-2 font-bold">Copied</span>
+                            <span class="mr-2 font-bold"
+                                ><Localized
+                                    id="invite-modal-copy-success"
+                                /></span
+                            >
                             <CheckCircleIcon size="24" strokeWidth="3" />
                         {:else}
-                            <span class="mr-2 font-bold">Copying failed</span>
+                            <span class="mr-2 font-bold"
+                                ><Localized
+                                    id="invite-modal-copy-failed"
+                                /></span
+                            >
                             <AlertCircleIcon size="24" strokeWidth="3" />
                         {/if}
                     </div>

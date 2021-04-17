@@ -387,7 +387,6 @@
 
             <div
                 class="py-3 px-6 border border-gray-400 rounded-lg hover:bg-gray-lightest"
-                on:focus|self={handleFocusInviteLink}
             >
                 <span
                     role="textbox"
@@ -401,6 +400,7 @@
                             event.preventDefault()
                         }
                     }}
+                    on:focus|self={handleFocusInviteLink}
                     class="rounded-lg font-bold text-sm text-gray-bitdark cursor-pointer focus:cursor-text outline-none break-all"
                     style="overflow-wrap: anywhere;"
                 >

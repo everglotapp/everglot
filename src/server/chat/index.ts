@@ -101,26 +101,10 @@ export function start(server: Server, pool: Pool) {
                 },
             })
 
-            // Broadcast when a user connects
-            if (alpha2 === "de") {
-                socket.broadcast
-                    .to(chatUser.groupUuid)
-                    .emit(
-                        "message",
-                        formatMessage(
-                            `${chatUser.user.username} ist dem Chat beigetreten.`
-                        )
-                    )
-            } else {
-                socket.broadcast
-                    .to(chatUser.groupUuid)
-                    .emit(
-                        "message",
-                        formatMessage(
-                            `${chatUser.user.username} has joined the chat.`
-                        )
-                    )
-            }
+            // Broadcast to other clients when a client connects
+            bots[chatUser.groupUuid].broadcastFrom(socket, "user-joined", {
+                username: chatUser.user.username || "?",
+            })
 
             if (HANGMAN_LANGUAGES.includes(alpha2)) {
                 const hangman = hangmanGames[alpha2 as HangmanLanguage]
@@ -247,7 +231,7 @@ export function start(server: Server, pool: Pool) {
                 return
             }
 
-            bots[chatUser.groupUuid].send("user-left", {
+            bots[chatUser.groupUuid].broadcastFrom(socket, "user-left", {
                 username: chatUser.user.username || "?",
             })
         })

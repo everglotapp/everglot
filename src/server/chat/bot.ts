@@ -2,7 +2,7 @@ import type { FluentVariable } from "@fluent/bundle"
 
 import type { Server as SocketIO } from "socket.io"
 
-import { createMessage } from "./messages"
+import { createMessage, formatMessage } from "./messages"
 import { translate } from "./locales"
 import { getGroupIdByUuid } from "../groups"
 import log from "../../logger"
@@ -42,6 +42,24 @@ export class Bot {
         )
         if (messageText) {
             await this.sendMessage(messageText)
+        }
+    }
+
+    async broadcastFrom(
+        socket: EverglotChatSocket,
+        fluentMessageId: string,
+        args?: Record<string, FluentVariable>,
+        errors?: Error[]
+    ) {
+        const messageText = await translate(this.locale)(
+            fluentMessageId,
+            args,
+            errors
+        )
+        if (messageText) {
+            socket.broadcast
+                .to(this.groupUuid)
+                .emit("message", formatMessage(messageText))
         }
     }
 

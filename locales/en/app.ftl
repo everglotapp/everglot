@@ -42,3 +42,9 @@ login-form-email = Email
 login-form-password = Password
 login-form-submit = Login
 login-form-signup = I don't have an account
+
+join-title = Join { -brand-name }
+join-form-email = Email
+join-form-password = Password
+join-form-submit = Create a new account
+join-form-login = I already have an account

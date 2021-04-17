@@ -49,7 +49,7 @@ export async function getTokenIdByToken(
     log.child({ token, tokenId }).trace("Got token ID by token")
     let success = queryResult?.rowCount === 1
     if (!success) {
-        log.child({ queryResult }).debug(`Querying token ID failed`)
+        log.child({ queryResult }).trace(`Querying token ID failed`)
         return null
     }
     return tokenId

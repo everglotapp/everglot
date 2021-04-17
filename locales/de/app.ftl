@@ -1,3 +1,4 @@
+-brand-name = Everglot
 panel-games = Spiele
 panel-subtitles = Untertitel
 submit-form-join-group = Gruppe beitreten

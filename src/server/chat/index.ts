@@ -1,4 +1,6 @@
-import type { Server } from "http"
+import path from "path"
+import { readFileSync } from "fs"
+
 import { Server as SocketIO } from "socket.io"
 import { validate as uuidValidate } from "uuid"
 
@@ -27,6 +29,27 @@ import type {
     Group,
 } from "../../types/generated/graphql"
 import { getGroupIdByUuid } from "../groups"
+
+import { FluentBundle, FluentResource } from "@fluent/bundle"
+
+import type { Server } from "http"
+
+const chlog = log.child({
+    namespace: "chat",
+})
+
+let resource = new FluentResource(
+    readFileSync(
+        path.resolve(__dirname, "../../../locales/en/bot.ftl"),
+        "utf-8"
+    )
+)
+
+let bundle = new FluentBundle(["en", "de"])
+let errors = bundle.addResource(resource)
+if (errors.length) {
+    chlog.error(`Failed to load fluent resource: ${JSON.stringify(errors)}`)
+}
 
 export function start(server: Server, pool: Pool) {
     const io = new SocketIO(server)
@@ -59,7 +82,7 @@ export function start(server: Server, pool: Pool) {
                 !res.data.user ||
                 !res.data?.user?.username?.length
             ) {
-                log.warn(
+                chlog.warn(
                     "Insufficient chat user result",
                     JSON.stringify({
                         sessionUserId: session.user_id,
@@ -71,7 +94,7 @@ export function start(server: Server, pool: Pool) {
             // TODO: Check that this is an actual group UUID and that
             // the user is part of this group.
             if (!groupUuid || !uuidValidate(groupUuid)) {
-                log.info(
+                chlog.info(
                     "Bad group UUID",
                     JSON.stringify({
                         groupUuid,
@@ -81,7 +104,7 @@ export function start(server: Server, pool: Pool) {
             }
             const group = await getChatGroupByUuid(groupUuid)
             if (!group || !group.groupByUuid?.language?.alpha2) {
-                log.info(
+                chlog.info(
                     "Group not found",
                     JSON.stringify({
                         groupUuid,
@@ -92,15 +115,13 @@ export function start(server: Server, pool: Pool) {
             const alpha2 = group.groupByUuid?.language?.alpha2
             const chatUser = userJoin(socket.id, res.data.user, groupUuid)
             socket.join(groupUuid)
-            if (userIsNew(chatUser)) {
-                if (alpha2 === "de") {
+            if (userIsNew(chatUser) && chatUser?.user?.username) {
+                let welcome = bundle.getMessage("welcome")
+                if (welcome?.value) {
                     sendBotMessage(
-                        `Willkommen bei Everglot, @${chatUser.user.username}! Schreibe !help, um alle verfügbaren Befehle zu sehen.`,
-                        groupUuid
-                    )
-                } else {
-                    sendBotMessage(
-                        `Welcome to Everglot, @${chatUser.user.username}! Write !help to see available commands.`,
+                        bundle.formatPattern(welcome.value, {
+                            username: chatUser.user.username,
+                        }),
                         groupUuid
                     )
                 }
@@ -172,7 +193,7 @@ export function start(server: Server, pool: Pool) {
                     chatUser.groupUuid
                 )
                 if (!recipientGroupId) {
-                    log.error(
+                    chlog.error(
                         "Failed to get group ID by UUID for user message",
                         JSON.stringify({
                             groupUuid: chatUser.groupUuid,
@@ -194,7 +215,7 @@ export function start(server: Server, pool: Pool) {
                         time: message.message.createdAt,
                     })
                 } else {
-                    log.error(
+                    chlog.error(
                         "User text message creation failed",
                         JSON.stringify(message)
                     )
@@ -203,7 +224,7 @@ export function start(server: Server, pool: Pool) {
 
                 const group = await getChatGroupByUuid(chatUser.groupUuid)
                 if (!group || !group.groupByUuid?.language?.alpha2) {
-                    log.error(
+                    chlog.error(
                         "Failed to get group by UUID for user message",
                         JSON.stringify({
                             groupUuid: chatUser.groupUuid,
@@ -322,7 +343,7 @@ export function start(server: Server, pool: Pool) {
             setTimeout(async () => {
                 const recipientGroupId = await getGroupIdByUuid(groupUuid)
                 if (!recipientGroupId) {
-                    log.error(
+                    chlog.error(
                         "Failed to get group ID by UUID for bot message",
                         JSON.stringify({ groupUuid, msg })
                     )
@@ -342,7 +363,7 @@ export function start(server: Server, pool: Pool) {
                         time: message.message.createdAt,
                     })
                 } else {
-                    log.error(
+                    chlog.error(
                         "Bot message creation failed",
                         JSON.stringify(message)
                     )

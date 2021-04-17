@@ -387,12 +387,12 @@
 
             <div
                 class="py-3 px-6 border border-gray-400 rounded-lg hover:bg-gray-lightest"
+                on:focus|self={handleFocusInviteLink}
             >
                 <span
                     role="textbox"
                     aria-readonly="true"
                     contenteditable
-                    on:focus|self={handleFocusInviteLink}
                     on:cut|preventDefault
                     on:paste|preventDefault
                     on:keydown={(event) => {

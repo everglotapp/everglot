@@ -170,16 +170,13 @@ async function createAndAssignGroup(
         uuid
     )
     if (groupId === null) {
-        log.info(
-            "Group creation failed",
-            JSON.stringify({
-                global,
-                name,
-                languageId,
-                languageSkillLevelId,
-                uuid,
-            })
-        )
+        log.child({
+            global,
+            name,
+            languageId,
+            languageSkillLevelId,
+            uuid,
+        }).info("Group creation failed")
         return null
     }
     for (const learner of learnerIds) {

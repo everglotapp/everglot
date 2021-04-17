@@ -1,4 +1,5 @@
 import path from "path"
+import fs from "fs"
 import resolve from "@rollup/plugin-node-resolve"
 import replace from "@rollup/plugin-replace"
 import commonjs from "@rollup/plugin-commonjs"
@@ -60,6 +61,22 @@ export default {
             fluent({
                 include: "locales/**/*.ftl",
             }),
+            ...(dev
+                ? [
+                      {
+                          buildStart() {
+                              const locales = fs.readdirSync(
+                                  path.resolve(__dirname, "./locales/")
+                              )
+                              locales.forEach((locale) => {
+                                  this.addWatchFile(
+                                      `static/posts/${locale}/app.ftl`
+                                  )
+                              })
+                          },
+                      },
+                  ]
+                : []),
 
             legacy &&
                 babel({
@@ -125,6 +142,22 @@ export default {
             fluent({
                 include: "locales/**/*.ftl",
             }),
+            ...(dev
+                ? [
+                      {
+                          buildStart() {
+                              const locales = fs.readdirSync(
+                                  path.resolve(__dirname, "./locales/")
+                              )
+                              locales.forEach((locale) => {
+                                  this.addWatchFile(
+                                      `static/posts/${locale}/bot.ftl`
+                                  )
+                              })
+                          },
+                      },
+                  ]
+                : []),
         ],
         external: Object.keys(pkg.dependencies).concat(
             require("module").builtinModules

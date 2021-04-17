@@ -268,7 +268,17 @@ export async function post(req: Request, res: Response, _next: () => void) {
     log.child({ userId }).trace("Tried to insert new user")
     let success = queryResult?.rowCount === 1
     if (!success) {
-        log.child({ queryResult }).info(`User insertion failed`)
+        log.child({
+            queryResult,
+            username,
+            email,
+            hash,
+            uuid,
+            googleId,
+            avatarUrl,
+            locale,
+            inviteTokenId,
+        }).error(`User insertion failed`)
         serverError(res)
         return
     }

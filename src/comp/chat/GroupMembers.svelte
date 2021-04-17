@@ -57,11 +57,8 @@
         {:else if $currentGroupIsGlobal && !$chatUsers.length && $groupChatStore.data && !$groupChatStore.error}
             <div class="text-center py-5 font-bold text-base text-gray-bitdark">
                 <Overlay id="sidebar-members-nobody-prompt">
-                    <p data-l10n-name="nobody">So far nobody is here 😥</p>
-                    <p data-l10n-name="prompt">
-                        Why don't you go ahead and join this group to get the
-                        ball rolling? Somebody always has to go first!
-                    </p>
+                    <p data-l10n-name="nobody" />
+                    <p data-l10n-name="prompt" />
                 </Overlay>
             </div>
             <div class="px-8">

@@ -1,3 +1,5 @@
+-brand-name = Everglot
+
 panel-games = Games
 panel-subtitles = Subtitles
 
@@ -34,3 +36,9 @@ invite-modal-close = Closes
 invite-modal-copy = Copy Link
 invite-modal-copy-success = Copied
 invite-modal-copy-failed = Failed to copy
+
+login-title = Login to { -brand-name }
+login-form-email = Email
+login-form-password = Password
+login-form-submit = Login
+login-form-signup = I don't have an account

@@ -7,7 +7,7 @@ import { translate } from "./locales"
 import { getGroupIdByUuid } from "../groups"
 import log from "../../logger"
 
-import type { Group, Language } from "../../types/generated/graphql"
+import type { Group, Language, Maybe } from "../../types/generated/graphql"
 
 const chlog = log.child({
     namespace: "bot",
@@ -17,6 +17,8 @@ export class Bot {
     groupUuid: Group["uuid"]
     locale: Language["alpha2"]
     io: SocketIO
+
+    groupId: Maybe<Group["id"]> = null
 
     constructor(
         groupUuid: Group["uuid"],
@@ -33,22 +35,22 @@ export class Bot {
         args?: Record<string, FluentVariable>,
         errors?: Error[]
     ) {
-        let welcome = await translate(this.locale)(
+        const messageText = await translate(this.locale)(
             fluentMessageId,
             args,
             errors
         )
-        if (welcome) {
-            this.sendMessage(welcome)
+        if (messageText) {
+            await this.sendMessage(messageText)
         }
     }
 
     async sendMessage(msg: string, delay = 300) {
-        const recipientGroupId = await getGroupIdByUuid(this.groupUuid)
+        const recipientGroupId = await this.getGroupId()
         if (!recipientGroupId) {
             chlog
-                .child({ groupUuid: this.groupUuid, msg })
-                .error("Failed to get group ID by UUID for bot message")
+                .child({ groupUuid: this.groupUuid })
+                .error("Failed to recipient group ID by UUID for bot message")
             return
         }
         const message = await createMessage({
@@ -69,6 +71,10 @@ export class Bot {
                 time: message.message!.createdAt,
             })
         }, delay)
+    }
+
+    protected async getGroupId() {
+        return (this.groupId ||= await getGroupIdByUuid(this.groupUuid))
     }
 }
 

@@ -10,6 +10,7 @@ import { terser } from "rollup-plugin-terser"
 import typescript from "@rollup/plugin-typescript"
 import graphql from "@rollup/plugin-graphql"
 import config from "sapper/config/rollup.js"
+import fluent from "./src/helpers/rollup-plugin-fluent"
 import pkg from "./package.json"
 
 const mode = process.env.NODE_ENV
@@ -56,6 +57,9 @@ export default {
             commonjs(),
             typescript({ sourceMap: dev }),
             graphql(),
+            fluent({
+                include: "locales/**/*.ftl",
+            }),
 
             legacy &&
                 babel({
@@ -118,6 +122,9 @@ export default {
             commonjs(),
             typescript({ sourceMap: dev }),
             graphql(),
+            fluent({
+                include: "locales/**/*.ftl",
+            }),
         ],
         external: Object.keys(pkg.dependencies).concat(
             require("module").builtinModules
@@ -140,6 +147,9 @@ export default {
             commonjs(),
             typescript({ sourceMap: dev }),
             graphql(),
+            fluent({
+                include: "locales/**/*.ftl",
+            }),
             !dev && terser(),
         ],
 

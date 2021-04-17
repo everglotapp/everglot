@@ -1,6 +1,6 @@
 import path from "path"
 import { readFileSync } from "fs"
-import { FluentBundle, FluentResource } from "@fluent/bundle"
+import { FluentResource } from "@fluent/bundle"
 
 export const importFluentResource = (name: string, locale: string) =>
     new FluentResource(

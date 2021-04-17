@@ -5,7 +5,7 @@ import log from "../../logger"
 
 import session from "../middlewares/session"
 
-import { createMessage, formatMessage } from "./messages"
+import { createMessage } from "./messages"
 import {
     userJoin,
     getCurrentUser,

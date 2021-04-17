@@ -38,6 +38,13 @@ declare module "*.webp" {
     export = value
 }
 
+declare module "*.ftl" {
+    import type { FluentResource } from "@fluent/bundle"
+    const value: FluentResource
+    export = value
+}
+
 declare module "svelte-feather-icons"
 declare module "fakerator"
 declare module "@graphile-contrib/pg-many-to-many"
+declare module "@nubolab-ffwd/svelte-fluent"

@@ -9,6 +9,7 @@
 
     import Message from "../comp/chat/Message.svelte"
     import Sidebar from "../comp/chat/Sidebar.svelte"
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
@@ -18,7 +19,7 @@
     import type { ChatUser } from "../server/chat/users"
     import type { ChatMessage } from "../server/chat/messages"
 
-    import { groupUuid, currentUser, currentUserStore } from "../stores"
+    import { groupUuid, currentUser } from "../stores"
     import {
         groupChatStore,
         groupChatMessagesStore,
@@ -507,10 +508,12 @@
                                             <div
                                                 class="text-lg py-1 px-3 bg-primary text-white rounded-tl-md rounded-tr-md"
                                             >
-                                                Games
+                                                <Localized id="panel-games" />
                                             </div>
                                             <div class="text-lg py-1 px-3">
-                                                Subtitles
+                                                <Localized
+                                                    id="panel-subtitles"
+                                                />
                                             </div>
                                         </div>
                                         <div
@@ -561,8 +564,11 @@
                                                         } else {
                                                             // TODO: Show error feedback
                                                         }
-                                                    }}>Join group</ButtonLarge
-                                                >
+                                                    }}
+                                                    ><Localized
+                                                        id="submit-form-join-group"
+                                                    />
+                                                </ButtonLarge>
                                             {:else if joinedRoom}
                                                 <input
                                                     id="send-msg-input"

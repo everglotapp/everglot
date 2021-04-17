@@ -14,6 +14,13 @@
     import { persistedFetchExchange } from "@urql/exchange-persisted-fetch"
     import persistedOperations from "../graphql.client.json"
 
+    import { negotiateLanguages } from "@fluent/langneg"
+    import { FluentBundle } from "@fluent/bundle"
+    import { FluentProvider } from "@nubolab-ffwd/svelte-fluent"
+
+    import en from "../../locales/en/app.ftl"
+    import de from "../../locales/de/app.ftl"
+
     import { currentUserStore, groupUuid } from "../stores"
 
     import MainNav from "../comp/layout/MainNav.svelte"
@@ -22,6 +29,8 @@
     import type { DocumentNode, OperationDefinitionNode } from "graphql"
 
     import { persistedMutationFetchExchange } from "../persistedMutationFetchExchange"
+    import { SUPPORTED_LOCALES } from "../constants"
+    import type { SupportedLocale } from "../constants"
 
     async function generateHash(
         _query: string,
@@ -98,29 +107,57 @@
             transitionId, // This forces a re-execution by changing the object contents.
         }
     }
+
+    // Store all translations as a simple object which is available
+    // synchronously and bundled with the rest of the code.
+    const RESOURCES = {
+        de,
+        en,
+    }
+
+    function* generateBundles(userLocales: readonly string[]) {
+        // Choose locales that are best for the user.
+        const currentLocales = negotiateLanguages(
+            userLocales,
+            SUPPORTED_LOCALES,
+            { defaultLocale: "en" }
+        )
+
+        for (const locale of currentLocales) {
+            const bundle = new FluentBundle(locale)
+            bundle.addResource(RESOURCES[locale as SupportedLocale])
+            yield bundle
+        }
+    }
 </script>
 
-<div id="app" class:noscroll class:with-main-nav={showMainNav}>
-    {#if showMainNav}
-        <MainNav {segment} />
-    {/if}
+<FluentProvider
+    bundles={generateBundles(
+        typeof navigator === "undefined" ? [] : navigator.languages
+    )}
+>
+    <div id="app" class:noscroll class:with-main-nav={showMainNav}>
+        {#if showMainNav}
+            <MainNav {segment} />
+        {/if}
 
-    <main>
-        {#key transitionId}
-            <div
-                class="main-inner"
-                in:scale={{ duration: timeout, delay: timeout }}
-                out:scale={{ duration: timeout }}
-            >
-                <slot />
-            </div>
-        {/key}
-    </main>
+        <main>
+            {#key transitionId}
+                <div
+                    class="main-inner"
+                    in:scale={{ duration: timeout, delay: timeout }}
+                    out:scale={{ duration: timeout }}
+                >
+                    <slot />
+                </div>
+            {/key}
+        </main>
 
-    {#if showFooter}
-        <Footer />
-    {/if}
-</div>
+        {#if showFooter}
+            <Footer />
+        {/if}
+    </div>
+</FluentProvider>
 
 <style>
     #app {

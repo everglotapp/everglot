@@ -1,7 +1,10 @@
 export const GOOGLE_SIGNIN_CLIENT_ID =
     "457984069949-bgc3aj14fi47olkp0arn7is4cr07cfla.apps.googleusercontent.com"
 
-export const ALPHABET = {
+export const SUPPORTED_LOCALES = ["en", "de"] as const
+export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
+
+export const ALPHABET: Record<SupportedLocale, readonly string[]> = {
     en: [
         "a",
         "b",
@@ -55,7 +58,7 @@ export const ALPHABET = {
         "X",
         "Y",
         "Z",
-    ],
+    ] as const,
     de: [
         "a",
         "ä",
@@ -117,9 +120,7 @@ export const ALPHABET = {
         "X",
         "Y",
         "Z",
-    ],
-}
+    ] as const,
+} as const
 
 export const ENABLE_FLUENT_BIDIRECTIONAL_SUPPORT = false
-
-export default { ALPHABET, ENABLE_FLUENT_BIDIRECTIONAL_SUPPORT }

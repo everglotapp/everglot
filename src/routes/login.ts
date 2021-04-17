@@ -116,8 +116,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
             // TODO: How to inform user that id token does not exist? Privacy issue?
             // Maybe not because payload was signed by Google?
             // Could be relayed by a different server but that might not matter. Threat model required.
-            log.info(
-                `User tried to login with an id token that does not exist: ${idToken}, Email: ${email}`
+            log.child({ idToken, email }).info(
+                `User tried to login with an id token that does not exist`
             )
             res.redirect("/join")
             return
@@ -125,7 +125,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
         const user = queryResult?.rows[0]!
         userId = user.id
-        log.info(`Successful login! User ID: ${userId}, Google ID: ${googleId}`)
+        log.child({ userId, googleId }).info(`Successful login via Google`)
     } else if (authMethod === AuthMethod.EMAIL) {
         email = req?.body?.email
         password = req?.body?.password
@@ -184,8 +184,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
         const userExists = Boolean(queryResult?.rowCount === 1)
         if (!userExists) {
             // TODO: How to inform user that email does not exist? Privacy issue.
-            log.info(
-                `User tried to login with an email address that does not exist: ${email}`
+            log.child({ email }).info(
+                `User tried to login with an email address that does not exist`
             )
             serverError(res, LOGIN_FAILED_MESSAGE)
             return
@@ -197,8 +197,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
         /** Avoid comparing null/undefined/empty string */
         if (!storedPasswordHash || !storedPasswordHash.length) {
-            log.error(
-                `User stored password hash is empty. This should never happen! Email: ${email}`
+            log.child({ email }).error(
+                `User stored password hash is empty. This should never happen!`
             )
             serverError(res, LOGIN_FAILED_MESSAGE)
             return
@@ -217,7 +217,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             return
         }
 
-        log.info(`Successful login! User ID: ${userId}, Email: ${email}`)
+        log.child({ userId, email }).info(`Successful login via email`)
     } else {
         // this should never get called due to the check above
         throw new Error(`Unknown auth method ${authMethod}`)
@@ -225,7 +225,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
     req.session.regenerate(function (err: any) {
         if (err) {
-            log.info("Failed to (re)generate session", err.message)
+            log.info("Failed to (re)generate session: %s", err.message)
             serverError(res)
         } else {
             req.session.user_id = userId!

@@ -1,5 +1,11 @@
 import { ALPHABET } from "../../constants"
 
+import log from "../../logger"
+
+const chlog = log.child({
+    namespace: "hangman",
+})
+
 export type HangmanLanguage = "en" | "de"
 
 const DICTIONARY: Record<HangmanLanguage, string[]> = {
@@ -95,6 +101,7 @@ export class HangmanGame {
     }
 
     start(): void {
+        chlog.debug("Starting hangman game")
         this.running = true
     }
 
@@ -119,6 +126,7 @@ export class HangmanGame {
                 return false
             }
         }
+        chlog.trace("Hangman round completed successfully")
         return true
     }
 
@@ -126,6 +134,7 @@ export class HangmanGame {
         if (!this.over) {
             return false
         }
+        chlog.trace("Starting new hangman round")
         const dict = DICTIONARY[this.language]
         this.reset(dict[Math.floor(Math.random() * dict.length)])
         return true
@@ -154,3 +163,4 @@ export let hangmanGames: Record<HangmanLanguage, HangmanGame> = {
     en: new HangmanGame("en"),
     de: new HangmanGame("de"),
 }
+export const HANGMAN_LANGUAGES = Object.keys(hangmanGames)

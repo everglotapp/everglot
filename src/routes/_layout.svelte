@@ -21,18 +21,6 @@
 
     import type { DocumentNode, OperationDefinitionNode } from "graphql"
 
-    import {
-        fromValue,
-        fromPromise,
-        filter,
-        merge,
-        mergeMap,
-        pipe,
-        share,
-        takeUntil,
-    } from "wonka"
-
-    import { makeFetchBody } from "@urql/core/internal"
     import { persistedMutationFetchExchange } from "../persistedMutationFetchExchange"
 
     async function generateHash(

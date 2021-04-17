@@ -392,7 +392,6 @@
                     role="textbox"
                     aria-readonly="true"
                     contenteditable
-                    on:focus|self={handleFocusInviteLink}
                     on:cut|preventDefault
                     on:paste|preventDefault
                     on:keydown={(event) => {
@@ -401,6 +400,7 @@
                             event.preventDefault()
                         }
                     }}
+                    on:focus|self={handleFocusInviteLink}
                     class="rounded-lg font-bold text-sm text-gray-bitdark cursor-pointer focus:cursor-text outline-none break-all"
                     style="overflow-wrap: anywhere;"
                 >

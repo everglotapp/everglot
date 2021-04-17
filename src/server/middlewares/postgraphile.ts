@@ -1,9 +1,13 @@
+import path from "path"
+
 import { postgraphile, makePluginHook } from "postgraphile"
 import PersistedOperationsPlugin from "@graphile/persisted-operations"
 import PgSimplifyInflectorPlugin from "@graphile-contrib/pg-simplify-inflector"
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter"
 import PgManyToManyPlugin from "@graphile-contrib/pg-many-to-many"
 import type { PostGraphileOptions } from "postgraphile"
+
+import PostgraphileLogger from "../../logger/postgraphileLogger"
 
 import type { Request, RequestHandler } from "express"
 
@@ -15,7 +19,10 @@ import { DATABASE_SCHEMA, DATABASE_ROLE_CLIENT } from "../db"
 let middleware: RequestHandler | null
 
 export function getPostGraphileOptions(): PostGraphileOptions {
-    const pluginHook = makePluginHook([PersistedOperationsPlugin])
+    const pluginHook = makePluginHook([
+        PersistedOperationsPlugin,
+        PostgraphileLogger,
+    ])
     // TODO: use a restricted user account for postgraphile access
     return {
         appendPlugins: [
@@ -27,7 +34,10 @@ export function getPostGraphileOptions(): PostGraphileOptions {
         graphiql: dev,
         enhanceGraphiql: dev,
         pluginHook,
-        persistedOperationsDirectory: `${__dirname}/../../../.persisted_operations/`,
+        persistedOperationsDirectory: path.resolve(
+            __dirname,
+            "../../../.persisted_operations/"
+        ),
         allowUnpersistedOperation(req: Request) {
             return dev && req.headers.referer?.endsWith("/graphiql")
         },

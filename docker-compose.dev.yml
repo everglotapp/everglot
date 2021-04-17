@@ -13,7 +13,16 @@ services:
             HOST: "0.0.0.0"
             PORT: "3000"
         entrypoint: entrypoints/dev.sh
-        command: ["/bin/sh", "-c", "npm run dev | roarr pretty-print"]
+        # We only show log messages from level DEBUG upwards to de-clutter the output.
+        command:
+            [
+                "/bin/sh",
+                "-c",
+                'npm run dev | roarr pretty-print --fe ''{"context.logLevel":{gt:10}}''',
+            ]
+        # Run the service with the following command to show log messages with level TRACE as well.
+        # You can usually pass it at the end of your `docker-compose` shell command.
+        # command: ["/bin/sh", "-c", "npm run dev | roarr pretty-print"]
 
     everglot-db:
         environment:

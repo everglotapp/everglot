@@ -63,12 +63,11 @@ export default function configureExpress(
         const { user_id: userId } = req.session
         if (userId) {
             if (!(await registerUserActivity({ userId }))) {
-                chlog.error(
-                    "Failed to register user activity",
-                    JSON.stringify({
+                chlog
+                    .child({
                         userId,
                     })
-                )
+                    .error("Failed to register user activity")
             }
         }
         next()

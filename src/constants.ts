@@ -120,4 +120,6 @@ export const ALPHABET = {
     ],
 }
 
-export default { ALPHABET }
+export const ENABLE_FLUENT_BIDIRECTIONAL_SUPPORT = false
+
+export default { ALPHABET, ENABLE_FLUENT_BIDIRECTIONAL_SUPPORT }

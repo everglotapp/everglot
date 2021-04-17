@@ -1,4 +1,3 @@
-import type { Server } from "http"
 import { Server as SocketIO } from "socket.io"
 import { validate as uuidValidate } from "uuid"
 
@@ -17,7 +16,7 @@ import {
 
 import { performQuery } from "../gql"
 
-import { hangmanGames } from "./hangman"
+import { HANGMAN_LANGUAGES, hangmanGames } from "./hangman"
 import type { HangmanLanguage } from "./hangman"
 
 import type { Pool } from "pg"
@@ -25,8 +24,17 @@ import type {
     ChatGroupByUuidQuery,
     ChatUserQuery,
     Group,
+    User,
 } from "../../types/generated/graphql"
 import { getGroupIdByUuid } from "../groups"
+
+import Bot from "./bot"
+
+import type { Server } from "http"
+
+const chlog = log.child({
+    namespace: "chat",
+})
 
 export function start(server: Server, pool: Pool) {
     const io = new SocketIO(server)
@@ -38,72 +46,50 @@ export function start(server: Server, pool: Pool) {
         sessionMiddleware(socket.request, {}, next)
     })
 
+    const bots: Record<Group["uuid"], Bot> = {}
+
     // Run when client connects
     io.on("connection", (socket: EverglotChatSocket) => {
         const { session } = socket.request
 
         socket.on("joinRoom", async ({ groupUuid }: { groupUuid: string }) => {
-            const res = await performQuery<ChatUserQuery>(
-                `query ChatUser($id: Int!) {
-                        user(id: $id) {
-                            id
-                            username
-                            uuid
-                            avatarUrl
-                        }
-                    }`,
-                { id: session.user_id }
-            )
-            if (
-                !res.data ||
-                !res.data.user ||
-                !res.data?.user?.username?.length
-            ) {
-                log.warn(
-                    "Insufficient chat user result",
-                    JSON.stringify({
-                        sessionUserId: session.user_id,
-                        res,
-                    })
-                )
+            const userMeta = await getChatUserByUserId(session.user_id)
+            if (!userMeta) {
                 return
             }
             // TODO: Check that this is an actual group UUID and that
             // the user is part of this group.
             if (!groupUuid || !uuidValidate(groupUuid)) {
-                log.info(
-                    "Bad group UUID",
-                    JSON.stringify({
+                chlog
+                    .child({
                         groupUuid,
                     })
-                )
+                    .info("Bad group UUID")
                 return
             }
             const group = await getChatGroupByUuid(groupUuid)
             if (!group || !group.groupByUuid?.language?.alpha2) {
-                log.info(
-                    "Group not found",
-                    JSON.stringify({
+                chlog
+                    .child({
                         groupUuid,
                     })
-                )
+                    .info("Group not found")
                 return
             }
+
+            bots[groupUuid] ||= new Bot(
+                groupUuid,
+                group.groupByUuid?.language?.alpha2,
+                io
+            )
+
             const alpha2 = group.groupByUuid?.language?.alpha2
-            const chatUser = userJoin(socket.id, res.data.user, groupUuid)
+            const chatUser = userJoin(socket.id, userMeta, groupUuid)
             socket.join(groupUuid)
-            if (userIsNew(chatUser)) {
-                if (alpha2 === "de") {
-                    sendBotMessage(
-                        `Willkommen bei Everglot, @${chatUser.user.username}! Schreibe !help, um alle verfügbaren Befehle zu sehen.`,
-                        groupUuid
-                    )
-                } else {
-                    sendBotMessage(
-                        `Welcome to Everglot, @${chatUser.user.username}! Write !help to see available commands.`,
-                        groupUuid
-                    )
-                }
+            if (userIsNew(chatUser) && chatUser?.user?.username) {
+                bots[groupUuid].send("welcome", {
+                    username: chatUser.user.username,
+                })
 
                 userGreeted(chatUser)
             }
@@ -115,42 +101,17 @@ export function start(server: Server, pool: Pool) {
                 },
             })
 
-            // Broadcast when a user connects
-            if (alpha2 === "de") {
-                socket.broadcast
-                    .to(chatUser.groupUuid)
-                    .emit(
-                        "message",
-                        formatMessage(
-                            `${chatUser.user.username} ist dem Chat beigetreten.`
-                        )
-                    )
-            } else {
-                socket.broadcast
-                    .to(chatUser.groupUuid)
-                    .emit(
-                        "message",
-                        formatMessage(
-                            `${chatUser.user.username} has joined the chat.`
-                        )
-                    )
-            }
+            // Broadcast to other clients when a client connects
+            bots[chatUser.groupUuid].broadcastFrom(socket, "user-joined", {
+                username: chatUser.user.username || "?",
+            })
 
-            // TODO: Get language from group.
-            if (["de", "en"].includes(alpha2)) {
+            if (HANGMAN_LANGUAGES.includes(alpha2)) {
                 const hangman = hangmanGames[alpha2 as HangmanLanguage]
                 if (hangman.running) {
-                    if (alpha2 === "de") {
-                        sendBotMessage(
-                            `Aktuelles Wort: ${hangman.publicWord}`,
-                            chatUser.groupUuid
-                        )
-                    } else {
-                        sendBotMessage(
-                            `Current word: ${hangman.publicWord}`,
-                            chatUser.groupUuid
-                        )
-                    }
+                    bots[chatUser.groupUuid].send("hangman-current-word", {
+                        word: hangman.publicWord,
+                    })
                 }
             }
         })
@@ -172,12 +133,13 @@ export function start(server: Server, pool: Pool) {
                     chatUser.groupUuid
                 )
                 if (!recipientGroupId) {
-                    log.error(
-                        "Failed to get group ID by UUID for user message",
-                        JSON.stringify({
+                    chlog
+                        .child({
                             groupUuid: chatUser.groupUuid,
                         })
-                    )
+                        .error(
+                            "Failed to get group ID by UUID for user message"
+                        )
                     return
                 }
                 const message = await createMessage({
@@ -194,39 +156,27 @@ export function start(server: Server, pool: Pool) {
                         time: message.message.createdAt,
                     })
                 } else {
-                    log.error(
-                        "User text message creation failed",
-                        JSON.stringify(message)
-                    )
+                    chlog
+                        .child({ message })
+                        .error("User text message creation failed")
                     return
                 }
 
                 const group = await getChatGroupByUuid(chatUser.groupUuid)
                 if (!group || !group.groupByUuid?.language?.alpha2) {
-                    log.error(
-                        "Failed to get group by UUID for user message",
-                        JSON.stringify({
+                    chlog
+                        .child({
                             groupUuid: chatUser.groupUuid,
                         })
-                    )
+                        .error("Failed to get group by UUID for user message")
                     return
                 }
                 const alpha2 = group.groupByUuid?.language?.alpha2
 
                 if (msg.startsWith("!help")) {
-                    if (alpha2 === "de") {
-                        sendBotMessage(
-                            "Verfügbare Befehle: !hangman, !help",
-                            chatUser.groupUuid
-                        )
-                    } else {
-                        sendBotMessage(
-                            "Available commands: !hangman, !help",
-                            chatUser.groupUuid
-                        )
-                    }
+                    bots[chatUser.groupUuid].send("available-commands")
                     return
-                } else if (Object.keys(hangmanGames).includes(alpha2)) {
+                } else if (HANGMAN_LANGUAGES.includes(alpha2)) {
                     const hangman = hangmanGames[alpha2 as HangmanLanguage]
                     if (hangman.running) {
                         if (msg.length === 1) {
@@ -235,66 +185,39 @@ export function start(server: Server, pool: Pool) {
                                 hangman.letterAvailable(msg)
                             ) {
                                 hangman.pickLetter(msg)
-                                if (alpha2 === "de") {
-                                    sendBotMessage(
-                                        `Aktuelles Wort: ${hangman.publicWord}`,
-                                        chatUser.groupUuid
-                                    )
-                                } else {
-                                    sendBotMessage(
-                                        `Current word: ${hangman.publicWord}`,
-                                        chatUser.groupUuid
-                                    )
-                                }
-                                if (hangman.nextRound()) {
-                                    if (alpha2 === "de") {
-                                        sendBotMessage(
-                                            `Du hast richtig geraten! Hier ist das nächste Wort: ${hangman.publicWord}`,
-                                            chatUser.groupUuid
-                                        )
-                                    } else {
-                                        sendBotMessage(
-                                            `You guessed correctly! Here's the next word: ${hangman.publicWord}`,
-                                            chatUser.groupUuid
-                                        )
+                                bots[chatUser.groupUuid].send(
+                                    "hangman-current-word",
+                                    {
+                                        word: hangman.publicWord,
                                     }
+                                )
+                                if (hangman.nextRound()) {
+                                    bots[chatUser.groupUuid].send(
+                                        "hangman-guessed-correctly",
+                                        {
+                                            nextWord: hangman.publicWord,
+                                        }
+                                    )
                                 }
                             }
                         }
                     }
                     if (msg.startsWith("!hangman")) {
                         if (hangman.running) {
-                            if (alpha2 === "de") {
-                                sendBotMessage(
-                                    "Es läuft bereits ein Hangman-Spiel.",
-                                    chatUser.groupUuid
-                                )
-                            } else {
-                                sendBotMessage(
-                                    "Hangman is already running.",
-                                    chatUser.groupUuid
-                                )
-                            }
+                            bots[chatUser.groupUuid].send(
+                                "hangman-already-running"
+                            )
                         } else {
                             hangman.start()
-                            if (alpha2 === "de") {
-                                sendBotMessage(
-                                    `Wir fangen ein Hangman-Spiel an: ${hangman.publicWord}`,
-                                    chatUser.groupUuid
-                                )
-                            } else {
-                                sendBotMessage(
-                                    `Started a hangman game: ${hangman.publicWord}`,
-                                    chatUser.groupUuid
-                                )
-                            }
+                            bots[chatUser.groupUuid].send("hangman-started", {
+                                word: hangman.publicWord,
+                            })
                         }
                     }
                 } else {
                     if (msg.startsWith("!hangman")) {
-                        sendBotMessage(
-                            "So far, hangman is only supported in English and German.",
-                            chatUser.groupUuid
+                        bots[chatUser.groupUuid].send(
+                            "hangman-lang-not-supported"
                         )
                     }
                 }
@@ -308,48 +231,35 @@ export function start(server: Server, pool: Pool) {
                 return
             }
 
-            sendBotMessage(
-                `${chatUser.user.username} has left the chat`,
-                chatUser.groupUuid
-            )
+            bots[chatUser.groupUuid].broadcastFrom(socket, "user-left", {
+                username: chatUser.user.username || "?",
+            })
         })
-
-        function sendBotMessage(
-            msg: string,
-            groupUuid: Group["uuid"],
-            delay = 300
-        ) {
-            setTimeout(async () => {
-                const recipientGroupId = await getGroupIdByUuid(groupUuid)
-                if (!recipientGroupId) {
-                    log.error(
-                        "Failed to get group ID by UUID for bot message",
-                        JSON.stringify({ groupUuid, msg })
-                    )
-                    return
-                }
-                const message = await createMessage({
-                    body: msg,
-                    recipientGroupId,
-                    recipientId: null,
-                    senderId: null,
-                })
-                if (message && message.message) {
-                    io.to(groupUuid).emit("message", {
-                        uuid: message.message.uuid,
-                        userUuid: message.sender?.uuid || null,
-                        text: msg,
-                        time: message.message.createdAt,
-                    })
-                } else {
-                    log.error(
-                        "Bot message creation failed",
-                        JSON.stringify(message)
-                    )
-                }
-            }, delay)
-        }
     })
+}
+
+async function getChatUserByUserId(userId: User["id"]) {
+    const res = await performQuery<ChatUserQuery>(
+        `query ChatUser($id: Int!) {
+                user(id: $id) {
+                    id
+                    username
+                    uuid
+                    avatarUrl
+                }
+            }`,
+        { id: userId }
+    )
+    if (!res.data || !res.data.user || !res.data?.user?.username?.length) {
+        chlog
+            .child({
+                userId,
+                res,
+            })
+            .warn("Insufficient chat user result")
+        return null
+    }
+    return res.data.user
 }
 
 async function getChatGroupByUuid(

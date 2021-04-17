@@ -10,7 +10,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
     req.session.destroy((err: any) => {
         if (err) {
-            log.error("Failed to destroy session", JSON.stringify(err))
+            log.child({ err }).error("Failed to destroy session")
             serverError(res)
         } else {
             log.debug("Successfully destroyed session")

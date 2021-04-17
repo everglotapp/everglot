@@ -58,9 +58,12 @@ const RESOURCES: Record<SupportedLocale, FluentResource> = {
     ),
 }
 
-const BUNDLES: Record<SupportedLocale, FluentBundle> = SUPPORTED_LOCALES.reduce(
+const BUNDLES: Record<
+    SupportedLocale,
+    FluentBundle | undefined
+> = SUPPORTED_LOCALES.reduce(
     (map, locale: SupportedLocale) => {
-        const bundle = map[locale]
+        const bundle = new FluentBundle(locale, { useIsolating: false })
         const errors = bundle.addResource(RESOURCES[locale])
         if (errors.length) {
             chlog
@@ -75,10 +78,7 @@ const BUNDLES: Record<SupportedLocale, FluentBundle> = SUPPORTED_LOCALES.reduce(
             [locale]: bundle,
         }
     },
-    {
-        en: new FluentBundle("en"),
-        de: new FluentBundle("de"),
-    }
+    { en: undefined, de: undefined }
 )
 
 export function start(server: Server, pool: Pool) {

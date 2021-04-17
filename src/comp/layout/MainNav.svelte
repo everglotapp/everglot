@@ -10,6 +10,8 @@
     } from "svelte-feather-icons"
     import { query } from "@urql/svelte"
 
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
+
     import Avatar from "../users/Avatar.svelte"
 
     import ButtonSmall from "../util/ButtonSmall.svelte"
@@ -141,7 +143,7 @@
                                 : undefined}
                             href="/global"
                             class="nav-item-with-icon"
-                            ><span>Global</span>
+                            ><span><Localized id="main-nav-global" /></span>
                             <svg
                                 width="32"
                                 height="32"
@@ -234,7 +236,7 @@
                             id="groups-dropdown-clickaway"
                             class="nav-item-with-icon"
                             on:click={handleClickGroups}
-                            ><span>Groups</span>
+                            ><span><Localized id="main-nav-groups" /></span>
                             <svg
                                 width="32"
                                 height="32"
@@ -316,7 +318,10 @@
                                                 color="SECONDARY"
                                                 className="w-full"
                                                 href="/profile"
-                                                ><span>Profile</span
+                                                ><span
+                                                    ><Localized
+                                                        id="main-nav-profile"
+                                                    /></span
                                                 ></ButtonSmall
                                             >
                                         </div>
@@ -330,7 +335,10 @@
                                                     on:click={() => {
                                                         showInviteModal = true
                                                     }}
-                                                    ><span>Invite friends</span
+                                                    ><span
+                                                        ><Localized
+                                                            id="main-nav-invite-friends"
+                                                        /></span
                                                     ></ButtonSmall
                                                 >
                                             </div>
@@ -342,7 +350,10 @@
                                                 tag="button"
                                                 className="w-full"
                                                 on:click={handleLogout}
-                                                ><span class="mr-1">Logout</span
+                                                ><span class="mr-1"
+                                                    ><Localized
+                                                        id="main-nav-logout"
+                                                    /></span
                                                 ><LogOutIcon
                                                     size="24"
                                                 /></ButtonSmall

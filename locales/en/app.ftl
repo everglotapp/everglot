@@ -15,3 +15,9 @@ sidebar-controls-audio = Audio
 sidebar-controls-toggle-on = On
 sidebar-controls-toggle-off = Off
 sidebar-start-call = Start Call
+
+main-nav-global = Global
+main-nav-groups = Groups
+main-nav-profile = Profile
+main-nav-invite-friends = Invite Friends
+main-nav-logout = Logout

@@ -16,7 +16,7 @@ import {
 
 import { performQuery } from "../gql"
 
-import { hangmanGames } from "./hangman"
+import { HANGMAN_LANGUAGES, hangmanGames } from "./hangman"
 import type { HangmanLanguage } from "./hangman"
 
 import type { Pool } from "pg"
@@ -122,19 +122,12 @@ export function start(server: Server, pool: Pool) {
                     )
             }
 
-            // TODO: Get language from group.
-            if (["de", "en"].includes(alpha2)) {
+            if (HANGMAN_LANGUAGES.includes(alpha2)) {
                 const hangman = hangmanGames[alpha2 as HangmanLanguage]
                 if (hangman.running) {
-                    if (alpha2 === "de") {
-                        bots[chatUser.groupUuid].sendMessage(
-                            `Aktuelles Wort: ${hangman.publicWord}`
-                        )
-                    } else {
-                        bots[chatUser.groupUuid].sendMessage(
-                            `Current word: ${hangman.publicWord}`
-                        )
-                    }
+                    bots[chatUser.groupUuid].send("hangman-current-word", {
+                        word: hangman.publicWord,
+                    })
                 }
             }
         })
@@ -197,17 +190,9 @@ export function start(server: Server, pool: Pool) {
                 const alpha2 = group.groupByUuid?.language?.alpha2
 
                 if (msg.startsWith("!help")) {
-                    if (alpha2 === "de") {
-                        bots[chatUser.groupUuid].sendMessage(
-                            "Verfügbare Befehle: !hangman, !help"
-                        )
-                    } else {
-                        bots[chatUser.groupUuid].sendMessage(
-                            "Available commands: !hangman, !help"
-                        )
-                    }
+                    bots[chatUser.groupUuid].send("available-commands")
                     return
-                } else if (Object.keys(hangmanGames).includes(alpha2)) {
+                } else if (HANGMAN_LANGUAGES.includes(alpha2)) {
                     const hangman = hangmanGames[alpha2 as HangmanLanguage]
                     if (hangman.running) {
                         if (msg.length === 1) {
@@ -216,57 +201,39 @@ export function start(server: Server, pool: Pool) {
                                 hangman.letterAvailable(msg)
                             ) {
                                 hangman.pickLetter(msg)
-                                if (alpha2 === "de") {
-                                    bots[chatUser.groupUuid].sendMessage(
-                                        `Aktuelles Wort: ${hangman.publicWord}`
-                                    )
-                                } else {
-                                    bots[chatUser.groupUuid].sendMessage(
-                                        `Current word: ${hangman.publicWord}`
-                                    )
-                                }
-                                if (hangman.nextRound()) {
-                                    if (alpha2 === "de") {
-                                        bots[chatUser.groupUuid].sendMessage(
-                                            `Du hast richtig geraten! Hier ist das nächste Wort: ${hangman.publicWord}`
-                                        )
-                                    } else {
-                                        bots[chatUser.groupUuid].sendMessage(
-                                            `You guessed correctly! Here's the next word: ${hangman.publicWord}`
-                                        )
+                                bots[chatUser.groupUuid].send(
+                                    "hangman-current-word",
+                                    {
+                                        word: hangman.publicWord,
                                     }
+                                )
+                                if (hangman.nextRound()) {
+                                    bots[chatUser.groupUuid].send(
+                                        "hangman-guessed-correctly",
+                                        {
+                                            nextWord: hangman.publicWord,
+                                        }
+                                    )
                                 }
                             }
                         }
                     }
                     if (msg.startsWith("!hangman")) {
                         if (hangman.running) {
-                            if (alpha2 === "de") {
-                                bots[chatUser.groupUuid].sendMessage(
-                                    "Es läuft bereits ein Hangman-Spiel."
-                                )
-                            } else {
-                                bots[chatUser.groupUuid].sendMessage(
-                                    "Hangman is already running."
-                                )
-                            }
+                            bots[chatUser.groupUuid].send(
+                                "hangman-already-running"
+                            )
                         } else {
                             hangman.start()
-                            if (alpha2 === "de") {
-                                bots[chatUser.groupUuid].sendMessage(
-                                    `Wir fangen ein Hangman-Spiel an: ${hangman.publicWord}`
-                                )
-                            } else {
-                                bots[chatUser.groupUuid].sendMessage(
-                                    `Started a hangman game: ${hangman.publicWord}`
-                                )
-                            }
+                            bots[chatUser.groupUuid].send("hangman-started", {
+                                word: hangman.publicWord,
+                            })
                         }
                     }
                 } else {
                     if (msg.startsWith("!hangman")) {
-                        bots[chatUser.groupUuid].sendMessage(
-                            "So far, hangman is only supported in English and German."
+                        bots[chatUser.groupUuid].send(
+                            "hangman-lang-not-supported"
                         )
                     }
                 }
@@ -280,9 +247,9 @@ export function start(server: Server, pool: Pool) {
                 return
             }
 
-            bots[chatUser.groupUuid].sendMessage(
-                `${chatUser.user.username} has left the chat`
-            )
+            bots[chatUser.groupUuid].send("user-left", {
+                username: chatUser.user.username || "?",
+            })
         })
     })
 }

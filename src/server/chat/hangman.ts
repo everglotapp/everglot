@@ -163,3 +163,4 @@ export let hangmanGames: Record<HangmanLanguage, HangmanGame> = {
     en: new HangmanGame("en"),
     de: new HangmanGame("de"),
 }
+export const HANGMAN_LANGUAGES = Object.keys(hangmanGames)

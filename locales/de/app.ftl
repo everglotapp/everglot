@@ -1,13 +1,11 @@
 panel-games = Spiele
 panel-subtitles = Untertitel
-
 submit-form-join-group = Gruppe beitreten
-
 sidebar-members = Mitglieder
 sidebar-members-join-group = Gruppe beitreten
 sidebar-members-nobody-prompt =
-    <p data-l10n-name="nobody">Niemand ist hier 😥</p>
-    <p data-l10n-name="prompt">Why don't you go ahead and join this group to get the ball rolling? Somebody always has to go first!</p>
+    <p data-l10n-name="nobody">Bisher ist niemand hier 😥</p>
+    <p data-l10n-name="prompt">Nutze doch die Gelegenheit und tritt der Gruppe bei. Irgendjemand muss immer den ersten Schritt wagen!</p>
 sidebar-controls = Einstellungen
 sidebar-controls-display = Anzeige
 sidebar-controls-mic = Mikro

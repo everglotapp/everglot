@@ -38,18 +38,48 @@ const chlog = log.child({
     namespace: "chat",
 })
 
-let resource = new FluentResource(
-    readFileSync(
-        path.resolve(__dirname, "../../../locales/en/bot.ftl"),
-        "utf-8"
-    )
-)
+type SupportedLocale = "en" | "de"
+const SUPPORTED_LOCALES = ["en", "de"]
 
-let bundle = new FluentBundle(["en", "de"])
-let errors = bundle.addResource(resource)
-if (errors.length) {
-    chlog.error(`Failed to load fluent resource: ${JSON.stringify(errors)}`)
+// Store all translations as a simple object which is available
+// synchronously and bundled with the rest of the code.
+const RESOURCES: Record<SupportedLocale, FluentResource> = {
+    en: new FluentResource(
+        readFileSync(
+            path.resolve(__dirname, "../../../locales/en/bot.ftl"),
+            "utf-8"
+        )
+    ),
+    de: new FluentResource(
+        readFileSync(
+            path.resolve(__dirname, "../../../locales/de/bot.ftl"),
+            "utf-8"
+        )
+    ),
 }
+
+const BUNDLES: Record<SupportedLocale, FluentBundle> = SUPPORTED_LOCALES.reduce(
+    (map, locale: SupportedLocale) => {
+        const bundle = map[locale]
+        const errors = bundle.addResource(RESOURCES[locale])
+        if (errors.length) {
+            chlog
+                .child({
+                    errors,
+                })
+                .error(`Failed to load fluent resource`)
+            process.exit(1)
+        }
+        return {
+            ...map,
+            [locale]: bundle,
+        }
+    },
+    {
+        en: new FluentBundle("en"),
+        de: new FluentBundle("de"),
+    }
+)
 
 export function start(server: Server, pool: Pool) {
     const io = new SocketIO(server)
@@ -113,6 +143,10 @@ export function start(server: Server, pool: Pool) {
                 return
             }
             const alpha2 = group.groupByUuid?.language?.alpha2
+            const locale = SUPPORTED_LOCALES.includes(alpha2)
+                ? (alpha2 as SupportedLocale)
+                : "en"
+            const bundle = BUNDLES[locale]
             const chatUser = userJoin(socket.id, res.data.user, groupUuid)
             socket.join(groupUuid)
             if (userIsNew(chatUser) && chatUser?.user?.username) {

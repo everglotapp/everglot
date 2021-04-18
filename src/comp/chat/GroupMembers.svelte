@@ -45,7 +45,9 @@
 </script>
 
 {#if $allGroupsStore.error}
-    <ErrorMessage>Failed to load group information</ErrorMessage>
+    <ErrorMessage>
+        <Localized id="chat-sidebar-members-error" />
+    </ErrorMessage>
 {:else}
     <ul class="users">
         {#if !$allGroupsStore.data || (!$chatUsers.length && $groupChatStore.fetching)}
@@ -56,7 +58,7 @@
             <div class="bg-gray-lightest mx-auto h-8 mb-1" />
         {:else if $currentGroupIsGlobal && !$chatUsers.length && $groupChatStore.data && !$groupChatStore.error}
             <div class="text-center py-5 font-bold text-base text-gray-bitdark">
-                <Overlay id="sidebar-members-nobody-prompt">
+                <Overlay id="chat-sidebar-members-nobody-prompt">
                     <p data-l10n-name="nobody" />
                     <p data-l10n-name="prompt" />
                 </Overlay>
@@ -67,7 +69,9 @@
                     tag="button"
                     variant="OUTLINED"
                     on:click={handleJoinGroup}
-                    ><Localized id="sidebar-members-join-group" /></ButtonSmall
+                    ><Localized
+                        id="chat-sidebar-members-join-group"
+                    /></ButtonSmall
                 >
             </div>
         {:else if $currentGroupIsGlobal}
@@ -96,14 +100,16 @@
                             className="w-full justify-center"
                             tag="button"
                             variant="OUTLINED"
-                            on:click={handleJoinGroup}>Join group</ButtonSmall
+                            on:click={handleJoinGroup}
                         >
+                            <Localized id="chat-sidebar-members-join-group" />
+                        </ButtonSmall>
                     </div>
                 {/if}
             </div>
         {:else}
             <h4 class="text-gray-bitdark text-sm font-bold text-left mb-1">
-                Learners
+                <Localized id="chat-sidebar-members-native" />
             </h4>
             <div class="mb-4">
                 {#each $chatLearners as user, i (user.uuid)}
@@ -126,7 +132,7 @@
                 {/each}
             </div>
             <h4 class="text-gray-bitdark text-sm font-bold text-left mb-1">
-                Native Speakers
+                <Localized id="chat-sidebar-members-native" />
             </h4>
             <div>
                 {#each $chatNativeSpeakers as user, i (user.uuid)}

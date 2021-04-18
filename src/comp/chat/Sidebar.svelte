@@ -18,11 +18,15 @@
 
 <div class="sidebar">
     <div class="users-container py-3 px-4 text-lg w-full mb-4">
-        <SidebarHeadline><Localized id="sidebar-members" /></SidebarHeadline>
+        <SidebarHeadline
+            ><Localized id="chat-sidebar-members" /></SidebarHeadline
+        >
         <GroupMembers />
     </div>
     <div class="toggles py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4">
-        <SidebarHeadline><Localized id="sidebar-controls" /></SidebarHeadline>
+        <SidebarHeadline
+            ><Localized id="chat-sidebar-controls" /></SidebarHeadline
+        >
         <div class="toggle-row">
             <svg
                 width="35"
@@ -36,13 +40,13 @@
                     fill="#45CDCD"
                 />
             </svg>
-            <span><Localized id="sidebar-controls-display" /></span>
+            <span><Localized id="chat-sidebar-controls-display" /></span>
             <div class="toggle" on:click={handleToggleSplit}>
                 <div aria-selected={split}>
-                    <Localized id="sidebar-controls-toggle-on" />
+                    <Localized id="chat-sidebar-controls-toggle-on" />
                 </div>
                 <div aria-selected={!split}>
-                    <Localized id="sidebar-controls-toggle-off" />
+                    <Localized id="chat-sidebar-controls-toggle-off" />
                 </div>
             </div>
         </div>
@@ -96,17 +100,17 @@
                         </clipPath>
                     </defs>
                 </svg>
-                <span><Localized id="sidebar-controls-mic" /></span>
+                <span><Localized id="chat-sidebar-controls-mic" /></span>
                 <div
                     class="toggle"
                     style="cursor: not-allowed;"
                     on:click={handleToggleMic}
                 >
                     <div aria-selected={mic}>
-                        <Localized id="sidebar-controls-toggle-on" />
+                        <Localized id="chat-sidebar-controls-toggle-on" />
                     </div>
                     <div aria-selected={!mic}>
-                        <Localized id="sidebar-controls-toggle-off" />
+                        <Localized id="chat-sidebar-controls-toggle-off" />
                     </div>
                 </div>
             </div>
@@ -123,20 +127,20 @@
                         fill="#45CDCD"
                     />
                 </svg>
-                <span><Localized id="sidebar-controls-audio" /></span>
+                <span><Localized id="chat-sidebar-controls-audio" /></span>
                 <div class="toggle" on:click={handleToggleAudio}>
                     <div aria-selected={audio}>
-                        <Localized id="sidebar-controls-toggle-on" />
+                        <Localized id="chat-sidebar-controls-toggle-on" />
                     </div>
                     <div aria-selected={!audio}>
-                        <Localized id="sidebar-controls-toggle-off" />
+                        <Localized id="chat-sidebar-controls-toggle-off" />
                     </div>
                 </div>
             </div>
         {:else}
             <div class="flex justify-center">
                 <ButtonLarge tag="button" on:click={handleCall} variant="TEXT"
-                    ><Localized id="sidebar-start-call" /></ButtonLarge
+                    ><Localized id="chat-sidebar-start-call" /></ButtonLarge
                 >
             </div>
         {/if}

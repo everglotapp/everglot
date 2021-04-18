@@ -1,11 +1,12 @@
 <script lang="ts">
     import { scale } from "svelte/transition"
+    import { query } from "@urql/svelte"
+
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import SidebarHeadline from "../comp/typography/SidebarHeadline.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
-
-    import { query } from "@urql/svelte"
 
     import { groupUuid } from "../stores"
     import {
@@ -48,7 +49,7 @@
 </svelte:head>
 
 <div
-    class="container flex gap-x-4 flex-wrap justify-center md:justify-start py-4 md:py-16 w-full max-w-sm md:max-w-4xl"
+    class="container flex gap-x-4 flex-wrap justify-center md:justify-start py-4 md:py-12 w-full max-w-sm md:max-w-4xl"
 >
     {#if $allGroupsStore.fetching}
         <div />
@@ -59,7 +60,9 @@
     {:else}
         <div class="sidebar">
             <div class="languages-container px-4 text-lg w-full mb-4">
-                <SidebarHeadline>Language</SidebarHeadline>
+                <SidebarHeadline
+                    ><Localized id="global-sidebar-language" /></SidebarHeadline
+                >
                 <div class="languages" role="tablist">
                     <button
                         on:click={() => (lang = "en")}
@@ -80,7 +83,7 @@
             </div>
         </div>
         <div
-            class="groups text-xl font-light p-8 rounded-xl text-center justify-center shadow-sm"
+            class="groups text-xl font-light p-8 rounded-xl text-center justify-center"
             role="tabpanel"
         >
             {#each groups[lang] as group (group.uuid)}
@@ -100,7 +103,12 @@
                             >{group.groupName}</span
                         >
                         <span class="members-count"
-                            >{group.groupUsers.totalCount} members</span
+                            ><Localized
+                                id="global-group-members-count"
+                                args={{
+                                    membersCount: group.groupUsers.totalCount,
+                                }}
+                            /></span
                         ></ButtonLarge
                     >
                 </div>

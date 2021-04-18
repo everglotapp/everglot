@@ -2,7 +2,9 @@
     import { scale } from "svelte/transition"
     import { svelteTime } from "svelte-time"
 
-    import { currentUser, currentUserStore } from "../../stores"
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
+
+    import { currentUser } from "../../stores"
     import { chatUsers } from "../../stores/chat"
 
     import Avatar from "../users/Avatar.svelte"
@@ -114,7 +116,11 @@
                     {#if user?.username}
                         <span class="username mr-2">{user.username}</span>
                     {:else}
-                        <span class="username mr-2 italic">unknown</span>
+                        <span class="username mr-2 italic"
+                            ><Localized
+                                id="chat-message-username-unknown"
+                            /></span
+                        >
                     {/if}
                 {:else}
                     <span class="username bot mr-2">Everglot Bot</span>
@@ -154,7 +160,7 @@
                         color="SECONDARY"
                         tag="button"
                         on:click={() => (showMore = false)}
-                        >Show less</ButtonSmall
+                        ><Localized id="chat-message-show-less" /></ButtonSmall
                     >
                 {:else}
                     <ButtonSmall
@@ -163,7 +169,7 @@
                         color="SECONDARY"
                         tag="button"
                         on:click={() => (showMore = true)}
-                        >Show more</ButtonSmall
+                        ><Localized id="chat-message-show-more" /></ButtonSmall
                     >
                 {/if}
             </div>

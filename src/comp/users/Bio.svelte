@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
+
     import { chatUsers } from "../../stores/chat"
 
     import Avatar from "./Avatar.svelte"

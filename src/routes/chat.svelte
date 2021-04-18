@@ -508,11 +508,13 @@
                                             <div
                                                 class="text-lg py-1 px-3 bg-primary text-white rounded-tl-md rounded-tr-md"
                                             >
-                                                <Localized id="panel-games" />
+                                                <Localized
+                                                    id="chat-panel-games"
+                                                />
                                             </div>
                                             <div class="text-lg py-1 px-3">
                                                 <Localized
-                                                    id="panel-subtitles"
+                                                    id="chat-panel-subtitles"
                                                 />
                                             </div>
                                         </div>
@@ -566,7 +568,7 @@
                                                         }
                                                     }}
                                                     ><Localized
-                                                        id="submit-form-join-group"
+                                                        id="chat-submit-form-join-group"
                                                     />
                                                 </ButtonLarge>
                                             {:else if joinedRoom}
@@ -584,7 +586,9 @@
                                                     className="ml-4 px-6"
                                                     tag="button"
                                                     on:click={handleSendMessage}
-                                                    >Send<ChevronsRightIcon
+                                                    ><Localized
+                                                        id="chat-submit-form-send"
+                                                    /><ChevronsRightIcon
                                                         size="24"
                                                         class="ml-1"
                                                     /></ButtonSmall
@@ -593,7 +597,9 @@
                                                 <div
                                                     class="w-full h-full font-bold text-center text-lg text-gray-bitdark"
                                                 >
-                                                    Connecting …
+                                                    <Localized
+                                                        id="chat-submit-form-connecting"
+                                                    />
                                                 </div>
                                             {/if}
                                         </form>

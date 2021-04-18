@@ -1,19 +1,19 @@
 -brand-name = Everglot
-panel-games = Games
-panel-subtitles = Subtitles
-submit-form-join-group = Join Group
-sidebar-members = Members
-sidebar-members-join-group = Join Group
-sidebar-members-nobody-prompt =
+chat-panel-games = Games
+chat-panel-subtitles = Subtitles
+chat-submit-form-join-group = Join Group
+chat-sidebar-members = Members
+chat-sidebar-members-join-group = Join Group
+chat-sidebar-members-nobody-prompt =
     <p data-l10n-name="nobody">So far nobody is here 😥</p>
     <p data-l10n-name="prompt">Why don't you go ahead and join this group to get the ball rolling? Somebody always has to go first!</p>
-sidebar-controls = Controls
-sidebar-controls-display = Display
-sidebar-controls-mic = Mic
-sidebar-controls-audio = Audio
-sidebar-controls-toggle-on = On
-sidebar-controls-toggle-off = Off
-sidebar-start-call = Start Call
+chat-sidebar-controls = Controls
+chat-sidebar-controls-display = Display
+chat-sidebar-controls-mic = Mic
+chat-sidebar-controls-audio = Audio
+chat-sidebar-controls-toggle-on = On
+chat-sidebar-controls-toggle-off = Off
+chat-sidebar-start-call = Start Call
 main-nav-global = Global
 main-nav-groups = Groups
 main-nav-profile = Profile
@@ -25,7 +25,7 @@ signup-success-msg =
     We will send you an email when we have sorted you into a language group.
     In the meantime, you can explore the platform.
 signup-success-explore = Explore Global Channels
-invite-modal-msg = Send this link to your friends to invite them to join Everglot!
+invite-modal-msg = Send this link to your friends to invite them to join { -brand-name }!
 invite-modal-close = Close
 invite-modal-copy = Copy Link
 invite-modal-copy-success = Copied
@@ -86,3 +86,17 @@ signup-form-gender-female = Female
 signup-form-gender-male = Male
 signup-form-gender-other = Other
 signup-form-submit = Next
+chat-message-username-unknown = unknown
+chat-message-show-less = Show less
+chat-message-show-more = Show more
+chat-submit-form-send = Send
+chat-submit-form-connecting = Connecting …
+footer-privacy = Privacy
+footer-imprint = Imprint
+user-bio-languages-title = Languages
+user-bio-error = Error
+global-sidebar-language = Language
+global-group-members-count = { $membersCount } { $membersCount ->
+    [one] member
+    *[other] members
+}

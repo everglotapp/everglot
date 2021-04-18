@@ -103,3 +103,16 @@ global-group-members-count = { $membersCount } { $membersCount ->
     [one] member
     *[other] members
 }
+profile-title = My Profile
+profile-error = Failed to load your profile
+profile-email = Email
+profile-change-password = Change my password
+profile-username = Username
+profile-gender = Gender
+profile-gender-male = Male
+profile-gender-female = Female
+profile-gender-other = Other
+profile-gender-unknown = Unknown
+profile-languages = My Languages
+profile-language-native-hint = (Native)
+profile-groups = My Groups

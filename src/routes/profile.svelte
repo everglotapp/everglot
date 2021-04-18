@@ -1,6 +1,8 @@
 <script lang="ts">
     import { scale } from "svelte/transition"
 
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
+
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import PageTitle from "../comp/typography/PageTitle.svelte"
@@ -36,26 +38,30 @@
     {#if $userProfileStore.fetching}
         <div />
     {:else if $userProfileStore.error}
-        <ErrorMessage>Failed to load your profile</ErrorMessage>
+        <ErrorMessage><Localized id="profile-error" /></ErrorMessage>
     {:else}
-        <PageTitle>My Profile</PageTitle>
+        <PageTitle><Localized id="profile-title" /></PageTitle>
         <div class="flex flex-row flex-wrap-reverse">
             <div class="w-full md:w-2/3">
-                <h4>Email:</h4>
+                <h4><Localized id="profile-email" /></h4>
                 <div class="mb-4">{userProfile?.email}</div>
-                <div><a href="/changepassword">Change my password</a></div>
-                <h4>Username:</h4>
+                <div>
+                    <a href="/changepassword">
+                        <Localized id="profile-change-password" />
+                    </a>
+                </div>
+                <h4><Localized id="profile-username" /></h4>
                 <div>{userProfile?.username}</div>
-                <h4>Gender:</h4>
+                <h4><Localized id="profile-gender" /></h4>
                 <div>
                     {#if userProfile?.gender == Gender.MALE}
-                        Male
+                        <Localized id="profile-gender-male" />
                     {:else if userProfile?.gender == Gender.FEMALE}
-                        Female
+                        <Localized id="profile-gender-female" />
                     {:else if userProfile?.gender == Gender.OTHER}
-                        Other
+                        <Localized id="profile-gender-other" />
                     {:else}
-                        Unknown
+                        <Localized id="profile-gender-unknown" />
                     {/if}
                 </div>
             </div>
@@ -74,13 +80,13 @@
             </div>
         </div>
         <div class="container">
-            <h4>My Languages:</h4>
+            <h4><Localized id="profile-languages" /></h4>
             <ul>
                 {#each userLanguages as language}
                     <li>
                         {language.language?.englishName}
                         {#if language?.native}
-                            (Native)
+                            <Localized id="profile-language-native-hint" />
                         {:else}
                             ({language?.languageSkillLevel?.name})
                         {/if}
@@ -88,7 +94,7 @@
                 {/each}
             </ul>
 
-            <h4>My Groups:</h4>
+            <h4><Localized id="profile-groups" /></h4>
             <ul>
                 {#each groupUsers as group}
                     <li>

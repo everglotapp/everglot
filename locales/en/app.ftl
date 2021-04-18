@@ -1,4 +1,13 @@
+# Everglot Web Application
+## Global terms and phrases
 -brand-name = Everglot
+# Note: This is a placeholder for values that we need to
+#       fill because svelte-fluent currently does not support
+#       empty values.
+-empty = _
+## Chat page
+chat-head = { -empty }
+    .title = { -brand-name } – Language Community
 chat-panel-games = Games
 chat-panel-subtitles = Subtitles
 chat-submit-form-join-group = Join Group
@@ -17,32 +26,53 @@ chat-sidebar-controls-audio = Audio
 chat-sidebar-controls-toggle-on = On
 chat-sidebar-controls-toggle-off = Off
 chat-sidebar-start-call = Start Call
+chat-submit-form-send = Send
+chat-submit-form-connecting = Connecting …
+chat-submit-form-input = { -empty }
+    .placeholder = Enter text message …
+chat-message-username-unknown = unknown
+chat-message-show-less = Show less
+chat-message-show-more = Show more
+## Main Navigation
 main-nav-global = Global
 main-nav-groups = Groups
 main-nav-profile = Profile
 main-nav-invite-friends = Invite Friends
 main-nav-logout = Logout
+## Signup successful page
+signup-success-head = { -empty }
+    .title = Success – { -brand-name }
 signup-success-title = Success!
 signup-success-msg =
     You have been added to the waiting list.
     We will send you an email when we have sorted you into a language group.
     In the meantime, you can explore the platform.
 signup-success-explore = Explore Global Channels
+## Invite Modal
 invite-modal-msg = Send this link to your friends to invite them to join { -brand-name }!
 invite-modal-close = Close
 invite-modal-copy = Copy Link
 invite-modal-copy-success = Copied
 invite-modal-copy-failed = Failed to copy
+## Login page
+login-head = { -empty }
+    .title = Login – { -brand-name }
 login-title = Login to { -brand-name }
 login-form-email = Email
 login-form-password = Password
 login-form-submit = Login
 login-form-signup = I don't have an account
+## Join page
+join-head = { -empty }
+    .title = Join – { -brand-name }
 join-title = Join { -brand-name }
 join-form-email = Email
 join-form-password = Password
 join-form-submit = Create a new account
 join-form-login = I already have an account
+## Signup page
+signup-head = { -empty }
+    .title = Sign Up – { -brand-name }
 signup-title = Tell us a little bit about yourself
 signup-form-username-label = Pick a username*
 signup-form-username-helper = The others will see you under this name.
@@ -89,20 +119,23 @@ signup-form-gender-female = Female
 signup-form-gender-male = Male
 signup-form-gender-other = Other
 signup-form-submit = Next
-chat-message-username-unknown = unknown
-chat-message-show-less = Show less
-chat-message-show-more = Show more
-chat-submit-form-send = Send
-chat-submit-form-connecting = Connecting …
+## Footer component
 footer-privacy = Privacy
 footer-imprint = Imprint
+## User Bio component
 user-bio-languages-title = Languages
 user-bio-error = Error
+## Global page
+global-head = { -empty }
+    .title = Global – { -brand-name }
 global-sidebar-language = Language
 global-group-members-count = { $membersCount } { $membersCount ->
     [one] member
     *[other] members
 }
+## Profile page
+profile-head = { -empty }
+    .title = My Profile – { -brand-name }
 profile-title = My Profile
 profile-error = Failed to load your profile
 profile-email = Email

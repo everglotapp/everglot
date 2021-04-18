@@ -45,7 +45,9 @@
 </script>
 
 <svelte:head>
-    <title>Global – Everglot</title>
+    <Localized id="global-head" let:attrs>
+        <title>{attrs.title}</title>
+    </Localized>
 </svelte:head>
 
 <div

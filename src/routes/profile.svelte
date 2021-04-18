@@ -31,14 +31,18 @@
 </script>
 
 <svelte:head>
-    <title>My Profile – Everglot</title>
+    <Localized id="profile-head" let:attrs>
+        <title>{attrs.title}</title>
+    </Localized>
 </svelte:head>
 
 <div class="container gap-x-4 py-16 px-2 w-full max-w-sm md:max-w-md">
     {#if $userProfileStore.fetching}
         <div />
     {:else if $userProfileStore.error}
-        <ErrorMessage><Localized id="profile-error" /></ErrorMessage>
+        <ErrorMessage>
+            <Localized id="profile-error" />
+        </ErrorMessage>
     {:else}
         <PageTitle><Localized id="profile-title" /></PageTitle>
         <div class="flex flex-row flex-wrap-reverse">

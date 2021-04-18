@@ -109,13 +109,17 @@
 </script>
 
 <svelte:head>
-    <title>Login – Everglot</title>
+    <Localized id="login-head" let:attrs>
+        <title>{attrs.title}</title>
+    </Localized>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id" content={GOOGLE_SIGNIN_CLIENT_ID} />
 </svelte:head>
 
 <div class="container px-4 mx-auto mt-16 mb-32 max-w-sm">
-    <PageTitle><Localized id="login-title" /></PageTitle>
+    <PageTitle>
+        <Localized id="login-title" />
+    </PageTitle>
 
     {#if errorMessage}
         <ErrorMessage>{errorMessage}</ErrorMessage>

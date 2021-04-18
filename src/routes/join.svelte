@@ -101,13 +101,17 @@
 </script>
 
 <svelte:head>
-    <title>Join – Everglot</title>
+    <Localized id="join-head" let:attrs>
+        <title>{attrs.title}</title>
+    </Localized>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id" content={GOOGLE_SIGNIN_CLIENT_ID} />
 </svelte:head>
 
 <div class="container px-4 mx-auto my-16 max-w-sm">
-    <PageTitle><Localized id="join-title" /></PageTitle>
+    <PageTitle>
+        <Localized id="join-title" />
+    </PageTitle>
 
     {#if errorMessage}
         <ErrorMessage>{errorMessage}</ErrorMessage>

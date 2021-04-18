@@ -438,7 +438,9 @@
 </script>
 
 <svelte:head>
-    <title>Everglot – Language Community</title>
+    <Localized id="chat-head" let:attrs>
+        <title>{attrs.title}</title>
+    </Localized>
 </svelte:head>
 
 {#if !$groupChatStore.fetching && $groupChatStore.error}
@@ -572,16 +574,23 @@
                                                     />
                                                 </ButtonLarge>
                                             {:else if joinedRoom}
-                                                <input
-                                                    id="send-msg-input"
-                                                    type="text"
-                                                    placeholder="Enter text message …"
-                                                    required
-                                                    autocomplete="off"
-                                                    class="border-none shadow-md px-4 py-4 w-full rounded-md"
-                                                    bind:value={msg}
-                                                    in:scale={{ duration: 200 }}
-                                                />
+                                                <Localized
+                                                    id="chat-submit-form-input"
+                                                    let:attrs
+                                                >
+                                                    <input
+                                                        id="send-msg-input"
+                                                        type="text"
+                                                        placeholder={attrs.placeholder}
+                                                        required
+                                                        autocomplete="off"
+                                                        class="border-none shadow-md px-4 py-4 w-full rounded-md"
+                                                        bind:value={msg}
+                                                        in:scale={{
+                                                            duration: 200,
+                                                        }}
+                                                    />
+                                                </Localized>
                                                 <ButtonSmall
                                                     className="ml-4 px-6"
                                                     tag="button"

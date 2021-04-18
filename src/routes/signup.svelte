@@ -222,7 +222,9 @@
 </script>
 
 <svelte:head>
-    <title>Everglot – Language Community</title>
+    <Localized id="signup-head" let:attrs>
+        <title>{attrs.title}</title>
+    </Localized>
 </svelte:head>
 
 {#if $languageCodeMappings.fetching}

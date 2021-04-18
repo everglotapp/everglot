@@ -109,7 +109,7 @@
             </div>
         {:else}
             <h4 class="text-gray-bitdark text-sm font-bold text-left mb-1">
-                <Localized id="chat-sidebar-members-native" />
+                <Localized id="chat-sidebar-members-learners" />
             </h4>
             <div class="mb-4">
                 {#each $chatLearners as user, i (user.uuid)}

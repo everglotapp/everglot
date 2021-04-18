@@ -4,6 +4,7 @@ import log from "../../logger"
 
 import en from "../../../locales/en/bot.ftl"
 import de from "../../../locales/de/bot.ftl"
+import zh from "../../../locales/zh-CN/bot.ftl"
 
 import {
     SUPPORTED_LOCALES,
@@ -45,6 +46,7 @@ export function translate(userLocale: string) {
 const RESOURCES: Record<SupportedLocale, FluentResource> = {
     en,
     de,
+    zh,
 }
 
 const BUNDLES: Record<
@@ -69,5 +71,5 @@ const BUNDLES: Record<
             [locale]: bundle,
         }
     },
-    { en: undefined, de: undefined }
+    { en: undefined, de: undefined, zh: undefined }
 )

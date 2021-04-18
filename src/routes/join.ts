@@ -49,7 +49,7 @@ export async function getTokenIdByToken(
     log.child({ token, tokenId }).trace("Got token ID by token")
     let success = queryResult?.rowCount === 1
     if (!success) {
-        log.child({ queryResult }).debug(`Querying token ID failed`)
+        log.child({ queryResult }).trace(`Querying token ID failed`)
         return null
     }
     return tokenId
@@ -268,7 +268,17 @@ export async function post(req: Request, res: Response, _next: () => void) {
     log.child({ userId }).trace("Tried to insert new user")
     let success = queryResult?.rowCount === 1
     if (!success) {
-        log.child({ queryResult }).info(`User insertion failed`)
+        log.child({
+            queryResult,
+            username,
+            email,
+            hash,
+            uuid,
+            googleId,
+            avatarUrl,
+            locale,
+            inviteTokenId,
+        }).error(`User insertion failed`)
         serverError(res)
         return
     }

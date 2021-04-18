@@ -2,6 +2,8 @@
     import { onMount } from "svelte"
     import { goto } from "@sapper/app"
 
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
+
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
@@ -113,7 +115,7 @@
 </svelte:head>
 
 <div class="container px-4 mx-auto mt-16 mb-32 max-w-sm">
-    <PageTitle>Login to Everglot</PageTitle>
+    <PageTitle><Localized id="login-title" /></PageTitle>
 
     {#if errorMessage}
         <ErrorMessage>{errorMessage}</ErrorMessage>
@@ -126,7 +128,7 @@
         class="bg-white my-8"
     >
         <div class="flex flex-col w-full mb-2">
-            <label for="email">Email</label>
+            <label for="email"><Localized id="login-form-email" /></label>
             <input
                 id="email"
                 type="email"
@@ -137,7 +139,7 @@
             />
         </div>
         <div class="flex flex-col w-full mb-2">
-            <label for="password">Password</label>
+            <label for="password"><Localized id="login-form-password" /></label>
             <input
                 id="password"
                 type="password"
@@ -154,7 +156,8 @@
             type="submit"
             className="w-full justify-center"
             disabled={submitting}
-            on:click={handleSubmit}>Login</ButtonLarge
+            on:click={handleSubmit}
+            ><Localized id="login-form-submit" /></ButtonLarge
         >
         <div
             class="g-signin2 flex justify-center mt-2 mb-1"
@@ -166,7 +169,7 @@
             href="join"
             variant="OUTLINED"
             className="w-full justify-center"
-            >I don't have an account</ButtonLarge
+            ><Localized id="login-form-signup" /></ButtonLarge
         >
     </form>
 </div>

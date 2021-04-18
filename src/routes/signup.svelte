@@ -2,6 +2,8 @@
     import { goto } from "@sapper/app"
     import { scale } from "svelte/transition"
 
+    import { Localized, Overlay } from "@nubolab-ffwd/svelte-fluent"
+
     import type { Language } from "../types/generated/graphql"
     import { query } from "@urql/svelte"
 
@@ -232,7 +234,7 @@
     </p>
 {:else}
     <div class="container max-w-2xl px-4 py-8 md:py-8" in:scale|local>
-        <PageTitle>Tell us a little bit about yourself</PageTitle>
+        <PageTitle><Localized id="signup-title" /></PageTitle>
 
         <form
             name="user-profile"
@@ -242,9 +244,11 @@
         >
             <fieldset class="mb-2">
                 <div class="form-control">
-                    <label for="username">Pick a username*</label>
+                    <label for="username"
+                        ><Localized id="signup-form-username-label" /></label
+                    >
                     <p class="helper-text">
-                        The others will see you under this name.
+                        <Localized id="signup-form-username-helper" />
                     </p>
                     <input
                         type="text"
@@ -260,12 +264,14 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend
-                    >What language(s) are you interested in ({MAX_LEARNING} max)?*</legend
-                >
+                <legend>
+                    <Localized
+                        id="signup-form-learning-label"
+                        args={{ max: MAX_LEARNING }}
+                    />
+                </legend>
                 <p class="helper-text">
-                    Please only choose languages that you really want to learn
-                    or already are learning.
+                    <Localized id="signup-form-learning-helper" />
                 </p>
                 <div class="form-control">
                     <ButtonSmall
@@ -345,20 +351,15 @@
                                     >
                                 </div>
                                 <div>
-                                    <p>
-                                        Everglot can be quite difficult for
-                                        beginners and elementary level learners.
-                                    </p>
-                                    <p>
-                                        You can still continue. Please be aware
-                                        that in the beginning it could be hard
-                                        for you to follow along.
-                                    </p>
+                                    <Overlay id="signup-form-difficult-msg">
+                                        <p data-l10n-name="difficult" />
+                                        <p data-l10n-name="no-problem" />
+                                    </Overlay>
                                 </div>
                             </div>
                         </div>
                     {/if}
-                    {#if learnOther.length === 1}
+                    {#if learnOther.length}
                         <div
                             class="warning-learn-other"
                             in:scale={{ duration: 150, delay: 150 }}
@@ -367,37 +368,17 @@
                             <div class="warning-inner-with-icon">
                                 <div><ClockIcon size="32" /></div>
                                 <div>
-                                    <p>
-                                        Sorry, {learnOther[0].label} is not supported,
-                                        yet.
-                                    </p>
-                                    <p>
-                                        Don't worry, we will place you on a
-                                        waiting list for a {learnOther[0].label}
-                                        study group and notify you as soon as it's
-                                        ready.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>{:else if learnOther.length === 2}
-                        <div
-                            class="warning-learn-other"
-                            in:scale={{ duration: 150, delay: 150 }}
-                            out:scale={{ duration: 150 }}
-                        >
-                            <div class="warning-inner-with-icon">
-                                <div><ClockIcon size="32" /></div>
-                                <div>
-                                    <p>
-                                        Sorry, {learnOther[0].label} and {learnOther[1]
-                                            .label} are not supported, yet.
-                                    </p>
-                                    <p>
-                                        Don't worry, we will place you on a
-                                        waiting list for {learnOther[0].label} and
-                                        {learnOther[1].label} study groups and notify
-                                        you as soon as they're ready.
-                                    </p>
+                                    <Overlay
+                                        id="signup-form-not-supported-msg"
+                                        args={{
+                                            learnCount: learnOther.length,
+                                            lang1: learnOther[0]?.label || "",
+                                            lang2: learnOther[1]?.label || "",
+                                        }}
+                                    >
+                                        <p data-l10n-name="sorry" />
+                                        <p data-l10n-name="no-worries" />
+                                    </Overlay>
                                 </div>
                             </div>
                         </div>
@@ -405,13 +386,14 @@
                 </fieldset>
             {/if}
             <fieldset class="my-4">
-                <legend
-                    >What language(s) could you help others out with ({MAX_TEACHING}
-                    max)?*</legend
-                >
+                <legend>
+                    <Localized
+                        id="signup-form-teaching-label"
+                        args={{ max: MAX_TEACHING }}
+                    />
+                </legend>
                 <p class="helper-text">
-                    These are languages that you either speak natively or on a
-                    near-native level.
+                    <Localized id="signup-form-teaching-helper" />
                 </p>
                 <div class="form-control">
                     <ButtonSmall
@@ -440,10 +422,9 @@
                 </div>
             </fieldset>
             <fieldset class="mb-4">
-                <legend>What gender do you identify as?</legend>
+                <legend><Localized id="signup-form-gender-label" /></legend>
                 <p class="helper-text">
-                    We'll use this information only to optimize group
-                    compositions.
+                    <Localized id="signup-form-gender-helper" />
                 </p>
                 <div class="form-control">
                     <ButtonSmall
@@ -453,14 +434,18 @@
                             ? "FILLED"
                             : "OUTLINED"}
                         on:click={() => toggleGender(Gender.FEMALE)}
-                        >Female</ButtonSmall
+                    >
+                        <Localized
+                            id="signup-form-gender-female"
+                        /></ButtonSmall
                     >
                     <ButtonSmall
                         tag="button"
                         className="mr-1 mb-1"
                         variant={gender === Gender.MALE ? "FILLED" : "OUTLINED"}
                         on:click={() => toggleGender(Gender.MALE)}
-                        >Male</ButtonSmall
+                    >
+                        <Localized id="signup-form-gender-male" /></ButtonSmall
                     >
                     <ButtonSmall
                         tag="button"
@@ -468,7 +453,8 @@
                             ? "FILLED"
                             : "OUTLINED"}
                         on:click={() => toggleGender(Gender.OTHER)}
-                        >Other</ButtonSmall
+                    >
+                        <Localized id="signup-form-gender-other" /></ButtonSmall
                     >
                 </div>
             </fieldset>
@@ -482,7 +468,7 @@
                 className="w-full justify-center"
                 on:click={handleSubmit}
                 disabled={submitting}
-                >Next<ArrowRightIcon
+                ><Localized id="signup-form-submit" /><ArrowRightIcon
                     class="ml-2 self-center"
                     size="24"
                 /></ButtonLarge

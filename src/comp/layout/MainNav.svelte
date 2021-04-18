@@ -10,6 +10,8 @@
     } from "svelte-feather-icons"
     import { query } from "@urql/svelte"
 
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
+
     import Avatar from "../users/Avatar.svelte"
 
     import ButtonSmall from "../util/ButtonSmall.svelte"
@@ -141,7 +143,7 @@
                                 : undefined}
                             href="/global"
                             class="nav-item-with-icon"
-                            ><span>Global</span>
+                            ><span><Localized id="main-nav-global" /></span>
                             <svg
                                 width="32"
                                 height="32"
@@ -234,7 +236,7 @@
                             id="groups-dropdown-clickaway"
                             class="nav-item-with-icon"
                             on:click={handleClickGroups}
-                            ><span>Groups</span>
+                            ><span><Localized id="main-nav-groups" /></span>
                             <svg
                                 width="32"
                                 height="32"
@@ -316,7 +318,10 @@
                                                 color="SECONDARY"
                                                 className="w-full"
                                                 href="/profile"
-                                                ><span>Profile</span
+                                                ><span
+                                                    ><Localized
+                                                        id="main-nav-profile"
+                                                    /></span
                                                 ></ButtonSmall
                                             >
                                         </div>
@@ -330,7 +335,10 @@
                                                     on:click={() => {
                                                         showInviteModal = true
                                                     }}
-                                                    ><span>Invite friends</span
+                                                    ><span
+                                                        ><Localized
+                                                            id="main-nav-invite-friends"
+                                                        /></span
                                                     ></ButtonSmall
                                                 >
                                             </div>
@@ -342,7 +350,10 @@
                                                 tag="button"
                                                 className="w-full"
                                                 on:click={handleLogout}
-                                                ><span class="mr-1">Logout</span
+                                                ><span class="mr-1"
+                                                    ><Localized
+                                                        id="main-nav-logout"
+                                                    /></span
                                                 ><LogOutIcon
                                                     size="24"
                                                 /></ButtonSmall
@@ -382,7 +393,7 @@
     <Modal>
         <div class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg">
             <p class="mb-6 text-center">
-                Send this link to your friends to invite them to join Everglot!
+                <Localized id="invite-modal-msg" />
             </p>
 
             <div
@@ -414,10 +425,11 @@
                     on:click={() => (showInviteModal = false)}
                     variant="TEXT"
                     color="SECONDARY"
-                    className="mr-1">Close</ButtonSmall
+                    className="mr-1"
+                    ><Localized id="invite-modal-close" /></ButtonSmall
                 >
                 <ButtonSmall tag="button" on:click={handleCopyClipboard}
-                    >Copy Link</ButtonSmall
+                    ><Localized id="invite-modal-copy" /></ButtonSmall
                 >
             </div>
             {#if copiedInviteLink !== null}
@@ -434,10 +446,18 @@
                         }`}
                     >
                         {#if copiedInviteLink}
-                            <span class="mr-2 font-bold">Copied</span>
+                            <span class="mr-2 font-bold"
+                                ><Localized
+                                    id="invite-modal-copy-success"
+                                /></span
+                            >
                             <CheckCircleIcon size="24" strokeWidth="3" />
                         {:else}
-                            <span class="mr-2 font-bold">Copying failed</span>
+                            <span class="mr-2 font-bold"
+                                ><Localized
+                                    id="invite-modal-copy-failed"
+                                /></span
+                            >
                             <AlertCircleIcon size="24" strokeWidth="3" />
                         {/if}
                     </div>

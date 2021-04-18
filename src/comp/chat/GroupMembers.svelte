@@ -1,5 +1,6 @@
 <script lang="ts">
     import { mutation } from "@urql/svelte"
+    import { Localized, Overlay } from "@nubolab-ffwd/svelte-fluent"
     import { groupUuid } from "../../stores"
     import {
         currentGroupIsGlobal,
@@ -55,18 +56,18 @@
             <div class="bg-gray-lightest mx-auto h-8 mb-1" />
         {:else if $currentGroupIsGlobal && !$chatUsers.length && $groupChatStore.data && !$groupChatStore.error}
             <div class="text-center py-5 font-bold text-base text-gray-bitdark">
-                <p>So far nobody is here 😥</p>
-                <p>
-                    Why don't you go ahead and join this group to get the ball
-                    rolling? Somebody always has to go first!
-                </p>
+                <Overlay id="sidebar-members-nobody-prompt">
+                    <p data-l10n-name="nobody" />
+                    <p data-l10n-name="prompt" />
+                </Overlay>
             </div>
             <div class="px-8">
                 <ButtonSmall
                     className="w-full justify-center"
                     tag="button"
                     variant="OUTLINED"
-                    on:click={handleJoinGroup}>Join group</ButtonSmall
+                    on:click={handleJoinGroup}
+                    ><Localized id="sidebar-members-join-group" /></ButtonSmall
                 >
             </div>
         {:else if $currentGroupIsGlobal}

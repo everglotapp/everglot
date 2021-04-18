@@ -7,8 +7,11 @@ chat-sidebar-members-join-group = Gruppe beitreten
 chat-sidebar-members-nobody-prompt =
     <p data-l10n-name="nobody">Bisher ist niemand hier 😥</p>
     <p data-l10n-name="prompt">Nutze doch die Gelegenheit und tritt der Gruppe bei. Irgendjemand muss immer den ersten Schritt wagen!</p>
+chat-sidebar-members-error = Infos zur Gruppe konnten nicht geladen werden
+chat-sidebar-members-learners = Lernende
+chat-sidebar-members-native = Muttersprachler
 chat-sidebar-controls = Einstellungen
-chat-sidebar-controls-display = Anzeige
+chat-sidebar-controls-display = 2-spaltig
 chat-sidebar-controls-mic = Mikro
 chat-sidebar-controls-audio = Ton
 chat-sidebar-controls-toggle-on = An
@@ -35,3 +38,31 @@ join-form-login = Ich habe schon einen Account
 signup-title = Erzähl uns ein wenig von dir
 signup-form-username-label = Wähle einen Nutzernamen*
 signup-form-username-helper = Die anderen werden dich unter diesem Namen sehen.
+chat-message-username-unknown = unbekannt
+chat-message-show-less = Weniger anzeigen
+chat-message-show-more = Mehr anzeigen
+chat-submit-form-send = Senden
+chat-submit-form-connecting = Verbinde …
+footer-privacy = Datenschutz
+footer-imprint = Impressum
+user-bio-languages-title = Sprachen
+user-bio-error = Fehler
+global-sidebar-language = Sprache
+global-group-members-count =
+    { $membersCount } { $membersCount ->
+        [one] Mitglied
+       *[other] Mitglieder
+    }
+profile-title = Mein Profil
+profile-error = Profil konnte nicht geladen werden
+profile-email = E-Mail
+profile-change-password = Passwort ändern
+profile-username = Nutzername
+profile-gender = Geschlecht
+profile-gender-male = Männlich
+profile-gender-female = Weiblich
+profile-gender-other = Divers
+profile-gender-unknown = unbekannt
+profile-languages = Meine Sprachen
+profile-language-native-hint = (Muttersprache)
+profile-groups = Meine Gruppen

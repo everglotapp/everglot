@@ -84,5 +84,5 @@ signup-form-gender-helper =
     compositions.
 signup-form-gender-female = Female
 signup-form-gender-male = Male
-signup-form-gender-other = other
+signup-form-gender-other = Other
 signup-form-submit = Next

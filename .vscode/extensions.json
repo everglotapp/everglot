@@ -5,6 +5,7 @@
     "esbenp.prettier-vscode",
     "bradlc.vscode-tailwindcss",
     "stylelint.vscode-stylelint",
-    "graphql.vscode-graphql"
+    "graphql.vscode-graphql",
+    "macabeus.vscode-fluent"
   ]
 }

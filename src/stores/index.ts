@@ -31,3 +31,9 @@ export const userHasCompletedProfile = derived(
 export const languageCodeMappings = operationStore<LanguageCodeMappingsQuery>(
     LanguageCodeMappings
 )
+
+export const userLocale = derived(currentUserStore, ($currentUserStore) =>
+    $currentUserStore.fetching
+        ? null
+        : $currentUserStore.data?.currentUser || null
+)

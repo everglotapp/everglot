@@ -23,6 +23,8 @@
     import zh from "../../locales/zh-CN/app.ftl"
 
     import { currentUserStore, groupUuid } from "../stores"
+    import { allGroupsStore } from "../stores/groups"
+    import { localeToEnforce } from "../stores/locales"
 
     import MainNav from "../comp/layout/MainNav.svelte"
     import Footer from "../comp/layout/Footer.svelte"
@@ -76,6 +78,7 @@
     })
 
     query(currentUserStore)
+    query(allGroupsStore)
 
     export let segment: string | undefined = undefined
     segment = segment // get rid of unused prop warning
@@ -131,13 +134,15 @@
             yield bundle
         }
     }
+
+    $: navigatorLocales =
+        typeof navigator === "undefined" ? [] : navigator.languages
+    $: preferredLocales = $localeToEnforce
+        ? [$localeToEnforce, ...navigatorLocales]
+        : navigatorLocales
 </script>
 
-<FluentProvider
-    bundles={generateBundles(
-        typeof navigator === "undefined" ? [] : navigator.languages
-    )}
->
+<FluentProvider bundles={generateBundles(preferredLocales)}>
     <div id="app" class:noscroll class:with-main-nav={showMainNav}>
         {#if showMainNav}
             <MainNav {segment} />

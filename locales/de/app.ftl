@@ -24,9 +24,9 @@ main-nav-invite-friends = Freunde einladen
 main-nav-logout = Abmelden
 signup-success-title = Prima!
 signup-success-msg =
-    Du bist jetzt auf der Warteliste.
-    Sobald wir für dich eine Gruppe gefunden haben, schicken wir dir eine E-Mail.
-    In der Zwischenzeit kannst du die Plattform schon einmal erkunden.
+    Du stehst jetzt auf der Warteliste.
+    Sobald wir für dich eine Gruppe gefunden haben, schicken wir dir eine Mail.
+    In der Zwischenzeit kannst du die Plattform schon mal erkunden.
 signup-success-explore = Globale Kanäle erkunden
 invite-modal-msg = Schicke diesen Link an deine Freunde, um sie zu { -brand-name } einzuladen!
 invite-modal-close = Schließen

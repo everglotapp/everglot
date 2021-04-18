@@ -278,7 +278,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             avatarUrl,
             locale,
             inviteTokenId,
-        }).error(`User insertion failed`)
+        }).info(`User insertion failed`)
         serverError(res)
         return
     }

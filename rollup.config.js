@@ -65,12 +65,14 @@ export default {
                 ? [
                       {
                           buildStart() {
-                              const locales = fs.readdirSync(
-                                  path.resolve(__dirname, "./locales/")
+                              const localesDir = path.resolve(
+                                  __dirname,
+                                  "./locales/"
                               )
+                              const locales = fs.readdirSync(localesDir)
                               locales.forEach((locale) => {
                                   this.addWatchFile(
-                                      `static/posts/${locale}/app.ftl`
+                                      path.join(localesDir, locale, `app.ftl`)
                                   )
                               })
                           },
@@ -146,12 +148,14 @@ export default {
                 ? [
                       {
                           buildStart() {
-                              const locales = fs.readdirSync(
-                                  path.resolve(__dirname, "./locales/")
+                              const localesDir = path.resolve(
+                                  __dirname,
+                                  "./locales/"
                               )
+                              const locales = fs.readdirSync(localesDir)
                               locales.forEach((locale) => {
                                   this.addWatchFile(
-                                      `static/posts/${locale}/bot.ftl`
+                                      path.join(localesDir, locale, `bot.ftl`)
                                   )
                               })
                           },

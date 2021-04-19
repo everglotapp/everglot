@@ -92,10 +92,6 @@
     onMount(() => {
         // TODO: is this really necessary?
         segment = window.location.pathname.split("/")[1]
-        const group = new URL(window.location.href).searchParams.get("group")
-        if (group && group.length && uuidValidate(group)) {
-            $groupUuid = group
-        }
     })
 
     const timeout = 150
@@ -134,6 +130,26 @@
             yield bundle
         }
     }
+
+    function resolveCurrentGroup() {
+        if (segment !== "chat") {
+            return null
+        }
+        if (typeof window === "undefined") {
+            /**
+             * Prevent loading group data on server-side.
+             */
+            return null
+        }
+        const group = new URL(window.location.href).searchParams.get("group")
+        if (group && group.length && uuidValidate(group)) {
+            return group
+        } else {
+            return null
+        }
+    }
+    // @ts-ignore
+    $: segment, ($groupUuid = resolveCurrentGroup())
 
     $: navigatorLocales =
         typeof navigator === "undefined" ? [] : navigator.languages

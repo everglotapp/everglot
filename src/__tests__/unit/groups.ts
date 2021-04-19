@@ -13,7 +13,7 @@ import { Pool } from "pg"
 const GROUP_LEARNER_SIZE = 4
 const GROUP_NATIVE_SIZE = 2
 
-jest.setTimeout(15000)
+// jest.setTimeout(15000)
 
 async function truncateAllTables(db: Pool) {
     const client = await db.connect()
@@ -86,7 +86,7 @@ describe("groups", () => {
     })
 
     afterAll(async () => {
-        await disconnectFromDatabase()
+        // await disconnectFromDatabase()
     })
 
     test("group forming works", async () => {

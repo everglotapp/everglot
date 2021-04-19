@@ -160,3 +160,7 @@ profile-gender-unknown = unbekannt
 profile-languages = Meine Sprachen
 profile-language-native-hint = (Muttersprache)
 profile-groups = Meine Gruppen
+## Locales
+locale-en = Englisch
+locale-de = Deutsch
+locale-zh = Chinesisch

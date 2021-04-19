@@ -151,12 +151,11 @@ user-bio-error = Error
 global-head = { -empty }
     .title = Global – { -brand-name }
 global-sidebar-language = Language
-global-group-members-count =
-    { $membersCount } { $membersCount ->
-        [one] member
-       *[other] members
-    }
-
+global-group-members-count = { $membersCount } { $membersCount ->
+    [one] member
+    *[other] members
+}
+global-error = Error
 ## Profile page
 
 profile-head = { -empty }
@@ -174,3 +173,7 @@ profile-gender-unknown = Unknown
 profile-languages = My Languages
 profile-language-native-hint = (Native)
 profile-groups = My Groups
+## Locales
+locale-en = English
+locale-de = German
+locale-zh = Chinese

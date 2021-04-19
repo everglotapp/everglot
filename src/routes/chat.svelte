@@ -11,6 +11,7 @@
     import Sidebar from "../comp/chat/Sidebar.svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
+    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
@@ -437,9 +438,9 @@
     $: callInProgress = incoming.length || Object.values(outgoing).some(Boolean)
 </script>
 
-<svelte:head>
-    <title>Everglot – Language Community</title>
-</svelte:head>
+<Localized id="chat-browser-window-title" let:text>
+    <BrowserTitle title={text} />
+</Localized>
 
 {#if !$groupChatStore.fetching && $groupChatStore.error}
     <div class="container max-w-sm my-8">
@@ -572,16 +573,23 @@
                                                     />
                                                 </ButtonLarge>
                                             {:else if joinedRoom}
-                                                <input
-                                                    id="send-msg-input"
-                                                    type="text"
-                                                    placeholder="Enter text message …"
-                                                    required
-                                                    autocomplete="off"
-                                                    class="border-none shadow-md px-4 py-4 w-full rounded-md"
-                                                    bind:value={msg}
-                                                    in:scale={{ duration: 200 }}
-                                                />
+                                                <Localized
+                                                    id="chat-submit-form-input"
+                                                    let:attrs
+                                                >
+                                                    <input
+                                                        id="send-msg-input"
+                                                        type="text"
+                                                        placeholder={attrs.placeholder}
+                                                        required
+                                                        autocomplete="off"
+                                                        class="border-none shadow-md px-4 py-4 w-full rounded-md"
+                                                        bind:value={msg}
+                                                        in:scale={{
+                                                            duration: 200,
+                                                        }}
+                                                    />
+                                                </Localized>
                                                 <ButtonSmall
                                                     className="ml-4 px-6"
                                                     tag="button"

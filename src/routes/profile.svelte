@@ -3,6 +3,7 @@
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
+    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import PageTitle from "../comp/typography/PageTitle.svelte"
@@ -30,15 +31,19 @@
         []
 </script>
 
-<svelte:head>
-    <title>My Profile – Everglot</title>
-</svelte:head>
+<svelte:head />
+
+<Localized id="profile-browser-window-title" let:text>
+    <BrowserTitle title={text} />
+</Localized>
 
 <div class="container gap-x-4 py-16 px-2 w-full max-w-sm md:max-w-md">
     {#if $userProfileStore.fetching}
         <div />
     {:else if $userProfileStore.error}
-        <ErrorMessage><Localized id="profile-error" /></ErrorMessage>
+        <ErrorMessage>
+            <Localized id="profile-error" />
+        </ErrorMessage>
     {:else}
         <PageTitle><Localized id="profile-title" /></PageTitle>
         <div class="flex flex-row flex-wrap-reverse">

@@ -1,4 +1,13 @@
+# Everglot Web Application
+
+
+## Global terms and phrases
+
 -brand-name = Everglot
+
+## Chat page
+
+chat-browser-window-title = { -brand-name } – Sprachgemeinschaft
 chat-panel-games = Spiele
 chat-panel-subtitles = Untertitel
 chat-submit-form-join-group = Gruppe beitreten
@@ -17,32 +26,61 @@ chat-sidebar-controls-audio = Ton
 chat-sidebar-controls-toggle-on = An
 chat-sidebar-controls-toggle-off = Aus
 chat-sidebar-start-call = Anruf starten
+chat-submit-form-send = Senden
+chat-submit-form-connecting = Verbinde …
+chat-submit-form-input = {""}
+    .placeholder = Nachricht eingeben …
+chat-message-username-unknown = unbekannt
+chat-message-show-less = Weniger anzeigen
+chat-message-show-more = Mehr anzeigen
+
+## Main Navigation
+
 main-nav-global = Global
 main-nav-groups = Gruppen
 main-nav-profile = Profil
 main-nav-invite-friends = Freunde einladen
 main-nav-logout = Abmelden
+
+## Signup successful page
+
+signup-success-browser-window-title = Erfolgreich registriert – { -brand-name }
 signup-success-title = Prima!
 signup-success-msg =
     Du stehst jetzt auf der Warteliste.
     Sobald wir für dich eine Gruppe gefunden haben, schicken wir dir eine Mail.
     In der Zwischenzeit kannst du die Plattform schon mal erkunden.
 signup-success-explore = Globale Kanäle erkunden
+
+## Invite Modal
+
 invite-modal-msg = Schicke diesen Link an deine Freunde, um sie zu { -brand-name } einzuladen!
 invite-modal-close = Schließen
 invite-modal-copy = Link kopieren
 invite-modal-copy-success = Kopiert
 invite-modal-copy-failed = Fehler beim Kopieren
+
+## Login page
+
+login-browser-window-title = Einloggen – { -brand-name }
 login-title = Bei { -brand-name } einloggen
 login-form-email = E-Mail
 login-form-password = Passwort
 login-form-submit = Einloggen
 login-form-signup = Ich habe keinen Account
+
+## Join page
+
+join-browser-window-title = Registrieren – { -brand-name }
 join-title = { -brand-name } beitreten
 join-form-email = E-Mail
 join-form-password = Passwort
 join-form-submit = Registrieren
 join-form-login = Ich habe schon einen Account
+
+## Signup page
+
+signup-browser-window-title = Fast fertig – { -brand-name }
 signup-title = Erzähl uns ein wenig von dir
 signup-form-username-label = Wähle einen Nutzernamen*
 signup-form-username-helper = Die anderen werden dich unter diesem Namen sehen.
@@ -74,21 +112,30 @@ signup-form-gender-female = Weiblich
 signup-form-gender-male = Männlich
 signup-form-gender-other = Divers
 signup-form-submit = Weiter
-chat-message-username-unknown = unbekannt
-chat-message-show-less = Weniger anzeigen
-chat-message-show-more = Mehr anzeigen
-chat-submit-form-send = Senden
-chat-submit-form-connecting = Verbinde …
+
+## Footer component
+
 footer-privacy = Datenschutz
 footer-imprint = Impressum
+
+## User Bio component
+
 user-bio-languages-title = Sprachen
 user-bio-error = Fehler
+
+## Global page
+
+global-browser-window-title = Global – { -brand-name }
 global-sidebar-language = Sprache
 global-group-members-count =
     { $membersCount } { $membersCount ->
         [one] Mitglied
        *[other] Mitglieder
     }
+
+## Profile page
+
+profile-browser-window-title = Mein Profil – { -brand-name }
 profile-title = Mein Profil
 profile-error = Profil konnte nicht geladen werden
 profile-email = E-Mail
@@ -102,3 +149,7 @@ profile-gender-unknown = unbekannt
 profile-languages = Meine Sprachen
 profile-language-native-hint = (Muttersprache)
 profile-groups = Meine Gruppen
+## Locales
+locale-en = Englisch
+locale-de = Deutsch
+locale-zh = Chinesisch

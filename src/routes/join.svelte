@@ -4,6 +4,7 @@
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
+    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
@@ -101,13 +102,18 @@
 </script>
 
 <svelte:head>
-    <title>Join – Everglot</title>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id" content={GOOGLE_SIGNIN_CLIENT_ID} />
 </svelte:head>
 
+<Localized id="join-browser-window-title" let:text>
+    <BrowserTitle title={text} />
+</Localized>
+
 <div class="container px-4 mx-auto my-16 max-w-sm">
-    <PageTitle><Localized id="join-title" /></PageTitle>
+    <PageTitle>
+        <Localized id="join-title" />
+    </PageTitle>
 
     {#if errorMessage}
         <ErrorMessage>{errorMessage}</ErrorMessage>

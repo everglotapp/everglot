@@ -4,6 +4,7 @@
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
+    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import SidebarHeadline from "../comp/typography/SidebarHeadline.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
@@ -15,18 +16,18 @@
         groupIsForLanguage,
     } from "../stores/groups"
     import type { GroupNode } from "../stores/groups"
+    import { SUPPORTED_LOCALES } from "../constants"
+    import type { SupportedLocale } from "../constants"
 
     query(allGroupsStore)
 
-    type GroupLanguage = "en" | "de" | "zh"
-
-    let groups: Record<GroupLanguage, GroupNode[]> = {
+    let groups: Record<SupportedLocale, GroupNode[]> = {
         en: [],
         de: [],
         zh: [],
     }
     $: if (!$allGroupsStore.fetching && !$allGroupsStore.error) {
-        groups = ["en", "de", "zh"].reduce(
+        groups = SUPPORTED_LOCALES.reduce(
             (map, lang) => ({
                 ...map,
                 [lang]: $globalGroups.filter((group) =>
@@ -41,12 +42,12 @@
         )
     }
 
-    let lang: "en" | "de" | "zh" = "en"
+    let lang: SupportedLocale = "en"
 </script>
 
-<svelte:head>
-    <title>Global – Everglot</title>
-</svelte:head>
+<Localized id="global-browser-window-title" let:text>
+    <BrowserTitle title={text} />
+</Localized>
 
 <div
     class="container flex gap-x-4 flex-wrap justify-center md:justify-start py-4 md:py-12 w-full max-w-sm md:max-w-4xl"
@@ -54,7 +55,7 @@
     {#if $allGroupsStore.fetching}
         <div />
     {:else if $allGroupsStore.error}
-        error
+        <Localized id="global-error" />
     {:else if !$globalGroups.length}
         <RedirectOnce to={"/signup"} />
     {:else}
@@ -64,21 +65,15 @@
                     ><Localized id="global-sidebar-language" /></SidebarHeadline
                 >
                 <div class="languages" role="tablist">
-                    <button
-                        on:click={() => (lang = "en")}
-                        aria-selected={lang === "en"}
-                        role="tab">English</button
-                    >
-                    <button
-                        on:click={() => (lang = "de")}
-                        aria-selected={lang === "de"}
-                        role="tab">German</button
-                    >
-                    <button
-                        on:click={() => (lang = "zh")}
-                        aria-selected={lang === "zh"}
-                        role="tab">Chinese</button
-                    >
+                    {#each SUPPORTED_LOCALES as locale}
+                        <Localized id={`locale-${locale}`} let:text>
+                            <button
+                                on:click={() => (lang = locale)}
+                                aria-selected={lang === locale}
+                                role="tab">{text}</button
+                            ></Localized
+                        >
+                    {/each}
                 </div>
             </div>
         </div>

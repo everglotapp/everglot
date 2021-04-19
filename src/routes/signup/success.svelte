@@ -1,12 +1,13 @@
 <script lang="ts">
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
+    import BrowserTitle from "../../comp/layout/BrowserTitle.svelte"
     import ButtonLarge from "../../comp/util/ButtonLarge.svelte"
 </script>
 
-<svelte:head>
-    <title>Success – Everglot</title>
-</svelte:head>
+<Localized id="signup-success-browser-window-title" let:text>
+    <BrowserTitle title={text} />
+</Localized>
 
 <div class="container max-w-md text-center px-4 md:px-0">
     <p class="mt-16 mb-12 text-primary text-5xl font-bold">

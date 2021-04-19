@@ -4,15 +4,10 @@
 ## Global terms and phrases
 
 -brand-name = Everglot
-# Note: This is a placeholder for values that we need to
-#       fill because svelte-fluent currently does not support
-#       empty values.
--empty = _
 
 ## Chat page
 
-chat-head = { -empty }
-    .title = { -brand-name } – Language Community
+chat-browser-window-title = { -brand-name } – Language Community
 chat-panel-games = Games
 chat-panel-subtitles = Subtitles
 chat-submit-form-join-group = Join Group
@@ -33,7 +28,8 @@ chat-sidebar-controls-toggle-off = Off
 chat-sidebar-start-call = Start Call
 chat-submit-form-send = Send
 chat-submit-form-connecting = Connecting …
-chat-submit-form-input = { -empty }
+# Chat text message input field
+chat-submit-form-input = {""}
     .placeholder = Enter text message …
 chat-message-username-unknown = unknown
 chat-message-show-less = Show less
@@ -49,8 +45,7 @@ main-nav-logout = Logout
 
 ## Signup successful page
 
-signup-success-head = { -empty }
-    .title = Success – { -brand-name }
+signup-success-browser-window-title = Success – { -brand-name }
 signup-success-title = Success!
 signup-success-msg =
     Stand by while we sort you into a study group. This may take awhile.  We will notify you by email once this process is complete.
@@ -67,8 +62,7 @@ invite-modal-copy-failed = Failed to copy
 
 ## Login page
 
-login-head = { -empty }
-    .title = Login – { -brand-name }
+login-browser-window-title = Login – { -brand-name }
 login-title = Login to { -brand-name }
 login-form-email = Email
 login-form-password = Password
@@ -77,8 +71,7 @@ login-form-signup = I don't have an account
 
 ## Join page
 
-join-head = { -empty }
-    .title = Join – { -brand-name }
+join-browser-window-title = Join – { -brand-name }
 join-title = Join { -brand-name }
 join-form-email = Email
 join-form-password = Password
@@ -87,8 +80,7 @@ join-form-login = I already have an account
 
 ## Signup page
 
-signup-head = { -empty }
-    .title = Sign Up – { -brand-name }
+signup-browser-window-title = Sign Up – { -brand-name }
 signup-title = Tell us a little bit about yourself
 signup-form-username-label = Pick a username*
 signup-form-username-helper = The others will see you under this name.
@@ -148,8 +140,7 @@ user-bio-error = Error
 
 ## Global page
 
-global-head = { -empty }
-    .title = Global – { -brand-name }
+global-browser-window-title = Global – { -brand-name }
 global-sidebar-language = Language
 global-group-members-count = { $membersCount } { $membersCount ->
     [one] member
@@ -158,8 +149,7 @@ global-group-members-count = { $membersCount } { $membersCount ->
 global-error = Error
 ## Profile page
 
-profile-head = { -empty }
-    .title = My Profile – { -brand-name }
+profile-browser-window-title = My Profile – { -brand-name }
 profile-title = My Profile
 profile-error = Failed to load profile
 profile-email = Email

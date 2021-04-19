@@ -4,15 +4,10 @@
 ## Global terms and phrases
 
 -brand-name = Everglot
-# Note: This is a placeholder for values that we need to
-#       fill because svelte-fluent currently does not support
-#       empty values.
--empty = _
 
 ## Chat page
 
-chat-head = { -empty }
-    .title = { -brand-name } – Sprachgemeinschaft
+chat-browser-window-title = { -brand-name } – Sprachgemeinschaft
 chat-panel-games = Spiele
 chat-panel-subtitles = Untertitel
 chat-submit-form-join-group = Gruppe beitreten
@@ -33,7 +28,7 @@ chat-sidebar-controls-toggle-off = Aus
 chat-sidebar-start-call = Anruf starten
 chat-submit-form-send = Senden
 chat-submit-form-connecting = Verbinde …
-chat-submit-form-input = { -empty }
+chat-submit-form-input = {""}
     .placeholder = Nachricht eingeben …
 chat-message-username-unknown = unbekannt
 chat-message-show-less = Weniger anzeigen
@@ -49,8 +44,7 @@ main-nav-logout = Abmelden
 
 ## Signup successful page
 
-signup-success-head = { -empty }
-    .title = Erfolgreich registriert – { -brand-name }
+signup-success-browser-window-title = Erfolgreich registriert – { -brand-name }
 signup-success-title = Prima!
 signup-success-msg =
     Du stehst jetzt auf der Warteliste.
@@ -68,8 +62,7 @@ invite-modal-copy-failed = Fehler beim Kopieren
 
 ## Login page
 
-login-head = { -empty }
-    .title = Einloggen – { -brand-name }
+login-browser-window-title = Einloggen – { -brand-name }
 login-title = Bei { -brand-name } einloggen
 login-form-email = E-Mail
 login-form-password = Passwort
@@ -78,8 +71,7 @@ login-form-signup = Ich habe keinen Account
 
 ## Join page
 
-join-head = { -empty }
-    .title = Registrieren – { -brand-name }
+join-browser-window-title = Registrieren – { -brand-name }
 join-title = { -brand-name } beitreten
 join-form-email = E-Mail
 join-form-password = Passwort
@@ -88,8 +80,7 @@ join-form-login = Ich habe schon einen Account
 
 ## Signup page
 
-signup-head = { -empty }
-    .title = Fast fertig – { -brand-name }
+signup-browser-window-title = Fast fertig – { -brand-name }
 signup-title = Erzähl uns ein wenig von dir
 signup-form-username-label = Wähle einen Nutzernamen*
 signup-form-username-helper = Die anderen werden dich unter diesem Namen sehen.
@@ -134,8 +125,7 @@ user-bio-error = Fehler
 
 ## Global page
 
-global-head = { -empty }
-    .title = Global – { -brand-name }
+global-browser-window-title = Global – { -brand-name }
 global-sidebar-language = Sprache
 global-group-members-count =
     { $membersCount } { $membersCount ->
@@ -145,8 +135,7 @@ global-group-members-count =
 
 ## Profile page
 
-profile-head = { -empty }
-    .title = Mein Profil – { -brand-name }
+profile-browser-window-title = Mein Profil – { -brand-name }
 profile-title = Mein Profil
 profile-error = Profil konnte nicht geladen werden
 profile-email = E-Mail

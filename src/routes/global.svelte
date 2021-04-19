@@ -4,6 +4,7 @@
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
+    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import SidebarHeadline from "../comp/typography/SidebarHeadline.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
@@ -44,11 +45,9 @@
     let lang: SupportedLocale = "en"
 </script>
 
-<svelte:head>
-    <Localized id="global-head" let:attrs>
-        <title>{attrs.title}</title>
-    </Localized>
-</svelte:head>
+<Localized id="global-browser-window-title" let:text>
+    <BrowserTitle title={text} />
+</Localized>
 
 <div
     class="container flex gap-x-4 flex-wrap justify-center md:justify-start py-4 md:py-12 w-full max-w-sm md:max-w-4xl"

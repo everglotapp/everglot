@@ -23,6 +23,7 @@
         MIN_USERNAME_LENGTH,
     } from "../users"
 
+    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import GroupSelect from "../comp/util/GroupSelect.svelte"
@@ -221,11 +222,9 @@
     }
 </script>
 
-<svelte:head>
-    <Localized id="signup-head" let:attrs>
-        <title>{attrs.title}</title>
-    </Localized>
-</svelte:head>
+<Localized id="signup-browser-window-title" let:text>
+    <BrowserTitle title={text} />
+</Localized>
 
 {#if $languageCodeMappings.fetching}
     <div />

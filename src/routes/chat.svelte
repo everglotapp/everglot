@@ -11,6 +11,7 @@
     import Sidebar from "../comp/chat/Sidebar.svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
+    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
@@ -437,11 +438,9 @@
     $: callInProgress = incoming.length || Object.values(outgoing).some(Boolean)
 </script>
 
-<svelte:head>
-    <Localized id="chat-head" let:attrs>
-        <title>{attrs.title}</title>
-    </Localized>
-</svelte:head>
+<Localized id="chat-browser-window-title" let:text>
+    <BrowserTitle title={text} />
+</Localized>
 
 {#if !$groupChatStore.fetching && $groupChatStore.error}
     <div class="container max-w-sm my-8">

@@ -19,6 +19,12 @@ describe("index route", () => {
 
     let sessionCookie: Maybe<string> = null
 
+    const signIn = async () => {
+        expect(exampleUser).toBeTruthy()
+        sessionCookie = await login(exampleUser!)
+        expect(sessionCookie).toBeTruthy()
+    }
+
     beforeAll(async () => {
         const pool = await connectToDatabase()
         expect(pool).toBeTruthy()
@@ -31,8 +37,6 @@ describe("index route", () => {
         await seedDatabase(db)
 
         exampleUser = await createUser()
-        sessionCookie = await login(exampleUser)
-        expect(sessionCookie).toBeTruthy()
     })
 
     afterEach(async () => {
@@ -47,6 +51,7 @@ describe("index route", () => {
     })
 
     test("GET works when signed in", async () => {
+        await signIn()
         const res = await fetch("/", {
             headers: {
                 cookie: sessionCookieHeader(sessionCookie),

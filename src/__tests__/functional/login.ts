@@ -1,5 +1,12 @@
 import { AuthMethod } from "../../users"
-import { fetch, truncateAllTables, seedDatabase, createUser } from "../utils"
+import {
+    fetch,
+    truncateAllTables,
+    seedDatabase,
+    createUser,
+    login,
+    sessionCookieHeader,
+} from "../utils"
 import type { TestUser } from "../utils"
 import { start } from "../../server/gql"
 import { Pool } from "pg"
@@ -12,6 +19,14 @@ describe("login route", () => {
     const INVALID_EMAIL = "invalid@example.com"
 
     let db: Pool = new Pool()
+
+    let sessionCookie: Maybe<string> = null
+
+    const signIn = async () => {
+        expect(exampleUser).toBeTruthy()
+        sessionCookie = await login(exampleUser!)
+        expect(sessionCookie).toBeTruthy()
+    }
 
     beforeAll(async () => {
         const pool = await connectToDatabase()
@@ -34,6 +49,17 @@ describe("login route", () => {
     test("GET works", async () => {
         const res = await fetch("/login")
         expect(res.status).toBe(200)
+    })
+
+    test("GET redirects when signed in", async () => {
+        await signIn()
+        const res = await fetch("/login", {
+            headers: {
+                cookie: sessionCookieHeader(sessionCookie),
+            },
+            redirect: "manual",
+        })
+        expect(res.status).toBe(302)
     })
 
     test("POST with email fails without auth method", async () => {

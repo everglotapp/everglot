@@ -22,6 +22,12 @@ describe("signup route", () => {
 
     let sessionCookie: Maybe<string> = null
 
+    const signIn = async () => {
+        expect(exampleUser).toBeTruthy()
+        sessionCookie = await login(exampleUser!)
+        expect(sessionCookie).toBeTruthy()
+    }
+
     beforeAll(async () => {
         const pool = await connectToDatabase()
         expect(pool).toBeTruthy()
@@ -36,8 +42,6 @@ describe("signup route", () => {
         await seedDatabase(db)
 
         exampleUser = await createUser()
-        sessionCookie = await login(exampleUser)
-        expect(sessionCookie).toBeTruthy()
     })
 
     afterEach(async () => {
@@ -52,6 +56,7 @@ describe("signup route", () => {
     })
 
     test("GET works when user is signed in and has no languages", async () => {
+        await signIn()
         const res = await fetch("/signup", {
             headers: {
                 cookie: sessionCookieHeader(sessionCookie),
@@ -62,6 +67,7 @@ describe("signup route", () => {
     })
 
     test("GET redirects when user is signed in and has languages", async () => {
+        await signIn()
         await createUserLanguage({
             userId: exampleUser!.id,
             languageId: english!.id,

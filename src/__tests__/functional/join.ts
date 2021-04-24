@@ -1,14 +1,24 @@
 import { createToken } from "../../server/inviteTokens"
 import { AuthMethod } from "../../users"
-import { fetch, truncateAllTables, seedDatabase } from "../utils"
+import {
+    fetch,
+    truncateAllTables,
+    seedDatabase,
+    sessionCookieHeader,
+    login,
+    createUser,
+} from "../utils"
+import type { TestUser } from "../utils"
 import { start } from "../../server/gql"
 import { Pool } from "pg"
 import { connectToDatabase } from "../../server/db"
 
 import Fakerator from "fakerator"
+import type { Maybe } from "../../types/generated/graphql"
 const fakerator = new Fakerator()
 
 describe("join route", () => {
+    let existingUser: Maybe<TestUser> = null
     const EXAMPLE_USER = fakerator.entity.user()
 
     const EXAMPLE_TOKEN = "CJeJiFdoJyytlQaYTqdFj5hXuPFwLWR3nzTWeuTPhAAE"
@@ -23,6 +33,14 @@ describe("join route", () => {
 
     let db: Pool = new Pool()
 
+    let sessionCookie: Maybe<string> = null
+
+    const signIn = async () => {
+        expect(existingUser).toBeTruthy()
+        sessionCookie = await login(existingUser!)
+        expect(sessionCookie).toBeTruthy()
+    }
+
     beforeAll(async () => {
         const pool = await connectToDatabase()
         expect(pool).toBeTruthy()
@@ -36,6 +54,8 @@ describe("join route", () => {
 
         const tokenId = await createExampleToken()
         expect(tokenId).not.toBeNull()
+
+        existingUser = await createUser()
     })
 
     afterEach(async () => {
@@ -45,6 +65,17 @@ describe("join route", () => {
     test("GET works", async () => {
         const res = await fetch("/join")
         expect(res.status).toBe(200)
+    })
+
+    test("GET redirects when signed in", async () => {
+        await signIn()
+        const res = await fetch("/join", {
+            headers: {
+                cookie: sessionCookieHeader(sessionCookie),
+            },
+            redirect: "manual",
+        })
+        expect(res.status).toBe(302)
     })
 
     test("POST with email fails without auth method", async () => {

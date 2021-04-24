@@ -8,7 +8,7 @@ import { connectToDatabase } from "../../server/db"
 import Fakerator from "fakerator"
 const fakerator = new Fakerator()
 
-describe("join", () => {
+describe("join route", () => {
     const EXAMPLE_USER = fakerator.entity.user()
 
     const EXAMPLE_TOKEN = "CJeJiFdoJyytlQaYTqdFj5hXuPFwLWR3nzTWeuTPhAAE"
@@ -42,12 +42,12 @@ describe("join", () => {
         await truncateAllTables(db)
     })
 
-    test("fetching route works", async () => {
+    test("GET works", async () => {
         const res = await fetch("/join")
         expect(res.status).toBe(200)
     })
 
-    test("joining with email fails without auth method", async () => {
+    test("POST with email fails without auth method", async () => {
         const body = JSON.stringify({
             email: EXAMPLE_USER.email,
             token: EXAMPLE_TOKEN,
@@ -60,7 +60,7 @@ describe("join", () => {
         expect(res.status).toBe(422)
     })
 
-    test("joining with email fails without token", async () => {
+    test("POST with email fails without token", async () => {
         const body = JSON.stringify({
             method: AuthMethod.EMAIL,
             email: EXAMPLE_USER.email,
@@ -73,7 +73,7 @@ describe("join", () => {
         expect(res.status).toBe(422)
     })
 
-    test("joining with email fails with invalid token", async () => {
+    test("POST with email fails with invalid token", async () => {
         const body = JSON.stringify({
             method: AuthMethod.EMAIL,
             email: EXAMPLE_USER.email,
@@ -87,7 +87,7 @@ describe("join", () => {
         expect(res.status).toBe(422)
     })
 
-    test("joining with email fails without password", async () => {
+    test("POST with email fails without password", async () => {
         const body = JSON.stringify({
             method: AuthMethod.EMAIL,
             email: EXAMPLE_USER.email,
@@ -101,7 +101,7 @@ describe("join", () => {
         expect(res.status).toBe(422)
     })
 
-    test("joining with email succeeds with existing token", async () => {
+    test("POST with email succeeds with existing token", async () => {
         const body = JSON.stringify({
             method: AuthMethod.EMAIL,
             email: EXAMPLE_USER.email,

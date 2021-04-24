@@ -6,7 +6,7 @@ import { Pool } from "pg"
 import { connectToDatabase } from "../../server/db"
 import type { Maybe } from "../../types/generated/graphql"
 
-describe("login", () => {
+describe("login route", () => {
     let exampleUser: Maybe<TestUser> = null
     const INVALID_PASSWORD = "InvalidPassword123"
     const INVALID_EMAIL = "invalid@example.com"
@@ -31,12 +31,12 @@ describe("login", () => {
         await truncateAllTables(db)
     })
 
-    test("fetching route works", async () => {
+    test("GET works", async () => {
         const res = await fetch("/login")
         expect(res.status).toBe(200)
     })
 
-    test("login with email fails without auth method", async () => {
+    test("POST with email fails without auth method", async () => {
         const body = JSON.stringify({
             email: exampleUser!.email,
         })
@@ -44,6 +44,7 @@ describe("login", () => {
             method: "POST",
             body,
             headers: { "content-type": "application/json" },
+            redirect: "manual",
         })
         const text = await res.text()
         expect(text).toBeTruthy()
@@ -54,7 +55,7 @@ describe("login", () => {
         expect(res.status).toBe(422)
     })
 
-    test("login with email fails without password", async () => {
+    test("POST with email fails without password", async () => {
         const body = JSON.stringify({
             method: AuthMethod.EMAIL,
             email: exampleUser!.email,
@@ -63,6 +64,7 @@ describe("login", () => {
             method: "POST",
             body,
             headers: { "content-type": "application/json" },
+            redirect: "manual",
         })
         const text = await res.text()
         expect(text).toBeTruthy()
@@ -73,7 +75,7 @@ describe("login", () => {
         expect(res.status).toBe(422)
     })
 
-    test("login with email fails without email", async () => {
+    test("POST with email fails without email", async () => {
         const body = JSON.stringify({
             method: AuthMethod.EMAIL,
             password: exampleUser!.password,
@@ -82,6 +84,7 @@ describe("login", () => {
             method: "POST",
             body,
             headers: { "content-type": "application/json" },
+            redirect: "manual",
         })
         const text = await res.text()
         expect(text).toBeTruthy()
@@ -92,7 +95,7 @@ describe("login", () => {
         expect(res.status).toBe(422)
     })
 
-    test("login with email fails with invalid password", async () => {
+    test("POST with email fails with invalid password", async () => {
         const body = JSON.stringify({
             method: AuthMethod.EMAIL,
             email: exampleUser!.email,
@@ -102,6 +105,7 @@ describe("login", () => {
             method: "POST",
             body,
             headers: { "content-type": "application/json" },
+            redirect: "manual",
         })
         const text = await res.text()
         expect(text).toBeTruthy()
@@ -112,7 +116,7 @@ describe("login", () => {
         expect(res.status).toBe(500)
     })
 
-    test("login with email fails with invalid email", async () => {
+    test("POST with email fails with invalid email", async () => {
         const body = JSON.stringify({
             method: AuthMethod.EMAIL,
             email: INVALID_EMAIL,
@@ -122,6 +126,7 @@ describe("login", () => {
             method: "POST",
             body,
             headers: { "content-type": "application/json" },
+            redirect: "manual",
         })
         const text = await res.text()
         expect(text).toBeTruthy()
@@ -132,7 +137,7 @@ describe("login", () => {
         expect(res.status).toBe(500)
     })
 
-    test("login with email succeeds with existing email and password", async () => {
+    test("POST with email succeeds with existing email and password", async () => {
         const body = JSON.stringify({
             method: AuthMethod.EMAIL,
             email: exampleUser!.email,
@@ -142,6 +147,7 @@ describe("login", () => {
             method: "POST",
             body,
             headers: { "content-type": "application/json" },
+            redirect: "manual",
         })
         expect(res.status).toBe(200)
     })

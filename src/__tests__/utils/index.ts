@@ -15,9 +15,11 @@ import type {
     CreateUserMutation,
     CreateUserLanguageMutation,
     LanguageIdByAlpha2Query,
+    Maybe,
 } from "../../types/generated/graphql"
 import type { Pool } from "pg"
-import type { Gender } from "../../users"
+import { AuthMethod, Gender } from "../../users"
+import { SESSION_COOKIE_NAME } from "../../server/middlewares/session"
 
 const BASE_URL = "http://everglot-app:3000"
 
@@ -262,4 +264,43 @@ export async function seedDatabase(db: Pool) {
     } finally {
         client.release()
     }
+}
+
+export async function login(user: TestUser): Promise<Maybe<string>> {
+    const body = JSON.stringify({
+        method: AuthMethod.EMAIL,
+        email: user.email,
+        password: user.password,
+    })
+    const res = await fetch("/login", {
+        method: "POST",
+        body,
+        headers: { "content-type": "application/json" },
+        credentials: "same-origin",
+    })
+    expect(res.status).toBe(200)
+    return getSessionCookieValue(res)
+}
+
+export function sessionCookieHeader(sessionCookie: Maybe<string>) {
+    if (!sessionCookie) {
+        return ""
+    }
+    return `${SESSION_COOKIE_NAME}=${sessionCookie}`
+}
+
+// Adapted from https://stackoverflow.com/a/55680330/9926795
+function getSessionCookieValue(res: Response) {
+    const cookies = res.headers.get("set-cookie")?.split(";") || []
+    const headerToCookie = (header: string) => {
+        const [name, value] = header.split("=")
+        return { name, value }
+    }
+    const sessionCookie = cookies.find((raw) => {
+        return headerToCookie(raw).name === SESSION_COOKIE_NAME
+    })
+    if (!sessionCookie) {
+        return null
+    }
+    return headerToCookie(sessionCookie).value
 }

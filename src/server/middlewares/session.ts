@@ -8,17 +8,17 @@ import type { RequestHandler } from "express"
 
 let middleware: RequestHandler | null
 
+export const {
+    SESSION_COOKIE_VALIDATION_SECRETS,
+    SESSION_COOKIE_NAME = "everglot_sid",
+    NODE_ENV,
+} = process.env
+const dev = NODE_ENV === "development"
+
 export function makeMiddleware(pool: Pool) {
     if (middleware) {
         return middleware
     }
-    const {
-        SESSION_COOKIE_VALIDATION_SECRETS,
-        SESSION_COOKIE_NAME = "everglot_sid",
-        NODE_ENV,
-    } = process.env
-    const dev = NODE_ENV === "development"
-
     if (
         !SESSION_COOKIE_VALIDATION_SECRETS ||
         !SESSION_COOKIE_VALIDATION_SECRETS.length

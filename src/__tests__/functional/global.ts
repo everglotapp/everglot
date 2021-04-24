@@ -12,7 +12,7 @@ import { Pool } from "pg"
 import { connectToDatabase } from "../../server/db"
 import type { Maybe } from "../../types/generated/graphql"
 
-describe("index route", () => {
+describe("global route", () => {
     let exampleUser: Maybe<TestUser> = null
 
     let db: Pool = new Pool()
@@ -40,14 +40,14 @@ describe("index route", () => {
     })
 
     test("GET redirects when not signed in", async () => {
-        const res = await fetch("/", {
+        const res = await fetch("/global", {
             redirect: "manual",
         })
         expect(res.status).toBe(302)
     })
 
     test("GET works when signed in", async () => {
-        const res = await fetch("/", {
+        const res = await fetch("/global", {
             headers: {
                 cookie: sessionCookieHeader(sessionCookie),
             },

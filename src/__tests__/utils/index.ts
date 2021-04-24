@@ -6,6 +6,8 @@ import { fetch as crossFetch } from "cross-fetch"
 
 import { performQuery } from "../../server/gql"
 
+import log from "../../logger"
+
 import type {
     Language,
     User,
@@ -14,16 +16,40 @@ import type {
     CreateUserLanguageMutation,
     LanguageIdByAlpha2Query,
 } from "../../types/generated/graphql"
+import type { Pool } from "pg"
+import type { Gender } from "../../users"
 
 const BASE_URL = "http://everglot-app:3000"
 
-const fakerator = Fakerator()
+const fakerator = new Fakerator()
 
-export async function createUser() {
-    let user: any = {
-        ...fakerator.entity.user(),
+export type TestUser = {
+    id: User["id"]
+    uuid: string
+    email: User["email"]
+    username: User["username"]
+    gender: Gender
+    avatarUrl: User["avatarUrl"]
+    passwordHash: User["passwordHash"]
+    locale: User["locale"]
+    signedUpWithTokenId: User["signedUpWithTokenId"]
+}
+
+export type TestLanguage = Pick<Language, "alpha2" | "id">
+
+const chlog = log.child({ namespace: "test-utils" })
+
+export async function createUser(): Promise<TestUser> {
+    const fakeUser = fakerator.entity.user()
+    const user = {
         uuid: uuidv4(),
-        gender: "m",
+        gender: "m" as Gender,
+        email: fakeUser.email,
+        passwordHash: hashSync(fakeUser.password, 1),
+        username: fakeUser.userName,
+        avatarUrl: fakeUser.avatar,
+        locale: null,
+        signedUpWithTokenId: null,
     }
 
     const res = await performQuery<CreateUserMutation>(
@@ -35,6 +61,7 @@ export async function createUser() {
             $uuid: UUID!
             $avatarUrl: String!
             $locale: Int
+            $signedUpWithTokenId: Int
         ) {
             createUser(
                 input: {
@@ -46,6 +73,7 @@ export async function createUser() {
                         uuid: $uuid
                         avatarUrl: $avatarUrl
                         locale: $locale
+                        signedUpWithTokenId: $signedUpWithTokenId
                     }
                 }
             ) {
@@ -54,22 +82,16 @@ export async function createUser() {
                 }
             }
         }`,
-        {
-            email: user.email,
-            gender: user.gender,
-            passwordHash: hashSync(user.password, 1),
-            username: user.userName,
-            uuid: user.uuid,
-            avatarUrl: user.avatar,
-            locale: null,
-        }
+        user
     )
     expect(res).not.toBeNull()
     expect(res.data).not.toBeNull()
     expect(res.data!.createUser?.user).not.toBeNull()
     expect(res.errors).toBeFalsy()
-    user = { ...user, id: res.data?.createUser?.user?.id }
-    return user
+    chlog
+        .child({ user: { ...user, id: res.data!.createUser!.user!.id! } })
+        .trace("Created test user")
+    return { ...user, id: res.data!.createUser!.user!.id! }
 }
 
 export async function createUserLanguage({
@@ -124,6 +146,7 @@ export async function createUserLanguage({
         native,
         userId,
     }
+    chlog.child({ userLanguage }).trace("Created test user language")
     return userLanguage
 }
 
@@ -142,9 +165,51 @@ export async function getLanguage({ alpha2 }: { alpha2: Language["alpha2"] }) {
     expect(res.data).not.toBeNull()
     expect(res.data?.languageByAlpha2).not.toBeNull()
     expect(res.errors).toBeFalsy()
-    return { alpha2, id: res.data?.languageByAlpha2?.id }
+    return { alpha2, id: res.data!.languageByAlpha2!.id! }
 }
 
-export function fetch(path: string, ...args: any[]) {
-    return crossFetch(`${BASE_URL}${path}`, ...args)
+export async function fetch(path: string, init?: RequestInit | undefined) {
+    return await crossFetch(`${BASE_URL}${path}`, init)
+}
+
+/**
+ * Empties all tables that aren't purely lookup tables.
+ * Expects the truncation to succeed.
+ *
+ * Can be used to obtain a clean database state before and after individual tests.
+ */
+export async function truncateAllTables(db: Pool) {
+    const success = await doTruncateNonLookupTables(db).catch(() => false)
+    expect(success).toBe(true)
+}
+
+/**
+ * Runs a database transaction that empties all tables that aren't
+ * purely lookup tables such as `languages` or `language_skill_levels`.
+ *
+ * @throws any error that occurs during truncation transaction
+ */
+export async function doTruncateNonLookupTables(db: Pool) {
+    const client = await db.connect()
+    try {
+        await client.query("begin")
+        await client.query(`set role to everglot_app_user`)
+        await client.query(`delete from app_public.user_languages where true`)
+        await client.query(`delete from app_public.group_users where true`)
+        await client.query(`delete from app_public.messages where true`)
+        await client.query(`delete from app_public.groups where true`)
+        await client.query(
+            `update app_public.users set signed_up_with_token_id = null where true`
+        )
+        await client.query(`delete from app_public.invite_tokens where true`)
+        await client.query(`delete from app_public.users where true`)
+        await client.query("commit")
+        return true
+    } catch (e) {
+        await client.query("rollback")
+        chlog.child({ e }).error("Failed to truncate non-lookup tables")
+        throw e
+    } finally {
+        client.release()
+    }
 }

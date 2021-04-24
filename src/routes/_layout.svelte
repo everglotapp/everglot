@@ -149,7 +149,7 @@
         }
     }
     // @ts-ignore
-    $: segment, ($groupUuid = resolveCurrentGroup())
+    $: segment, setTimeout(() => ($groupUuid = resolveCurrentGroup()), 50)
 
     $: navigatorLocales =
         typeof navigator === "undefined" ? [] : navigator.languages

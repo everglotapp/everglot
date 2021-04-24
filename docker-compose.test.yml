@@ -17,3 +17,5 @@ services:
             POSTGRES_USER: "everglot_app_user"
             POSTGRES_PASSWORD: "everglot_app_pass"
             POSTGRES_DB: "everglot_app_db"
+        ports:
+            - "127.0.0.1:5432:5432"

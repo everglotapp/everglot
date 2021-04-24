@@ -277,7 +277,15 @@ export async function login(user: TestUser): Promise<Maybe<string>> {
         body,
         headers: { "content-type": "application/json" },
         credentials: "same-origin",
+        redirect: "manual",
     })
+    chlog
+        .child({
+            text: await res.text(),
+            statusCode: res.status,
+            responseHeaders: res.headers,
+        })
+        .trace("Attempted to sign in during test")
     expect(res.status).toBe(200)
     return getSessionCookieValue(res)
 }

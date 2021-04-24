@@ -30,6 +30,8 @@ services:
         image: everglot-app-image
         depends_on:
             - everglot-app
+        volumes:
+            - ./:/home/node/app
 
     everglot-db:
         environment:

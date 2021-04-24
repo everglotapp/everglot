@@ -26,6 +26,13 @@ import type { Maybe } from "../types/generated/graphql"
 
 type InvalidEmailReason = "smtp" | "regex" | "typo" | "mx" | "disposable"
 
+async function resolveInviteTokenId(token: unknown) {
+    if (!token || typeof token !== "string") {
+        return null
+    }
+    return (await getTokenIdByToken(token)) || null
+}
+
 export function get(req: Request, res: Response, next: () => void) {
     if (req.session.user_id) {
         res.redirect("/")
@@ -57,8 +64,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
 
     const inviteToken = req?.body?.token
-    const inviteTokenId = await getTokenIdByToken(inviteToken)
-    if (!inviteToken || typeof inviteToken !== "string" || !inviteTokenId) {
+    const inviteTokenId = await resolveInviteTokenId(inviteToken)
+    if (!inviteTokenId) {
         res.status(422).json({
             success: false,
             message:

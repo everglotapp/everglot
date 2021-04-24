@@ -12,6 +12,7 @@ import {
     createUser,
     createUserLanguage,
     truncateAllTables,
+    seedDatabase,
 } from "../utils"
 import type { TestUser, TestLanguage } from "../utils"
 import { Pool } from "pg"
@@ -66,6 +67,7 @@ describe("groups", () => {
 
     beforeEach(async () => {
         await truncateAllTables(db)
+        await seedDatabase(db)
     })
 
     afterEach(async () => {

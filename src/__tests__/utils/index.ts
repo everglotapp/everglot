@@ -179,8 +179,7 @@ export async function fetch(path: string, init?: RequestInit | undefined) {
  * Can be used to obtain a clean database state before and after individual tests.
  */
 export async function truncateAllTables(db: Pool) {
-    const success = await doTruncateNonLookupTables(db).catch(() => false)
-    expect(success).toBe(true)
+    await doTruncateNonLookupTables(db)
 }
 
 /**
@@ -202,12 +201,61 @@ export async function doTruncateNonLookupTables(db: Pool) {
             `update app_public.users set signed_up_with_token_id = null where true`
         )
         await client.query(`delete from app_public.invite_tokens where true`)
+        await client.query(`delete from app_public.user_sessions where true`)
         await client.query(`delete from app_public.users where true`)
         await client.query("commit")
         return true
     } catch (e) {
         await client.query("rollback")
         chlog.child({ e }).error("Failed to truncate non-lookup tables")
+        throw e
+    } finally {
+        client.release()
+    }
+}
+
+/**
+ * Creates all records that might get deleted during database teardown.
+ *
+ * @throws any error that occurs during seeding transaction
+ */
+export async function seedDatabase(db: Pool) {
+    const client = await db.connect()
+    try {
+        await client.query("begin")
+        await client.query(
+            `INSERT INTO app_public.groups(
+                global,
+                group_name,
+                language_id,
+                uuid,
+                language_skill_level_id
+            ) VALUES
+            (true, 'General', (
+                select id
+                from app_public.languages
+                where alpha2 = 'en'
+                limit 1
+            ), $1, null),
+            (true, 'General', (
+                select id
+                from app_public.languages
+                where alpha2 = 'zh'
+                limit 1
+            ), $2, null),
+            (true, 'General', (
+                select id
+                from app_public.languages
+                where alpha2 = 'de'
+                limit 1
+            ), $3, null)`,
+            [uuidv4(), uuidv4(), uuidv4()]
+        )
+        await client.query("commit")
+        return true
+    } catch (e) {
+        await client.query("rollback")
+        chlog.child({ e }).error("Failed to setup database")
         throw e
     } finally {
         client.release()

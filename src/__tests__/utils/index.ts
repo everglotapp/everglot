@@ -286,7 +286,6 @@ export async function login(user: TestUser): Promise<Maybe<string>> {
         .child({
             text: await res.text(),
             statusCode: res.status,
-            responseHeaders: res.headers.raw(),
         })
         .trace("Attempted to sign in during test")
     expect(res.status).toBe(200)

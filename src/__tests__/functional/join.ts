@@ -4,7 +4,6 @@ import { fetch, truncateAllTables } from "../utils"
 import { start } from "../../server/gql"
 import { Pool } from "pg"
 import { connectToDatabase } from "../../server/db"
-import log from "../../logger"
 
 describe("join", () => {
     // TODO: Use faker library
@@ -112,7 +111,6 @@ describe("join", () => {
             body,
             headers: { "content-type": "application/json" },
         })
-        log.debug(await res.text())
         expect(res.status).toBe(200)
     })
 })

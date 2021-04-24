@@ -60,14 +60,16 @@ Before the app is fully operationable, the database schema must be updated by ru
 
 They are run both in development and production to semi-automatically ensure that your app's database is always up-to-date.
 
+Export the following environment variables, preferably set up aliases for your shell to make your life easier.
+
+```bash
+export PGHOST=localhost PGUSER=everglot_app_user PGDATABASE=everglot_app_db PGPASSWORD=everglot_app_pass
+```
+
 To setup the current database schema, run
 
 ```bash
-PGHOST=localhost \
-PGUSER=everglot_app_user \
-PGDATABASE=everglot_app_db \
-PGPASSWORD=everglot_app_pass \
-    npm run migrate up
+npm run migrate up
 ```
 
 In development, at least the `everglot-db` container must be running so that there is a Postgres database to connect to.
@@ -79,31 +81,19 @@ This command also needs to be run in production as soon as changes requiring a n
 To create a new migration up/down definition file within `src/migrations` run the following command:
 
 ```bash
-PGHOST=localhost \
-PGUSER=everglot_app_user \
-PGDATABASE=everglot_app_db \
-PGPASSWORD=everglot_app_pass \
-    npm run migrate create "this is my migration name"
+npm run migrate create "this is my migration name"
 ```
 
 Then change the new file. To run newly created and/or remaining [`node-pg-migrate`](https://salsita.github.io/node-pg-migrate/) migrations, call the `migrate` npm script with the `up` command just as you did during the initial setup when you set up the schema locally for the first time.
 
 ```bash
-PGHOST=localhost \
-PGUSER=everglot_app_user \
-PGDATABASE=everglot_app_db \
-PGPASSWORD=everglot_app_pass \
-    npm run migrate up
+npm run migrate up
 ```
 
 Note that you can also add a number after `up`, `down` and `redo` to specify a maximum number of migrations to run. If you made a mistake roll back the faulty migrations using `migrate down`. You just have to make sure the `down` function reverts the wrong changes before you do so.
 
 ```bash
-PGHOST=localhost \
-PGUSER=everglot_app_user \
-PGDATABASE=everglot_app_db \
-PGPASSWORD=everglot_app_pass \
-    npm run migrate down 1
+npm run migrate down 1
 ```
 
 Then you can change the migration file and only commit the correct one. But never remove a migration that you ran in production or shared with others. They help us roll back changes and to understand the database schema's history.
@@ -128,34 +118,55 @@ The `docker-compose.test.yml` configuration is designed for running the applicat
 
 It is important that you run commands regarding the testing environment in a different `docker-compose` project with the `-p` flag. That way your development containers for the app and for the database are not re-used for testing. The tests delete and add data to your database which you probably do not want during development.
 
-First start the database:
+### Unit tests only
+
+To only run unit tests there is no need to run the server itself, execute the following command. It will automatically start the database if it's not up, yet.
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test up -d everglot-db
+docker-compose \
+    -f docker-compose.yml \
+    -f docker-compose.test.yml \
+    -p test \
+    run --entrypoint entrypoints/test-after-db.sh --rm everglot-app \
+    npx jest --forceExit src/__tests__/unit
 ```
 
-To only run unit tests:
+To run tests against a running app it must be started in a separate container as well. The following command does that and will also wait for the database to be up.
+
+The created app container will run the app in development mode and thus pick up any changes you make to (existing) files without you having to restart the server manually. Because it has to compile everything initially, you will have to wait about a minute for it to load up.
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test exec everglot-app npm run test src/__tests__/unit
+docker-compose \
+    -f docker-compose.yml \
+    -f docker-compose.test.yml \
+    -p test \
+    up -d everglot-app
 ```
 
-To run functional tests the app must be running separately as well. This command can also be left out by simply not passing the `everglot-db` service in the `up -d` command above.
+### All tests
+
+To simply run all tests, execute the following command. Containers created this way will automatically wait a minute for the app to be up in case it's not reachable, yet.
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test up -d everglot-app
+docker-compose \
+    -f docker-compose.yml \
+    -f docker-compose.test.yml \
+    -p test \
+    run --rm everglot-app-test \
+    npm run test:pretty
 ```
 
-Run all tests:
+### Functional tests only
+
+To run only functional tests:
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test exec everglot-app npm run test
-```
-
-Only run functional tests:
-
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test exec everglot-app npm run test src/__tests__/functional
+docker-compose \
+    -f docker-compose.yml \
+    -f docker-compose.test.yml \
+    -p test \
+    run --rm everglot-app-test \
+    npx jest --forceExit src/__tests__/functional | roarr pretty-print --
 ```
 
 Jest's `--forceExit` option (as defined in the `test` script within `package.json`) is currently necessary because something is still running somewhere which prevents the tests from exiting normally within 1 second.
@@ -165,9 +176,18 @@ Jest's `--forceExit` option (as defined in the `test` script within `package.jso
 CI environments don't need a separate project and should use the `docker-compose.ci.yml` configuration with `entrypoints/wait-for-db.sh` for setup and `entrypoints/wait-for-app.sh` for testing.
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-db
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml run -d --entrypoint entrypoints/wait-for-db.sh everglot-app
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint entrypoints/wait-for-app.sh everglot-app npm run test:pretty
+docker-compose \
+    -f docker-compose.yml \
+    -f docker-compose.ci.yml \
+    up -d everglot-db
+docker-compose \
+    -f docker-compose.yml \
+    -f docker-compose.ci.yml \
+    run -d --entrypoint entrypoints/wait-for-db.sh everglot-app
+docker-compose \
+    -f docker-compose.yml \
+    -f docker-compose.ci.yml \
+    run --entrypoint entrypoints/wait-for-app.sh everglot-app npm run test:pretty
 ```
 
 ## Deployment

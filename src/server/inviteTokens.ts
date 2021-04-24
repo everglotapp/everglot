@@ -11,7 +11,7 @@ export async function createToken({
     userId: Maybe<User["id"]>
     token: InviteToken["inviteToken"]
 }): Promise<InviteToken["id"] | null> {
-    const tokenQueryResult = await db?.query({
+    const res = await db?.query<{ id: InviteToken["id"] }>({
         text: `INSERT INTO invite_tokens (
             user_id,
             invite_token
@@ -23,30 +23,37 @@ export async function createToken({
         RETURNING id`,
         values: [userId, token],
     })
-    const success = tokenQueryResult?.rowCount === 1
-    if (!tokenQueryResult || !success) {
-        log.child({ tokenQueryResult }).error(`Token insertion failed`)
+    const success = res?.rowCount === 1
+    if (!res || !success) {
+        log.child({ userId, token, rowCount: res?.rowCount }).error(
+            `Token insertion failed`
+        )
         return null
     }
-    return tokenQueryResult.rows[0].id
+    const tokenId = res.rows[0].id
+    return tokenId || null
 }
 
 export async function getTokenIdByToken(
     token: String
 ): Promise<Maybe<InviteToken["id"]>> {
-    const queryResult = await db?.query({
+    const res = await db?.query<{ id: InviteToken["id"] }>({
         text: `SELECT id
         FROM app_public.invite_tokens
         WHERE invite_token = $1
         LIMIT 1`,
         values: [token],
     })
-    const tokenId = await queryResult?.rows[0]?.id
-    log.child({ token, tokenId }).trace("Got token ID by token")
-    let success = queryResult?.rowCount === 1
-    if (!success) {
-        log.child({ queryResult }).trace(`Querying token ID failed`)
+    let success = res?.rowCount === 1
+    if (!res || !success) {
+        log.child({ token, rowCount: res?.rowCount }).debug(
+            `Could not find any invite_tokens record for the given token`
+        )
         return null
     }
-    return tokenId
+    const tokenId = res.rows[0].id
+    log.child({ token, tokenId }).trace(
+        `Found an invite_tokens record for the given token`
+    )
+    return tokenId || null
 }

@@ -2,7 +2,8 @@ import Fakerator from "fakerator"
 
 import { hashSync } from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
-import { fetch as crossFetch } from "cross-fetch"
+import nodeFetch from "node-fetch"
+import type { Response, RequestInit } from "node-fetch"
 
 import { performQuery } from "../../server/gql"
 
@@ -15,9 +16,11 @@ import type {
     CreateUserMutation,
     CreateUserLanguageMutation,
     LanguageIdByAlpha2Query,
+    Maybe,
 } from "../../types/generated/graphql"
 import type { Pool } from "pg"
-import type { Gender } from "../../users"
+import { AuthMethod, Gender } from "../../users"
+import { SESSION_COOKIE_NAME } from "../../server/middlewares/session"
 
 const BASE_URL = "http://everglot-app:3000"
 
@@ -170,8 +173,11 @@ export async function getLanguage({ alpha2 }: { alpha2: Language["alpha2"] }) {
     return { alpha2, id: res.data!.languageByAlpha2!.id! }
 }
 
-export async function fetch(path: string, init?: RequestInit | undefined) {
-    return await crossFetch(`${BASE_URL}${path}`, init)
+export async function fetch(
+    path: string,
+    init: RequestInit | undefined = undefined
+) {
+    return await nodeFetch(`${BASE_URL}${path}`, init)
 }
 
 /**
@@ -262,4 +268,49 @@ export async function seedDatabase(db: Pool) {
     } finally {
         client.release()
     }
+}
+
+export async function login(user: TestUser): Promise<Maybe<string>> {
+    const body = JSON.stringify({
+        method: AuthMethod.EMAIL,
+        email: user.email,
+        password: user.password,
+    })
+    const res = await fetch("/login", {
+        method: "POST",
+        body,
+        headers: { "content-type": "application/json" },
+        redirect: "manual",
+    })
+    chlog
+        .child({
+            text: await res.text(),
+            statusCode: res.status,
+        })
+        .trace("Attempted to sign in during test")
+    expect(res.status).toBe(200)
+    return getSessionCookieValue(res)
+}
+
+export function sessionCookieHeader(sessionCookie: Maybe<string>) {
+    if (!sessionCookie) {
+        return ""
+    }
+    return `${SESSION_COOKIE_NAME}=${sessionCookie}`
+}
+
+// Adapted from https://stackoverflow.com/a/55680330/9926795
+function getSessionCookieValue(res: Response) {
+    const cookies = res.headers.raw()["set-cookie"] || []
+    const headerToCookie = (header: string) => {
+        const [name, value] = header.split("=")
+        return { name, value }
+    }
+    const sessionCookie = cookies.find((raw) => {
+        return headerToCookie(raw).name === SESSION_COOKIE_NAME
+    })
+    if (!sessionCookie) {
+        return null
+    }
+    return headerToCookie(sessionCookie).value
 }

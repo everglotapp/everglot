@@ -2,7 +2,8 @@ import Fakerator from "fakerator"
 
 import { hashSync } from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
-import { fetch as crossFetch } from "cross-fetch"
+import nodeFetch from "node-fetch"
+import type { Response, RequestInit } from "node-fetch"
 
 import { performQuery } from "../../server/gql"
 
@@ -172,8 +173,11 @@ export async function getLanguage({ alpha2 }: { alpha2: Language["alpha2"] }) {
     return { alpha2, id: res.data!.languageByAlpha2!.id! }
 }
 
-export async function fetch(path: string, init?: RequestInit | undefined) {
-    return await crossFetch(`${BASE_URL}${path}`, init)
+export async function fetch(
+    path: string,
+    init: RequestInit | undefined = undefined
+) {
+    return await nodeFetch(`${BASE_URL}${path}`, init)
 }
 
 /**
@@ -276,14 +280,13 @@ export async function login(user: TestUser): Promise<Maybe<string>> {
         method: "POST",
         body,
         headers: { "content-type": "application/json" },
-        credentials: "same-origin",
         redirect: "manual",
     })
     chlog
         .child({
             text: await res.text(),
             statusCode: res.status,
-            responseHeaders: res.headers,
+            responseHeaders: res.headers.raw(),
         })
         .trace("Attempted to sign in during test")
     expect(res.status).toBe(200)
@@ -299,7 +302,7 @@ export function sessionCookieHeader(sessionCookie: Maybe<string>) {
 
 // Adapted from https://stackoverflow.com/a/55680330/9926795
 function getSessionCookieValue(res: Response) {
-    const cookies = res.headers.get("set-cookie")?.split(";") || []
+    const cookies = res.headers.raw()["set-cookie"] || []
     const headerToCookie = (header: string) => {
         const [name, value] = header.split("=")
         return { name, value }

@@ -1,6 +1,7 @@
 import { db } from "../server/db"
 
 import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
+import { createToken, getTokenIdByToken } from "../server/inviteTokens"
 import { ensureJson, serverError } from "../helpers"
 import { GOOGLE_SIGNIN_CLIENT_ID } from "../constants"
 
@@ -21,7 +22,7 @@ import { OAuth2Client } from "google-auth-library"
 const BCRYPT_WORK_FACTOR = 14
 
 import type { Request, Response } from "express"
-import type { InviteToken } from "../types/generated/graphql"
+import type { Maybe } from "../types/generated/graphql"
 
 type InvalidEmailReason = "smtp" | "regex" | "typo" | "mx" | "disposable"
 
@@ -32,29 +33,6 @@ export function get(req: Request, res: Response, next: () => void) {
     }
     next()
 }
-
-// const INVITE_TOKEN = "Tkb8T3mfZcsvNRBg6hKuwnL6o8s8vFuD"
-
-export async function getTokenIdByToken(
-    token: String
-): Promise<InviteToken["id"] | null> {
-    const queryResult = await db?.query({
-        text: `SELECT id
-        FROM app_public.invite_tokens
-        WHERE invite_token = $1
-        LIMIT 1`,
-        values: [token],
-    })
-    const tokenId = await queryResult?.rows[0]?.id
-    log.child({ token, tokenId }).trace("Got token ID by token")
-    let success = queryResult?.rowCount === 1
-    if (!success) {
-        log.child({ queryResult }).trace(`Querying token ID failed`)
-        return null
-    }
-    return tokenId
-}
-
 export async function post(req: Request, res: Response, _next: () => void) {
     if (!ensureJson(req, res)) {
         return
@@ -89,13 +67,13 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    let email: string | null = null,
-        password: string | null = null,
-        hash: string | null = null,
-        avatarUrl: string | null = null,
-        locale: string | null = null,
-        username: string | null = null,
-        googleId: string | null = null
+    let email: Maybe<string> = null,
+        password: Maybe<string> = null,
+        hash: Maybe<string> = null,
+        avatarUrl: Maybe<string> = null,
+        locale: Maybe<string> = null,
+        username: Maybe<string> = null,
+        googleId: Maybe<string> = null
 
     if (authMethod === AuthMethod.GOOGLE) {
         const googleIdToken = req?.body?.idToken
@@ -290,21 +268,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
         serverError(res)
         return
     }
-    const tokenQueryResult = await db?.query({
-        text: `INSERT INTO invite_tokens (
-                user_id,
-                invite_token
-            )
-            VALUES (
-                $1,
-                $2
-            )
-            RETURNING id`,
-        values: [userId, newInviteToken],
-    })
-    let tokenSuccess = tokenQueryResult?.rowCount === 1
-    if (!tokenSuccess) {
-        log.child({ tokenQueryResult }).error(`Token insertion failed`)
+
+    if (!(await createToken({ userId, token: newInviteToken }))) {
+        log.child({ newInviteToken }).error(
+            `Failed to insert token for new user`
+        )
         serverError(res)
         return
     }

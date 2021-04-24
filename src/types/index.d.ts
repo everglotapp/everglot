@@ -1,7 +1,7 @@
-import type { Session } from "express-session"
 import type { Socket } from "socket.io"
 
 declare module "express-session" {
+    import type { SessionData } from "express-session"
     interface SessionData {
         user_id: number
     }

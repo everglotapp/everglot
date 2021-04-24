@@ -3,7 +3,7 @@
  * https://github.com/graphile/postgraphile-log-consola/blob/master/index.js
  */
 
-import type { DocumentNode } from "graphql"
+import type { DocumentNode, OperationDefinitionNode } from "graphql"
 import log from "."
 
 const chlog = log.child({
@@ -18,7 +18,7 @@ const dev = mode === "development"
  * GraphQL. This helps us to avoid issues related to having multiple GraphQL
  * versions installed.
  */
-let graphql
+let graphql: any
 
 /*
  * Below is the definition of a PostGraphile server plugin. You can read more
@@ -32,20 +32,20 @@ let graphql
  * spurious errors.
  */
 export default {
-    ["init"](_, { graphql: _graphql }) {
+    ["init"](_: any, { graphql: _graphql }: { graphql: any }) {
         // See the note by `let graphql` above.
         graphql = _graphql
         return _
     },
 
-    ["postgraphile:options"](options) {
+    ["postgraphile:options"](options: any) {
         return {
             ...options,
             disableQueryLog: true, // Bypass PostGraphile's internal logging
         }
     },
 
-    ["postgraphile:http:handler"](req) {
+    ["postgraphile:http:handler"](req: any) {
         // For timing
         req._consolaPluginStartTime = process.hrtime()
         return req
@@ -89,9 +89,10 @@ export default {
                     message = `${errorCount} error(s)`
                 }
                 const hasError = errorCount > 0 || resultStatusCode >= 400
-                const operationName =
-                    queryDocumentAst.definitions[0]?.name?.value
-                const operationType = queryDocumentAst.definitions[0]?.operation
+                const operationDefinition = queryDocumentAst
+                    .definitions[0] as OperationDefinitionNode | null
+                const operationName = operationDefinition?.name?.value
+                const operationType = operationDefinition?.operation
                 chlog[hasError ? "error" : "debug"](
                     `${message} ${
                         pgRole != null ? `as ${pgRole} ` : ""

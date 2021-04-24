@@ -1,13 +1,19 @@
 import log from "../../logger"
 
 import { start } from "../../server/gql"
-import { connectToDatabase, disconnectFromDatabase } from "../../server/db"
+import { connectToDatabase } from "../../server/db"
 
-import type { Language, User } from "../../types/generated/graphql"
+import type { Maybe } from "../../types/generated/graphql"
 
 import { tryFormingGroupsWithUser } from "../../server/groups"
 
-import { getLanguage, createUser, createUserLanguage } from "../utils"
+import {
+    getLanguage,
+    createUser,
+    createUserLanguage,
+    truncateAllTables,
+} from "../utils"
+import type { TestUser, TestLanguage } from "../utils"
 import { Pool } from "pg"
 
 const GROUP_LEARNER_SIZE = 4
@@ -15,28 +21,9 @@ const GROUP_NATIVE_SIZE = 2
 
 // jest.setTimeout(15000)
 
-async function truncateAllTables(db: Pool) {
-    const client = await db.connect()
-    try {
-        await client.query("begin")
-        await client.query(`set role to everglot_app_user`)
-        await client.query(`delete from app_public.user_languages where true`)
-        await client.query(`delete from app_public.group_users where true`)
-        await client.query(`delete from app_public.messages where true`)
-        await client.query(`delete from app_public.groups where true`)
-        await client.query(`delete from app_public.users where true`)
-        await client.query("commit")
-    } catch (e) {
-        await client.query("rollback")
-        throw e
-    } finally {
-        client.release()
-    }
-}
-
 describe("groups", () => {
-    let english: Partial<Language> | null = null
-    let german: Partial<Language> | null = null
+    let english: Maybe<TestLanguage> = null
+    let german: Maybe<TestLanguage> = null
 
     let db: Pool = new Pool()
 
@@ -44,21 +31,21 @@ describe("groups", () => {
         teaching,
         learning,
     }: {
-        teaching: Partial<Language>
-        learning: Partial<Language>
-    }): Promise<Partial<User>> => {
+        teaching: TestLanguage
+        learning: TestLanguage
+    }): Promise<TestUser> => {
         const user = await createUser()
         expect(user).not.toBeNull()
         const teachingMembership = await createUserLanguage({
             userId: user.id,
-            languageId: teaching.id!,
+            languageId: teaching.id,
             languageSkillLevelId: null,
             native: true,
         })
         expect(teachingMembership).not.toBeNull()
         const learningMembership = await createUserLanguage({
             userId: user.id,
-            languageId: learning.id!,
+            languageId: learning.id,
             languageSkillLevelId: 1,
             native: false,
         })
@@ -101,7 +88,7 @@ describe("groups", () => {
                 learning: english!,
             })
             expect(user).not.toBeNull()
-            expect(await tryFormingGroupsWithUser(user.id!)).toEqual([])
+            expect(await tryFormingGroupsWithUser(user.id)).toEqual([])
         }
 
         for (let i = 0; i < GROUP_NATIVE_SIZE - 1; ++i) {
@@ -111,7 +98,7 @@ describe("groups", () => {
                 learning: german!,
             })
             expect(user).not.toBeNull()
-            expect(await tryFormingGroupsWithUser(user.id!)).toEqual([])
+            expect(await tryFormingGroupsWithUser(user.id)).toEqual([])
         }
 
         chlog.debug("Adding English native speaker", GROUP_NATIVE_SIZE)
@@ -120,7 +107,7 @@ describe("groups", () => {
             learning: german!,
         })
         expect(user).not.toBeNull()
-        const englishGroupIds = await tryFormingGroupsWithUser(user.id!)
+        const englishGroupIds = await tryFormingGroupsWithUser(user.id)
         expect(englishGroupIds).not.toEqual([])
         expect(englishGroupIds.length).toEqual(1)
 
@@ -130,7 +117,7 @@ describe("groups", () => {
             learning: german!,
         })
         expect(user).not.toBeNull()
-        expect(await tryFormingGroupsWithUser(user.id!)).toEqual([])
+        expect(await tryFormingGroupsWithUser(user.id)).toEqual([])
 
         chlog.debug("Adding a 4th German learner")
         user = await createTestUser({
@@ -138,7 +125,7 @@ describe("groups", () => {
             learning: german!,
         })
         expect(user).not.toBeNull()
-        const germanGroupIds = await tryFormingGroupsWithUser(user.id!)
+        const germanGroupIds = await tryFormingGroupsWithUser(user.id)
         expect(germanGroupIds).not.toEqual([])
         expect(germanGroupIds.length).toEqual(1)
     })

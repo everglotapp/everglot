@@ -30,6 +30,7 @@ export type TestUser = {
     username: User["username"]
     gender: Gender
     avatarUrl: User["avatarUrl"]
+    password: string
     passwordHash: User["passwordHash"]
     locale: User["locale"]
     signedUpWithTokenId: User["signedUpWithTokenId"]
@@ -45,6 +46,7 @@ export async function createUser(): Promise<TestUser> {
         uuid: uuidv4(),
         gender: "m" as Gender,
         email: fakeUser.email,
+        password: fakeUser.password,
         passwordHash: hashSync(fakeUser.password, 1),
         username: fakeUser.userName,
         avatarUrl: fakeUser.avatar,

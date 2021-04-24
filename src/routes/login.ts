@@ -33,10 +33,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         typeof authMethod !== "string" ||
         !Object.values(AuthMethod).includes(authMethod as AuthMethod)
     ) {
-        res.status(422).json({
-            success: false,
-            message: "Please specify an auth method.",
-        })
+        res.status(422).json({ success: false, message: null })
         return
     }
 

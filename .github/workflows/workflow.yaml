@@ -26,10 +26,10 @@ jobs:
             - name: Migrate database and start app
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d everglot-app
             - name: Run linter
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint entrypoints/ci-after-app.sh everglot-app-ci npm run lint
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint "/bin/sh -c" everglot-app-ci "npm run lint"
               continue-on-error: true
             - name: Run tests
-              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint entrypoints/ci-after-app.sh everglot-app-ci npm run test:pretty -- --filter-expression '{"context.logLevel":{gt:20}}'
+              run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --entrypoint entrypoints/ci-after-app.sh everglot-app-ci mispipe "npm run test" "npx roarr pretty-print --fe '{\"context.logLevel\":{gt:20}}'"
     build:
         name: Build, Push and Deploy
         runs-on: ubuntu-latest

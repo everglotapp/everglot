@@ -238,7 +238,7 @@ async function formGroup(
             languageId,
             languageSkillLevelId
         )
-        log.info("Formed group", groupId)
+        log.child({ groupId }).debug("Formed group")
         return groupId
     } else {
         log.child({

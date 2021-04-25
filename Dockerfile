@@ -11,6 +11,7 @@ RUN set -eux \
         yarn \
         git \
         wait4ports \
+        moreutils \
         --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 # Pass NODE_ENV as a build arg to change the NPM dependencies.

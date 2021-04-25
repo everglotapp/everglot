@@ -100,7 +100,7 @@ Then you can change the migration file and only commit the correct one. But neve
 
 ### Creating a GraphQL query on the client
 
-Create a `.graphql` file in `src/gql/` containing your GraphQL query/mutation/subscription.
+Create a `.graphql` file in the `src/gql/` directory containing your GraphQL operation.
 
 Then generate the typings and any missing persisted operation files using:
 
@@ -112,7 +112,7 @@ Note: PostGraphile Subscriptions are not configured, yet (2021-03-17).
 
 ## Testing
 
-The `docker-compose.test.yml` configuration is designed for running the application tests locally, whereas `docker-compose.ci.yml` is for running them in CI environments.
+The [`docker-compose.test.yml`](docker-compose.test.yml) configuration is designed for running the application tests locally, whereas [`docker-compose.ci.yml`](docker-compose.ci.yml) is for running them in CI environments.
 
 ### Local execution
 
@@ -120,7 +120,7 @@ It is important that you run commands regarding the testing environment in a dif
 
 ### Unit tests only
 
-To only run unit tests there is no need to run the server itself, execute the following command. It will automatically start the database if it's not up, yet.
+To only run unit tests there is no need to start the app server itself, just execute the following command. It will automatically start the test database if it's not up, yet.
 
 ```bash
 docker-compose \
@@ -128,12 +128,16 @@ docker-compose \
     -f docker-compose.test.yml \
     -p test \
     run --entrypoint entrypoints/test-after-db.sh --rm everglot-app \
-    npx jest --forceExit src/__tests__/unit
+    mispipe "npm run test -- src/__tests__/unit" "npx roarr pretty-print --fe '{\"context.logLevel\":{gt:20}}'"
 ```
+
+> Note: You can increase the output verbosity by reducing the "greater than" property to e.g. `{gt:10}` or `{gt:0}`.
 
 To run tests against a running app it must be started in a separate container as well. The following command does that and will also wait for the database to be up.
 
 The created app container will run the app in development mode and thus pick up any changes you make to (existing) files without you having to restart the server manually. Because it has to compile everything initially, you will have to wait about a minute for it to load up.
+
+> **Skip this:** You can happily skip this command as it will be run automatically. We only mention it for completeness' sake. It might be useful for initializing your development environment automatically so that you won't have to wait when you need it.
 
 ```bash
 docker-compose \
@@ -145,7 +149,7 @@ docker-compose \
 
 ### All tests
 
-To simply run all tests, execute the following command. Containers created this way will automatically wait a minute for the app to be up in case it's not reachable, yet.
+To simply run all tests, execute the following command. Containers created this way will automatically wait 100 seconds for the web server to start in case it's not reachable, yet.
 
 ```bash
 docker-compose \
@@ -153,7 +157,7 @@ docker-compose \
     -f docker-compose.test.yml \
     -p test \
     run --rm everglot-app-test \
-    npm run test:pretty
+    npm run test:pretty -- --fe '{"context.logLevel":{gt:20}}'
 ```
 
 ### Functional tests only
@@ -166,30 +170,17 @@ docker-compose \
     -f docker-compose.test.yml \
     -p test \
     run --rm everglot-app-test \
-    npx jest --forceExit src/__tests__/functional | roarr pretty-print --
+    mispipe "npm run test -- src/__tests__/functional" "npx roarr pretty-print --fe '{\"context.logLevel\":{gt:20}}'"
 ```
 
-Jest's `--forceExit` option (as defined in the `test` script within `package.json`) is currently necessary because something is still running somewhere which prevents the tests from exiting normally within 1 second.
+> Side note: Jest's `--forceExit` option (as defined in the `test` script within `package.json`) is currently necessary because something is still running somewhere which prevents the tests from exiting normally within 1 second. `--runInBand` causes tests to be run sequentially, preventing some race conditions w.r.t. database setup and teardown.
 
 ### In CI
 
 CI environments don't need a separate project and should use the `docker-compose.ci.yml` configuration with `entrypoints/wait-for-db.sh` for setup and `entrypoints/wait-for-app.sh` for testing.
 
-```bash
-docker-compose \
-    -f docker-compose.yml \
-    -f docker-compose.ci.yml \
-    up -d everglot-db
-docker-compose \
-    -f docker-compose.yml \
-    -f docker-compose.ci.yml \
-    run -d --entrypoint entrypoints/wait-for-db.sh everglot-app
-docker-compose \
-    -f docker-compose.yml \
-    -f docker-compose.ci.yml \
-    run --entrypoint entrypoints/wait-for-app.sh everglot-app npm run test:pretty
-```
+See [the GitHub workflow file](.github/workflows/workflow.yaml) for current details.
 
 ## Deployment
 
-Deployment is done via Kubernetes (see `k8s-setup` repository).
+Deployment is done via Kubernetes (see [`k8s-setup`](https://github.com/everglotapp/k8s-setup) repository).

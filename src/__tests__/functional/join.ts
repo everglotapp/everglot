@@ -62,10 +62,6 @@ describe("join route", () => {
         await truncateAllTables(db)
     })
 
-    test("failing test to see if CI works", () => {
-        expect(false).toBe(true)
-    })
-
     test("GET works", async () => {
         const res = await fetch("/join")
         expect(res.status).toBe(200)

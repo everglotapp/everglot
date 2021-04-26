@@ -613,9 +613,13 @@
                                                             duration: 200,
                                                         }}
                                                     />
-                                                    <EmojiSelector
-                                                        on:emoji={onEmoji}
-                                                    />
+                                                    <span
+                                                        class="hidden md:inline"
+                                                    >
+                                                        <EmojiSelector
+                                                            on:emoji={onEmoji}
+                                                        />
+                                                    </span>
                                                 </Localized>
                                                 <ButtonSmall
                                                     className="send-msg-button"
@@ -815,6 +819,10 @@
         margin-left: -2px;
     }
 
+    #send-msg-input {
+        @apply mr-3;
+    }
+
     .submit-form-container :global(.send-msg-button) {
         @apply px-2 !important;
     }
@@ -825,7 +833,6 @@
 
     .submit-form-container :global(.svelte-emoji-picker__trigger) {
         @apply text-sm;
-        @apply ml-4;
         @apply px-2;
         @apply py-2;
         @apply text-gray-bitdark;

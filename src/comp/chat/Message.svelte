@@ -325,6 +325,10 @@
         @apply px-2;
     }
 
+    .main .body span {
+        @apply align-middle;
+    }
+
     .main .body .mention {
         @apply font-bold;
         @apply text-gray-bitdark;

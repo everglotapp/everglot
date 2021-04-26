@@ -4,6 +4,10 @@
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
+    // @ts-ignore
+    import _anchorme from "anchorme"
+    const anchorme: typeof _anchorme = _anchorme.default || _anchorme
+
     import { currentUser } from "../../stores"
     import { chatUsers } from "../../stores/chat"
 
@@ -39,31 +43,106 @@
 
     enum BodyElementType {
         Text,
-        Tag,
+        Mention,
+        Link,
     }
-    type BodyElement = {
+    interface BodyElement {
         content: string
         type: BodyElementType
     }
+    interface BodyLink extends BodyElement {
+        uri: string
+    }
     let bodyElements: BodyElement[] = []
-    $: if (usernameTag) {
-        const newElements = []
+
+    function withMentions(elements: BodyElement[]) {
+        if (!usernameTag) {
+            return elements
+        }
+        const res = []
         const split = body.split(usernameTag).map((content) => ({
             type: BodyElementType.Text,
             content,
         }))
         for (let i = 0; i < split.length - 1; ++i) {
-            newElements.push(split[i])
-            newElements.push({
+            res.push(split[i])
+            res.push({
                 content: usernameTag,
-                type: BodyElementType.Tag,
+                type: BodyElementType.Mention,
             })
         }
-        newElements.push(split[split.length - 1])
-        bodyElements = newElements
-    } else {
-        bodyElements = [{ content: body, type: BodyElementType.Text }]
+        res.push(split[split.length - 1])
+        return res
     }
+
+    function linkMatchToURI(match: ReturnType<typeof anchorme.list>[number]) {
+        if (!match.isURL) {
+            // Only accept web URLs, otherwise consider invalid.
+            return null
+        }
+        const { string } = match
+        if (string.startsWith("https://") || string.startsWith("http://")) {
+            return string
+        } else {
+            return `https://${string}`
+        }
+    }
+    function withLinks(elements: BodyElement[]) {
+        const res = []
+        for (let element of elements) {
+            if (element.type !== BodyElementType.Text) {
+                res.push(element)
+                continue
+            }
+            const matches = anchorme.list(element.content)
+            // Get first next match
+            let match = matches.shift()
+            let textStart = 0
+            let matchStart = 0
+            while (match) {
+                if (matchStart !== match.start) {
+                    // There's at least 1 match left but we're not there yet. Forward to next match.
+                    matchStart = match.start
+                }
+                res.push({
+                    content: element.content.slice(textStart, matchStart),
+                    type: BodyElementType.Text,
+                })
+                const uri = linkMatchToURI(match)
+                if (uri) {
+                    res.push({
+                        content: element.content.slice(
+                            matchStart,
+                            match.end + 1
+                        ),
+                        type: BodyElementType.Link,
+                        uri: uri,
+                    } as BodyLink)
+                    // Start text one character after match (there could even be only one character left)
+                    textStart = match.end + 1
+                }
+                // Get first next match
+                match = matches.shift()
+            }
+            // No matches left, append rest of text content if there is any left.
+            if (textStart < element.content.length) {
+                res.push({
+                    content: element.content.slice(textStart),
+                    type: BodyElementType.Text,
+                })
+            }
+        }
+        return res
+    }
+
+    function makeBodyElements(text: string) {
+        let elements = [{ content: text, type: BodyElementType.Text }]
+        elements = withMentions(elements)
+        elements = withLinks(elements)
+        return elements
+    }
+
+    $: bodyElements = makeBodyElements(body)
 </script>
 
 <div
@@ -145,8 +224,10 @@
             {#each bodyElements as element}
                 {#if element.type === BodyElementType.Text}
                     <span>{element.content}</span>
-                {:else}
-                    <span class="tag">{element.content}</span>
+                {:else if element.type === BodyElementType.Mention}
+                    <span class="mention">{element.content}</span>
+                {:else if element.type === BodyElementType.Link}
+                    <a href={element.uri}>{element.content}</a>
                 {/if}
             {/each}
             {bodyCutOff && !showMore ? "…" : ""}
@@ -197,7 +278,7 @@
         @apply px-2;
     }
 
-    .main .body .tag {
+    .main .body .mention {
         @apply font-bold;
         @apply text-gray-bitdark;
     }

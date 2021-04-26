@@ -76,16 +76,16 @@
     }
 
     function linkMatchToURI(match: ReturnType<typeof anchorme.list>[number]) {
-        if (match.isURL) {
-            const { string } = match
-            if (string.startsWith("https://") || string.startsWith("http://")) {
-                return string
-            } else {
-                return `https://${string}`
-            }
+        if (!match.isURL) {
+            // Only accept web URLs, otherwise consider invalid.
+            return null
         }
-        // Only accept web URLs, otherwise consider invalid.
-        return null
+        const { string } = match
+        if (string.startsWith("https://") || string.startsWith("http://")) {
+            return string
+        } else {
+            return `https://${string}`
+        }
     }
     function withLinks(elements: BodyElement[]) {
         const res = []
@@ -117,7 +117,7 @@
                         ),
                         type: BodyElementType.Link,
                         uri: uri,
-                    })
+                    } as BodyLink)
                     // Start text one character after match (there could even be only one character left)
                     textStart = match.end + 1
                 }

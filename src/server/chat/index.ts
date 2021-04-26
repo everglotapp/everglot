@@ -182,6 +182,11 @@ export function start(server: Server, pool: Pool) {
                     chlog
                         .child({ message, imageUrl })
                         .debug("Callback for message preview was called")
+                    io.to(chatUser.groupUuid).emit("messagePreview", {
+                        messageUuid: message.message!.uuid,
+                        type: "image",
+                        url: imageUrl,
+                    })
                 })
             }
 

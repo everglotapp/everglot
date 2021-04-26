@@ -195,6 +195,8 @@
             socket.on("welcome", onWelcome)
             // Message from server
             socket.on("message", onMessage)
+            // Message preview from server
+            socket.on("messagePreview", onMessagePreview)
         }
     }
 
@@ -365,6 +367,11 @@
             setTimeout(() => scrollToBottom(container, force), 150)
         })
         messages = [...messages, message]
+    }
+
+    let previews = {}
+    function onMessagePreview({ messageUuid, url, type }) {
+        previews[messageUuid] = { url, type }
     }
 
     let outgoing: Record<User["uuid"], MediaStream | null> = {}
@@ -567,6 +574,19 @@
                                                 time={message.time}
                                                 text={message.text}
                                             />
+                                            {#if previews[message.uuid]}
+                                                <div
+                                                    style="padding-left: 4.5rem;"
+                                                >
+                                                    {#if previews[message.uuid].type === "image"}
+                                                        <img
+                                                            src={previews[
+                                                                message.uuid
+                                                            ].url}
+                                                        />
+                                                    {/if}
+                                                </div>
+                                            {/if}
                                         {/each}
                                     </div>
                                     <div

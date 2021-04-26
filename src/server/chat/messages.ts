@@ -17,6 +17,7 @@ import type {
 } from "../../types/generated/graphql"
 
 import log from "../../logger"
+import UIDGenerator from "uid-generator"
 
 const chlog = log.child({
     namespace: "messages",
@@ -145,9 +146,18 @@ export async function getMessagePreview(
         }
         const imageBuffer = await res.buffer()
         chlog.child({ url }).debug("Found image")
-        // TODO: Check if empty
-        // TODO: Generate filename
-        const filename = "photo.jpg"
+        if (!imageBuffer.length) {
+            chlog.child({ url }).debug("URL preview image is empty")
+            continue
+        }
+        const uidgen = new UIDGenerator(256, UIDGenerator.BASE62)
+        const filename = await uidgen.generate().catch(() => null)
+        if (!filename) {
+            chlog
+                .child({ url })
+                .error(`URL preview image random file name generation failed`)
+            continue
+        }
         const filepath = path.resolve(
             MESSAGE_PREVIEW_IMAGES_DIRECTORY,
             filename

@@ -327,12 +327,15 @@
         // console.log("Successfully joined chat", { joinedRoom, myUuid })
     }
 
-    function handleSendMessage(): void {
+    function focusChatMessageInput(): void {
         const element = document.getElementById("send-msg-input")
         if (element) {
             element.focus()
         }
+    }
 
+    function handleSendMessage(): void {
+        focusChatMessageInput()
         const trimmedMsg = msg.trim()
 
         if (!trimmedMsg) {
@@ -441,6 +444,7 @@
 
     function onEmoji(event: CustomEvent) {
         msg = `${msg || ""}${event.detail}`
+        focusChatMessageInput()
     }
 </script>
 

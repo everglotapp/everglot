@@ -336,6 +336,9 @@
 
     .main .body .emoji {
         @apply text-2xl;
+
+        padding-left: 3px;
+        padding-right: 3px;
     }
 
     .main .body a {

@@ -575,9 +575,7 @@
                                                 text={message.text}
                                             />
                                             {#if previews[message.uuid]}
-                                                <div
-                                                    style="padding-left: 4.5rem;"
-                                                >
+                                                <div class="message-preview">
                                                     {#if previews[message.uuid].type === "image"}
                                                         <img
                                                             src={previews[
@@ -799,6 +797,14 @@
         @apply overflow-y-scroll;
         @apply py-2;
         @apply pr-2;
+    }
+
+    .message-preview {
+        padding-left: 4.5rem;
+    }
+
+    .message-preview img {
+        max-height: 256px;
     }
 
     .submit-form-container {

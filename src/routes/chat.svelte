@@ -7,6 +7,8 @@
     import type SocketIO from "socket.io-client"
     import type { Socket } from "socket.io"
 
+    import EmojiSelector from "svelte-emoji-selector"
+
     import Message from "../comp/chat/Message.svelte"
     import Sidebar from "../comp/chat/Sidebar.svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
@@ -436,6 +438,10 @@
     let audio = false
     let mic = false
     $: callInProgress = incoming.length || Object.values(outgoing).some(Boolean)
+
+    function onEmoji(event: CustomEvent) {
+        msg = `${msg || ""}${event.detail}`
+    }
 </script>
 
 <Localized id="chat-browser-window-title" let:text>
@@ -589,16 +595,18 @@
                                                             duration: 200,
                                                         }}
                                                     />
+                                                    <EmojiSelector
+                                                        on:emoji={onEmoji}
+                                                    />
                                                 </Localized>
                                                 <ButtonSmall
-                                                    className="ml-4 px-6"
+                                                    className="send-msg-button"
                                                     tag="button"
+                                                    variant="TEXT"
+                                                    color="SECONDARY"
                                                     on:click={handleSendMessage}
-                                                    ><Localized
-                                                        id="chat-submit-form-send"
-                                                    /><ChevronsRightIcon
-                                                        size="24"
-                                                        class="ml-1"
+                                                    ><ChevronsRightIcon
+                                                        size="28"
                                                     /></ButtonSmall
                                                 >
                                             {:else}
@@ -787,6 +795,28 @@
 
     .toggle-split-screen > :global(svg) {
         margin-left: -2px;
+    }
+
+    .submit-form-container :global(.send-msg-button) {
+        @apply px-2 !important;
+    }
+
+    .submit-form-container :global(.send-msg-button:hover) {
+        @apply text-primary !important;
+    }
+
+    .submit-form-container :global(.svelte-emoji-picker__trigger) {
+        @apply text-sm;
+        @apply ml-4;
+        @apply px-2;
+        @apply py-2;
+        @apply text-gray-bitdark;
+        @apply hover:text-primary;
+    }
+
+    .submit-form-container :global(.svelte-emoji-picker__trigger svg) {
+        width: 1.4rem;
+        height: 1.4rem;
     }
 
     @media (max-width: 700px) {

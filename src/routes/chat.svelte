@@ -7,6 +7,8 @@
     import type SocketIO from "socket.io-client"
     import type { Socket } from "socket.io"
 
+    import EmojiSelector from "svelte-emoji-selector"
+
     import Message from "../comp/chat/Message.svelte"
     import Sidebar from "../comp/chat/Sidebar.svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
@@ -325,12 +327,17 @@
         // console.log("Successfully joined chat", { joinedRoom, myUuid })
     }
 
-    function handleSendMessage(): void {
-        const element = document.getElementById("send-msg-input")
+    const getChatMessageInput = () =>
+        document.getElementById("send-msg-input") as HTMLInputElement | null
+    function focusChatMessageInput(): void {
+        const element = getChatMessageInput()
         if (element) {
             element.focus()
         }
+    }
 
+    function handleSendMessage(): void {
+        focusChatMessageInput()
         const trimmedMsg = msg.trim()
 
         if (!trimmedMsg) {
@@ -436,6 +443,23 @@
     let audio = false
     let mic = false
     $: callInProgress = incoming.length || Object.values(outgoing).some(Boolean)
+
+    function onEmoji(event: CustomEvent) {
+        const input = getChatMessageInput()
+        if (input && typeof input.selectionStart !== "undefined") {
+            const { selectionStart: start, selectionEnd: end } = input
+            if (start !== null && end !== null) {
+                // Replace text selection by selected emoji.
+                msg = `${msg.slice(0, start)}${event.detail}${msg.slice(end)}`
+                focusChatMessageInput()
+                // Move cursor to after selection. (Doesnt work)
+                // input.selectionStart = input.selectionEnd = end
+                return
+            }
+        }
+        msg = `${msg || ""}${event.detail}`
+        focusChatMessageInput()
+    }
 </script>
 
 <Localized id="chat-browser-window-title" let:text>
@@ -589,16 +613,18 @@
                                                             duration: 200,
                                                         }}
                                                     />
+                                                    <EmojiSelector
+                                                        on:emoji={onEmoji}
+                                                    />
                                                 </Localized>
                                                 <ButtonSmall
-                                                    className="ml-4 px-6"
+                                                    className="send-msg-button"
                                                     tag="button"
+                                                    variant="TEXT"
+                                                    color="SECONDARY"
                                                     on:click={handleSendMessage}
-                                                    ><Localized
-                                                        id="chat-submit-form-send"
-                                                    /><ChevronsRightIcon
-                                                        size="24"
-                                                        class="ml-1"
+                                                    ><ChevronsRightIcon
+                                                        size="28"
                                                     /></ButtonSmall
                                                 >
                                             {:else}
@@ -787,6 +813,28 @@
 
     .toggle-split-screen > :global(svg) {
         margin-left: -2px;
+    }
+
+    .submit-form-container :global(.send-msg-button) {
+        @apply px-2 !important;
+    }
+
+    .submit-form-container :global(.send-msg-button:hover) {
+        @apply text-primary !important;
+    }
+
+    .submit-form-container :global(.svelte-emoji-picker__trigger) {
+        @apply text-sm;
+        @apply ml-4;
+        @apply px-2;
+        @apply py-2;
+        @apply text-gray-bitdark;
+        @apply hover:text-primary;
+    }
+
+    .submit-form-container :global(.svelte-emoji-picker__trigger svg) {
+        width: 1.4rem;
+        height: 1.4rem;
     }
 
     @media (max-width: 700px) {

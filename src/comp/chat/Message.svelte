@@ -45,6 +45,7 @@
         Text,
         Mention,
         Link,
+        Emoji,
     }
     interface BodyElement {
         content: string
@@ -134,11 +135,53 @@
         }
         return res
     }
+    const emojiRegex = /\p{Extended_Pictographic}/gu
+    function withEmojis(elements: BodyElement[]) {
+        const res = []
+        for (const element of elements) {
+            if (element.type !== BodyElementType.Text) {
+                res.push(element)
+                continue
+            }
+            const matches = [...element.content.matchAll(emojiRegex)]
+            // Get first next match
+            let match = matches.shift()
+            let textStart = 0
+            let matchStart = 0
+            while (match) {
+                if (matchStart !== match.index) {
+                    // There's at least 1 match left but we're not there yet. Forward to next match.
+                    matchStart = match.index || 0
+                }
+                res.push({
+                    content: element.content.slice(textStart, matchStart),
+                    type: BodyElementType.Text,
+                })
+                res.push({
+                    content: match[0],
+                    type: BodyElementType.Emoji,
+                })
+                // Start text one character after match (there could even be only one character left)
+                textStart = (match.index || 0) + match[0].length
+                // Get first next match
+                match = matches.shift()
+            }
+            // No matches left, append rest of text content if there is any left.
+            if (textStart < element.content.length) {
+                res.push({
+                    content: element.content.slice(textStart),
+                    type: BodyElementType.Text,
+                })
+            }
+        }
+        return res
+    }
 
     function makeBodyElements(text: string) {
         let elements = [{ content: text, type: BodyElementType.Text }]
         elements = withMentions(elements)
         elements = withLinks(elements)
+        elements = withEmojis(elements)
         return elements
     }
 
@@ -224,6 +267,8 @@
             {#each bodyElements as element}
                 {#if element.type === BodyElementType.Text}
                     <span>{element.content}</span>
+                {:else if element.type === BodyElementType.Emoji}
+                    <span class="emoji">{element.content}</span>
                 {:else if element.type === BodyElementType.Mention}
                     <span class="mention">{element.content}</span>
                 {:else if element.type === BodyElementType.Link}
@@ -280,9 +325,24 @@
         @apply px-2;
     }
 
+    .main .body span {
+        @apply align-middle;
+    }
+
     .main .body .mention {
         @apply font-bold;
         @apply text-gray-bitdark;
+    }
+
+    .main .body .emoji {
+        @apply text-2xl;
+
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .main .body a {
+        @apply font-normal;
     }
 
     .avatar {

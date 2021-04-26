@@ -118,7 +118,7 @@
     <BrowserTitle title={text} />
 </Localized>
 
-<div class="container px-4 mx-auto mt-16 mb-32 max-w-sm">
+<div class="container px-4 mx-auto mt-16 mb-32 md:mt-32 max-w-sm">
     <PageTitle>
         <Localized id="login-title" />
     </PageTitle>

@@ -29,7 +29,7 @@ RUN set -eux\
 
 # Restrict app privileges.
 USER node
-RUN mkdir -p /home/node/app
+RUN mkdir -pv /home/node/app
 WORKDIR /home/node/app
 
 # Configure project dependencies.
@@ -44,8 +44,19 @@ RUN git config --global url."https://github.com/".insteadOf git@github.com:
 # Make sure https is always used for git repositories instead of ssh.
 RUN git config --global url."https://".insteadOf ssh://
 
-# Install all dev dependencies to build the app.
+# Copy latest source code files.
+RUN mkdir -pv /home/node/app/src/node_modules/svelte-emoji-selector
+WORKDIR /home/node/app/src/node_modules/svelte-emoji-selector
+COPY --chown=node:node src/node_modules/svelte-emoji-selector .
 RUN NODE_ENV=development npm ci
+USER root
+RUN NODE_ENV=development npm link
+
+# Install all dev dependencies to build the app.
+WORKDIR /home/node/app
+RUN NODE_ENV=development npm link svelte-emoji-selector
+USER node
+RUN NODE_ENV=development npm i
 
 # Copy latest source code files.
 COPY --chown=node:node . .

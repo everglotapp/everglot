@@ -110,7 +110,7 @@
     <BrowserTitle title={text} />
 </Localized>
 
-<div class="container px-4 mx-auto my-16 max-w-sm">
+<div class="container px-4 mx-auto my-16 md:mt-32 max-w-sm">
     <PageTitle>
         <Localized id="join-title" />
     </PageTitle>

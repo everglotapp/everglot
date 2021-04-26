@@ -227,7 +227,9 @@
                 {:else if element.type === BodyElementType.Mention}
                     <span class="mention">{element.content}</span>
                 {:else if element.type === BodyElementType.Link}
-                    <a href={element.uri}>{element.content}</a>
+                    <a href={element.uri} target="_blank" rel="noreferrer"
+                        >{element.content}</a
+                    >
                 {/if}
             {/each}
             {bodyCutOff && !showMore ? "…" : ""}

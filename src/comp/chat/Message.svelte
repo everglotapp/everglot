@@ -285,6 +285,10 @@
         @apply text-gray-bitdark;
     }
 
+    .main .body a {
+        @apply font-normal;
+    }
+
     .avatar {
         font-size: 15px;
         font-weight: bold;

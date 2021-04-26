@@ -177,10 +177,10 @@ export function start(server: Server, pool: Pool) {
                 chlog
                     .child({ message })
                     .debug("Trying to obtain message preview")
-                getMessagePreview(msg, () => {
+                getMessagePreview(msg, (imageUrl) => {
                     // TODO: Send preview metadata
                     chlog
-                        .child({ message })
+                        .child({ message, imageUrl })
                         .debug("Callback for message preview was called")
                 })
             }

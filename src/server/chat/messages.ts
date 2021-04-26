@@ -1,3 +1,6 @@
+import fs from "fs"
+import path from "path"
+
 import { v4 as uuidv4 } from "uuid"
 
 import fetch from "node-fetch"
@@ -18,6 +21,17 @@ import log from "../../logger"
 const chlog = log.child({
     namespace: "messages",
 })
+
+const MESSAGE_PREVIEW_IMAGES_DIRECTORY = path.resolve(
+    __dirname,
+    "../../../static/images/preview"
+)
+const MESSAGE_PREVIEW_IMAGES_ACCEPTED_CONTENT_TYPES = [
+    "image/jpg",
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+] as const
 
 export type ChatMessage = {
     text: string
@@ -80,13 +94,10 @@ export async function createMessage(
     return res.data?.createMessage
 }
 
-const ACCEPTED_IMAGE_CONTENT_TYPES = [
-    "image/jpg",
-    "image/jpeg",
-    "image/png",
-    "image/gif",
-] as const
-export async function getMessagePreview(msg: string, cb: () => void) {
+export async function getMessagePreview(
+    msg: string,
+    callback: (imageUrl: string) => void
+) {
     // Check for URLs
     const matches = anchorme.list(msg)
     for (const match of matches) {
@@ -123,7 +134,7 @@ export async function getMessagePreview(msg: string, cb: () => void) {
         const contentType = res.headers.get("content-type")
         if (
             !contentType ||
-            !ACCEPTED_IMAGE_CONTENT_TYPES.some(
+            !MESSAGE_PREVIEW_IMAGES_ACCEPTED_CONTENT_TYPES.some(
                 (acceptedContentType) => acceptedContentType === contentType
             )
         ) {
@@ -132,12 +143,23 @@ export async function getMessagePreview(msg: string, cb: () => void) {
                 .debug("Content type does not indicate an image")
             continue
         }
-        const img = await res.blob()
+        const imageBuffer = await res.buffer()
         chlog.child({ url }).debug("Found image")
         // TODO: Check if empty
-        // TODO: Save image
-        void img
-        cb()
+        // TODO: Generate filename
+        const filename = "photo.jpg"
+        const filepath = path.resolve(
+            MESSAGE_PREVIEW_IMAGES_DIRECTORY,
+            filename
+        )
+        const imageUrl = `/images/preview/${filename}`
+        fs.writeFile(filepath, imageBuffer, () => {
+            chlog
+                .child({ url, imageUrl, filepath, filename })
+                .debug("Stored preview image")
+            callback(imageUrl)
+        })
+        // Only consider first image that can be retrieved successfully.
         break
     }
 }

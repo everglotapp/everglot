@@ -1,6 +1,7 @@
 import fs from "fs"
 import path from "path"
 
+import mime from "mime-types"
 import { v4 as uuidv4 } from "uuid"
 
 import fetch from "node-fetch"
@@ -151,13 +152,15 @@ export async function getMessagePreview(
             continue
         }
         const uidgen = new UIDGenerator(256, UIDGenerator.BASE62)
-        const filename = await uidgen.generate().catch(() => null)
-        if (!filename) {
+        const randomPart = await uidgen.generate().catch(() => null)
+        if (!randomPart) {
             chlog
                 .child({ url })
                 .error(`URL preview image random file name generation failed`)
             continue
         }
+        const extension = mime.extension(contentType)
+        const filename = `${randomPart}${extension ? `.${extension}` : ""}`
         const filepath = path.resolve(
             MESSAGE_PREVIEW_IMAGES_DIRECTORY,
             filename

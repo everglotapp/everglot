@@ -327,8 +327,10 @@
         // console.log("Successfully joined chat", { joinedRoom, myUuid })
     }
 
+    const getChatMessageInput = () =>
+        document.getElementById("send-msg-input") as HTMLInputElement | null
     function focusChatMessageInput(): void {
-        const element = document.getElementById("send-msg-input")
+        const element = getChatMessageInput()
         if (element) {
             element.focus()
         }
@@ -443,6 +445,18 @@
     $: callInProgress = incoming.length || Object.values(outgoing).some(Boolean)
 
     function onEmoji(event: CustomEvent) {
+        const input = getChatMessageInput()
+        if (input && typeof input.selectionStart !== "undefined") {
+            const { selectionStart: start, selectionEnd: end } = input
+            if (start !== null && end !== null) {
+                // Replace text selection by selected emoji.
+                msg = `${msg.slice(0, start)}${event.detail}${msg.slice(end)}`
+                focusChatMessageInput()
+                // Move cursor to after selection. (Doesnt work)
+                // input.selectionStart = input.selectionEnd = end
+                return
+            }
+        }
         msg = `${msg || ""}${event.detail}`
         focusChatMessageInput()
     }

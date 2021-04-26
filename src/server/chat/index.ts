@@ -5,7 +5,7 @@ import log from "../../logger"
 
 import session from "../middlewares/session"
 
-import { createMessage } from "./messages"
+import { createMessage, getMessagePreview } from "./messages"
 import {
     userJoin,
     getCurrentUser,
@@ -129,51 +129,63 @@ export function start(server: Server, pool: Pool) {
                 return
             }
 
-            if (msg) {
-                const recipientGroupId = await getGroupIdByUuid(
-                    chatUser.groupUuid
-                )
-                if (!recipientGroupId) {
-                    chlog
-                        .child({
-                            groupUuid: chatUser.groupUuid,
-                        })
-                        .error(
-                            "Failed to get group ID by UUID for user message"
-                        )
-                    return
-                }
-                const message = await createMessage({
-                    body: msg,
-                    recipientGroupId,
-                    recipientId: null,
-                    senderId: chatUser.user.id,
-                })
-                if (message && message.message && message.sender) {
-                    io.to(chatUser.groupUuid).emit("message", {
-                        uuid: message.message.uuid,
-                        userUuid: message.sender.uuid,
-                        text: msg,
-                        time: message.message.createdAt,
+            if (!msg) {
+                chlog.debug("User sent chatMessage with empty body")
+                return
+            }
+            const recipientGroupId = await getGroupIdByUuid(chatUser.groupUuid)
+            if (!recipientGroupId) {
+                chlog
+                    .child({
+                        groupUuid: chatUser.groupUuid,
                     })
-                } else {
+                    .error("Failed to get group ID by UUID for user message")
+                return
+            }
+            const message = await createMessage({
+                body: msg,
+                recipientGroupId,
+                recipientId: null,
+                senderId: chatUser.user.id,
+            })
+            if (message && message.message && message.sender) {
+                io.to(chatUser.groupUuid).emit("message", {
+                    uuid: message.message.uuid,
+                    userUuid: message.sender.uuid,
+                    text: msg,
+                    time: message.message.createdAt,
+                })
+            } else {
+                chlog
+                    .child({ message })
+                    .error("User text message creation failed")
+                return
+            }
+
+            const group = await getChatGroupByUuid(chatUser.groupUuid)
+            if (!group || !group.groupByUuid?.language?.alpha2) {
+                chlog
+                    .child({
+                        groupUuid: chatUser.groupUuid,
+                    })
+                    .error("Failed to get group by UUID for user message")
+                return
+            }
+            const alpha2 = group.groupByUuid?.language?.alpha2
+
+            if (!msg.startsWith("!")) {
+                chlog
+                    .child({ message })
+                    .debug("Trying to obtain message preview")
+                getMessagePreview(msg, () => {
+                    // TODO: Send preview metadata
                     chlog
                         .child({ message })
-                        .error("User text message creation failed")
-                    return
-                }
+                        .debug("Callback for message preview was called")
+                })
+            }
 
-                const group = await getChatGroupByUuid(chatUser.groupUuid)
-                if (!group || !group.groupByUuid?.language?.alpha2) {
-                    chlog
-                        .child({
-                            groupUuid: chatUser.groupUuid,
-                        })
-                        .error("Failed to get group by UUID for user message")
-                    return
-                }
-                const alpha2 = group.groupByUuid?.language?.alpha2
-
+            if (msg.startsWith("!")) {
                 if (msg.startsWith("!help")) {
                     bots[chatUser.groupUuid].send("available-commands")
                     return

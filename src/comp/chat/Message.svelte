@@ -162,7 +162,7 @@
                     type: BodyElementType.Emoji,
                 })
                 // Start text one character after match (there could even be only one character left)
-                textStart = (match.index || 0) + match[0].length + 1
+                textStart = (match.index || 0) + match[0].length
                 // Get first next match
                 match = matches.shift()
             }
@@ -337,8 +337,8 @@
     .main .body .emoji {
         @apply text-2xl;
 
-        padding-left: 3px;
-        padding-right: 3px;
+        padding-left: 2px;
+        padding-right: 2px;
     }
 
     .main .body a {

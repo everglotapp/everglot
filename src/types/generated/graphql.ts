@@ -265,6 +265,41 @@ export type CreateMessagePayloadMessageEdgeArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
 };
 
+/** All input for the create `MessagePreview` mutation. */
+export type CreateMessagePreviewInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `MessagePreview` to be created by this mutation. */
+  messagePreview: MessagePreviewInput;
+};
+
+/** The output of our create `MessagePreview` mutation. */
+export type CreateMessagePreviewPayload = {
+  __typename?: 'CreateMessagePreviewPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `MessagePreview` that was created by this mutation. */
+  messagePreview?: Maybe<MessagePreview>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Message` that is related to this `MessagePreview`. */
+  message?: Maybe<Message>;
+  /** An edge for our `MessagePreview`. May be used by Relay 1. */
+  messagePreviewEdge?: Maybe<MessagePreviewsEdge>;
+};
+
+
+/** The output of our create `MessagePreview` mutation. */
+export type CreateMessagePreviewPayloadMessagePreviewEdgeArgs = {
+  orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
+};
+
 /** All input for the create `User` mutation. */
 export type CreateUserInput = {
   /**
@@ -723,6 +758,62 @@ export type DeleteMessagePayload = {
 /** The output of our delete `Message` mutation. */
 export type DeleteMessagePayloadMessageEdgeArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
+};
+
+/** All input for the `deleteMessagePreviewByNodeId` mutation. */
+export type DeleteMessagePreviewByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `MessagePreview` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteMessagePreviewByUuid` mutation. */
+export type DeleteMessagePreviewByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteMessagePreview` mutation. */
+export type DeleteMessagePreviewInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `MessagePreview` mutation. */
+export type DeleteMessagePreviewPayload = {
+  __typename?: 'DeleteMessagePreviewPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `MessagePreview` that was deleted by this mutation. */
+  messagePreview?: Maybe<MessagePreview>;
+  deletedMessagePreviewNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Message` that is related to this `MessagePreview`. */
+  message?: Maybe<Message>;
+  /** An edge for our `MessagePreview`. May be used by Relay 1. */
+  messagePreviewEdge?: Maybe<MessagePreviewsEdge>;
+};
+
+
+/** The output of our delete `MessagePreview` mutation. */
+export type DeleteMessagePreviewPayloadMessagePreviewEdgeArgs = {
+  orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
 };
 
 /** All input for the `deleteUserByEmail` mutation. */
@@ -2212,6 +2303,8 @@ export type Message = Node & {
   parentMessage?: Maybe<Message>;
   /** Reads and enables pagination through a set of `Message`. */
   messagesByParentMessageId: MessagesConnection;
+  /** Reads and enables pagination through a set of `MessagePreview`. */
+  messagePreviews: MessagePreviewsConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByMessageParentMessageIdAndSenderId: MessageUsersByMessageParentMessageIdAndSenderIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
@@ -2230,6 +2323,18 @@ export type MessageMessagesByParentMessageIdArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+
+export type MessageMessagePreviewsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
+  condition?: Maybe<MessagePreviewCondition>;
+  filter?: Maybe<MessagePreviewFilter>;
 };
 
 
@@ -2375,6 +2480,128 @@ export type MessagePatch = {
   createdAt?: Maybe<Scalars['Datetime']>;
 };
 
+export type MessagePreview = Node & {
+  __typename?: 'MessagePreview';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  /** Basename without extension */
+  filename: Scalars['String'];
+  /** Extension without leading dot */
+  extension?: Maybe<Scalars['String']>;
+  messageId: Scalars['Int'];
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `Message` that is related to this `MessagePreview`. */
+  message?: Maybe<Message>;
+};
+
+/**
+ * A condition to be used against `MessagePreview` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type MessagePreviewCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `filename` field. */
+  filename?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `extension` field. */
+  extension?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `messageId` field. */
+  messageId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `MessagePreview` object types. All fields are combined with a logical ‘and.’ */
+export type MessagePreviewFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `filename` field. */
+  filename?: Maybe<StringFilter>;
+  /** Filter by the object’s `extension` field. */
+  extension?: Maybe<StringFilter>;
+  /** Filter by the object’s `messageId` field. */
+  messageId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<MessagePreviewFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<MessagePreviewFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<MessagePreviewFilter>;
+};
+
+/** An input for mutations affecting `MessagePreview` */
+export type MessagePreviewInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid: Scalars['UUID'];
+  /** Basename without extension */
+  filename: Scalars['String'];
+  /** Extension without leading dot */
+  extension?: Maybe<Scalars['String']>;
+  messageId: Scalars['Int'];
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `MessagePreview`. Fields that are set will be updated. */
+export type MessagePreviewPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Basename without extension */
+  filename?: Maybe<Scalars['String']>;
+  /** Extension without leading dot */
+  extension?: Maybe<Scalars['String']>;
+  messageId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `MessagePreview` values. */
+export type MessagePreviewsConnection = {
+  __typename?: 'MessagePreviewsConnection';
+  /** A list of `MessagePreview` objects. */
+  nodes: Array<Maybe<MessagePreview>>;
+  /** A list of edges which contains the `MessagePreview` and cursor to aid in pagination. */
+  edges: Array<MessagePreviewsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `MessagePreview` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `MessagePreview` edge in the connection. */
+export type MessagePreviewsEdge = {
+  __typename?: 'MessagePreviewsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `MessagePreview` at the end of the edge. */
+  node?: Maybe<MessagePreview>;
+};
+
+/** Methods to use when ordering `MessagePreview`. */
+export enum MessagePreviewsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  FilenameAsc = 'FILENAME_ASC',
+  FilenameDesc = 'FILENAME_DESC',
+  ExtensionAsc = 'EXTENSION_ASC',
+  ExtensionDesc = 'EXTENSION_DESC',
+  MessageIdAsc = 'MESSAGE_ID_ASC',
+  MessageIdDesc = 'MESSAGE_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
 /** A connection to a list of `User` values, with data from `Message`. */
 export type MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyConnection = {
   __typename?: 'MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyConnection';
@@ -2507,6 +2734,8 @@ export type Mutation = {
   createLanguageSkillLevel?: Maybe<CreateLanguageSkillLevelPayload>;
   /** Creates a single `Language`. */
   createLanguage?: Maybe<CreateLanguagePayload>;
+  /** Creates a single `MessagePreview`. */
+  createMessagePreview?: Maybe<CreateMessagePreviewPayload>;
   /** Creates a single `Message`. */
   createMessage?: Maybe<CreateMessagePayload>;
   /** Creates a single `UserLanguage`. */
@@ -2541,6 +2770,12 @@ export type Mutation = {
   updateLanguageByAlpha2?: Maybe<UpdateLanguagePayload>;
   /** Updates a single `Language` using a unique key and a patch. */
   updateLanguageByEnglishName?: Maybe<UpdateLanguagePayload>;
+  /** Updates a single `MessagePreview` using its globally unique id and a patch. */
+  updateMessagePreviewByNodeId?: Maybe<UpdateMessagePreviewPayload>;
+  /** Updates a single `MessagePreview` using a unique key and a patch. */
+  updateMessagePreview?: Maybe<UpdateMessagePreviewPayload>;
+  /** Updates a single `MessagePreview` using a unique key and a patch. */
+  updateMessagePreviewByUuid?: Maybe<UpdateMessagePreviewPayload>;
   /** Updates a single `Message` using its globally unique id and a patch. */
   updateMessageByNodeId?: Maybe<UpdateMessagePayload>;
   /** Updates a single `Message` using a unique key and a patch. */
@@ -2589,6 +2824,12 @@ export type Mutation = {
   deleteLanguageByAlpha2?: Maybe<DeleteLanguagePayload>;
   /** Deletes a single `Language` using a unique key. */
   deleteLanguageByEnglishName?: Maybe<DeleteLanguagePayload>;
+  /** Deletes a single `MessagePreview` using its globally unique id. */
+  deleteMessagePreviewByNodeId?: Maybe<DeleteMessagePreviewPayload>;
+  /** Deletes a single `MessagePreview` using a unique key. */
+  deleteMessagePreview?: Maybe<DeleteMessagePreviewPayload>;
+  /** Deletes a single `MessagePreview` using a unique key. */
+  deleteMessagePreviewByUuid?: Maybe<DeleteMessagePreviewPayload>;
   /** Deletes a single `Message` using its globally unique id. */
   deleteMessageByNodeId?: Maybe<DeleteMessagePayload>;
   /** Deletes a single `Message` using a unique key. */
@@ -2643,6 +2884,12 @@ export type MutationCreateLanguageSkillLevelArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateLanguageArgs = {
   input: CreateLanguageInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateMessagePreviewArgs = {
+  input: CreateMessagePreviewInput;
 };
 
 
@@ -2745,6 +2992,24 @@ export type MutationUpdateLanguageByAlpha2Args = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateLanguageByEnglishNameArgs = {
   input: UpdateLanguageByEnglishNameInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateMessagePreviewByNodeIdArgs = {
+  input: UpdateMessagePreviewByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateMessagePreviewArgs = {
+  input: UpdateMessagePreviewInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateMessagePreviewByUuidArgs = {
+  input: UpdateMessagePreviewByUuidInput;
 };
 
 
@@ -2893,6 +3158,24 @@ export type MutationDeleteLanguageByEnglishNameArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteMessagePreviewByNodeIdArgs = {
+  input: DeleteMessagePreviewByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteMessagePreviewArgs = {
+  input: DeleteMessagePreviewInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteMessagePreviewByUuidArgs = {
+  input: DeleteMessagePreviewByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteMessageByNodeIdArgs = {
   input: DeleteMessageByNodeIdInput;
 };
@@ -3010,6 +3293,8 @@ export type Query = Node & {
   languageSkillLevels?: Maybe<LanguageSkillLevelsConnection>;
   /** Reads and enables pagination through a set of `Language`. */
   languages?: Maybe<LanguagesConnection>;
+  /** Reads and enables pagination through a set of `MessagePreview`. */
+  messagePreviews?: Maybe<MessagePreviewsConnection>;
   /** Reads and enables pagination through a set of `Message`. */
   messages?: Maybe<MessagesConnection>;
   /** Reads and enables pagination through a set of `UserLanguage`. */
@@ -3026,6 +3311,8 @@ export type Query = Node & {
   language?: Maybe<Language>;
   languageByAlpha2?: Maybe<Language>;
   languageByEnglishName?: Maybe<Language>;
+  messagePreview?: Maybe<MessagePreview>;
+  messagePreviewByUuid?: Maybe<MessagePreview>;
   message?: Maybe<Message>;
   messageByUuid?: Maybe<Message>;
   userLanguage?: Maybe<UserLanguage>;
@@ -3051,6 +3338,8 @@ export type Query = Node & {
   languageSkillLevelByNodeId?: Maybe<LanguageSkillLevel>;
   /** Reads a single `Language` using its globally unique `ID`. */
   languageByNodeId?: Maybe<Language>;
+  /** Reads a single `MessagePreview` using its globally unique `ID`. */
+  messagePreviewByNodeId?: Maybe<MessagePreview>;
   /** Reads a single `Message` using its globally unique `ID`. */
   messageByNodeId?: Maybe<Message>;
   /** Reads a single `UserLanguage` using its globally unique `ID`. */
@@ -3130,6 +3419,19 @@ export type QueryLanguagesArgs = {
   orderBy?: Maybe<Array<LanguagesOrderBy>>;
   condition?: Maybe<LanguageCondition>;
   filter?: Maybe<LanguageFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryMessagePreviewsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
+  condition?: Maybe<MessagePreviewCondition>;
+  filter?: Maybe<MessagePreviewFilter>;
 };
 
 
@@ -3230,6 +3532,18 @@ export type QueryLanguageByAlpha2Args = {
 /** The root query type which gives access points into the data universe. */
 export type QueryLanguageByEnglishNameArgs = {
   englishName: Scalars['String'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryMessagePreviewArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryMessagePreviewByUuidArgs = {
+  uuid: Scalars['UUID'];
 };
 
 
@@ -3338,6 +3652,12 @@ export type QueryLanguageSkillLevelByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryLanguageByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryMessagePreviewByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
 
@@ -3840,6 +4160,67 @@ export type UpdateMessagePayload = {
 /** The output of our update `Message` mutation. */
 export type UpdateMessagePayloadMessageEdgeArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
+};
+
+/** All input for the `updateMessagePreviewByNodeId` mutation. */
+export type UpdateMessagePreviewByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `MessagePreview` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `MessagePreview` being updated. */
+  patch: MessagePreviewPatch;
+};
+
+/** All input for the `updateMessagePreviewByUuid` mutation. */
+export type UpdateMessagePreviewByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `MessagePreview` being updated. */
+  patch: MessagePreviewPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateMessagePreview` mutation. */
+export type UpdateMessagePreviewInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `MessagePreview` being updated. */
+  patch: MessagePreviewPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `MessagePreview` mutation. */
+export type UpdateMessagePreviewPayload = {
+  __typename?: 'UpdateMessagePreviewPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `MessagePreview` that was updated by this mutation. */
+  messagePreview?: Maybe<MessagePreview>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Message` that is related to this `MessagePreview`. */
+  message?: Maybe<Message>;
+  /** An edge for our `MessagePreview`. May be used by Relay 1. */
+  messagePreviewEdge?: Maybe<MessagePreviewsEdge>;
+};
+
+
+/** The output of our update `MessagePreview` mutation. */
+export type UpdateMessagePreviewPayloadMessagePreviewEdgeArgs = {
+  orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
 };
 
 /** All input for the `updateUserByEmail` mutation. */
@@ -5076,6 +5457,25 @@ export type CreateMessageMutation = (
   )> }
 );
 
+export type CreateMessagePreviewMutationVariables = Exact<{
+  messageId: Scalars['Int'];
+  filename: Scalars['String'];
+  extension?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type CreateMessagePreviewMutation = (
+  { __typename?: 'Mutation' }
+  & { createMessagePreview?: Maybe<(
+    { __typename?: 'CreateMessagePreviewPayload' }
+    & { messagePreview?: Maybe<(
+      { __typename?: 'MessagePreview' }
+      & Pick<MessagePreview, 'id'>
+    )> }
+  )> }
+);
+
 export type CreateUserMutationVariables = Exact<{
   email: Scalars['String'];
   gender: Scalars['String'];
@@ -5436,6 +5836,17 @@ export const CreateMessage = gql`
       id
       uuid
       createdAt
+    }
+  }
+}
+    `;
+export const CreateMessagePreview = gql`
+    mutation CreateMessagePreview($messageId: Int!, $filename: String!, $extension: String, $uuid: UUID!) {
+  createMessagePreview(
+    input: {messagePreview: {uuid: $uuid, filename: $filename, extension: $extension, messageId: $messageId}}
+  ) {
+    messagePreview {
+      id
     }
   }
 }

@@ -47,7 +47,7 @@
 
 <div class="wrapper">
     {#if !user}
-        <span class="text-sm italic">error</span>
+        <span class="text-sm italic"><Localized id="user-bio-error" /></span>
     {:else}
         <div class="flex flex-row font-medium gap-x-6">
             <div class="relative">
@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div class="pt-8">
-                <span>Languages</span>
+                <span><Localized id="user-bio-languages-title" /></span>
                 <div class="pl-2 pt-1">
                     {#each languages as language}
                         <div class="text-primary">{language}</div>

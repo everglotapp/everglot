@@ -187,6 +187,40 @@ type Query implements Node {
     filter: LanguageFilter
   ): LanguagesConnection
 
+  """Reads and enables pagination through a set of `MessagePreview`."""
+  messagePreviews(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `MessagePreview`."""
+    orderBy: [MessagePreviewsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessagePreviewCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessagePreviewFilter
+  ): MessagePreviewsConnection
+
   """Reads and enables pagination through a set of `Message`."""
   messages(
     """Only read the first `n` values of the set."""
@@ -330,6 +364,8 @@ type Query implements Node {
   language(id: Int!): Language
   languageByAlpha2(alpha2: String!): Language
   languageByEnglishName(englishName: String!): Language
+  messagePreview(id: Int!): MessagePreview
+  messagePreviewByUuid(uuid: UUID!): MessagePreview
   message(id: Int!): Message
   messageByUuid(uuid: UUID!): Message
   userLanguage(id: Int!): UserLanguage
@@ -432,6 +468,14 @@ type Query implements Node {
     """The globally unique `ID` to be used in selecting a single `Language`."""
     nodeId: ID!
   ): Language
+
+  """Reads a single `MessagePreview` using its globally unique `ID`."""
+  messagePreviewByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `MessagePreview`.
+    """
+    nodeId: ID!
+  ): MessagePreview
 
   """Reads a single `Message` using its globally unique `ID`."""
   messageByNodeId(
@@ -2489,6 +2533,40 @@ type Message implements Node {
     filter: MessageFilter
   ): MessagesConnection!
 
+  """Reads and enables pagination through a set of `MessagePreview`."""
+  messagePreviews(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `MessagePreview`."""
+    orderBy: [MessagePreviewsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessagePreviewCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessagePreviewFilter
+  ): MessagePreviewsConnection!
+
   """Reads and enables pagination through a set of `User`."""
   usersByMessageParentMessageIdAndSenderId(
     """Only read the first `n` values of the set."""
@@ -2680,6 +2758,127 @@ input MessageFilter {
 
   """Negates the expression."""
   not: MessageFilter
+}
+
+"""A connection to a list of `MessagePreview` values."""
+type MessagePreviewsConnection {
+  """A list of `MessagePreview` objects."""
+  nodes: [MessagePreview]!
+
+  """
+  A list of edges which contains the `MessagePreview` and cursor to aid in pagination.
+  """
+  edges: [MessagePreviewsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `MessagePreview` you could get from the connection."""
+  totalCount: Int!
+}
+
+type MessagePreview implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+
+  """Basename without extension"""
+  filename: String!
+
+  """Extension without leading dot"""
+  extension: String
+  messageId: Int!
+  createdAt: Datetime!
+
+  """Reads a single `Message` that is related to this `MessagePreview`."""
+  message: Message
+}
+
+"""A `MessagePreview` edge in the connection."""
+type MessagePreviewsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `MessagePreview` at the end of the edge."""
+  node: MessagePreview
+}
+
+"""Methods to use when ordering `MessagePreview`."""
+enum MessagePreviewsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  FILENAME_ASC
+  FILENAME_DESC
+  EXTENSION_ASC
+  EXTENSION_DESC
+  MESSAGE_ID_ASC
+  MESSAGE_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `MessagePreview` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input MessagePreviewCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `filename` field."""
+  filename: String
+
+  """Checks for equality with the object’s `extension` field."""
+  extension: String
+
+  """Checks for equality with the object’s `messageId` field."""
+  messageId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `MessagePreview` object types. All fields are combined with a logical ‘and.’
+"""
+input MessagePreviewFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `filename` field."""
+  filename: StringFilter
+
+  """Filter by the object’s `extension` field."""
+  extension: StringFilter
+
+  """Filter by the object’s `messageId` field."""
+  messageId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [MessagePreviewFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [MessagePreviewFilter!]
+
+  """Negates the expression."""
+  not: MessagePreviewFilter
 }
 
 """A connection to a list of `User` values, with data from `Message`."""
@@ -4729,6 +4928,14 @@ type Mutation {
     input: CreateLanguageInput!
   ): CreateLanguagePayload
 
+  """Creates a single `MessagePreview`."""
+  createMessagePreview(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateMessagePreviewInput!
+  ): CreateMessagePreviewPayload
+
   """Creates a single `Message`."""
   createMessage(
     """
@@ -4868,6 +5075,32 @@ type Mutation {
     """
     input: UpdateLanguageByEnglishNameInput!
   ): UpdateLanguagePayload
+
+  """
+  Updates a single `MessagePreview` using its globally unique id and a patch.
+  """
+  updateMessagePreviewByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateMessagePreviewByNodeIdInput!
+  ): UpdateMessagePreviewPayload
+
+  """Updates a single `MessagePreview` using a unique key and a patch."""
+  updateMessagePreview(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateMessagePreviewInput!
+  ): UpdateMessagePreviewPayload
+
+  """Updates a single `MessagePreview` using a unique key and a patch."""
+  updateMessagePreviewByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateMessagePreviewByUuidInput!
+  ): UpdateMessagePreviewPayload
 
   """Updates a single `Message` using its globally unique id and a patch."""
   updateMessageByNodeId(
@@ -5064,6 +5297,30 @@ type Mutation {
     """
     input: DeleteLanguageByEnglishNameInput!
   ): DeleteLanguagePayload
+
+  """Deletes a single `MessagePreview` using its globally unique id."""
+  deleteMessagePreviewByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteMessagePreviewByNodeIdInput!
+  ): DeleteMessagePreviewPayload
+
+  """Deletes a single `MessagePreview` using a unique key."""
+  deleteMessagePreview(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteMessagePreviewInput!
+  ): DeleteMessagePreviewPayload
+
+  """Deletes a single `MessagePreview` using a unique key."""
+  deleteMessagePreviewByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteMessagePreviewByUuidInput!
+  ): DeleteMessagePreviewPayload
 
   """Deletes a single `Message` using its globally unique id."""
   deleteMessageByNodeId(
@@ -5398,6 +5655,58 @@ input LanguageInput {
   """ISO 3166-1 alpha-2 standardized code"""
   alpha2: String!
   englishName: String!
+  createdAt: Datetime
+}
+
+"""The output of our create `MessagePreview` mutation."""
+type CreateMessagePreviewPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `MessagePreview` that was created by this mutation."""
+  messagePreview: MessagePreview
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Message` that is related to this `MessagePreview`."""
+  message: Message
+
+  """An edge for our `MessagePreview`. May be used by Relay 1."""
+  messagePreviewEdge(
+    """The method to use when ordering `MessagePreview`."""
+    orderBy: [MessagePreviewsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): MessagePreviewsEdge
+}
+
+"""All input for the create `MessagePreview` mutation."""
+input CreateMessagePreviewInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `MessagePreview` to be created by this mutation."""
+  messagePreview: MessagePreviewInput!
+}
+
+"""An input for mutations affecting `MessagePreview`"""
+input MessagePreviewInput {
+  id: Int
+  uuid: UUID!
+
+  """Basename without extension"""
+  filename: String!
+
+  """Extension without leading dot"""
+  extension: String
+  messageId: Int!
   createdAt: Datetime
 }
 
@@ -6018,6 +6327,97 @@ input UpdateLanguageByEnglishNameInput {
   """
   patch: LanguagePatch!
   englishName: String!
+}
+
+"""The output of our update `MessagePreview` mutation."""
+type UpdateMessagePreviewPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `MessagePreview` that was updated by this mutation."""
+  messagePreview: MessagePreview
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Message` that is related to this `MessagePreview`."""
+  message: Message
+
+  """An edge for our `MessagePreview`. May be used by Relay 1."""
+  messagePreviewEdge(
+    """The method to use when ordering `MessagePreview`."""
+    orderBy: [MessagePreviewsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): MessagePreviewsEdge
+}
+
+"""All input for the `updateMessagePreviewByNodeId` mutation."""
+input UpdateMessagePreviewByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `MessagePreview` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `MessagePreview` being updated.
+  """
+  patch: MessagePreviewPatch!
+}
+
+"""
+Represents an update to a `MessagePreview`. Fields that are set will be updated.
+"""
+input MessagePreviewPatch {
+  id: Int
+  uuid: UUID
+
+  """Basename without extension"""
+  filename: String
+
+  """Extension without leading dot"""
+  extension: String
+  messageId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateMessagePreview` mutation."""
+input UpdateMessagePreviewInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `MessagePreview` being updated.
+  """
+  patch: MessagePreviewPatch!
+  id: Int!
+}
+
+"""All input for the `updateMessagePreviewByUuid` mutation."""
+input UpdateMessagePreviewByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `MessagePreview` being updated.
+  """
+  patch: MessagePreviewPatch!
+  uuid: UUID!
 }
 
 """The output of our update `Message` mutation."""
@@ -6661,6 +7061,67 @@ input DeleteLanguageByEnglishNameInput {
   """
   clientMutationId: String
   englishName: String!
+}
+
+"""The output of our delete `MessagePreview` mutation."""
+type DeleteMessagePreviewPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `MessagePreview` that was deleted by this mutation."""
+  messagePreview: MessagePreview
+  deletedMessagePreviewNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Message` that is related to this `MessagePreview`."""
+  message: Message
+
+  """An edge for our `MessagePreview`. May be used by Relay 1."""
+  messagePreviewEdge(
+    """The method to use when ordering `MessagePreview`."""
+    orderBy: [MessagePreviewsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): MessagePreviewsEdge
+}
+
+"""All input for the `deleteMessagePreviewByNodeId` mutation."""
+input DeleteMessagePreviewByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `MessagePreview` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteMessagePreview` mutation."""
+input DeleteMessagePreviewInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deleteMessagePreviewByUuid` mutation."""
+input DeleteMessagePreviewByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
 }
 
 """The output of our delete `Message` mutation."""

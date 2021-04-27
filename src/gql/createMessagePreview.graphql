@@ -1,0 +1,21 @@
+mutation CreateMessagePreview(
+    $messageId: Int!
+    $filename: String!
+    $extension: String
+    $uuid: UUID!
+) {
+    createMessagePreview(
+        input: {
+            messagePreview: {
+                uuid: $uuid
+                filename: $filename
+                extension: $extension
+                messageId: $messageId
+            }
+        }
+    ) {
+        messagePreview {
+            id
+        }
+    }
+}

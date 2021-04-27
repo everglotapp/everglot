@@ -5,7 +5,7 @@ import log from "../../logger"
 
 import session from "../middlewares/session"
 
-import { createMessage, getMessagePreview } from "./messages"
+import { createMessage, generateMessagePreview } from "./messages"
 import {
     userJoin,
     getCurrentUser,
@@ -177,17 +177,20 @@ export function start(server: Server, pool: Pool) {
                 chlog
                     .child({ message })
                     .debug("Trying to obtain message preview")
-                getMessagePreview(msg, (imageUrl) => {
-                    // TODO: Send preview metadata
-                    chlog
-                        .child({ message, imageUrl })
-                        .debug("Callback for message preview was called")
-                    io.to(chatUser.groupUuid).emit("messagePreview", {
-                        messageUuid: message.message!.uuid,
-                        type: "image",
-                        url: imageUrl,
-                    })
-                })
+                generateMessagePreview(
+                    { id: message.message.id, body: msg },
+                    (imageUrl) => {
+                        // TODO: Send preview metadata
+                        chlog
+                            .child({ message, imageUrl })
+                            .debug("Callback for message preview was called")
+                        io.to(chatUser.groupUuid).emit("messagePreview", {
+                            messageUuid: message.message!.uuid,
+                            type: "image",
+                            url: imageUrl,
+                        })
+                    }
+                )
             }
 
             if (msg.startsWith("!")) {

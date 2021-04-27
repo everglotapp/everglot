@@ -15,10 +15,15 @@ import type {
     User,
     CreateMessageMutation,
     CreateMessageMutationVariables,
+    CreateMessagePreviewMutation,
+    CreateMessagePreviewMutationVariables,
+    MessagePreview,
+    Message,
 } from "../../types/generated/graphql"
 
 import log from "../../logger"
 import UIDGenerator from "uid-generator"
+import { MESSAGE_PREVIEW_BASE_PATH } from "../../constants"
 
 const chlog = log.child({
     namespace: "messages",
@@ -96,12 +101,12 @@ export async function createMessage(
     return res.data?.createMessage
 }
 
-export async function getMessagePreview(
-    msg: string,
+export async function generateMessagePreview(
+    message: Pick<Message, "id" | "body">,
     callback: (imageUrl: string) => void
 ) {
     // Check for URLs
-    const matches = anchorme.list(msg)
+    const matches = anchorme.list(message.body)
     for (const match of matches) {
         const { string: url, isURL } = match
         if (!isURL) {
@@ -152,27 +157,75 @@ export async function getMessagePreview(
             continue
         }
         const uidgen = new UIDGenerator(256, UIDGenerator.BASE62)
-        const randomPart = await uidgen.generate().catch(() => null)
-        if (!randomPart) {
+        const filename = await uidgen.generate().catch(() => null)
+        if (!filename) {
             chlog
                 .child({ url })
                 .error(`URL preview image random file name generation failed`)
             continue
         }
         const extension = mime.extension(contentType)
-        const filename = `${randomPart}${extension ? `.${extension}` : ""}`
+        const basename = `${filename}${extension ? `.${extension}` : ""}`
         const filepath = path.resolve(
             MESSAGE_PREVIEW_IMAGES_DIRECTORY,
-            filename
+            basename
         )
-        const imageUrl = `/images/preview/${filename}`
-        fs.writeFile(filepath, imageBuffer, () => {
+        const imageUrl = `${MESSAGE_PREVIEW_BASE_PATH}${basename}`
+        fs.writeFile(filepath, imageBuffer, async () => {
             chlog
-                .child({ url, imageUrl, filepath, filename })
+                .child({
+                    url,
+                    imageUrl,
+                    filepath,
+                    filename,
+                    basename,
+                    extension,
+                })
                 .debug("Stored preview image")
+
             callback(imageUrl)
+
+            // Create in database
+            createMessagePreview({
+                messageId: message.id,
+                filename,
+                extension: extension || null,
+            })
         })
         // Only consider first image that can be retrieved successfully.
         break
     }
+}
+
+export async function createMessagePreview(
+    messagePreview: Omit<CreateMessagePreviewMutationVariables, "uuid">
+): Promise<MessagePreview["id"] | null> {
+    const res = await performQuery<CreateMessagePreviewMutation>(
+        `mutation CreateMessagePreview(
+            $messageId: Int!
+            $filename: String!
+            $extension: String
+            $uuid: UUID!
+          ) {
+            createMessagePreview(
+              input: {
+                messagePreview: {
+                  uuid: $uuid
+                  filename: $filename
+                  extension: $extension
+                  messageId: $messageId
+                }
+              }
+            ) {
+              messagePreview {
+                id
+              }
+            }
+          }`,
+        { ...messagePreview, uuid: uuidv4() }
+    )
+    if (!res.data) {
+        return null
+    }
+    return res.data?.createMessagePreview?.messagePreview?.id || null
 }

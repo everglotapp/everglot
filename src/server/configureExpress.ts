@@ -37,7 +37,12 @@ export default function configureExpress(
         proxied: APP_IS_BEHIND_REVERSE_PROXY ? "true" : "false",
     })
 
-    app.use(compression({ threshold: 0 }), sirv("static", { dev }), json())
+    app.use(
+        compression({ threshold: 0 }),
+        sirv("static", { dev }),
+        sirv("dynamic", { dev: true }),
+        json()
+    )
 
     if (!dev) {
         if (APP_IS_BEHIND_REVERSE_PROXY) {

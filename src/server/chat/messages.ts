@@ -32,7 +32,7 @@ const chlog = log.child({
 
 const MESSAGE_PREVIEW_IMAGES_DIRECTORY = path.resolve(
     __dirname,
-    "../../../static/images/preview"
+    "../../../dynamic/images/preview"
 )
 const MESSAGE_PREVIEW_IMAGES_ACCEPTED_CONTENT_TYPES = [
     "image/jpg",

@@ -4,6 +4,6 @@
 yarn-error.log
 /__sapper__/
 /static/global.css
-/static/images/
+/dynamic/
 .env
 /src/graphql.server.json

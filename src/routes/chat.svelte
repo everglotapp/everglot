@@ -40,6 +40,7 @@
         Group,
         User,
         JoinGlobalGroupMutation,
+        Maybe,
     } from "../types/generated/graphql"
     import { JoinGlobalGroup } from "../types/generated/graphql"
 
@@ -378,17 +379,17 @@
         }
     }
 
+    const isOwnMessage = (message: ChatMessage) =>
+        message.userUuid !== null &&
+        myUuid !== null &&
+        message.userUuid === myUuid
     function onMessage(message: ChatMessage): void {
         getChatMessageContainers().forEach((container) => {
-            const isOwnMessage =
-                message.userUuid !== null &&
-                myUuid !== null &&
-                message.userUuid === myUuid
             /**
              * Force auto-scroll if the user sent the message themselves
              * or if the user didn't scroll upwards before receiving the message.
              */
-            const force = isOwnMessage || isScrolledToBottom(container)
+            const force = isOwnMessage(message) || isScrolledToBottom(container)
 
             setTimeout(() => scrollToBottom(container, force), 150)
         })
@@ -500,6 +501,45 @@
         }
         msg = `${msg || ""}${event.detail}`
         focusChatMessageInput()
+    }
+
+    const HISTORY_MAX = 1
+    let history: ChatMessage[] = []
+    $: {
+        const HISTORY_CHECK_MAX = 50
+        const res = []
+        for (
+            let i = 0;
+            i < HISTORY_CHECK_MAX &&
+            i < messages.length &&
+            res.length < HISTORY_MAX;
+            ++i
+        ) {
+            const toCheck = messages[messages.length - i - 1]
+            if (!isOwnMessage(toCheck)) {
+                continue
+            }
+            res.push(toCheck)
+        }
+        history = res
+    }
+    let historyMessage: Maybe<ChatMessage> = null
+    let origMsg: string = ""
+    function handleMessageInputKeydown(event: KeyboardEvent): void {
+        if (event.key === "ArrowUp") {
+            if (!historyMessage) {
+                const olderMsg = history[0]
+                if (olderMsg) {
+                    historyMessage = olderMsg
+                    origMsg = msg
+                    msg = historyMessage.text
+                }
+            }
+        }
+        if (event.key === "ArrowDown") {
+            historyMessage = null
+            msg = origMsg
+        }
     }
 </script>
 
@@ -665,6 +705,7 @@
                                                         in:scale={{
                                                             duration: 200,
                                                         }}
+                                                        on:keydown={handleMessageInputKeydown}
                                                     />
                                                     <span
                                                         class="hidden md:inline"

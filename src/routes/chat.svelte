@@ -19,8 +19,12 @@
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
 
-    import type { ChatUser } from "../server/chat/users"
-    import type { ChatMessage } from "../server/chat/messages"
+    import { makeChatMessagePreview } from "../types/chat"
+    import type {
+        ChatUser,
+        ChatMessage,
+        ChatMessagePreview,
+    } from "../types/chat"
 
     import { groupUuid, currentUser } from "../stores"
     import {
@@ -66,6 +70,7 @@
         // })
         // Remove all messages from screen
         messages = []
+        previews = {}
 
         // Fetch group messages just once
         $groupChatMessagesStore.variables = { groupUuid: $groupUuid }
@@ -139,8 +144,9 @@
             const existingUuids = messages.map(({ uuid }) => uuid)
             const messageIsNew = ({ uuid }: any) =>
                 !existingUuids.includes(uuid)
+            const newMessages = receivedMessages.filter(messageIsNew)
             messages = [
-                ...receivedMessages.filter(messageIsNew).map((message) => ({
+                ...newMessages.map((message) => ({
                     text: message!.body,
                     time: message!.createdAt,
                     uuid: message!.uuid,
@@ -148,6 +154,25 @@
                 })),
                 ...messages,
             ]
+            previews = {
+                ...previews,
+                ...Object.fromEntries(
+                    newMessages
+                        .filter(Boolean)
+                        .map((message) => [
+                            message!.uuid,
+                            message!.messagePreviews.nodes
+                                .filter(Boolean)
+                                .map((node) =>
+                                    makeChatMessagePreview(
+                                        node!.uuid,
+                                        node!.filename,
+                                        node!.extension || undefined
+                                    )
+                                ),
+                        ])
+                ),
+            }
             if (typeof window !== "undefined") {
                 getChatMessageContainers().forEach((container) =>
                     setTimeout(() => scrollToBottom(container, true), 150)
@@ -161,7 +186,7 @@
         if ($groupUuid) {
             joinChatRoom($groupUuid)
         }
-        connectToWebRTC()
+        // connectToWebRTC()
     })
 
     onDestroy(() => {
@@ -195,6 +220,8 @@
             socket.on("welcome", onWelcome)
             // Message from server
             socket.on("message", onMessage)
+            // Message preview from server
+            socket.on("messagePreview", onMessagePreview)
         }
     }
 
@@ -264,7 +291,7 @@
     }
 
     function sendMessage(msg: string): boolean {
-        if (!socket) {
+        if (!socket || !socket.connected) {
             // console.log("Not sending", msg, "no socket")
             return false
         }
@@ -273,12 +300,14 @@
         return true
     }
 
+    /**
+     * Note: At the time of this writing there is only one element
+     *       with this class name, this is just defensive coding.
+     */
     const getChatMessageContainers = () =>
-        Array.from(
-            typeof document === "undefined"
-                ? []
-                : document.getElementsByClassName("messages")
-        )
+        typeof document === "undefined"
+            ? []
+            : Array.from(document.getElementsByClassName("messages"))
 
     function scrollToBottom(container: Element, force: boolean = false): void {
         if (!isScrolledToBottom(container) && !force) {
@@ -324,7 +353,6 @@
     }): void {
         joinedRoom = groupUuid
         myUuid = user.uuid
-        // console.log("Successfully joined chat", { joinedRoom, myUuid })
     }
 
     const getChatMessageInput = () =>
@@ -343,11 +371,11 @@
         if (!trimmedMsg) {
             msg = ""
             return
-        } else {
-            // TODO: do this only if message was sent successfully.
+        }
+        const sent = sendMessage(trimmedMsg)
+        if (sent) {
             msg = ""
         }
-        sendMessage(trimmedMsg)
     }
 
     function onMessage(message: ChatMessage): void {
@@ -365,6 +393,19 @@
             setTimeout(() => scrollToBottom(container, force), 150)
         })
         messages = [...messages, message]
+    }
+
+    let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
+    function onMessagePreview({
+        messageUuid,
+        url,
+        type,
+    }: {
+        messageUuid: string
+        url: string
+        type: string
+    }) {
+        previews[messageUuid] = [{ uuid: "", url, type }]
     }
 
     let outgoing: Record<User["uuid"], MediaStream | null> = {}
@@ -567,6 +608,18 @@
                                                 time={message.time}
                                                 text={message.text}
                                             />
+                                            {#if previews[message.uuid]}
+                                                {#each previews[message.uuid] as preview (preview.uuid)}
+                                                    <div
+                                                        class="message-preview"
+                                                    >
+                                                        <img
+                                                            src={preview.url}
+                                                            alt="Preview image"
+                                                        />
+                                                    </div>
+                                                {/each}
+                                            {/if}
                                         {/each}
                                     </div>
                                     <div
@@ -613,9 +666,13 @@
                                                             duration: 200,
                                                         }}
                                                     />
-                                                    <EmojiSelector
-                                                        on:emoji={onEmoji}
-                                                    />
+                                                    <span
+                                                        class="hidden md:inline"
+                                                    >
+                                                        <EmojiSelector
+                                                            on:emoji={onEmoji}
+                                                        />
+                                                    </span>
                                                 </Localized>
                                                 <ButtonSmall
                                                     className="send-msg-button"
@@ -777,6 +834,14 @@
         @apply pr-2;
     }
 
+    .message-preview {
+        padding-left: 4.5rem;
+    }
+
+    .message-preview img {
+        max-height: 256px;
+    }
+
     .submit-form-container {
         padding: 18px 30px;
 
@@ -815,6 +880,10 @@
         margin-left: -2px;
     }
 
+    #send-msg-input {
+        @apply mr-3;
+    }
+
     .submit-form-container :global(.send-msg-button) {
         @apply px-2 !important;
     }
@@ -825,7 +894,6 @@
 
     .submit-form-container :global(.svelte-emoji-picker__trigger) {
         @apply text-sm;
-        @apply ml-4;
         @apply px-2;
         @apply py-2;
         @apply text-gray-bitdark;

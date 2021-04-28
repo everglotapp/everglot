@@ -44,6 +44,15 @@ declare module '*/createMessage.graphql' {
 }
     
 
+declare module '*/createMessagePreview.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateMessagePreview: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createUser.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

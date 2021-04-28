@@ -877,6 +877,8 @@
 
     .message-preview {
         padding-left: 4.5rem;
+
+        @apply mb-3;
     }
 
     .message-preview img {

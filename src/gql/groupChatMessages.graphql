@@ -8,6 +8,13 @@ query GroupChatMessages($groupUuid: UUID!) {
                     uuid
                 }
                 uuid
+                messagePreviews {
+                    nodes {
+                        uuid
+                        filename
+                        extension
+                    }
+                }
             }
         }
     }

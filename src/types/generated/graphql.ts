@@ -5611,7 +5611,13 @@ export type GroupChatMessagesQuery = (
         & { sender?: Maybe<(
           { __typename?: 'User' }
           & Pick<User, 'uuid'>
-        )> }
+        )>, messagePreviews: (
+          { __typename?: 'MessagePreviewsConnection' }
+          & { nodes: Array<Maybe<(
+            { __typename?: 'MessagePreview' }
+            & Pick<MessagePreview, 'uuid' | 'filename' | 'extension'>
+          )>> }
+        ) }
       )>> }
     ) }
   )> }
@@ -5950,6 +5956,13 @@ export const GroupChatMessages = gql`
           uuid
         }
         uuid
+        messagePreviews {
+          nodes {
+            uuid
+            filename
+            extension
+          }
+        }
       }
     }
   }

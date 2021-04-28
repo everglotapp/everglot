@@ -1,16 +1,10 @@
 import type { User, Group } from "../../types/generated/graphql"
+import type { ChatUser } from "../../types/chat"
 
 type SocketHistory = {
     greeted: boolean
 }
 const socketHistories: Record<string, SocketHistory> = {}
-
-export type ChatUser = {
-    socketId: string
-    user: Pick<User, "id" | "username" | "uuid" | "avatarUrl">
-    groupUuid: Group["uuid"]
-    joinedAt: Date
-}
 
 const users: ChatUser[] = []
 

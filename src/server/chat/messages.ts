@@ -24,6 +24,7 @@ import type {
 import log from "../../logger"
 import UIDGenerator from "uid-generator"
 import { MESSAGE_PREVIEW_BASE_PATH } from "../../constants"
+import type { ChatMessage } from "../../types/chat"
 
 const chlog = log.child({
     namespace: "messages",
@@ -39,13 +40,6 @@ const MESSAGE_PREVIEW_IMAGES_ACCEPTED_CONTENT_TYPES = [
     "image/png",
     "image/gif",
 ] as const
-
-export type ChatMessage = {
-    text: string
-    time: string
-    uuid: string
-    userUuid: User["uuid"] | null
-}
 
 export function formatMessage(
     text: string,

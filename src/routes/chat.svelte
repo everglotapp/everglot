@@ -844,10 +844,6 @@
         }
     }
 
-    .view-right {
-        @apply bg-gray-lightest;
-    }
-
     .view-inner {
         @apply grid;
         @apply absolute;
@@ -867,8 +863,9 @@
     .view-right-inner {
         @apply px-3;
         @apply mx-auto;
+        @apply overflow-x-hidden;
 
-        max-width: 820px;
+        max-width: 100%;
         grid-template-rows: 1fr 94px;
     }
 

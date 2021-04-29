@@ -5,6 +5,7 @@
 
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
+    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import PageTitle from "../comp/typography/PageTitle.svelte"
 
@@ -29,6 +30,23 @@
     $: groupUsers =
         userProfile?.groupUsers?.nodes.filter(Boolean).map((node) => node!) ||
         []
+
+    let avatarForm: HTMLFormElement
+    async function handleUploadAvatar(e: Event) {
+        e.preventDefault()
+        const formData = new FormData(avatarForm)
+        await fetch("/profile/picture", {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                console.log("Success:", result)
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+            })
+    }
 </script>
 
 <svelte:head />
@@ -37,7 +55,7 @@
     <BrowserTitle title={text} />
 </Localized>
 
-<div class="container gap-x-4 py-16 px-2 w-full max-w-sm md:max-w-md">
+<div class="container gap-x-4 py-16 px-2 w-full max-w-sm md:max-w-xl">
     {#if $userProfileStore.fetching}
         <div />
     {:else if $userProfileStore.error}
@@ -47,7 +65,7 @@
     {:else}
         <PageTitle><Localized id="profile-title" /></PageTitle>
         <div class="flex flex-row flex-wrap-reverse">
-            <div class="w-full md:w-2/3">
+            <div class="w-full md:w-1/2">
                 <h4><Localized id="profile-email" /></h4>
                 <div class="mb-4">{userProfile?.email}</div>
                 <div>
@@ -70,10 +88,10 @@
                     {/if}
                 </div>
             </div>
-            <div class="w-full md:w-1/3">
+            <div class="w-full md:w-1/2">
                 <div
                     in:scale|local={{ delay: 400, duration: 100 }}
-                    class="mx-auto"
+                    class="mx-auto mb-4"
                     style="border-radius: 50%; width: 96px; height: 96px;"
                 >
                     <Avatar
@@ -82,6 +100,29 @@
                         size={96}
                     />
                 </div>
+
+                <form
+                    action="/profile/picture"
+                    enctype="multipart/form-data"
+                    method="post"
+                    bind:this={avatarForm}
+                    on:submit={handleUploadAvatar}
+                >
+                    <div>
+                        <input
+                            type="file"
+                            name="avatar"
+                            accept="image/png,image/jpeg"
+                        />
+                        <ButtonLarge
+                            tag="button"
+                            type="submit"
+                            variant="TEXT"
+                            className="w-full justify-center"
+                            >Upload Avatar</ButtonLarge
+                        >
+                    </div>
+                </form>
             </div>
         </div>
         <div class="container">

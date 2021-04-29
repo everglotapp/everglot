@@ -655,7 +655,8 @@
                                                     >
                                                         <img
                                                             src={preview.url}
-                                                            alt="Preview image"
+                                                            alt="Preview"
+                                                            role="presentation"
                                                         />
                                                     </div>
                                                 {/each}
@@ -669,7 +670,7 @@
                                             on:submit|preventDefault={handleSendMessage}
                                             class="submit-form justify-end items-center"
                                         >
-                                            {#if $groupChatStore.data && $currentGroupIsGlobal && !$currentUserIsGroupMember}
+                                            {#if false && $groupChatStore.data && $currentGroupIsGlobal && !$currentUserIsGroupMember}
                                                 <ButtonLarge
                                                     className="ml-4 px-6 w-full justify-center"
                                                     tag="button"
@@ -843,6 +844,10 @@
         }
     }
 
+    .view-right {
+        @apply bg-gray-lightest;
+    }
+
     .view-inner {
         @apply grid;
         @apply absolute;
@@ -861,7 +866,9 @@
 
     .view-right-inner {
         @apply px-3;
+        @apply mx-auto;
 
+        max-width: 820px;
         grid-template-rows: 1fr 94px;
     }
 
@@ -870,9 +877,12 @@
     }
 
     .messages {
+        @apply bg-white;
         @apply overflow-y-scroll;
         @apply py-2;
         @apply pr-2;
+        @apply rounded-bl-lg;
+        @apply rounded-br-lg;
     }
 
     .message-preview {
@@ -887,6 +897,8 @@
 
     .submit-form-container {
         padding: 18px 30px;
+        box-shadow: -2px -2px 4px rgba(220, 220, 220, 0.5);
+        min-height: 94px;
 
         @apply bg-gray-lightest;
         @apply absolute;

@@ -7,8 +7,8 @@
     import {
         initClient as initUrqlClient,
         dedupExchange,
-        fetchExchange,
         cacheExchange,
+        fetchExchange,
         query,
     } from "@urql/svelte"
     import { persistedFetchExchange } from "@urql/exchange-persisted-fetch"

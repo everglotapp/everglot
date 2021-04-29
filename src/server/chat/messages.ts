@@ -30,16 +30,10 @@ const chlog = log.child({
     namespace: "messages",
 })
 
-const MESSAGE_PREVIEW_IMAGES_DIRECTORY = path.resolve(
-    __dirname,
-    "../../../dynamic/images/preview"
-)
-const MESSAGE_PREVIEW_IMAGES_ACCEPTED_CONTENT_TYPES = [
-    "image/jpg",
-    "image/jpeg",
-    "image/png",
-    "image/gif",
-] as const
+import {
+    MESSAGE_PREVIEW_IMAGES_DIRECTORY,
+    MESSAGE_PREVIEW_IMAGES_ACCEPTED_CONTENT_TYPES,
+} from "../constants"
 
 export function formatMessage(
     text: string,

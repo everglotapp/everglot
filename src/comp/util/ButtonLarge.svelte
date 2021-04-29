@@ -35,14 +35,25 @@
 </script>
 
 {#if tag === "button"}
-    <button
-        class={`${computedClasses} ${className}`}
-        {type}
-        disabled={disabled ? true : undefined}
-        on:click|preventDefault
-    >
-        <slot />
-    </button>
+    {#if type === "submit"}
+        <button
+            class={`${computedClasses} ${className}`}
+            {type}
+            disabled={disabled ? true : undefined}
+            on:click
+        >
+            <slot />
+        </button>
+    {:else}
+        <button
+            class={`${computedClasses} ${className}`}
+            {type}
+            disabled={disabled ? true : undefined}
+            on:click|preventDefault
+        >
+            <slot />
+        </button>
+    {/if}
 {:else if tag === "a"}
     <a
         class={`${computedClasses} ${className}`}

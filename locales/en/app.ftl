@@ -163,6 +163,7 @@ profile-gender-unknown = Unknown
 profile-languages = My Languages
 profile-language-native-hint = (Native)
 profile-groups = My Groups
+profile-avatar-upload-failed = Your avatar could not be changed successfully. Please try again.
 ## Locales
 locale-en = English
 locale-de = German

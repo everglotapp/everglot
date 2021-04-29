@@ -322,6 +322,7 @@
         @apply flex;
         @apply flex-col;
         @apply overflow-hidden;
+        @apply w-full;
     }
 
     .main .body {
@@ -338,8 +339,8 @@
     }
 
     .main .body .emoji {
-        @apply text-2xl;
-
+        font-size: 1.6rem;
+        line-height: 2.2rem;
         padding-left: 2px;
         padding-right: 2px;
     }

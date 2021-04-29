@@ -7,6 +7,7 @@ import * as sapper from "@sapper/server"
 
 import postgraphile from "./middlewares/postgraphile"
 import session from "./middlewares/session"
+import uploads from "./middlewares/uploads"
 
 import log from "../logger"
 import { registerUserActivity } from "./users"
@@ -61,6 +62,8 @@ export default function configureExpress(
         }
         next()
     })
+
+    app.use(uploads)
 
     app.use(WEBRTC_PATH, peerjs)
 

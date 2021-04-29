@@ -143,6 +143,15 @@ declare module '*/registerUserActivity.graphql' {
 }
     
 
+declare module '*/updateUserAvatarUrl.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UpdateUserAvatarUrl: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/userHasCompletedProfile.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

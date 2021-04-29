@@ -14,7 +14,7 @@
     import type { UserProfileQuery } from "../types/generated/graphql"
     import { Gender } from "../users"
     import Avatar from "../comp/users/Avatar.svelte"
-    import { groupUuid } from "../stores"
+    import { groupUuid, currentUserStore } from "../stores"
 
     const userProfileStore = operationStore<UserProfileQuery>(UserProfile)
     query(userProfileStore)
@@ -31,9 +31,14 @@
         userProfile?.groupUsers?.nodes.filter(Boolean).map((node) => node!) ||
         []
 
+    let errorId: string | null = null
+
+    let newAvatarUrl: string | null = null
     let avatarForm: HTMLFormElement
     async function handleUploadAvatar(e: Event) {
         e.preventDefault()
+        errorId = null
+        newAvatarUrl = null
         const formData = new FormData(avatarForm)
         await fetch("/profile/picture", {
             method: "POST",
@@ -41,10 +46,30 @@
         })
             .then((response) => response.json())
             .then((result) => {
-                console.log("Success:", result)
+                if (result.success) {
+                    newAvatarUrl = result.meta.avatarUrl
+                    $userProfileStore.context = {
+                        requestPolicy: "network-only",
+                        pause: true,
+                    }
+                    $userProfileStore.context = {
+                        requestPolicy: "network-only",
+                        pause: false,
+                    }
+                    $currentUserStore.context = {
+                        requestPolicy: "network-only",
+                        pause: true,
+                    }
+                    $currentUserStore.context = {
+                        requestPolicy: "network-only",
+                        pause: false,
+                    }
+                } else {
+                    errorId = "profile-avatar-upload-failed"
+                }
             })
-            .catch((error) => {
-                console.error("Error:", error)
+            .catch(() => {
+                errorId = "profile-avatar-upload-failed"
             })
     }
 </script>
@@ -56,8 +81,10 @@
 </Localized>
 
 <div class="container gap-x-4 py-16 px-2 w-full max-w-sm md:max-w-xl">
-    {#if $userProfileStore.fetching}
-        <div />
+    {#if errorId}
+        <ErrorMessage>
+            <Localized id={errorId} />
+        </ErrorMessage>
     {:else if $userProfileStore.error}
         <ErrorMessage>
             <Localized id="profile-error" />
@@ -89,17 +116,21 @@
                 </div>
             </div>
             <div class="w-full md:w-1/2">
-                <div
-                    in:scale|local={{ delay: 400, duration: 100 }}
-                    class="mx-auto mb-4"
-                    style="border-radius: 50%; width: 96px; height: 96px;"
-                >
-                    <Avatar
-                        username={userProfile?.username || ""}
-                        url={userProfile?.avatarUrl || ""}
-                        size={96}
-                    />
-                </div>
+                {#key newAvatarUrl}
+                    <div
+                        in:scale|local={{ delay: 400, duration: 100 }}
+                        class="mx-auto mb-4"
+                        style="border-radius: 50%; width: 96px; height: 96px;"
+                    >
+                        <Avatar
+                            username={userProfile?.username || ""}
+                            url={$userProfileStore.fetching && newAvatarUrl
+                                ? newAvatarUrl
+                                : userProfile?.avatarUrl || ""}
+                            size={96}
+                        />
+                    </div>
+                {/key}
 
                 <form
                     action="/profile/picture"

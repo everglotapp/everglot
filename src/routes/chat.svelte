@@ -670,7 +670,7 @@
                                             on:submit|preventDefault={handleSendMessage}
                                             class="submit-form justify-end items-center"
                                         >
-                                            {#if false && $groupChatStore.data && $currentGroupIsGlobal && !$currentUserIsGroupMember}
+                                            {#if $groupChatStore.data && $currentGroupIsGlobal && !$currentUserIsGroupMember}
                                                 <ButtonLarge
                                                     className="ml-4 px-6 w-full justify-center"
                                                     tag="button"

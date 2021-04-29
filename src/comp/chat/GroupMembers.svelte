@@ -42,6 +42,18 @@
     }
 
     let showBioUuid: number | null = null
+    function hideBioOf(userUuid: number | null) {
+        if (showBioUuid === userUuid) {
+            showBioUuid = null
+        }
+    }
+    function toggleBioOf(userUuid: number | null) {
+        if (showBioUuid === userUuid) {
+            showBioUuid = null
+        } else {
+            showBioUuid = userUuid
+        }
+    }
 </script>
 
 {#if $allGroupsStore.error}
@@ -84,13 +96,9 @@
                             avatarUrl={user.avatarUrl}
                             username={user.username}
                             showBio={showBioUuid === user.uuid}
-                            handleClickAway={() => (showBioUuid = null)}
-                            handleEscapeKey={() => (showBioUuid = null)}
-                            on:click={() =>
-                                (showBioUuid =
-                                    showBioUuid === user.uuid
-                                        ? null
-                                        : user.uuid)}
+                            handleClickAway={() => hideBioOf(user.uuid)}
+                            handleEscapeKey={() => hideBioOf(user.uuid)}
+                            on:click={() => toggleBioOf(user.uuid)}
                         />
                     {/if}
                 {/each}
@@ -120,13 +128,9 @@
                             avatarUrl={user.avatarUrl}
                             username={user.username}
                             showBio={showBioUuid === user.uuid}
-                            handleClickAway={() => (showBioUuid = null)}
-                            handleEscapeKey={() => (showBioUuid = null)}
-                            on:click={() =>
-                                (showBioUuid =
-                                    showBioUuid === user.uuid
-                                        ? null
-                                        : user.uuid)}
+                            handleClickAway={() => hideBioOf(user.uuid)}
+                            handleEscapeKey={() => hideBioOf(user.uuid)}
+                            on:click={() => toggleBioOf(user.uuid)}
                         />
                     {/if}
                 {/each}
@@ -143,13 +147,9 @@
                             avatarUrl={user.avatarUrl}
                             username={user.username}
                             showBio={showBioUuid === user.uuid}
-                            handleClickAway={() => (showBioUuid = null)}
-                            handleEscapeKey={() => (showBioUuid = null)}
-                            on:click={() =>
-                                (showBioUuid =
-                                    showBioUuid === user.uuid
-                                        ? null
-                                        : user.uuid)}
+                            handleClickAway={() => hideBioOf(user.uuid)}
+                            handleEscapeKey={() => hideBioOf(user.uuid)}
+                            on:click={() => toggleBioOf(user.uuid)}
                         />
                     {/if}
                 {/each}

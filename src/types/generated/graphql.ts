@@ -5698,6 +5698,23 @@ export type RegisterUserActivityMutation = (
   )> }
 );
 
+export type UpdateUserAvatarUrlMutationVariables = Exact<{
+  avatarUrl: Scalars['String'];
+  id: Scalars['Int'];
+}>;
+
+
+export type UpdateUserAvatarUrlMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser?: Maybe<(
+    { __typename?: 'UpdateUserPayload' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'avatarUrl'>
+    )> }
+  )> }
+);
+
 export type UserHasCompletedProfileQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -6010,6 +6027,15 @@ export const RegisterUserActivity = gql`
     mutation RegisterUserActivity($userId: Int!) {
   registerUserActivity(input: {userId: $userId}) {
     datetime
+  }
+}
+    `;
+export const UpdateUserAvatarUrl = gql`
+    mutation UpdateUserAvatarUrl($avatarUrl: String!, $id: Int!) {
+  updateUser(input: {patch: {avatarUrl: $avatarUrl}, id: $id}) {
+    user {
+      avatarUrl
+    }
   }
 }
     `;

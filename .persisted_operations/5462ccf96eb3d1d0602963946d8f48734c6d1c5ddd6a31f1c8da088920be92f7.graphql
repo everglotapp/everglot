@@ -1,0 +1,9 @@
+mutation UpdateUserAvatarUrl($avatarUrl: String!, $id: Int!) {
+  updateUser(input: {patch: {avatarUrl: $avatarUrl}, id: $id}) {
+    user {
+      avatarUrl
+      __typename
+    }
+    __typename
+  }
+}

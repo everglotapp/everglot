@@ -12,7 +12,7 @@
     tabindex="0"
     style={`width: ${size}px; height: ${size}px;`}
 >
-    {#if url?.startsWith("https://")}
+    {#if url?.startsWith("https://") || url?.startsWith("/")}
         <img
             src={url}
             alt={initial}

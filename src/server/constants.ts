@@ -17,7 +17,7 @@ export const USER_UPLOADED_IMAGES_DIRECTORY = path.resolve(
     "../../../dynamic/images/uploads"
 )
 
-export const USER_UPLOADED_IMAGES_ACCEPTED_MIME_TYPES = [
+export const USER_UPLOADED_IMAGES_ACCEPTED_CONTENT_TYPES = [
     "image/jpg",
     "image/jpeg",
     "image/png",

@@ -44,3 +44,10 @@ export function ensureJsonRequest(req: Request, res: Response): boolean {
     }
     return true
 }
+
+/**
+ * Sets response `content-type` to `application/json`.
+ */
+export function jsonResponse(res: Response): void {
+    res.setHeader("Content-Type", CONTENT_TYPE_JSON)
+}

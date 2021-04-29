@@ -664,7 +664,7 @@
                                         {/each}
                                     </div>
                                     <div
-                                        class="submit-form-container rounded-bl-md rounded-br-md"
+                                        class="submit-form-container rounded-bl-md rounded-br-md grid items-center"
                                     >
                                         <form
                                             on:submit|preventDefault={handleSendMessage}

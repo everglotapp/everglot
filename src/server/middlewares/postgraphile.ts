@@ -62,7 +62,7 @@ export function getPostGraphileOptions(): PostGraphileOptions {
              */
             role: DATABASE_ROLE_CLIENT,
             "user.id": req.session.user_id,
-            statement_timeout: "3000",
+            statement_timeout: "4000",
         }),
     } as PostGraphileOptions & { persistedOperationsDirectory: PathLike }
 }

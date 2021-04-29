@@ -231,7 +231,7 @@
             {/if}
         </div>
     </div>
-    <div class="main w-full">
+    <div class="main">
         <div class="meta">
             <div class="flex items-center">
                 {#if userUuid}
@@ -319,6 +319,9 @@
         @apply p-2;
         @apply bg-gray-lightest;
         @apply shadow-sm;
+        @apply flex;
+        @apply flex-col;
+        @apply overflow-hidden;
     }
 
     .main .body {
@@ -348,7 +351,8 @@
     .avatar {
         font-size: 15px;
         font-weight: bold;
-        width: 4.5rem;
+        width: auto;
+        min-width: 3.75rem;
         max-width: 4.5rem;
 
         @apply flex;
@@ -365,6 +369,8 @@
         @apply flex;
         @apply w-full;
         @apply justify-between;
+        @apply whitespace-nowrap;
+        @apply overflow-hidden;
     }
 
     .username {

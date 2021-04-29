@@ -81,16 +81,17 @@
 </Localized>
 
 <div class="container gap-x-4 py-16 px-2 w-full max-w-sm md:max-w-xl">
-    {#if errorId}
-        <ErrorMessage>
-            <Localized id={errorId} />
-        </ErrorMessage>
-    {:else if $userProfileStore.error}
+    {#if $userProfileStore.error}
         <ErrorMessage>
             <Localized id="profile-error" />
         </ErrorMessage>
     {:else}
         <PageTitle><Localized id="profile-title" /></PageTitle>
+        {#if errorId}
+            <ErrorMessage>
+                <Localized id={errorId} />
+            </ErrorMessage>
+        {/if}
         <div class="flex flex-row flex-wrap-reverse">
             <div class="w-full md:w-1/2">
                 <h4><Localized id="profile-email" /></h4>
@@ -144,14 +145,19 @@
                             type="file"
                             name="avatar"
                             accept="image/png,image/jpeg"
+                            required
+                            class="mb-2"
                         />
                         <ButtonLarge
                             tag="button"
                             type="submit"
                             variant="TEXT"
-                            className="w-full justify-center"
+                            className="w-full justify-center mb-2"
                             >Upload Avatar</ButtonLarge
                         >
+                        <p class="text-gray-bitdark text-sm">
+                            Avatars must be smaller than 5 MB in size.
+                        </p>
                     </div>
                 </form>
             </div>

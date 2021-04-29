@@ -9,6 +9,12 @@ import {
     USER_UPLOADED_IMAGES_ACCEPTED_CONTENT_TYPES,
 } from "../constants"
 
+import log from "../../logger"
+
+const chlog = log.child({
+    namespace: "session",
+})
+
 const uidgen = new UIDGenerator(256, UIDGenerator.BASE62)
 
 const avatarUploadsStorage = multer.diskStorage({
@@ -18,6 +24,11 @@ const avatarUploadsStorage = multer.diskStorage({
                 (acceptedType) => acceptedType === file.mimetype
             )
         ) {
+            chlog
+                .child({ file })
+                .error(
+                    "User tried to upload avatar with non-accepted content type"
+                )
             cb(new Error("Only JPG and PNG images are accepted"), "")
             return
         }
@@ -26,11 +37,15 @@ const avatarUploadsStorage = multer.diskStorage({
     filename: async function (_req, file, cb) {
         const extension = mime.extension(file.mimetype)
         if (!extension || !extension.length) {
+            chlog
+                .child({ file })
+                .error("Failed to resolve extension for mime type")
             cb(new Error("Unknown image type"), "")
             return
         }
         const filename = await uidgen.generate().catch(() => null)
-        if (!extension) {
+        if (!filename) {
+            chlog.child({ file }).error("Failed to generate filename")
             cb(new Error("Failed to generate filename"), "")
             return
         }

@@ -31,6 +31,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     log.child({ avatarUrl, userId: req.session.user_id }).debug(
         "Successfully saved new avatar"
     )
+    // TODO: Remove old avatar
     res.status(200).json({
         success: true,
         message: null,

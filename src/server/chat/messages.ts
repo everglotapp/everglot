@@ -1,5 +1,6 @@
 import fs from "fs"
 import path from "path"
+import URI from "uri-js"
 
 import mime from "mime-types"
 import { v4 as uuidv4 } from "uuid"
@@ -111,7 +112,8 @@ export async function generateMessagePreview(
         }
 
         // TODO: Set limit for file size
-        const res = await fetch(url).catch(() => {
+        const uri = URI.serialize(URI.parse(url))
+        const res = await fetch(uri).catch(() => {
             chlog
                 .child({ url })
                 .debug(
@@ -127,14 +129,15 @@ export async function generateMessagePreview(
             continue
         }
         const contentType = res.headers.get("content-type")
+        const mimeType = contentType ? contentType.split(";")[0] : null
         if (
-            !contentType ||
+            !mimeType ||
             !MESSAGE_PREVIEW_IMAGES_ACCEPTED_CONTENT_TYPES.some(
-                (acceptedContentType) => acceptedContentType === contentType
+                (acceptedContentType) => acceptedContentType === mimeType
             )
         ) {
             chlog
-                .child({ contentType })
+                .child({ contentType, mimeType })
                 .debug("Content type does not indicate an image")
             continue
         }
@@ -152,13 +155,13 @@ export async function generateMessagePreview(
                 .error(`URL preview image random file name generation failed`)
             continue
         }
-        const extension = mime.extension(contentType)
+        const extension = mime.extension(mimeType)
         const basename = `${filename}${extension ? `.${extension}` : ""}`
         const filepath = path.resolve(
             MESSAGE_PREVIEW_IMAGES_DIRECTORY,
             basename
         )
-        const imageUrl = `${MESSAGE_PREVIEW_BASE_PATH}${basename}`
+        const imageUrl = `${MESSAGE_PREVIEW_BASE_PATH}/${basename}`
         fs.writeFile(filepath, imageBuffer, async () => {
             chlog
                 .child({

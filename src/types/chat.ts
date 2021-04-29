@@ -32,7 +32,7 @@ export function makeChatMessagePreview(
 ): ChatMessagePreview {
     return {
         uuid,
-        url: `${MESSAGE_PREVIEW_BASE_PATH}${
+        url: `${MESSAGE_PREVIEW_BASE_PATH}/${
             extension ? `${filename}.${extension}` : filename
         }`,
         type: ChatMessagePreviewType.Image,

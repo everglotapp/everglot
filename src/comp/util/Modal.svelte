@@ -3,7 +3,7 @@
 </script>
 
 <div
-    class="wrapper absolute left-0 top-0 right-0 bottom-0 z-20 flex items-center justify-center"
+    class="wrapper fixed left-0 top-0 right-0 bottom-0 z-20 flex items-center justify-center"
     out:fade={{ duration: 100 }}
 >
     <div

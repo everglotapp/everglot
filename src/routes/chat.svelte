@@ -18,6 +18,9 @@
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
+    import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
+    import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
+    import Modal from "../comp/util/Modal.svelte"
 
     import { makeChatMessagePreview } from "../types/chat"
     import type {
@@ -541,6 +544,13 @@
             msg = origMsg
         }
     }
+    let showLargeImageModalUrl: string | null = null
+    function handleEnlargenImage(url: string) {
+        return (event: MouseEvent) => {
+            event.stopPropagation()
+            showLargeImageModalUrl = url
+        }
+    }
 </script>
 
 <Localized id="chat-browser-window-title" let:text>
@@ -657,6 +667,10 @@
                                                             src={preview.url}
                                                             alt="Preview"
                                                             role="presentation"
+                                                            class="cursor-pointer"
+                                                            on:click={handleEnlargenImage(
+                                                                preview.url
+                                                            )}
                                                         />
                                                     </div>
                                                 {/each}
@@ -745,6 +759,27 @@
             </section>
         </div>
     </div>
+
+    {#if showLargeImageModalUrl && typeof window !== "undefined"}
+        <EscapeKeyListener on:keydown={() => (showLargeImageModalUrl = null)} />
+        <ClickAwayListener
+            elementId="large-image-view"
+            on:clickaway={() => (showLargeImageModalUrl = null)}
+        />
+        <Modal>
+            <div
+                class="grid place-items-center w-full h-full"
+                id="large-image-view"
+            >
+                <img
+                    src={showLargeImageModalUrl}
+                    alt="Enlargened"
+                    role="presentation"
+                    style="max-width: 80vw; max-height: 90vh;"
+                />
+            </div>
+        </Modal>
+    {/if}
 {/if}
 
 <style>

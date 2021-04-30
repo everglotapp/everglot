@@ -50,12 +50,16 @@
     import { ChevronLeftIcon, ChevronsRightIcon } from "svelte-feather-icons"
     import type { MediaConnection } from "peerjs"
 
+    let socket: SocketIO.Socket | null = null
+    let joinedRoom: string | null = null
     let messages: ChatMessage[] = []
     let myUuid: User["uuid"] | null = null
     let msg = ""
 
     let Peer
     let peer: object | null = null
+
+    let chatMessagesContainer: null | HTMLElement
 
     let fetchGroupMetadataInterval: number | null = null
 
@@ -76,8 +80,11 @@
         messages = []
         previews = {}
 
-        // Fetch group messages just once
-        $groupChatMessagesStore.variables = { groupUuid: $groupUuid }
+        // Fetch latest group messages just once
+        $groupChatMessagesStore.variables = {
+            groupUuid: $groupUuid,
+            before: null,
+        }
         fetchGroupChatMessages()
 
         // "Subscribe" to group metadata (name, language, members)
@@ -140,7 +147,9 @@
     ) {
         const { groupByUuid } = $groupChatMessagesStore.data
         const receivedMessages =
-            groupByUuid?.messagesByRecipientGroupId?.nodes.filter(Boolean) || []
+            groupByUuid?.messagesByRecipientGroupId?.edges
+                .filter(Boolean)
+                .map((edge) => edge!.node) || []
         if (receivedMessages.length) {
             $groupChatMessagesStore.context = {
                 pause: true,
@@ -178,9 +187,13 @@
                 ),
             }
             if (typeof window !== "undefined") {
-                getChatMessageContainers().forEach((container) =>
-                    setTimeout(() => scrollToBottom(container, true), 150)
-                )
+                if (chatMessagesContainer) {
+                    setTimeout(() => {
+                        if (chatMessagesContainer) {
+                            scrollToBottom(chatMessagesContainer, true)
+                        }
+                    }, 150)
+                }
             }
         }
     }
@@ -211,8 +224,6 @@
         peer = null
     })
 
-    let socket: SocketIO.Socket | null = null
-    let joinedRoom: string | null = null
     function connectToChat() {
         if (socket || typeof window === "undefined") {
             return
@@ -304,16 +315,10 @@
         return true
     }
 
-    /**
-     * Note: At the time of this writing there is only one element
-     *       with this class name, this is just defensive coding.
-     */
-    const getChatMessageContainers = () =>
-        typeof document === "undefined"
-            ? []
-            : Array.from(document.getElementsByClassName("messages"))
-
-    function scrollToBottom(container: Element, force: boolean = false): void {
+    function scrollToBottom(
+        container: HTMLElement,
+        force: boolean = false
+    ): void {
         if (!isScrolledToBottom(container) && !force) {
             return
         }
@@ -326,7 +331,7 @@
      * If no scrollTop is specified, it'll scroll to the bottom.
      * src: https://github.com/theomessin/vue-chat-scroll/blob/8a68a271fecaffad43d25300ca192e0ada88100b/src/scroll.ts
      */
-    const scroll = (el: Element, scrollTop?: number): void => {
+    const scroll = (el: HTMLElement, scrollTop?: number): void => {
         const top = scrollTop || el.scrollHeight - el.clientHeight
         if (typeof el.scroll === "function") {
             el.scroll({ top })
@@ -339,12 +344,12 @@
      * Whether the element is scrolled to the specified position.
      * @param scrollTop Position to check against, bottom if null.
      */
-    const isScrolled = (el: Element, scrollTop: number | null): boolean => {
+    const isScrolled = (el: HTMLElement, scrollTop: number | null): boolean => {
         const top = scrollTop || el.scrollHeight - el.clientHeight
         return el.scrollTop === top
     }
 
-    const isScrolledToBottom = (container: Element): boolean => {
+    const isScrolledToBottom = (container: HTMLElement): boolean => {
         return isScrolled(container, null)
     }
 
@@ -387,15 +392,21 @@
         myUuid !== null &&
         message.userUuid === myUuid
     function onMessage(message: ChatMessage): void {
-        getChatMessageContainers().forEach((container) => {
+        if (chatMessagesContainer) {
             /**
              * Force auto-scroll if the user sent the message themselves
              * or if the user didn't scroll upwards before receiving the message.
              */
-            const force = isOwnMessage(message) || isScrolledToBottom(container)
+            const force =
+                isOwnMessage(message) ||
+                isScrolledToBottom(chatMessagesContainer)
 
-            setTimeout(() => scrollToBottom(container, force), 150)
-        })
+            setTimeout(() => {
+                if (chatMessagesContainer) {
+                    scrollToBottom(chatMessagesContainer, force)
+                }
+            }, 150)
+        }
         messages = [...messages, message]
     }
 
@@ -551,6 +562,54 @@
             showLargeImageModalUrl = url
         }
     }
+    function fetchOlderMessages() {
+        if (!$groupUuid) {
+            return
+        }
+        if (
+            !$groupChatMessagesStore.data ||
+            !$groupChatMessagesStore.data.groupByUuid ||
+            $groupChatMessagesStore.error
+        ) {
+            return
+        }
+        $groupChatMessagesStore.variables = {
+            groupUuid: $groupUuid,
+            before:
+                $groupChatMessagesStore.data.groupByUuid
+                    .messagesByRecipientGroupId.pageInfo.startCursor,
+        }
+        $groupChatMessagesStore.context = {
+            requestPolicy: "network-only",
+            pause: true,
+        }
+        $groupChatMessagesStore.context = {
+            requestPolicy: "network-only",
+            pause: false,
+        }
+    }
+
+    const FETCH_OLDER_MAX_SCROLL_TOP_PX = 100
+    function handleScroll(event: Event) {
+        const container = event.target as HTMLElement | null
+        if (!container) {
+            return
+        }
+        const scrolledPx =
+            container.scrollTop ||
+            container.scrollHeight - container.clientHeight
+        const { hasPreviousPage } =
+            $groupChatMessagesStore.data?.groupByUuid
+                ?.messagesByRecipientGroupId.pageInfo || {}
+        if (
+            scrolledPx < FETCH_OLDER_MAX_SCROLL_TOP_PX &&
+            hasPreviousPage &&
+            !$groupChatMessagesStore.fetching
+        ) {
+            // element is scrolled near top
+            fetchOlderMessages()
+        }
+    }
 </script>
 
 <Localized id="chat-browser-window-title" let:text>
@@ -650,7 +709,37 @@
                                     class="view-inner view-right-inner"
                                     transition:blur|local={{ duration: 400 }}
                                 >
-                                    <div class="messages">
+                                    <div
+                                        class="messages"
+                                        bind:this={chatMessagesContainer}
+                                        on:scroll={handleScroll}
+                                    >
+                                        {#if $groupChatMessagesStore.fetching}
+                                            <div
+                                                class="text-center mb-2 text-gray-bitdark text-sm font-bold"
+                                            >
+                                                Loading …
+                                            </div>
+                                        {:else if $groupChatMessagesStore.fetching}
+                                            <div
+                                                class="text-center mb-2 text-red-700 text-sm font-bold"
+                                            >
+                                                Error
+                                            </div>
+                                        {:else if $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId.pageInfo.hasPreviousPage}
+                                            <div class="flex justify-center">
+                                                <ButtonSmall
+                                                    tag="button"
+                                                    on:click={fetchOlderMessages}
+                                                    variant="TEXT"
+                                                    color="SECONDARY"
+                                                    className="text-sm mb-2"
+                                                    >Find older messages</ButtonSmall
+                                                >
+                                            </div>
+                                        {:else}
+                                            <hr />
+                                        {/if}
                                         {#each messages as message (message.uuid)}
                                             <Message
                                                 uuid={message.uuid}

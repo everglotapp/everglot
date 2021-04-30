@@ -32,6 +32,7 @@ export const groupChatMessagesStore = operationStore<
     GroupChatMessages,
     {
         groupUuid: "",
+        before: null,
     },
     { pause: true, requestPolicy: "network-only" }
 )

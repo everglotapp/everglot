@@ -1,88 +1,26 @@
 <script lang="ts">
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
-    import { v4 as uuidv4, validate as uuidValidate } from "uuid"
+    import { v4 as uuidv4 } from "uuid"
 
-    import fetch from "cross-fetch"
-    import {
-        initClient as initUrqlClient,
-        dedupExchange,
-        cacheExchange,
-        fetchExchange,
-        query,
-    } from "@urql/svelte"
-    import { persistedFetchExchange } from "@urql/exchange-persisted-fetch"
-    import persistedOperations from "../graphql.client.json"
+    import { setupUrql } from "./_helpers/urql"
+    import { query } from "@urql/svelte"
 
-    import { negotiateLanguages } from "@fluent/langneg"
-    import { FluentBundle, FluentResource } from "@fluent/bundle"
-    import { FluentProvider } from "@nubolab-ffwd/svelte-fluent"
-
-    import en from "../../locales/en/app.ftl"
-    import de from "../../locales/de/app.ftl"
-    import zh from "../../locales/zh-CN/app.ftl"
-
-    import { currentUserStore, groupUuid } from "../stores"
+    import { currentUserStore } from "../stores"
     import { allGroupsStore } from "../stores/groups"
-    import { localeToEnforce } from "../stores/locales"
 
+    import LocaleProvider from "./_helpers/locales/LocaleProvider.svelte"
     import MainNav from "../comp/layout/MainNav.svelte"
     import Footer from "../comp/layout/Footer.svelte"
 
-    import type { DocumentNode, OperationDefinitionNode } from "graphql"
-
-    import { persistedMutationFetchExchange } from "../persistedMutationFetchExchange"
-    import { SUPPORTED_LOCALES } from "../constants"
-    import type { SupportedLocale } from "../constants"
-
-    async function generateHash(
-        _query: string,
-        document: DocumentNode
-    ): Promise<string> {
-        // Note that we're assuming that the first definition is a operation
-        // definition rather than a FragmentDefinitionNode.
-        // Also we're ignoring the query variable meaning that we
-        // cannot just use raw query strings. To change that, return its hash.
-        const operationName = (document
-            ?.definitions[0] as OperationDefinitionNode)?.name?.value
-        if (operationName) {
-            return persistedOperations[
-                operationName as keyof typeof persistedOperations
-            ]
-        }
-        throw new Error("Failed to resolve persisted operation hash")
-    }
-
-    initUrqlClient({
-        url: "/graphql",
-        fetch,
-        exchanges: [
-            dedupExchange,
-            cacheExchange,
-            persistedMutationFetchExchange({
-                // Disable until PostGraphile supports queries via GET
-                // https://github.com/graphile/postgraphile/issues/442
-                preferGetForPersistedQueries: false,
-                enforcePersistedQueries: true,
-                generateHash,
-            }),
-            persistedFetchExchange({
-                // Disable until PostGraphile supports queries via GET
-                // https://github.com/graphile/postgraphile/issues/442
-                preferGetForPersistedQueries: false,
-                enforcePersistedQueries: true,
-                generateHash,
-            }),
-            fetchExchange,
-        ],
-    })
+    setupUrql()
 
     query(currentUserStore)
     query(allGroupsStore)
 
     export let segment: string | undefined = undefined
     segment = segment // get rid of unused prop warning
-    // @ts-ignore (left side of comma operator isn't ignored by svelte)
+    // @ts-ignore (left side of comma operator isn't.
     $: segment, handlePageChange()
 
     $: showMainNav = segment !== "login" && segment !== "join"
@@ -107,58 +45,9 @@
             transitionId, // This forces a re-execution by changing the object contents.
         }
     }
-
-    // Store all translations as a simple object which is available
-    // synchronously and bundled with the rest of the code.
-    const RESOURCES: Record<SupportedLocale, FluentResource> = {
-        de,
-        en,
-        zh,
-    }
-
-    function* generateBundles(userLocales: readonly string[]) {
-        // Choose locales that are best for the user.
-        const currentLocales = negotiateLanguages(
-            userLocales,
-            SUPPORTED_LOCALES,
-            { defaultLocale: "en" }
-        )
-
-        for (const locale of currentLocales) {
-            const bundle = new FluentBundle(locale)
-            bundle.addResource(RESOURCES[locale as SupportedLocale])
-            yield bundle
-        }
-    }
-
-    function resolveCurrentGroup() {
-        if (segment !== "chat") {
-            return null
-        }
-        if (typeof window === "undefined") {
-            /**
-             * Prevent loading group data on server-side.
-             */
-            return null
-        }
-        const group = new URL(window.location.href).searchParams.get("group")
-        if (group && group.length && uuidValidate(group)) {
-            return group
-        } else {
-            return null
-        }
-    }
-    // @ts-ignore
-    $: segment, setTimeout(() => ($groupUuid = resolveCurrentGroup()), 50)
-
-    $: navigatorLocales =
-        typeof navigator === "undefined" ? [] : navigator.languages
-    $: preferredLocales = $localeToEnforce
-        ? [$localeToEnforce, ...navigatorLocales]
-        : navigatorLocales
 </script>
 
-<FluentProvider bundles={generateBundles(preferredLocales)}>
+<LocaleProvider {segment}>
     <div id="app" class:noscroll class:with-main-nav={showMainNav}>
         {#if showMainNav}
             <MainNav {segment} />
@@ -180,7 +69,7 @@
             <Footer />
         {/if}
     </div>
-</FluentProvider>
+</LocaleProvider>
 
 <style>
     #app {

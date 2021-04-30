@@ -5596,6 +5596,7 @@ export type GroupChatQuery = (
 
 export type GroupChatMessagesQueryVariables = Exact<{
   groupUuid: Scalars['UUID'];
+  before?: Maybe<Scalars['Cursor']>;
 }>;
 
 
@@ -5605,20 +5606,26 @@ export type GroupChatMessagesQuery = (
     { __typename?: 'Group' }
     & { messagesByRecipientGroupId: (
       { __typename?: 'MessagesConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'Message' }
-        & Pick<Message, 'body' | 'createdAt' | 'uuid'>
-        & { sender?: Maybe<(
-          { __typename?: 'User' }
-          & Pick<User, 'uuid'>
-        )>, messagePreviews: (
-          { __typename?: 'MessagePreviewsConnection' }
-          & { nodes: Array<Maybe<(
-            { __typename?: 'MessagePreview' }
-            & Pick<MessagePreview, 'uuid' | 'filename' | 'extension'>
-          )>> }
-        ) }
-      )>> }
+      & { edges: Array<(
+        { __typename?: 'MessagesEdge' }
+        & { node?: Maybe<(
+          { __typename?: 'Message' }
+          & Pick<Message, 'body' | 'createdAt' | 'uuid' | 'nodeId'>
+          & { sender?: Maybe<(
+            { __typename?: 'User' }
+            & Pick<User, 'uuid' | 'nodeId'>
+          )>, messagePreviews: (
+            { __typename?: 'MessagePreviewsConnection' }
+            & { nodes: Array<Maybe<(
+              { __typename?: 'MessagePreview' }
+              & Pick<MessagePreview, 'uuid' | 'filename' | 'extension' | 'nodeId'>
+            )>> }
+          ) }
+        )> }
+      )>, pageInfo: (
+        { __typename?: 'PageInfo' }
+        & Pick<PageInfo, 'startCursor' | 'hasPreviousPage'>
+      ) }
     ) }
   )> }
 );
@@ -5963,23 +5970,32 @@ export const GroupChat = gql`
 }
     `;
 export const GroupChatMessages = gql`
-    query GroupChatMessages($groupUuid: UUID!) {
+    query GroupChatMessages($groupUuid: UUID!, $before: Cursor) {
   groupByUuid(uuid: $groupUuid) {
-    messagesByRecipientGroupId(orderBy: CREATED_AT_ASC, last: 1000) {
-      nodes {
-        body
-        createdAt
-        sender {
-          uuid
-        }
-        uuid
-        messagePreviews {
-          nodes {
+    messagesByRecipientGroupId(orderBy: CREATED_AT_ASC, last: 50, before: $before) {
+      edges {
+        node {
+          body
+          createdAt
+          sender {
             uuid
-            filename
-            extension
+            nodeId
           }
+          uuid
+          messagePreviews {
+            nodes {
+              uuid
+              filename
+              extension
+              nodeId
+            }
+          }
+          nodeId
         }
+      }
+      pageInfo {
+        startCursor
+        hasPreviousPage
       }
     }
   }

@@ -1,17 +1,17 @@
 <script lang="ts">
-    import { onMount, onDestroy } from "svelte"
+    import { onDestroy } from "svelte"
     import { scale, fly, blur } from "svelte/transition"
     import { mutation, query } from "@urql/svelte"
 
-    import { io } from "socket.io-client"
-    import type SocketIO from "socket.io-client"
-    import type { Socket } from "socket.io"
-
     import EmojiSelector from "svelte-emoji-selector"
+
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
+
+    import ChatProvider from "./_helpers/chat/ChatProvider.svelte"
+    import WebrtcProvider from "./_helpers/webrtc/WebrtcProvider.svelte"
 
     import Message from "../comp/chat/Message.svelte"
     import Sidebar from "../comp/chat/Sidebar.svelte"
-    import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
@@ -29,7 +29,7 @@
         ChatMessagePreview,
     } from "../types/chat"
 
-    import { groupUuid, currentUser } from "../stores"
+    import { groupUuid } from "../stores"
     import {
         groupChatStore,
         groupChatMessagesStore,
@@ -38,9 +38,10 @@
         groupName,
         currentUserIsGroupMember,
         currentGroupIsGlobal,
+        fetchGroupMetadata,
+        fetchGroupChatMessages,
     } from "../stores/chat"
     import type {
-        Group,
         User,
         JoinGlobalGroupMutation,
         Maybe,
@@ -48,29 +49,55 @@
     import { JoinGlobalGroup } from "../types/generated/graphql"
 
     import { ChevronLeftIcon, ChevronsRightIcon } from "svelte-feather-icons"
-    import type { MediaConnection } from "peerjs"
 
-    let socket: SocketIO.Socket | null = null
-    let joinedRoom: string | null = null
+    let chat: ChatProvider | undefined
+    let webrtc: WebrtcProvider | undefined
+
     let messages: ChatMessage[] = []
+    let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
     let myUuid: User["uuid"] | null = null
     let msg = ""
-
-    let Peer
-    let peer: object | null = null
-
-    let chatMessagesContainer: null | HTMLElement
+    let messagesContainer: HTMLElement | undefined
 
     let fetchGroupMetadataInterval: number | null = null
 
     query(groupChatStore)
     query(groupChatMessagesStore)
 
+    $: if (chat) {
+        chat!.connect()
+        if ($groupUuid) {
+            chat!.joinRoom($groupUuid)
+        }
+    }
+
+    $: if (webrtc) {
+        // webrtc.connect()
+    }
+
+    onDestroy(() => {
+        if (fetchGroupMetadataInterval) {
+            clearInterval(fetchGroupMetadataInterval)
+            fetchGroupMetadataInterval = null
+        }
+    })
+
     const joinGlobalGroup = mutation<JoinGlobalGroupMutation>({
         query: JoinGlobalGroup,
     })
 
-    $: if ($groupUuid && joinedRoom !== $groupUuid) {
+    const fetchMoreMessages = () => {
+        if (!$groupUuid) {
+            return
+        }
+        fetchGroupChatMessages({
+            groupUuid: $groupUuid,
+            before:
+                $groupChatMessagesStore.data?.groupByUuid
+                    ?.messagesByRecipientGroupId.pageInfo.startCursor || null,
+        })
+    }
+    $: if ($groupUuid && chat && chat.currentRoom() !== $groupUuid) {
         // console.log("Switching room", {
         //     oldRoom: joinedRoom,
         //     newRoom: $groupUuid,
@@ -80,83 +107,52 @@
         messages = []
         previews = {}
 
-        // Fetch latest group messages just once
-        $groupChatMessagesStore.variables = {
-            groupUuid: $groupUuid,
-            before: null,
-        }
-        fetchGroupChatMessages()
+        fetchMoreMessages()
+        fetchGroupMetadata({ groupUuid: $groupUuid })
 
-        // "Subscribe" to group metadata (name, language, members)
-        $groupChatStore.variables = { groupUuid: $groupUuid }
-        fetchGroupMetadata()
         if (fetchGroupMetadataInterval === null) {
             const FETCH_GROUP_METADATA_INTERVAL_SECS = 30
             fetchGroupMetadataInterval = setInterval(
-                fetchGroupMetadata,
+                () => fetchGroupMetadata({ groupUuid: $groupUuid }),
                 FETCH_GROUP_METADATA_INTERVAL_SECS * 1000
             )
         }
 
-        leaveChatRoom()
-        joinChatRoom($groupUuid)
-    }
-
-    function fetchGroupMetadata() {
-        if (!$groupChatStore.variables?.groupUuid) {
-            // console.log("Not fetching group metadata", $groupChat.variables)
-            return
-        }
-        // console.log("Fetching group metadata", $groupChat.variables)
-        $groupChatStore.context = {
-            requestPolicy: "network-only",
-            pause: true,
-        }
-        $groupChatStore.context = {
-            requestPolicy: "network-only",
-            pause: false,
-        }
-    }
-
-    function fetchGroupChatMessages() {
-        if (!$groupChatMessagesStore.variables?.groupUuid) {
-            // console.log(
-            //     "Not fetching group chat messages",
-            //     $groupChatMessages.variables
-            // )
-            return
-        }
-        // console.log(
-        //     "Fetching group chat messages",
-        //     $groupChatMessages.variables
-        // )
-        $groupChatMessagesStore.context = {
-            requestPolicy: "network-only",
-            pause: true,
-        }
-        $groupChatMessagesStore.context = {
-            requestPolicy: "network-only",
-            pause: false,
-        }
+        chat.leaveRoom()
+        chat.joinRoom($groupUuid)
     }
 
     $: if (
-        !$groupChatMessagesStore.fetching &&
         $groupChatMessagesStore.data &&
-        !$groupChatMessagesStore.error
+        !$groupChatMessagesStore.error &&
+        !$groupChatMessagesStore.fetching
     ) {
         const { groupByUuid } = $groupChatMessagesStore.data
         const receivedMessages =
             groupByUuid?.messagesByRecipientGroupId?.edges
                 .filter(Boolean)
                 .map((edge) => edge!.node) || []
+        const forceScrollToBottom =
+            messagesContainer && isScrolledToBottom(messagesContainer)
+
+        console.log("Just got new messages", {
+            forceScrollToBottom,
+            messagesContainer,
+            fetching: $groupChatMessagesStore.fetching,
+            stale: $groupChatMessagesStore.stale,
+            error: $groupChatMessagesStore.error,
+            existingMessagesLength: messages.length,
+            receivedMessagesLength: receivedMessages.length,
+        })
         if (receivedMessages.length) {
-            $groupChatMessagesStore.context = {
-                pause: true,
+            const messageIsNew = ({ uuid }: any) => {
+                for (let i = messages.length - 1; i >= 0; --i) {
+                    if (messages[i].uuid === uuid) {
+                        return false
+                    }
+                }
+                return true
             }
-            const existingUuids = messages.map(({ uuid }) => uuid)
-            const messageIsNew = ({ uuid }: any) =>
-                !existingUuids.includes(uuid)
             const newMessages = receivedMessages.filter(messageIsNew)
             messages = [
                 ...newMessages.map((message) => ({
@@ -186,133 +182,12 @@
                         ])
                 ),
             }
-            if (typeof window !== "undefined") {
-                if (chatMessagesContainer) {
-                    setTimeout(() => {
-                        if (chatMessagesContainer) {
-                            scrollToBottom(chatMessagesContainer, true)
-                        }
-                    }, 150)
+            setTimeout(() => {
+                if (messagesContainer) {
+                    scrollToBottom(messagesContainer, forceScrollToBottom)
                 }
-            }
+            }, 150)
         }
-    }
-
-    onMount(() => {
-        connectToChat()
-        if ($groupUuid) {
-            joinChatRoom($groupUuid)
-        }
-        // connectToWebRTC()
-    })
-
-    onDestroy(() => {
-        leaveChatRoom()
-        if (socket) {
-            socket.disconnect()
-        }
-        if (fetchGroupMetadataInterval) {
-            clearInterval(fetchGroupMetadataInterval)
-            fetchGroupMetadataInterval = null
-        }
-        if (peer) {
-            peer.disconnect()
-        }
-        if (peer) {
-            peer.destroy()
-        }
-        peer = null
-    })
-
-    function connectToChat() {
-        if (socket || typeof window === "undefined") {
-            return
-        }
-        // console.log("Connecting to chat")
-        socket = io()
-        if (socket) {
-            // Welcome from server
-            socket.on("welcome", onWelcome)
-            // Message from server
-            socket.on("message", onMessage)
-            // Message preview from server
-            socket.on("messagePreview", onMessagePreview)
-        }
-    }
-
-    async function connectToWebRTC() {
-        if (peer !== null) {
-            return peer
-        }
-        // @ts-ignore see https://github.com/peers/peerjs/issues/552#issuecomment-770401843
-        window.parcelRequire = undefined
-        const module = await import("peerjs")
-
-        // @ts-ignore
-        Peer = module.peerjs.Peer as typeof module.default
-
-        if ($currentUser) {
-            peer = new Peer($currentUser.uuid, {
-                host: "/",
-                port: Number(window.location.port),
-                path: "/webrtc",
-                config: {
-                    iceServers: [{ urls: "stun:stun.t-online.de:3478" }],
-                    sdpSemantics: "unified-plan",
-                },
-            })
-
-            if (peer) {
-                peer.on("error", function (err) {
-                    console.log(err)
-                })
-                peer.on("disconnected", function (err) {
-                    peer = null
-                })
-            }
-        }
-
-        return peer
-    }
-
-    function joinChatRoom(room: string) {
-        if (!socket) {
-            return
-        }
-        if (!room || !room.length) {
-            // console.log("Not joining empty room", { room })
-            return
-        }
-        if (joinedRoom === room) {
-            // console.log("Not joining room, already joined", { room })
-            return
-        }
-        // console.log("Joining room", { room })
-        socket.emit("joinRoom", {
-            groupUuid: room,
-        })
-    }
-
-    function leaveChatRoom(): boolean {
-        if (!socket) {
-            return false
-        }
-        if (joinedRoom === null) {
-            return false
-        }
-        // console.log("Leaving room", { joinedRoom })
-        socket.emit("leaveRoom")
-        return true
-    }
-
-    function sendMessage(msg: string): boolean {
-        if (!socket || !socket.connected) {
-            // console.log("Not sending", msg, "no socket")
-            return false
-        }
-        // console.log("Sending", msg)
-        socket.emit("chatMessage", msg)
-        return true
     }
 
     function scrollToBottom(
@@ -333,6 +208,7 @@
      */
     const scroll = (el: HTMLElement, scrollTop?: number): void => {
         const top = scrollTop || el.scrollHeight - el.clientHeight
+        console.log({ top, scrollTop, el })
         if (typeof el.scroll === "function") {
             el.scroll({ top })
         } else {
@@ -349,18 +225,14 @@
         return el.scrollTop === top
     }
 
-    const isScrolledToBottom = (container: HTMLElement): boolean => {
-        return isScrolled(container, null)
-    }
+    const isScrolledToBottom = (container: HTMLElement) =>
+        isScrolled(container, null)
 
-    function onWelcome({
-        user,
-        groupUuid,
-    }: {
+    function handleWelcome({
+        detail: { user },
+    }: CustomEvent<{
         user: Pick<ChatUser["user"], "uuid">
-        groupUuid: Group["uuid"]
-    }): void {
-        joinedRoom = groupUuid
+    }>): void {
         myUuid = user.uuid
     }
 
@@ -381,7 +253,7 @@
             msg = ""
             return
         }
-        const sent = sendMessage(trimmedMsg)
+        const sent = chat!.sendMessage(trimmedMsg)
         if (sent) {
             msg = ""
         }
@@ -391,71 +263,49 @@
         message.userUuid !== null &&
         myUuid !== null &&
         message.userUuid === myUuid
-    function onMessage(message: ChatMessage): void {
-        if (chatMessagesContainer) {
-            /**
-             * Force auto-scroll if the user sent the message themselves
-             * or if the user didn't scroll upwards before receiving the message.
-             */
-            const force =
-                isOwnMessage(message) ||
-                isScrolledToBottom(chatMessagesContainer)
+    function handleMessage({
+        detail: message,
+    }: CustomEvent<ChatMessage>): void {
+        /**
+         * Force auto-scroll if the user sent the message themselves
+         * or if the user didn't scroll upwards before receiving the message.
+         */
+        const force =
+            isOwnMessage(message) ||
+            (!!messagesContainer && isScrolledToBottom(messagesContainer))
+        console.log("handleMessage", {
+            force,
+            isOwn: isOwnMessage(message),
+            isScroll:
+                messagesContainer && isScrolledToBottom(messagesContainer),
+        })
 
-            setTimeout(() => {
-                if (chatMessagesContainer) {
-                    scrollToBottom(chatMessagesContainer, force)
-                }
-            }, 150)
-        }
+        setTimeout(() => {
+            console.log("handleMessage.timeout", {
+                messagesContainer,
+                force,
+            })
+            if (!messagesContainer) {
+                return
+            }
+            scrollToBottom(messagesContainer, force)
+        }, 150)
         messages = [...messages, message]
     }
 
-    let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
-    function onMessagePreview({
-        messageUuid,
-        url,
-        type,
-    }: {
+    function handleMessagePreview({
+        detail: { messageUuid, url, type },
+    }: CustomEvent<{
         messageUuid: string
         url: string
         type: string
-    }) {
+    }>) {
         previews[messageUuid] = [{ uuid: "", url, type }]
     }
 
-    let outgoing: Record<User["uuid"], MediaStream | null> = {}
-    let incoming: MediaStream[] = []
-
-    let listeningForCalls = false
-    function listenForCalls() {
-        if (listeningForCalls) {
-            return
-        }
-        connectToWebRTC().then(async (peer) => {
-            if (!peer) {
-                return
-            }
-            peer.on("call", async (call: MediaConnection) => {
-                const stream = await navigator.mediaDevices
-                    .getUserMedia({ video: false, audio: true })
-                    .catch((err) => {
-                        console.error("Failed to get local stream", err)
-                        return null
-                    })
-                if (!stream) {
-                    return
-                }
-                call.answer(stream)
-                call.on("stream", (remoteStream) => {
-                    incoming = [...incoming, remoteStream]
-                    console.log("Answered", { remoteStream })
-                })
-            })
-            listeningForCalls = true
-        })
+    $: if (webrtc && webrtc.connectedToServer()) {
+        webrtc.listenForCalls()
     }
-    // @ts-ignore
-    $: peer, listenForCalls
 
     // TODO: Get these from the peer server's list of active peers somehow
     $: otherUserUuids =
@@ -463,44 +313,12 @@
             .filter(Boolean)
             .map((user) => user!.uuid) || []
 
-    function handleCall() {
-        connectToWebRTC().then(async (peer) => {
-            if (!peer) {
-                return
-            }
-            for (const otherUuid of otherUserUuids) {
-                // TODO: call user and put into outgoing
-                if (Object.keys(outgoing).includes(otherUuid)) {
-                    continue
-                }
-                const stream = await navigator.mediaDevices
-                    .getUserMedia({ video: false, audio: true })
-                    .catch((err) => {
-                        console.error("Failed to get local stream", err)
-                        return null
-                    })
-                if (!stream) {
-                    continue
-                }
-                const call: MediaConnection = peer.call(otherUuid, stream)
-                if (!call) {
-                    continue
-                }
-                outgoing = { ...outgoing, [otherUuid]: null }
-                call.on("stream", (remoteStream) => {
-                    outgoing[otherUuid] = remoteStream
-                    console.log("Called", { [otherUuid]: remoteStream })
-                })
-            }
-        })
-    }
-
     let split = true
     let audio = false
     let mic = false
-    $: callInProgress = incoming.length || Object.values(outgoing).some(Boolean)
+    $: callInProgress = webrtc && webrtc.callInProgress()
 
-    function onEmoji(event: CustomEvent) {
+    function handleEmoji(event: CustomEvent) {
         const input = getChatMessageInput()
         if (input && typeof input.selectionStart !== "undefined") {
             const { selectionStart: start, selectionEnd: end } = input
@@ -562,34 +380,8 @@
             showLargeImageModalUrl = url
         }
     }
-    function fetchOlderMessages() {
-        if (!$groupUuid) {
-            return
-        }
-        if (
-            !$groupChatMessagesStore.data ||
-            !$groupChatMessagesStore.data.groupByUuid ||
-            $groupChatMessagesStore.error
-        ) {
-            return
-        }
-        $groupChatMessagesStore.variables = {
-            groupUuid: $groupUuid,
-            before:
-                $groupChatMessagesStore.data.groupByUuid
-                    .messagesByRecipientGroupId.pageInfo.startCursor,
-        }
-        $groupChatMessagesStore.context = {
-            requestPolicy: "network-only",
-            pause: true,
-        }
-        $groupChatMessagesStore.context = {
-            requestPolicy: "network-only",
-            pause: false,
-        }
-    }
 
-    const FETCH_OLDER_MAX_SCROLL_TOP_PX = 100
+    const FETCH_OLDER_MAX_SCROLL_TOP_PX = 1500
     function handleScroll(event: Event) {
         const container = event.target as HTMLElement | null
         if (!container) {
@@ -598,6 +390,16 @@
         const scrolledPx =
             container.scrollTop ||
             container.scrollHeight - container.clientHeight
+        console.log({
+            scrolledPx,
+            con: messagesContainer
+                ? messagesContainer.scrollTop ||
+                  messagesContainer.scrollHeight -
+                      messagesContainer.clientHeight
+                : null,
+            messagesContainer,
+            container,
+        })
         const { hasPreviousPage } =
             $groupChatMessagesStore.data?.groupByUuid
                 ?.messagesByRecipientGroupId.pageInfo || {}
@@ -607,7 +409,7 @@
             !$groupChatMessagesStore.fetching
         ) {
             // element is scrolled near top
-            fetchOlderMessages()
+            fetchMoreMessages()
         }
     }
 </script>
@@ -616,238 +418,285 @@
     <BrowserTitle title={text} />
 </Localized>
 
-{#if !$groupChatStore.fetching && $groupChatStore.error}
+{#if !$groupChatStore.stale && $groupChatStore.error}
     <div class="container max-w-sm my-8">
         <ErrorMessage
             >Something went wrong while loading the chat. Maybe try reloading
             this page.</ErrorMessage
         >
     </div>
-{:else if $groupUuid && !$groupChatStore.fetching && !($groupChatStore.data && $groupChatStore.data?.groupByUuid)}
-    <RedirectOnce to="/" />
 {:else}
-    <div class="wrapper">
-        {#key $groupUuid}
-            <Sidebar
-                {split}
-                {audio}
-                {mic}
-                {callInProgress}
-                handleToggleSplit={() => (split = !split)}
-                handleToggleMic={() => (mic = !mic)}
-                handleToggleAudio={() => (audio = !audio)}
-                {handleCall}
-            />
-        {/key}
-        <div class="section-wrapper">
-            <section>
-                <header>
-                    {#key $groupUuid}
-                        {#if $groupChatStore.data && !$groupChatStore.error}
-                            <span
-                                class="text-xl py-2 font-bold text-gray-lightest"
-                                >{$groupName || ""}</span
-                            >
-                            <div
-                                class="inline"
-                                style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
-                            />
-                            <span class="text-xl py-2"
-                                >{$language?.englishName || ""}
-                                {$languageSkillLevel?.name || ""}</span
-                            >
-                        {:else if $groupChatStore.error}
-                            error
-                        {/if}
-                    {/key}
-                </header>
-                <div class="views-wrapper">
-                    <div class="views" class:split>
-                        {#if split}
-                            <div
-                                class="view view-left hidden"
-                                in:fly={{ duration: 200, x: -600 }}
-                                out:fly={{ duration: 200, x: -600 }}
-                                style="transform-origin: center left;"
-                            >
-                                {#key $groupUuid}
-                                    <div
-                                        class="view-inner view-left-inner px-3"
-                                        transition:blur|local={{
-                                            duration: 300,
-                                        }}
-                                    >
-                                        <div
-                                            class="flex flex-row bg-gray-light max-h-12 px-2 items-center"
-                                        >
-                                            <div
-                                                class="text-lg py-1 px-3 bg-primary text-white rounded-tl-md rounded-tr-md"
-                                            >
-                                                <Localized
-                                                    id="chat-panel-games"
-                                                />
-                                            </div>
-                                            <div class="text-lg py-1 px-3">
-                                                <Localized
-                                                    id="chat-panel-subtitles"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="toggle-split-screen"
-                                            on:click={() => (split = false)}
-                                        >
-                                            <ChevronLeftIcon size="24" />
-                                        </div>
-                                    </div>
-                                {/key}
-                            </div>
-                        {/if}
-                        <div class="view view-right rounded-tr-md">
+    {#if $groupUuid && !$groupChatStore.error && $groupChatStore.data && !$groupChatStore.data.groupByUuid}
+        <RedirectOnce to="/" />
+    {/if}
+    <ChatProvider
+        bind:this={chat}
+        on:welcome={handleWelcome}
+        on:message={handleMessage}
+        on:messagePreview={handleMessagePreview}
+        let:currentRoom
+    >
+        <WebrtcProvider bind:this={webrtc}>
+            <div class="wrapper">
+                {#key $groupUuid}
+                    <Sidebar
+                        {split}
+                        {audio}
+                        {mic}
+                        {callInProgress}
+                        handleToggleSplit={() => (split = !split)}
+                        handleToggleMic={() => (mic = !mic)}
+                        handleToggleAudio={() => (audio = !audio)}
+                        handleCall={() =>
+                            webrtc && webrtc.handleCall(otherUserUuids)}
+                    />
+                {/key}
+                <div class="section-wrapper">
+                    <section>
+                        <header>
                             {#key $groupUuid}
-                                <div
-                                    class="view-inner view-right-inner"
-                                    transition:blur|local={{ duration: 400 }}
-                                >
-                                    <div
-                                        class="messages"
-                                        bind:this={chatMessagesContainer}
-                                        on:scroll={handleScroll}
+                                {#if $groupChatStore.data && !$groupChatStore.error}
+                                    <span
+                                        class="text-xl py-2 font-bold text-gray-lightest"
+                                        >{$groupName || ""}</span
                                     >
-                                        {#if $groupChatMessagesStore.fetching}
+                                    <div
+                                        class="inline"
+                                        style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
+                                    />
+                                    <span class="text-xl py-2"
+                                        >{$language?.englishName || ""}
+                                        {$languageSkillLevel?.name || ""}</span
+                                    >
+                                {:else if $groupChatStore.error}
+                                    error
+                                {/if}
+                            {/key}
+                        </header>
+                        <div class="views-wrapper">
+                            <div class="views" class:split>
+                                {#if split}
+                                    <div
+                                        class="view view-left hidden"
+                                        in:fly={{ duration: 200, x: -600 }}
+                                        out:fly={{ duration: 200, x: -600 }}
+                                        style="transform-origin: center left;"
+                                    >
+                                        {#key $groupUuid}
                                             <div
-                                                class="text-center mb-2 text-gray-bitdark text-sm font-bold"
+                                                class="view-inner view-left-inner px-3"
+                                                transition:blur|local={{
+                                                    duration: 300,
+                                                }}
                                             >
-                                                Loading …
-                                            </div>
-                                        {:else if $groupChatMessagesStore.fetching}
-                                            <div
-                                                class="text-center mb-2 text-red-700 text-sm font-bold"
-                                            >
-                                                Error
-                                            </div>
-                                        {:else if $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId.pageInfo.hasPreviousPage}
-                                            <div class="flex justify-center">
-                                                <ButtonSmall
-                                                    tag="button"
-                                                    on:click={fetchOlderMessages}
-                                                    variant="TEXT"
-                                                    color="SECONDARY"
-                                                    className="text-sm mb-2"
-                                                    >Find older messages</ButtonSmall
+                                                <div
+                                                    class="flex flex-row bg-gray-light max-h-12 px-2 items-center"
                                                 >
-                                            </div>
-                                        {:else}
-                                            <hr />
-                                        {/if}
-                                        {#each messages as message (message.uuid)}
-                                            <Message
-                                                uuid={message.uuid}
-                                                userUuid={message.userUuid}
-                                                time={message.time}
-                                                text={message.text}
-                                            />
-                                            {#if previews[message.uuid]}
-                                                {#each previews[message.uuid] as preview (preview.uuid)}
                                                     <div
-                                                        class="message-preview"
+                                                        class="text-lg py-1 px-3 bg-primary text-white rounded-tl-md rounded-tr-md"
                                                     >
-                                                        <img
-                                                            src={preview.url}
-                                                            alt="Preview"
-                                                            role="presentation"
-                                                            class="cursor-pointer"
-                                                            on:click={handleEnlargenImage(
-                                                                preview.url
-                                                            )}
+                                                        <Localized
+                                                            id="chat-panel-games"
                                                         />
                                                     </div>
-                                                {/each}
-                                            {/if}
-                                        {/each}
-                                    </div>
-                                    <div
-                                        class="submit-form-container rounded-bl-md rounded-br-md grid items-center"
-                                    >
-                                        <form
-                                            on:submit|preventDefault={handleSendMessage}
-                                            class="submit-form justify-end items-center"
-                                        >
-                                            {#if $groupChatStore.data && $currentGroupIsGlobal && !$currentUserIsGroupMember}
-                                                <ButtonLarge
-                                                    className="ml-4 px-6 w-full justify-center"
-                                                    tag="button"
-                                                    on:click={async () => {
-                                                        const res = await joinGlobalGroup(
-                                                            {
-                                                                groupUuid: $groupUuid,
-                                                            }
-                                                        )
-                                                        if (res.data) {
-                                                            fetchGroupMetadata()
-                                                        } else {
-                                                            // TODO: Show error feedback
-                                                        }
-                                                    }}
-                                                    ><Localized
-                                                        id="chat-submit-form-join-group"
-                                                    />
-                                                </ButtonLarge>
-                                            {:else if joinedRoom}
-                                                <Localized
-                                                    id="chat-submit-form-input"
-                                                    let:attrs
-                                                >
-                                                    <input
-                                                        id="send-msg-input"
-                                                        type="text"
-                                                        placeholder={attrs.placeholder}
-                                                        required
-                                                        autocomplete="off"
-                                                        class="border-none shadow-md px-4 py-4 w-full rounded-md"
-                                                        bind:value={msg}
-                                                        in:scale={{
-                                                            duration: 200,
-                                                        }}
-                                                        on:keydown={handleMessageInputKeydown}
-                                                    />
-                                                    <span
-                                                        class="hidden md:inline"
+                                                    <div
+                                                        class="text-lg py-1 px-3"
                                                     >
-                                                        <EmojiSelector
-                                                            on:emoji={onEmoji}
+                                                        <Localized
+                                                            id="chat-panel-subtitles"
                                                         />
-                                                    </span>
-                                                </Localized>
-                                                <ButtonSmall
-                                                    className="send-msg-button"
-                                                    tag="button"
-                                                    variant="TEXT"
-                                                    color="SECONDARY"
-                                                    on:click={handleSendMessage}
-                                                    ><ChevronsRightIcon
-                                                        size="28"
-                                                    /></ButtonSmall
-                                                >
-                                            {:else}
+                                                    </div>
+                                                </div>
                                                 <div
-                                                    class="w-full h-full font-bold text-center text-lg text-gray-bitdark"
+                                                    class="toggle-split-screen"
+                                                    on:click={() =>
+                                                        (split = false)}
                                                 >
-                                                    <Localized
-                                                        id="chat-submit-form-connecting"
+                                                    <ChevronLeftIcon
+                                                        size="24"
                                                     />
                                                 </div>
-                                            {/if}
-                                        </form>
+                                            </div>
+                                        {/key}
                                     </div>
+                                {/if}
+                                <div class="view view-right rounded-tr-md">
+                                    {#key $groupUuid}
+                                        <div
+                                            class="view-inner view-right-inner"
+                                            transition:blur|local={{
+                                                duration: 400,
+                                            }}
+                                        >
+                                            <div
+                                                class="messages"
+                                                id="chat-messages-container"
+                                                on:scroll={handleScroll}
+                                                bind:this={messagesContainer}
+                                            >
+                                                {#if $groupChatMessagesStore.fetching}
+                                                    <div
+                                                        class="text-center mb-2 text-gray-bitdark text-sm font-bold"
+                                                    >
+                                                        Loading …
+                                                    </div>
+                                                {:else if $groupChatMessagesStore.error}
+                                                    <div
+                                                        class="text-center mb-2 text-red-700 text-sm font-bold"
+                                                    >
+                                                        Error.
+                                                        <ButtonSmall
+                                                            tag="button"
+                                                            on:click={fetchMoreMessages}
+                                                            variant="TEXT"
+                                                            color="SECONDARY"
+                                                            className="text-sm mb-2"
+                                                            >Try again</ButtonSmall
+                                                        >
+                                                    </div>
+                                                {:else if $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId.pageInfo.hasPreviousPage}
+                                                    <div
+                                                        class="flex justify-center"
+                                                    >
+                                                        <ButtonSmall
+                                                            tag="button"
+                                                            on:click={fetchMoreMessages}
+                                                            variant="TEXT"
+                                                            color="SECONDARY"
+                                                            className="text-sm mb-2"
+                                                            >Get older messages</ButtonSmall
+                                                        >
+                                                    </div>
+                                                {:else if $groupChatMessagesStore.data}
+                                                    <div
+                                                        class="flex items-center justify-center space-between mb-2 px-8"
+                                                    >
+                                                        <hr
+                                                            class="w-full border-gray-bitlight"
+                                                        />
+                                                        <span
+                                                            class="px-4 text-gray-bitdark font-bold text-sm mx-auto whitespace-nowrap"
+                                                            >No older messages</span
+                                                        >
+                                                        <hr
+                                                            class="w-full border-gray-bitlight"
+                                                        />
+                                                    </div>
+                                                {/if}
+                                                {#each messages as message (message.uuid)}
+                                                    <Message
+                                                        uuid={message.uuid}
+                                                        userUuid={message.userUuid}
+                                                        time={message.time}
+                                                        text={message.text}
+                                                    />
+                                                    {#if previews[message.uuid]}
+                                                        {#each previews[message.uuid] as preview (preview.uuid)}
+                                                            <div
+                                                                class="message-preview"
+                                                            >
+                                                                <img
+                                                                    src={preview.url}
+                                                                    alt="Preview"
+                                                                    role="presentation"
+                                                                    class="cursor-pointer"
+                                                                    on:click={handleEnlargenImage(
+                                                                        preview.url
+                                                                    )}
+                                                                />
+                                                            </div>
+                                                        {/each}
+                                                    {/if}
+                                                {/each}
+                                            </div>
+                                            <div
+                                                class="submit-form-container rounded-bl-md rounded-br-md grid items-center"
+                                            >
+                                                <form
+                                                    on:submit|preventDefault={handleSendMessage}
+                                                    class="submit-form justify-end items-center"
+                                                >
+                                                    {#if $groupChatStore.data && $currentGroupIsGlobal && !$currentUserIsGroupMember}
+                                                        <ButtonLarge
+                                                            className="ml-4 px-6 w-full justify-center"
+                                                            tag="button"
+                                                            on:click={async () => {
+                                                                const res = await joinGlobalGroup(
+                                                                    {
+                                                                        groupUuid: $groupUuid,
+                                                                    }
+                                                                )
+                                                                if (res.data) {
+                                                                    fetchGroupMetadata(
+                                                                        {
+                                                                            groupUuid: $groupUuid,
+                                                                        }
+                                                                    )
+                                                                } else {
+                                                                    // TODO: Show error feedback
+                                                                }
+                                                            }}
+                                                            ><Localized
+                                                                id="chat-submit-form-join-group"
+                                                            />
+                                                        </ButtonLarge>
+                                                    {:else if currentRoom}
+                                                        <Localized
+                                                            id="chat-submit-form-input"
+                                                            let:attrs
+                                                        >
+                                                            <input
+                                                                id="send-msg-input"
+                                                                type="text"
+                                                                placeholder={attrs.placeholder}
+                                                                required
+                                                                autocomplete="off"
+                                                                class="border-none shadow-md px-4 py-4 w-full rounded-md"
+                                                                bind:value={msg}
+                                                                in:scale={{
+                                                                    duration: 200,
+                                                                }}
+                                                                on:keydown={handleMessageInputKeydown}
+                                                            />
+                                                            <span
+                                                                class="hidden md:inline"
+                                                            >
+                                                                <EmojiSelector
+                                                                    on:emoji={handleEmoji}
+                                                                />
+                                                            </span>
+                                                        </Localized>
+                                                        <ButtonSmall
+                                                            className="send-msg-button"
+                                                            tag="button"
+                                                            variant="TEXT"
+                                                            color="SECONDARY"
+                                                            on:click={handleSendMessage}
+                                                            ><ChevronsRightIcon
+                                                                size="28"
+                                                            /></ButtonSmall
+                                                        >
+                                                    {:else}
+                                                        <div
+                                                            class="w-full h-full font-bold text-center text-lg text-gray-bitdark"
+                                                        >
+                                                            <Localized
+                                                                id="chat-submit-form-connecting"
+                                                            />
+                                                        </div>
+                                                    {/if}
+                                                </form>
+                                            </div>
+                                        </div>
+                                    {/key}
                                 </div>
-                            {/key}
+                            </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
-            </section>
-        </div>
-    </div>
+            </div>
+        </WebrtcProvider>
+    </ChatProvider>
 
     {#if showLargeImageModalUrl && typeof window !== "undefined"}
         <EscapeKeyListener on:keydown={() => (showLargeImageModalUrl = null)} />
@@ -864,7 +713,7 @@
                     src={showLargeImageModalUrl}
                     alt="Enlargened"
                     role="presentation"
-                    style="max-width: 80vw; max-height: 90vh;"
+                    style="max-width: 80vw; max-height: 90vh; box-shadow: 1px 1px 3px #393939, 1px 1px 9px #777;"
                 />
             </div>
         </Modal>

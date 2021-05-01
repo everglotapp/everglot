@@ -2,7 +2,8 @@ import fetch from "cross-fetch"
 import { initClient, dedupExchange, fetchExchange } from "@urql/svelte"
 import { persistedFetchExchange } from "@urql/exchange-persisted-fetch"
 import { persistedMutationFetchExchange } from "./persistedMutationFetchExchange"
-import { cacheExchange } from "./cacheExchange"
+// import { cacheExchange } from "./cacheExchange"
+import { devtoolsExchange } from "@urql/devtools"
 
 import persistedOperations from "../../../graphql.client.json"
 
@@ -15,8 +16,9 @@ export function setupUrql() {
         url: GRAPHQL_ENDPOINT,
         fetch,
         exchanges: [
+            devtoolsExchange,
             dedupExchange,
-            cacheExchange,
+            // cacheExchange,
             persistedMutationFetchExchange({
                 // Disable until PostGraphile supports queries via GET
                 // https://github.com/graphile/postgraphile/issues/442

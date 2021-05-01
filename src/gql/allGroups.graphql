@@ -10,6 +10,7 @@ query AllGroups {
             }
             languageSkillLevel {
                 name
+                nodeId
             }
             groupUsers {
                 totalCount

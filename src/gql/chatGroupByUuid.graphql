@@ -3,5 +3,6 @@ query ChatGroupByUuid($uuid: UUID!) {
         language {
             alpha2
         }
+        uuid
     }
 }

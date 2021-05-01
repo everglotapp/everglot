@@ -2,7 +2,7 @@ query GroupChatMessages($groupUuid: UUID!, $before: Cursor) {
     groupByUuid(uuid: $groupUuid) {
         messagesByRecipientGroupId(
             orderBy: CREATED_AT_ASC
-            last: 50
+            last: 128
             before: $before
         ) {
             edges {
@@ -11,7 +11,6 @@ query GroupChatMessages($groupUuid: UUID!, $before: Cursor) {
                     createdAt
                     sender {
                         uuid
-                        nodeId
                     }
                     uuid
                     messagePreviews {
@@ -19,10 +18,8 @@ query GroupChatMessages($groupUuid: UUID!, $before: Cursor) {
                             uuid
                             filename
                             extension
-                            nodeId
                         }
                     }
-                    nodeId
                 }
             }
             pageInfo {

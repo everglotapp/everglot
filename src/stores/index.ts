@@ -15,9 +15,7 @@ export const groupUuid = writable<string | null>(null)
 export const currentUserStore = operationStore<CurrentUserQuery>(CurrentUser)
 
 export const currentUser = derived(currentUserStore, ($currentUserStore) =>
-    $currentUserStore.fetching
-        ? null
-        : $currentUserStore.data?.currentUser || null
+    $currentUserStore.data ? $currentUserStore.data?.currentUser || null : null
 )
 
 export const userHasCompletedProfile = derived(

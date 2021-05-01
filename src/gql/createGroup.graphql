@@ -18,6 +18,7 @@ mutation CreateGroup(
     ) {
         group {
             id
+            uuid
         }
     }
 }

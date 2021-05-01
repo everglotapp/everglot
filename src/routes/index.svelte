@@ -22,7 +22,7 @@
     }
 
     onMount(() => {
-        if ($currentUserStore.fetching) {
+        if ($currentUserStore.stale) {
             if (redirectTimeout === null) {
                 redirectTimeout = window.setTimeout(() => {
                     goto("/signup", { replaceState: true, noscroll: false })

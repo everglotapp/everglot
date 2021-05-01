@@ -49,19 +49,19 @@
                 if (result.success) {
                     newAvatarUrl = result.meta.avatarUrl
                     $userProfileStore.context = {
-                        requestPolicy: "network-only",
+                        requestPolicy: "cache-and-network",
                         pause: true,
                     }
                     $userProfileStore.context = {
-                        requestPolicy: "network-only",
+                        requestPolicy: "cache-and-network",
                         pause: false,
                     }
                     $currentUserStore.context = {
-                        requestPolicy: "network-only",
+                        requestPolicy: "cache-and-network",
                         pause: true,
                     }
                     $currentUserStore.context = {
-                        requestPolicy: "network-only",
+                        requestPolicy: "cache-and-network",
                         pause: false,
                     }
                 } else {

@@ -29,11 +29,11 @@
         })
         if (res.data) {
             $groupChatStore.context = {
-                requestPolicy: "network-only",
+                requestPolicy: "cache-and-network",
                 pause: true,
             }
             $groupChatStore.context = {
-                requestPolicy: "network-only",
+                requestPolicy: "cache-and-network",
                 pause: false,
             }
         } else {
@@ -56,7 +56,7 @@
     }
 </script>
 
-{#if $allGroupsStore.error}
+{#if !$allGroupsStore.data && $allGroupsStore.error}
     <ErrorMessage>
         <Localized id="chat-sidebar-members-error" />
     </ErrorMessage>

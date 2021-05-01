@@ -236,7 +236,12 @@
             <div class="flex items-center">
                 {#if userUuid}
                     {#if user?.username}
-                        <span class="username mr-2">{user.username}</span>
+                        <span
+                            class="username mr-2 cursor-pointer"
+                            on:click={(e) =>
+                                e.stopPropagation() || (showBio = !showBio)}
+                            >{user.username}</span
+                        >
                     {:else}
                         <span class="username mr-2 italic"
                             ><Localized

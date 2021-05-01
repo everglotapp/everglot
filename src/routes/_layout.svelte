@@ -41,7 +41,7 @@
     const handlePageChange = () => {
         doTransition()
         $currentUserStore.context = {
-            requestPolicy: "network-only",
+            requestPolicy: "cache-and-network",
             transitionId, // This forces a re-execution by changing the object contents.
         }
     }

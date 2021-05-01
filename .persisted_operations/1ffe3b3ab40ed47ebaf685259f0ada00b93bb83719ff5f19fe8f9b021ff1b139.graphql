@@ -1,0 +1,17 @@
+mutation JoinGlobalGroup($groupUuid: UUID!) {
+  joinGlobalGroup(input: {groupUuid: $groupUuid}) {
+    groupUser {
+      group {
+        uuid
+        __typename
+      }
+      user {
+        uuid
+        __typename
+      }
+      nodeId
+      __typename
+    }
+    __typename
+  }
+}

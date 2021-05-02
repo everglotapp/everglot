@@ -5375,7 +5375,7 @@ export type AllGroupsQuery = (
         & Pick<Language, 'alpha2' | 'englishName'>
       )>, languageSkillLevel?: Maybe<(
         { __typename?: 'LanguageSkillLevel' }
-        & Pick<LanguageSkillLevel, 'name'>
+        & Pick<LanguageSkillLevel, 'name' | 'nodeId'>
       )>, groupUsers: (
         { __typename?: 'GroupUsersConnection' }
         & Pick<GroupUsersConnection, 'totalCount'>
@@ -5393,6 +5393,7 @@ export type ChatGroupByUuidQuery = (
   { __typename?: 'Query' }
   & { groupByUuid?: Maybe<(
     { __typename?: 'Group' }
+    & Pick<Group, 'uuid'>
     & { language?: Maybe<(
       { __typename?: 'Language' }
       & Pick<Language, 'alpha2'>
@@ -5428,7 +5429,7 @@ export type CreateGroupMutation = (
     { __typename?: 'CreateGroupPayload' }
     & { group?: Maybe<(
       { __typename?: 'Group' }
-      & Pick<Group, 'id'>
+      & Pick<Group, 'id' | 'uuid'>
     )> }
   )> }
 );
@@ -5550,13 +5551,13 @@ export type GroupChatQuery = (
   { __typename?: 'Query' }
   & { groupByUuid?: Maybe<(
     { __typename?: 'Group' }
-    & Pick<Group, 'groupName'>
+    & Pick<Group, 'groupName' | 'uuid'>
     & { language?: Maybe<(
       { __typename?: 'Language' }
       & Pick<Language, 'englishName'>
     )>, languageSkillLevel?: Maybe<(
       { __typename?: 'LanguageSkillLevel' }
-      & Pick<LanguageSkillLevel, 'name'>
+      & Pick<LanguageSkillLevel, 'name' | 'nodeId'>
     )>, usersByGroupUserGroupIdAndUserId: (
       { __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection' }
       & { nodes: Array<Maybe<(
@@ -5566,6 +5567,7 @@ export type GroupChatQuery = (
           { __typename?: 'UserLanguagesConnection' }
           & { nodes: Array<Maybe<(
             { __typename?: 'UserLanguage' }
+            & Pick<UserLanguage, 'nodeId'>
             & { language?: Maybe<(
               { __typename?: 'Language' }
               & Pick<Language, 'englishName'>
@@ -5575,7 +5577,7 @@ export type GroupChatQuery = (
           { __typename?: 'GroupUsersConnection' }
           & { nodes: Array<Maybe<(
             { __typename?: 'GroupUser' }
-            & Pick<GroupUser, 'userType'>
+            & Pick<GroupUser, 'userType' | 'nodeId'>
             & { group?: Maybe<(
               { __typename?: 'Group' }
               & Pick<Group, 'uuid'>
@@ -5596,6 +5598,7 @@ export type GroupChatQuery = (
 
 export type GroupChatMessagesQueryVariables = Exact<{
   groupUuid: Scalars['UUID'];
+  before?: Maybe<Scalars['Cursor']>;
 }>;
 
 
@@ -5605,20 +5608,26 @@ export type GroupChatMessagesQuery = (
     { __typename?: 'Group' }
     & { messagesByRecipientGroupId: (
       { __typename?: 'MessagesConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'Message' }
-        & Pick<Message, 'body' | 'createdAt' | 'uuid'>
-        & { sender?: Maybe<(
-          { __typename?: 'User' }
-          & Pick<User, 'uuid'>
-        )>, messagePreviews: (
-          { __typename?: 'MessagePreviewsConnection' }
-          & { nodes: Array<Maybe<(
-            { __typename?: 'MessagePreview' }
-            & Pick<MessagePreview, 'uuid' | 'filename' | 'extension'>
-          )>> }
-        ) }
-      )>> }
+      & { edges: Array<(
+        { __typename?: 'MessagesEdge' }
+        & { node?: Maybe<(
+          { __typename?: 'Message' }
+          & Pick<Message, 'body' | 'createdAt' | 'uuid'>
+          & { sender?: Maybe<(
+            { __typename?: 'User' }
+            & Pick<User, 'uuid'>
+          )>, messagePreviews: (
+            { __typename?: 'MessagePreviewsConnection' }
+            & { nodes: Array<Maybe<(
+              { __typename?: 'MessagePreview' }
+              & Pick<MessagePreview, 'uuid' | 'filename' | 'extension'>
+            )>> }
+          ) }
+        )> }
+      )>, pageInfo: (
+        { __typename?: 'PageInfo' }
+        & Pick<PageInfo, 'startCursor' | 'hasPreviousPage'>
+      ) }
     ) }
   )> }
 );
@@ -5647,6 +5656,7 @@ export type JoinGlobalGroupMutation = (
     { __typename?: 'JoinGlobalGroupPayload' }
     & { groupUser?: Maybe<(
       { __typename?: 'GroupUser' }
+      & Pick<GroupUser, 'nodeId'>
       & { group?: Maybe<(
         { __typename?: 'Group' }
         & Pick<Group, 'uuid'>
@@ -5741,12 +5751,12 @@ export type UserLanguageInfoQuery = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id'>
+    & Pick<User, 'id' | 'uuid'>
     & { userLanguages: (
       { __typename?: 'UserLanguagesConnection' }
       & { nodes: Array<Maybe<(
         { __typename?: 'UserLanguage' }
-        & Pick<UserLanguage, 'languageId' | 'languageSkillLevelId' | 'native'>
+        & Pick<UserLanguage, 'nodeId' | 'languageId' | 'languageSkillLevelId' | 'native'>
       )>> }
     ) }
   )> }
@@ -5759,7 +5769,7 @@ export type UserProfileQuery = (
   { __typename?: 'Query' }
   & { currentUser?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'avatarUrl'>
+    & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'avatarUrl' | 'uuid'>
     & { userLanguages: (
       { __typename?: 'UserLanguagesConnection' }
       & Pick<UserLanguagesConnection, 'totalCount'>
@@ -5778,7 +5788,7 @@ export type UserProfileQuery = (
       { __typename?: 'GroupUsersConnection' }
       & { nodes: Array<Maybe<(
         { __typename?: 'GroupUser' }
-        & Pick<GroupUser, 'userType' | 'joinedOn'>
+        & Pick<GroupUser, 'nodeId' | 'userType' | 'joinedOn'>
         & { group?: Maybe<(
           { __typename?: 'Group' }
           & Pick<Group, 'uuid' | 'groupName'>
@@ -5809,6 +5819,7 @@ export const AllGroups = gql`
       }
       languageSkillLevel {
         name
+        nodeId
       }
       groupUsers {
         totalCount
@@ -5823,6 +5834,7 @@ export const ChatGroupByUuid = gql`
     language {
       alpha2
     }
+    uuid
   }
 }
     `;
@@ -5843,6 +5855,7 @@ export const CreateGroup = gql`
   ) {
     group {
       id
+      uuid
     }
   }
 }
@@ -5928,7 +5941,9 @@ export const GroupChat = gql`
     }
     languageSkillLevel {
       name
+      nodeId
     }
+    uuid
     usersByGroupUserGroupIdAndUserId {
       nodes {
         bio
@@ -5938,6 +5953,7 @@ export const GroupChat = gql`
         lastActiveAt
         userLanguages {
           nodes {
+            nodeId
             language {
               englishName
             }
@@ -5955,6 +5971,7 @@ export const GroupChat = gql`
                 name
               }
             }
+            nodeId
           }
         }
       }
@@ -5963,23 +5980,29 @@ export const GroupChat = gql`
 }
     `;
 export const GroupChatMessages = gql`
-    query GroupChatMessages($groupUuid: UUID!) {
+    query GroupChatMessages($groupUuid: UUID!, $before: Cursor) {
   groupByUuid(uuid: $groupUuid) {
-    messagesByRecipientGroupId(orderBy: CREATED_AT_ASC, last: 1000) {
-      nodes {
-        body
-        createdAt
-        sender {
-          uuid
-        }
-        uuid
-        messagePreviews {
-          nodes {
+    messagesByRecipientGroupId(orderBy: CREATED_AT_ASC, last: 128, before: $before) {
+      edges {
+        node {
+          body
+          createdAt
+          sender {
             uuid
-            filename
-            extension
+          }
+          uuid
+          messagePreviews {
+            nodes {
+              uuid
+              filename
+              extension
+            }
           }
         }
+      }
+      pageInfo {
+        startCursor
+        hasPreviousPage
       }
     }
   }
@@ -6002,6 +6025,7 @@ export const JoinGlobalGroup = gql`
       user {
         uuid
       }
+      nodeId
     }
   }
 }
@@ -6053,8 +6077,10 @@ export const UserLanguageInfo = gql`
     query UserLanguageInfo($id: Int!) {
   user(id: $id) {
     id
+    uuid
     userLanguages {
       nodes {
+        nodeId
         languageId
         languageSkillLevelId
         native
@@ -6071,6 +6097,7 @@ export const UserProfile = gql`
     gender
     username
     avatarUrl
+    uuid
     userLanguages {
       totalCount
       nodes {
@@ -6085,6 +6112,7 @@ export const UserProfile = gql`
     }
     groupUsers {
       nodes {
+        nodeId
         group {
           uuid
           groupName

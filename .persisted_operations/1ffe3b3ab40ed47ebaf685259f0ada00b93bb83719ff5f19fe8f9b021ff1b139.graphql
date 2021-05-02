@@ -9,6 +9,7 @@ mutation JoinGlobalGroup($groupUuid: UUID!) {
         uuid
         __typename
       }
+      nodeId
       __typename
     }
     __typename

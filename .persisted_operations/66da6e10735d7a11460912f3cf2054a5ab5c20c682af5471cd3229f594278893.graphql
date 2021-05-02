@@ -1,10 +1,21 @@
 query AllGroups {
   groups {
     nodes {
+      uuid
       groupName
       global
       language {
+        alpha2
         englishName
+        __typename
+      }
+      languageSkillLevel {
+        name
+        nodeId
+        __typename
+      }
+      groupUsers {
+        totalCount
         __typename
       }
       __typename

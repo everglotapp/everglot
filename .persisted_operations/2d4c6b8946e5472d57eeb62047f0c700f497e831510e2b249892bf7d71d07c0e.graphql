@@ -1,0 +1,35 @@
+query GroupChatMessages($groupUuid: UUID!, $before: Cursor) {
+  groupByUuid(uuid: $groupUuid) {
+    messagesByRecipientGroupId(orderBy: CREATED_AT_ASC, last: 128, before: $before) {
+      edges {
+        node {
+          body
+          createdAt
+          sender {
+            uuid
+            __typename
+          }
+          uuid
+          messagePreviews {
+            nodes {
+              uuid
+              filename
+              extension
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      pageInfo {
+        startCursor
+        hasPreviousPage
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

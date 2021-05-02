@@ -45,7 +45,9 @@ const avatarUploadsStorage = multer.diskStorage({
         }
         const filename = await uidgen.generate().catch(() => null)
         if (!filename) {
-            chlog.child({ file }).error("Failed to generate filename")
+            chlog
+                .child({ file, extension })
+                .error("Failed to generate filename")
             cb(new Error("Failed to generate filename"), "")
             return
         }

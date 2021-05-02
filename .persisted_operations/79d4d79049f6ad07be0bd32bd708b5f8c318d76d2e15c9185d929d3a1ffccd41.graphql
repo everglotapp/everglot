@@ -1,11 +1,11 @@
-query CurrentUser {
+query UserProfile {
   currentUser {
     bio
     email
     gender
     username
-    uuid
     avatarUrl
+    uuid
     userLanguages {
       totalCount
       nodes {
@@ -22,13 +22,11 @@ query CurrentUser {
       }
       __typename
     }
-    languageByLocale {
-      alpha2
-      __typename
-    }
     groupUsers {
       nodes {
+        nodeId
         group {
+          uuid
           groupName
           language {
             englishName

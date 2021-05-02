@@ -6,7 +6,9 @@ query GroupChat($groupUuid: UUID!) {
         }
         languageSkillLevel {
             name
+            nodeId
         }
+        uuid
         usersByGroupUserGroupIdAndUserId {
             nodes {
                 bio
@@ -16,6 +18,7 @@ query GroupChat($groupUuid: UUID!) {
                 lastActiveAt
                 userLanguages {
                     nodes {
+                        nodeId
                         language {
                             englishName
                         }
@@ -33,6 +36,7 @@ query GroupChat($groupUuid: UUID!) {
                                 name
                             }
                         }
+                        nodeId
                     }
                 }
             }

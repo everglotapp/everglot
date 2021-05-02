@@ -1,4 +1,4 @@
-import { derived } from "svelte/store"
+import { derived, get } from "svelte/store"
 import { operationStore } from "@urql/svelte"
 
 import { groupUuid, currentUser } from "./index"
@@ -32,6 +32,7 @@ export const groupChatMessagesStore = operationStore<
     GroupChatMessages,
     {
         groupUuid: "",
+        before: null,
     },
     { pause: true, requestPolicy: "network-only" }
 )
@@ -104,3 +105,52 @@ export const currentUserIsGroupMember = derived(
         $currentUser.uuid &&
         $chatUsers.some((user) => user.uuid === $currentUser.uuid)
 )
+
+export function fetchGroupChatMessages({
+    groupUuid,
+    before,
+}: GroupChatMessagesQueryVariables) {
+    const $groupChatMessagesStore = get(groupChatMessagesStore)
+    console.log("Will fetch messages?", {
+        groupUuid,
+        fetching: $groupChatMessagesStore.fetching,
+        stale: $groupChatMessagesStore.stale,
+        error: $groupChatMessagesStore.error,
+    })
+    console.log("Fetching messages", {
+        groupUuid,
+        before,
+    })
+    $groupChatMessagesStore.context = {
+        requestPolicy: "cache-and-network",
+        pause: true,
+    }
+    $groupChatMessagesStore.variables = {
+        groupUuid,
+        before,
+    }
+    $groupChatMessagesStore.context = {
+        requestPolicy: "cache-and-network",
+        pause: false,
+    }
+}
+
+/**
+ * "Subscribe" to group metadata (name, language, members)
+ */
+export function fetchGroupMetadata({ groupUuid }: GroupChatQueryVariables) {
+    const $groupChatStore = get(groupChatStore)
+    if (!groupUuid) {
+        return
+    }
+    console.log("fetching group metadata")
+    $groupChatStore.context = {
+        requestPolicy: "cache-and-network",
+        pause: true,
+    }
+    $groupChatStore.variables = { groupUuid }
+    $groupChatStore.context = {
+        requestPolicy: "cache-and-network",
+        pause: false,
+    }
+}

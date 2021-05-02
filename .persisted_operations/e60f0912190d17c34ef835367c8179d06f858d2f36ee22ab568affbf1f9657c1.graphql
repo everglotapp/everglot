@@ -4,6 +4,7 @@ query ChatGroupByUuid($uuid: UUID!) {
       alpha2
       __typename
     }
+    uuid
     __typename
   }
 }

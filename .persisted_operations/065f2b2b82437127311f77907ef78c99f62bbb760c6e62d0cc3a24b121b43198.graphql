@@ -1,8 +1,10 @@
 query UserLanguageInfo($id: Int!) {
   user(id: $id) {
     id
+    uuid
     userLanguages {
       nodes {
+        nodeId
         languageId
         languageSkillLevelId
         native

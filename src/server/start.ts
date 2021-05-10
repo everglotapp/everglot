@@ -26,7 +26,7 @@ async function startWebServer(db: Pool): Promise<http.Server> {
         httpServer = http.createServer(app)
 
         /** Configure HTTP server. */
-        app = configureExpress(app, httpServer, db)
+        app = configureExpress(app, db)
         /** Disable header leaking information on the server. */
         app.disable("x-powered-by")
 

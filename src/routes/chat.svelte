@@ -49,6 +49,7 @@
     import { JoinGlobalGroup } from "../types/generated/graphql"
 
     import { ChevronLeftIcon, ChevronsRightIcon } from "svelte-feather-icons"
+    import { WEBRTC_URI } from "../constants"
 
     let chat: ChatProvider | undefined
     let webrtc: WebrtcProvider | undefined
@@ -72,7 +73,7 @@
     }
 
     $: if (webrtc) {
-        // webrtc.connect()
+        webrtc.init(WEBRTC_URI)
     }
 
     onDestroy(() => {
@@ -135,15 +136,15 @@
         const forceScrollToBottom =
             messagesContainer && isScrolledToBottom(messagesContainer)
 
-        console.log("Just got new messages", {
-            forceScrollToBottom,
-            messagesContainer,
-            fetching: $groupChatMessagesStore.fetching,
-            stale: $groupChatMessagesStore.stale,
-            error: $groupChatMessagesStore.error,
-            existingMessagesLength: messages.length,
-            receivedMessagesLength: receivedMessages.length,
-        })
+        // console.log("Just got new messages", {
+        //     forceScrollToBottom,
+        //     messagesContainer,
+        //     fetching: $groupChatMessagesStore.fetching,
+        //     stale: $groupChatMessagesStore.stale,
+        //     error: $groupChatMessagesStore.error,
+        //     existingMessagesLength: messages.length,
+        //     receivedMessagesLength: receivedMessages.length,
+        // })
         if (receivedMessages.length) {
             const messageIsNew = ({ uuid }: any) => {
                 for (let i = messages.length - 1; i >= 0; --i) {
@@ -208,7 +209,7 @@
      */
     const scroll = (el: HTMLElement, scrollTop?: number): void => {
         const top = scrollTop || el.scrollHeight - el.clientHeight
-        console.log({ top, scrollTop, el })
+        // console.log({ top, scrollTop, el })
         if (typeof el.scroll === "function") {
             el.scroll({ top })
         } else {
@@ -273,18 +274,18 @@
         const force =
             isOwnMessage(message) ||
             (!!messagesContainer && isScrolledToBottom(messagesContainer))
-        console.log("handleMessage", {
-            force,
-            isOwn: isOwnMessage(message),
-            isScroll:
-                messagesContainer && isScrolledToBottom(messagesContainer),
-        })
+        // console.log("handleMessage", {
+        //     force,
+        //     isOwn: isOwnMessage(message),
+        //     isScroll:
+        //         messagesContainer && isScrolledToBottom(messagesContainer),
+        // })
 
         setTimeout(() => {
-            console.log("handleMessage.timeout", {
-                messagesContainer,
-                force,
-            })
+            // console.log("handleMessage.timeout", {
+            //     messagesContainer,
+            //     force,
+            // })
             if (!messagesContainer) {
                 return
             }
@@ -303,20 +304,9 @@
         previews[messageUuid] = [{ uuid: "", url, type }]
     }
 
-    $: if (webrtc && webrtc.connectedToServer()) {
-        webrtc.listenForCalls()
-    }
-
-    // TODO: Get these from the peer server's list of active peers somehow
-    $: otherUserUuids =
-        $groupChatStore.data?.groupByUuid?.usersByGroupUserGroupIdAndUserId.nodes
-            .filter(Boolean)
-            .map((user) => user!.uuid) || []
-
     let split = true
     let audio = false
     let mic = false
-    $: callInProgress = webrtc && webrtc.callInProgress()
 
     function handleEmoji(event: CustomEvent) {
         const input = getChatMessageInput()
@@ -390,16 +380,16 @@
         const scrolledPx =
             container.scrollTop ||
             container.scrollHeight - container.clientHeight
-        console.log({
-            scrolledPx,
-            con: messagesContainer
-                ? messagesContainer.scrollTop ||
-                  messagesContainer.scrollHeight -
-                      messagesContainer.clientHeight
-                : null,
-            messagesContainer,
-            container,
-        })
+        // console.log({
+        //     scrolledPx,
+        //     con: messagesContainer
+        //         ? messagesContainer.scrollTop ||
+        //           messagesContainer.scrollHeight -
+        //               messagesContainer.clientHeight
+        //         : null,
+        //     messagesContainer,
+        //     container,
+        // })
         const { hasPreviousPage } =
             $groupChatMessagesStore.data?.groupByUuid
                 ?.messagesByRecipientGroupId.pageInfo || {}
@@ -410,6 +400,17 @@
         ) {
             // element is scrolled near top
             fetchMoreMessages()
+        }
+    }
+
+    async function handleCall() {
+        if (webrtc && $groupUuid) {
+            if (!(await webrtc.joinRoom($groupUuid, myUuid))) {
+                // TODO: error
+                console.log("failed to join call")
+            }
+        } else {
+            console.log("webrtc unknown")
         }
     }
 </script>
@@ -436,19 +437,19 @@
         on:messagePreview={handleMessagePreview}
         let:currentRoom
     >
-        <WebrtcProvider bind:this={webrtc}>
+        <WebrtcProvider bind:this={webrtc} let:inCall let:incoming>
             <div class="wrapper">
                 {#key $groupUuid}
                     <Sidebar
                         {split}
                         {audio}
                         {mic}
-                        {callInProgress}
+                        {inCall}
+                        {incoming}
                         handleToggleSplit={() => (split = !split)}
                         handleToggleMic={() => (mic = !mic)}
                         handleToggleAudio={() => (audio = !audio)}
-                        handleCall={() =>
-                            webrtc && webrtc.handleCall(otherUserUuids)}
+                        {handleCall}
                     />
                 {/key}
                 <div class="section-wrapper">

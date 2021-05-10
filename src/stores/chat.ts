@@ -111,16 +111,16 @@ export function fetchGroupChatMessages({
     before,
 }: GroupChatMessagesQueryVariables) {
     const $groupChatMessagesStore = get(groupChatMessagesStore)
-    console.log("Will fetch messages?", {
-        groupUuid,
-        fetching: $groupChatMessagesStore.fetching,
-        stale: $groupChatMessagesStore.stale,
-        error: $groupChatMessagesStore.error,
-    })
-    console.log("Fetching messages", {
-        groupUuid,
-        before,
-    })
+    // console.log("Will fetch messages?", {
+    //     groupUuid,
+    //     fetching: $groupChatMessagesStore.fetching,
+    //     stale: $groupChatMessagesStore.stale,
+    //     error: $groupChatMessagesStore.error,
+    // })
+    // console.log("Fetching messages", {
+    //     groupUuid,
+    //     before,
+    // })
     $groupChatMessagesStore.context = {
         requestPolicy: "cache-and-network",
         pause: true,
@@ -143,7 +143,7 @@ export function fetchGroupMetadata({ groupUuid }: GroupChatQueryVariables) {
     if (!groupUuid) {
         return
     }
-    console.log("fetching group metadata")
+    // console.log("fetching group metadata")
     $groupChatStore.context = {
         requestPolicy: "cache-and-network",
         pause: true,

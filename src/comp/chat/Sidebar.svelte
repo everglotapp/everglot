@@ -13,7 +13,8 @@
     export let split = false
     export let mic = false
     export let audio = false
-    export let callInProgress = false
+    export let inCall = false
+    export let incoming: MediaStreamTrack[] = []
 </script>
 
 <div class="sidebar">
@@ -50,7 +51,7 @@
                 </div>
             </div>
         </div>
-        {#if callInProgress}
+        {#if inCall}
             <div class="toggle-row">
                 <svg
                     width="35"

@@ -25,7 +25,7 @@ chat-sidebar-controls-mic = Mic
 chat-sidebar-controls-audio = Audio
 chat-sidebar-controls-toggle-on = On
 chat-sidebar-controls-toggle-off = Off
-chat-sidebar-start-call = Start Call
+chat-sidebar-start-call = Join Call
 chat-submit-form-send = Send
 chat-submit-form-connecting = Connecting …
 # Chat text message input field

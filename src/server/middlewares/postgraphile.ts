@@ -15,7 +15,7 @@ const { NODE_ENV, DATABASE_URL } = process.env
 const dev = NODE_ENV === "development"
 
 import { DATABASE_SCHEMA, DATABASE_ROLE_CLIENT } from "../db"
-import type { PathLike } from "node:fs"
+import type { PathLike } from "fs"
 
 let middleware: RequestHandler | null
 

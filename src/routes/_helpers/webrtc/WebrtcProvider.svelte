@@ -1,134 +1,137 @@
 <script lang="ts">
-    import type Peer from "peerjs"
-    import type { MediaConnection } from "peerjs"
+    import { onDestroy } from "svelte"
 
-    import { setContext, onDestroy } from "svelte"
-    import { currentUser } from "../../../stores"
-    import type { User } from "../../../types/generated/graphql"
+    import type { LocalStream, RemoteStream } from "ion-sdk-js"
+    import type { IonConnector } from "ion-sdk-js/lib/ion"
 
-    let Peer
-    let peer: object | null = null
+    let connector: IonConnector | undefined
+    let outgoing: LocalStream | undefined
+    export let incoming: MediaStreamTrack[] = []
+    let joinedRoom: string | undefined = undefined
+    let joinedUserId: string | undefined
 
-    const WEBRTC_CONTEXT = {}
+    $: inCall = incoming.length > 0 || typeof outgoing !== "undefined"
 
-    setContext(WEBRTC_CONTEXT, {
-        connectToServer,
-    })
-
-    export const connectedToServer = () => peer !== null
-    $: inCall = incoming.length || Object.values(outgoing).some(Boolean)
-    export const callInProgress = () => inCall
-
-    export let outgoing: Record<User["uuid"], MediaStream | null> = {}
-    export let incoming: MediaStream[] = []
-    let listeningForCalls: boolean = false
-
-    export async function connectToServer() {
-        if (peer !== null) {
-            return peer
-        }
-        // @ts-ignore see https://github.com/peers/peerjs/issues/552#issuecomment-770401843
-        window.parcelRequire = undefined
-        const module = await import("peerjs")
-
-        // @ts-ignore
-        Peer = module.peerjs.Peer as typeof module.default
-
-        if ($currentUser) {
-            peer = new Peer($currentUser.uuid, {
-                host: "/",
-                port: Number(window.location.port),
-                path: "/webrtc",
-                config: {
-                    iceServers: [{ urls: "stun:stun.t-online.de:3478" }],
-                    sdpSemantics: "unified-plan",
-                },
-            })
-
-            if (peer) {
-                peer.on("error", function (err) {
-                    console.log(err)
-                })
-                peer.on("disconnected", function (err) {
-                    peer = null
-                })
-            }
-        }
-
-        return peer
-    }
-
-    export function isListeningForCalls() {
-        return listeningForCalls
-    }
-
-    export async function listenForCalls() {
-        if (listeningForCalls) {
+    export async function init(uri: string) {
+        if (connector) {
             return
         }
-        const peer = await connectToServer()
-        if (!peer) {
+
+        if (typeof window === "undefined") {
             return
         }
-        peer.on("call", async (call: MediaConnection) => {
-            const stream = await navigator.mediaDevices
-                .getUserMedia({ video: false, audio: true })
-                .catch((err) => {
-                    console.error("Failed to get local stream", err)
-                    return null
-                })
-            if (!stream) {
+        const { IonConnector } = await import("ion-sdk-js/lib/ion")
+
+        connector = new IonConnector(uri)
+    }
+
+    export async function joinRoom(
+        roomId: string,
+        userId: string
+    ): Promise<boolean> {
+        if (!connector) {
+            throw new Error("Not initialized")
+        }
+
+        if (outgoing) {
+            console.log("Failed to join call: already in call")
+            return false
+        }
+
+        const peerInfo = new Map()
+        const token = undefined
+        const joinResult = await connector.join(roomId, userId, peerInfo, token)
+        if (!joinResult.success) {
+            console.log(`Failed to join call: ${joinResult.reason}`)
+            return false
+        }
+        joinedRoom = roomId
+        joinedUserId = userId
+
+        if (!connector.sfu) {
+            console.log("Failed to join call: no client")
+            return false
+        }
+
+        const { LocalStream } = await import("ion-sdk-js")
+        // Setup handlers
+        connector.sfu.ontrack = (
+            track: MediaStreamTrack,
+            stream: RemoteStream
+        ) => {
+            if (!stream.audio) {
+                console.log("Incoming stream is not an audio stream", stream)
                 return
             }
-            call.answer(stream)
-            call.on("stream", (remoteStream) => {
-                incoming = [...incoming, remoteStream]
-                console.log("Answered", { remoteStream })
-            })
+            if (track.kind !== "audio") {
+                console.log("Incoming track is not an audio track", track)
+                return
+            }
+            console.log("Got audio track", track)
+
+            stream.mute("audio")
+            stream.unmute("audio")
+
+            incoming.push(track)
+        }
+
+        outgoing = await LocalStream.getUserMedia({
+            audio: true,
+            video: false,
+            simulcast: true, // enable simulcast
+            codec: "opus",
+            resolution: "qvga",
+        }).catch((e: Error) => {
+            console.log("Failed to get user media:", e.message)
+            return undefined
         })
-        listeningForCalls = true
+
+        if (!outgoing) {
+            console.log("Failed to get user media")
+            return false
+        }
+
+        console.log("Got outgoing audio stream", outgoing)
+
+        outgoing.mute("audio")
+        connector.sfu.publish(outgoing)
+        return true
     }
 
-    export async function handleCall(otherUserUuids: string[]) {
-        const peer = await connectToServer()
-        if (!peer) {
-            return
+    export async function leaveRoom(): Promise<boolean> {
+        let res = true
+        if (connector) {
+            if (joinedUserId && !(await connector.leave(joinedUserId))) {
+                console.log("Failed to leave room")
+                res = false
+            }
+            connector = undefined
+            joinedRoom = undefined
         }
-        for (const otherUuid of otherUserUuids) {
-            // TODO: call user and put into outgoing
-            if (Object.keys(outgoing).includes(otherUserUuids)) {
-                continue
-            }
-            const stream = await navigator.mediaDevices
-                .getUserMedia({ video: false, audio: true })
-                .catch((err) => {
-                    console.error("Failed to get local stream", err)
-                    return null
-                })
-            if (!stream) {
-                continue
-            }
-            const call: MediaConnection = peer.call(otherUuid, stream)
-            if (!call) {
-                continue
-            }
-            outgoing = { ...outgoing, [otherUuid]: null }
-            call.on("stream", (remoteStream) => {
-                outgoing[otherUuid] = remoteStream
-                console.log("Called", { [otherUuid]: remoteStream })
-            })
+        for (const incomingTrack of incoming) {
+            incomingTrack.stop()
+        }
+        incoming = []
+        if (outgoing) {
+            stopStreamTracks(outgoing)
+            outgoing.unpublish()
+            outgoing = undefined
+        } else {
+            res = false
+        }
+        return res
+    }
+
+    function stopStreamTracks(stream: MediaStream) {
+        const tracks = stream.getTracks()
+        for (const track of tracks) {
+            track.stop()
         }
     }
 
     onDestroy(() => {
-        if (peer) {
-            peer.disconnect()
-        }
-        if (peer) {
-            peer.destroy()
-        }
-        peer = null
+        leaveRoom()
     })
 </script>
 
-<slot />
+<slot {inCall} {incoming} />

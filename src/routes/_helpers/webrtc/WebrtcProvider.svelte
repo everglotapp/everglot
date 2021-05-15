@@ -40,9 +40,9 @@
 
         const peerInfo = new Map()
         const token = undefined
-        const joinResult = await connector.join(roomId, userId, peerInfo, token)
-        if (!joinResult.success) {
-            console.log(`Failed to join call: ${joinResult.reason}`)
+        const joined = await connector.join(roomId, userId, peerInfo, token)
+        if (!joined) {
+            console.log(`Failed to join call: ${JSON.stringify(joined)}`)
             return false
         }
         joinedRoom = roomId

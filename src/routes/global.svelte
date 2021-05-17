@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte"
     import { scale } from "svelte/transition"
     import { query } from "@urql/svelte"
 
@@ -41,6 +42,11 @@
             }
         )
     }
+
+    onMount(() => {
+        $allGroupsStore.context = { ...$allGroupsStore.context, pause: true }
+        $allGroupsStore.context = { ...$allGroupsStore.context, pause: false }
+    })
 
     let lang: SupportedLocale = "en"
 </script>

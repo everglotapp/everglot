@@ -9,11 +9,13 @@
     export let handleToggleSplit: () => void
     export let handleToggleMic: () => void
     export let handleToggleAudio: () => void
-    export let handleCall: () => void
+    export let handleJoinCall: () => void
+    export let handleLeaveCall: () => void
     export let split = false
     export let mic = false
     export let audio = false
-    export let callInProgress = false
+    export let inCall = false
+    export let incoming: MediaStreamTrack[] = []
 </script>
 
 <div class="sidebar">
@@ -50,7 +52,7 @@
                 </div>
             </div>
         </div>
-        {#if callInProgress}
+        {#if inCall}
             <div class="toggle-row">
                 <svg
                     width="35"
@@ -137,9 +139,20 @@
                     </div>
                 </div>
             </div>
+            <div class="flex justify-center">
+                <ButtonLarge
+                    tag="button"
+                    on:click={handleLeaveCall}
+                    variant="TEXT"
+                    ><Localized id="chat-sidebar-leave-call" /></ButtonLarge
+                >
+            </div>
         {:else}
             <div class="flex justify-center">
-                <ButtonLarge tag="button" on:click={handleCall} variant="TEXT"
+                <ButtonLarge
+                    tag="button"
+                    on:click={handleJoinCall}
+                    variant="TEXT"
                     ><Localized id="chat-sidebar-start-call" /></ButtonLarge
                 >
             </div>

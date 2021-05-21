@@ -1,35 +1,46 @@
 <script lang="ts">
     import { onDestroy } from "svelte"
 
-    import type { LocalStream, RemoteStream } from "ion-sdk-js"
-    import type { IonConnector } from "ion-sdk-js/lib/ion"
+    import type {
+        IAgoraRTC,
+        IAgoraRTCClient,
+        IMicrophoneAudioTrack,
+        IRemoteAudioTrack,
+    } from "agora-rtc-sdk-ng"
 
-    let connector: IonConnector | undefined
-    let outgoing: LocalStream | undefined
-    export let incoming: MediaStreamTrack[] = []
-    let joinedRoom: string | undefined = undefined
-    let joinedUserId: string | undefined
+    let AgoraRTC: IAgoraRTC
+    const AGORA_APP_ID = "38aefcc1e5254b578fb65665fe227ed5"
+    const AGORA_TOKEN =
+        "00638aefcc1e5254b578fb65665fe227ed5IAAu6G2JERjs8k1pO9qdwnJj/dftw+qDqN/x3ZtIhOa6dAx+f9gAAAAAEABZxLUYcUKpYAEAAQBxQqlg"
 
-    $: inCall = incoming.length > 0 || typeof outgoing !== "undefined"
+    let outgoing: IMicrophoneAudioTrack | undefined
+    export let incoming: IRemoteAudioTrack[] = []
 
-    export async function init(uri: string) {
-        if (connector) {
-            return
-        }
+    let client: IAgoraRTCClient | undefined
 
+    $: inCall = typeof outgoing !== "undefined"
+
+    export async function init() {
         if (typeof window === "undefined") {
             return
         }
-        const { IonConnector } = await import("ion-sdk-js/lib/ion")
 
-        connector = new IonConnector(uri)
+        if (!AgoraRTC) {
+            // @ts-ignore
+            AgoraRTC = await import("agora-rtc-sdk-ng")
+        }
+
+        client = AgoraRTC.createClient({
+            mode: "rtc",
+            codec: "vp8",
+        })
     }
 
     export async function joinRoom(
         roomId: string,
         userId: string
     ): Promise<boolean> {
-        if (!connector) {
+        if (!client) {
             throw new Error("Not initialized")
         }
 
@@ -38,95 +49,59 @@
             return false
         }
 
-        const peerInfo = new Map()
-        const token = undefined
-        const joined = await connector.join(roomId, userId, peerInfo, token)
-        if (!joined) {
-            console.log(`Failed to join call: ${JSON.stringify(joined)}`)
-            return false
-        }
-        joinedRoom = roomId
-        joinedUserId = userId
-
-        if (!connector.sfu) {
-            console.log("Failed to join call: no client")
-            return false
-        }
-
-        const { LocalStream } = await import("ion-sdk-js")
-        // Setup handlers
-        connector.sfu.ontrack = (
-            track: MediaStreamTrack,
-            stream: RemoteStream
-        ) => {
-            if (!stream.audio) {
-                console.log("Incoming stream is not an audio stream", stream)
+        client.on("user-published", async (user, mediaType) => {
+            if (!client) {
                 return
             }
-            if (track.kind !== "audio") {
-                console.log("Incoming track is not an audio track", track)
+            // Subscribe to a remote user.
+            await client.subscribe(user, mediaType)
+            console.log("subscribe success")
+
+            // If the subscribed track is audio.
+            if (mediaType === "audio") {
+                // Get `RemoteAudioTrack` in the `user` object.
+                const remoteAudioTrack = user.audioTrack
+                if (!remoteAudioTrack) {
+                    return
+                }
+                incoming = [...incoming, remoteAudioTrack]
+                // Play the audio track. No need to pass any DOM element.
+                remoteAudioTrack.play()
+            }
+        })
+        client.on("user-unpublished", async (user, mediaType) => {
+            console.log("user unpublished", user)
+            if (!client) {
                 return
             }
-            console.log("Got audio track", track)
-
-            stream.mute("audio")
-            stream.unmute("audio")
-
-            incoming.push(track)
-        }
-
-        outgoing = await LocalStream.getUserMedia({
-            audio: true,
-            video: false,
-            simulcast: true, // enable simulcast
-            codec: "opus",
-            resolution: "qvga",
-        }).catch((e: Error) => {
-            console.log("Failed to get user media:", e.message)
-            return undefined
+            await client.unsubscribe(user, mediaType)
         })
 
-        if (!outgoing) {
-            console.log("Failed to get user media")
+        const uid = await client.join(AGORA_APP_ID, "test", AGORA_TOKEN, userId)
+        if (!uid) {
             return false
         }
 
-        console.log("Got outgoing audio stream", outgoing)
+        if (!AgoraRTC) {
+            // @ts-ignore
+            AgoraRTC = await import("agora-rtc-sdk-ng")
+        }
+        outgoing = await AgoraRTC.createMicrophoneAudioTrack()
+        // Publish the local audio track to the channel.
+        await client.publish([outgoing])
 
-        outgoing.mute("audio")
-        connector.sfu.publish(outgoing)
+        console.log("publish success!")
         return true
     }
 
     export async function leaveRoom(): Promise<boolean> {
-        let res = true
-        if (connector) {
-            if (joinedUserId && !(await connector.leave(joinedUserId))) {
-                console.log("Failed to leave room")
-                res = false
-            }
-            connector = undefined
-            joinedRoom = undefined
-        }
-        for (const incomingTrack of incoming) {
-            incomingTrack.stop()
-        }
-        incoming = []
-        if (outgoing) {
-            stopStreamTracks(outgoing)
-            outgoing.unpublish()
+        if (client && outgoing) {
+            await client.unpublish([outgoing])
+            await client.leave()
             outgoing = undefined
-        } else {
-            res = false
+            return true
         }
-        return res
-    }
-
-    function stopStreamTracks(stream: MediaStream) {
-        const tracks = stream.getTracks()
-        for (const track of tracks) {
-            track.stop()
-        }
+        return false
     }
 
     onDestroy(() => {

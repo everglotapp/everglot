@@ -73,7 +73,7 @@
     }
 
     $: if (webrtc) {
-        webrtc.init(WEBRTC_URI)
+        webrtc.init()
     }
 
     onDestroy(() => {
@@ -403,11 +403,22 @@
         }
     }
 
-    async function handleCall() {
+    async function handleJoinCall() {
         if (webrtc && $groupUuid) {
             if (!(await webrtc.joinRoom($groupUuid, myUuid))) {
                 // TODO: error
                 console.log("failed to join call")
+            }
+        } else {
+            console.log("webrtc unknown")
+        }
+    }
+
+    async function handleLeaveCall() {
+        if (webrtc && $groupUuid) {
+            if (!(await webrtc.leaveRoom())) {
+                // TODO: error
+                console.log("failed to leave call")
             }
         } else {
             console.log("webrtc unknown")
@@ -449,7 +460,8 @@
                         handleToggleSplit={() => (split = !split)}
                         handleToggleMic={() => (mic = !mic)}
                         handleToggleAudio={() => (audio = !audio)}
-                        {handleCall}
+                        {handleJoinCall}
+                        {handleLeaveCall}
                     />
                 {/key}
                 <div class="section-wrapper">

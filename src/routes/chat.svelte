@@ -49,7 +49,6 @@
     import { JoinGlobalGroup } from "../types/generated/graphql"
 
     import { ChevronLeftIcon, ChevronsRightIcon } from "svelte-feather-icons"
-    import { WEBRTC_URI } from "../constants"
 
     let chat: ChatProvider | undefined
     let webrtc: WebrtcProvider | undefined

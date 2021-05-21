@@ -1,5 +1,6 @@
 export const GOOGLE_SIGNIN_CLIENT_ID =
     "457984069949-bgc3aj14fi47olkp0arn7is4cr07cfla.apps.googleusercontent.com"
+export const AGORA_APP_ID = "38aefcc1e5254b578fb65665fe227ed5"
 
 export const SUPPORTED_LOCALES = ["en", "de", "zh"] as const
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]

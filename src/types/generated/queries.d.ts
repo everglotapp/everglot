@@ -161,6 +161,15 @@ declare module '*/userHasCompletedProfile.graphql' {
 }
     
 
+declare module '*/userIsInGroup.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserIsInGroup: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/userLanguageInfo.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -174,6 +183,15 @@ declare module '*/userProfile.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const UserProfile: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userUuidById.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserUuidById: DocumentNode;
 
   export default defaultDocument;
 }

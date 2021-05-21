@@ -8,10 +8,9 @@
         IRemoteAudioTrack,
     } from "agora-rtc-sdk-ng"
 
+    import { AGORA_APP_ID } from "../../../constants"
+
     let AgoraRTC: IAgoraRTC
-    const AGORA_APP_ID = "38aefcc1e5254b578fb65665fe227ed5"
-    const AGORA_TOKEN =
-        "00638aefcc1e5254b578fb65665fe227ed5IAAu6G2JERjs8k1pO9qdwnJj/dftw+qDqN/x3ZtIhOa6dAx+f9gAAAAAEABZxLUYcUKpYAEAAQBxQqlg"
 
     let outgoing: IMicrophoneAudioTrack | undefined
     export let incoming: IRemoteAudioTrack[] = []
@@ -77,7 +76,11 @@
             await client.unsubscribe(user, mediaType)
         })
 
-        const uid = await client.join(AGORA_APP_ID, "test", AGORA_TOKEN, userId)
+        const rtcToken = await getAgoraToken(roomId)
+        if (!rtcToken) {
+            return false
+        }
+        const uid = await client.join(AGORA_APP_ID, roomId, rtcToken, userId)
         if (!uid) {
             return false
         }
@@ -102,6 +105,24 @@
             return true
         }
         return false
+    }
+
+    async function getAgoraToken(roomId: string): Promise<string | false> {
+        const response = await fetch(`/groups/rtc-token/${roomId}`, {
+            method: "get",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
+        const res = await response.json()
+        if (!res.hasOwnProperty("success")) {
+            return false
+        }
+        if (res.success !== true) {
+            return false
+        }
+        return res.token
     }
 
     onDestroy(() => {

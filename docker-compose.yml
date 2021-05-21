@@ -17,6 +17,7 @@ services:
             PGPORT: ${PGPORT:-5432}
             DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGHOST:-everglot-db}:${PGPORT}/${POSTGRES_DB}"
             SESSION_COOKIE_VALIDATION_SECRETS: ${SESSION_COOKIE_VALIDATION_SECRETS:?Please set SESSION_COOKIE_VALIDATION_SECRETS}
+            AGORA_APP_CERTIFICATE: ${AGORA_APP_CERTIFICATE:?Please set AGORA_APP_CERTIFICATE}
 
     everglot-db:
         image: postgres:13-alpine

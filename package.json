@@ -33,6 +33,7 @@
     "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
     "@graphile/persisted-operations": "^0.1.0",
     "@urql/devtools": "^2.0.3",
+    "agora-access-token": "^2.0.4",
     "bcrypt": "^5.0.1",
     "compression": "^1.7.1",
     "connect-pg-simple": "^6.2.1",

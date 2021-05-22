@@ -18,6 +18,7 @@ jobs:
                   echo "POSTGRES_PASSWORD=everglot_app_pass" >> .env
                   echo "POSTGRES_DB=everglot_app_db" >> .env
                   echo "SESSION_COOKIE_VALIDATION_SECRETS=[\"MySecretCookieValidationSecret123\"]" >> .env
+                  echo "AGORA_APP_CERTIFICATE=whatever" >> .env
             - name: Build app docker image
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml build --build-arg NODE_ENV=development --parallel everglot-app
             - name: Start database
@@ -76,6 +77,12 @@ jobs:
 
             - name: Inject Session Secrets from Github Secrets
               run: kubectl create secret generic session --from-literal=session-cookie-validation-secrets='${{ secrets.SESSION_COOKIE_VALIDATION_SECRETS }}'
+
+            - name: Delete Agora Certificate from Kubernetes Secrets if existed
+              run: kubectl delete secret agora --ignore-not-found
+
+            - name: Inject Agora Certificate from Github Secrets
+              run: kubectl create secret generic agora --from-literal=agora-app-certificate='${{ secrets.AGORA_APP_CERTIFICATE }}'
 
             - name: Deploy Config to DigitalOcean Kubernetes
               run: kubectl apply -f $GITHUB_WORKSPACE/k8s-setup/everglot/service-deployment.yml

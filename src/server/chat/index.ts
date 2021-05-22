@@ -27,7 +27,7 @@ import type {
     Group,
     User,
 } from "../../types/generated/graphql"
-import { getGroupIdByUuid } from "../groups"
+import { getGroupIdByUuid, userIsInGroup } from "../groups"
 
 import Bot from "./bot"
 
@@ -54,27 +54,40 @@ export function start(server: Server, pool: Pool) {
         const { session } = socket.request
 
         socket.on("joinRoom", async ({ groupUuid }: { groupUuid: string }) => {
-            const userMeta = await getChatUserByUserId(session.user_id)
+            const userId = session.user_id
+            const userMeta = await getChatUserByUserId(userId)
             if (!userMeta) {
                 return
             }
-            // TODO: Check that this is an actual group UUID and that
-            // the user is part of this group.
+            // Check that this is an actual group UUID
             if (!groupUuid || !uuidValidate(groupUuid)) {
                 chlog
                     .child({
+                        userId,
                         groupUuid,
                     })
-                    .info("Bad group UUID")
+                    .debug("Bad group UUID")
                 return
             }
+
             const group = await getChatGroupByUuid(groupUuid)
             if (!group || !group.groupByUuid?.language?.alpha2) {
                 chlog
                     .child({
+                        userId,
                         groupUuid,
                     })
-                    .info("Group not found")
+                    .debug("Group not found")
+                return
+            }
+
+            if (!(await userIsInGroup(userId, groupUuid))) {
+                chlog
+                    .child({
+                        userId,
+                        groupUuid,
+                    })
+                    .debug("User is not part of group")
                 return
             }
 

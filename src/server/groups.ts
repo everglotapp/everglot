@@ -7,6 +7,7 @@ import { performQuery } from "./gql"
 import {
     CreateGroupMutation,
     GroupIdByUuidQuery,
+    UserIsInGroupQuery,
     UserLanguageInfoQuery,
     UserType,
 } from "../types/generated/graphql"
@@ -357,4 +358,28 @@ export async function getGroupIdByUuid(
         return null
     }
     return res.data.groupByUuid?.id || null
+}
+
+export async function userIsInGroup(
+    userId: User["id"],
+    groupUuid: Group["uuid"]
+): Promise<boolean | null> {
+    const res = await performQuery<UserIsInGroupQuery>(
+        `query UserIsInGroup($userId: Int!, $groupUuid: UUID!) {
+            groupByUuid(uuid: $groupUuid) {
+                groupUsers(condition: { userId: $userId }) {
+                    totalCount
+                }
+            }
+        }`,
+        { userId, groupUuid }
+    )
+    if (
+        !res.data ||
+        !res.data.groupByUuid?.groupUsers ||
+        typeof res.data.groupByUuid?.groupUsers?.totalCount === "undefined"
+    ) {
+        return null
+    }
+    return res.data.groupByUuid.groupUsers.totalCount > 0
 }

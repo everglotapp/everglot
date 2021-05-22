@@ -1,0 +1,7 @@
+query UserIsInGroup($userId: Int!, $groupUuid: UUID!) {
+    groupByUuid(uuid: $groupUuid) {
+        groupUsers(condition: { userId: $userId }) {
+            totalCount
+        }
+    }
+}

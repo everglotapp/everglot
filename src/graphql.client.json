@@ -17,6 +17,8 @@
    "RegisterUserActivity": "210f3ff41111c4b7011d7e86cd6054cc29ff3244ca86f2a716be9df63b6f07d5",
    "UpdateUserAvatarUrl": "5462ccf96eb3d1d0602963946d8f48734c6d1c5ddd6a31f1c8da088920be92f7",
    "UserHasCompletedProfile": "cd3ecbcb94dbe8bfaa3a058fe3250d2217988fc2b4e69e3d11ac2d04c5533024",
+   "UserIsInGroup": "0c7a8c409b6280fc4a79f893c748ccd8339eddc2694e00d936392e368d82ef04",
    "UserLanguageInfo": "065f2b2b82437127311f77907ef78c99f62bbb760c6e62d0cc3a24b121b43198",
-   "UserProfile": "79d4d79049f6ad07be0bd32bd708b5f8c318d76d2e15c9185d929d3a1ffccd41"
+   "UserProfile": "79d4d79049f6ad07be0bd32bd708b5f8c318d76d2e15c9185d929d3a1ffccd41",
+   "UserUuidById": "fc060ecae0283bbc43b600f0676d4d33c5d568aa50267fe2579fc63649075fcc"
 }

@@ -5742,6 +5742,23 @@ export type UserHasCompletedProfileQuery = (
   )> }
 );
 
+export type UserIsInGroupQueryVariables = Exact<{
+  userId: Scalars['Int'];
+  groupUuid: Scalars['UUID'];
+}>;
+
+
+export type UserIsInGroupQuery = (
+  { __typename?: 'Query' }
+  & { groupByUuid?: Maybe<(
+    { __typename?: 'Group' }
+    & { groupUsers: (
+      { __typename?: 'GroupUsersConnection' }
+      & Pick<GroupUsersConnection, 'totalCount'>
+    ) }
+  )> }
+);
+
 export type UserLanguageInfoQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -5802,6 +5819,19 @@ export type UserProfileQuery = (
         )> }
       )>> }
     ) }
+  )> }
+);
+
+export type UserUuidByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserUuidByIdQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'uuid'>
   )> }
 );
 
@@ -6073,6 +6103,15 @@ export const UserHasCompletedProfile = gql`
   }
 }
     `;
+export const UserIsInGroup = gql`
+    query UserIsInGroup($userId: Int!, $groupUuid: UUID!) {
+  groupByUuid(uuid: $groupUuid) {
+    groupUsers(condition: {userId: $userId}) {
+      totalCount
+    }
+  }
+}
+    `;
 export const UserLanguageInfo = gql`
     query UserLanguageInfo($id: Int!) {
   user(id: $id) {
@@ -6127,6 +6166,13 @@ export const UserProfile = gql`
         joinedOn
       }
     }
+  }
+}
+    `;
+export const UserUuidById = gql`
+    query UserUuidById($id: Int!) {
+  user(id: $id) {
+    uuid
   }
 }
     `;

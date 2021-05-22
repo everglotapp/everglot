@@ -78,6 +78,12 @@ jobs:
             - name: Inject Session Secrets from Github Secrets
               run: kubectl create secret generic session --from-literal=session-cookie-validation-secrets='${{ secrets.SESSION_COOKIE_VALIDATION_SECRETS }}'
 
+            - name: Delete Agora Certificate from Kubernetes Secrets if existed
+              run: kubectl delete secret agora --ignore-not-found
+
+            - name: Inject Agora Certificate from Github Secrets
+              run: kubectl create secret generic agora --from-literal=agora-app-certificate='${{ secrets.AGORA_APP_CERTIFICATE }}'
+
             - name: Deploy Config to DigitalOcean Kubernetes
               run: kubectl apply -f $GITHUB_WORKSPACE/k8s-setup/everglot/service-deployment.yml
 

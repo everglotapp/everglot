@@ -6,19 +6,18 @@
         IAgoraRTCClient,
         IAgoraRTCRemoteUser,
         IMicrophoneAudioTrack,
-        IRemoteUser,
     } from "agora-rtc-sdk-ng"
 
     import { AGORA_APP_ID } from "../../../constants"
 
     let AgoraRTC: IAgoraRTC
 
-    let outgoing: IMicrophoneAudioTrack | undefined
-    let remoteUsers: IAgoraRTCRemoteUser[] = []
+    export let outgoing: IMicrophoneAudioTrack | undefined
+    export let remoteUsers: IAgoraRTCRemoteUser[] = []
 
     let client: IAgoraRTCClient | undefined
 
-    $: inCall = typeof outgoing !== "undefined"
+    $: isInCall = typeof outgoing !== "undefined"
 
     export async function init() {
         if (typeof window === "undefined") {
@@ -150,4 +149,4 @@
     })
 </script>
 
-<slot {inCall} {remoteUsers} />
+<slot {isInCall} {outgoing} {remoteUsers} />

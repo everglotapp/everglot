@@ -447,16 +447,30 @@
         on:messagePreview={handleMessagePreview}
         let:currentRoom
     >
-        <WebrtcProvider bind:this={webrtc} let:inCall>
+        <WebrtcProvider
+            bind:this={webrtc}
+            let:isInCall
+            let:outgoing
+            let:remoteUsers
+        >
             <div class="wrapper">
                 {#key $groupUuid}
                     <Sidebar
                         {split}
                         {audio}
                         {mic}
-                        {inCall}
+                        {isInCall}
                         handleToggleSplit={() => (split = !split)}
-                        handleToggleMic={() => (mic = !mic)}
+                        handleToggleMic={() => {
+                            if (outgoing) {
+                                mic = !mic
+                                if (mic) {
+                                    outgoing.setVolume(100)
+                                } else {
+                                    outgoing.setVolume(0)
+                                }
+                            }
+                        }}
                         handleToggleAudio={() => (audio = !audio)}
                         {handleJoinCall}
                         {handleLeaveCall}

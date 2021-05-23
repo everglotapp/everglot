@@ -14,7 +14,7 @@
     export let split = false
     export let mic = false
     export let audio = false
-    export let inCall = false
+    export let isInCall = false
     // export let incoming: MediaStreamTrack[] = []
 </script>
 
@@ -52,7 +52,7 @@
                 </div>
             </div>
         </div>
-        {#if inCall}
+        {#if isInCall}
             <div class="toggle-row">
                 <svg
                     width="35"
@@ -103,11 +103,7 @@
                     </defs>
                 </svg>
                 <span><Localized id="chat-sidebar-controls-mic" /></span>
-                <div
-                    class="toggle"
-                    style="cursor: not-allowed;"
-                    on:click={handleToggleMic}
-                >
+                <div class="toggle" on:click={handleToggleMic}>
                     <div aria-selected={mic}>
                         <Localized id="chat-sidebar-controls-toggle-on" />
                     </div>

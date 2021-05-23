@@ -13,6 +13,11 @@ import {
     userIsNew,
     userGreeted,
 } from "./users"
+import {
+    userJoin as userJoinCall,
+    userLeave as userLeaveCall,
+    getUsers as getCallUsers,
+} from "./call"
 
 import { performQuery } from "../gql"
 
@@ -27,7 +32,7 @@ import type {
     Group,
     User,
 } from "../../types/generated/graphql"
-import { getGroupIdByUuid, userIsInGroup } from "../groups"
+import { getAllGroupUuids, getGroupIdByUuid, userIsInGroup } from "../groups"
 
 import Bot from "./bot"
 
@@ -53,12 +58,10 @@ export function start(server: Server, pool: Pool) {
     io.on("connection", (socket: EverglotChatSocket) => {
         const { session } = socket.request
 
-        socket.on("joinRoom", async ({ groupUuid }: { groupUuid: string }) => {
-            const userId = session.user_id
-            const userMeta = await getChatUserByUserId(userId)
-            if (!userMeta) {
-                return
-            }
+        const authenticateUserInGroup = async (
+            userId: number,
+            groupUuid: string
+        ) => {
             // Check that this is an actual group UUID
             if (!groupUuid || !uuidValidate(groupUuid)) {
                 chlog
@@ -67,6 +70,28 @@ export function start(server: Server, pool: Pool) {
                         groupUuid,
                     })
                     .debug("Bad group UUID")
+                return false
+            }
+
+            if (!(await userIsInGroup(userId, groupUuid))) {
+                chlog
+                    .child({
+                        userId,
+                        groupUuid,
+                    })
+                    .debug("Group doesn't exist or user is not part of group")
+                return false
+            }
+        }
+
+        socket.on("joinRoom", async ({ groupUuid }: { groupUuid: string }) => {
+            const userId = session.user_id
+            const userMeta = await getChatUserByUserId(userId)
+            if (!userMeta) {
+                return
+            }
+
+            if (!authenticateUserInGroup(userId, groupUuid)) {
                 return
             }
 
@@ -78,17 +103,7 @@ export function start(server: Server, pool: Pool) {
                         groupUuid,
                     })
                     .debug("Group not found")
-                return
-            }
-
-            if (!(await userIsInGroup(userId, groupUuid))) {
-                chlog
-                    .child({
-                        userId,
-                        groupUuid,
-                    })
-                    .debug("User is not part of group")
-                return
+                return false
             }
 
             bots[groupUuid] ||= new Bot(
@@ -271,6 +286,48 @@ export function start(server: Server, pool: Pool) {
                 username: chatUser.user.username || "?",
             })
         })
+
+        socket.on(
+            "userJoinCall",
+            async ({ groupUuid }: { groupUuid: string }) => {
+                const userId = session.user_id
+                const userMeta = await getChatUserByUserId(userId)
+                if (!userMeta) {
+                    return
+                }
+                if (!authenticateUserInGroup(userId, groupUuid)) {
+                    return
+                }
+                userJoinCall(userMeta.uuid, groupUuid)
+            }
+        )
+
+        socket.on(
+            "userLeaveCall",
+            async ({ groupUuid }: { groupUuid: string }) => {
+                const userId = session.user_id
+                const userMeta = await getChatUserByUserId(userId)
+                if (!userMeta) {
+                    return
+                }
+                if (!authenticateUserInGroup(userId, groupUuid)) {
+                    return
+                }
+                userLeaveCall(userMeta.uuid, groupUuid)
+            }
+        )
+
+        setInterval(async () => {
+            const groupUuids = await getAllGroupUuids()
+            if (!groupUuids) {
+                return
+            }
+            for (const groupUuid of groupUuids) {
+                socket.broadcast
+                    .to(groupUuid)
+                    .emit("callUsers", getCallUsers(groupUuid))
+            }
+        }, 5000)
     })
 }
 

@@ -1,4 +1,13 @@
 
+declare module '*/allGroupUuids.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const AllGroupUuids: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/allGroups.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

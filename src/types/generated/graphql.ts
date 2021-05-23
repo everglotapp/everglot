@@ -5360,6 +5360,20 @@ export enum UsersOrderBy {
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
+export type AllGroupUuidsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllGroupUuidsQuery = (
+  { __typename?: 'Query' }
+  & { groups?: Maybe<(
+    { __typename?: 'GroupsConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'Group' }
+      & Pick<Group, 'uuid'>
+    )>> }
+  )> }
+);
+
 export type AllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -5836,6 +5850,15 @@ export type UserUuidByIdQuery = (
 );
 
 
+export const AllGroupUuids = gql`
+    query AllGroupUuids {
+  groups {
+    nodes {
+      uuid
+    }
+  }
+}
+    `;
 export const AllGroups = gql`
     query AllGroups {
   groups {

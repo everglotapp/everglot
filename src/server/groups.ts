@@ -5,6 +5,7 @@ import log from "../logger"
 import { performQuery } from "./gql"
 
 import {
+    AllGroupUuidsQuery,
     CreateGroupMutation,
     GroupIdByUuidQuery,
     UserIsInGroupQuery,
@@ -382,4 +383,21 @@ export async function userIsInGroup(
         return null
     }
     return res.data.groupByUuid.groupUsers.totalCount > 0
+}
+
+export async function getAllGroupUuids(): Promise<string[] | null> {
+    const res = await performQuery<AllGroupUuidsQuery>(
+        `query AllGroupUuids {
+            groups {
+                nodes {
+                    uuid
+                }
+            }
+        }`,
+        {}
+    )
+    if (!res.data) {
+        return null
+    }
+    return res.data.groups?.nodes.map((node) => node?.uuid) || []
 }

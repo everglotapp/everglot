@@ -408,6 +408,9 @@
                 // TODO: error
                 console.log("failed to join call")
             }
+            if (chat) {
+                chat.emit("userJoinCall", {groupUuid: $groupUuid})
+            }
         } else {
             console.log("webrtc unknown")
         }
@@ -418,6 +421,9 @@
             if (!(await webrtc.leaveRoom())) {
                 // TODO: error
                 console.log("failed to leave call")
+            }
+            if (chat) {
+                chat.emit("userLeaveCall", {groupUuid: $groupUuid})
             }
         } else {
             console.log("webrtc unknown")

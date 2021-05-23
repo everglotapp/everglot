@@ -304,8 +304,8 @@
     }
 
     let split = true
-    let audio = false
-    let mic = false
+    let audio = true
+    let mic = true
 
     function handleEmoji(event: CustomEvent) {
         const input = getChatMessageInput()
@@ -408,6 +408,9 @@
                 // TODO: error
                 console.log("failed to join call")
             }
+            if (chat) {
+                chat.emit("userJoinCall", {groupUuid: $groupUuid})
+            }
         } else {
             console.log("webrtc unknown")
         }
@@ -418,6 +421,9 @@
             if (!(await webrtc.leaveRoom())) {
                 // TODO: error
                 console.log("failed to leave call")
+            }
+            if (chat) {
+                chat.emit("userLeaveCall", {groupUuid: $groupUuid})
             }
         } else {
             console.log("webrtc unknown")
@@ -447,18 +453,45 @@
         on:messagePreview={handleMessagePreview}
         let:currentRoom
     >
-        <WebrtcProvider bind:this={webrtc} let:inCall let:incoming>
+        <WebrtcProvider
+            bind:this={webrtc}
+            let:isInCall
+            let:outgoing
+            let:remoteUsers
+        >
             <div class="wrapper">
                 {#key $groupUuid}
                     <Sidebar
                         {split}
                         {audio}
                         {mic}
-                        {inCall}
-                        {incoming}
+                        {isInCall}
+                        {remoteUsers}
                         handleToggleSplit={() => (split = !split)}
-                        handleToggleMic={() => (mic = !mic)}
-                        handleToggleAudio={() => (audio = !audio)}
+                        handleToggleMic={() => {
+                            if (outgoing) {
+                                mic = !mic
+                                if (mic) {
+                                    outgoing.setVolume(100)
+                                } else {
+                                    outgoing.setVolume(0)
+                                }
+                            }
+                        }}
+                        handleToggleAudio={() => {
+                            audio = !audio
+                            for (const remoteUser of remoteUsers) {
+                                const { audioTrack } = remoteUser
+                                if (!audioTrack) {
+                                    continue
+                                }
+                                if (audio) {
+                                    audioTrack.setVolume(100)
+                                } else {
+                                    audioTrack.setVolume(0)
+                                }
+                            }
+                        }}
                         {handleJoinCall}
                         {handleLeaveCall}
                     />

@@ -1,0 +1,9 @@
+query AllGroupUuids {
+  groups {
+    nodes {
+      uuid
+      __typename
+    }
+    __typename
+  }
+}

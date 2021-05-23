@@ -91,6 +91,14 @@
         socket.emit("chatMessage", msg)
         return true
     }
+
+    export function emit(ev: string, ...args: any[]): boolean {
+        if (!socket || !socket.connected) {
+            return false
+        }
+        socket.emit(ev, ...args)
+        return true
+    }
 </script>
 
 <slot currentRoom={joinedRoom} />

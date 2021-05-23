@@ -4,20 +4,20 @@
     import type {
         IAgoraRTC,
         IAgoraRTCClient,
+        IAgoraRTCRemoteUser,
         IMicrophoneAudioTrack,
-        IRemoteAudioTrack,
     } from "agora-rtc-sdk-ng"
 
     import { AGORA_APP_ID } from "../../../constants"
 
     let AgoraRTC: IAgoraRTC
 
-    let outgoing: IMicrophoneAudioTrack | undefined
-    export let incoming: IRemoteAudioTrack[] = []
+    export let outgoing: IMicrophoneAudioTrack | undefined
+    export let remoteUsers: IAgoraRTCRemoteUser[] = []
 
     let client: IAgoraRTCClient | undefined
 
-    $: inCall = typeof outgoing !== "undefined"
+    $: isInCall = typeof outgoing !== "undefined"
 
     export async function init() {
         if (typeof window === "undefined") {
@@ -28,7 +28,15 @@
             // @ts-ignore
             AgoraRTC = await import("agora-rtc-sdk-ng")
         }
+    }
 
+    function createClientIfNotExists() {
+        if (typeof client !== "undefined") {
+            return
+        }
+        if (typeof window === "undefined") {
+            return
+        }
         client = AgoraRTC.createClient({
             mode: "rtc",
             codec: "vp8",
@@ -40,7 +48,7 @@
         userId: string
     ): Promise<boolean> {
         if (!client) {
-            throw new Error("Not initialized")
+            createClientIfNotExists()
         }
 
         if (outgoing) {
@@ -48,7 +56,7 @@
             return false
         }
 
-        client.on("user-published", async (user, mediaType) => {
+        client!.on("user-published", async (user, mediaType) => {
             if (!client) {
                 return
             }
@@ -63,12 +71,12 @@
                 if (!remoteAudioTrack) {
                     return
                 }
-                incoming = [...incoming, remoteAudioTrack]
+                remoteUsers = [...remoteUsers, user]
                 // Play the audio track. No need to pass any DOM element.
                 remoteAudioTrack.play()
             }
         })
-        client.on("user-unpublished", async (user, mediaType) => {
+        client!.on("user-unpublished", async (user, mediaType) => {
             console.log("user unpublished", user)
             if (!client) {
                 return
@@ -80,7 +88,7 @@
         if (!rtcToken) {
             return false
         }
-        const uid = await client.join(AGORA_APP_ID, roomId, rtcToken, userId)
+        const uid = await client!.join(AGORA_APP_ID, roomId, rtcToken, userId)
         if (!uid) {
             return false
         }
@@ -91,20 +99,31 @@
         }
         outgoing = await AgoraRTC.createMicrophoneAudioTrack()
         // Publish the local audio track to the channel.
-        await client.publish([outgoing])
+        await client!.publish([outgoing])
 
         console.log("publish success!")
         return true
     }
 
     export async function leaveRoom(): Promise<boolean> {
-        if (client && outgoing) {
-            await client.unpublish([outgoing])
-            await client.leave()
-            outgoing = undefined
-            return true
+        if (!client) {
+            return false
         }
-        return false
+        if (remoteUsers) {
+            for (const remoteUser of remoteUsers) {
+                await client.unsubscribe(remoteUser, "audio")
+                remoteUser.audioTrack?.stop()
+            }
+        }
+        if (outgoing) {
+            await client.unpublish([outgoing])
+            outgoing.stop()
+            outgoing.close()
+            outgoing = undefined
+        }
+        client.leave()
+        client = undefined
+        return true
     }
 
     async function getAgoraToken(roomId: string): Promise<string | false> {
@@ -130,4 +149,4 @@
     })
 </script>
 
-<slot {inCall} {incoming} />
+<slot {isInCall} {outgoing} {remoteUsers} />

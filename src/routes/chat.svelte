@@ -447,7 +447,7 @@
         on:messagePreview={handleMessagePreview}
         let:currentRoom
     >
-        <WebrtcProvider bind:this={webrtc} let:inCall let:incoming>
+        <WebrtcProvider bind:this={webrtc} let:inCall>
             <div class="wrapper">
                 {#key $groupUuid}
                     <Sidebar
@@ -455,7 +455,6 @@
                         {audio}
                         {mic}
                         {inCall}
-                        {incoming}
                         handleToggleSplit={() => (split = !split)}
                         handleToggleMic={() => (mic = !mic)}
                         handleToggleAudio={() => (audio = !audio)}

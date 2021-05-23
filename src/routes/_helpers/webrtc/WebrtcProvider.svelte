@@ -4,8 +4,9 @@
     import type {
         IAgoraRTC,
         IAgoraRTCClient,
+        IAgoraRTCRemoteUser,
         IMicrophoneAudioTrack,
-        IRemoteAudioTrack,
+        IRemoteUser,
     } from "agora-rtc-sdk-ng"
 
     import { AGORA_APP_ID } from "../../../constants"
@@ -13,7 +14,7 @@
     let AgoraRTC: IAgoraRTC
 
     let outgoing: IMicrophoneAudioTrack | undefined
-    export let incoming: IRemoteAudioTrack[] = []
+    let remoteUsers: IAgoraRTCRemoteUser[] = []
 
     let client: IAgoraRTCClient | undefined
 
@@ -63,7 +64,7 @@
                 if (!remoteAudioTrack) {
                     return
                 }
-                incoming = [...incoming, remoteAudioTrack]
+                remoteUsers = [...remoteUsers, user]
                 // Play the audio track. No need to pass any DOM element.
                 remoteAudioTrack.play()
             }
@@ -98,11 +99,20 @@
     }
 
     export async function leaveRoom(): Promise<boolean> {
+        if (client && remoteUsers) {
+            for (const remoteUser of remoteUsers) {
+                await client.unsubscribe(remoteUser, "audio")
+                remoteUser.audioTrack?.stop()
+            }
+        }
         if (client && outgoing) {
             await client.unpublish([outgoing])
-            await client.leave()
+            outgoing.stop()
+            outgoing.close()
             outgoing = undefined
-            return true
+        }
+        if (client) {
+            client.leave()
         }
         return false
     }
@@ -130,4 +140,4 @@
     })
 </script>
 
-<slot {inCall} {incoming} />
+<slot {inCall} {remoteUsers} />

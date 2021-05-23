@@ -15,7 +15,7 @@
     export let mic = false
     export let audio = false
     export let inCall = false
-    export let incoming: MediaStreamTrack[] = []
+    // export let incoming: MediaStreamTrack[] = []
 </script>
 
 <div class="sidebar">

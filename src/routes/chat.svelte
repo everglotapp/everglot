@@ -460,6 +460,7 @@
                         {audio}
                         {mic}
                         {isInCall}
+                        {remoteUsers}
                         handleToggleSplit={() => (split = !split)}
                         handleToggleMic={() => {
                             if (outgoing) {

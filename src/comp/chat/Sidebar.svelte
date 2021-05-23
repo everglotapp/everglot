@@ -5,6 +5,8 @@
 
     import SidebarHeadline from "../typography/SidebarHeadline.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
+    import type { IAgoraRTCRemoteUser } from "agora-rtc-sdk-ng"
+    import App from "svelte-emoji-selector/examples/src/App.svelte"
 
     export let handleToggleSplit: () => void
     export let handleToggleMic: () => void
@@ -15,7 +17,19 @@
     export let mic = false
     export let audio = false
     export let isInCall = false
-    // export let incoming: MediaStreamTrack[] = []
+    export let remoteUsers: IAgoraRTCRemoteUser[] = []
+
+    let volume = 100
+
+    function handleSliderChange(event: Event) {
+        for (const remoteUser of remoteUsers) {
+            const { audioTrack } = remoteUser
+            if (!audioTrack) {
+                continue
+            }
+            audioTrack.setVolume(event.target.value)
+        }
+    }
 </script>
 
 <div class="sidebar">
@@ -135,6 +149,21 @@
                     </div>
                 </div>
             </div>
+            {#if audio}
+                <div class="flex items-center justify-center mt-3">
+                    <input
+                        type="range"
+                        min={0}
+                        max={200}
+                        on:change={handleSliderChange}
+                        bind:value={volume}
+                        style="max-width: 150px;"
+                    />
+                    <span class="text-base pl-2 text-gray-bitdark text-md"
+                        >{Math.floor(volume / 2)}%</span
+                    >
+                </div>
+            {/if}
             <div class="flex justify-center">
                 <ButtonLarge
                     tag="button"

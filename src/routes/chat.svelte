@@ -304,8 +304,8 @@
     }
 
     let split = true
-    let audio = false
-    let mic = false
+    let audio = true
+    let mic = true
 
     function handleEmoji(event: CustomEvent) {
         const input = getChatMessageInput()
@@ -471,7 +471,20 @@
                                 }
                             }
                         }}
-                        handleToggleAudio={() => (audio = !audio)}
+                        handleToggleAudio={() => {
+                            audio = !audio
+                            for (const remoteUser of remoteUsers) {
+                                const { audioTrack } = remoteUser
+                                if (!audioTrack) {
+                                    continue
+                                }
+                                if (audio) {
+                                    audioTrack.setVolume(100)
+                                } else {
+                                    audioTrack.setVolume(0)
+                                }
+                            }
+                        }}
                         {handleJoinCall}
                         {handleLeaveCall}
                     />

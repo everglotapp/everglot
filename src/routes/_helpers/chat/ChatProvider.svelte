@@ -1,10 +1,12 @@
 <script lang="ts">
-    import { onDestroy, createEventDispatcher } from "svelte"
+    import { createEventDispatcher } from "svelte"
 
     const dispatch = createEventDispatcher()
 
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
+
+    import { setUsersInCall } from "../../../stores/call"
 
     import type { Group } from "../../../types/generated/graphql"
 
@@ -14,21 +16,12 @@
     export const currentRoom = () => joinedRoom
     let socket: SocketIO.Socket | null = null
 
-    onDestroy(() => {
-        leaveRoom()
-        if (socket) {
-            socket.disconnect()
-        }
-    })
-
     export function connect() {
         if (socket || typeof window === "undefined") {
             return
         }
-        // console.log("Connecting to chat")
         socket = io()
         if (socket) {
-            // Welcome from server
             socket.on(
                 "welcome",
                 (detail: {
@@ -39,16 +32,21 @@
                     dispatch("welcome", detail)
                 }
             )
-            // Message from server
             socket.on("message", (detail: ChatMessage) =>
                 dispatch("message", detail)
             )
-            // Message preview from server
             socket.on(
                 "messagePreview",
                 (detail: { messageUuid: string; url: string; type: string }) =>
                     dispatch("messagePreview", detail)
             )
+            socket.on("callUsers", setUsersInCall)
+        }
+    }
+
+    export function disconnect() {
+        if (socket) {
+            socket.disconnect()
         }
     }
 

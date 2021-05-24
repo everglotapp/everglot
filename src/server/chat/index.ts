@@ -293,12 +293,23 @@ export function start(server: Server, pool: Pool) {
                 const userId = session.user_id
                 const userMeta = await getChatUserByUserId(userId)
                 if (!userMeta) {
+                    chlog
+                        .child({ userId, groupUuid })
+                        .error("Failed to get group call user metadata")
                     return
                 }
                 if (!authenticateUserInGroup(userId, groupUuid)) {
+                    chlog
+                        .child({ userId, groupUuid })
+                        .debug("User is not in group but tried to join call")
                     return
                 }
-                userJoinCall(userMeta.uuid, groupUuid)
+                if (!userJoinCall(userMeta.uuid, groupUuid)) {
+                    return
+                }
+                socket.broadcast
+                    .to(groupUuid)
+                    .emit("callUsers", getCallUsers(groupUuid))
             }
         )
 
@@ -308,18 +319,30 @@ export function start(server: Server, pool: Pool) {
                 const userId = session.user_id
                 const userMeta = await getChatUserByUserId(userId)
                 if (!userMeta) {
+                    chlog
+                        .child({ userId, groupUuid })
+                        .error("Failed to get group call user metadata")
                     return
                 }
                 if (!authenticateUserInGroup(userId, groupUuid)) {
+                    chlog
+                        .child({ userId, groupUuid })
+                        .debug("User is not in group but tried to leave call")
                     return
                 }
-                userLeaveCall(userMeta.uuid, groupUuid)
+                if (!userLeaveCall(userMeta.uuid, groupUuid)) {
+                    return
+                }
+                socket.broadcast
+                    .to(groupUuid)
+                    .emit("callUsers", getCallUsers(groupUuid))
             }
         )
 
         setInterval(async () => {
             const groupUuids = await getAllGroupUuids()
             if (!groupUuids) {
+                chlog.error("Failed to get group UUIDs to send call users")
                 return
             }
             for (const groupUuid of groupUuids) {

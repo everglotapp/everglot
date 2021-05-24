@@ -6,8 +6,11 @@
     import Bio from "../users/Bio.svelte"
     import Avatar from "../users/Avatar.svelte"
 
+    import { MicIcon, MicOffIcon, VolumeXIcon } from "svelte-feather-icons"
+
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
+    import { usersInCurrentCall } from "../../stores/call"
 
     export let id: string
     export let avatarUrl: Maybe<string> | undefined
@@ -17,6 +20,10 @@
     export let showBio = false
     export let handleClickAway: (e: CustomEvent<any>) => any
     export let handleEscapeKey: (e: CustomEvent<any>) => any
+
+    $: callUser = uuid
+        ? $usersInCurrentCall.find((callUser) => callUser.uuid === uuid) || null
+        : null
 </script>
 
 <li
@@ -32,6 +39,16 @@
         <Avatar url={avatarUrl || ""} username={username || ""} size={32} />
     </div>
     <span class="username">{username || ""}</span>
+    {#if callUser}
+        {#if callUser.micMuted}
+            <MicOffIcon size="18" class="text-gray-bitdark" />
+        {:else}
+            <MicIcon size="18" class="text-gray-bitdark" />
+        {/if}
+        {#if callUser.audioMuted}
+            <VolumeXIcon size="18" class="text-gray-bitdark" />
+        {/if}
+    {/if}
     {#if showBio}
         <ClickAwayListener elementId={id} on:clickaway={handleClickAway} />
         <EscapeKeyListener on:keydown={handleEscapeKey} />

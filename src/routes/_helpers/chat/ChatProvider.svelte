@@ -6,6 +6,8 @@
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
 
+    import { setUsersInCall } from "../../../stores/call"
+
     import type { Group } from "../../../types/generated/graphql"
 
     import type { ChatUser, ChatMessage } from "../../../types/chat"
@@ -25,10 +27,8 @@
         if (socket || typeof window === "undefined") {
             return
         }
-        // console.log("Connecting to chat")
         socket = io()
         if (socket) {
-            // Welcome from server
             socket.on(
                 "welcome",
                 (detail: {
@@ -39,16 +39,15 @@
                     dispatch("welcome", detail)
                 }
             )
-            // Message from server
             socket.on("message", (detail: ChatMessage) =>
                 dispatch("message", detail)
             )
-            // Message preview from server
             socket.on(
                 "messagePreview",
                 (detail: { messageUuid: string; url: string; type: string }) =>
                     dispatch("messagePreview", detail)
             )
+            socket.on("callUsers", setUsersInCall)
         }
     }
 

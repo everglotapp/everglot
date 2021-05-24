@@ -12,12 +12,12 @@
 
     let AgoraRTC: IAgoraRTC
 
-    export let outgoing: IMicrophoneAudioTrack | undefined
+    export let outgoing: IMicrophoneAudioTrack | null = null
     export let remoteUsers: IAgoraRTCRemoteUser[] = []
 
     let client: IAgoraRTCClient | undefined
 
-    $: isInCall = typeof outgoing !== "undefined"
+    $: isInCall = outgoing !== null
 
     export async function init() {
         if (typeof window === "undefined") {
@@ -119,7 +119,7 @@
             await client.unpublish([outgoing])
             outgoing.stop()
             outgoing.close()
-            outgoing = undefined
+            outgoing = null
         }
         client.leave()
         client = undefined

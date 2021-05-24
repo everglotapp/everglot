@@ -15,7 +15,7 @@ export function getUsers(groupUuid: string) {
 export function userJoin(userUuid: User["uuid"], groupUuid: Group["uuid"]) {
     chlog
         .child({ userUuid, groupUuid })
-        .debug("User claims to have joined group call")
+        .trace("User claims to have joined group call")
     if (
         users.some(
             (user) => user.uuid === userUuid && user.groupUuid === groupUuid
@@ -42,7 +42,7 @@ export function userLeave(userUuid: User["uuid"], groupUuid: Group["uuid"]) {
     )
     chlog
         .child({ userUuid, groupUuid })
-        .debug("User claims to have left group call")
+        .trace("User claims to have left group call")
 
     if (index === -1) {
         chlog
@@ -51,5 +51,30 @@ export function userLeave(userUuid: User["uuid"], groupUuid: Group["uuid"]) {
         return false
     } else {
         return users.splice(index, 1)[0]
+    }
+}
+
+export function userUpdateMeta(
+    userUuid: User["uuid"],
+    groupUuid: Group["uuid"],
+    meta: Pick<VoiceChatUser, "micMuted" | "audioMuted">
+) {
+    const index = users.findIndex(
+        (user) => user.uuid === userUuid && user.groupUuid === groupUuid
+    )
+    chlog.child({ userUuid, groupUuid }).trace("User sent call meta")
+
+    if (index === -1) {
+        chlog
+            .child({ userUuid, groupUuid })
+            .debug("User is not in group call, preventing leave")
+        return false
+    } else {
+        users[index] = {
+            ...users[index],
+            micMuted: Boolean(meta.micMuted),
+            audioMuted: Boolean(meta.audioMuted),
+        }
+        return true
     }
 }

@@ -16,6 +16,7 @@ import {
 import {
     userJoin as userJoinCall,
     userLeave as userLeaveCall,
+    userUpdateMeta as userUpdateCallMeta,
     getUsers as getCallUsers,
 } from "./call"
 
@@ -25,6 +26,10 @@ import { hangmanGames } from "./hangman"
 import { HANGMAN_LOCALES } from "../../constants"
 import type { HangmanLocale } from "../../constants"
 
+import { getAllGroupUuids, getGroupIdByUuid, userIsInGroup } from "../groups"
+
+import Bot from "./bot"
+
 import type { Pool } from "pg"
 import type {
     ChatGroupByUuidQuery,
@@ -32,9 +37,7 @@ import type {
     Group,
     User,
 } from "../../types/generated/graphql"
-import { getAllGroupUuids, getGroupIdByUuid, userIsInGroup } from "../groups"
-
-import Bot from "./bot"
+import type { VoiceChatUser } from "../../types/call"
 
 import type { Server } from "http"
 
@@ -331,6 +334,38 @@ export function start(server: Server, pool: Pool) {
                     return
                 }
                 if (!userLeaveCall(userMeta.uuid, groupUuid)) {
+                    return
+                }
+                socket.broadcast
+                    .to(groupUuid)
+                    .emit("callUsers", getCallUsers(groupUuid))
+            }
+        )
+
+        socket.on(
+            "userCallMeta",
+            async ({
+                groupUuid,
+                callMeta,
+            }: {
+                groupUuid: string
+                callMeta: Pick<VoiceChatUser, "micMuted" | "audioMuted">
+            }) => {
+                const userId = session.user_id
+                const userMeta = await getChatUserByUserId(userId)
+                if (!userMeta) {
+                    chlog
+                        .child({ userId, groupUuid })
+                        .error("Failed to get group call user metadata")
+                    return
+                }
+                if (!authenticateUserInGroup(userId, groupUuid)) {
+                    chlog
+                        .child({ userId, groupUuid })
+                        .debug("User is not in group but tried to join call")
+                    return
+                }
+                if (!userUpdateCallMeta(userMeta.uuid, groupUuid, callMeta)) {
                     return
                 }
                 socket.broadcast

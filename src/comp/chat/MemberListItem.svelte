@@ -46,7 +46,7 @@
             <MicIcon size="18" class="text-gray-bitdark" />
         {/if}
         {#if callUser.audioMuted}
-            <VolumeXIcon size="18" class="text-gray-bitdark" />
+            <VolumeXIcon size="18" class="text-gray-bitdark ml-1" />
         {/if}
     {/if}
     {#if showBio}

@@ -409,7 +409,7 @@
                 console.log("failed to join call")
             }
             if (chat) {
-                chat.emit("userJoinCall", {groupUuid: $groupUuid})
+                chat.emit("userJoinCall", { groupUuid: $groupUuid })
             }
         } else {
             console.log("webrtc unknown")
@@ -423,7 +423,7 @@
                 console.log("failed to leave call")
             }
             if (chat) {
-                chat.emit("userLeaveCall", {groupUuid: $groupUuid})
+                chat.emit("userLeaveCall", { groupUuid: $groupUuid })
             }
         } else {
             console.log("webrtc unknown")
@@ -476,6 +476,15 @@
                                 } else {
                                     outgoing.setVolume(0)
                                 }
+                                if (chat) {
+                                    chat.emit("userCallMeta", {
+                                        groupUuid: $groupUuid,
+                                        callMeta: {
+                                            micMuted: !mic,
+                                            audioMuted: !audio,
+                                        },
+                                    })
+                                }
                             }
                         }}
                         handleToggleAudio={() => {
@@ -490,6 +499,15 @@
                                 } else {
                                     audioTrack.setVolume(0)
                                 }
+                            }
+                            if (chat) {
+                                chat.emit("userCallMeta", {
+                                    groupUuid: $groupUuid,
+                                    callMeta: {
+                                        micMuted: !mic,
+                                        audioMuted: !audio,
+                                    },
+                                })
                             }
                         }}
                         {handleJoinCall}

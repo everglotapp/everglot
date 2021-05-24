@@ -155,18 +155,26 @@ async function addUserToGroup(
     return res.data?.createGroupUser.groupUser.id
 }
 
-async function createAndAssignGroup(
+export async function createAndAssignGroup(
     learnerIds: Array<number>,
     nativeIds: Array<number>,
     languageId: number,
     languageSkillLevelId: number
-): Promise<Group["id"] | null> {
+): Promise<Pick<
+    Group,
+    | "id"
+    | "uuid"
+    | "global"
+    | "groupName"
+    | "languageId"
+    | "languageSkillLevelId"
+> | null> {
     const global = false
-    const name = "random"
+    const groupName = "random"
     const uuid = uuidv4()
     const groupId = await createGroup(
         global,
-        name,
+        groupName,
         languageId,
         languageSkillLevelId,
         uuid
@@ -201,7 +209,14 @@ async function createAndAssignGroup(
             return null
         }
     }
-    return groupId
+    return {
+        id: groupId,
+        global,
+        groupName,
+        languageId,
+        languageSkillLevelId,
+        uuid,
+    }
 }
 
 async function formGroup(
@@ -234,14 +249,14 @@ async function formGroup(
         learnerIds.length === GROUP_LEARNER_SIZE &&
         nativeIds.length === GROUP_NATIVE_SIZE
     ) {
-        const groupId = await createAndAssignGroup(
+        const group = await createAndAssignGroup(
             learnerIds,
             nativeIds,
             languageId,
             languageSkillLevelId
         )
-        log.child({ groupId }).debug("Formed group")
-        return groupId
+        log.child({ group }).debug("Formed group")
+        return group?.id || null
     } else {
         log.child({
             learnerIds,

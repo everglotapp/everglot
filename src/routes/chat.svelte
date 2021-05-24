@@ -65,9 +65,9 @@
     query(groupChatMessagesStore)
 
     $: if (chat) {
-        chat!.connect()
+        chat.connect()
         if ($groupUuid) {
-            chat!.joinRoom($groupUuid)
+            chat.joinRoom($groupUuid)
         }
     }
 
@@ -76,6 +76,10 @@
     }
 
     onDestroy(() => {
+        if (chat) {
+            chat.leaveRoom()
+            chat.disconnect()
+        }
         if (fetchGroupMetadataInterval) {
             clearInterval(fetchGroupMetadataInterval)
             fetchGroupMetadataInterval = null
@@ -429,11 +433,34 @@
             console.log("webrtc unknown")
         }
     }
+
+    function handleBeforeunload() {
+        console.log("beforeunload", {
+            groupUuid: $groupUuid,
+            myUuid,
+            chat: !!chat,
+            webrtc: !!webrtc,
+        })
+        if ($groupUuid) {
+            if (chat) {
+                chat.emit("userLeaveCall", { groupUuid: $groupUuid })
+            }
+        }
+        if (chat) {
+            chat.leaveRoom()
+            chat.disconnect()
+        }
+        if (webrtc) {
+            webrtc.leaveRoom()
+        }
+    }
 </script>
 
 <Localized id="chat-browser-window-title" let:text>
     <BrowserTitle title={text} />
 </Localized>
+
+<svelte:window on:beforeunload={handleBeforeunload} />
 
 {#if !$groupChatStore.stale && $groupChatStore.error}
     <div class="container max-w-sm my-8">

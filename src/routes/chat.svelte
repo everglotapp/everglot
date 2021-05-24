@@ -41,6 +41,7 @@
         fetchGroupMetadata,
         fetchGroupChatMessages,
     } from "../stores/chat"
+    import { setCallUserMeta, removeUserFromCall } from "../stores/call"
     import type {
         User,
         JoinGlobalGroupMutation,
@@ -414,6 +415,11 @@
             }
             if (chat) {
                 chat.emit("userJoinCall", { groupUuid: $groupUuid })
+                const callMeta = {
+                    micMuted: !mic,
+                    audioMuted: !audio,
+                }
+                setCallUserMeta(myUuid, $groupUuid, callMeta)
             }
         } else {
             console.log("webrtc unknown")
@@ -428,6 +434,7 @@
             }
             if (chat) {
                 chat.emit("userLeaveCall", { groupUuid: $groupUuid })
+                removeUserFromCall(myUuid, $groupUuid)
             }
         } else {
             console.log("webrtc unknown")
@@ -503,14 +510,20 @@
                                 } else {
                                     outgoing.setVolume(0)
                                 }
-                                if (chat) {
+                                if (chat && $groupUuid) {
+                                    const callMeta = {
+                                        micMuted: !mic,
+                                        audioMuted: !audio,
+                                    }
                                     chat.emit("userCallMeta", {
                                         groupUuid: $groupUuid,
-                                        callMeta: {
-                                            micMuted: !mic,
-                                            audioMuted: !audio,
-                                        },
+                                        callMeta,
                                     })
+                                    setCallUserMeta(
+                                        myUuid,
+                                        $groupUuid,
+                                        callMeta
+                                    )
                                 }
                             }
                         }}
@@ -527,14 +540,16 @@
                                     audioTrack.setVolume(0)
                                 }
                             }
-                            if (chat) {
+                            if (chat && $groupUuid) {
+                                const callMeta = {
+                                    micMuted: !mic,
+                                    audioMuted: !audio,
+                                }
                                 chat.emit("userCallMeta", {
                                     groupUuid: $groupUuid,
-                                    callMeta: {
-                                        micMuted: !mic,
-                                        audioMuted: !audio,
-                                    },
+                                    callMeta,
                                 })
+                                setCallUserMeta(myUuid, $groupUuid, callMeta)
                             }
                         }}
                         {handleJoinCall}

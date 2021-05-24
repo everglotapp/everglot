@@ -13,7 +13,7 @@ import { Pool } from "pg"
 import { connectToDatabase } from "../../../../server/db"
 import type { Maybe } from "../../../../types/generated/graphql"
 
-describe("profile route", () => {
+describe("[uuid] route", () => {
     let exampleUser: Maybe<TestUser> = null
 
     let db: Pool = new Pool()

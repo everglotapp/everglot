@@ -1,12 +1,17 @@
 <script lang="ts">
+    import { getContext } from "svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
     import GroupMembers from "./GroupMembers.svelte"
 
     import SidebarHeadline from "../typography/SidebarHeadline.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
+
+    import { groupUuid } from "../../stores"
+
     import type { IAgoraRTCRemoteUser } from "agora-rtc-sdk-ng"
-    import App from "svelte-emoji-selector/examples/src/App.svelte"
+
+    const { isInCall, joinedRoom: joinedCallRoom } = getContext("WEBRTC")
 
     export let handleToggleSplit: () => void
     export let handleToggleMic: () => void
@@ -16,7 +21,6 @@
     export let split = false
     export let mic = false
     export let audio = false
-    export let isInCall = false
     export let remoteUsers: IAgoraRTCRemoteUser[] = []
 
     let volume = 100
@@ -66,7 +70,7 @@
                 </div>
             </div>
         </div>
-        {#if isInCall}
+        {#if $isInCall && $joinedCallRoom === $groupUuid}
             <div class="toggle-row">
                 <svg
                     width="35"

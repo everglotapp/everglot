@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { onDestroy } from "svelte"
+    import { onDestroy, setContext } from "svelte"
+    import { writable } from "svelte/store"
 
     import type {
         IAgoraRTC,
@@ -12,14 +13,27 @@
 
     let AgoraRTC: IAgoraRTC
 
-    export let outgoing: IMicrophoneAudioTrack | null = null
-    export let remoteUsers: IAgoraRTCRemoteUser[] = []
+    const outgoing = writable<IMicrophoneAudioTrack | null>(null)
+    const remoteUsers = writable<IAgoraRTCRemoteUser[]>([])
+    const joinedRoom = writable<string | null>(null)
+
+    const isInCall = writable(false)
+    $: isInCall.set($outgoing !== null)
+
+    export let contextKey: string
+    setContext(contextKey, {
+        outgoing,
+        remoteUsers,
+        isInCall,
+        joinedRoom,
+        init,
+        joinRoom,
+        leaveRoom,
+    })
 
     let client: IAgoraRTCClient | undefined
 
-    $: isInCall = outgoing !== null
-
-    export async function init() {
+    async function init() {
         if (typeof window === "undefined") {
             return
         }
@@ -29,6 +43,7 @@
             AgoraRTC = await import("agora-rtc-sdk-ng")
         }
     }
+    init()
 
     function createClientIfNotExists() {
         if (typeof client !== "undefined") {
@@ -43,18 +58,17 @@
         })
     }
 
-    export async function joinRoom(
-        roomId: string,
-        userId: string
-    ): Promise<boolean> {
+    async function joinRoom(roomId: string, userId: string): Promise<boolean> {
         if (!client) {
             createClientIfNotExists()
         }
 
-        if (outgoing) {
+        if ($outgoing) {
             console.log("Failed to join call: already in call")
             return false
         }
+
+        $joinedRoom = roomId
 
         client!.on("user-published", async (user, mediaType) => {
             if (!client) {
@@ -71,7 +85,7 @@
                 if (!remoteAudioTrack) {
                     return
                 }
-                remoteUsers = [...remoteUsers, user]
+                $remoteUsers = [...$remoteUsers, user]
                 // Play the audio track. No need to pass any DOM element.
                 remoteAudioTrack.play()
             }
@@ -97,32 +111,33 @@
             // @ts-ignore
             AgoraRTC = await import("agora-rtc-sdk-ng")
         }
-        outgoing = await AgoraRTC.createMicrophoneAudioTrack()
+        $outgoing = await AgoraRTC.createMicrophoneAudioTrack()
         // Publish the local audio track to the channel.
-        await client!.publish([outgoing])
+        await client!.publish([$outgoing!])
 
         console.log("publish success!")
         return true
     }
 
-    export async function leaveRoom(): Promise<boolean> {
+    async function leaveRoom(): Promise<boolean> {
         if (!client) {
             return false
         }
-        if (remoteUsers) {
-            for (const remoteUser of remoteUsers) {
+        if ($remoteUsers) {
+            for (const remoteUser of $remoteUsers) {
                 await client.unsubscribe(remoteUser, "audio")
                 remoteUser.audioTrack?.stop()
             }
         }
-        if (outgoing) {
-            await client.unpublish([outgoing])
-            outgoing.stop()
-            outgoing.close()
-            outgoing = null
+        if ($outgoing) {
+            await client.unpublish([$outgoing])
+            $outgoing.stop()
+            $outgoing.close()
+            $outgoing = null
         }
         client.leave()
         client = undefined
+        $joinedRoom = null
         return true
     }
 
@@ -149,4 +164,4 @@
     })
 </script>
 
-<slot {isInCall} {outgoing} {remoteUsers} />
+<slot />

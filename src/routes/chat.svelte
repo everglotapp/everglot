@@ -440,7 +440,7 @@
 
     function handleBeforeunload() {
         if ($groupUuid) {
-            if (chat) {
+            if (chat && chat.hasOwnProperty("emit")) {
                 chat.emit("userLeaveCall", { groupUuid: $groupUuid })
             }
         }

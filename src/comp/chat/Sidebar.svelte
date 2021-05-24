@@ -6,6 +6,8 @@
 
     import SidebarHeadline from "../typography/SidebarHeadline.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
+    import ButtonSmall from "../util/ButtonSmall.svelte"
+    import Modal from "../util/Modal.svelte"
 
     import { groupUuid } from "../../stores"
 
@@ -23,6 +25,7 @@
     export let audio = false
     export let remoteUsers: IAgoraRTCRemoteUser[] = []
 
+    let wantsToJoinCall = false
     let volume = 100
 
     function handleSliderChange(event: Event) {
@@ -176,6 +179,48 @@
                     ><Localized id="chat-sidebar-leave-call" /></ButtonLarge
                 >
             </div>
+        {:else if $isInCall && $joinedCallRoom !== $groupUuid}
+            {#if wantsToJoinCall}
+                <Modal>
+                    <div
+                        class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg"
+                    >
+                        <p class="mb-6 text-center">
+                            <Localized id="chat-sidebar-switch-call-text" />
+                        </p>
+                        <div class="flex justify-end">
+                            <ButtonSmall
+                                tag="button"
+                                on:click={() => (wantsToJoinCall = false)}
+                                variant="TEXT"
+                                color="SECONDARY"
+                                ><Localized
+                                    id="chat-sidebar-switch-call-cancel"
+                                /></ButtonSmall
+                            >
+                            <ButtonSmall
+                                tag="button"
+                                on:click={async () => {
+                                    await handleLeaveCall()
+                                    await handleJoinCall()
+                                }}
+                                ><Localized
+                                    id="chat-sidebar-switch-call-confirm"
+                                /></ButtonSmall
+                            >
+                        </div>
+                    </div></Modal
+                >
+            {:else}
+                <div class="flex justify-center">
+                    <ButtonLarge
+                        tag="button"
+                        on:click={() => (wantsToJoinCall = true)}
+                        variant="TEXT"
+                        ><Localized id="chat-sidebar-start-call" /></ButtonLarge
+                    >
+                </div>
+            {/if}
         {:else}
             <div class="flex justify-center">
                 <ButtonLarge

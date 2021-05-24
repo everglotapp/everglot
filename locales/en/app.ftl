@@ -27,6 +27,9 @@ chat-sidebar-controls-toggle-on = On
 chat-sidebar-controls-toggle-off = Off
 chat-sidebar-start-call = Join Call
 chat-sidebar-leave-call = Leave Call
+chat-sidebar-switch-call-text = You are already in a call, do you want to switch to this group?
+chat-sidebar-switch-call-cancel = Cancel
+chat-sidebar-switch-call-confirm = Switch
 chat-submit-form-send = Send
 chat-submit-form-connecting = Connecting …
 # Chat text message input field

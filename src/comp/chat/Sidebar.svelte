@@ -27,6 +27,7 @@
 
     let wantsToJoinCall = false
     let volume = 100
+    let previousVolume = 100
 
     function handleSliderChange(event: Event) {
         for (const remoteUser of remoteUsers) {
@@ -35,6 +36,19 @@
                 continue
             }
             audioTrack.setVolume(event.target.value)
+        }
+    }
+
+    function handleToggleAudioButton() {
+        const disabling = audio
+        if (disabling) {
+            previousVolume = volume
+        }
+        handleToggleAudio()
+        if (disabling) {
+            volume = 0
+        } else {
+            volume = previousVolume
         }
     }
 </script>
@@ -147,7 +161,7 @@
                     />
                 </svg>
                 <span><Localized id="chat-sidebar-controls-audio" /></span>
-                <div class="toggle" on:click={handleToggleAudio}>
+                <div class="toggle" on:click={handleToggleAudioButton}>
                     <div aria-selected={audio}>
                         <Localized id="chat-sidebar-controls-toggle-on" />
                     </div>
@@ -156,21 +170,20 @@
                     </div>
                 </div>
             </div>
-            {#if audio}
-                <div class="flex items-center justify-center mt-3">
-                    <input
-                        type="range"
-                        min={0}
-                        max={200}
-                        on:change={handleSliderChange}
-                        bind:value={volume}
-                        style="max-width: 150px;"
-                    />
-                    <span class="text-base pl-2 text-gray-bitdark text-md"
-                        >{Math.floor(volume / 2)}%</span
-                    >
-                </div>
-            {/if}
+            <div class="flex items-center justify-center mt-3">
+                <input
+                    type="range"
+                    min={0}
+                    max={200}
+                    on:change={handleSliderChange}
+                    bind:value={volume}
+                    style="max-width: 150px;"
+                    disabled={!audio}
+                />
+                <span class="text-base pl-2 text-gray-bitdark text-md"
+                    >{Math.floor(volume / 2)}%</span
+                >
+            </div>
             <div class="flex justify-center">
                 <ButtonLarge
                     tag="button"

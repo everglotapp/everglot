@@ -8,18 +8,23 @@
     import ButtonLarge from "../util/ButtonLarge.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import Modal from "../util/Modal.svelte"
+    import Spinner from "../util/Spinner.svelte"
 
     import { groupUuid } from "../../stores"
 
     import type { IAgoraRTCRemoteUser } from "agora-rtc-sdk-ng"
 
-    const { isInCall, joinedRoom: joinedCallRoom } = getContext("WEBRTC")
+    const {
+        isInCall,
+        joinedRoom: joinedCallRoom,
+        joining: joiningCall,
+    } = getContext("WEBRTC")
 
     export let handleToggleSplit: () => void
     export let handleToggleMic: () => void
     export let handleToggleAudio: () => void
-    export let handleJoinCall: () => void
-    export let handleLeaveCall: () => void
+    export let handleJoinCall: () => Promise<boolean>
+    export let handleLeaveCall: () => Promise<boolean>
     export let split = false
     export let mic = false
     export let audio = false
@@ -90,7 +95,9 @@
                     </div>
                 </div>
             </div>
-            {#if $isInCall && $joinedCallRoom === $groupUuid}
+            {#if $joiningCall}
+                <div class="flex justify-center pt-2"><Spinner /></div>
+            {:else if $isInCall && $joinedCallRoom === $groupUuid}
                 <div class="toggle-row">
                     <svg
                         width="35"
@@ -216,9 +223,9 @@
                                 >
                                 <ButtonSmall
                                     tag="button"
-                                    on:click={() => {
-                                        handleJoinCall()
+                                    on:click={async () => {
                                         wantsToJoinCall = false
+                                        handleJoinCall()
                                     }}
                                     ><Localized
                                         id="chat-sidebar-switch-call-confirm"

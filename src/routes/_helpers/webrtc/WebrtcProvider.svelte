@@ -16,6 +16,7 @@
     const outgoing = writable<IMicrophoneAudioTrack | null>(null)
     const remoteUsers = writable<IAgoraRTCRemoteUser[]>([])
     const joinedRoom = writable<string | null>(null)
+    const joining = writable<boolean>(false)
 
     const isInCall = writable(false)
     $: isInCall.set($outgoing !== null)
@@ -29,6 +30,7 @@
         init,
         joinRoom,
         leaveRoom,
+        joining,
     })
 
     let client: IAgoraRTCClient | undefined
@@ -63,6 +65,12 @@
             createClientIfNotExists()
         }
 
+        if ($joining) {
+            return false
+        } else {
+            $joining = true
+        }
+
         if ($joinedRoom) {
             await leaveRoom()
         }
@@ -95,10 +103,12 @@
 
         const rtcToken = await getAgoraToken(roomId)
         if (!rtcToken) {
+            $joining = false
             return false
         }
         const uid = await client!.join(AGORA_APP_ID, roomId, rtcToken, userId)
         if (!uid) {
+            $joining = false
             return false
         }
 
@@ -111,6 +121,7 @@
         await client!.publish([$outgoing!])
 
         $joinedRoom = roomId
+        $joining = false
 
         return true
     }

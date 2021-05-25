@@ -400,9 +400,9 @@
         }
     }
 
-    async function handleJoinCall() {
+    async function handleJoinCall(): Promise<boolean> {
         if (!$groupUuid) {
-            return
+            return false
         }
         if ($joinedRoom !== $groupUuid && chat) {
             chat.emit("userLeaveCall", { groupUuid: $joinedRoom })
@@ -410,6 +410,7 @@
         if (!(await webrtc.joinRoom($groupUuid, myUuid))) {
             // TODO: error
             console.log("failed to join call")
+            return false
         }
         if (chat) {
             chat.emit("userJoinCall", { groupUuid: $groupUuid })
@@ -419,20 +420,23 @@
             }
             setCallUserMeta(myUuid, $groupUuid, callMeta)
         }
+        return true
     }
 
-    async function handleLeaveCall() {
+    async function handleLeaveCall(): Promise<boolean> {
         if (!$groupUuid) {
-            return
+            return false
         }
         if (!(await webrtc.leaveRoom())) {
             // TODO: error
             console.log("failed to leave call")
+            return false
         }
         if (chat) {
             chat.emit("userLeaveCall", { groupUuid: $groupUuid })
             removeUserFromCall(myUuid, $groupUuid)
         }
+        return true
     }
 
     function handleBeforeunload() {

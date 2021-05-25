@@ -67,8 +67,6 @@
             await leaveRoom()
         }
 
-        $joinedRoom = roomId
-
         client!.on("user-published", async (user, mediaType) => {
             if (!client) {
                 return
@@ -111,6 +109,8 @@
         $outgoing = await AgoraRTC.createMicrophoneAudioTrack()
         // Publish the local audio track to the channel.
         await client!.publish([$outgoing!])
+
+        $joinedRoom = roomId
 
         return true
     }

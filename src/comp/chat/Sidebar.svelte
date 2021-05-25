@@ -29,10 +29,6 @@
     let volume = 100
     let previousVolume = 100
 
-    $: if ($joinedCallRoom === $groupUuid) {
-        wantsToJoinCall = false
-    }
-
     function handleSliderChange(event: Event) {
         for (const remoteUser of remoteUsers) {
             const { audioTrack } = remoteUser
@@ -220,7 +216,10 @@
                                 >
                                 <ButtonSmall
                                     tag="button"
-                                    on:click={handleJoinCall}
+                                    on:click={() => {
+                                        handleJoinCall()
+                                        wantsToJoinCall = false
+                                    }}
                                     ><Localized
                                         id="chat-sidebar-switch-call-confirm"
                                     /></ButtonSmall

@@ -16,6 +16,7 @@
     const outgoing = writable<IMicrophoneAudioTrack | null>(null)
     const remoteUsers = writable<IAgoraRTCRemoteUser[]>([])
     const joinedRoom = writable<string | null>(null)
+    const joining = writable<boolean>(false)
 
     const isInCall = writable(false)
     $: isInCall.set($outgoing !== null)
@@ -29,6 +30,7 @@
         init,
         joinRoom,
         leaveRoom,
+        joining,
     })
 
     let client: IAgoraRTCClient | undefined
@@ -63,12 +65,15 @@
             createClientIfNotExists()
         }
 
-        if ($outgoing) {
-            console.log("Failed to join call: already in call")
+        if ($joining) {
             return false
+        } else {
+            $joining = true
         }
 
-        $joinedRoom = roomId
+        if ($joinedRoom) {
+            await leaveRoom()
+        }
 
         client!.on("user-published", async (user, mediaType) => {
             if (!client) {
@@ -76,7 +81,6 @@
             }
             // Subscribe to a remote user.
             await client.subscribe(user, mediaType)
-            console.log("subscribe success")
 
             // If the subscribed track is audio.
             if (mediaType === "audio") {
@@ -91,7 +95,6 @@
             }
         })
         client!.on("user-unpublished", async (user, mediaType) => {
-            console.log("user unpublished", user)
             if (!client) {
                 return
             }
@@ -100,10 +103,12 @@
 
         const rtcToken = await getAgoraToken(roomId)
         if (!rtcToken) {
+            $joining = false
             return false
         }
         const uid = await client!.join(AGORA_APP_ID, roomId, rtcToken, userId)
         if (!uid) {
+            $joining = false
             return false
         }
 
@@ -115,7 +120,9 @@
         // Publish the local audio track to the channel.
         await client!.publish([$outgoing!])
 
-        console.log("publish success!")
+        $joinedRoom = roomId
+        $joining = false
+
         return true
     }
 
@@ -135,8 +142,7 @@
             $outgoing.close()
             $outgoing = null
         }
-        client.leave()
-        client = undefined
+        await client.leave()
         $joinedRoom = null
         return true
     }

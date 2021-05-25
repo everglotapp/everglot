@@ -46,6 +46,7 @@ main-nav-groups = Groups
 main-nav-profile = Profile
 main-nav-invite-friends = Invite Friends
 main-nav-logout = Logout
+main-nav-go-to-call = Go to Call
 
 ## Signup successful page
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte"
+    import { onDestroy, createEventDispatcher } from "svelte"
 
     const dispatch = createEventDispatcher()
 
@@ -15,6 +15,11 @@
     let joinedRoom: string | null = null
     export const currentRoom = () => joinedRoom
     let socket: SocketIO.Socket | null = null
+
+    onDestroy(() => {
+        leaveRoom()
+        disconnect()
+    })
 
     export function connect() {
         if (socket || typeof window === "undefined") {

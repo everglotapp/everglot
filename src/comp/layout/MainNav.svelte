@@ -313,6 +313,26 @@
                                             >
                                             <hr class="mt-2" />
                                         {/if}
+                                        {#if $joinedCallRoom && (segment !== "chat" || $groupUuid !== $joinedCallRoom)}
+                                            <div>
+                                                <ButtonSmall
+                                                    variant="TEXT"
+                                                    color="SECONDARY"
+                                                    className="w-full justify-between items-center"
+                                                    href={`/chat?group=${$joinedCallRoom}`}
+                                                    on:click={() =>
+                                                        ($groupUuid = $joinedCallRoom)}
+                                                    ><span class="mr-1"
+                                                        ><Localized
+                                                            id="main-nav-go-to-call"
+                                                        /></span
+                                                    ><MicIcon
+                                                        size="18"
+                                                        class="text-gray-bitdark"
+                                                    /></ButtonSmall
+                                                >
+                                            </div>
+                                        {/if}
                                         <div>
                                             <ButtonSmall
                                                 variant="TEXT"
@@ -368,7 +388,7 @@
                     <button
                         on:click={() =>
                             (showSettingsDropdown = !showSettingsDropdown)}
-                        class="nav-item-with-icon justify-center cursor-pointer"
+                        class="nav-item-with-icon justify-center cursor-pointer relative"
                         id="settings-dropdown-clickaway"
                     >
                         {#if !$currentUserStore.fetching}
@@ -377,6 +397,12 @@
                                 username={$currentUser?.username || ""}
                                 size={42}
                             />
+                            {#if $joinedCallRoom}
+                                <MicIcon
+                                    size="16"
+                                    class="text-gray-bitdark absolute mic-icon"
+                                />
+                            {/if}
                         {:else}
                             <div
                                 class="bg-gray-lightest"
@@ -637,5 +663,10 @@
 
     .group :global(a) {
         @apply m-0;
+    }
+
+    #settings-dropdown-clickaway :global(.mic-icon) {
+        right: 18px;
+        bottom: 10px;
     }
 </style>

@@ -131,7 +131,8 @@
             $outgoing.close()
             $outgoing = null
         }
-        client.leave()
+        await client.leave()
+        $joinedRoom = null
         return true
     }
 

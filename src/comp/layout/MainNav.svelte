@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { tick } from "svelte"
+    import { tick, getContext } from "svelte"
     import { scale } from "svelte/transition"
     import { goto } from "@sapper/app"
 
@@ -11,6 +11,8 @@
     import { query } from "@urql/svelte"
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
+
+    import { MicIcon } from "svelte-feather-icons"
 
     import Avatar from "../users/Avatar.svelte"
 
@@ -32,6 +34,9 @@
     query(allGroupsStore)
 
     export let segment: string | undefined
+
+    const webrtc = getContext("WEBRTC")
+    const { joinedRoom: joinedCallRoom } = webrtc
 
     async function handleLogout() {
         await fetch("/logout", {
@@ -208,6 +213,7 @@
                                                         variant="TEXT"
                                                         color="SECONDARY"
                                                         href={`/chat?group=${group.uuid}`}
+                                                        className="w-full justify-between items-center"
                                                         on:click={() =>
                                                             ($groupUuid =
                                                                 group.uuid)}
@@ -216,9 +222,12 @@
                                                             ""}
                                                         {group
                                                             ?.languageSkillLevel
-                                                            ?.name ||
-                                                            ""})</ButtonSmall
-                                                    >
+                                                            ?.name || ""})
+                                                        {#if group.uuid === $joinedCallRoom}<MicIcon
+                                                                size="18"
+                                                                class="text-gray-bitdark ml-2"
+                                                            />{/if}
+                                                    </ButtonSmall>
                                                 </div>
                                             {/each}
                                         {/if}

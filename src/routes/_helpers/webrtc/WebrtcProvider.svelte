@@ -63,9 +63,8 @@
             createClientIfNotExists()
         }
 
-        if ($outgoing) {
-            console.log("Failed to join call: already in call")
-            return false
+        if ($joinedRoom) {
+            await leaveRoom()
         }
 
         $joinedRoom = roomId
@@ -76,7 +75,6 @@
             }
             // Subscribe to a remote user.
             await client.subscribe(user, mediaType)
-            console.log("subscribe success")
 
             // If the subscribed track is audio.
             if (mediaType === "audio") {
@@ -91,7 +89,6 @@
             }
         })
         client!.on("user-unpublished", async (user, mediaType) => {
-            console.log("user unpublished", user)
             if (!client) {
                 return
             }
@@ -115,7 +112,6 @@
         // Publish the local audio track to the channel.
         await client!.publish([$outgoing!])
 
-        console.log("publish success!")
         return true
     }
 
@@ -136,8 +132,6 @@
             $outgoing = null
         }
         client.leave()
-        client = undefined
-        $joinedRoom = null
         return true
     }
 

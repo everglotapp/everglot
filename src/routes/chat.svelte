@@ -53,7 +53,7 @@
     let chat: ChatProvider | undefined
 
     const webrtc = getContext("WEBRTC")
-    const { outgoing, remoteUsers } = webrtc
+    const { outgoing, remoteUsers, joinedRoom } = webrtc
 
     let messages: ChatMessage[] = []
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
@@ -74,10 +74,6 @@
     }
 
     onDestroy(() => {
-        if (chat) {
-            chat.leaveRoom()
-            chat.disconnect()
-        }
         if (fetchGroupMetadataInterval) {
             clearInterval(fetchGroupMetadataInterval)
             fetchGroupMetadataInterval = null
@@ -405,36 +401,37 @@
     }
 
     async function handleJoinCall() {
-        if ($groupUuid) {
-            if (!(await webrtc.joinRoom($groupUuid, myUuid))) {
-                // TODO: error
-                console.log("failed to join call")
+        if (!$groupUuid) {
+            return
+        }
+        if ($joinedRoom !== $groupUuid && chat) {
+            chat.emit("userLeaveCall", { groupUuid: $joinedRoom })
+        }
+        if (!(await webrtc.joinRoom($groupUuid, myUuid))) {
+            // TODO: error
+            console.log("failed to join call")
+        }
+        if (chat) {
+            chat.emit("userJoinCall", { groupUuid: $groupUuid })
+            const callMeta = {
+                micMuted: !mic,
+                audioMuted: !audio,
             }
-            if (chat) {
-                chat.emit("userJoinCall", { groupUuid: $groupUuid })
-                const callMeta = {
-                    micMuted: !mic,
-                    audioMuted: !audio,
-                }
-                setCallUserMeta(myUuid, $groupUuid, callMeta)
-            }
-        } else {
-            console.log("webrtc unknown")
+            setCallUserMeta(myUuid, $groupUuid, callMeta)
         }
     }
 
     async function handleLeaveCall() {
-        if ($groupUuid) {
-            if (!(await webrtc.leaveRoom())) {
-                // TODO: error
-                console.log("failed to leave call")
-            }
-            if (chat) {
-                chat.emit("userLeaveCall", { groupUuid: $groupUuid })
-                removeUserFromCall(myUuid, $groupUuid)
-            }
-        } else {
-            console.log("webrtc unknown")
+        if (!$groupUuid) {
+            return
+        }
+        if (!(await webrtc.leaveRoom())) {
+            // TODO: error
+            console.log("failed to leave call")
+        }
+        if (chat) {
+            chat.emit("userLeaveCall", { groupUuid: $groupUuid })
+            removeUserFromCall(myUuid, $groupUuid)
         }
     }
 
@@ -477,63 +474,61 @@
         let:currentRoom
     >
         <div class="wrapper">
-            {#key $groupUuid}
-                <Sidebar
-                    {split}
-                    {audio}
-                    {mic}
-                    handleToggleSplit={() => (split = !split)}
-                    handleToggleMic={() => {
-                        if (!$outgoing) {
-                            return
+            <Sidebar
+                {split}
+                {audio}
+                {mic}
+                handleToggleSplit={() => (split = !split)}
+                handleToggleMic={() => {
+                    if (!$outgoing) {
+                        return
+                    }
+                    mic = !mic
+                    if (mic) {
+                        $outgoing.setVolume(100)
+                    } else {
+                        $outgoing.setVolume(0)
+                    }
+                    if (chat && $groupUuid) {
+                        const callMeta = {
+                            micMuted: !mic,
+                            audioMuted: !audio,
                         }
-                        mic = !mic
-                        if (mic) {
-                            $outgoing.setVolume(100)
+                        chat.emit("userCallMeta", {
+                            groupUuid: $groupUuid,
+                            callMeta,
+                        })
+                        setCallUserMeta(myUuid, $groupUuid, callMeta)
+                    }
+                }}
+                handleToggleAudio={() => {
+                    audio = !audio
+                    for (const remoteUser of $remoteUsers) {
+                        const { audioTrack } = remoteUser
+                        if (!audioTrack) {
+                            continue
+                        }
+                        if (audio) {
+                            audioTrack.setVolume(100)
                         } else {
-                            $outgoing.setVolume(0)
+                            audioTrack.setVolume(0)
                         }
-                        if (chat && $groupUuid) {
-                            const callMeta = {
-                                micMuted: !mic,
-                                audioMuted: !audio,
-                            }
-                            chat.emit("userCallMeta", {
-                                groupUuid: $groupUuid,
-                                callMeta,
-                            })
-                            setCallUserMeta(myUuid, $groupUuid, callMeta)
+                    }
+                    if (chat && $groupUuid) {
+                        const callMeta = {
+                            micMuted: !mic,
+                            audioMuted: !audio,
                         }
-                    }}
-                    handleToggleAudio={() => {
-                        audio = !audio
-                        for (const remoteUser of $remoteUsers) {
-                            const { audioTrack } = remoteUser
-                            if (!audioTrack) {
-                                continue
-                            }
-                            if (audio) {
-                                audioTrack.setVolume(100)
-                            } else {
-                                audioTrack.setVolume(0)
-                            }
-                        }
-                        if (chat && $groupUuid) {
-                            const callMeta = {
-                                micMuted: !mic,
-                                audioMuted: !audio,
-                            }
-                            chat.emit("userCallMeta", {
-                                groupUuid: $groupUuid,
-                                callMeta,
-                            })
-                            setCallUserMeta(myUuid, $groupUuid, callMeta)
-                        }
-                    }}
-                    {handleJoinCall}
-                    {handleLeaveCall}
-                />
-            {/key}
+                        chat.emit("userCallMeta", {
+                            groupUuid: $groupUuid,
+                            callMeta,
+                        })
+                        setCallUserMeta(myUuid, $groupUuid, callMeta)
+                    }
+                }}
+                {handleJoinCall}
+                {handleLeaveCall}
+            />
             <div class="section-wrapper">
                 <section>
                     <header>

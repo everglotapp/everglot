@@ -6,7 +6,7 @@
     import { setupUrql } from "./_helpers/urql"
     import { query } from "@urql/svelte"
 
-    import { currentUserStore } from "../stores"
+    import { currentUserStore, groupUuid } from "../stores"
     import { allGroupsStore } from "../stores/groups"
 
     import LocaleProvider from "./_helpers/locales/LocaleProvider.svelte"

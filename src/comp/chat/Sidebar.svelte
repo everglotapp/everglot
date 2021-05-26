@@ -96,7 +96,7 @@
                 </div>
             </div>
             {#if $joiningCall}
-                <div class="flex justify-center pt-2"><Spinner /></div>
+                <div class="flex justify-center pt-3 pb-2"><Spinner /></div>
             {:else if $isInCall && $joinedCallRoom === $groupUuid}
                 <div class="toggle-row">
                     <svg

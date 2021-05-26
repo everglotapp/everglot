@@ -19,7 +19,6 @@ export const isScrolledToBottom = (container: HTMLElement) =>
  */
 const scroll = (el: HTMLElement, scrollTop?: number): void => {
     const top = scrollTop || el.scrollHeight - el.clientHeight
-    console.log({ top, scrollTop, el })
     if (typeof el.scroll === "function") {
         el.scroll({ top })
     } else {

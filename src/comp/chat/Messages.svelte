@@ -65,10 +65,6 @@
                 if (!messagesContainer) {
                     return
                 }
-                console.log({
-                    previousHeight,
-                    height: messagesContainer.scrollHeight,
-                })
                 if (previousHeight === null) {
                     scrollToBottom(messagesContainer, forceScrollToBottom)
                     return

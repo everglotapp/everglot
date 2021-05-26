@@ -12,6 +12,8 @@ export const MESSAGE_PREVIEW_BASE_PATH = "/images/preview" as const
 export const USER_UPLOADED_IMAGES_BASE_PATH = "/images/uploads" as const
 export const USER_AVATARS_BASE_PATH = `${USER_UPLOADED_IMAGES_BASE_PATH}/avatars` as const
 
+export const WEBRTC_CONTEXT_KEY = "WEBRTC"
+
 export const ALPHABET: Record<HangmanLocale, readonly string[]> = {
     en: [
         "a",

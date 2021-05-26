@@ -9,7 +9,7 @@
 
     import ChatProvider from "./_helpers/chat/ChatProvider.svelte"
 
-    import Message from "../comp/chat/Message.svelte"
+    import Messages from "../comp/chat/Messages.svelte"
     import Sidebar from "../comp/chat/Sidebar.svelte"
 
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
@@ -21,7 +21,6 @@
     import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
     import Modal from "../comp/util/Modal.svelte"
 
-    import { isScrolledToBottom, scrollToBottom } from "./_helpers/scrolling"
     import { groupUuid } from "../stores"
     import {
         groupChatStore,
@@ -54,14 +53,16 @@
 
     let chat: ChatProvider | undefined
 
+    let messages: ChatMessage[] = []
+    let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
+    let lastSentMessage: ChatMessage | null
+    let lastMessageSentAt: number | null
+
     const webrtc = getContext("WEBRTC")
     const { outgoing, remoteUsers, joinedRoom } = webrtc
 
-    let messages: ChatMessage[] = []
-    let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
     let myUuid: User["uuid"] | null = null
     let msg = ""
-    let messagesContainer: HTMLElement | undefined
 
     let fetchGroupMetadataInterval: number | null = null
 
@@ -97,6 +98,61 @@
                     ?.messagesByRecipientGroupId.pageInfo.startCursor || null,
         })
     }
+
+    $: if (
+        $groupChatMessagesStore.data &&
+        !$groupChatMessagesStore.error &&
+        !$groupChatMessagesStore.fetching
+    ) {
+        const { groupByUuid } = $groupChatMessagesStore.data
+        const receivedMessages =
+            groupByUuid?.messagesByRecipientGroupId?.edges
+                .filter(Boolean)
+                .map((edge) => edge!.node) || []
+
+        if (receivedMessages.length) {
+            const messageIsNew = ({ uuid }: any) => {
+                for (let i = messages.length - 1; i >= 0; --i) {
+                    if (messages[i].uuid === uuid) {
+                        return false
+                    }
+                }
+                return true
+            }
+            const newMessages = receivedMessages.filter(messageIsNew)
+            if (newMessages.length) {
+                messages = [
+                    ...newMessages.map((message) => ({
+                        text: message!.body,
+                        time: message!.createdAt,
+                        uuid: message!.uuid,
+                        userUuid: message!.sender?.uuid || null,
+                    })),
+                    ...messages,
+                ]
+                previews = {
+                    ...previews,
+                    ...Object.fromEntries(
+                        newMessages
+                            .filter(Boolean)
+                            .map((message) => [
+                                message!.uuid,
+                                message!.messagePreviews.nodes
+                                    .filter(Boolean)
+                                    .map((node) =>
+                                        makeChatMessagePreview(
+                                            node!.uuid,
+                                            node!.filename,
+                                            node!.extension || undefined
+                                        )
+                                    ),
+                            ])
+                    ),
+                }
+            }
+        }
+    }
+
     $: if ($groupUuid && chat && chat.currentRoom() !== $groupUuid) {
         // console.log("Switching room", {
         //     oldRoom: joinedRoom,
@@ -120,74 +176,6 @@
 
         chat.leaveRoom()
         chat.joinRoom($groupUuid)
-    }
-
-    $: if (
-        $groupChatMessagesStore.data &&
-        !$groupChatMessagesStore.error &&
-        !$groupChatMessagesStore.fetching
-    ) {
-        const { groupByUuid } = $groupChatMessagesStore.data
-        const receivedMessages =
-            groupByUuid?.messagesByRecipientGroupId?.edges
-                .filter(Boolean)
-                .map((edge) => edge!.node) || []
-        const forceScrollToBottom =
-            messagesContainer && isScrolledToBottom(messagesContainer)
-
-        // console.log("Just got new messages", {
-        //     forceScrollToBottom,
-        //     messagesContainer,
-        //     fetching: $groupChatMessagesStore.fetching,
-        //     stale: $groupChatMessagesStore.stale,
-        //     error: $groupChatMessagesStore.error,
-        //     existingMessagesLength: messages.length,
-        //     receivedMessagesLength: receivedMessages.length,
-        // })
-        if (receivedMessages.length) {
-            const messageIsNew = ({ uuid }: any) => {
-                for (let i = messages.length - 1; i >= 0; --i) {
-                    if (messages[i].uuid === uuid) {
-                        return false
-                    }
-                }
-                return true
-            }
-            const newMessages = receivedMessages.filter(messageIsNew)
-            messages = [
-                ...newMessages.map((message) => ({
-                    text: message!.body,
-                    time: message!.createdAt,
-                    uuid: message!.uuid,
-                    userUuid: message!.sender?.uuid || null,
-                })),
-                ...messages,
-            ]
-            previews = {
-                ...previews,
-                ...Object.fromEntries(
-                    newMessages
-                        .filter(Boolean)
-                        .map((message) => [
-                            message!.uuid,
-                            message!.messagePreviews.nodes
-                                .filter(Boolean)
-                                .map((node) =>
-                                    makeChatMessagePreview(
-                                        node!.uuid,
-                                        node!.filename,
-                                        node!.extension || undefined
-                                    )
-                                ),
-                        ])
-                ),
-            }
-            setTimeout(() => {
-                if (messagesContainer) {
-                    scrollToBottom(messagesContainer, forceScrollToBottom)
-                }
-            }, 150)
-        }
     }
 
     function handleWelcome({
@@ -221,6 +209,8 @@
         }
     }
 
+    let messagesComponent: Messages
+
     const isOwnMessage = (message: ChatMessage) =>
         message.userUuid !== null &&
         myUuid !== null &&
@@ -228,30 +218,8 @@
     function handleMessage({
         detail: message,
     }: CustomEvent<ChatMessage>): void {
-        /**
-         * Force auto-scroll if the user sent the message themselves
-         * or if the user didn't scroll upwards before receiving the message.
-         */
-        const force =
-            isOwnMessage(message) ||
-            (!!messagesContainer && isScrolledToBottom(messagesContainer))
-        // console.log("handleMessage", {
-        //     force,
-        //     isOwn: isOwnMessage(message),
-        //     isScroll:
-        //         messagesContainer && isScrolledToBottom(messagesContainer),
-        // })
-
-        setTimeout(() => {
-            // console.log("handleMessage.timeout", {
-            //     messagesContainer,
-            //     force,
-            // })
-            if (!messagesContainer) {
-                return
-            }
-            scrollToBottom(messagesContainer, force)
-        }, 150)
+        lastSentMessage = message
+        lastMessageSentAt = Date.now()
         messages = [...messages, message]
     }
 
@@ -330,42 +298,6 @@
             event.stopPropagation()
             showLargeImageModalUrl = url
         }
-    }
-
-    const FETCH_OLDER_MAX_SCROLL_TOP_PX = 1500
-    function handleScroll(event: Event) {
-        const container = event.target as HTMLElement | null
-        if (!container) {
-            return
-        }
-        const scrolledPx =
-            container.scrollTop ||
-            container.scrollHeight - container.clientHeight
-        // console.log({
-        //     scrolledPx,
-        //     con: messagesContainer
-        //         ? messagesContainer.scrollTop ||
-        //           messagesContainer.scrollHeight -
-        //               messagesContainer.clientHeight
-        //         : null,
-        //     messagesContainer,
-        //     container,
-        // })
-        const { hasPreviousPage } =
-            $groupChatMessagesStore.data?.groupByUuid
-                ?.messagesByRecipientGroupId.pageInfo || {}
-        if (
-            scrolledPx < FETCH_OLDER_MAX_SCROLL_TOP_PX &&
-            hasPreviousPage &&
-            !$groupChatMessagesStore.fetching
-        ) {
-            // element is scrolled near top
-            fetchMoreMessages()
-        }
-    }
-
-    $: if ($groupUuid && messagesContainer) {
-        scrollToBottom(messagesContainer)
     }
 
     async function handleJoinCall(): Promise<boolean> {
@@ -573,87 +505,16 @@
                                             duration: 400,
                                         }}
                                     >
-                                        <div
-                                            class="messages"
-                                            id="chat-messages-container"
-                                            on:scroll={handleScroll}
-                                            bind:this={messagesContainer}
-                                        >
-                                            {#if $groupChatMessagesStore.fetching}
-                                                <div
-                                                    class="text-center mb-2 text-gray-bitdark text-sm font-bold"
-                                                >
-                                                    Loading …
-                                                </div>
-                                            {:else if $groupChatMessagesStore.error}
-                                                <div
-                                                    class="text-center mb-2 text-red-700 text-sm font-bold"
-                                                >
-                                                    Error.
-                                                    <ButtonSmall
-                                                        tag="button"
-                                                        on:click={fetchMoreMessages}
-                                                        variant="TEXT"
-                                                        color="SECONDARY"
-                                                        className="text-sm mb-2"
-                                                        >Try again</ButtonSmall
-                                                    >
-                                                </div>
-                                            {:else if $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId.pageInfo.hasPreviousPage}
-                                                <div
-                                                    class="flex justify-center"
-                                                >
-                                                    <ButtonSmall
-                                                        tag="button"
-                                                        on:click={fetchMoreMessages}
-                                                        variant="TEXT"
-                                                        color="SECONDARY"
-                                                        className="text-sm mb-2"
-                                                        >Get older messages</ButtonSmall
-                                                    >
-                                                </div>
-                                            {:else if $groupChatMessagesStore.data}
-                                                <div
-                                                    class="flex items-center justify-center space-between mb-2 px-8"
-                                                >
-                                                    <hr
-                                                        class="w-full border-gray-bitlight"
-                                                    />
-                                                    <span
-                                                        class="px-4 text-gray-bitdark font-bold text-sm mx-auto whitespace-nowrap"
-                                                        >No older messages</span
-                                                    >
-                                                    <hr
-                                                        class="w-full border-gray-bitlight"
-                                                    />
-                                                </div>
-                                            {/if}
-                                            {#each messages as message (message.uuid)}
-                                                <Message
-                                                    uuid={message.uuid}
-                                                    userUuid={message.userUuid}
-                                                    time={message.time}
-                                                    text={message.text}
-                                                />
-                                                {#if previews[message.uuid]}
-                                                    {#each previews[message.uuid] as preview (preview.uuid)}
-                                                        <div
-                                                            class="message-preview"
-                                                        >
-                                                            <img
-                                                                src={preview.url}
-                                                                alt="Preview"
-                                                                role="presentation"
-                                                                class="cursor-pointer"
-                                                                on:click={handleEnlargenImage(
-                                                                    preview.url
-                                                                )}
-                                                            />
-                                                        </div>
-                                                    {/each}
-                                                {/if}
-                                            {/each}
-                                        </div>
+                                        <Messages
+                                            {messages}
+                                            {previews}
+                                            {lastSentMessage}
+                                            {lastMessageSentAt}
+                                            bind:this={messagesComponent}
+                                            {handleEnlargenImage}
+                                            {fetchMoreMessages}
+                                            {isOwnMessage}
+                                        />
                                         <div
                                             class="submit-form-container rounded-bl-md rounded-br-md grid items-center"
                                         >
@@ -888,25 +749,6 @@
 
     .views.split .view-right-inner {
         @apply px-0;
-    }
-
-    .messages {
-        @apply bg-white;
-        @apply overflow-y-scroll;
-        @apply py-2;
-        @apply pr-2;
-        @apply rounded-bl-lg;
-        @apply rounded-br-lg;
-    }
-
-    .message-preview {
-        padding-left: 4.5rem;
-
-        @apply mb-3;
-    }
-
-    .message-preview img {
-        max-height: 256px;
     }
 
     .submit-form-container {

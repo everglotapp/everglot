@@ -6,6 +6,8 @@
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
 
+    import { setUsersInCall } from "../../../stores/call"
+
     import type { Group } from "../../../types/generated/graphql"
 
     import type { ChatUser, ChatMessage } from "../../../types/chat"
@@ -16,19 +18,15 @@
 
     onDestroy(() => {
         leaveRoom()
-        if (socket) {
-            socket.disconnect()
-        }
+        disconnect()
     })
 
     export function connect() {
         if (socket || typeof window === "undefined") {
             return
         }
-        // console.log("Connecting to chat")
         socket = io()
         if (socket) {
-            // Welcome from server
             socket.on(
                 "welcome",
                 (detail: {
@@ -39,16 +37,21 @@
                     dispatch("welcome", detail)
                 }
             )
-            // Message from server
             socket.on("message", (detail: ChatMessage) =>
                 dispatch("message", detail)
             )
-            // Message preview from server
             socket.on(
                 "messagePreview",
                 (detail: { messageUuid: string; url: string; type: string }) =>
                     dispatch("messagePreview", detail)
             )
+            socket.on("callUsers", setUsersInCall)
+        }
+    }
+
+    export function disconnect() {
+        if (socket) {
+            socket.disconnect()
         }
     }
 
@@ -89,6 +92,14 @@
         }
         // console.log("Sending", msg)
         socket.emit("chatMessage", msg)
+        return true
+    }
+
+    export function emit(ev: string, ...args: any[]): boolean {
+        if (!socket || !socket.connected) {
+            return false
+        }
+        socket.emit(ev, ...args)
         return true
     }
 </script>

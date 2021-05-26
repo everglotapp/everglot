@@ -12,6 +12,7 @@
     import LocaleProvider from "./_helpers/locales/LocaleProvider.svelte"
     import MainNav from "../comp/layout/MainNav.svelte"
     import Footer from "../comp/layout/Footer.svelte"
+    import WebrtcProvider from "./_helpers/webrtc/WebrtcProvider.svelte"
 
     setupUrql()
 
@@ -48,27 +49,29 @@
 </script>
 
 <LocaleProvider {segment}>
-    <div id="app" class:noscroll class:with-main-nav={showMainNav}>
-        {#if showMainNav}
-            <MainNav {segment} />
-        {/if}
+    <WebrtcProvider contextKey="WEBRTC">
+        <div id="app" class:noscroll class:with-main-nav={showMainNav}>
+            {#if showMainNav}
+                <MainNav {segment} />
+            {/if}
 
-        <main>
-            {#key transitionId}
-                <div
-                    class="main-inner"
-                    in:scale={{ duration: timeout, delay: timeout }}
-                    out:scale={{ duration: timeout }}
-                >
-                    <slot />
-                </div>
-            {/key}
-        </main>
+            <main>
+                {#key transitionId}
+                    <div
+                        class="main-inner"
+                        in:scale={{ duration: timeout, delay: timeout }}
+                        out:scale={{ duration: timeout }}
+                    >
+                        <slot />
+                    </div>
+                {/key}
+            </main>
 
-        {#if showFooter}
-            <Footer />
-        {/if}
-    </div>
+            {#if showFooter}
+                <Footer />
+            {/if}
+        </div>
+    </WebrtcProvider>
 </LocaleProvider>
 
 <style>

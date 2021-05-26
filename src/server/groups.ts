@@ -5,8 +5,10 @@ import log from "../logger"
 import { performQuery } from "./gql"
 
 import {
+    AllGroupUuidsQuery,
     CreateGroupMutation,
     GroupIdByUuidQuery,
+    UserIsInGroupQuery,
     UserLanguageInfoQuery,
     UserType,
 } from "../types/generated/graphql"
@@ -153,18 +155,26 @@ async function addUserToGroup(
     return res.data?.createGroupUser.groupUser.id
 }
 
-async function createAndAssignGroup(
+export async function createAndAssignGroup(
     learnerIds: Array<number>,
     nativeIds: Array<number>,
     languageId: number,
     languageSkillLevelId: number
-): Promise<Group["id"] | null> {
+): Promise<Pick<
+    Group,
+    | "id"
+    | "uuid"
+    | "global"
+    | "groupName"
+    | "languageId"
+    | "languageSkillLevelId"
+> | null> {
     const global = false
-    const name = "random"
+    const groupName = "random"
     const uuid = uuidv4()
     const groupId = await createGroup(
         global,
-        name,
+        groupName,
         languageId,
         languageSkillLevelId,
         uuid
@@ -199,7 +209,14 @@ async function createAndAssignGroup(
             return null
         }
     }
-    return groupId
+    return {
+        id: groupId,
+        global,
+        groupName,
+        languageId,
+        languageSkillLevelId,
+        uuid,
+    }
 }
 
 async function formGroup(
@@ -232,14 +249,14 @@ async function formGroup(
         learnerIds.length === GROUP_LEARNER_SIZE &&
         nativeIds.length === GROUP_NATIVE_SIZE
     ) {
-        const groupId = await createAndAssignGroup(
+        const group = await createAndAssignGroup(
             learnerIds,
             nativeIds,
             languageId,
             languageSkillLevelId
         )
-        log.child({ groupId }).debug("Formed group")
-        return groupId
+        log.child({ group }).debug("Formed group")
+        return group?.id || null
     } else {
         log.child({
             learnerIds,
@@ -357,4 +374,45 @@ export async function getGroupIdByUuid(
         return null
     }
     return res.data.groupByUuid?.id || null
+}
+
+export async function userIsInGroup(
+    userId: User["id"],
+    groupUuid: Group["uuid"]
+): Promise<boolean | null> {
+    const res = await performQuery<UserIsInGroupQuery>(
+        `query UserIsInGroup($userId: Int!, $groupUuid: UUID!) {
+            groupByUuid(uuid: $groupUuid) {
+                groupUsers(condition: { userId: $userId }) {
+                    totalCount
+                }
+            }
+        }`,
+        { userId, groupUuid }
+    )
+    if (
+        !res.data ||
+        !res.data.groupByUuid?.groupUsers ||
+        typeof res.data.groupByUuid?.groupUsers?.totalCount === "undefined"
+    ) {
+        return null
+    }
+    return res.data.groupByUuid.groupUsers.totalCount > 0
+}
+
+export async function getAllGroupUuids(): Promise<string[] | null> {
+    const res = await performQuery<AllGroupUuidsQuery>(
+        `query AllGroupUuids {
+            groups {
+                nodes {
+                    uuid
+                }
+            }
+        }`,
+        {}
+    )
+    if (!res.data) {
+        return null
+    }
+    return res.data.groups?.nodes.map((node) => node?.uuid) || []
 }

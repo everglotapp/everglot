@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { tick } from "svelte"
+    import { tick, getContext } from "svelte"
     import { scale } from "svelte/transition"
     import { goto } from "@sapper/app"
 
@@ -11,6 +11,8 @@
     import { query } from "@urql/svelte"
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
+
+    import { MicIcon } from "svelte-feather-icons"
 
     import Avatar from "../users/Avatar.svelte"
 
@@ -32,6 +34,9 @@
     query(allGroupsStore)
 
     export let segment: string | undefined
+
+    const webrtc = getContext("WEBRTC")
+    const { joinedRoom: joinedCallRoom } = webrtc
 
     async function handleLogout() {
         await fetch("/logout", {
@@ -208,6 +213,7 @@
                                                         variant="TEXT"
                                                         color="SECONDARY"
                                                         href={`/chat?group=${group.uuid}`}
+                                                        className="w-full justify-between items-center"
                                                         on:click={() =>
                                                             ($groupUuid =
                                                                 group.uuid)}
@@ -216,9 +222,12 @@
                                                             ""}
                                                         {group
                                                             ?.languageSkillLevel
-                                                            ?.name ||
-                                                            ""})</ButtonSmall
-                                                    >
+                                                            ?.name || ""})
+                                                        {#if group.uuid === $joinedCallRoom}<MicIcon
+                                                                size="18"
+                                                                class="text-gray-bitdark ml-2"
+                                                            />{/if}
+                                                    </ButtonSmall>
                                                 </div>
                                             {/each}
                                         {/if}
@@ -304,6 +313,26 @@
                                             >
                                             <hr class="mt-2" />
                                         {/if}
+                                        {#if $joinedCallRoom && (segment !== "chat" || $groupUuid !== $joinedCallRoom)}
+                                            <div>
+                                                <ButtonSmall
+                                                    variant="TEXT"
+                                                    color="SECONDARY"
+                                                    className="w-full justify-between items-center"
+                                                    href={`/chat?group=${$joinedCallRoom}`}
+                                                    on:click={() =>
+                                                        ($groupUuid = $joinedCallRoom)}
+                                                    ><span class="mr-1"
+                                                        ><Localized
+                                                            id="main-nav-go-to-call"
+                                                        /></span
+                                                    ><MicIcon
+                                                        size="18"
+                                                        class="text-gray-bitdark"
+                                                    /></ButtonSmall
+                                                >
+                                            </div>
+                                        {/if}
                                         <div>
                                             <ButtonSmall
                                                 variant="TEXT"
@@ -359,7 +388,7 @@
                     <button
                         on:click={() =>
                             (showSettingsDropdown = !showSettingsDropdown)}
-                        class="nav-item-with-icon justify-center cursor-pointer"
+                        class="nav-item-with-icon justify-center cursor-pointer relative"
                         id="settings-dropdown-clickaway"
                     >
                         {#if !$currentUserStore.fetching}
@@ -368,6 +397,12 @@
                                 username={$currentUser?.username || ""}
                                 size={42}
                             />
+                            {#if $joinedCallRoom}
+                                <MicIcon
+                                    size="16"
+                                    class="text-gray-bitdark absolute mic-icon"
+                                />
+                            {/if}
                         {:else}
                             <div
                                 class="bg-gray-lightest"
@@ -628,5 +663,10 @@
 
     .group :global(a) {
         @apply m-0;
+    }
+
+    #settings-dropdown-clickaway :global(.mic-icon) {
+        right: 18px;
+        bottom: 10px;
     }
 </style>

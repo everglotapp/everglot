@@ -10,6 +10,7 @@ import type {
     UpdateUserAvatarUrlMutation,
     UpdateUserAvatarUrlMutationVariables,
     User,
+    UserUuidByIdQuery,
 } from "../types/generated/graphql"
 
 export async function registerUserActivity(
@@ -47,4 +48,19 @@ export async function updateUserAvatarUrl(
         return false
     }
     return true
+}
+
+export async function getUserUuidById(id: User["id"]): Promise<string | null> {
+    const res = await performQuery<UserUuidByIdQuery>(
+        `query UserUuidById($id: Int!) {
+            user(id: $id) {
+                uuid
+            }
+        }`,
+        { id }
+    )
+    if (!res.data) {
+        return null
+    }
+    return res.data.user?.uuid || null
 }

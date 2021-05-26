@@ -1,133 +1,172 @@
 <script lang="ts">
-    import type Peer from "peerjs"
-    import type { MediaConnection } from "peerjs"
+    import { onDestroy, setContext } from "svelte"
+    import { writable } from "svelte/store"
 
-    import { setContext, onDestroy } from "svelte"
-    import { currentUser } from "../../../stores"
-    import type { User } from "../../../types/generated/graphql"
+    import type {
+        IAgoraRTC,
+        IAgoraRTCClient,
+        IAgoraRTCRemoteUser,
+        IMicrophoneAudioTrack,
+    } from "agora-rtc-sdk-ng"
 
-    let Peer
-    let peer: object | null = null
+    import { AGORA_APP_ID } from "../../../constants"
 
-    const WEBRTC_CONTEXT = {}
+    let AgoraRTC: IAgoraRTC
 
-    setContext(WEBRTC_CONTEXT, {
-        connectToServer,
+    const outgoing = writable<IMicrophoneAudioTrack | null>(null)
+    const remoteUsers = writable<IAgoraRTCRemoteUser[]>([])
+    const joinedRoom = writable<string | null>(null)
+    const joining = writable<boolean>(false)
+
+    const isInCall = writable(false)
+    $: isInCall.set($outgoing !== null)
+
+    export let contextKey: string
+    setContext(contextKey, {
+        outgoing,
+        remoteUsers,
+        isInCall,
+        joinedRoom,
+        init,
+        joinRoom,
+        leaveRoom,
+        joining,
     })
 
-    export const connectedToServer = () => peer !== null
-    $: inCall = incoming.length || Object.values(outgoing).some(Boolean)
-    export const callInProgress = () => inCall
+    let client: IAgoraRTCClient | undefined
 
-    export let outgoing: Record<User["uuid"], MediaStream | null> = {}
-    export let incoming: MediaStream[] = []
-    let listeningForCalls: boolean = false
-
-    export async function connectToServer() {
-        if (peer !== null) {
-            return peer
-        }
-        // @ts-ignore see https://github.com/peers/peerjs/issues/552#issuecomment-770401843
-        window.parcelRequire = undefined
-        const module = await import("peerjs")
-
-        // @ts-ignore
-        Peer = module.peerjs.Peer as typeof module.default
-
-        if ($currentUser) {
-            peer = new Peer($currentUser.uuid, {
-                host: "/",
-                port: Number(window.location.port),
-                path: "/webrtc",
-                config: {
-                    iceServers: [{ urls: "stun:stun.t-online.de:3478" }],
-                    sdpSemantics: "unified-plan",
-                },
-            })
-
-            if (peer) {
-                peer.on("error", function (err) {
-                    console.log(err)
-                })
-                peer.on("disconnected", function (err) {
-                    peer = null
-                })
-            }
-        }
-
-        return peer
-    }
-
-    export function isListeningForCalls() {
-        return listeningForCalls
-    }
-
-    export async function listenForCalls() {
-        if (listeningForCalls) {
+    async function init() {
+        if (typeof window === "undefined") {
             return
         }
-        const peer = await connectToServer()
-        if (!peer) {
+
+        if (!AgoraRTC) {
+            // @ts-ignore
+            AgoraRTC = await import("agora-rtc-sdk-ng")
+        }
+    }
+    init()
+
+    function createClientIfNotExists() {
+        if (typeof client !== "undefined") {
             return
         }
-        peer.on("call", async (call: MediaConnection) => {
-            const stream = await navigator.mediaDevices
-                .getUserMedia({ video: false, audio: true })
-                .catch((err) => {
-                    console.error("Failed to get local stream", err)
-                    return null
-                })
-            if (!stream) {
+        if (typeof window === "undefined") {
+            return
+        }
+        client = AgoraRTC.createClient({
+            mode: "rtc",
+            codec: "vp8",
+        })
+    }
+
+    async function joinRoom(roomId: string, userId: string): Promise<boolean> {
+        if (!client) {
+            createClientIfNotExists()
+        }
+
+        if ($joining) {
+            return false
+        } else {
+            $joining = true
+        }
+
+        if ($joinedRoom) {
+            await leaveRoom()
+        }
+
+        client!.on("user-published", async (user, mediaType) => {
+            if (!client) {
                 return
             }
-            call.answer(stream)
-            call.on("stream", (remoteStream) => {
-                incoming = [...incoming, remoteStream]
-                console.log("Answered", { remoteStream })
-            })
+            // Subscribe to a remote user.
+            await client.subscribe(user, mediaType)
+
+            // If the subscribed track is audio.
+            if (mediaType === "audio") {
+                // Get `RemoteAudioTrack` in the `user` object.
+                const remoteAudioTrack = user.audioTrack
+                if (!remoteAudioTrack) {
+                    return
+                }
+                $remoteUsers = [...$remoteUsers, user]
+                // Play the audio track. No need to pass any DOM element.
+                remoteAudioTrack.play()
+            }
         })
-        listeningForCalls = true
+        client!.on("user-unpublished", async (user, mediaType) => {
+            if (!client) {
+                return
+            }
+            await client.unsubscribe(user, mediaType)
+        })
+
+        const rtcToken = await getAgoraToken(roomId)
+        if (!rtcToken) {
+            $joining = false
+            return false
+        }
+        const uid = await client!.join(AGORA_APP_ID, roomId, rtcToken, userId)
+        if (!uid) {
+            $joining = false
+            return false
+        }
+
+        if (!AgoraRTC) {
+            // @ts-ignore
+            AgoraRTC = await import("agora-rtc-sdk-ng")
+        }
+        $outgoing = await AgoraRTC.createMicrophoneAudioTrack()
+        // Publish the local audio track to the channel.
+        await client!.publish([$outgoing!])
+
+        $joinedRoom = roomId
+        $joining = false
+
+        return true
     }
 
-    export async function handleCall(otherUserUuids: string[]) {
-        const peer = await connectToServer()
-        if (!peer) {
-            return
+    async function leaveRoom(): Promise<boolean> {
+        if (!client) {
+            return false
         }
-        for (const otherUuid of otherUserUuids) {
-            // TODO: call user and put into outgoing
-            if (Object.keys(outgoing).includes(otherUserUuids)) {
-                continue
+        if ($remoteUsers) {
+            for (const remoteUser of $remoteUsers) {
+                await client.unsubscribe(remoteUser, "audio")
+                remoteUser.audioTrack?.stop()
             }
-            const stream = await navigator.mediaDevices
-                .getUserMedia({ video: false, audio: true })
-                .catch((err) => {
-                    console.error("Failed to get local stream", err)
-                    return null
-                })
-            if (!stream) {
-                continue
-            }
-            const call: MediaConnection = peer.call(otherUuid, stream)
-            if (!call) {
-                continue
-            }
-            outgoing = { ...outgoing, [otherUuid]: null }
-            call.on("stream", (remoteStream) => {
-                outgoing[otherUuid] = remoteStream
-                console.log("Called", { [otherUuid]: remoteStream })
-            })
         }
+        if ($outgoing) {
+            await client.unpublish([$outgoing])
+            $outgoing.stop()
+            $outgoing.close()
+            $outgoing = null
+        }
+        await client.leave()
+        $joinedRoom = null
+        return true
+    }
+
+    async function getAgoraToken(roomId: string): Promise<string | false> {
+        const response = await fetch(`/groups/rtc-token/${roomId}`, {
+            method: "get",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
+        const res = await response.json()
+        if (!res.hasOwnProperty("success")) {
+            return false
+        }
+        if (res.success !== true) {
+            return false
+        }
+        return res.token
     }
 
     onDestroy(() => {
-        if (peer) {
-            peer.disconnect()
-        }
-        if (peer) {
-            peer.destroy()
-        }
-        peer = null
+        leaveRoom()
     })
 </script>
 

@@ -11,6 +11,7 @@
     let clickHandlerAttached = false
 
     export let className = ""
+    export let forceSignOut = false
 
     let initialized = false
 
@@ -69,7 +70,7 @@
     function handleInit(auth2: gapi.auth2.GoogleAuth) {
         initialized = true
         attachClickHandler()
-        if (auth2.isSignedIn.get() === true) {
+        if (auth2.isSignedIn.get() === true && !forceSignOut) {
             dispatch("success", { googleUser: auth2.currentUser.get() })
         }
     }
@@ -82,6 +83,10 @@
         details: string
     }) {
         dispatch("error", { error, details })
+    }
+
+    $: if (forceSignOut && initialized) {
+        GoogleAuth!.signOut()
     }
 </script>
 

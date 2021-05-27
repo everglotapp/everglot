@@ -391,6 +391,7 @@
                                         <SubmitForm
                                             {currentRoom}
                                             {sendMessage}
+                                            {isOwnMessage}
                                         />
                                     </div>
                                 {/key}

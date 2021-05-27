@@ -87,15 +87,14 @@
         query: JoinGlobalGroup,
     })
 
+    let messagesStartCursor = null
     const fetchMoreMessages = () => {
         if (!$groupUuid) {
             return
         }
         fetchGroupChatMessages({
             groupUuid: $groupUuid,
-            before:
-                $groupChatMessagesStore.data?.groupByUuid
-                    ?.messagesByRecipientGroupId.pageInfo.startCursor || null,
+            before: messagesStartCursor,
         })
     }
 
@@ -109,7 +108,10 @@
             groupByUuid?.messagesByRecipientGroupId?.edges
                 .filter(Boolean)
                 .map((edge) => edge!.node) || []
+        messagesStartCursor =
+            groupByUuid?.messagesByRecipientGroupId.pageInfo.startCursor || null
 
+        groupByUuid?.messagesByRecipientGroupId?.b
         if (receivedMessages.length) {
             const messageIsNew = ({ uuid }: any) => {
                 for (let i = messages.length - 1; i >= 0; --i) {
@@ -162,6 +164,8 @@
         // Remove all messages from screen
         messages = []
         previews = {}
+        // make sure that all messages are fetched
+        messagesStartCursor = null
 
         fetchMoreMessages()
         fetchGroupMetadata({ groupUuid: $groupUuid })

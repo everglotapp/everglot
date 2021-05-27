@@ -166,6 +166,7 @@
         <GoogleAuthButton
             on:success={handleGoogleSignIn}
             on:click={() => (blockGoogleSignIn = false)}
+            forceSignOut={blockGoogleSignIn}
             className="w-full justify-center mb-1"
             ><Localized id="login-form-google" />
         </GoogleAuthButton>

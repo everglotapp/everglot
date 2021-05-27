@@ -8,8 +8,10 @@
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+
+    import GoogleAuthButton from "./_helpers/auth/GoogleAuthButton.svelte"
+
     import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
-    import { GOOGLE_SIGNIN_CLIENT_ID } from "../constants"
 
     let errorMessage: string | null = null
     let submitting = false
@@ -80,39 +82,35 @@
             "signedout"
         )
         if (signedOut === "1") {
-            // @ts-ignore
-            window.gapi?.auth2?.getAuthInstance()?.signOut()
             blockGoogleSignIn = true
-        }
-        // @ts-ignore
-        window.onSignIn = async (googleUser: any) => {
-            if (blockGoogleSignIn) {
-                return
-            }
-            const response = await doSubmit({
-                method: AuthMethod.GOOGLE,
-                idToken: googleUser?.getAuthResponse()?.id_token,
-            })
-            const res = await response?.json()
-            if (!res || !res.hasOwnProperty("success")) {
-                return
-            }
-            if (res.success === true) {
-                goto("/signup")
-            } else {
-                errorMessage = res.message
-            }
         }
     })
 
     let email = ""
     let password = ""
-</script>
 
-<svelte:head>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content={GOOGLE_SIGNIN_CLIENT_ID} />
-</svelte:head>
+    async function handleGoogleSignIn(
+        event: CustomEvent<{ googleUser: gapi.auth2.GoogleUser }>
+    ) {
+        if (blockGoogleSignIn) {
+            return
+        }
+        const { googleUser } = event.detail
+        const response = await doSubmit({
+            method: AuthMethod.GOOGLE,
+            idToken: googleUser.getAuthResponse().id_token,
+        })
+        const res = await response?.json()
+        if (!res || !res.hasOwnProperty("success")) {
+            return
+        }
+        if (res.success === true) {
+            goto("/signup")
+        } else {
+            errorMessage = res.message
+        }
+    }
+</script>
 
 <Localized id="login-browser-window-title" let:text>
     <BrowserTitle title={text} />
@@ -160,17 +158,17 @@
         <ButtonLarge
             tag="button"
             type="submit"
-            className="w-full justify-center"
+            className="w-full justify-center mb-1"
             disabled={submitting}
             on:click={handleSubmit}
             ><Localized id="login-form-submit" /></ButtonLarge
         >
-        <div
-            class="g-signin2 flex justify-center mt-2 mb-1"
-            data-onsuccess="onSignIn"
-            data-longtitle="true"
+        <GoogleAuthButton
+            on:success={handleGoogleSignIn}
             on:click={() => (blockGoogleSignIn = false)}
-        />
+            className="w-full justify-center mb-1"
+            ><Localized id="login-form-google" />
+        </GoogleAuthButton>
         <ButtonLarge
             href="join"
             variant="OUTLINED"
@@ -179,9 +177,3 @@
         >
     </form>
 </div>
-
-<style>
-    :global(.g-signin2) {
-        min-height: 36px;
-    }
-</style>

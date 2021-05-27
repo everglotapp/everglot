@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte"
     import { goto } from "@sapper/app"
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
@@ -8,8 +7,9 @@
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+    import GoogleAuthButton from "./_helpers/auth/GoogleAuthButton.svelte"
+
     import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
-    import { GOOGLE_SIGNIN_CLIENT_ID } from "../constants"
     import { username } from "../stores"
 
     let errorMessage: string | null = null
@@ -71,40 +71,33 @@
         })
     }
 
-    onMount(() => {
-        // @ts-ignore
-        window.onSignIn = async (googleUser: any) => {
-            $username = googleUser?.getBasicProfile()?.getName() || $username
-            const response = await doSubmit({
-                method: AuthMethod.GOOGLE,
-                idToken: googleUser?.getAuthResponse()?.id_token,
-                token:
-                    typeof window === "undefined"
-                        ? null
-                        : new URL(window.location.href).searchParams.get(
-                              "token"
-                          ),
-            })
-            const res = await response.json()
-            if (!res.hasOwnProperty("success")) {
-                return
-            }
-            if (res.success === true) {
-                goto("/signup")
-            } else {
-                errorMessage = res.message
-            }
+    async function handleGoogleSignIn(
+        event: CustomEvent<{ googleUser: gapi.auth2.GoogleUser }>
+    ) {
+        const { googleUser } = event.detail
+        $username = googleUser.getBasicProfile().getName() || $username
+        const response = await doSubmit({
+            method: AuthMethod.GOOGLE,
+            idToken: googleUser.getAuthResponse().id_token,
+            token:
+                typeof window === "undefined"
+                    ? null
+                    : new URL(window.location.href).searchParams.get("token"),
+        })
+        const res = await response.json()
+        if (!res.hasOwnProperty("success")) {
+            return
         }
-    })
+        if (res.success === true) {
+            goto("/signup")
+        } else {
+            errorMessage = res.message
+        }
+    }
 
     let email = ""
     let password = ""
 </script>
-
-<svelte:head>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content={GOOGLE_SIGNIN_CLIENT_ID} />
-</svelte:head>
 
 <Localized id="join-browser-window-title" let:text>
     <BrowserTitle title={text} />
@@ -158,16 +151,16 @@
         <ButtonLarge
             tag="button"
             type="submit"
-            className="w-full justify-center"
+            className="w-full justify-center mb-1"
             disabled={submitting}
             on:click={handleSubmit}
             ><Localized id="join-form-submit" /></ButtonLarge
         >
-        <div
-            class="g-signin2 flex justify-center mt-2 mb-1"
-            data-onsuccess="onSignIn"
-            data-longtitle="true"
-        />
+        <GoogleAuthButton
+            on:success={handleGoogleSignIn}
+            className="w-full justify-center mb-1"
+            ><Localized id="join-form-google" />
+        </GoogleAuthButton>
         <ButtonLarge
             href="login"
             variant="TEXT"
@@ -176,9 +169,3 @@
         >
     </form>
 </div>
-
-<style>
-    :global(.g-signin2) {
-        min-height: 36px;
-    }
-</style>

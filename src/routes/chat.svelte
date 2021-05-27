@@ -1,21 +1,19 @@
 <script lang="ts">
     import { onDestroy, getContext } from "svelte"
-    import { scale, fly, blur } from "svelte/transition"
-    import { mutation, query } from "@urql/svelte"
-
-    import EmojiSelector from "svelte-emoji-selector"
-
+    import { fly, blur } from "svelte/transition"
+    import { query } from "@urql/svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
     import ChatProvider from "./_helpers/chat/ChatProvider.svelte"
 
-    import Messages from "../comp/chat/Messages.svelte"
     import Sidebar from "../comp/chat/Sidebar.svelte"
+    import Header from "../comp/chat/Header.svelte"
+    import SidePanel from "../comp/chat/SidePanel.svelte"
+    import Messages from "../comp/chat/Messages.svelte"
+    import SubmitForm from "../comp/chat/SubmitForm.svelte"
 
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
-    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
-    import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
     import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
@@ -25,11 +23,6 @@
     import {
         groupChatStore,
         groupChatMessagesStore,
-        language,
-        languageSkillLevel,
-        groupName,
-        currentUserIsGroupMember,
-        currentGroupIsGlobal,
         fetchGroupMetadata,
         fetchGroupChatMessages,
     } from "../stores/chat"
@@ -42,14 +35,9 @@
         ChatMessage,
         ChatMessagePreview,
     } from "../types/chat"
-    import type {
-        User,
-        JoinGlobalGroupMutation,
-        Maybe,
-    } from "../types/generated/graphql"
-    import { JoinGlobalGroup } from "../types/generated/graphql"
+    import type { User } from "../types/generated/graphql"
 
-    import { ChevronLeftIcon, ChevronsRightIcon } from "svelte-feather-icons"
+    import { ChevronLeftIcon } from "svelte-feather-icons"
 
     let chat: ChatProvider | undefined
 
@@ -62,7 +50,6 @@
     const { outgoing, remoteUsers, joinedRoom } = webrtc
 
     let myUuid: User["uuid"] | null = null
-    let msg = ""
 
     let fetchGroupMetadataInterval: number | null = null
 
@@ -83,11 +70,7 @@
         }
     })
 
-    const joinGlobalGroup = mutation<JoinGlobalGroupMutation>({
-        query: JoinGlobalGroup,
-    })
-
-    let messagesStartCursor = null
+    let messagesStartCursor: any = null
     const fetchMoreMessages = () => {
         if (!$groupUuid) {
             return
@@ -111,7 +94,6 @@
         messagesStartCursor =
             groupByUuid?.messagesByRecipientGroupId.pageInfo.startCursor || null
 
-        groupByUuid?.messagesByRecipientGroupId?.b
         if (receivedMessages.length) {
             const messageIsNew = ({ uuid }: any) => {
                 for (let i = messages.length - 1; i >= 0; --i) {
@@ -190,35 +172,13 @@
         myUuid = user.uuid
     }
 
-    const getChatMessageInput = () =>
-        document.getElementById("send-msg-input") as HTMLInputElement | null
-    function focusChatMessageInput(): void {
-        const element = getChatMessageInput()
-        if (element) {
-            element.focus()
-        }
-    }
-
-    function handleSendMessage(): void {
-        focusChatMessageInput()
-        const trimmedMsg = msg.trim()
-
-        if (!trimmedMsg) {
-            msg = ""
-            return
-        }
-        const sent = chat!.sendMessage(trimmedMsg)
-        if (sent) {
-            msg = ""
-        }
-    }
-
     let messagesComponent: Messages
 
     const isOwnMessage = (message: ChatMessage) =>
         message.userUuid !== null &&
         myUuid !== null &&
         message.userUuid === myUuid
+
     function handleMessage({
         detail: message,
     }: CustomEvent<ChatMessage>): void {
@@ -240,62 +200,6 @@
     let split = true
     let audio = true
     let mic = true
-
-    function handleEmoji(event: CustomEvent) {
-        const input = getChatMessageInput()
-        if (input && typeof input.selectionStart !== "undefined") {
-            const { selectionStart: start, selectionEnd: end } = input
-            if (start !== null && end !== null) {
-                // Replace text selection by selected emoji.
-                msg = `${msg.slice(0, start)}${event.detail}${msg.slice(end)}`
-                focusChatMessageInput()
-                // Move cursor to after selection. (Doesnt work)
-                // input.selectionStart = input.selectionEnd = end
-                return
-            }
-        }
-        msg = `${msg || ""}${event.detail}`
-        focusChatMessageInput()
-    }
-
-    const HISTORY_MAX = 1
-    let history: ChatMessage[] = []
-    $: {
-        const HISTORY_CHECK_MAX = 50
-        const res = []
-        for (
-            let i = 0;
-            i < HISTORY_CHECK_MAX &&
-            i < messages.length &&
-            res.length < HISTORY_MAX;
-            ++i
-        ) {
-            const toCheck = messages[messages.length - i - 1]
-            if (!isOwnMessage(toCheck)) {
-                continue
-            }
-            res.push(toCheck)
-        }
-        history = res
-    }
-    let historyMessage: Maybe<ChatMessage> = null
-    let origMsg: string = ""
-    function handleMessageInputKeydown(event: KeyboardEvent): void {
-        if (event.key === "ArrowUp") {
-            if (!historyMessage) {
-                const olderMsg = history[0]
-                if (olderMsg) {
-                    historyMessage = olderMsg
-                    origMsg = msg
-                    msg = historyMessage.text
-                }
-            }
-        }
-        if (event.key === "ArrowDown") {
-            historyMessage = null
-            msg = origMsg
-        }
-    }
     let showLargeImageModalUrl: string | null = null
     function handleEnlargenImage(url: string) {
         return (event: MouseEvent) => {
@@ -380,6 +284,7 @@
         on:message={handleMessage}
         on:messagePreview={handleMessagePreview}
         let:currentRoom
+        let:sendMessage
     >
         <div class="wrapper">
             <Sidebar
@@ -439,26 +344,7 @@
             />
             <div class="section-wrapper">
                 <section>
-                    <header>
-                        {#key $groupUuid}
-                            {#if $groupChatStore.data && !$groupChatStore.error}
-                                <span
-                                    class="text-xl py-2 font-bold text-gray-lightest"
-                                    >{$groupName || ""}</span
-                                >
-                                <div
-                                    class="inline"
-                                    style="min-width: 5px; margin: 0 1rem; height: 42px; border-left: 1px solid white; border-right: 1px solid white;"
-                                />
-                                <span class="text-xl py-2"
-                                    >{$language?.englishName || ""}
-                                    {$languageSkillLevel?.name || ""}</span
-                                >
-                            {:else if $groupChatStore.error}
-                                error
-                            {/if}
-                        {/key}
-                    </header>
+                    <Header />
                     <div class="views-wrapper">
                         <div class="views" class:split>
                             {#if split}
@@ -468,37 +354,20 @@
                                     out:fly={{ duration: 200, x: -600 }}
                                     style="transform-origin: center left;"
                                 >
-                                    {#key $groupUuid}
+                                    <div
+                                        class="view-inner view-left-inner"
+                                        transition:blur|local={{
+                                            duration: 300,
+                                        }}
+                                    >
+                                        <SidePanel />
                                         <div
-                                            class="view-inner view-left-inner px-3"
-                                            transition:blur|local={{
-                                                duration: 300,
-                                            }}
+                                            class="toggle-split-screen"
+                                            on:click={() => (split = false)}
                                         >
-                                            <div
-                                                class="flex flex-row bg-gray-light max-h-12 px-2 items-center"
-                                            >
-                                                <div
-                                                    class="text-lg py-1 px-3 bg-primary text-white rounded-tl-md rounded-tr-md"
-                                                >
-                                                    <Localized
-                                                        id="chat-panel-games"
-                                                    />
-                                                </div>
-                                                <div class="text-lg py-1 px-3">
-                                                    <Localized
-                                                        id="chat-panel-subtitles"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div
-                                                class="toggle-split-screen"
-                                                on:click={() => (split = false)}
-                                            >
-                                                <ChevronLeftIcon size="24" />
-                                            </div>
+                                            <ChevronLeftIcon size="24" />
                                         </div>
-                                    {/key}
+                                    </div>
                                 </div>
                             {/if}
                             <div class="view view-right rounded-tr-md">
@@ -519,84 +388,11 @@
                                             {fetchMoreMessages}
                                             {isOwnMessage}
                                         />
-                                        <div
-                                            class="submit-form-container rounded-bl-md rounded-br-md grid items-center"
-                                        >
-                                            <form
-                                                on:submit|preventDefault={handleSendMessage}
-                                                class="submit-form justify-end items-center"
-                                            >
-                                                {#if $groupChatStore.data && $currentGroupIsGlobal && !$currentUserIsGroupMember}
-                                                    <ButtonLarge
-                                                        className="ml-4 px-6 w-full justify-center"
-                                                        tag="button"
-                                                        on:click={async () => {
-                                                            const res = await joinGlobalGroup(
-                                                                {
-                                                                    groupUuid: $groupUuid,
-                                                                }
-                                                            )
-                                                            if (res.data) {
-                                                                fetchGroupMetadata(
-                                                                    {
-                                                                        groupUuid: $groupUuid,
-                                                                    }
-                                                                )
-                                                            } else {
-                                                                // TODO: Show error feedback
-                                                            }
-                                                        }}
-                                                        ><Localized
-                                                            id="chat-submit-form-join-group"
-                                                        />
-                                                    </ButtonLarge>
-                                                {:else if currentRoom}
-                                                    <Localized
-                                                        id="chat-submit-form-input"
-                                                        let:attrs
-                                                    >
-                                                        <input
-                                                            id="send-msg-input"
-                                                            type="text"
-                                                            placeholder={attrs.placeholder}
-                                                            required
-                                                            autocomplete="off"
-                                                            class="border-none shadow-md px-4 py-4 w-full rounded-md"
-                                                            bind:value={msg}
-                                                            in:scale={{
-                                                                duration: 200,
-                                                            }}
-                                                            on:keydown={handleMessageInputKeydown}
-                                                        />
-                                                        <span
-                                                            class="hidden md:inline"
-                                                        >
-                                                            <EmojiSelector
-                                                                on:emoji={handleEmoji}
-                                                            />
-                                                        </span>
-                                                    </Localized>
-                                                    <ButtonSmall
-                                                        className="send-msg-button"
-                                                        tag="button"
-                                                        variant="TEXT"
-                                                        color="SECONDARY"
-                                                        on:click={handleSendMessage}
-                                                        ><ChevronsRightIcon
-                                                            size="28"
-                                                        /></ButtonSmall
-                                                    >
-                                                {:else}
-                                                    <div
-                                                        class="w-full h-full font-bold text-center text-lg text-gray-bitdark"
-                                                    >
-                                                        <Localized
-                                                            id="chat-submit-form-connecting"
-                                                        />
-                                                    </div>
-                                                {/if}
-                                            </form>
-                                        </div>
+                                        <SubmitForm
+                                            {currentRoom}
+                                            {sendMessage}
+                                            {isOwnMessage}
+                                        />
                                     </div>
                                 {/key}
                             </div>
@@ -664,22 +460,6 @@
 
             @apply bottom-0;
             @apply p-0;
-        }
-    }
-
-    header {
-        @apply relative;
-        @apply w-full;
-        @apply flex;
-        @apply items-center;
-        @apply bg-primary;
-        @apply text-white;
-        @apply shadow-sm;
-        @apply p-0;
-
-        @screen md {
-            @apply py-4;
-            @apply px-8;
         }
     }
 
@@ -755,22 +535,6 @@
         @apply px-0;
     }
 
-    .submit-form-container {
-        padding: 18px 30px;
-        box-shadow: -2px -2px 4px rgba(220, 220, 220, 0.5);
-        min-height: 94px;
-
-        @apply bg-gray-lightest;
-        @apply absolute;
-        @apply bottom-0;
-        @apply left-0;
-        @apply right-0;
-    }
-
-    .submit-form-container form {
-        display: flex;
-    }
-
     .toggle-split-screen {
         width: 30px;
         height: 30px;
@@ -795,41 +559,9 @@
         margin-left: -2px;
     }
 
-    #send-msg-input {
-        @apply mr-3;
-    }
-
-    .submit-form-container :global(.send-msg-button) {
-        @apply px-2 !important;
-    }
-
-    .submit-form-container :global(.send-msg-button:hover) {
-        @apply text-primary !important;
-    }
-
-    .submit-form-container :global(.svelte-emoji-picker__trigger) {
-        @apply text-sm;
-        @apply px-2;
-        @apply py-2;
-        @apply text-gray-bitdark;
-        @apply hover:text-primary;
-    }
-
-    .submit-form-container :global(.svelte-emoji-picker__trigger svg) {
-        width: 1.4rem;
-        height: 1.4rem;
-    }
-
     @media (max-width: 700px) {
         .wrapper {
             display: block;
-        }
-
-        .submit-form-container {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
         }
     }
 </style>

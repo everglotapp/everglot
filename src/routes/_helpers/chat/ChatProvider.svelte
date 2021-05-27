@@ -104,4 +104,4 @@
     }
 </script>
 
-<slot currentRoom={joinedRoom} />
+<slot currentRoom={joinedRoom} {sendMessage} />

@@ -1,20 +1,27 @@
-<div class="spinner" />
+<script lang="ts">
+    export let size: number = 32
+    export let stroke: number = 4
+</script>
+
+<div
+    class="spinner"
+    style={`width: ${size}px; height: ${size}px; border-width: ${stroke}px;`}
+/>
 
 <style>
     .spinner:not(:required) {
         -moz-animation: everglot-spinner 1250ms infinite linear;
         -webkit-animation: everglot-spinner 1250ms infinite linear;
         animation: everglot-spinner 1250ms infinite linear;
-        border: 6px solid theme("colors.primary.DEFAULT");
+        border-style: solid;
+        border-color: theme("colors.primary.DEFAULT");
         border-right-color: transparent;
-        border-radius: 16px;
+        border-radius: 50%;
         box-sizing: border-box;
         display: inline-block;
         position: relative;
         overflow: hidden;
         text-indent: -9999px;
-        width: 32px;
-        height: 32px;
     }
 
     @-moz-keyframes everglot-spinner {

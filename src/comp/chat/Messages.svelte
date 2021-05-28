@@ -3,6 +3,7 @@
 
     import Message from "./Message.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import Spinner from "../util/Spinner.svelte"
     import { groupChatMessagesStore } from "../../stores/chat"
 
     import type { ChatMessage, ChatMessagePreview } from "../../types/chat"
@@ -113,7 +114,7 @@
 <div class="messages" on:scroll={handleScroll} bind:this={messagesContainer}>
     {#if $groupChatMessagesStore.fetching}
         <div class="text-center mb-2 text-gray-bitdark text-sm font-bold">
-            Loading …
+            <Spinner size={16} />
         </div>
     {:else if $groupChatMessagesStore.error}
         <div class="text-center mb-2 text-red-700 text-sm font-bold">

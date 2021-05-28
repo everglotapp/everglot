@@ -17,7 +17,7 @@
 <div>
     {#key $groupUuid}
         {#if activity === null}
-            <div class="px-16 py-8 md:py-16">
+            <div class="px-16 py-8 md:py-24">
                 <div
                     class="relative flex justify-end"
                     style="padding-right: 190px;"
@@ -25,8 +25,7 @@
                     <div
                         class="squirrel-bubble bg-primary-lightest p-4 max-w-sm font-bold text-lg text-gray-bitdark"
                     >
-                        Welcome to the game center. Select a game to play with
-                        your study group.
+                        <Localized id="chat-side-panel-bubble" />
                     </div>
                     <img
                         src="/squirrel.png"
@@ -42,7 +41,9 @@
                             color="PRIMARY"
                             variant="OUTLINED"
                             on:click={() => (activity = Activity.Hangman)}
-                            ><Localized id="Play Hangman" /></ButtonLarge
+                            ><Localized
+                                id="chat-side-panel-menu-hangman"
+                            /></ButtonLarge
                         >
                     </div>
                     <div class="menu-item">
@@ -53,7 +54,9 @@
                             variant="OUTLINED"
                             on:click={() =>
                                 (activity = Activity.WouldYouRather)}
-                            ><Localized id="Would You Rather" /></ButtonLarge
+                            ><Localized
+                                id="chat-side-panel-menu-would-you-rather"
+                            /></ButtonLarge
                         >
                     </div>
                     <div class="menu-item">
@@ -64,7 +67,7 @@
                             variant="OUTLINED"
                             on:click={() => console.log("Random q")}
                             ><Localized
-                                id="Ask a Random Question"
+                                id="chat-side-panel-menu-random-question"
                             /></ButtonLarge
                         >
                     </div>

@@ -10,14 +10,16 @@
     }
 </script>
 
-<div class="flex flex-row bg-gray-light max-h-12 px-2 items-center">
-    <div class="text-lg py-1 px-3 border-primary border-b-2">
-        <Localized id="chat-game-hangman" />
+<div class="flex flex-row m-4 max-h-12 px-2 justify-between items-center">
+    <div class="text-lg py-1 px-3 bg-gray-lightest border-primary border-b-2">
+        <Localized id="chat-side-panel-activity-hangman" />
     </div>
     <ButtonSmall
         tag="button"
-        className="w-full justify-between"
-        color="SECONDARY"
-        on:click={handleQuit}>Quit</ButtonSmall
+        className="justify-center"
+        color="PRIMARY"
+        variant="TEXT"
+        on:click={handleQuit}
+        ><Localized id="chat-side-panel-activity-quit" /></ButtonSmall
     >
 </div>

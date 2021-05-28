@@ -37,6 +37,8 @@ chat-side-panel-menu-random-question = Ask a Random Question
 chat-side-panel-activity-hangman = Hangman
 chat-side-panel-activity-would-you-rather = Would You Rather
 chat-side-panel-activity-quit = Quit Game
+chat-side-panel-activity-hangman-guess = Make a guess
+chat-side-panel-activity-hangman-enter = Enter
 chat-submit-form-send = Send
 chat-submit-form-connecting = Connecting …
 # Chat text message input field

@@ -38,6 +38,7 @@ chat-submit-form-input = {""}
 chat-message-username-unknown = unknown
 chat-message-show-less = Show less
 chat-message-show-more = Show more
+chat-message-username-bot = Ebo
 
 ## Main Navigation
 

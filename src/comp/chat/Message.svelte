@@ -3,6 +3,7 @@
     import { svelteTime } from "svelte-time"
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/FluentProvider.svelte"
 
     // @ts-ignore
     import _anchorme from "anchorme"
@@ -184,6 +185,9 @@
     }
 
     $: bodyElements = makeBodyElements(body)
+
+    const { translate } = fluentStores()
+    $: botUsername = $translate("chat-message-username-bot")
 </script>
 
 <div
@@ -221,7 +225,7 @@
         {#if user === null}
             <div>
                 <Avatar
-                    username="Everglot Bot"
+                    username={botUsername}
                     url="/squirrel.png"
                     size={36}
                     showShadow={false}
@@ -258,7 +262,7 @@
                         >
                     {/if}
                 {:else}
-                    <span class="username bot mr-2">Everglot Bot</span>
+                    <span class="username bot mr-2">{botUsername}</span>
                 {/if}
                 <time
                     use:svelteTime={{

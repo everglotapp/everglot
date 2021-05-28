@@ -1,18 +1,22 @@
 <script lang="ts">
     export let username: string = ""
     export let url: string = ""
-    export let size = 50
+    export let size: number = 50
+    export let showShadow: boolean = true
 
     $: initial = username.charAt(0)
+    $: showImage = url?.startsWith("https://") || url?.startsWith("/")
 </script>
 
 <div
-    class="wrapper"
+    class={`wrapper ${showImage ? "image" : "initial"}${
+        showShadow ? " shadow-md" : ""
+    }`}
     on:click
     tabindex="0"
     style={`width: ${size}px; height: ${size}px;`}
 >
-    {#if url?.startsWith("https://") || url?.startsWith("/")}
+    {#if showImage}
         <img
             src={url}
             alt={initial}
@@ -21,7 +25,7 @@
             style={`max-height: ${size}px;`}
         />
     {:else}
-        <span class="initial" role="presentation">
+        <span role="presentation">
             {initial}
         </span>
     {/if}
@@ -34,14 +38,16 @@
         @apply flex;
         @apply justify-center;
         @apply items-center;
-        @apply bg-gray-light;
-        @apply shadow-md;
         @apply overflow-hidden;
-        @apply text-gray-dark;
-        @apply font-bold;
     }
 
-    .initial {
+    .wrapper.initial {
+        @apply text-gray-dark;
+        @apply font-bold;
+        @apply bg-gray-light;
+    }
+
+    .initial span {
         height: 1.625rem;
     }
 </style>

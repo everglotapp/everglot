@@ -50,9 +50,7 @@
     interface BodyElement {
         content: string
         type: BodyElementType
-    }
-    interface BodyLink extends BodyElement {
-        uri: string
+        uri?: string
     }
     let bodyElements: BodyElement[] = []
 
@@ -118,7 +116,7 @@
                         ),
                         type: BodyElementType.Link,
                         uri: uri,
-                    } as BodyLink)
+                    })
                     // Start text one character after match (there could even be only one character left)
                     textStart = match.end + 1
                 }
@@ -220,16 +218,25 @@
                 </div>
             {/if}
         {/if}
-        <div class="cursor-pointer">
-            {#if user}
+        {#if user === null}
+            <div>
+                <Avatar
+                    username="Everglot Bot"
+                    url="/squirrel.png"
+                    size={36}
+                    showShadow={false}
+                />
+            </div>
+        {:else}
+            <div class="cursor-pointer">
                 <Avatar
                     username={user.username || ""}
                     url={user.avatarUrl || ""}
                     size={36}
                     on:click={() => (showBio = !showBio)}
                 />
-            {/if}
-        </div>
+            </div>
+        {/if}
     </div>
     <div class="main">
         <div class="meta">
@@ -238,9 +245,10 @@
                     {#if user?.username}
                         <span
                             class="username mr-2 cursor-pointer"
-                            on:click={(e) =>
-                                e.stopPropagation() || (showBio = !showBio)}
-                            >{user.username}</span
+                            on:click={(event) => {
+                                event.stopPropagation()
+                                showBio = !showBio
+                            }}>{user.username}</span
                         >
                     {:else}
                         <span class="username mr-2 italic"

@@ -23,3 +23,52 @@
         ><Localized id="chat-side-panel-activity-quit" /></ButtonSmall
     >
 </div>
+<div class="flex justify-center">
+    <div class="inline-block relative">
+        <div class="rope" />
+        <div class="box-top" />
+        <div class="box-left" />
+        <div class="box-bottom" />
+        <img src="/squirrel.png" alt="Squirrel" class="squirrel" />
+    </div>
+</div>
+
+<style>
+    .squirrel {
+        position: absolute;
+        max-width: 207px;
+        bottom: 49px;
+        left: 82px;
+    }
+
+    .rope {
+        height: 190px;
+        width: 3px;
+        background: #664e27;
+        margin-left: 8px;
+        position: absolute;
+        top: 23px;
+        left: 193px;
+    }
+
+    .box-top {
+        height: 23px;
+        width: 236px;
+        background: #b57a57;
+        margin-left: 20px;
+    }
+
+    .box-left {
+        height: 350px;
+        width: 20px;
+        background: #b57a57;
+        margin-left: 20px;
+    }
+
+    .box-bottom {
+        height: 66px;
+        width: 381px;
+        background: #b57a57;
+        margin-left: 8px;
+    }
+</style>

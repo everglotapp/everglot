@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { onDestroy, createEventDispatcher } from "svelte"
+    import { onDestroy, createEventDispatcher, setContext } from "svelte"
+    import { writable } from "svelte/store"
 
     const dispatch = createEventDispatcher()
 
@@ -12,9 +13,23 @@
 
     import type { ChatUser, ChatMessage } from "../../../types/chat"
 
-    let joinedRoom: string | null = null
-    export const currentRoom = () => joinedRoom
-    let socket: SocketIO.Socket | null = null
+    const joinedRoom = writable<string | null>(null)
+    const socket = writable<SocketIO.Socket | null>(null)
+    const connected = writable(false)
+
+    export let contextKey: string
+    setContext(contextKey, {
+        joinedRoom,
+        connected,
+        connect,
+        disconnect,
+        joinRoom,
+        leaveRoom,
+        sendMessage,
+        emit,
+        on,
+        off,
+    })
 
     onDestroy(() => {
         leaveRoom()
@@ -22,86 +37,109 @@
     })
 
     export function connect() {
-        if (socket || typeof window === "undefined") {
+        if ($socket || typeof window === "undefined") {
             return
         }
-        socket = io()
-        if (socket) {
-            socket.on(
-                "welcome",
-                (detail: {
-                    user: Pick<ChatUser["user"], "uuid">
-                    groupUuid: Group["uuid"]
-                }) => {
-                    joinedRoom = detail.groupUuid
-                    dispatch("welcome", detail)
-                }
-            )
-            socket.on("message", (detail: ChatMessage) =>
-                dispatch("message", detail)
-            )
-            socket.on(
-                "messagePreview",
-                (detail: { messageUuid: string; url: string; type: string }) =>
-                    dispatch("messagePreview", detail)
-            )
-            socket.on("callUsers", setUsersInCall)
+
+        const s = io()
+        if (!s) {
+            return
         }
+
+        s.on("connect", () => {
+            $connected = true
+        })
+
+        s.on("disconnecting", () => {
+            $connected = false
+            $socket = null
+        })
+
+        s.on(
+            "welcome",
+            (detail: {
+                user: Pick<ChatUser["user"], "uuid">
+                groupUuid: Group["uuid"]
+            }) => {
+                $joinedRoom = detail.groupUuid
+            }
+        )
+        s.on("callUsers", setUsersInCall)
+
+        $socket = s
     }
 
     export function disconnect() {
-        if (socket) {
-            socket.disconnect()
+        if ($socket) {
+            $socket.off()
+            $socket.disconnect()
+            $socket = null
         }
     }
 
     export function joinRoom(room: string) {
-        if (!socket) {
+        if (!$socket) {
             return
         }
         if (!room || !room.length) {
             // console.log("Not joining empty room", { room })
             return
         }
-        if (joinedRoom === room) {
+        if ($joinedRoom === room) {
             // console.log("Not joining room, already joined", { room })
             return
         }
         // console.log("Joining room", { room })
-        socket.emit("joinRoom", {
+        $socket.emit("joinRoom", {
             groupUuid: room,
         })
     }
 
     export function leaveRoom(): boolean {
-        if (!socket) {
+        if (!$socket) {
             return false
         }
-        if (joinedRoom === null) {
+        if ($joinedRoom === null) {
             return false
         }
-        // console.log("Leaving room", { joinedRoom })
-        socket.emit("leaveRoom")
+        // console.log("Leaving room", { joinedRoom: $joinedRoom })
+        $socket.emit("leaveRoom")
         return true
     }
 
     export function sendMessage(msg: string): boolean {
-        if (!socket || !socket.connected) {
+        if (!$socket || !$socket.connected) {
             // console.log("Not sending", msg, "no socket")
             return false
         }
         // console.log("Sending", msg)
-        socket.emit("chatMessage", msg)
+        $socket.emit("chatMessage", msg)
         return true
     }
 
     export function emit(ev: string, ...args: any[]): boolean {
-        if (!socket || !socket.connected) {
+        if (!$socket || !$socket.connected) {
             return false
         }
-        socket.emit(ev, ...args)
+        $socket.emit(ev, ...args)
+        return true
+    }
+
+    export function on(ev: string, listener: Function): boolean {
+        if (!$socket || !$socket.connected) {
+            return false
+        }
+        $socket.on(ev, listener)
+        return true
+    }
+
+    export function off(ev?: string, listener?: Function): boolean {
+        if (!$socket || !$socket.connected) {
+            return false
+        }
+        $socket.off(ev, listener)
         return true
     }
 </script>
 
-<slot currentRoom={joinedRoom} {sendMessage} />
+<slot />

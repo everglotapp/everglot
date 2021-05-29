@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { getContext } from "svelte"
     import { scale } from "svelte/transition"
     import EmojiSelector from "svelte-emoji-selector"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
@@ -24,10 +25,10 @@
     import type { ChatMessage } from "../../types/chat"
 
     let msg = ""
-    export let currentRoom: Maybe<string> = null
     export let isOwnMessage: (message: ChatMessage) => boolean
-    export let sendMessage: (message: string) => boolean
     export let messages: ChatMessage[] = []
+
+    const { joinedRoom: joinedChatRoom, sendMessage } = getContext("CHAT")
 
     const joinGlobalGroup = mutation<JoinGlobalGroupMutation>({
         query: JoinGlobalGroup,
@@ -137,7 +138,7 @@
                 }}
                 ><Localized id="chat-submit-form-join-group" />
             </ButtonLarge>
-        {:else if currentRoom}
+        {:else if $joinedChatRoom}
             <Localized id="chat-submit-form-input" let:attrs>
                 <input
                     id="send-msg-input"

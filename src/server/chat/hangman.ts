@@ -147,6 +147,27 @@ export class HangmanGame {
         )
     }
 
+    get publicState() {
+        return {
+            running: this.running,
+            over: this.over,
+            currentWord: this.currentWord,
+            picked: this.picked,
+        }
+    }
+
+    get currentWord(): (string | null)[] {
+        let result = []
+        for (let i = 0; i < this.word.length; ++i) {
+            result.push(
+                this.picked.includes(this.word[i].toLowerCase())
+                    ? this.word[i]
+                    : null
+            )
+        }
+        return result
+    }
+
     get publicWord(): string {
         let result = ""
         for (let i = 0; i < this.word.length; ++i) {

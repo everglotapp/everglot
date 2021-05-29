@@ -2,7 +2,6 @@
     import { createEventDispatcher } from "svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
-    import ButtonLarge from "../../util/ButtonLarge.svelte"
 
     const dispatch = createEventDispatcher()
 
@@ -69,18 +68,17 @@
         >
         <input
             id="hangman-input"
-            class="border border-gray shadow-md"
+            class="border border-gray shadow-md inline-flex"
             bind:value={inputValue}
         />
-        <ButtonLarge
+        <ButtonSmall
             tag="button"
             className="justify-center"
             color="PRIMARY"
-            variant="TEXT"
             on:click={handleEnter}
             ><Localized
                 id="chat-side-panel-activity-hangman-enter"
-            /></ButtonLarge
+            /></ButtonSmall
         >
     </form>
 </div>

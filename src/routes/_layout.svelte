@@ -13,6 +13,7 @@
     import MainNav from "../comp/layout/MainNav.svelte"
     import Footer from "../comp/layout/Footer.svelte"
     import WebrtcProvider from "./_helpers/webrtc/WebrtcProvider.svelte"
+    import ChatProvider from "./_helpers/chat/ChatProvider.svelte"
 
     setupUrql()
 
@@ -50,27 +51,29 @@
 
 <LocaleProvider {segment}>
     <WebrtcProvider contextKey="WEBRTC">
-        <div id="app" class:noscroll class:with-main-nav={showMainNav}>
-            {#if showMainNav}
-                <MainNav {segment} />
-            {/if}
+        <ChatProvider contextKey="CHAT">
+            <div id="app" class:noscroll class:with-main-nav={showMainNav}>
+                {#if showMainNav}
+                    <MainNav {segment} />
+                {/if}
 
-            <main>
-                {#key transitionId}
-                    <div
-                        class="main-inner"
-                        in:scale={{ duration: timeout, delay: timeout }}
-                        out:scale={{ duration: timeout }}
-                    >
-                        <slot />
-                    </div>
-                {/key}
-            </main>
+                <main>
+                    {#key transitionId}
+                        <div
+                            class="main-inner"
+                            in:scale={{ duration: timeout, delay: timeout }}
+                            out:scale={{ duration: timeout }}
+                        >
+                            <slot />
+                        </div>
+                    {/key}
+                </main>
 
-            {#if showFooter}
-                <Footer />
-            {/if}
-        </div>
+                {#if showFooter}
+                    <Footer />
+                {/if}
+            </div>
+        </ChatProvider>
     </WebrtcProvider>
 </LocaleProvider>
 

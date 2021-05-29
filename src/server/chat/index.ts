@@ -132,6 +132,7 @@ export function start(server: Server, pool: Pool) {
                     uuid: chatUser.user.uuid,
                 },
             })
+            socket.emit("callUsers", getCallUsers(groupUuid))
 
             // Broadcast to other clients when a client connects
             bots[chatUser.groupUuid].broadcastFrom(socket, "user-joined", {
@@ -145,6 +146,7 @@ export function start(server: Server, pool: Pool) {
                         word: hangman.publicWord,
                     })
                 }
+                socket.emit("hangman", hangman.publicState)
             }
         })
 
@@ -245,6 +247,10 @@ export function start(server: Server, pool: Pool) {
                                         word: hangman.publicWord,
                                     }
                                 )
+                                io.to(chatUser.groupUuid).emit(
+                                    "hangman",
+                                    hangman.publicState
+                                )
                                 if (hangman.nextRound()) {
                                     bots[chatUser.groupUuid].send(
                                         "hangman-guessed-correctly",
@@ -267,6 +273,11 @@ export function start(server: Server, pool: Pool) {
                                 word: hangman.publicWord,
                             })
                         }
+
+                        io.to(chatUser.groupUuid).emit(
+                            "hangman",
+                            hangman.publicState
+                        )
                     }
                 } else {
                     if (msg.startsWith("!hangman")) {

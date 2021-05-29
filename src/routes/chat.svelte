@@ -4,8 +4,6 @@
     import { query } from "@urql/svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
-    import ChatProvider from "./_helpers/chat/ChatProvider.svelte"
-
     import Sidebar from "../comp/chat/Sidebar.svelte"
     import Header from "../comp/chat/Header.svelte"
     import SidePanel from "../comp/chat/SidePanel.svelte"
@@ -35,11 +33,9 @@
         ChatMessage,
         ChatMessagePreview,
     } from "../types/chat"
-    import type { User } from "../types/generated/graphql"
+    import type { User, Maybe } from "../types/generated/graphql"
 
     import { ChevronLeftIcon } from "svelte-feather-icons"
-
-    let chat: ChatProvider | undefined
 
     let messages: ChatMessage[] = []
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
@@ -47,7 +43,9 @@
     let lastMessageSentAt: number | null
 
     const webrtc = getContext("WEBRTC")
-    const { outgoing, remoteUsers, joinedRoom } = webrtc
+    const { outgoing, remoteUsers, joinedRoom: joinedCallRoom } = webrtc
+    const chat = getContext("CHAT")
+    const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
 
     let myUuid: User["uuid"] | null = null
 
@@ -56,11 +54,17 @@
     query(groupChatStore)
     query(groupChatMessagesStore)
 
-    $: if (chat) {
+    $: if (!$connectedToChat) {
         chat.connect()
-        if ($groupUuid) {
-            chat.joinRoom($groupUuid)
-        }
+        chat.off()
+    }
+    $: if ($connectedToChat) {
+        chat.on("welcome", handleWelcome)
+        chat.on("message", handleMessage)
+        chat.on("messagePreview", handleMessagePreview)
+    }
+    $: if ($connectedToChat && $groupUuid) {
+        chat.joinRoom($groupUuid)
     }
 
     onDestroy(() => {
@@ -137,7 +141,7 @@
         }
     }
 
-    $: if ($groupUuid && chat && chat.currentRoom() !== $groupUuid) {
+    $: if ($groupUuid && $connectedToChat && $joinedChatRoom !== $groupUuid) {
         // console.log("Switching room", {
         //     oldRoom: joinedRoom,
         //     newRoom: $groupUuid,
@@ -165,10 +169,11 @@
     }
 
     function handleWelcome({
-        detail: { user },
-    }: CustomEvent<{
+        user,
+    }: {
         user: Pick<ChatUser["user"], "uuid">
-    }>): void {
+        groupUuid: Group["uuid"]
+    }): void {
         myUuid = user.uuid
     }
 
@@ -179,21 +184,21 @@
         myUuid !== null &&
         message.userUuid === myUuid
 
-    function handleMessage({
-        detail: message,
-    }: CustomEvent<ChatMessage>): void {
+    function handleMessage(message: ChatMessage): void {
         lastSentMessage = message
         lastMessageSentAt = Date.now()
         messages = [...messages, message]
     }
 
     function handleMessagePreview({
-        detail: { messageUuid, url, type },
-    }: CustomEvent<{
+        messageUuid,
+        url,
+        type,
+    }: {
         messageUuid: string
         url: string
         type: string
-    }>) {
+    }) {
         previews[messageUuid] = [{ uuid: "", url, type }]
     }
 
@@ -212,8 +217,8 @@
         if (!$groupUuid) {
             return false
         }
-        if ($joinedRoom !== $groupUuid && chat) {
-            chat.emit("userLeaveCall", { groupUuid: $joinedRoom })
+        if ($joinedCallRoom !== $groupUuid && chat) {
+            chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
         }
         if (!(await webrtc.joinRoom($groupUuid, myUuid))) {
             // TODO: error
@@ -278,130 +283,117 @@
     {#if $groupUuid && !$groupChatStore.error && $groupChatStore.data && !$groupChatStore.data.groupByUuid}
         <RedirectOnce to="/" />
     {/if}
-    <ChatProvider
-        bind:this={chat}
-        on:welcome={handleWelcome}
-        on:message={handleMessage}
-        on:messagePreview={handleMessagePreview}
-        let:currentRoom
-        let:sendMessage
-    >
-        <div class="wrapper">
-            <Sidebar
-                {split}
-                {audio}
-                {mic}
-                handleToggleSplit={() => (split = !split)}
-                handleToggleMic={() => {
-                    if (!$outgoing) {
-                        return
+    <div class="wrapper">
+        <Sidebar
+            {split}
+            {audio}
+            {mic}
+            handleToggleSplit={() => (split = !split)}
+            handleToggleMic={() => {
+                if (!$outgoing) {
+                    return
+                }
+                mic = !mic
+                if (mic) {
+                    $outgoing.setVolume(100)
+                } else {
+                    $outgoing.setVolume(0)
+                }
+                if (chat && $groupUuid) {
+                    const callMeta = {
+                        micMuted: !mic,
+                        audioMuted: !audio,
                     }
-                    mic = !mic
-                    if (mic) {
-                        $outgoing.setVolume(100)
+                    chat.emit("userCallMeta", {
+                        groupUuid: $groupUuid,
+                        callMeta,
+                    })
+                    setCallUserMeta(myUuid, $groupUuid, callMeta)
+                }
+            }}
+            handleToggleAudio={() => {
+                audio = !audio
+                for (const remoteUser of $remoteUsers) {
+                    const { audioTrack } = remoteUser
+                    if (!audioTrack) {
+                        continue
+                    }
+                    if (audio) {
+                        audioTrack.setVolume(100)
                     } else {
-                        $outgoing.setVolume(0)
+                        audioTrack.setVolume(0)
                     }
-                    if (chat && $groupUuid) {
-                        const callMeta = {
-                            micMuted: !mic,
-                            audioMuted: !audio,
-                        }
-                        chat.emit("userCallMeta", {
-                            groupUuid: $groupUuid,
-                            callMeta,
-                        })
-                        setCallUserMeta(myUuid, $groupUuid, callMeta)
+                }
+                if (chat && $groupUuid) {
+                    const callMeta = {
+                        micMuted: !mic,
+                        audioMuted: !audio,
                     }
-                }}
-                handleToggleAudio={() => {
-                    audio = !audio
-                    for (const remoteUser of $remoteUsers) {
-                        const { audioTrack } = remoteUser
-                        if (!audioTrack) {
-                            continue
-                        }
-                        if (audio) {
-                            audioTrack.setVolume(100)
-                        } else {
-                            audioTrack.setVolume(0)
-                        }
-                    }
-                    if (chat && $groupUuid) {
-                        const callMeta = {
-                            micMuted: !mic,
-                            audioMuted: !audio,
-                        }
-                        chat.emit("userCallMeta", {
-                            groupUuid: $groupUuid,
-                            callMeta,
-                        })
-                        setCallUserMeta(myUuid, $groupUuid, callMeta)
-                    }
-                }}
-                {handleJoinCall}
-                {handleLeaveCall}
-            />
-            <div class="section-wrapper">
-                <section>
-                    <Header />
-                    <div class="views-wrapper">
-                        <div class="views" class:split>
-                            {#if split}
+                    chat.emit("userCallMeta", {
+                        groupUuid: $groupUuid,
+                        callMeta,
+                    })
+                    setCallUserMeta(myUuid, $groupUuid, callMeta)
+                }
+            }}
+            {handleJoinCall}
+            {handleLeaveCall}
+        />
+        <div class="section-wrapper">
+            <section>
+                <Header />
+                <div class="views-wrapper">
+                    <div class="views" class:split>
+                        {#if split}
+                            <div
+                                class="view view-left hidden"
+                                in:fly={{ duration: 200, x: -600 }}
+                                out:fly={{ duration: 200, x: -600 }}
+                                style="transform-origin: center left;"
+                            >
                                 <div
-                                    class="view view-left hidden"
-                                    in:fly={{ duration: 200, x: -600 }}
-                                    out:fly={{ duration: 200, x: -600 }}
-                                    style="transform-origin: center left;"
+                                    class="view-inner view-left-inner"
+                                    transition:blur|local={{
+                                        duration: 300,
+                                    }}
                                 >
+                                    <SidePanel />
                                     <div
-                                        class="view-inner view-left-inner"
-                                        transition:blur|local={{
-                                            duration: 300,
-                                        }}
+                                        class="toggle-split-screen"
+                                        on:click={() => (split = false)}
                                     >
-                                        <SidePanel />
-                                        <div
-                                            class="toggle-split-screen"
-                                            on:click={() => (split = false)}
-                                        >
-                                            <ChevronLeftIcon size="24" />
-                                        </div>
+                                        <ChevronLeftIcon size="24" />
                                     </div>
                                 </div>
-                            {/if}
-                            <div class="view view-right rounded-tr-md">
-                                {#key $groupUuid}
-                                    <div
-                                        class="view-inner view-right-inner"
-                                        transition:blur|local={{
-                                            duration: 400,
-                                        }}
-                                    >
-                                        <Messages
-                                            {messages}
-                                            {previews}
-                                            {lastSentMessage}
-                                            {lastMessageSentAt}
-                                            bind:this={messagesComponent}
-                                            {handleEnlargenImage}
-                                            {fetchMoreMessages}
-                                            {isOwnMessage}
-                                        />
-                                        <SubmitForm
-                                            {currentRoom}
-                                            {sendMessage}
-                                            {isOwnMessage}
-                                        />
-                                    </div>
-                                {/key}
                             </div>
+                        {/if}
+                        <div class="view view-right rounded-tr-md">
+                            {#key $groupUuid}
+                                <div
+                                    class="view-inner view-right-inner"
+                                    transition:blur|local={{
+                                        duration: 400,
+                                    }}
+                                >
+                                    <Messages
+                                        {messages}
+                                        {previews}
+                                        {lastSentMessage}
+                                        {lastMessageSentAt}
+                                        bind:this={messagesComponent}
+                                        {handleEnlargenImage}
+                                        {fetchMoreMessages}
+                                        {isOwnMessage}
+                                    />
+                                    <SubmitForm {isOwnMessage} />
+                                </div>
+                            {/key}
                         </div>
                     </div>
-                </section>
-            </div>
+                </div>
+            </section>
         </div>
-    </ChatProvider>
+    </div>
 
     {#if showLargeImageModalUrl && typeof window !== "undefined"}
         <EscapeKeyListener on:keydown={() => (showLargeImageModalUrl = null)} />

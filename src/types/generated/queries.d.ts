@@ -17,15 +17,6 @@ declare module '*/allGroups.graphql' {
 }
     
 
-declare module '*/chatGroupByUuid.graphql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const ChatGroupByUuid: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
 declare module '*/chatUser.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -111,6 +102,15 @@ declare module '*/groupIdbyUuid.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const GroupIdByUuid: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/groupLanguageByUuid.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const GroupLanguageByUuid: DocumentNode;
 
   export default defaultDocument;
 }

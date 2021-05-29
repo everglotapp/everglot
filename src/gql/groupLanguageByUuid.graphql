@@ -1,4 +1,4 @@
-query ChatGroupByUuid($uuid: UUID!) {
+query GroupLanguageByUuid($uuid: UUID!) {
     groupByUuid(uuid: $uuid) {
         language {
             alpha2

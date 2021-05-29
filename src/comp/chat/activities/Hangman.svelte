@@ -1,34 +1,38 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte"
+    import { createEventDispatcher, getContext } from "svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
 
+    let inputValue: string | undefined
+
+    export let over: boolean
+    export let pickedLetters: string[]
+    export let word: (string | null)[]
+
+    const chat = getContext("CHAT")
+    const { connected: connectedToChat } = chat
+
     const dispatch = createEventDispatcher()
 
-    const handleQuit = (_event: MouseEvent) => {
-        dispatch("quit")
+    function submitGuess(guess: string) {
+        if (!$connectedToChat) {
+            return
+        }
+        chat.emit("groupActivity.hangmanGuess", { guess })
     }
 
-    const handleEnter = (_event: MouseEvent) => {
-        dispatch("enter", { value: inputValue })
-    }
+    const handleQuit = () => dispatch("quit")
 
+    const handleEnter = () => {
+        if (inputValue) {
+            submitGuess(inputValue)
+        }
+    }
     const handleSubmit = () => {
-        dispatch("enter", { value: inputValue })
+        if (inputValue) {
+            submitGuess(inputValue)
+        }
     }
-    let inputValue: string | undefined
-    let currentCharacters: (string | null)[] = [
-        "h",
-        null,
-        "l",
-        "l",
-        null,
-        "w",
-        null,
-        "r",
-        "l",
-        "d",
-    ]
 </script>
 
 <div class="flex flex-row m-4 max-h-12 px-2 justify-between items-center">
@@ -50,12 +54,12 @@
         <div class="box-top" />
         <div class="box-left" />
         <div class="box-bottom px-8 py-5">
-            {#each currentCharacters as char}
+            {#each word as character}
                 <span class="character">
-                    {#if char === null}
+                    {#if character === null}
                         &nbsp;
                     {:else}
-                        {char}
+                        {character}
                     {/if}
                 </span>
             {/each}

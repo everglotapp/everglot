@@ -1,8 +1,6 @@
 <script lang="ts">
-    import { onDestroy, createEventDispatcher, setContext } from "svelte"
+    import { onDestroy, setContext } from "svelte"
     import { writable } from "svelte/store"
-
-    const dispatch = createEventDispatcher()
 
     import { io } from "socket.io-client"
     import type SocketIO from "socket.io-client"
@@ -11,7 +9,7 @@
 
     import type { Group } from "../../../types/generated/graphql"
 
-    import type { ChatUser, ChatMessage } from "../../../types/chat"
+    import type { ChatUser } from "../../../types/chat"
 
     const joinedRoom = writable<string | null>(null)
     const socket = writable<SocketIO.Socket | null>(null)

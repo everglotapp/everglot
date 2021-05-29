@@ -33,14 +33,17 @@
         ChatMessage,
         ChatMessagePreview,
     } from "../types/chat"
-    import type { User, Maybe } from "../types/generated/graphql"
+
+    import type { GroupActivity } from "../types/activities"
+    import type { User } from "../types/generated/graphql"
 
     import { ChevronLeftIcon } from "svelte-feather-icons"
 
     let messages: ChatMessage[] = []
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
-    let lastSentMessage: ChatMessage | null
-    let lastMessageSentAt: number | null
+    let lastSentMessage: ChatMessage | null = null
+    let lastMessageSentAt: number | null = null
+    let currentActivity: GroupActivity | null = null
 
     const webrtc = getContext("WEBRTC")
     const { outgoing, remoteUsers, joinedRoom: joinedCallRoom } = webrtc
@@ -62,6 +65,7 @@
         chat.on("welcome", handleWelcome)
         chat.on("message", handleMessage)
         chat.on("messagePreview", handleMessagePreview)
+        chat.on("groupActivity", handleGroupActivity)
     }
     $: if ($connectedToChat && $groupUuid) {
         chat.joinRoom($groupUuid)
@@ -175,6 +179,10 @@
         groupUuid: Group["uuid"]
     }): void {
         myUuid = user.uuid
+    }
+
+    function handleGroupActivity(activity: GroupActivity) {
+        currentActivity = activity
     }
 
     let messagesComponent: Messages
@@ -357,7 +365,7 @@
                                         duration: 300,
                                     }}
                                 >
-                                    <SidePanel />
+                                    <SidePanel activity={currentActivity} />
                                     <div
                                         class="toggle-split-screen"
                                         on:click={() => (split = false)}

@@ -1,0 +1,10 @@
+query GroupLanguageByUuid($uuid: UUID!) {
+  groupByUuid(uuid: $uuid) {
+    language {
+      alpha2
+      __typename
+    }
+    uuid
+    __typename
+  }
+}

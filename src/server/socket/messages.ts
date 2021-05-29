@@ -27,6 +27,8 @@ import UIDGenerator from "uid-generator"
 import { MESSAGE_PREVIEW_BASE_PATH } from "../../constants"
 import type { ChatMessage } from "../../types/chat"
 
+import type { Server as SocketIO } from "socket.io"
+
 const chlog = log.child({
     namespace: "messages",
 })
@@ -35,6 +37,139 @@ import {
     MESSAGE_PREVIEW_IMAGES_DIRECTORY,
     MESSAGE_PREVIEW_IMAGES_ACCEPTED_CONTENT_TYPES,
 } from "../constants"
+import { getCurrentUser } from "./users"
+import { getGroupIdByUuid, getGroupLanguageByUuid } from "../groups"
+
+export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
+    socket.on("chatMessage", async (msg) => {
+        const chatUser = getCurrentUser(socket.id)
+        if (!chatUser) {
+            return
+        }
+
+        if (!msg) {
+            chlog.debug("User sent chatMessage with empty body")
+            return
+        }
+        const recipientGroupId = await getGroupIdByUuid(chatUser.groupUuid)
+        if (!recipientGroupId) {
+            chlog
+                .child({
+                    groupUuid: chatUser.groupUuid,
+                })
+                .error("Failed to get group ID by UUID for user message")
+            return
+        }
+        const message = await createMessage({
+            body: msg,
+            recipientGroupId,
+            recipientId: null,
+            senderId: chatUser.user.id,
+        })
+        if (message && message.message && message.sender) {
+            io.to(chatUser.groupUuid).emit("message", {
+                uuid: message.message.uuid,
+                userUuid: message.sender.uuid,
+                text: msg,
+                time: message.message.createdAt,
+            })
+        } else {
+            chlog.child({ message }).error("User text message creation failed")
+            return
+        }
+
+        const group = await getGroupLanguageByUuid(chatUser.groupUuid)
+        if (!group || !group.groupByUuid?.language?.alpha2) {
+            chlog
+                .child({
+                    groupUuid: chatUser.groupUuid,
+                })
+                .error("Failed to get group by UUID for user message")
+            return
+        }
+        // const alpha2 = group.groupByUuid?.language?.alpha2
+
+        if (!msg.startsWith("!")) {
+            chlog.child({ message }).debug("Trying to obtain message preview")
+            generateMessagePreview(
+                { id: message.message.id, body: msg },
+                (imageUrl) => {
+                    // TODO: Send preview metadata
+                    chlog
+                        .child({ message, imageUrl })
+                        .debug("Callback for message preview was called")
+                    io.to(chatUser.groupUuid).emit("messagePreview", {
+                        messageUuid: message.message!.uuid,
+                        type: "image",
+                        url: imageUrl,
+                    })
+                }
+            )
+        }
+
+        // if (msg.startsWith("!")) {
+        //     if (msg.startsWith("!help")) {
+        //         bots[chatUser.groupUuid].send("available-commands")
+        //         return
+        //     } else if (
+        //         HANGMAN_LOCALES.some((locale) => locale === alpha2)
+        //     ) {
+        //         const hangman = hangmanGames[alpha2 as HangmanLocale]
+        //         if (hangman.running) {
+        //             if (msg.length === 1) {
+        //                 if (
+        //                     !hangman.letterPicked(msg) &&
+        //                     hangman.letterAvailable(msg)
+        //                 ) {
+        //                     hangman.pickLetter(msg)
+        //                     bots[chatUser.groupUuid].send(
+        //                         "hangman-current-word",
+        //                         {
+        //                             word: hangman.publicWord,
+        //                         }
+        //                     )
+        //                     io.to(chatUser.groupUuid).emit(
+        //                         "hangman",
+        //                         hangman.publicState
+        //                     )
+        //                     if (hangman.nextRound()) {
+        //                         bots[chatUser.groupUuid].send(
+        //                             "hangman-guessed-correctly",
+        //                             {
+        //                                 nextWord: hangman.publicWord,
+        //                             }
+        //                         )
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //         if (msg.startsWith("!hangman")) {
+        //             if (hangman.running) {
+        //                 bots[chatUser.groupUuid].send(
+        //                     "hangman-already-running"
+        //                 )
+        //             } else {
+        //                 hangman.start()
+        //                 bots[chatUser.groupUuid].send("hangman-started", {
+        //                     word: hangman.publicWord,
+        //                 })
+        //             }
+
+        //             io.to(chatUser.groupUuid).emit(
+        //                 "hangman",
+        //                 hangman.publicState
+        //             )
+        //         }
+        //     } else {
+        //         if (msg.startsWith("!hangman")) {
+        //             bots[chatUser.groupUuid].send(
+        //                 "hangman-lang-not-supported"
+        //             )
+        //         }
+        //     }
+        // }
+    })
+}
 
 export function formatMessage(
     text: string,
@@ -219,4 +354,8 @@ export async function createMessagePreview(
         return null
     }
     return res.data?.createMessagePreview?.messagePreview?.id || null
+}
+
+export default {
+    handleUserConnected,
 }

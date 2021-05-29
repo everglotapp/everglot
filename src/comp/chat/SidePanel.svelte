@@ -1,17 +1,20 @@
 <script lang="ts">
+    import { getContext } from "svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import ButtonLarge from "../util/ButtonLarge.svelte"
 
     import Hangman from "./activities/Hangman.svelte"
     import WouldYouRather from "./activities/WouldYouRather.svelte"
 
+    import { GroupActivityKind } from "../../types/activities"
+    import type { GroupActivity } from "../../types/activities"
+
     import { groupUuid } from "../../stores"
 
-    enum Activity {
-        Hangman,
-        WouldYouRather,
-    }
-    let activity: Activity | null = null
+    const chat = getContext("CHAT")
+
+    export let activity: GroupActivity | null = null
+    let startingActivity = false
 </script>
 
 <div>
@@ -40,7 +43,12 @@
                             className="w-full justify-center"
                             color="PRIMARY"
                             variant="OUTLINED"
-                            on:click={() => (activity = Activity.Hangman)}
+                            on:click={() => {
+                                chat.emit("startGroupActivity", {
+                                    kind: GroupActivityKind.Hangman,
+                                })
+                                startingActivity = true
+                            }}
                             ><Localized
                                 id="chat-side-panel-menu-hangman"
                             /></ButtonLarge
@@ -52,8 +60,13 @@
                             className="w-full justify-center"
                             color="PRIMARY"
                             variant="OUTLINED"
-                            on:click={() =>
-                                (activity = Activity.WouldYouRather)}
+                            disabled={startingActivity}
+                            on:click={() => {
+                                chat.emit("startGroupActivity", {
+                                    kind: GroupActivityKind.WouldYouRather,
+                                })
+                                startingActivity = true
+                            }}
                             ><Localized
                                 id="chat-side-panel-menu-would-you-rather"
                             /></ButtonLarge
@@ -73,9 +86,14 @@
                     </div>
                 </div>
             </div>
-        {:else if activity === Activity.Hangman}
-            <Hangman on:quit={() => (activity = null)} />
-        {:else if activity === Activity.WouldYouRather}
+        {:else if activity.kind === GroupActivityKind.Hangman}
+            <Hangman
+                on:quit={() => (activity = null)}
+                over={activity.state.over}
+                pickedLetters={activity.state.pickedLetters}
+                word={activity.state.currentWord}
+            />
+        {:else if activity.kind === GroupActivityKind.WouldYouRather}
             <WouldYouRather on:quit={() => (activity = null)} />
         {/if}
     {/key}

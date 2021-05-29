@@ -8,6 +8,7 @@ import {
     AllGroupUuidsQuery,
     CreateGroupMutation,
     GroupIdByUuidQuery,
+    GroupLanguageByUuidQuery,
     UserIsInGroupQuery,
     UserLanguageInfoQuery,
     UserType,
@@ -415,4 +416,23 @@ export async function getAllGroupUuids(): Promise<string[] | null> {
         return null
     }
     return res.data.groups?.nodes.map((node) => node?.uuid) || []
+}
+
+export async function getGroupLanguageByUuid(
+    uuid: Group["uuid"]
+): Promise<GroupLanguageByUuidQuery | null> {
+    const res = await performQuery<GroupLanguageByUuidQuery>(
+        `query GroupLanguageByUuid($uuid: UUID!) {
+            groupByUuid(uuid: $uuid) {
+                language {
+                    alpha2
+                }
+            }
+        }`,
+        { uuid }
+    )
+    if (!res.data?.groupByUuid) {
+        return null
+    }
+    return res.data || null
 }

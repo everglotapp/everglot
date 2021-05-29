@@ -99,11 +99,6 @@ export class HangmanGame {
         this.word = dict[Math.floor(Math.random() * dict.length)]
     }
 
-    start(): void {
-        chlog.debug("Starting hangman game")
-        this.running = true
-    }
-
     letterPicked(l: string): boolean {
         return this.pickedLetters.includes(l.toLowerCase())
     }

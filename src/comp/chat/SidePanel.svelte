@@ -43,6 +43,7 @@
                             className="w-full justify-center"
                             color="PRIMARY"
                             variant="OUTLINED"
+                            disabled={startingActivity}
                             on:click={() => {
                                 chat.emit("startGroupActivity", {
                                     kind: GroupActivityKind.Hangman,

@@ -26,11 +26,13 @@
     const handleEnter = () => {
         if (inputValue) {
             submitGuess(inputValue)
+            inputValue = ""
         }
     }
     const handleSubmit = () => {
         if (inputValue) {
             submitGuess(inputValue)
+            inputValue = ""
         }
     }
 </script>
@@ -97,6 +99,7 @@
 
     .character {
         @apply text-lg;
+        @apply font-bold;
         @apply mr-2;
 
         border-bottom: 1px solid black;

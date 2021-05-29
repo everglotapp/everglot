@@ -11,6 +11,7 @@ import type { Group } from "../../../types/generated/graphql"
 
 import type { Server as SocketIO } from "socket.io"
 import { getCurrentUser } from "../users"
+import { stringify } from "querystring"
 
 const chlog = log.child({
     namespace: "activities",
@@ -35,6 +36,58 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
             }
         }
     )
+    socket.on(
+        "groupActivity.hangmanGuess",
+        async ({ guess }: { guess: string }) => {
+            const chatUser = getCurrentUser(socket.id)
+            if (!chatUser) {
+                return
+            }
+            const activity = getGroupActivity(chatUser.groupUuid)
+            if (!activity) {
+                chlog
+                    .child({
+                        groupUuid: chatUser.groupUuid,
+                    })
+                    .debug(
+                        "User attempted hangman guess but no activity is running for their group"
+                    )
+                return
+            }
+            if (activity.kind !== GroupActivityKind.Hangman) {
+                chlog
+                    .child({
+                        groupUuid: chatUser.groupUuid,
+                    })
+                    .debug(
+                        "User attempted hangman guess but current group activity is not hangman"
+                    )
+                return
+            }
+            // TODO: allow word guesses
+            const game = hangmanGames[chatUser.groupUuid]!
+            if (
+                guess.length !== 1 &&
+                !game.letterPicked(guess) &&
+                game.letterAvailable(guess)
+            ) {
+                return
+            }
+            game.pickLetter(guess)
+            const success = game.nextRound()
+            // Tell group users about the guess and whether it was successful.
+            io.to(chatUser.groupUuid).emit("groupActivity.hangmanGuess", {
+                guess,
+                success,
+                user: chatUser.user.uuid,
+            })
+            // Tell group users about the new game state.
+            io.to(chatUser.groupUuid).emit(
+                "groupActivity",
+                getGroupActivity(chatUser.groupUuid)
+            )
+        }
+    )
 }
 
 export function handleUserJoinedRoom(
@@ -42,14 +95,6 @@ export function handleUserJoinedRoom(
     socket: EverglotChatSocket,
     groupUuid: Group["uuid"]
 ) {
-    // if (HANGMAN_LOCALES.some((locale) => locale === alpha2)) {
-    //     const hangman = hangmanGames[alpha2 as HangmanLocale]
-    //     if (hangman.running) {
-    //         bots[chatUser.groupUuid].send("hangman-current-word", {
-    //             word: hangman.publicWord,
-    //         })
-    //     }
-    // }
     socket.emit("groupActivity", getGroupActivity(groupUuid))
 }
 
@@ -58,6 +103,11 @@ export async function startGroupActivity(
     kind: GroupActivityKind
 ): Promise<GroupActivity | null> {
     if (typeof groupActivities[groupUuid] !== "undefined") {
+        chlog
+            .child({
+                groupUuid,
+            })
+            .debug("An activity is already running for this group")
         return null
     }
     if (kind === GroupActivityKind.Hangman) {
@@ -72,6 +122,11 @@ export async function startGroupActivity(
 
 export function endGroupActivity(groupUuid: Group["uuid"]) {
     if (typeof groupActivities[groupUuid] === "undefined") {
+        chlog
+            .child({
+                groupUuid,
+            })
+            .debug("No activity is running for this group")
         return false
     }
     groupActivities[groupUuid] = null

@@ -15,6 +15,28 @@
 
     const dispatch = createEventDispatcher()
 
+    let feedback: string | undefined
+    let feedbackSuccess = false
+    $: if ($connectedToChat) {
+        chat.on(
+            "groupActivity.hangmanGuess",
+            ({
+                userUuid,
+                success,
+                guess,
+            }: {
+                userUuid: string
+                success: boolean
+                guess: string
+            }) => {
+                feedbackSuccess = success
+                feedback = success
+                    ? `${guess} was correct!`
+                    : `${guess} was incorrect!`
+            }
+        )
+    }
+
     function submitGuess(guess: string) {
         if (!$connectedToChat) {
             return
@@ -92,6 +114,15 @@
             /></ButtonSmall
         >
     </form>
+    {#if feedback}
+        <div
+            class={`px-8 py-4 font-bold shadow-md rounded-lg ${
+                feedbackSuccess ? "text-green-600" : "text-red-700"
+            }`}
+        >
+            {feedback}
+        </div>
+    {/if}
 </div>
 
 <style>

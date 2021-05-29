@@ -107,11 +107,12 @@ export class HangmanGame {
         return this.availableLetters.includes(l.toLowerCase())
     }
 
-    pickLetter(l: string): void {
+    pickLetter(l: string): boolean {
         this.pickedLetters.push(l.toLowerCase())
         this.availableLetters = this.availableLetters.filter(
             (av: string) => l.toLowerCase() !== av
         )
+        return this.word.includes(l)
     }
 
     get over(): boolean {

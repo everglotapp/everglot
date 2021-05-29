@@ -78,25 +78,32 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
             // TODO: allow word guesses
             const game = hangmanGames[chatUser.groupUuid]!
             if (
-                guess.length !== 1 &&
-                !game.letterPicked(guess) &&
-                game.letterAvailable(guess)
+                guess.length !== 1 ||
+                game.letterPicked(guess) ||
+                !game.letterAvailable(guess)
             ) {
                 return
             }
-            game.pickLetter(guess)
-            const success = game.nextRound()
+            const success = game.pickLetter(guess)
             // Tell group users about the guess and whether it was successful.
             io.to(chatUser.groupUuid).emit("groupActivity.hangmanGuess", {
                 guess,
                 success,
-                user: chatUser.user.uuid,
+                userUuid: chatUser.user.uuid,
             })
             // Tell group users about the new game state.
             io.to(chatUser.groupUuid).emit(
                 "groupActivity",
                 getGroupActivity(chatUser.groupUuid)
             )
+            setTimeout(() => {
+                if (game.nextRound()) {
+                    io.to(chatUser.groupUuid).emit(
+                        "groupActivity",
+                        getGroupActivity(chatUser.groupUuid)
+                    )
+                }
+            }, 5000)
         }
     )
 }

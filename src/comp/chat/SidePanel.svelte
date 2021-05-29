@@ -1,5 +1,6 @@
 <script lang="ts">
     import { getContext } from "svelte"
+    import { scale } from "svelte/transition"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import ButtonLarge from "../util/ButtonLarge.svelte"
 
@@ -15,12 +16,17 @@
 
     export let activity: GroupActivity | null = null
     let startingActivity = false
+    // @ts-ignore
+    $: activity, (startingActivity = false)
 </script>
 
 <div>
     {#key $groupUuid}
         {#if activity === null}
-            <div class="px-16 py-8 md:py-24">
+            <div
+                class="px-16 py-8 md:py-24"
+                in:scale={{ duration: 200, delay: 250 }}
+            >
                 <div
                     class="relative flex justify-end"
                     style="padding-right: 190px;"
@@ -89,13 +95,13 @@
             </div>
         {:else if activity.kind === GroupActivityKind.Hangman}
             <Hangman
-                on:quit={() => (activity = null)}
+                on:quit={() => chat.emit("endGroupActivity")}
                 over={activity.state.over}
                 pickedLetters={activity.state.pickedLetters}
                 word={activity.state.currentWord}
             />
         {:else if activity.kind === GroupActivityKind.WouldYouRather}
-            <WouldYouRather on:quit={() => (activity = null)} />
+            <WouldYouRather on:quit={() => chat.emit("endGroupActivity")} />
         {/if}
     {/key}
 </div>

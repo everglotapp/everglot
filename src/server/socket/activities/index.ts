@@ -11,7 +11,6 @@ import type { Group } from "../../../types/generated/graphql"
 
 import type { Server as SocketIO } from "socket.io"
 import { getCurrentUser } from "../users"
-import { stringify } from "querystring"
 
 const chlog = log.child({
     namespace: "activities",
@@ -36,6 +35,18 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
             }
         }
     )
+    socket.on("endGroupActivity", async () => {
+        const chatUser = getCurrentUser(socket.id)
+        if (!chatUser) {
+            return
+        }
+        if (endGroupActivity(chatUser.groupUuid)) {
+            io.to(chatUser.groupUuid).emit(
+                "groupActivity",
+                getGroupActivity(chatUser.groupUuid)
+            )
+        }
+    })
     socket.on(
         "groupActivity.hangmanGuess",
         async ({ guess }: { guess: string }) => {
@@ -102,7 +113,7 @@ export async function startGroupActivity(
     groupUuid: Group["uuid"],
     kind: GroupActivityKind
 ): Promise<GroupActivity | null> {
-    if (typeof groupActivities[groupUuid] !== "undefined") {
+    if (groupActivities[groupUuid]) {
         chlog
             .child({
                 groupUuid,
@@ -121,7 +132,7 @@ export async function startGroupActivity(
 }
 
 export function endGroupActivity(groupUuid: Group["uuid"]) {
-    if (typeof groupActivities[groupUuid] === "undefined") {
+    if (!groupActivities[groupUuid]) {
         chlog
             .child({
                 groupUuid,

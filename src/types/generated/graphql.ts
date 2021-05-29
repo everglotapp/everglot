@@ -5398,23 +5398,6 @@ export type AllGroupsQuery = (
   )> }
 );
 
-export type ChatGroupByUuidQueryVariables = Exact<{
-  uuid: Scalars['UUID'];
-}>;
-
-
-export type ChatGroupByUuidQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & Pick<Group, 'uuid'>
-    & { language?: Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'alpha2'>
-    )> }
-  )> }
-);
-
 export type ChatUserQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -5659,6 +5642,23 @@ export type GroupIdByUuidQuery = (
   )> }
 );
 
+export type GroupLanguageByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type GroupLanguageByUuidQuery = (
+  { __typename?: 'Query' }
+  & { groupByUuid?: Maybe<(
+    { __typename?: 'Group' }
+    & Pick<Group, 'uuid'>
+    & { language?: Maybe<(
+      { __typename?: 'Language' }
+      & Pick<Language, 'alpha2'>
+    )> }
+  )> }
+);
+
 export type JoinGlobalGroupMutationVariables = Exact<{
   groupUuid: Scalars['UUID'];
 }>;
@@ -5881,16 +5881,6 @@ export const AllGroups = gql`
   }
 }
     `;
-export const ChatGroupByUuid = gql`
-    query ChatGroupByUuid($uuid: UUID!) {
-  groupByUuid(uuid: $uuid) {
-    language {
-      alpha2
-    }
-    uuid
-  }
-}
-    `;
 export const ChatUser = gql`
     query ChatUser($id: Int!) {
   user(id: $id) {
@@ -6065,6 +6055,16 @@ export const GroupIdByUuid = gql`
     query GroupIdByUuid($uuid: UUID!) {
   groupByUuid(uuid: $uuid) {
     id
+  }
+}
+    `;
+export const GroupLanguageByUuid = gql`
+    query GroupLanguageByUuid($uuid: UUID!) {
+  groupByUuid(uuid: $uuid) {
+    language {
+      alpha2
+    }
+    uuid
   }
 }
     `;

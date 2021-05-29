@@ -30,6 +30,15 @@ chat-sidebar-leave-call = Leave Call
 chat-sidebar-switch-call-text = You are already in a call, do you want to switch to this group?
 chat-sidebar-switch-call-cancel = Cancel
 chat-sidebar-switch-call-confirm = Switch
+chat-side-panel-bubble = Welcome to the game center. Select a game to play with your study group.
+chat-side-panel-menu-hangman = Play Hangman
+chat-side-panel-menu-would-you-rather = Play Would You Rather
+chat-side-panel-menu-random-question = Ask a Random Question
+chat-side-panel-activity-hangman = Hangman
+chat-side-panel-activity-would-you-rather = Would You Rather
+chat-side-panel-activity-quit = Quit Game
+chat-side-panel-activity-hangman-guess = Make a guess
+chat-side-panel-activity-hangman-enter = Enter
 chat-submit-form-send = Send
 chat-submit-form-connecting = Connecting …
 # Chat text message input field

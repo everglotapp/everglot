@@ -186,7 +186,7 @@
 
     $: bodyElements = makeBodyElements(body)
 
-    const { translate } = fluentStores()
+    const { translate } = fluentStores()!
     $: botUsername = $translate("chat-message-username-bot")
 </script>
 

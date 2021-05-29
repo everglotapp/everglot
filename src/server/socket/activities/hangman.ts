@@ -1,7 +1,8 @@
-import { ALPHABET } from "../../constants"
-import type { HangmanLocale } from "../../constants"
+import { ALPHABET } from "../../../constants"
+import type { HangmanLocale } from "../../../constants"
+import type { HangmanState } from "../../../types/activities"
 
-import log from "../../logger"
+import log from "../../../logger"
 
 const chlog = log.child({
     namespace: "hangman",
@@ -84,44 +85,39 @@ const DICTIONARY: Record<HangmanLocale, string[]> = {
 }
 
 export class HangmanGame {
-    running: boolean = false
     language: HangmanLocale
-    picked: string[] = []
-    available: string[] = []
+    pickedLetters: string[] = []
+    availableLetters: string[] = []
     word: string
 
     constructor(language: HangmanLocale) {
         this.language = language
-        this.available = ALPHABET[language].filter(
+        this.availableLetters = ALPHABET[language].filter(
             (l: string) => l === l.toLowerCase()
         )
         const dict = DICTIONARY[this.language]
         this.word = dict[Math.floor(Math.random() * dict.length)]
     }
 
-    start(): void {
-        chlog.debug("Starting hangman game")
-        this.running = true
-    }
-
     letterPicked(l: string): boolean {
-        return this.picked.includes(l.toLowerCase())
+        return this.pickedLetters.includes(l.toLowerCase())
     }
 
     letterAvailable(l: string): boolean {
-        return this.available.includes(l.toLowerCase())
+        return this.availableLetters.includes(l.toLowerCase())
     }
 
-    pickLetter(l: string): void {
-        this.picked.push(l.toLowerCase())
-        this.available = this.available.filter(
+    pickLetter(l: string): boolean {
+        this.pickedLetters.push(l.toLowerCase())
+        this.availableLetters = this.availableLetters.filter(
             (av: string) => l.toLowerCase() !== av
         )
+        return this.word.includes(l)
     }
 
     get over(): boolean {
         for (let i = 0; i < this.word.length; ++i) {
-            if (!this.picked.includes(this.word[i].toLowerCase())) {
+            if (!this.pickedLetters.includes(this.word[i].toLowerCase())) {
                 return false
             }
         }
@@ -141,24 +137,39 @@ export class HangmanGame {
 
     reset(newWord: string): void {
         this.word = newWord
-        this.picked = []
-        this.available = ALPHABET[this.language].filter(
+        this.pickedLetters = []
+        this.availableLetters = ALPHABET[this.language].filter(
             (l: string) => l === l.toLowerCase()
         )
+    }
+
+    get publicState(): HangmanState {
+        return {
+            over: this.over,
+            currentWord: this.currentWord,
+            pickedLetters: this.pickedLetters,
+        }
+    }
+
+    get currentWord(): (string | null)[] {
+        let result = []
+        for (let i = 0; i < this.word.length; ++i) {
+            result.push(
+                this.pickedLetters.includes(this.word[i].toLowerCase())
+                    ? this.word[i]
+                    : null
+            )
+        }
+        return result
     }
 
     get publicWord(): string {
         let result = ""
         for (let i = 0; i < this.word.length; ++i) {
-            result += this.picked.includes(this.word[i].toLowerCase())
+            result += this.pickedLetters.includes(this.word[i].toLowerCase())
                 ? this.word[i]
                 : "_ "
         }
         return result
     }
-}
-
-export let hangmanGames: Record<HangmanLocale, HangmanGame> = {
-    en: new HangmanGame("en"),
-    de: new HangmanGame("de"),
 }

@@ -1,7 +1,6 @@
 {
    "AllGroupUuids": "74d703a070c5092b41239819f6f2fdb49e05e27b7a967ab71364d8cb60895a9b",
    "AllGroups": "66da6e10735d7a11460912f3cf2054a5ab5c20c682af5471cd3229f594278893",
-   "ChatGroupByUuid": "e60f0912190d17c34ef835367c8179d06f858d2f36ee22ab568affbf1f9657c1",
    "ChatUser": "7aece808b7987c0738709ab52676aaa1f0da80081e7589c371dcd13a6b26d1c4",
    "CreateGroup": "43f1ea63e7aa13289abf93981c43368cba6e52644cfe8d79c758c86b951c1637",
    "CreateMessage": "41bae1157555ac99bdcbbfcb58df57fdda28640f3be40ae90adeee27c52a49c0",
@@ -12,6 +11,7 @@
    "GroupChat": "86673bb89136ebef60d8c5ec2119e75fe1111140f5e300142fe35a26fec57e76",
    "GroupChatMessages": "2d4c6b8946e5472d57eeb62047f0c700f497e831510e2b249892bf7d71d07c0e",
    "GroupIdByUuid": "7398e5a6351a9e72b23eaec0cc9f92f766e6b858a488f15d13b082bd182e01a5",
+   "GroupLanguageByUuid": "3478ae7032adbbb3e3008c91c4510ca7ae46239ed909d7266ff7c8ca24342b98",
    "JoinGlobalGroup": "1ffe3b3ab40ed47ebaf685259f0ada00b93bb83719ff5f19fe8f9b021ff1b139",
    "LanguageCodeMappings": "a9f61bcb578bdd14da454b2bc2b956bfde716898a7cc6a61a8d6f095d50d9dad",
    "LanguageIdByAlpha2": "12c56259bed90093440e6b75147cd67cf4b0747b132213d4946ca21c13f095a1",

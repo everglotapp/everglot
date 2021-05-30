@@ -302,7 +302,7 @@
                     <ButtonSmall
                         className="w-full justify-center"
                         variant="TEXT"
-                        color="SECONDARY"
+                        color="PRIMARY"
                         tag="button"
                         on:click={() => (showMore = false)}
                         ><Localized id="chat-message-show-less" /></ButtonSmall
@@ -311,7 +311,7 @@
                     <ButtonSmall
                         className="w-full justify-center"
                         variant="TEXT"
-                        color="SECONDARY"
+                        color="PRIMARY"
                         tag="button"
                         on:click={() => (showMore = true)}
                         ><Localized id="chat-message-show-more" /></ButtonSmall

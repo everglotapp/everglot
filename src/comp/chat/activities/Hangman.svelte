@@ -2,13 +2,26 @@
     import { createEventDispatcher, getContext } from "svelte"
     import { scale } from "svelte/transition"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
+    import Headline4 from "../../typography/Headline4.svelte"
 
     let inputValue: string | undefined
 
     export let over: boolean
     export let pickedLetters: string[]
     export let word: (string | null)[]
+    export let solution: string | null = null
+
+    $: wordGuessedCorrectly = word.every((character) => character !== null)
+    $: wrongGuesses = pickedLetters.filter(characterWasIncorrect).length
+    const characterWasIncorrect = (character: string) => {
+        const lower = character.toLowerCase()
+        return word.every(
+            (wordCharacter) =>
+                wordCharacter === null || wordCharacter.toLowerCase() !== lower
+        )
+    }
 
     const chat = getContext("CHAT")
     const { connected: connectedToChat } = chat
@@ -21,7 +34,7 @@
         chat.on(
             "groupActivity.hangmanGuess",
             ({
-                userUuid,
+                userUuid: _userUuid,
                 success,
                 guess,
             }: {
@@ -31,8 +44,8 @@
             }) => {
                 feedbackSuccess = success
                 feedback = success
-                    ? `${guess} was correct!`
-                    : `${guess} was incorrect!`
+                    ? `${guess} is correct!`
+                    : `${guess} is incorrect!`
             }
         )
     }
@@ -65,21 +78,31 @@
     in:scale={{ duration: 200, delay: 350 }}
     out:scale={{ duration: 200, delay: 0 }}
 >
-    <div class="text-lg py-1 px-3 bg-gray-lightest border-primary border-b-2">
-        <Localized id="chat-side-panel-activity-hangman" />
-    </div>
+        <Headline4
+            ><Localized id="chat-side-panel-activity-hangman" /></Headline4
+        >
     <ButtonSmall
         tag="button"
-        className="justify-center"
+        className="items-center justify-center"
         color="PRIMARY"
         variant="TEXT"
         on:click={handleQuit}
-        ><Localized id="chat-side-panel-activity-quit" /></ButtonSmall
+    >
+        <XIcon size="20" />
+        <span class="ml-1"
+            ><Localized id="chat-side-panel-activity-quit" /></span
+        ></ButtonSmall
     >
 </div>
 <div class="flex flex-col items-center">
     <div class="inline-block relative mb-4">
-        <div class="rope" />
+        <div
+            class="rope"
+            style={`transition: height 400ms ease-in-out; height: ${Math.max(
+                0,
+                190 - wrongGuesses * 15
+            )}px`}
+        />
         <div class="box-top" />
         <div class="box-left" />
         <div class="box-bottom px-8 py-5">
@@ -93,30 +116,41 @@
                 </span>
             {/each}
         </div>
-        <img src="/squirrel.png" alt="Squirrel" class="squirrel" />
-    </div>
-    <form on:submit|preventDefault={handleSubmit}>
-        <label for="hangman-input"
-            ><Localized id="chat-side-panel-activity-hangman-guess" /></label
-        >
-        <input
-            id="hangman-input"
-            class="border border-gray shadow-md inline-flex"
-            bind:value={inputValue}
+        <img
+            src="/squirrel.png"
+            alt="Squirrel"
+            class="squirrel"
+            style={`transition: transform 400ms ease-in-out; transform: translateY(-${
+                wrongGuesses * 15
+            }px)`}
         />
-        <ButtonSmall
-            tag="button"
-            className="justify-center"
-            color="PRIMARY"
-            on:click={handleEnter}
-            ><Localized
-                id="chat-side-panel-activity-hangman-enter"
-            /></ButtonSmall
-        >
-    </form>
+    </div>
+    {#if !over}
+        <form on:submit|preventDefault={handleSubmit}>
+            <label for="hangman-input"
+                ><Localized
+                    id="chat-side-panel-activity-hangman-guess"
+                /></label
+            >
+            <input
+                id="hangman-input"
+                class="border border-gray shadow-md inline-flex"
+                bind:value={inputValue}
+            />
+            <ButtonSmall
+                tag="button"
+                className="justify-center"
+                color="PRIMARY"
+                on:click={handleEnter}
+                ><Localized
+                    id="chat-side-panel-activity-hangman-enter"
+                /></ButtonSmall
+            >
+        </form>
+    {/if}
     {#if feedback}
         <div
-            class={`px-8 py-4 font-bold shadow-md rounded-lg ${
+            class={`px-8 py-4 font-bold ${
                 feedbackSuccess ? "text-green-600" : "text-red-700"
             }`}
         >

@@ -370,7 +370,18 @@
                                         class="toggle-split-screen"
                                         on:click={() => (split = false)}
                                     >
-                                        <ChevronLeftIcon size="24" />
+                                        <div
+                                            class="absolute"
+                                            style="left: -1px;"
+                                        >
+                                            <ChevronLeftIcon size="24" />
+                                        </div>
+                                        <div
+                                            class="absolute"
+                                            style="left: 5px;"
+                                        >
+                                            <ChevronLeftIcon size="24" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -538,10 +549,9 @@
     .toggle-split-screen {
         width: 30px;
         height: 30px;
-        border: 2px solid theme("colors.primary.DEFAULT");
         position: absolute;
         right: -16px;
-        top: 0.5rem;
+        top: 45%;
         border-radius: 50%;
 
         @apply flex;
@@ -553,10 +563,6 @@
         @apply cursor-pointer;
         @apply bg-gray-lightest;
         @apply z-10;
-    }
-
-    .toggle-split-screen > :global(svg) {
-        margin-left: -2px;
     }
 
     @media (max-width: 700px) {

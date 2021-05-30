@@ -317,7 +317,7 @@
                                             <div>
                                                 <ButtonSmall
                                                     variant="TEXT"
-                                                    color="SECONDARY"
+                                                    color="PRIMARY"
                                                     className="w-full justify-between items-center"
                                                     href={`/chat?group=${$joinedCallRoom}`}
                                                     on:click={() =>
@@ -451,7 +451,7 @@
                     tag="button"
                     on:click={() => (showInviteModal = false)}
                     variant="TEXT"
-                    color="SECONDARY"
+                    color="PRIMARY"
                     className="mr-1"
                     ><Localized id="invite-modal-close" /></ButtonSmall
                 >

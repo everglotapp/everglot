@@ -6,7 +6,8 @@
     import ButtonSmall from "../../util/ButtonSmall.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
 
-    import { currentUserIsGroupMember } from "../../../stores/chat"
+    import { currentUser } from "../../../stores"
+    import { currentUserIsGroupMember, chatUsers } from "../../../stores/chat"
 
     let inputValue: string | undefined
 
@@ -14,16 +15,7 @@
     export let pickedLetters: string[]
     export let word: (string | null)[]
     export let solution: string | null = null
-
-    $: wordGuessedCorrectly = word.every((character) => character !== null)
-    $: wrongGuesses = pickedLetters.filter(characterWasIncorrect).length
-    const characterWasIncorrect = (character: string) => {
-        const lower = character.toLowerCase()
-        return word.every(
-            (wordCharacter) =>
-                wordCharacter === null || wordCharacter.toLowerCase() !== lower
-        )
-    }
+    let forceDisableInputs = false
 
     const chat = getContext("CHAT")
     const { connected: connectedToChat } = chat
@@ -36,7 +28,7 @@
         chat.on(
             "groupActivity.hangmanGuess",
             ({
-                userUuid: _userUuid,
+                userUuid,
                 success,
                 guess,
             }: {
@@ -45,9 +37,24 @@
                 guess: string
             }) => {
                 feedbackSuccess = success
-                feedback = success
-                    ? `${guess} is correct!`
-                    : `${guess} is incorrect!`
+                const guessingUser = $chatUsers.find(
+                    (user) => user.uuid === userUuid
+                )
+                if ($currentUser && guessingUser) {
+                    if (guessingUser === $currentUser.uuid) {
+                        feedback = success
+                            ? `${guess} is correct, nice!`
+                            : `${guess} is incorrect, careful!`
+                    } else {
+                        feedback = success
+                            ? `${guessingUser.username} guessed ${guess} which is correct!`
+                            : `${guessingUser.username} guessed ${guess} which is incorrect!`
+                    }
+                } else {
+                    feedback = success
+                        ? `${guess} is correct!`
+                        : `${guess} is incorrect!`
+                }
             }
         )
     }
@@ -73,6 +80,28 @@
             submitGuess(inputValue)
             inputValue = ""
         }
+    }
+
+    $: wordGuessedCorrectly = word.every((character) => character !== null)
+    $: wrongGuesses = pickedLetters.filter(characterWasIncorrect).length
+    const characterWasIncorrect = (character: string) => {
+        const lower = character.toLowerCase()
+        return word.every(
+            (wordCharacter) =>
+                wordCharacter === null || wordCharacter.toLowerCase() !== lower
+        )
+    }
+
+    $: if (over) {
+        forceDisableInputs = true
+        setTimeout(() => {
+            forceDisableInputs = false
+        }, 3000)
+        setTimeout(() => {
+            if (over) {
+                feedback = undefined
+            }
+        }, 3000)
     }
 </script>
 
@@ -130,14 +159,34 @@
                 {/each}
             {/if}
         </div>
-        <img
-            src="/squirrel.png"
-            alt="Squirrel"
-            class="squirrel"
-            style={`transition: transform 400ms ease-in-out; transform: translateY(-${
-                wrongGuesses * 15
-            }px)`}
-        />
+        <div class="squirrel-container">
+            <div
+                class="relative"
+                style={`transition: transform 400ms ease-in-out; transform: translateY(-${
+                    wrongGuesses * 15
+                }px)`}
+            >
+                <img src="/squirrel.png" alt="Squirrel" />
+                {#if over && !wordGuessedCorrectly}
+                    <div
+                        class="absolute font-bold"
+                        style="right: 64px; top: 36px;"
+                    >
+                        x
+                    </div>
+                    <div
+                        class="absolute font-bold"
+                        style="right: 55px; top: 60px; width: 11px; border-bottom: 2px solid black;"
+                    />
+                    <div
+                        class="absolute font-bold"
+                        style="right: 49px; top: 36px;"
+                    >
+                        x
+                    </div>
+                {/if}
+            </div>
+        </div>
     </div>
     <form on:submit|preventDefault={handleSubmit}>
         <label for="hangman-input"
@@ -147,13 +196,13 @@
             id="hangman-input"
             class="border border-gray shadow-md inline-flex"
             bind:value={inputValue}
-            disabled={over || !$currentUserIsGroupMember}
+            disabled={over || forceDisableInputs || !$currentUserIsGroupMember}
         />
         <ButtonSmall
             tag="button"
             className="justify-center"
             color="PRIMARY"
-            disabled={over || !$currentUserIsGroupMember}
+            disabled={over || forceDisableInputs || !$currentUserIsGroupMember}
             on:click={handleEnter}
             ><Localized
                 id="chat-side-panel-activity-hangman-enter"
@@ -172,7 +221,7 @@
 </div>
 
 <style>
-    .squirrel {
+    .squirrel-container {
         position: absolute;
         max-width: 170px;
         bottom: 48px;

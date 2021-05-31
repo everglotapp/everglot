@@ -328,7 +328,7 @@
                                                         /></span
                                                     ><MicIcon
                                                         size="18"
-                                                        class="text-gray-bitdark"
+                                                        class="text-primary"
                                                     /></ButtonSmall
                                                 >
                                             </div>
@@ -400,7 +400,7 @@
                             {#if $joinedCallRoom}
                                 <MicIcon
                                     size="16"
-                                    class="text-gray-bitdark absolute mic-icon"
+                                    class="text-primary absolute mic-icon"
                                 />
                             {/if}
                         {:else}

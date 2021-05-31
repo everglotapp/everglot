@@ -107,13 +107,13 @@
         <div class="box-bottom px-8 py-5">
             {#if over}
                 {#if wordGuessedCorrectly}
-                    You correctly guessed: <span class="font-bold"
-                        >{solution}</span
-                    >
+                    <Localized
+                        id="chat-side-panel-activity-hangman-solution-correct"
+                    /> <span class="font-bold">{solution}</span>
                 {:else}
-                    The word would have been: <span class="font-bold"
-                        >{solution}</span
-                    >
+                    <Localized
+                        id="chat-side-panel-activity-hangman-solution-wrong"
+                    /> <span class="font-bold">{solution}</span>
                 {/if}
             {:else}
                 {#each word as character}

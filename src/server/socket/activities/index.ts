@@ -23,11 +23,22 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     socket.on(
         "startGroupActivity",
         async ({ kind }: { kind: GroupActivityKind }) => {
-            const chatUser = getCurrentUser(socket.id)
+            const chatUser = getCurrentUser(socket)
             if (!chatUser) {
+                chlog
+                    .child({ kind, socketId: socket.id })
+                    .debug("User trying to start group activity not found")
                 return
             }
-            if (await startGroupActivity(chatUser.groupUuid, kind)) {
+            const activity = await startGroupActivity(chatUser.groupUuid, kind)
+            if (activity) {
+                chlog
+                    .child({
+                        groupUuid: chatUser.groupUuid,
+                        userUuid: chatUser.user.uuid,
+                        activity,
+                    })
+                    .debug("User successfully started group activity")
                 io.to(chatUser.groupUuid).emit(
                     "groupActivity",
                     getGroupActivity(chatUser.groupUuid)
@@ -36,11 +47,20 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
         }
     )
     socket.on("endGroupActivity", async () => {
-        const chatUser = getCurrentUser(socket.id)
+        const chatUser = getCurrentUser(socket)
         if (!chatUser) {
+            chlog
+                .child({ socketId: socket.id })
+                .debug("User trying to end group activity not found")
             return
         }
         if (endGroupActivity(chatUser.groupUuid)) {
+            chlog
+                .child({
+                    groupUuid: chatUser.groupUuid,
+                    userUuid: chatUser.user.uuid,
+                })
+                .debug("User successfully ended group activity")
             io.to(chatUser.groupUuid).emit(
                 "groupActivity",
                 getGroupActivity(chatUser.groupUuid)
@@ -50,8 +70,11 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     socket.on(
         "groupActivity.hangmanGuess",
         async ({ guess }: { guess: string }) => {
-            const chatUser = getCurrentUser(socket.id)
+            const chatUser = getCurrentUser(socket)
             if (!chatUser) {
+                chlog
+                    .child({ socketId: socket.id, guess })
+                    .debug("User trying to guess in hangman not found")
                 return
             }
             const activity = getGroupActivity(chatUser.groupUuid)
@@ -59,6 +82,7 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 chlog
                     .child({
                         groupUuid: chatUser.groupUuid,
+                        userUuid: chatUser.user.uuid,
                     })
                     .debug(
                         "User attempted hangman guess but no activity is running for their group"
@@ -69,6 +93,7 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 chlog
                     .child({
                         groupUuid: chatUser.groupUuid,
+                        userUuid: chatUser.user.uuid,
                     })
                     .debug(
                         "User attempted hangman guess but current group activity is not hangman"
@@ -82,6 +107,13 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 game.letterPicked(guess) ||
                 !game.letterAvailable(guess)
             ) {
+                chlog
+                    .child({
+                        groupUuid: chatUser.groupUuid,
+                        userUuid: chatUser.user.uuid,
+                        guess,
+                    })
+                    .debug("User attempted hangman guess but guess was invalid")
                 return
             }
             const success = game.pickLetter(guess)
@@ -91,6 +123,15 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 success,
                 userUuid: chatUser.user.uuid,
             })
+
+            chlog
+                .child({
+                    groupUuid: chatUser.groupUuid,
+                    userUuid: chatUser.user.uuid,
+                    guess,
+                    success,
+                })
+                .debug("User attempted hangman guess")
             // Tell group users about the new game state.
             io.to(chatUser.groupUuid).emit(
                 "groupActivity",
@@ -98,6 +139,12 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
             )
             setTimeout(() => {
                 if (game.nextRound()) {
+                    chlog
+                        .child({
+                            groupUuid: chatUser.groupUuid,
+                            userUuid: chatUser.user.uuid,
+                        })
+                        .debug("Hangman game proceeded to next round")
                     io.to(chatUser.groupUuid).emit(
                         "groupActivity",
                         getGroupActivity(chatUser.groupUuid)
@@ -181,6 +228,12 @@ async function makeHangmanActivity(
     }
     const alpha2 = group.groupByUuid?.language?.alpha2
     if (!HANGMAN_LOCALES.some((locale) => locale === alpha2)) {
+        chlog
+            .child({
+                groupUuid,
+                alpha2,
+            })
+            .debug("Group locale does not support hangman")
         return null
     }
     hangmanGames[groupUuid] ||= new HangmanGame(alpha2 as HangmanLocale)

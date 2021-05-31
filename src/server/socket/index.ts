@@ -68,8 +68,7 @@ export function start(server: Server, pool: Pool) {
                 io
             )
 
-            // const alpha2 = group.groupByUuid?.language?.alpha2
-            const chatUser = userJoin(socket.id, userMeta, groupUuid)
+            const chatUser = userJoin(socket, userMeta, groupUuid)
             socket.join(groupUuid)
             if (userIsNew(chatUser) && chatUser?.user?.username) {
                 bots[groupUuid].send("welcome", {
@@ -97,12 +96,12 @@ export function start(server: Server, pool: Pool) {
 
         // Listen for chatMessage
         socket.on("leaveRoom", () => {
-            userLeave(socket.id)
+            userLeave(socket)
         })
 
         // Runs when client disconnects
         socket.on("disconnect", () => {
-            const chatUser = userLeave(socket.id)
+            const chatUser = userLeave(socket)
             if (!chatUser) {
                 return
             }

@@ -6,6 +6,8 @@
     import ButtonSmall from "../../util/ButtonSmall.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
 
+    import { currentUserIsGroupMember } from "../../../stores/chat"
+
     let inputValue: string | undefined
 
     export let over: boolean
@@ -85,6 +87,7 @@
         className="items-center justify-center"
         color="PRIMARY"
         variant="TEXT"
+        disabled={!$currentUserIsGroupMember}
         on:click={handleQuit}
     >
         <XIcon size="20" />
@@ -144,13 +147,13 @@
             id="hangman-input"
             class="border border-gray shadow-md inline-flex"
             bind:value={inputValue}
-            disabled={over}
+            disabled={over || !$currentUserIsGroupMember}
         />
         <ButtonSmall
             tag="button"
             className="justify-center"
             color="PRIMARY"
-            disabled={over}
+            disabled={over || !$currentUserIsGroupMember}
             on:click={handleEnter}
             ><Localized
                 id="chat-side-panel-activity-hangman-enter"

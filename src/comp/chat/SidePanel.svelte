@@ -7,6 +7,8 @@
     import Hangman from "./activities/Hangman.svelte"
     import WouldYouRather from "./activities/WouldYouRather.svelte"
 
+    import { currentUserIsGroupMember } from "../../stores/chat"
+
     import { GroupActivityKind } from "../../types/activities"
     import type { GroupActivity } from "../../types/activities"
 
@@ -49,7 +51,8 @@
                             className="w-full justify-center"
                             color="SECONDARY"
                             variant="OUTLINED"
-                            disabled={startingActivity}
+                            disabled={startingActivity ||
+                                !$currentUserIsGroupMember}
                             on:click={() => {
                                 chat.emit("startGroupActivity", {
                                     kind: GroupActivityKind.Hangman,
@@ -67,7 +70,8 @@
                             className="w-full justify-center"
                             color="SECONDARY"
                             variant="OUTLINED"
-                            disabled={startingActivity}
+                            disabled={startingActivity ||
+                                !$currentUserIsGroupMember}
                             on:click={() => {
                                 chat.emit("startGroupActivity", {
                                     kind: GroupActivityKind.WouldYouRather,
@@ -85,6 +89,7 @@
                             className="w-full justify-center"
                             color="SECONDARY"
                             variant="OUTLINED"
+                            disabled={!$currentUserIsGroupMember}
                             on:click={() => console.log("Random q")}
                             ><Localized
                                 id="chat-side-panel-menu-random-question"
@@ -111,8 +116,8 @@
     .squirrel {
         transform: rotateY(180deg);
         max-width: 154px;
-        right: 0;
-        top: 35px;
+        right: 9px;
+        top: max(35px, calc(400px - 24vw));
     }
 
     .squirrel-bubble {

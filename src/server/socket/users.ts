@@ -10,26 +10,49 @@ const users: ChatUser[] = []
 
 // Join user to chat
 export function userJoin(
-    socketId: string,
+    socket: EverglotChatSocket,
     user: Pick<User, "id" | "username" | "uuid" | "avatarUrl">,
     groupUuid: Group["uuid"]
 ) {
-    const chatUser = { socketId, user, groupUuid, joinedAt: new Date() }
+    const chatUser = {
+        socketId: socket.id,
+        user,
+        groupUuid,
+        joinedAt: new Date(),
+    }
 
-    users.push(chatUser)
-    socketHistories[socketId] ||= { greeted: false }
-
-    return chatUser
+    let existingUser = getCurrentUser(socket)
+    if (existingUser) {
+        existingUser = {
+            ...existingUser,
+            user,
+            groupUuid,
+        }
+        return existingUser
+    } else {
+        users.push(chatUser)
+        socketHistories[socket.id] ||= { greeted: false }
+        return chatUser
+    }
 }
 
 // Get current user
-export function getCurrentUser(socketId: string) {
-    return users.find((user) => user.socketId === socketId)
+export function getCurrentUser(socket: EverglotChatSocket) {
+    const { session } = socket.request
+    if (!session.user_id) {
+        return null
+    }
+    return (
+        users.find(
+            (user) =>
+                user.socketId === socket.id && user.user.id === session.user_id
+        ) || null
+    )
 }
 
 // User leaves chat
-export function userLeave(socketId: string) {
-    const index = users.findIndex((user) => user.socketId === socketId)
+export function userLeave(socket: EverglotChatSocket) {
+    const index = users.findIndex((user) => user.socketId === socket.id)
 
     if (index !== -1) {
         return users.splice(index, 1)[0]

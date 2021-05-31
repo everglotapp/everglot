@@ -44,7 +44,7 @@
     let lastSentMessage: ChatMessage | null = null
     let lastMessageSentAt: number | null = null
     let currentActivity: GroupActivity | null = null
-    let currentActivityIsKnown = false
+    let currentActivityKnownForGroupUuid: Group["uuid"] | null = null
 
     const webrtc = getContext("WEBRTC")
     const { outgoing, remoteUsers, joinedRoom: joinedCallRoom } = webrtc
@@ -184,7 +184,7 @@
 
     function handleGroupActivity(activity: GroupActivity) {
         currentActivity = activity
-        currentActivityIsKnown = true
+        currentActivityKnownForGroupUuid = $groupUuid
     }
 
     let messagesComponent: Messages
@@ -367,7 +367,7 @@
                                         duration: 300,
                                     }}
                                 >
-                                    {#if currentActivityIsKnown}
+                                    {#if $groupUuid !== null && currentActivityKnownForGroupUuid === $groupUuid}
                                         <SidePanel activity={currentActivity} />
                                     {/if}
                                     <div

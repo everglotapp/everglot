@@ -148,6 +148,7 @@ export class HangmanGame {
             over: this.over,
             currentWord: this.currentWord,
             pickedLetters: this.pickedLetters,
+            solution: this.over ? this.word : null,
         }
     }
 

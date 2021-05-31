@@ -65,6 +65,7 @@
             inputValue = ""
         }
     }
+
     const handleSubmit = () => {
         if (inputValue) {
             submitGuess(inputValue)
@@ -78,9 +79,7 @@
     in:scale={{ duration: 200, delay: 350 }}
     out:scale={{ duration: 200, delay: 0 }}
 >
-        <Headline4
-            ><Localized id="chat-side-panel-activity-hangman" /></Headline4
-        >
+    <Headline4><Localized id="chat-side-panel-activity-hangman" /></Headline4>
     <ButtonSmall
         tag="button"
         className="items-center justify-center"
@@ -106,15 +105,27 @@
         <div class="box-top" />
         <div class="box-left" />
         <div class="box-bottom px-8 py-5">
-            {#each word as character}
-                <span class="character">
-                    {#if character === null}
-                        &nbsp;
-                    {:else}
-                        {character}
-                    {/if}
-                </span>
-            {/each}
+            {#if over}
+                {#if wordGuessedCorrectly}
+                    You correctly guessed: <span class="font-bold"
+                        >{solution}</span
+                    >
+                {:else}
+                    The word would have been: <span class="font-bold"
+                        >{solution}</span
+                    >
+                {/if}
+            {:else}
+                {#each word as character}
+                    <span class="character">
+                        {#if character === null}
+                            &nbsp;
+                        {:else}
+                            {character}
+                        {/if}
+                    </span>
+                {/each}
+            {/if}
         </div>
         <img
             src="/squirrel.png"
@@ -125,29 +136,27 @@
             }px)`}
         />
     </div>
-    {#if !over}
-        <form on:submit|preventDefault={handleSubmit}>
-            <label for="hangman-input"
-                ><Localized
-                    id="chat-side-panel-activity-hangman-guess"
-                /></label
-            >
-            <input
-                id="hangman-input"
-                class="border border-gray shadow-md inline-flex"
-                bind:value={inputValue}
-            />
-            <ButtonSmall
-                tag="button"
-                className="justify-center"
-                color="PRIMARY"
-                on:click={handleEnter}
-                ><Localized
-                    id="chat-side-panel-activity-hangman-enter"
-                /></ButtonSmall
-            >
-        </form>
-    {/if}
+    <form on:submit|preventDefault={handleSubmit}>
+        <label for="hangman-input"
+            ><Localized id="chat-side-panel-activity-hangman-guess" /></label
+        >
+        <input
+            id="hangman-input"
+            class="border border-gray shadow-md inline-flex"
+            bind:value={inputValue}
+            disabled={over}
+        />
+        <ButtonSmall
+            tag="button"
+            className="justify-center"
+            color="PRIMARY"
+            disabled={over}
+            on:click={handleEnter}
+            ><Localized
+                id="chat-side-panel-activity-hangman-enter"
+            /></ButtonSmall
+        >
+    </form>
     {#if feedback}
         <div
             class={`px-8 py-4 font-bold ${

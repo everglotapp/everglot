@@ -99,6 +99,7 @@
                 over={activity.state.over}
                 pickedLetters={activity.state.pickedLetters}
                 word={activity.state.currentWord}
+                solution={activity.state.solution}
             />
         {:else if activity.kind === GroupActivityKind.WouldYouRather}
             <WouldYouRather on:quit={() => chat.emit("endGroupActivity")} />

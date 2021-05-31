@@ -69,17 +69,39 @@
     const handleQuit = () => dispatch("quit")
 
     const handleEnter = () => {
-        if (inputValue) {
-            submitGuess(inputValue)
-            inputValue = ""
+        if (!inputValue || !validateInput(inputValue)) {
+            return
         }
+        submitGuess(inputValue)
+        inputValue = ""
     }
 
     const handleSubmit = () => {
-        if (inputValue) {
-            submitGuess(inputValue)
-            inputValue = ""
+        if (!inputValue || !validateInput(inputValue)) {
+            return
         }
+        submitGuess(inputValue)
+        inputValue = ""
+    }
+
+    const validateInput = (input: string) => {
+        if (input.length !== 1) {
+            feedback = `You can only enter single letters (you entered: ${input})`
+            feedbackSuccess = false
+            return false
+        }
+        if (
+            pickedLetters.some(
+                (letter) =>
+                    letter !== null &&
+                    letter.toLowerCase() === input.toLowerCase()
+            )
+        ) {
+            feedback = `The letter ${input} has already been picked`
+            feedbackSuccess = false
+            return false
+        }
+        return true
     }
 
     $: wordGuessedCorrectly = word.every((character) => character !== null)

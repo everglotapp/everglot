@@ -99,7 +99,7 @@
             class="rope"
             style={`transition: height 400ms ease-in-out; height: ${Math.max(
                 0,
-                190 - wrongGuesses * 15
+                175 - wrongGuesses * 12
             )}px`}
         />
         <div class="box-top" />
@@ -171,9 +171,9 @@
 <style>
     .squirrel {
         position: absolute;
-        max-width: 207px;
+        max-width: 170px;
         bottom: 48px;
-        left: 82px;
+        left: 107px;
     }
 
     .character {
@@ -188,7 +188,6 @@
     }
 
     .rope {
-        height: 190px;
         width: 3px;
         background: #664e27;
         margin-left: 8px;
@@ -205,7 +204,7 @@
     }
 
     .box-left {
-        height: 350px;
+        height: 300px;
         width: 20px;
         background: #b57a57;
         margin-left: 20px;

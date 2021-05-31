@@ -106,8 +106,18 @@
             $joining = false
             return false
         }
-        const uid = await client!.join(AGORA_APP_ID, roomId, rtcToken, userId)
-        if (!uid) {
+        try {
+            const uid = await client!.join(
+                AGORA_APP_ID,
+                roomId,
+                rtcToken,
+                userId
+            )
+            if (!uid) {
+                $joining = false
+                return false
+            }
+        } catch (e) {
             $joining = false
             return false
         }
@@ -116,9 +126,19 @@
             // @ts-ignore
             AgoraRTC = await import("agora-rtc-sdk-ng")
         }
-        $outgoing = await AgoraRTC.createMicrophoneAudioTrack()
-        // Publish the local audio track to the channel.
-        await client!.publish([$outgoing!])
+        try {
+            $outgoing = await AgoraRTC.createMicrophoneAudioTrack()
+            // Publish the local audio track to the channel.
+            await client!.publish([$outgoing!])
+        } catch (e) {
+            $joining = false
+            try {
+                await client!.leave()
+            } catch (e) {
+                return false
+            }
+            return false
+        }
 
         $joinedRoom = roomId
         $joining = false

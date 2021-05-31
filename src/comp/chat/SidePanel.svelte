@@ -7,10 +7,14 @@
     import Hangman from "./activities/Hangman.svelte"
     import WouldYouRather from "./activities/WouldYouRather.svelte"
 
+    import { currentUserIsGroupMember } from "../../stores/chat"
+
     import { GroupActivityKind } from "../../types/activities"
     import type { GroupActivity } from "../../types/activities"
 
     import { groupUuid } from "../../stores"
+    import { currentGroupLocale } from "../../stores/locales"
+    import { HANGMAN_LOCALES } from "../../constants"
 
     const chat = getContext("CHAT")
 
@@ -18,6 +22,9 @@
     let startingActivity = false
     // @ts-ignore
     $: activity, (startingActivity = false)
+    $: groupCanPlayHangman =
+        $currentGroupLocale &&
+        (HANGMAN_LOCALES as readonly string[]).includes($currentGroupLocale)
 </script>
 
 <div>
@@ -43,31 +50,35 @@
                     />
                 </div>
                 <div class="flex flex-col items-center pt-32">
+                    {#if groupCanPlayHangman}
+                        <div class="menu-item">
+                            <ButtonLarge
+                                tag="button"
+                                className="w-full justify-center"
+                                color="SECONDARY"
+                                variant="OUTLINED"
+                                disabled={startingActivity ||
+                                    !$currentUserIsGroupMember}
+                                on:click={() => {
+                                    chat.emit("startGroupActivity", {
+                                        kind: GroupActivityKind.Hangman,
+                                    })
+                                    startingActivity = true
+                                }}
+                                ><Localized
+                                    id="chat-side-panel-menu-hangman"
+                                /></ButtonLarge
+                            >
+                        </div>
+                    {/if}
                     <div class="menu-item">
                         <ButtonLarge
                             tag="button"
                             className="w-full justify-center"
                             color="SECONDARY"
                             variant="OUTLINED"
-                            disabled={startingActivity}
-                            on:click={() => {
-                                chat.emit("startGroupActivity", {
-                                    kind: GroupActivityKind.Hangman,
-                                })
-                                startingActivity = true
-                            }}
-                            ><Localized
-                                id="chat-side-panel-menu-hangman"
-                            /></ButtonLarge
-                        >
-                    </div>
-                    <div class="menu-item">
-                        <ButtonLarge
-                            tag="button"
-                            className="w-full justify-center"
-                            color="SECONDARY"
-                            variant="OUTLINED"
-                            disabled={startingActivity}
+                            disabled={startingActivity ||
+                                !$currentUserIsGroupMember}
                             on:click={() => {
                                 chat.emit("startGroupActivity", {
                                     kind: GroupActivityKind.WouldYouRather,
@@ -85,6 +96,7 @@
                             className="w-full justify-center"
                             color="SECONDARY"
                             variant="OUTLINED"
+                            disabled={!$currentUserIsGroupMember}
                             on:click={() => console.log("Random q")}
                             ><Localized
                                 id="chat-side-panel-menu-random-question"
@@ -111,8 +123,8 @@
     .squirrel {
         transform: rotateY(180deg);
         max-width: 154px;
-        right: 0;
-        top: 35px;
+        right: 9px;
+        top: max(35px, calc(400px - 24vw));
     }
 
     .squirrel-bubble {

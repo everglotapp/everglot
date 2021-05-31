@@ -44,6 +44,7 @@
     let lastSentMessage: ChatMessage | null = null
     let lastMessageSentAt: number | null = null
     let currentActivity: GroupActivity | null = null
+    let currentActivityKnownForGroupUuid: Group["uuid"] | null = null
 
     const webrtc = getContext("WEBRTC")
     const { outgoing, remoteUsers, joinedRoom: joinedCallRoom } = webrtc
@@ -183,6 +184,7 @@
 
     function handleGroupActivity(activity: GroupActivity) {
         currentActivity = activity
+        currentActivityKnownForGroupUuid = $groupUuid
     }
 
     let messagesComponent: Messages
@@ -365,7 +367,9 @@
                                         duration: 300,
                                     }}
                                 >
-                                    <SidePanel activity={currentActivity} />
+                                    {#if $groupUuid !== null && currentActivityKnownForGroupUuid === $groupUuid}
+                                        <SidePanel activity={currentActivity} />
+                                    {/if}
                                     <div
                                         class="toggle-split-screen"
                                         on:click={() => (split = false)}

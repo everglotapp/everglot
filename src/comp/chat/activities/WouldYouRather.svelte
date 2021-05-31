@@ -7,6 +7,8 @@
     import ButtonLarge from "../../util/ButtonLarge.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
 
+    import { currentUserIsGroupMember } from "../../../stores/chat"
+
     const dispatch = createEventDispatcher()
 
     const handleQuit = (_event: MouseEvent) => {
@@ -27,6 +29,7 @@
         className="items-center justify-center"
         color="PRIMARY"
         variant="TEXT"
+        disabled={!$currentUserIsGroupMember}
         on:click={handleQuit}
     >
         <XIcon size="20" />
@@ -56,6 +59,7 @@
                 className="w-full justify-center"
                 color="SECONDARY"
                 variant="OUTLINED"
+                disabled={!$currentUserIsGroupMember}
                 on:click={() => {}}>Walnut</ButtonLarge
             >
         </div>
@@ -65,6 +69,7 @@
                 className="w-full justify-center"
                 color="SECONDARY"
                 variant="OUTLINED"
+                disabled={!$currentUserIsGroupMember}
                 on:click={() => {}}>Hazelnut</ButtonLarge
             >
         </div>
@@ -75,8 +80,8 @@
     .squirrel {
         transform: rotateY(180deg);
         max-width: 154px;
-        right: 0;
-        top: 35px;
+        right: 9px;
+        top: max(35px, calc(400px - 24vw));
     }
 
     .squirrel-bubble {

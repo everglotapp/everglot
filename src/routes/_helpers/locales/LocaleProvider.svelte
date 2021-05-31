@@ -10,7 +10,7 @@
     import zh from "../../../../locales/zh-CN/app.ftl"
 
     import { groupUuid } from "../../../stores"
-    import { localeToEnforce } from "../../../stores/locales"
+    import { currentGroupLocale } from "../../../stores/locales"
 
     import { SUPPORTED_LOCALES } from "../../../constants"
     import type { SupportedLocale } from "../../../constants"
@@ -63,8 +63,8 @@
 
     $: navigatorLocales =
         typeof navigator === "undefined" ? [] : navigator.languages
-    $: preferredLocales = $localeToEnforce
-        ? [$localeToEnforce, ...navigatorLocales]
+    $: preferredLocales = $currentGroupLocale
+        ? [$currentGroupLocale, ...navigatorLocales]
         : navigatorLocales
 </script>
 

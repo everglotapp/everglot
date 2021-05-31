@@ -23,7 +23,7 @@ const currentGroup = derived(
 /**
  * The user locale to be enforced if non-null.
  */
-export const localeToEnforce = derived([currentGroup], ([$currentGroup]) => {
+export const currentGroupLocale = derived([currentGroup], ([$currentGroup]) => {
     if (!$currentGroup) {
         return null
     }

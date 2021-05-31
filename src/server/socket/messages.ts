@@ -42,7 +42,7 @@ import { getGroupIdByUuid, getGroupLanguageByUuid } from "../groups"
 
 export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     socket.on("chatMessage", async (msg) => {
-        const chatUser = getCurrentUser(socket.id)
+        const chatUser = getCurrentUser(socket)
         if (!chatUser) {
             return
         }

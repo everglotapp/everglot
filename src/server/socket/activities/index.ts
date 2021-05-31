@@ -137,8 +137,8 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 "groupActivity",
                 getGroupActivity(chatUser.groupUuid)
             )
-            setTimeout(() => {
-                if (game.nextRound()) {
+            setTimeout(async () => {
+                if (await game.nextRound()) {
                     chlog
                         .child({
                             groupUuid: chatUser.groupUuid,
@@ -236,10 +236,16 @@ async function makeHangmanActivity(
             .debug("Group locale does not support hangman")
         return null
     }
-    hangmanGames[groupUuid] ||= new HangmanGame(alpha2 as HangmanLocale)
+    const game = (hangmanGames[groupUuid] ||= new HangmanGame(
+        alpha2 as HangmanLocale
+    ))
+    if (!(await game.start())) {
+        delete hangmanGames[groupUuid]
+        return null
+    }
     return {
         kind: GroupActivityKind.Hangman,
-        state: hangmanGames[groupUuid].publicState,
+        state: game.publicState,
     }
 }
 

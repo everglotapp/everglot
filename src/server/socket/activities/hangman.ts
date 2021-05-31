@@ -2,137 +2,30 @@ import { ALPHABET } from "../../../constants"
 import type { HangmanLocale } from "../../../constants"
 import type { HangmanState } from "../../../types/activities"
 
+import { db } from "../../db"
+
 import log from "../../../logger"
 
 const chlog = log.child({
     namespace: "hangman",
 })
 
-const DICTIONARY: Record<HangmanLocale, string[]> = {
-    en: [
-        "me",
-        "new",
-        "old",
-        "forever",
-        "time",
-        "path",
-        "think",
-        "believe",
-        "undermine",
-        "stubborn",
-        "indicate",
-        "imply",
-        "lose",
-        "win",
-        "I",
-        "way",
-        "you",
-        "he",
-        "celebrate",
-        "she",
-        "join",
-        "love",
-        "why",
-        "we",
-        "us",
-        "boss",
-        "they",
-        "thus",
-        "hangman",
-        "improve",
-        "client",
-        "call",
-        "city",
-        "welcome",
-        "leave",
-        "sit",
-        "country",
-        "house",
-        "land",
-        "river",
-        "severe",
-        "sea",
-        "surprise",
-        "zip",
-        "fast",
-        "natives",
-        "speedup",
-        "date",
-        "run",
-        "abort",
-        "see",
-        "employee",
-        "scenario",
-        "absolutely",
-        "change",
-        "effect",
-        "bone",
-        "leg",
-        "grow",
-        "stand",
-        "place",
-        "body",
-        "eye",
-        "one",
-        "two",
-        "three",
-        "four",
-        "five",
-        "six",
-        "seven",
-        "eight",
-        "nine",
-        "ten",
-    ],
-    de: [
-        "ich",
-        "du",
-        "er",
-        "sie",
-        "es",
-        "verlieren",
-        "gewinnen",
-        "Spiel",
-        "Galgenmännchen",
-        "daher",
-        "Haus",
-        "Mal",
-        "sobald",
-        "immer",
-        "Bein",
-        "oft",
-        "stur",
-        "Auge",
-        "Hintergrund",
-        "Körper",
-        "überhaupt",
-        "selten",
-        "Überraschung",
-        "Brot",
-        "jedenfalls",
-        "unbedingt",
-        "sogar",
-        "durchaus",
-        "soeben",
-        "laufen",
-        "Bürgermeister",
-        "Stadt",
-        "Land",
-        "Fluss",
-        "stets",
-        "See",
-        "Meer",
-        "eins",
-        "zwei",
-        "drei",
-        "vier",
-        "fünf",
-        "sechs",
-        "sieben",
-        "acht",
-        "neun",
-        "zehn",
-    ],
+const MAX_WORD_LENGTH = 11
+async function getRandomWord(language: HangmanLocale): Promise<string | null> {
+    const res = await db?.query<{ word: string }>(
+        `
+    select word from(
+        select * from app_public.words_${language}
+        where length <= $1
+        order by random()
+    ) wd limit 1
+    `,
+        [MAX_WORD_LENGTH]
+    )
+    if (!res || res.rowCount !== 1) {
+        return null
+    }
+    return res.rows[0].word
 }
 
 const MAX_WRONG_LETTERS = 5
@@ -141,17 +34,26 @@ export class HangmanGame {
     language: HangmanLocale
     pickedLetters: string[] = []
     availableLetters: string[] = []
-    word: string
+    word: string | undefined
     wrongLetters = 0
     wrongWords = 0
+    started = false
 
     constructor(language: HangmanLocale) {
         this.language = language
         this.availableLetters = ALPHABET[language].filter(
             (l: string) => l === l.toLowerCase()
         )
-        const dict = DICTIONARY[this.language]
-        this.word = dict[Math.floor(Math.random() * dict.length)]
+    }
+
+    async start(): Promise<boolean> {
+        const word = await getRandomWord(this.language)
+        if (!word) {
+            return false
+        }
+        this.word = word
+        this.started = true
+        return true
     }
 
     letterPicked(l: string): boolean {
@@ -163,11 +65,14 @@ export class HangmanGame {
     }
 
     pickLetter(l: string): boolean {
+        if (!this.started) {
+            return false
+        }
         this.pickedLetters.push(l.toLowerCase())
         this.availableLetters = this.availableLetters.filter(
             (av: string) => l.toLowerCase() !== av
         )
-        const included = this.word.includes(l.toLowerCase())
+        const included = this.word!.includes(l.toLowerCase())
         if (included) {
             return true
         }
@@ -176,12 +81,16 @@ export class HangmanGame {
     }
 
     get over(): boolean {
+        if (!this.started) {
+            return false
+        }
+
         if (this.wrongLetters > MAX_WRONG_LETTERS) {
             return true
         }
 
-        for (let i = 0; i < this.word.length; ++i) {
-            if (!this.pickedLetters.includes(this.word[i].toLowerCase())) {
+        for (let i = 0; i < this.word!.length; ++i) {
+            if (!this.pickedLetters.includes(this.word![i].toLowerCase())) {
                 return false
             }
         }
@@ -189,13 +98,16 @@ export class HangmanGame {
         return true
     }
 
-    nextRound(): boolean {
+    async nextRound(): Promise<boolean> {
         if (!this.over) {
             return false
         }
         chlog.trace("Starting new hangman round")
-        const dict = DICTIONARY[this.language]
-        this.reset(dict[Math.floor(Math.random() * dict.length)])
+        const word = await getRandomWord(this.language)
+        if (!word) {
+            return false
+        }
+        this.reset(word)
         return true
     }
 
@@ -214,28 +126,21 @@ export class HangmanGame {
             over: this.over,
             currentWord: this.currentWord,
             pickedLetters: this.pickedLetters,
-            solution: this.over ? this.word : null,
+            solution: this.over ? this.word || null : null,
         }
     }
 
     get currentWord(): (string | null)[] {
         let result = []
-        for (let i = 0; i < this.word.length; ++i) {
+        if (!this.started) {
+            return []
+        }
+        for (let i = 0; i < this.word!.length; ++i) {
             result.push(
-                this.pickedLetters.includes(this.word[i].toLowerCase())
-                    ? this.word[i]
+                this.pickedLetters.includes(this.word![i].toLowerCase())
+                    ? this.word![i]
                     : null
             )
-        }
-        return result
-    }
-
-    get publicWord(): string {
-        let result = ""
-        for (let i = 0; i < this.word.length; ++i) {
-            result += this.pickedLetters.includes(this.word[i].toLowerCase())
-                ? this.word[i]
-                : "_ "
         }
         return result
     }

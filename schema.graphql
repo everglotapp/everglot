@@ -85,6 +85,42 @@ type Query implements Node {
     filter: GroupFilter
   ): GroupsConnection
 
+  """
+  Reads and enables pagination through a set of `ChineseGuessCharacterQuestion`.
+  """
+  chineseGuessCharacterQuestions(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `ChineseGuessCharacterQuestion`."""
+    orderBy: [ChineseGuessCharacterQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChineseGuessCharacterQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ChineseGuessCharacterQuestionFilter
+  ): ChineseGuessCharacterQuestionsConnection
+
   """Reads and enables pagination through a set of `InviteToken`."""
   inviteTokens(
     """Only read the first `n` values of the set."""
@@ -255,6 +291,108 @@ type Query implements Node {
     filter: MessageFilter
   ): MessagesConnection
 
+  """Reads and enables pagination through a set of `GermanRandomQuestion`."""
+  germanRandomQuestions(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GermanRandomQuestion`."""
+    orderBy: [GermanRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GermanRandomQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GermanRandomQuestionFilter
+  ): GermanRandomQuestionsConnection
+
+  """Reads and enables pagination through a set of `EnglishRandomQuestion`."""
+  englishRandomQuestions(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `EnglishRandomQuestion`."""
+    orderBy: [EnglishRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: EnglishRandomQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: EnglishRandomQuestionFilter
+  ): EnglishRandomQuestionsConnection
+
+  """Reads and enables pagination through a set of `ChineseRandomQuestion`."""
+  chineseRandomQuestions(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `ChineseRandomQuestion`."""
+    orderBy: [ChineseRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChineseRandomQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ChineseRandomQuestionFilter
+  ): ChineseRandomQuestionsConnection
+
   """Reads and enables pagination through a set of `UserLanguage`."""
   userLanguages(
     """Only read the first `n` values of the set."""
@@ -356,9 +494,187 @@ type Query implements Node {
     """
     filter: UserFilter
   ): UsersConnection
+
+  """Reads and enables pagination through a set of `GermanWord`."""
+  germanWords(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GermanWord`."""
+    orderBy: [GermanWordsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GermanWordCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GermanWordFilter
+  ): GermanWordsConnection
+
+  """Reads and enables pagination through a set of `EnglishWord`."""
+  englishWords(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `EnglishWord`."""
+    orderBy: [EnglishWordsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: EnglishWordCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: EnglishWordFilter
+  ): EnglishWordsConnection
+
+  """
+  Reads and enables pagination through a set of `GermanWouldYouRatherQuestion`.
+  """
+  germanWouldYouRatherQuestions(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GermanWouldYouRatherQuestion`."""
+    orderBy: [GermanWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GermanWouldYouRatherQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GermanWouldYouRatherQuestionFilter
+  ): GermanWouldYouRatherQuestionsConnection
+
+  """
+  Reads and enables pagination through a set of `EnglishWouldYouRatherQuestion`.
+  """
+  englishWouldYouRatherQuestions(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `EnglishWouldYouRatherQuestion`."""
+    orderBy: [EnglishWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: EnglishWouldYouRatherQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: EnglishWouldYouRatherQuestionFilter
+  ): EnglishWouldYouRatherQuestionsConnection
+
+  """
+  Reads and enables pagination through a set of `ChineseWouldYouRatherQuestion`.
+  """
+  chineseWouldYouRatherQuestions(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `ChineseWouldYouRatherQuestion`."""
+    orderBy: [ChineseWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChineseWouldYouRatherQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ChineseWouldYouRatherQuestionFilter
+  ): ChineseWouldYouRatherQuestionsConnection
   groupUser(id: Int!): GroupUser
   group(id: Int!): Group
   groupByUuid(uuid: UUID!): Group
+  chineseGuessCharacterQuestion(id: Int!): ChineseGuessCharacterQuestion
+  chineseGuessCharacterQuestionByUuid(uuid: UUID!): ChineseGuessCharacterQuestion
   inviteToken(id: Int!): InviteToken
   languageSkillLevel(id: Int!): LanguageSkillLevel
   language(id: Int!): Language
@@ -368,11 +684,27 @@ type Query implements Node {
   messagePreviewByUuid(uuid: UUID!): MessagePreview
   message(id: Int!): Message
   messageByUuid(uuid: UUID!): Message
+  germanRandomQuestion(id: Int!): GermanRandomQuestion
+  germanRandomQuestionByUuid(uuid: UUID!): GermanRandomQuestion
+  englishRandomQuestion(id: Int!): EnglishRandomQuestion
+  englishRandomQuestionByUuid(uuid: UUID!): EnglishRandomQuestion
+  chineseRandomQuestion(id: Int!): ChineseRandomQuestion
+  chineseRandomQuestionByUuid(uuid: UUID!): ChineseRandomQuestion
   userLanguage(id: Int!): UserLanguage
   userSession(sid: String!): UserSession
   user(id: Int!): User
   userByEmail(email: String!): User
   userByUuid(uuid: UUID!): User
+  germanWord(id: Int!): GermanWord
+  germanWordByUuid(uuid: UUID!): GermanWord
+  englishWord(id: Int!): EnglishWord
+  englishWordByUuid(uuid: UUID!): EnglishWord
+  germanWouldYouRatherQuestion(id: Int!): GermanWouldYouRatherQuestion
+  germanWouldYouRatherQuestionByUuid(uuid: UUID!): GermanWouldYouRatherQuestion
+  englishWouldYouRatherQuestion(id: Int!): EnglishWouldYouRatherQuestion
+  englishWouldYouRatherQuestionByUuid(uuid: UUID!): EnglishWouldYouRatherQuestion
+  chineseWouldYouRatherQuestion(id: Int!): ChineseWouldYouRatherQuestion
+  chineseWouldYouRatherQuestionByUuid(uuid: UUID!): ChineseWouldYouRatherQuestion
   currentUser: User
   currentUserId: Int
   groupIsGlobal(gid: Int!): Boolean
@@ -447,6 +779,16 @@ type Query implements Node {
     nodeId: ID!
   ): Group
 
+  """
+  Reads a single `ChineseGuessCharacterQuestion` using its globally unique `ID`.
+  """
+  chineseGuessCharacterQuestionByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `ChineseGuessCharacterQuestion`.
+    """
+    nodeId: ID!
+  ): ChineseGuessCharacterQuestion
+
   """Reads a single `InviteToken` using its globally unique `ID`."""
   inviteTokenByNodeId(
     """
@@ -483,6 +825,30 @@ type Query implements Node {
     nodeId: ID!
   ): Message
 
+  """Reads a single `GermanRandomQuestion` using its globally unique `ID`."""
+  germanRandomQuestionByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `GermanRandomQuestion`.
+    """
+    nodeId: ID!
+  ): GermanRandomQuestion
+
+  """Reads a single `EnglishRandomQuestion` using its globally unique `ID`."""
+  englishRandomQuestionByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `EnglishRandomQuestion`.
+    """
+    nodeId: ID!
+  ): EnglishRandomQuestion
+
+  """Reads a single `ChineseRandomQuestion` using its globally unique `ID`."""
+  chineseRandomQuestionByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `ChineseRandomQuestion`.
+    """
+    nodeId: ID!
+  ): ChineseRandomQuestion
+
   """Reads a single `UserLanguage` using its globally unique `ID`."""
   userLanguageByNodeId(
     """
@@ -504,6 +870,52 @@ type Query implements Node {
     """The globally unique `ID` to be used in selecting a single `User`."""
     nodeId: ID!
   ): User
+
+  """Reads a single `GermanWord` using its globally unique `ID`."""
+  germanWordByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `GermanWord`.
+    """
+    nodeId: ID!
+  ): GermanWord
+
+  """Reads a single `EnglishWord` using its globally unique `ID`."""
+  englishWordByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `EnglishWord`.
+    """
+    nodeId: ID!
+  ): EnglishWord
+
+  """
+  Reads a single `GermanWouldYouRatherQuestion` using its globally unique `ID`.
+  """
+  germanWouldYouRatherQuestionByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `GermanWouldYouRatherQuestion`.
+    """
+    nodeId: ID!
+  ): GermanWouldYouRatherQuestion
+
+  """
+  Reads a single `EnglishWouldYouRatherQuestion` using its globally unique `ID`.
+  """
+  englishWouldYouRatherQuestionByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `EnglishWouldYouRatherQuestion`.
+    """
+    nodeId: ID!
+  ): EnglishWouldYouRatherQuestion
+
+  """
+  Reads a single `ChineseWouldYouRatherQuestion` using its globally unique `ID`.
+  """
+  chineseWouldYouRatherQuestionByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `ChineseWouldYouRatherQuestion`.
+    """
+    nodeId: ID!
+  ): ChineseWouldYouRatherQuestion
 }
 
 """An object with a globally unique `ID`."""
@@ -1877,6 +2289,320 @@ type LanguageSkillLevel implements Node {
     """
     filter: GroupFilter
   ): GroupsConnection!
+
+  """Reads and enables pagination through a set of `EnglishWord`."""
+  englishWordsByRecommendedSkillLevelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `EnglishWord`."""
+    orderBy: [EnglishWordsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: EnglishWordCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: EnglishWordFilter
+  ): EnglishWordsConnection!
+
+  """Reads and enables pagination through a set of `GermanWord`."""
+  germanWordsByRecommendedSkillLevelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GermanWord`."""
+    orderBy: [GermanWordsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GermanWordCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GermanWordFilter
+  ): GermanWordsConnection!
+
+  """Reads and enables pagination through a set of `EnglishRandomQuestion`."""
+  englishRandomQuestionsByRecommendedSkillLevelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `EnglishRandomQuestion`."""
+    orderBy: [EnglishRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: EnglishRandomQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: EnglishRandomQuestionFilter
+  ): EnglishRandomQuestionsConnection!
+
+  """Reads and enables pagination through a set of `GermanRandomQuestion`."""
+  germanRandomQuestionsByRecommendedSkillLevelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GermanRandomQuestion`."""
+    orderBy: [GermanRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GermanRandomQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GermanRandomQuestionFilter
+  ): GermanRandomQuestionsConnection!
+
+  """
+  Reads and enables pagination through a set of `EnglishWouldYouRatherQuestion`.
+  """
+  englishWouldYouRatherQuestionsByRecommendedSkillLevelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `EnglishWouldYouRatherQuestion`."""
+    orderBy: [EnglishWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: EnglishWouldYouRatherQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: EnglishWouldYouRatherQuestionFilter
+  ): EnglishWouldYouRatherQuestionsConnection!
+
+  """
+  Reads and enables pagination through a set of `GermanWouldYouRatherQuestion`.
+  """
+  germanWouldYouRatherQuestionsByRecommendedSkillLevelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GermanWouldYouRatherQuestion`."""
+    orderBy: [GermanWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GermanWouldYouRatherQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GermanWouldYouRatherQuestionFilter
+  ): GermanWouldYouRatherQuestionsConnection!
+
+  """Reads and enables pagination through a set of `ChineseRandomQuestion`."""
+  chineseRandomQuestionsByRecommendedSkillLevelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `ChineseRandomQuestion`."""
+    orderBy: [ChineseRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChineseRandomQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ChineseRandomQuestionFilter
+  ): ChineseRandomQuestionsConnection!
+
+  """
+  Reads and enables pagination through a set of `ChineseWouldYouRatherQuestion`.
+  """
+  chineseWouldYouRatherQuestionsByRecommendedSkillLevelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `ChineseWouldYouRatherQuestion`."""
+    orderBy: [ChineseWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChineseWouldYouRatherQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ChineseWouldYouRatherQuestionFilter
+  ): ChineseWouldYouRatherQuestionsConnection!
+
+  """
+  Reads and enables pagination through a set of `ChineseGuessCharacterQuestion`.
+  """
+  chineseGuessCharacterQuestionsByRecommendedSkillLevelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `ChineseGuessCharacterQuestion`."""
+    orderBy: [ChineseGuessCharacterQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChineseGuessCharacterQuestionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ChineseGuessCharacterQuestionFilter
+  ): ChineseGuessCharacterQuestionsConnection!
 
   """Reads and enables pagination through a set of `User`."""
   usersByUserLanguageLanguageSkillLevelIdAndUserId(
@@ -3401,6 +4127,1191 @@ type GroupsEdge {
   node: Group
 }
 
+"""A connection to a list of `EnglishWord` values."""
+type EnglishWordsConnection {
+  """A list of `EnglishWord` objects."""
+  nodes: [EnglishWord]!
+
+  """
+  A list of edges which contains the `EnglishWord` and cursor to aid in pagination.
+  """
+  edges: [EnglishWordsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `EnglishWord` you could get from the connection."""
+  totalCount: Int!
+}
+
+type EnglishWord implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  word: String!
+
+  """Ranges from 0 to 1 (higher is more frequent)"""
+  frequency: Float!
+  length: Int
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `EnglishWord` edge in the connection."""
+type EnglishWordsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `EnglishWord` at the end of the edge."""
+  node: EnglishWord
+}
+
+"""Methods to use when ordering `EnglishWord`."""
+enum EnglishWordsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  WORD_ASC
+  WORD_DESC
+  FREQUENCY_ASC
+  FREQUENCY_DESC
+  LENGTH_ASC
+  LENGTH_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `EnglishWord` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input EnglishWordCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `word` field."""
+  word: String
+
+  """Checks for equality with the object’s `frequency` field."""
+  frequency: Float
+
+  """Checks for equality with the object’s `length` field."""
+  length: Int
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `EnglishWord` object types. All fields are combined with a logical ‘and.’
+"""
+input EnglishWordFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `word` field."""
+  word: StringFilter
+
+  """Filter by the object’s `frequency` field."""
+  frequency: FloatFilter
+
+  """Filter by the object’s `length` field."""
+  length: IntFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [EnglishWordFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [EnglishWordFilter!]
+
+  """Negates the expression."""
+  not: EnglishWordFilter
+}
+
+"""
+A filter to be used against Float fields. All fields are combined with a logical ‘and.’
+"""
+input FloatFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Float
+
+  """Not equal to the specified value."""
+  notEqualTo: Float
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Float
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Float
+
+  """Included in the specified list."""
+  in: [Float!]
+
+  """Not included in the specified list."""
+  notIn: [Float!]
+
+  """Less than the specified value."""
+  lessThan: Float
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Float
+
+  """Greater than the specified value."""
+  greaterThan: Float
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Float
+}
+
+"""A connection to a list of `GermanWord` values."""
+type GermanWordsConnection {
+  """A list of `GermanWord` objects."""
+  nodes: [GermanWord]!
+
+  """
+  A list of edges which contains the `GermanWord` and cursor to aid in pagination.
+  """
+  edges: [GermanWordsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `GermanWord` you could get from the connection."""
+  totalCount: Int!
+}
+
+type GermanWord implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  word: String!
+
+  """Ranges from 0 to 1 (higher is more frequent)"""
+  frequency: Float!
+  length: Int
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `GermanWord` edge in the connection."""
+type GermanWordsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GermanWord` at the end of the edge."""
+  node: GermanWord
+}
+
+"""Methods to use when ordering `GermanWord`."""
+enum GermanWordsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  WORD_ASC
+  WORD_DESC
+  FREQUENCY_ASC
+  FREQUENCY_DESC
+  LENGTH_ASC
+  LENGTH_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `GermanWord` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input GermanWordCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `word` field."""
+  word: String
+
+  """Checks for equality with the object’s `frequency` field."""
+  frequency: Float
+
+  """Checks for equality with the object’s `length` field."""
+  length: Int
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `GermanWord` object types. All fields are combined with a logical ‘and.’
+"""
+input GermanWordFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `word` field."""
+  word: StringFilter
+
+  """Filter by the object’s `frequency` field."""
+  frequency: FloatFilter
+
+  """Filter by the object’s `length` field."""
+  length: IntFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [GermanWordFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GermanWordFilter!]
+
+  """Negates the expression."""
+  not: GermanWordFilter
+}
+
+"""A connection to a list of `EnglishRandomQuestion` values."""
+type EnglishRandomQuestionsConnection {
+  """A list of `EnglishRandomQuestion` objects."""
+  nodes: [EnglishRandomQuestion]!
+
+  """
+  A list of edges which contains the `EnglishRandomQuestion` and cursor to aid in pagination.
+  """
+  edges: [EnglishRandomQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `EnglishRandomQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type EnglishRandomQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  question: String!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `EnglishRandomQuestion` edge in the connection."""
+type EnglishRandomQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `EnglishRandomQuestion` at the end of the edge."""
+  node: EnglishRandomQuestion
+}
+
+"""Methods to use when ordering `EnglishRandomQuestion`."""
+enum EnglishRandomQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  QUESTION_ASC
+  QUESTION_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `EnglishRandomQuestion` object types. All fields
+are tested for equality and combined with a logical ‘and.’
+"""
+input EnglishRandomQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `question` field."""
+  question: String
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `EnglishRandomQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input EnglishRandomQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `question` field."""
+  question: StringFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [EnglishRandomQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [EnglishRandomQuestionFilter!]
+
+  """Negates the expression."""
+  not: EnglishRandomQuestionFilter
+}
+
+"""A connection to a list of `GermanRandomQuestion` values."""
+type GermanRandomQuestionsConnection {
+  """A list of `GermanRandomQuestion` objects."""
+  nodes: [GermanRandomQuestion]!
+
+  """
+  A list of edges which contains the `GermanRandomQuestion` and cursor to aid in pagination.
+  """
+  edges: [GermanRandomQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `GermanRandomQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type GermanRandomQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  question: String!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `GermanRandomQuestion` edge in the connection."""
+type GermanRandomQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GermanRandomQuestion` at the end of the edge."""
+  node: GermanRandomQuestion
+}
+
+"""Methods to use when ordering `GermanRandomQuestion`."""
+enum GermanRandomQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  QUESTION_ASC
+  QUESTION_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `GermanRandomQuestion` object types. All fields
+are tested for equality and combined with a logical ‘and.’
+"""
+input GermanRandomQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `question` field."""
+  question: String
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `GermanRandomQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input GermanRandomQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `question` field."""
+  question: StringFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [GermanRandomQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GermanRandomQuestionFilter!]
+
+  """Negates the expression."""
+  not: GermanRandomQuestionFilter
+}
+
+"""A connection to a list of `EnglishWouldYouRatherQuestion` values."""
+type EnglishWouldYouRatherQuestionsConnection {
+  """A list of `EnglishWouldYouRatherQuestion` objects."""
+  nodes: [EnglishWouldYouRatherQuestion]!
+
+  """
+  A list of edges which contains the `EnglishWouldYouRatherQuestion` and cursor to aid in pagination.
+  """
+  edges: [EnglishWouldYouRatherQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `EnglishWouldYouRatherQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type EnglishWouldYouRatherQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  question: String!
+  answers: [String]!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `EnglishWouldYouRatherQuestion` edge in the connection."""
+type EnglishWouldYouRatherQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `EnglishWouldYouRatherQuestion` at the end of the edge."""
+  node: EnglishWouldYouRatherQuestion
+}
+
+"""Methods to use when ordering `EnglishWouldYouRatherQuestion`."""
+enum EnglishWouldYouRatherQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  QUESTION_ASC
+  QUESTION_DESC
+  ANSWERS_ASC
+  ANSWERS_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `EnglishWouldYouRatherQuestion` object types. All
+fields are tested for equality and combined with a logical ‘and.’
+"""
+input EnglishWouldYouRatherQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `question` field."""
+  question: String
+
+  """Checks for equality with the object’s `answers` field."""
+  answers: [String]
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `EnglishWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input EnglishWouldYouRatherQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `question` field."""
+  question: StringFilter
+
+  """Filter by the object’s `answers` field."""
+  answers: StringListFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [EnglishWouldYouRatherQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [EnglishWouldYouRatherQuestionFilter!]
+
+  """Negates the expression."""
+  not: EnglishWouldYouRatherQuestionFilter
+}
+
+"""
+A filter to be used against String List fields. All fields are combined with a logical ‘and.’
+"""
+input StringListFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: [String]
+
+  """Not equal to the specified value."""
+  notEqualTo: [String]
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: [String]
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: [String]
+
+  """Less than the specified value."""
+  lessThan: [String]
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: [String]
+
+  """Greater than the specified value."""
+  greaterThan: [String]
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: [String]
+
+  """Contains the specified list of values."""
+  contains: [String]
+
+  """Contained by the specified list of values."""
+  containedBy: [String]
+
+  """Overlaps the specified list of values."""
+  overlaps: [String]
+
+  """Any array item is equal to the specified value."""
+  anyEqualTo: String
+
+  """Any array item is not equal to the specified value."""
+  anyNotEqualTo: String
+
+  """Any array item is less than the specified value."""
+  anyLessThan: String
+
+  """Any array item is less than or equal to the specified value."""
+  anyLessThanOrEqualTo: String
+
+  """Any array item is greater than the specified value."""
+  anyGreaterThan: String
+
+  """Any array item is greater than or equal to the specified value."""
+  anyGreaterThanOrEqualTo: String
+}
+
+"""A connection to a list of `GermanWouldYouRatherQuestion` values."""
+type GermanWouldYouRatherQuestionsConnection {
+  """A list of `GermanWouldYouRatherQuestion` objects."""
+  nodes: [GermanWouldYouRatherQuestion]!
+
+  """
+  A list of edges which contains the `GermanWouldYouRatherQuestion` and cursor to aid in pagination.
+  """
+  edges: [GermanWouldYouRatherQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `GermanWouldYouRatherQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type GermanWouldYouRatherQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  question: String!
+  answers: [String]!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `GermanWouldYouRatherQuestion` edge in the connection."""
+type GermanWouldYouRatherQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GermanWouldYouRatherQuestion` at the end of the edge."""
+  node: GermanWouldYouRatherQuestion
+}
+
+"""Methods to use when ordering `GermanWouldYouRatherQuestion`."""
+enum GermanWouldYouRatherQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  QUESTION_ASC
+  QUESTION_DESC
+  ANSWERS_ASC
+  ANSWERS_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `GermanWouldYouRatherQuestion` object types. All
+fields are tested for equality and combined with a logical ‘and.’
+"""
+input GermanWouldYouRatherQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `question` field."""
+  question: String
+
+  """Checks for equality with the object’s `answers` field."""
+  answers: [String]
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `GermanWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input GermanWouldYouRatherQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `question` field."""
+  question: StringFilter
+
+  """Filter by the object’s `answers` field."""
+  answers: StringListFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [GermanWouldYouRatherQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GermanWouldYouRatherQuestionFilter!]
+
+  """Negates the expression."""
+  not: GermanWouldYouRatherQuestionFilter
+}
+
+"""A connection to a list of `ChineseRandomQuestion` values."""
+type ChineseRandomQuestionsConnection {
+  """A list of `ChineseRandomQuestion` objects."""
+  nodes: [ChineseRandomQuestion]!
+
+  """
+  A list of edges which contains the `ChineseRandomQuestion` and cursor to aid in pagination.
+  """
+  edges: [ChineseRandomQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `ChineseRandomQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type ChineseRandomQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  question: String!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `ChineseRandomQuestion` edge in the connection."""
+type ChineseRandomQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ChineseRandomQuestion` at the end of the edge."""
+  node: ChineseRandomQuestion
+}
+
+"""Methods to use when ordering `ChineseRandomQuestion`."""
+enum ChineseRandomQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  QUESTION_ASC
+  QUESTION_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `ChineseRandomQuestion` object types. All fields
+are tested for equality and combined with a logical ‘and.’
+"""
+input ChineseRandomQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `question` field."""
+  question: String
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `ChineseRandomQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input ChineseRandomQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `question` field."""
+  question: StringFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [ChineseRandomQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ChineseRandomQuestionFilter!]
+
+  """Negates the expression."""
+  not: ChineseRandomQuestionFilter
+}
+
+"""A connection to a list of `ChineseWouldYouRatherQuestion` values."""
+type ChineseWouldYouRatherQuestionsConnection {
+  """A list of `ChineseWouldYouRatherQuestion` objects."""
+  nodes: [ChineseWouldYouRatherQuestion]!
+
+  """
+  A list of edges which contains the `ChineseWouldYouRatherQuestion` and cursor to aid in pagination.
+  """
+  edges: [ChineseWouldYouRatherQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `ChineseWouldYouRatherQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type ChineseWouldYouRatherQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  question: String!
+  answers: [String]!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `ChineseWouldYouRatherQuestion` edge in the connection."""
+type ChineseWouldYouRatherQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ChineseWouldYouRatherQuestion` at the end of the edge."""
+  node: ChineseWouldYouRatherQuestion
+}
+
+"""Methods to use when ordering `ChineseWouldYouRatherQuestion`."""
+enum ChineseWouldYouRatherQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  QUESTION_ASC
+  QUESTION_DESC
+  ANSWERS_ASC
+  ANSWERS_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `ChineseWouldYouRatherQuestion` object types. All
+fields are tested for equality and combined with a logical ‘and.’
+"""
+input ChineseWouldYouRatherQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `question` field."""
+  question: String
+
+  """Checks for equality with the object’s `answers` field."""
+  answers: [String]
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `ChineseWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input ChineseWouldYouRatherQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `question` field."""
+  question: StringFilter
+
+  """Filter by the object’s `answers` field."""
+  answers: StringListFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [ChineseWouldYouRatherQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ChineseWouldYouRatherQuestionFilter!]
+
+  """Negates the expression."""
+  not: ChineseWouldYouRatherQuestionFilter
+}
+
+"""A connection to a list of `ChineseGuessCharacterQuestion` values."""
+type ChineseGuessCharacterQuestionsConnection {
+  """A list of `ChineseGuessCharacterQuestion` objects."""
+  nodes: [ChineseGuessCharacterQuestion]!
+
+  """
+  A list of edges which contains the `ChineseGuessCharacterQuestion` and cursor to aid in pagination.
+  """
+  edges: [ChineseGuessCharacterQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `ChineseGuessCharacterQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type ChineseGuessCharacterQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  character: String!
+  hint: String!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseGuessCharacterQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `ChineseGuessCharacterQuestion` edge in the connection."""
+type ChineseGuessCharacterQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ChineseGuessCharacterQuestion` at the end of the edge."""
+  node: ChineseGuessCharacterQuestion
+}
+
+"""Methods to use when ordering `ChineseGuessCharacterQuestion`."""
+enum ChineseGuessCharacterQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  CHARACTER_ASC
+  CHARACTER_DESC
+  HINT_ASC
+  HINT_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `ChineseGuessCharacterQuestion` object types. All
+fields are tested for equality and combined with a logical ‘and.’
+"""
+input ChineseGuessCharacterQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `character` field."""
+  character: String
+
+  """Checks for equality with the object’s `hint` field."""
+  hint: String
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `ChineseGuessCharacterQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input ChineseGuessCharacterQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `character` field."""
+  character: StringFilter
+
+  """Filter by the object’s `hint` field."""
+  hint: StringFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [ChineseGuessCharacterQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ChineseGuessCharacterQuestionFilter!]
+
+  """Negates the expression."""
+  not: ChineseGuessCharacterQuestionFilter
+}
+
 """
 A connection to a list of `User` values, with data from `UserLanguage`.
 """
@@ -4904,6 +6815,14 @@ type Mutation {
     input: CreateGroupInput!
   ): CreateGroupPayload
 
+  """Creates a single `ChineseGuessCharacterQuestion`."""
+  createChineseGuessCharacterQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateChineseGuessCharacterQuestionInput!
+  ): CreateChineseGuessCharacterQuestionPayload
+
   """Creates a single `InviteToken`."""
   createInviteToken(
     """
@@ -4944,6 +6863,30 @@ type Mutation {
     input: CreateMessageInput!
   ): CreateMessagePayload
 
+  """Creates a single `GermanRandomQuestion`."""
+  createGermanRandomQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGermanRandomQuestionInput!
+  ): CreateGermanRandomQuestionPayload
+
+  """Creates a single `EnglishRandomQuestion`."""
+  createEnglishRandomQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateEnglishRandomQuestionInput!
+  ): CreateEnglishRandomQuestionPayload
+
+  """Creates a single `ChineseRandomQuestion`."""
+  createChineseRandomQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateChineseRandomQuestionInput!
+  ): CreateChineseRandomQuestionPayload
+
   """Creates a single `UserLanguage`."""
   createUserLanguage(
     """
@@ -4967,6 +6910,46 @@ type Mutation {
     """
     input: CreateUserInput!
   ): CreateUserPayload
+
+  """Creates a single `GermanWord`."""
+  createGermanWord(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGermanWordInput!
+  ): CreateGermanWordPayload
+
+  """Creates a single `EnglishWord`."""
+  createEnglishWord(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateEnglishWordInput!
+  ): CreateEnglishWordPayload
+
+  """Creates a single `GermanWouldYouRatherQuestion`."""
+  createGermanWouldYouRatherQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGermanWouldYouRatherQuestionInput!
+  ): CreateGermanWouldYouRatherQuestionPayload
+
+  """Creates a single `EnglishWouldYouRatherQuestion`."""
+  createEnglishWouldYouRatherQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateEnglishWouldYouRatherQuestionInput!
+  ): CreateEnglishWouldYouRatherQuestionPayload
+
+  """Creates a single `ChineseWouldYouRatherQuestion`."""
+  createChineseWouldYouRatherQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateChineseWouldYouRatherQuestionInput!
+  ): CreateChineseWouldYouRatherQuestionPayload
 
   """Updates a single `GroupUser` using its globally unique id and a patch."""
   updateGroupUserByNodeId(
@@ -5007,6 +6990,36 @@ type Mutation {
     """
     input: UpdateGroupByUuidInput!
   ): UpdateGroupPayload
+
+  """
+  Updates a single `ChineseGuessCharacterQuestion` using its globally unique id and a patch.
+  """
+  updateChineseGuessCharacterQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChineseGuessCharacterQuestionByNodeIdInput!
+  ): UpdateChineseGuessCharacterQuestionPayload
+
+  """
+  Updates a single `ChineseGuessCharacterQuestion` using a unique key and a patch.
+  """
+  updateChineseGuessCharacterQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChineseGuessCharacterQuestionInput!
+  ): UpdateChineseGuessCharacterQuestionPayload
+
+  """
+  Updates a single `ChineseGuessCharacterQuestion` using a unique key and a patch.
+  """
+  updateChineseGuessCharacterQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChineseGuessCharacterQuestionByUuidInput!
+  ): UpdateChineseGuessCharacterQuestionPayload
 
   """
   Updates a single `InviteToken` using its globally unique id and a patch.
@@ -5127,6 +7140,96 @@ type Mutation {
   ): UpdateMessagePayload
 
   """
+  Updates a single `GermanRandomQuestion` using its globally unique id and a patch.
+  """
+  updateGermanRandomQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGermanRandomQuestionByNodeIdInput!
+  ): UpdateGermanRandomQuestionPayload
+
+  """
+  Updates a single `GermanRandomQuestion` using a unique key and a patch.
+  """
+  updateGermanRandomQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGermanRandomQuestionInput!
+  ): UpdateGermanRandomQuestionPayload
+
+  """
+  Updates a single `GermanRandomQuestion` using a unique key and a patch.
+  """
+  updateGermanRandomQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGermanRandomQuestionByUuidInput!
+  ): UpdateGermanRandomQuestionPayload
+
+  """
+  Updates a single `EnglishRandomQuestion` using its globally unique id and a patch.
+  """
+  updateEnglishRandomQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateEnglishRandomQuestionByNodeIdInput!
+  ): UpdateEnglishRandomQuestionPayload
+
+  """
+  Updates a single `EnglishRandomQuestion` using a unique key and a patch.
+  """
+  updateEnglishRandomQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateEnglishRandomQuestionInput!
+  ): UpdateEnglishRandomQuestionPayload
+
+  """
+  Updates a single `EnglishRandomQuestion` using a unique key and a patch.
+  """
+  updateEnglishRandomQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateEnglishRandomQuestionByUuidInput!
+  ): UpdateEnglishRandomQuestionPayload
+
+  """
+  Updates a single `ChineseRandomQuestion` using its globally unique id and a patch.
+  """
+  updateChineseRandomQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChineseRandomQuestionByNodeIdInput!
+  ): UpdateChineseRandomQuestionPayload
+
+  """
+  Updates a single `ChineseRandomQuestion` using a unique key and a patch.
+  """
+  updateChineseRandomQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChineseRandomQuestionInput!
+  ): UpdateChineseRandomQuestionPayload
+
+  """
+  Updates a single `ChineseRandomQuestion` using a unique key and a patch.
+  """
+  updateChineseRandomQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChineseRandomQuestionByUuidInput!
+  ): UpdateChineseRandomQuestionPayload
+
+  """
   Updates a single `UserLanguage` using its globally unique id and a patch.
   """
   updateUserLanguageByNodeId(
@@ -5194,6 +7297,148 @@ type Mutation {
     input: UpdateUserByUuidInput!
   ): UpdateUserPayload
 
+  """
+  Updates a single `GermanWord` using its globally unique id and a patch.
+  """
+  updateGermanWordByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGermanWordByNodeIdInput!
+  ): UpdateGermanWordPayload
+
+  """Updates a single `GermanWord` using a unique key and a patch."""
+  updateGermanWord(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGermanWordInput!
+  ): UpdateGermanWordPayload
+
+  """Updates a single `GermanWord` using a unique key and a patch."""
+  updateGermanWordByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGermanWordByUuidInput!
+  ): UpdateGermanWordPayload
+
+  """
+  Updates a single `EnglishWord` using its globally unique id and a patch.
+  """
+  updateEnglishWordByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateEnglishWordByNodeIdInput!
+  ): UpdateEnglishWordPayload
+
+  """Updates a single `EnglishWord` using a unique key and a patch."""
+  updateEnglishWord(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateEnglishWordInput!
+  ): UpdateEnglishWordPayload
+
+  """Updates a single `EnglishWord` using a unique key and a patch."""
+  updateEnglishWordByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateEnglishWordByUuidInput!
+  ): UpdateEnglishWordPayload
+
+  """
+  Updates a single `GermanWouldYouRatherQuestion` using its globally unique id and a patch.
+  """
+  updateGermanWouldYouRatherQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGermanWouldYouRatherQuestionByNodeIdInput!
+  ): UpdateGermanWouldYouRatherQuestionPayload
+
+  """
+  Updates a single `GermanWouldYouRatherQuestion` using a unique key and a patch.
+  """
+  updateGermanWouldYouRatherQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGermanWouldYouRatherQuestionInput!
+  ): UpdateGermanWouldYouRatherQuestionPayload
+
+  """
+  Updates a single `GermanWouldYouRatherQuestion` using a unique key and a patch.
+  """
+  updateGermanWouldYouRatherQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGermanWouldYouRatherQuestionByUuidInput!
+  ): UpdateGermanWouldYouRatherQuestionPayload
+
+  """
+  Updates a single `EnglishWouldYouRatherQuestion` using its globally unique id and a patch.
+  """
+  updateEnglishWouldYouRatherQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateEnglishWouldYouRatherQuestionByNodeIdInput!
+  ): UpdateEnglishWouldYouRatherQuestionPayload
+
+  """
+  Updates a single `EnglishWouldYouRatherQuestion` using a unique key and a patch.
+  """
+  updateEnglishWouldYouRatherQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateEnglishWouldYouRatherQuestionInput!
+  ): UpdateEnglishWouldYouRatherQuestionPayload
+
+  """
+  Updates a single `EnglishWouldYouRatherQuestion` using a unique key and a patch.
+  """
+  updateEnglishWouldYouRatherQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateEnglishWouldYouRatherQuestionByUuidInput!
+  ): UpdateEnglishWouldYouRatherQuestionPayload
+
+  """
+  Updates a single `ChineseWouldYouRatherQuestion` using its globally unique id and a patch.
+  """
+  updateChineseWouldYouRatherQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChineseWouldYouRatherQuestionByNodeIdInput!
+  ): UpdateChineseWouldYouRatherQuestionPayload
+
+  """
+  Updates a single `ChineseWouldYouRatherQuestion` using a unique key and a patch.
+  """
+  updateChineseWouldYouRatherQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChineseWouldYouRatherQuestionInput!
+  ): UpdateChineseWouldYouRatherQuestionPayload
+
+  """
+  Updates a single `ChineseWouldYouRatherQuestion` using a unique key and a patch.
+  """
+  updateChineseWouldYouRatherQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChineseWouldYouRatherQuestionByUuidInput!
+  ): UpdateChineseWouldYouRatherQuestionPayload
+
   """Deletes a single `GroupUser` using its globally unique id."""
   deleteGroupUserByNodeId(
     """
@@ -5233,6 +7478,32 @@ type Mutation {
     """
     input: DeleteGroupByUuidInput!
   ): DeleteGroupPayload
+
+  """
+  Deletes a single `ChineseGuessCharacterQuestion` using its globally unique id.
+  """
+  deleteChineseGuessCharacterQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChineseGuessCharacterQuestionByNodeIdInput!
+  ): DeleteChineseGuessCharacterQuestionPayload
+
+  """Deletes a single `ChineseGuessCharacterQuestion` using a unique key."""
+  deleteChineseGuessCharacterQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChineseGuessCharacterQuestionInput!
+  ): DeleteChineseGuessCharacterQuestionPayload
+
+  """Deletes a single `ChineseGuessCharacterQuestion` using a unique key."""
+  deleteChineseGuessCharacterQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChineseGuessCharacterQuestionByUuidInput!
+  ): DeleteChineseGuessCharacterQuestionPayload
 
   """Deletes a single `InviteToken` using its globally unique id."""
   deleteInviteTokenByNodeId(
@@ -5346,6 +7617,78 @@ type Mutation {
     input: DeleteMessageByUuidInput!
   ): DeleteMessagePayload
 
+  """Deletes a single `GermanRandomQuestion` using its globally unique id."""
+  deleteGermanRandomQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGermanRandomQuestionByNodeIdInput!
+  ): DeleteGermanRandomQuestionPayload
+
+  """Deletes a single `GermanRandomQuestion` using a unique key."""
+  deleteGermanRandomQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGermanRandomQuestionInput!
+  ): DeleteGermanRandomQuestionPayload
+
+  """Deletes a single `GermanRandomQuestion` using a unique key."""
+  deleteGermanRandomQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGermanRandomQuestionByUuidInput!
+  ): DeleteGermanRandomQuestionPayload
+
+  """Deletes a single `EnglishRandomQuestion` using its globally unique id."""
+  deleteEnglishRandomQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteEnglishRandomQuestionByNodeIdInput!
+  ): DeleteEnglishRandomQuestionPayload
+
+  """Deletes a single `EnglishRandomQuestion` using a unique key."""
+  deleteEnglishRandomQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteEnglishRandomQuestionInput!
+  ): DeleteEnglishRandomQuestionPayload
+
+  """Deletes a single `EnglishRandomQuestion` using a unique key."""
+  deleteEnglishRandomQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteEnglishRandomQuestionByUuidInput!
+  ): DeleteEnglishRandomQuestionPayload
+
+  """Deletes a single `ChineseRandomQuestion` using its globally unique id."""
+  deleteChineseRandomQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChineseRandomQuestionByNodeIdInput!
+  ): DeleteChineseRandomQuestionPayload
+
+  """Deletes a single `ChineseRandomQuestion` using a unique key."""
+  deleteChineseRandomQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChineseRandomQuestionInput!
+  ): DeleteChineseRandomQuestionPayload
+
+  """Deletes a single `ChineseRandomQuestion` using a unique key."""
+  deleteChineseRandomQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChineseRandomQuestionByUuidInput!
+  ): DeleteChineseRandomQuestionPayload
+
   """Deletes a single `UserLanguage` using its globally unique id."""
   deleteUserLanguageByNodeId(
     """
@@ -5409,6 +7752,132 @@ type Mutation {
     """
     input: DeleteUserByUuidInput!
   ): DeleteUserPayload
+
+  """Deletes a single `GermanWord` using its globally unique id."""
+  deleteGermanWordByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGermanWordByNodeIdInput!
+  ): DeleteGermanWordPayload
+
+  """Deletes a single `GermanWord` using a unique key."""
+  deleteGermanWord(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGermanWordInput!
+  ): DeleteGermanWordPayload
+
+  """Deletes a single `GermanWord` using a unique key."""
+  deleteGermanWordByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGermanWordByUuidInput!
+  ): DeleteGermanWordPayload
+
+  """Deletes a single `EnglishWord` using its globally unique id."""
+  deleteEnglishWordByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteEnglishWordByNodeIdInput!
+  ): DeleteEnglishWordPayload
+
+  """Deletes a single `EnglishWord` using a unique key."""
+  deleteEnglishWord(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteEnglishWordInput!
+  ): DeleteEnglishWordPayload
+
+  """Deletes a single `EnglishWord` using a unique key."""
+  deleteEnglishWordByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteEnglishWordByUuidInput!
+  ): DeleteEnglishWordPayload
+
+  """
+  Deletes a single `GermanWouldYouRatherQuestion` using its globally unique id.
+  """
+  deleteGermanWouldYouRatherQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGermanWouldYouRatherQuestionByNodeIdInput!
+  ): DeleteGermanWouldYouRatherQuestionPayload
+
+  """Deletes a single `GermanWouldYouRatherQuestion` using a unique key."""
+  deleteGermanWouldYouRatherQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGermanWouldYouRatherQuestionInput!
+  ): DeleteGermanWouldYouRatherQuestionPayload
+
+  """Deletes a single `GermanWouldYouRatherQuestion` using a unique key."""
+  deleteGermanWouldYouRatherQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGermanWouldYouRatherQuestionByUuidInput!
+  ): DeleteGermanWouldYouRatherQuestionPayload
+
+  """
+  Deletes a single `EnglishWouldYouRatherQuestion` using its globally unique id.
+  """
+  deleteEnglishWouldYouRatherQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteEnglishWouldYouRatherQuestionByNodeIdInput!
+  ): DeleteEnglishWouldYouRatherQuestionPayload
+
+  """Deletes a single `EnglishWouldYouRatherQuestion` using a unique key."""
+  deleteEnglishWouldYouRatherQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteEnglishWouldYouRatherQuestionInput!
+  ): DeleteEnglishWouldYouRatherQuestionPayload
+
+  """Deletes a single `EnglishWouldYouRatherQuestion` using a unique key."""
+  deleteEnglishWouldYouRatherQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteEnglishWouldYouRatherQuestionByUuidInput!
+  ): DeleteEnglishWouldYouRatherQuestionPayload
+
+  """
+  Deletes a single `ChineseWouldYouRatherQuestion` using its globally unique id.
+  """
+  deleteChineseWouldYouRatherQuestionByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChineseWouldYouRatherQuestionByNodeIdInput!
+  ): DeleteChineseWouldYouRatherQuestionPayload
+
+  """Deletes a single `ChineseWouldYouRatherQuestion` using a unique key."""
+  deleteChineseWouldYouRatherQuestion(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChineseWouldYouRatherQuestionInput!
+  ): DeleteChineseWouldYouRatherQuestionPayload
+
+  """Deletes a single `ChineseWouldYouRatherQuestion` using a unique key."""
+  deleteChineseWouldYouRatherQuestionByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChineseWouldYouRatherQuestionByUuidInput!
+  ): DeleteChineseWouldYouRatherQuestionPayload
   joinGlobalGroup(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -5524,6 +7993,58 @@ input GroupInput {
   languageSkillLevelId: Int
   createdAt: Datetime
   uuid: UUID!
+}
+
+"""The output of our create `ChineseGuessCharacterQuestion` mutation."""
+type CreateChineseGuessCharacterQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChineseGuessCharacterQuestion` that was created by this mutation."""
+  chineseGuessCharacterQuestion: ChineseGuessCharacterQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseGuessCharacterQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `ChineseGuessCharacterQuestion`. May be used by Relay 1.
+  """
+  chineseGuessCharacterQuestionEdge(
+    """The method to use when ordering `ChineseGuessCharacterQuestion`."""
+    orderBy: [ChineseGuessCharacterQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChineseGuessCharacterQuestionsEdge
+}
+
+"""All input for the create `ChineseGuessCharacterQuestion` mutation."""
+input CreateChineseGuessCharacterQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ChineseGuessCharacterQuestion` to be created by this mutation."""
+  chineseGuessCharacterQuestion: ChineseGuessCharacterQuestionInput!
+}
+
+"""An input for mutations affecting `ChineseGuessCharacterQuestion`"""
+input ChineseGuessCharacterQuestionInput {
+  id: Int
+  uuid: UUID!
+  character: String!
+  hint: String!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
 }
 
 """The output of our create `InviteToken` mutation."""
@@ -5769,6 +8290,153 @@ input MessageInput {
   createdAt: Datetime
 }
 
+"""The output of our create `GermanRandomQuestion` mutation."""
+type CreateGermanRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GermanRandomQuestion` that was created by this mutation."""
+  germanRandomQuestion: GermanRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `GermanRandomQuestion`. May be used by Relay 1."""
+  germanRandomQuestionEdge(
+    """The method to use when ordering `GermanRandomQuestion`."""
+    orderBy: [GermanRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GermanRandomQuestionsEdge
+}
+
+"""All input for the create `GermanRandomQuestion` mutation."""
+input CreateGermanRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `GermanRandomQuestion` to be created by this mutation."""
+  germanRandomQuestion: GermanRandomQuestionInput!
+}
+
+"""An input for mutations affecting `GermanRandomQuestion`"""
+input GermanRandomQuestionInput {
+  id: Int
+  uuid: UUID!
+  question: String!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""The output of our create `EnglishRandomQuestion` mutation."""
+type CreateEnglishRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `EnglishRandomQuestion` that was created by this mutation."""
+  englishRandomQuestion: EnglishRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `EnglishRandomQuestion`. May be used by Relay 1."""
+  englishRandomQuestionEdge(
+    """The method to use when ordering `EnglishRandomQuestion`."""
+    orderBy: [EnglishRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): EnglishRandomQuestionsEdge
+}
+
+"""All input for the create `EnglishRandomQuestion` mutation."""
+input CreateEnglishRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `EnglishRandomQuestion` to be created by this mutation."""
+  englishRandomQuestion: EnglishRandomQuestionInput!
+}
+
+"""An input for mutations affecting `EnglishRandomQuestion`"""
+input EnglishRandomQuestionInput {
+  id: Int
+  uuid: UUID!
+  question: String!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""The output of our create `ChineseRandomQuestion` mutation."""
+type CreateChineseRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChineseRandomQuestion` that was created by this mutation."""
+  chineseRandomQuestion: ChineseRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `ChineseRandomQuestion`. May be used by Relay 1."""
+  chineseRandomQuestionEdge(
+    """The method to use when ordering `ChineseRandomQuestion`."""
+    orderBy: [ChineseRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChineseRandomQuestionsEdge
+}
+
+"""All input for the create `ChineseRandomQuestion` mutation."""
+input CreateChineseRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ChineseRandomQuestion` to be created by this mutation."""
+  chineseRandomQuestion: ChineseRandomQuestionInput!
+}
+
+"""An input for mutations affecting `ChineseRandomQuestion`"""
+input ChineseRandomQuestionInput {
+  id: Int
+  uuid: UUID!
+  question: String!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
 """The output of our create `UserLanguage` mutation."""
 type CreateUserLanguagePayload {
   """
@@ -5925,6 +8593,268 @@ input UserInput {
   locale: Int
   googleId: String
   signedUpWithTokenId: Int
+}
+
+"""The output of our create `GermanWord` mutation."""
+type CreateGermanWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GermanWord` that was created by this mutation."""
+  germanWord: GermanWord
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `GermanWord`. May be used by Relay 1."""
+  germanWordEdge(
+    """The method to use when ordering `GermanWord`."""
+    orderBy: [GermanWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GermanWordsEdge
+}
+
+"""All input for the create `GermanWord` mutation."""
+input CreateGermanWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `GermanWord` to be created by this mutation."""
+  germanWord: GermanWordInput!
+}
+
+"""An input for mutations affecting `GermanWord`"""
+input GermanWordInput {
+  id: Int
+  uuid: UUID!
+  word: String!
+
+  """Ranges from 0 to 1 (higher is more frequent)"""
+  frequency: Float!
+  length: Int
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""The output of our create `EnglishWord` mutation."""
+type CreateEnglishWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `EnglishWord` that was created by this mutation."""
+  englishWord: EnglishWord
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `EnglishWord`. May be used by Relay 1."""
+  englishWordEdge(
+    """The method to use when ordering `EnglishWord`."""
+    orderBy: [EnglishWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): EnglishWordsEdge
+}
+
+"""All input for the create `EnglishWord` mutation."""
+input CreateEnglishWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `EnglishWord` to be created by this mutation."""
+  englishWord: EnglishWordInput!
+}
+
+"""An input for mutations affecting `EnglishWord`"""
+input EnglishWordInput {
+  id: Int
+  uuid: UUID!
+  word: String!
+
+  """Ranges from 0 to 1 (higher is more frequent)"""
+  frequency: Float!
+  length: Int
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""The output of our create `GermanWouldYouRatherQuestion` mutation."""
+type CreateGermanWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GermanWouldYouRatherQuestion` that was created by this mutation."""
+  germanWouldYouRatherQuestion: GermanWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `GermanWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  germanWouldYouRatherQuestionEdge(
+    """The method to use when ordering `GermanWouldYouRatherQuestion`."""
+    orderBy: [GermanWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GermanWouldYouRatherQuestionsEdge
+}
+
+"""All input for the create `GermanWouldYouRatherQuestion` mutation."""
+input CreateGermanWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `GermanWouldYouRatherQuestion` to be created by this mutation."""
+  germanWouldYouRatherQuestion: GermanWouldYouRatherQuestionInput!
+}
+
+"""An input for mutations affecting `GermanWouldYouRatherQuestion`"""
+input GermanWouldYouRatherQuestionInput {
+  id: Int
+  uuid: UUID!
+  question: String!
+  answers: [String]!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""The output of our create `EnglishWouldYouRatherQuestion` mutation."""
+type CreateEnglishWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `EnglishWouldYouRatherQuestion` that was created by this mutation."""
+  englishWouldYouRatherQuestion: EnglishWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `EnglishWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  englishWouldYouRatherQuestionEdge(
+    """The method to use when ordering `EnglishWouldYouRatherQuestion`."""
+    orderBy: [EnglishWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): EnglishWouldYouRatherQuestionsEdge
+}
+
+"""All input for the create `EnglishWouldYouRatherQuestion` mutation."""
+input CreateEnglishWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `EnglishWouldYouRatherQuestion` to be created by this mutation."""
+  englishWouldYouRatherQuestion: EnglishWouldYouRatherQuestionInput!
+}
+
+"""An input for mutations affecting `EnglishWouldYouRatherQuestion`"""
+input EnglishWouldYouRatherQuestionInput {
+  id: Int
+  uuid: UUID!
+  question: String!
+  answers: [String]!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""The output of our create `ChineseWouldYouRatherQuestion` mutation."""
+type CreateChineseWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChineseWouldYouRatherQuestion` that was created by this mutation."""
+  chineseWouldYouRatherQuestion: ChineseWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `ChineseWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  chineseWouldYouRatherQuestionEdge(
+    """The method to use when ordering `ChineseWouldYouRatherQuestion`."""
+    orderBy: [ChineseWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChineseWouldYouRatherQuestionsEdge
+}
+
+"""All input for the create `ChineseWouldYouRatherQuestion` mutation."""
+input CreateChineseWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ChineseWouldYouRatherQuestion` to be created by this mutation."""
+  chineseWouldYouRatherQuestion: ChineseWouldYouRatherQuestionInput!
+}
+
+"""An input for mutations affecting `ChineseWouldYouRatherQuestion`"""
+input ChineseWouldYouRatherQuestionInput {
+  id: Int
+  uuid: UUID!
+  question: String!
+  answers: [String]!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
 }
 
 """The output of our update `GroupUser` mutation."""
@@ -6090,6 +9020,101 @@ input UpdateGroupByUuidInput {
   An object where the defined keys will be set on the `Group` being updated.
   """
   patch: GroupPatch!
+  uuid: UUID!
+}
+
+"""The output of our update `ChineseGuessCharacterQuestion` mutation."""
+type UpdateChineseGuessCharacterQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChineseGuessCharacterQuestion` that was updated by this mutation."""
+  chineseGuessCharacterQuestion: ChineseGuessCharacterQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseGuessCharacterQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `ChineseGuessCharacterQuestion`. May be used by Relay 1.
+  """
+  chineseGuessCharacterQuestionEdge(
+    """The method to use when ordering `ChineseGuessCharacterQuestion`."""
+    orderBy: [ChineseGuessCharacterQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChineseGuessCharacterQuestionsEdge
+}
+
+"""
+All input for the `updateChineseGuessCharacterQuestionByNodeId` mutation.
+"""
+input UpdateChineseGuessCharacterQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChineseGuessCharacterQuestion` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `ChineseGuessCharacterQuestion` being updated.
+  """
+  patch: ChineseGuessCharacterQuestionPatch!
+}
+
+"""
+Represents an update to a `ChineseGuessCharacterQuestion`. Fields that are set will be updated.
+"""
+input ChineseGuessCharacterQuestionPatch {
+  id: Int
+  uuid: UUID
+  character: String
+  hint: String
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateChineseGuessCharacterQuestion` mutation."""
+input UpdateChineseGuessCharacterQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `ChineseGuessCharacterQuestion` being updated.
+  """
+  patch: ChineseGuessCharacterQuestionPatch!
+  id: Int!
+}
+
+"""
+All input for the `updateChineseGuessCharacterQuestionByUuid` mutation.
+"""
+input UpdateChineseGuessCharacterQuestionByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `ChineseGuessCharacterQuestion` being updated.
+  """
+  patch: ChineseGuessCharacterQuestionPatch!
   uuid: UUID!
 }
 
@@ -6518,6 +9543,270 @@ input UpdateMessageByUuidInput {
   uuid: UUID!
 }
 
+"""The output of our update `GermanRandomQuestion` mutation."""
+type UpdateGermanRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GermanRandomQuestion` that was updated by this mutation."""
+  germanRandomQuestion: GermanRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `GermanRandomQuestion`. May be used by Relay 1."""
+  germanRandomQuestionEdge(
+    """The method to use when ordering `GermanRandomQuestion`."""
+    orderBy: [GermanRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GermanRandomQuestionsEdge
+}
+
+"""All input for the `updateGermanRandomQuestionByNodeId` mutation."""
+input UpdateGermanRandomQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `GermanRandomQuestion` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `GermanRandomQuestion` being updated.
+  """
+  patch: GermanRandomQuestionPatch!
+}
+
+"""
+Represents an update to a `GermanRandomQuestion`. Fields that are set will be updated.
+"""
+input GermanRandomQuestionPatch {
+  id: Int
+  uuid: UUID
+  question: String
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateGermanRandomQuestion` mutation."""
+input UpdateGermanRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `GermanRandomQuestion` being updated.
+  """
+  patch: GermanRandomQuestionPatch!
+  id: Int!
+}
+
+"""All input for the `updateGermanRandomQuestionByUuid` mutation."""
+input UpdateGermanRandomQuestionByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `GermanRandomQuestion` being updated.
+  """
+  patch: GermanRandomQuestionPatch!
+  uuid: UUID!
+}
+
+"""The output of our update `EnglishRandomQuestion` mutation."""
+type UpdateEnglishRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `EnglishRandomQuestion` that was updated by this mutation."""
+  englishRandomQuestion: EnglishRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `EnglishRandomQuestion`. May be used by Relay 1."""
+  englishRandomQuestionEdge(
+    """The method to use when ordering `EnglishRandomQuestion`."""
+    orderBy: [EnglishRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): EnglishRandomQuestionsEdge
+}
+
+"""All input for the `updateEnglishRandomQuestionByNodeId` mutation."""
+input UpdateEnglishRandomQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `EnglishRandomQuestion` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `EnglishRandomQuestion` being updated.
+  """
+  patch: EnglishRandomQuestionPatch!
+}
+
+"""
+Represents an update to a `EnglishRandomQuestion`. Fields that are set will be updated.
+"""
+input EnglishRandomQuestionPatch {
+  id: Int
+  uuid: UUID
+  question: String
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateEnglishRandomQuestion` mutation."""
+input UpdateEnglishRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `EnglishRandomQuestion` being updated.
+  """
+  patch: EnglishRandomQuestionPatch!
+  id: Int!
+}
+
+"""All input for the `updateEnglishRandomQuestionByUuid` mutation."""
+input UpdateEnglishRandomQuestionByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `EnglishRandomQuestion` being updated.
+  """
+  patch: EnglishRandomQuestionPatch!
+  uuid: UUID!
+}
+
+"""The output of our update `ChineseRandomQuestion` mutation."""
+type UpdateChineseRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChineseRandomQuestion` that was updated by this mutation."""
+  chineseRandomQuestion: ChineseRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `ChineseRandomQuestion`. May be used by Relay 1."""
+  chineseRandomQuestionEdge(
+    """The method to use when ordering `ChineseRandomQuestion`."""
+    orderBy: [ChineseRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChineseRandomQuestionsEdge
+}
+
+"""All input for the `updateChineseRandomQuestionByNodeId` mutation."""
+input UpdateChineseRandomQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChineseRandomQuestion` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `ChineseRandomQuestion` being updated.
+  """
+  patch: ChineseRandomQuestionPatch!
+}
+
+"""
+Represents an update to a `ChineseRandomQuestion`. Fields that are set will be updated.
+"""
+input ChineseRandomQuestionPatch {
+  id: Int
+  uuid: UUID
+  question: String
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateChineseRandomQuestion` mutation."""
+input UpdateChineseRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `ChineseRandomQuestion` being updated.
+  """
+  patch: ChineseRandomQuestionPatch!
+  id: Int!
+}
+
+"""All input for the `updateChineseRandomQuestionByUuid` mutation."""
+input UpdateChineseRandomQuestionByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `ChineseRandomQuestion` being updated.
+  """
+  patch: ChineseRandomQuestionPatch!
+  uuid: UUID!
+}
+
 """The output of our update `UserLanguage` mutation."""
 type UpdateUserLanguagePayload {
   """
@@ -6776,6 +10065,473 @@ input UpdateUserByUuidInput {
   uuid: UUID!
 }
 
+"""The output of our update `GermanWord` mutation."""
+type UpdateGermanWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GermanWord` that was updated by this mutation."""
+  germanWord: GermanWord
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `GermanWord`. May be used by Relay 1."""
+  germanWordEdge(
+    """The method to use when ordering `GermanWord`."""
+    orderBy: [GermanWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GermanWordsEdge
+}
+
+"""All input for the `updateGermanWordByNodeId` mutation."""
+input UpdateGermanWordByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `GermanWord` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `GermanWord` being updated.
+  """
+  patch: GermanWordPatch!
+}
+
+"""
+Represents an update to a `GermanWord`. Fields that are set will be updated.
+"""
+input GermanWordPatch {
+  id: Int
+  uuid: UUID
+  word: String
+
+  """Ranges from 0 to 1 (higher is more frequent)"""
+  frequency: Float
+  length: Int
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateGermanWord` mutation."""
+input UpdateGermanWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `GermanWord` being updated.
+  """
+  patch: GermanWordPatch!
+  id: Int!
+}
+
+"""All input for the `updateGermanWordByUuid` mutation."""
+input UpdateGermanWordByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `GermanWord` being updated.
+  """
+  patch: GermanWordPatch!
+  uuid: UUID!
+}
+
+"""The output of our update `EnglishWord` mutation."""
+type UpdateEnglishWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `EnglishWord` that was updated by this mutation."""
+  englishWord: EnglishWord
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `EnglishWord`. May be used by Relay 1."""
+  englishWordEdge(
+    """The method to use when ordering `EnglishWord`."""
+    orderBy: [EnglishWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): EnglishWordsEdge
+}
+
+"""All input for the `updateEnglishWordByNodeId` mutation."""
+input UpdateEnglishWordByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `EnglishWord` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `EnglishWord` being updated.
+  """
+  patch: EnglishWordPatch!
+}
+
+"""
+Represents an update to a `EnglishWord`. Fields that are set will be updated.
+"""
+input EnglishWordPatch {
+  id: Int
+  uuid: UUID
+  word: String
+
+  """Ranges from 0 to 1 (higher is more frequent)"""
+  frequency: Float
+  length: Int
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateEnglishWord` mutation."""
+input UpdateEnglishWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `EnglishWord` being updated.
+  """
+  patch: EnglishWordPatch!
+  id: Int!
+}
+
+"""All input for the `updateEnglishWordByUuid` mutation."""
+input UpdateEnglishWordByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `EnglishWord` being updated.
+  """
+  patch: EnglishWordPatch!
+  uuid: UUID!
+}
+
+"""The output of our update `GermanWouldYouRatherQuestion` mutation."""
+type UpdateGermanWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GermanWouldYouRatherQuestion` that was updated by this mutation."""
+  germanWouldYouRatherQuestion: GermanWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `GermanWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  germanWouldYouRatherQuestionEdge(
+    """The method to use when ordering `GermanWouldYouRatherQuestion`."""
+    orderBy: [GermanWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GermanWouldYouRatherQuestionsEdge
+}
+
+"""
+All input for the `updateGermanWouldYouRatherQuestionByNodeId` mutation.
+"""
+input UpdateGermanWouldYouRatherQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `GermanWouldYouRatherQuestion` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `GermanWouldYouRatherQuestion` being updated.
+  """
+  patch: GermanWouldYouRatherQuestionPatch!
+}
+
+"""
+Represents an update to a `GermanWouldYouRatherQuestion`. Fields that are set will be updated.
+"""
+input GermanWouldYouRatherQuestionPatch {
+  id: Int
+  uuid: UUID
+  question: String
+  answers: [String]
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateGermanWouldYouRatherQuestion` mutation."""
+input UpdateGermanWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `GermanWouldYouRatherQuestion` being updated.
+  """
+  patch: GermanWouldYouRatherQuestionPatch!
+  id: Int!
+}
+
+"""All input for the `updateGermanWouldYouRatherQuestionByUuid` mutation."""
+input UpdateGermanWouldYouRatherQuestionByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `GermanWouldYouRatherQuestion` being updated.
+  """
+  patch: GermanWouldYouRatherQuestionPatch!
+  uuid: UUID!
+}
+
+"""The output of our update `EnglishWouldYouRatherQuestion` mutation."""
+type UpdateEnglishWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `EnglishWouldYouRatherQuestion` that was updated by this mutation."""
+  englishWouldYouRatherQuestion: EnglishWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `EnglishWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  englishWouldYouRatherQuestionEdge(
+    """The method to use when ordering `EnglishWouldYouRatherQuestion`."""
+    orderBy: [EnglishWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): EnglishWouldYouRatherQuestionsEdge
+}
+
+"""
+All input for the `updateEnglishWouldYouRatherQuestionByNodeId` mutation.
+"""
+input UpdateEnglishWouldYouRatherQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `EnglishWouldYouRatherQuestion` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `EnglishWouldYouRatherQuestion` being updated.
+  """
+  patch: EnglishWouldYouRatherQuestionPatch!
+}
+
+"""
+Represents an update to a `EnglishWouldYouRatherQuestion`. Fields that are set will be updated.
+"""
+input EnglishWouldYouRatherQuestionPatch {
+  id: Int
+  uuid: UUID
+  question: String
+  answers: [String]
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateEnglishWouldYouRatherQuestion` mutation."""
+input UpdateEnglishWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `EnglishWouldYouRatherQuestion` being updated.
+  """
+  patch: EnglishWouldYouRatherQuestionPatch!
+  id: Int!
+}
+
+"""
+All input for the `updateEnglishWouldYouRatherQuestionByUuid` mutation.
+"""
+input UpdateEnglishWouldYouRatherQuestionByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `EnglishWouldYouRatherQuestion` being updated.
+  """
+  patch: EnglishWouldYouRatherQuestionPatch!
+  uuid: UUID!
+}
+
+"""The output of our update `ChineseWouldYouRatherQuestion` mutation."""
+type UpdateChineseWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChineseWouldYouRatherQuestion` that was updated by this mutation."""
+  chineseWouldYouRatherQuestion: ChineseWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `ChineseWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  chineseWouldYouRatherQuestionEdge(
+    """The method to use when ordering `ChineseWouldYouRatherQuestion`."""
+    orderBy: [ChineseWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChineseWouldYouRatherQuestionsEdge
+}
+
+"""
+All input for the `updateChineseWouldYouRatherQuestionByNodeId` mutation.
+"""
+input UpdateChineseWouldYouRatherQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChineseWouldYouRatherQuestion` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `ChineseWouldYouRatherQuestion` being updated.
+  """
+  patch: ChineseWouldYouRatherQuestionPatch!
+}
+
+"""
+Represents an update to a `ChineseWouldYouRatherQuestion`. Fields that are set will be updated.
+"""
+input ChineseWouldYouRatherQuestionPatch {
+  id: Int
+  uuid: UUID
+  question: String
+  answers: [String]
+  recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateChineseWouldYouRatherQuestion` mutation."""
+input UpdateChineseWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `ChineseWouldYouRatherQuestion` being updated.
+  """
+  patch: ChineseWouldYouRatherQuestionPatch!
+  id: Int!
+}
+
+"""
+All input for the `updateChineseWouldYouRatherQuestionByUuid` mutation.
+"""
+input UpdateChineseWouldYouRatherQuestionByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `ChineseWouldYouRatherQuestion` being updated.
+  """
+  patch: ChineseWouldYouRatherQuestionPatch!
+  uuid: UUID!
+}
+
 """The output of our delete `GroupUser` mutation."""
 type DeleteGroupUserPayload {
   """
@@ -6886,6 +10642,75 @@ input DeleteGroupInput {
 
 """All input for the `deleteGroupByUuid` mutation."""
 input DeleteGroupByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `ChineseGuessCharacterQuestion` mutation."""
+type DeleteChineseGuessCharacterQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChineseGuessCharacterQuestion` that was deleted by this mutation."""
+  chineseGuessCharacterQuestion: ChineseGuessCharacterQuestion
+  deletedGuessCharacterQuestionsZhNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseGuessCharacterQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `ChineseGuessCharacterQuestion`. May be used by Relay 1.
+  """
+  chineseGuessCharacterQuestionEdge(
+    """The method to use when ordering `ChineseGuessCharacterQuestion`."""
+    orderBy: [ChineseGuessCharacterQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChineseGuessCharacterQuestionsEdge
+}
+
+"""
+All input for the `deleteChineseGuessCharacterQuestionByNodeId` mutation.
+"""
+input DeleteChineseGuessCharacterQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChineseGuessCharacterQuestion` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteChineseGuessCharacterQuestion` mutation."""
+input DeleteChineseGuessCharacterQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""
+All input for the `deleteChineseGuessCharacterQuestionByUuid` mutation.
+"""
+input DeleteChineseGuessCharacterQuestionByUuidInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -7194,6 +11019,195 @@ input DeleteMessageByUuidInput {
   uuid: UUID!
 }
 
+"""The output of our delete `GermanRandomQuestion` mutation."""
+type DeleteGermanRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GermanRandomQuestion` that was deleted by this mutation."""
+  germanRandomQuestion: GermanRandomQuestion
+  deletedRandomQuestionsDeNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `GermanRandomQuestion`. May be used by Relay 1."""
+  germanRandomQuestionEdge(
+    """The method to use when ordering `GermanRandomQuestion`."""
+    orderBy: [GermanRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GermanRandomQuestionsEdge
+}
+
+"""All input for the `deleteGermanRandomQuestionByNodeId` mutation."""
+input DeleteGermanRandomQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `GermanRandomQuestion` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteGermanRandomQuestion` mutation."""
+input DeleteGermanRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deleteGermanRandomQuestionByUuid` mutation."""
+input DeleteGermanRandomQuestionByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `EnglishRandomQuestion` mutation."""
+type DeleteEnglishRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `EnglishRandomQuestion` that was deleted by this mutation."""
+  englishRandomQuestion: EnglishRandomQuestion
+  deletedRandomQuestionsEnNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `EnglishRandomQuestion`. May be used by Relay 1."""
+  englishRandomQuestionEdge(
+    """The method to use when ordering `EnglishRandomQuestion`."""
+    orderBy: [EnglishRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): EnglishRandomQuestionsEdge
+}
+
+"""All input for the `deleteEnglishRandomQuestionByNodeId` mutation."""
+input DeleteEnglishRandomQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `EnglishRandomQuestion` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteEnglishRandomQuestion` mutation."""
+input DeleteEnglishRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deleteEnglishRandomQuestionByUuid` mutation."""
+input DeleteEnglishRandomQuestionByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `ChineseRandomQuestion` mutation."""
+type DeleteChineseRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChineseRandomQuestion` that was deleted by this mutation."""
+  chineseRandomQuestion: ChineseRandomQuestion
+  deletedRandomQuestionsZhNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `ChineseRandomQuestion`. May be used by Relay 1."""
+  chineseRandomQuestionEdge(
+    """The method to use when ordering `ChineseRandomQuestion`."""
+    orderBy: [ChineseRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChineseRandomQuestionsEdge
+}
+
+"""All input for the `deleteChineseRandomQuestionByNodeId` mutation."""
+input DeleteChineseRandomQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChineseRandomQuestion` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteChineseRandomQuestion` mutation."""
+input DeleteChineseRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deleteChineseRandomQuestionByUuid` mutation."""
+input DeleteChineseRandomQuestionByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
 """The output of our delete `UserLanguage` mutation."""
 type DeleteUserLanguagePayload {
   """
@@ -7367,6 +11381,337 @@ input DeleteUserByEmailInput {
 
 """All input for the `deleteUserByUuid` mutation."""
 input DeleteUserByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `GermanWord` mutation."""
+type DeleteGermanWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GermanWord` that was deleted by this mutation."""
+  germanWord: GermanWord
+  deletedWordsDeNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `GermanWord`. May be used by Relay 1."""
+  germanWordEdge(
+    """The method to use when ordering `GermanWord`."""
+    orderBy: [GermanWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GermanWordsEdge
+}
+
+"""All input for the `deleteGermanWordByNodeId` mutation."""
+input DeleteGermanWordByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `GermanWord` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteGermanWord` mutation."""
+input DeleteGermanWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deleteGermanWordByUuid` mutation."""
+input DeleteGermanWordByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `EnglishWord` mutation."""
+type DeleteEnglishWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `EnglishWord` that was deleted by this mutation."""
+  englishWord: EnglishWord
+  deletedWordsEnNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `EnglishWord`. May be used by Relay 1."""
+  englishWordEdge(
+    """The method to use when ordering `EnglishWord`."""
+    orderBy: [EnglishWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): EnglishWordsEdge
+}
+
+"""All input for the `deleteEnglishWordByNodeId` mutation."""
+input DeleteEnglishWordByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `EnglishWord` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteEnglishWord` mutation."""
+input DeleteEnglishWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deleteEnglishWordByUuid` mutation."""
+input DeleteEnglishWordByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `GermanWouldYouRatherQuestion` mutation."""
+type DeleteGermanWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GermanWouldYouRatherQuestion` that was deleted by this mutation."""
+  germanWouldYouRatherQuestion: GermanWouldYouRatherQuestion
+  deletedWouldYouRatherQuestionsDeNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `GermanWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  germanWouldYouRatherQuestionEdge(
+    """The method to use when ordering `GermanWouldYouRatherQuestion`."""
+    orderBy: [GermanWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GermanWouldYouRatherQuestionsEdge
+}
+
+"""
+All input for the `deleteGermanWouldYouRatherQuestionByNodeId` mutation.
+"""
+input DeleteGermanWouldYouRatherQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `GermanWouldYouRatherQuestion` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteGermanWouldYouRatherQuestion` mutation."""
+input DeleteGermanWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deleteGermanWouldYouRatherQuestionByUuid` mutation."""
+input DeleteGermanWouldYouRatherQuestionByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `EnglishWouldYouRatherQuestion` mutation."""
+type DeleteEnglishWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `EnglishWouldYouRatherQuestion` that was deleted by this mutation."""
+  englishWouldYouRatherQuestion: EnglishWouldYouRatherQuestion
+  deletedWouldYouRatherQuestionsEnNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `EnglishWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  englishWouldYouRatherQuestionEdge(
+    """The method to use when ordering `EnglishWouldYouRatherQuestion`."""
+    orderBy: [EnglishWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): EnglishWouldYouRatherQuestionsEdge
+}
+
+"""
+All input for the `deleteEnglishWouldYouRatherQuestionByNodeId` mutation.
+"""
+input DeleteEnglishWouldYouRatherQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `EnglishWouldYouRatherQuestion` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteEnglishWouldYouRatherQuestion` mutation."""
+input DeleteEnglishWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""
+All input for the `deleteEnglishWouldYouRatherQuestionByUuid` mutation.
+"""
+input DeleteEnglishWouldYouRatherQuestionByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `ChineseWouldYouRatherQuestion` mutation."""
+type DeleteChineseWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChineseWouldYouRatherQuestion` that was deleted by this mutation."""
+  chineseWouldYouRatherQuestion: ChineseWouldYouRatherQuestion
+  deletedWouldYouRatherQuestionsZhNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `ChineseWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  chineseWouldYouRatherQuestionEdge(
+    """The method to use when ordering `ChineseWouldYouRatherQuestion`."""
+    orderBy: [ChineseWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChineseWouldYouRatherQuestionsEdge
+}
+
+"""
+All input for the `deleteChineseWouldYouRatherQuestionByNodeId` mutation.
+"""
+input DeleteChineseWouldYouRatherQuestionByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChineseWouldYouRatherQuestion` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteChineseWouldYouRatherQuestion` mutation."""
+input DeleteChineseWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""
+All input for the `deleteChineseWouldYouRatherQuestionByUuid` mutation.
+"""
+input DeleteChineseWouldYouRatherQuestionByUuidInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.

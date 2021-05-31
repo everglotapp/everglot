@@ -49,6 +49,660 @@ export type BooleanFilter = {
   greaterThanOrEqualTo?: Maybe<Scalars['Boolean']>;
 };
 
+export type ChineseGuessCharacterQuestion = Node & {
+  __typename?: 'ChineseGuessCharacterQuestion';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  character: Scalars['String'];
+  hint: Scalars['String'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseGuessCharacterQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+};
+
+/**
+ * A condition to be used against `ChineseGuessCharacterQuestion` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type ChineseGuessCharacterQuestionCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `character` field. */
+  character?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `hint` field. */
+  hint?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `ChineseGuessCharacterQuestion` object types. All fields are combined with a logical ‘and.’ */
+export type ChineseGuessCharacterQuestionFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `character` field. */
+  character?: Maybe<StringFilter>;
+  /** Filter by the object’s `hint` field. */
+  hint?: Maybe<StringFilter>;
+  /** Filter by the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<ChineseGuessCharacterQuestionFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<ChineseGuessCharacterQuestionFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<ChineseGuessCharacterQuestionFilter>;
+};
+
+/** An input for mutations affecting `ChineseGuessCharacterQuestion` */
+export type ChineseGuessCharacterQuestionInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid: Scalars['UUID'];
+  character: Scalars['String'];
+  hint: Scalars['String'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `ChineseGuessCharacterQuestion`. Fields that are set will be updated. */
+export type ChineseGuessCharacterQuestionPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  character?: Maybe<Scalars['String']>;
+  hint?: Maybe<Scalars['String']>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `ChineseGuessCharacterQuestion` values. */
+export type ChineseGuessCharacterQuestionsConnection = {
+  __typename?: 'ChineseGuessCharacterQuestionsConnection';
+  /** A list of `ChineseGuessCharacterQuestion` objects. */
+  nodes: Array<Maybe<ChineseGuessCharacterQuestion>>;
+  /** A list of edges which contains the `ChineseGuessCharacterQuestion` and cursor to aid in pagination. */
+  edges: Array<ChineseGuessCharacterQuestionsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `ChineseGuessCharacterQuestion` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `ChineseGuessCharacterQuestion` edge in the connection. */
+export type ChineseGuessCharacterQuestionsEdge = {
+  __typename?: 'ChineseGuessCharacterQuestionsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `ChineseGuessCharacterQuestion` at the end of the edge. */
+  node?: Maybe<ChineseGuessCharacterQuestion>;
+};
+
+/** Methods to use when ordering `ChineseGuessCharacterQuestion`. */
+export enum ChineseGuessCharacterQuestionsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  CharacterAsc = 'CHARACTER_ASC',
+  CharacterDesc = 'CHARACTER_DESC',
+  HintAsc = 'HINT_ASC',
+  HintDesc = 'HINT_DESC',
+  RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
+  RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+export type ChineseRandomQuestion = Node & {
+  __typename?: 'ChineseRandomQuestion';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  question: Scalars['String'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+};
+
+/**
+ * A condition to be used against `ChineseRandomQuestion` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type ChineseRandomQuestionCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `question` field. */
+  question?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `ChineseRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
+export type ChineseRandomQuestionFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `question` field. */
+  question?: Maybe<StringFilter>;
+  /** Filter by the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<ChineseRandomQuestionFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<ChineseRandomQuestionFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<ChineseRandomQuestionFilter>;
+};
+
+/** An input for mutations affecting `ChineseRandomQuestion` */
+export type ChineseRandomQuestionInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid: Scalars['UUID'];
+  question: Scalars['String'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `ChineseRandomQuestion`. Fields that are set will be updated. */
+export type ChineseRandomQuestionPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  question?: Maybe<Scalars['String']>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `ChineseRandomQuestion` values. */
+export type ChineseRandomQuestionsConnection = {
+  __typename?: 'ChineseRandomQuestionsConnection';
+  /** A list of `ChineseRandomQuestion` objects. */
+  nodes: Array<Maybe<ChineseRandomQuestion>>;
+  /** A list of edges which contains the `ChineseRandomQuestion` and cursor to aid in pagination. */
+  edges: Array<ChineseRandomQuestionsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `ChineseRandomQuestion` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `ChineseRandomQuestion` edge in the connection. */
+export type ChineseRandomQuestionsEdge = {
+  __typename?: 'ChineseRandomQuestionsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `ChineseRandomQuestion` at the end of the edge. */
+  node?: Maybe<ChineseRandomQuestion>;
+};
+
+/** Methods to use when ordering `ChineseRandomQuestion`. */
+export enum ChineseRandomQuestionsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  QuestionAsc = 'QUESTION_ASC',
+  QuestionDesc = 'QUESTION_DESC',
+  RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
+  RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+export type ChineseWouldYouRatherQuestion = Node & {
+  __typename?: 'ChineseWouldYouRatherQuestion';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  question: Scalars['String'];
+  answers: Array<Maybe<Scalars['String']>>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+};
+
+/**
+ * A condition to be used against `ChineseWouldYouRatherQuestion` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type ChineseWouldYouRatherQuestionCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `question` field. */
+  question?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `answers` field. */
+  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `ChineseWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
+export type ChineseWouldYouRatherQuestionFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `question` field. */
+  question?: Maybe<StringFilter>;
+  /** Filter by the object’s `answers` field. */
+  answers?: Maybe<StringListFilter>;
+  /** Filter by the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<ChineseWouldYouRatherQuestionFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<ChineseWouldYouRatherQuestionFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<ChineseWouldYouRatherQuestionFilter>;
+};
+
+/** An input for mutations affecting `ChineseWouldYouRatherQuestion` */
+export type ChineseWouldYouRatherQuestionInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid: Scalars['UUID'];
+  question: Scalars['String'];
+  answers: Array<Maybe<Scalars['String']>>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `ChineseWouldYouRatherQuestion`. Fields that are set will be updated. */
+export type ChineseWouldYouRatherQuestionPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  question?: Maybe<Scalars['String']>;
+  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `ChineseWouldYouRatherQuestion` values. */
+export type ChineseWouldYouRatherQuestionsConnection = {
+  __typename?: 'ChineseWouldYouRatherQuestionsConnection';
+  /** A list of `ChineseWouldYouRatherQuestion` objects. */
+  nodes: Array<Maybe<ChineseWouldYouRatherQuestion>>;
+  /** A list of edges which contains the `ChineseWouldYouRatherQuestion` and cursor to aid in pagination. */
+  edges: Array<ChineseWouldYouRatherQuestionsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `ChineseWouldYouRatherQuestion` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `ChineseWouldYouRatherQuestion` edge in the connection. */
+export type ChineseWouldYouRatherQuestionsEdge = {
+  __typename?: 'ChineseWouldYouRatherQuestionsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `ChineseWouldYouRatherQuestion` at the end of the edge. */
+  node?: Maybe<ChineseWouldYouRatherQuestion>;
+};
+
+/** Methods to use when ordering `ChineseWouldYouRatherQuestion`. */
+export enum ChineseWouldYouRatherQuestionsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  QuestionAsc = 'QUESTION_ASC',
+  QuestionDesc = 'QUESTION_DESC',
+  AnswersAsc = 'ANSWERS_ASC',
+  AnswersDesc = 'ANSWERS_DESC',
+  RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
+  RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/** All input for the create `ChineseGuessCharacterQuestion` mutation. */
+export type CreateChineseGuessCharacterQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseGuessCharacterQuestion` to be created by this mutation. */
+  chineseGuessCharacterQuestion: ChineseGuessCharacterQuestionInput;
+};
+
+/** The output of our create `ChineseGuessCharacterQuestion` mutation. */
+export type CreateChineseGuessCharacterQuestionPayload = {
+  __typename?: 'CreateChineseGuessCharacterQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseGuessCharacterQuestion` that was created by this mutation. */
+  chineseGuessCharacterQuestion?: Maybe<ChineseGuessCharacterQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseGuessCharacterQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ChineseGuessCharacterQuestion`. May be used by Relay 1. */
+  chineseGuessCharacterQuestionEdge?: Maybe<ChineseGuessCharacterQuestionsEdge>;
+};
+
+
+/** The output of our create `ChineseGuessCharacterQuestion` mutation. */
+export type CreateChineseGuessCharacterQuestionPayloadChineseGuessCharacterQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
+};
+
+/** All input for the create `ChineseRandomQuestion` mutation. */
+export type CreateChineseRandomQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseRandomQuestion` to be created by this mutation. */
+  chineseRandomQuestion: ChineseRandomQuestionInput;
+};
+
+/** The output of our create `ChineseRandomQuestion` mutation. */
+export type CreateChineseRandomQuestionPayload = {
+  __typename?: 'CreateChineseRandomQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseRandomQuestion` that was created by this mutation. */
+  chineseRandomQuestion?: Maybe<ChineseRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ChineseRandomQuestion`. May be used by Relay 1. */
+  chineseRandomQuestionEdge?: Maybe<ChineseRandomQuestionsEdge>;
+};
+
+
+/** The output of our create `ChineseRandomQuestion` mutation. */
+export type CreateChineseRandomQuestionPayloadChineseRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
+};
+
+/** All input for the create `ChineseWouldYouRatherQuestion` mutation. */
+export type CreateChineseWouldYouRatherQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseWouldYouRatherQuestion` to be created by this mutation. */
+  chineseWouldYouRatherQuestion: ChineseWouldYouRatherQuestionInput;
+};
+
+/** The output of our create `ChineseWouldYouRatherQuestion` mutation. */
+export type CreateChineseWouldYouRatherQuestionPayload = {
+  __typename?: 'CreateChineseWouldYouRatherQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseWouldYouRatherQuestion` that was created by this mutation. */
+  chineseWouldYouRatherQuestion?: Maybe<ChineseWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ChineseWouldYouRatherQuestion`. May be used by Relay 1. */
+  chineseWouldYouRatherQuestionEdge?: Maybe<ChineseWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our create `ChineseWouldYouRatherQuestion` mutation. */
+export type CreateChineseWouldYouRatherQuestionPayloadChineseWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** All input for the create `EnglishRandomQuestion` mutation. */
+export type CreateEnglishRandomQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishRandomQuestion` to be created by this mutation. */
+  englishRandomQuestion: EnglishRandomQuestionInput;
+};
+
+/** The output of our create `EnglishRandomQuestion` mutation. */
+export type CreateEnglishRandomQuestionPayload = {
+  __typename?: 'CreateEnglishRandomQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishRandomQuestion` that was created by this mutation. */
+  englishRandomQuestion?: Maybe<EnglishRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `EnglishRandomQuestion`. May be used by Relay 1. */
+  englishRandomQuestionEdge?: Maybe<EnglishRandomQuestionsEdge>;
+};
+
+
+/** The output of our create `EnglishRandomQuestion` mutation. */
+export type CreateEnglishRandomQuestionPayloadEnglishRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<EnglishRandomQuestionsOrderBy>>;
+};
+
+/** All input for the create `EnglishWord` mutation. */
+export type CreateEnglishWordInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishWord` to be created by this mutation. */
+  englishWord: EnglishWordInput;
+};
+
+/** The output of our create `EnglishWord` mutation. */
+export type CreateEnglishWordPayload = {
+  __typename?: 'CreateEnglishWordPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishWord` that was created by this mutation. */
+  englishWord?: Maybe<EnglishWord>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `EnglishWord`. May be used by Relay 1. */
+  englishWordEdge?: Maybe<EnglishWordsEdge>;
+};
+
+
+/** The output of our create `EnglishWord` mutation. */
+export type CreateEnglishWordPayloadEnglishWordEdgeArgs = {
+  orderBy?: Maybe<Array<EnglishWordsOrderBy>>;
+};
+
+/** All input for the create `EnglishWouldYouRatherQuestion` mutation. */
+export type CreateEnglishWouldYouRatherQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishWouldYouRatherQuestion` to be created by this mutation. */
+  englishWouldYouRatherQuestion: EnglishWouldYouRatherQuestionInput;
+};
+
+/** The output of our create `EnglishWouldYouRatherQuestion` mutation. */
+export type CreateEnglishWouldYouRatherQuestionPayload = {
+  __typename?: 'CreateEnglishWouldYouRatherQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishWouldYouRatherQuestion` that was created by this mutation. */
+  englishWouldYouRatherQuestion?: Maybe<EnglishWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `EnglishWouldYouRatherQuestion`. May be used by Relay 1. */
+  englishWouldYouRatherQuestionEdge?: Maybe<EnglishWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our create `EnglishWouldYouRatherQuestion` mutation. */
+export type CreateEnglishWouldYouRatherQuestionPayloadEnglishWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** All input for the create `GermanRandomQuestion` mutation. */
+export type CreateGermanRandomQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanRandomQuestion` to be created by this mutation. */
+  germanRandomQuestion: GermanRandomQuestionInput;
+};
+
+/** The output of our create `GermanRandomQuestion` mutation. */
+export type CreateGermanRandomQuestionPayload = {
+  __typename?: 'CreateGermanRandomQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanRandomQuestion` that was created by this mutation. */
+  germanRandomQuestion?: Maybe<GermanRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `GermanRandomQuestion`. May be used by Relay 1. */
+  germanRandomQuestionEdge?: Maybe<GermanRandomQuestionsEdge>;
+};
+
+
+/** The output of our create `GermanRandomQuestion` mutation. */
+export type CreateGermanRandomQuestionPayloadGermanRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<GermanRandomQuestionsOrderBy>>;
+};
+
+/** All input for the create `GermanWord` mutation. */
+export type CreateGermanWordInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanWord` to be created by this mutation. */
+  germanWord: GermanWordInput;
+};
+
+/** The output of our create `GermanWord` mutation. */
+export type CreateGermanWordPayload = {
+  __typename?: 'CreateGermanWordPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanWord` that was created by this mutation. */
+  germanWord?: Maybe<GermanWord>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `GermanWord`. May be used by Relay 1. */
+  germanWordEdge?: Maybe<GermanWordsEdge>;
+};
+
+
+/** The output of our create `GermanWord` mutation. */
+export type CreateGermanWordPayloadGermanWordEdgeArgs = {
+  orderBy?: Maybe<Array<GermanWordsOrderBy>>;
+};
+
+/** All input for the create `GermanWouldYouRatherQuestion` mutation. */
+export type CreateGermanWouldYouRatherQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanWouldYouRatherQuestion` to be created by this mutation. */
+  germanWouldYouRatherQuestion: GermanWouldYouRatherQuestionInput;
+};
+
+/** The output of our create `GermanWouldYouRatherQuestion` mutation. */
+export type CreateGermanWouldYouRatherQuestionPayload = {
+  __typename?: 'CreateGermanWouldYouRatherQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanWouldYouRatherQuestion` that was created by this mutation. */
+  germanWouldYouRatherQuestion?: Maybe<GermanWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `GermanWouldYouRatherQuestion`. May be used by Relay 1. */
+  germanWouldYouRatherQuestionEdge?: Maybe<GermanWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our create `GermanWouldYouRatherQuestion` mutation. */
+export type CreateGermanWouldYouRatherQuestionPayloadGermanWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
+};
+
 /** All input for the create `Group` mutation. */
 export type CreateGroupInput = {
   /**
@@ -435,6 +1089,510 @@ export type DatetimeFilter = {
   greaterThan?: Maybe<Scalars['Datetime']>;
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo?: Maybe<Scalars['Datetime']>;
+};
+
+/** All input for the `deleteChineseGuessCharacterQuestionByNodeId` mutation. */
+export type DeleteChineseGuessCharacterQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `ChineseGuessCharacterQuestion` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteChineseGuessCharacterQuestionByUuid` mutation. */
+export type DeleteChineseGuessCharacterQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteChineseGuessCharacterQuestion` mutation. */
+export type DeleteChineseGuessCharacterQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `ChineseGuessCharacterQuestion` mutation. */
+export type DeleteChineseGuessCharacterQuestionPayload = {
+  __typename?: 'DeleteChineseGuessCharacterQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseGuessCharacterQuestion` that was deleted by this mutation. */
+  chineseGuessCharacterQuestion?: Maybe<ChineseGuessCharacterQuestion>;
+  deletedGuessCharacterQuestionsZhNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseGuessCharacterQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ChineseGuessCharacterQuestion`. May be used by Relay 1. */
+  chineseGuessCharacterQuestionEdge?: Maybe<ChineseGuessCharacterQuestionsEdge>;
+};
+
+
+/** The output of our delete `ChineseGuessCharacterQuestion` mutation. */
+export type DeleteChineseGuessCharacterQuestionPayloadChineseGuessCharacterQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
+};
+
+/** All input for the `deleteChineseRandomQuestionByNodeId` mutation. */
+export type DeleteChineseRandomQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `ChineseRandomQuestion` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteChineseRandomQuestionByUuid` mutation. */
+export type DeleteChineseRandomQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteChineseRandomQuestion` mutation. */
+export type DeleteChineseRandomQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `ChineseRandomQuestion` mutation. */
+export type DeleteChineseRandomQuestionPayload = {
+  __typename?: 'DeleteChineseRandomQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseRandomQuestion` that was deleted by this mutation. */
+  chineseRandomQuestion?: Maybe<ChineseRandomQuestion>;
+  deletedRandomQuestionsZhNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ChineseRandomQuestion`. May be used by Relay 1. */
+  chineseRandomQuestionEdge?: Maybe<ChineseRandomQuestionsEdge>;
+};
+
+
+/** The output of our delete `ChineseRandomQuestion` mutation. */
+export type DeleteChineseRandomQuestionPayloadChineseRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
+};
+
+/** All input for the `deleteChineseWouldYouRatherQuestionByNodeId` mutation. */
+export type DeleteChineseWouldYouRatherQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `ChineseWouldYouRatherQuestion` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteChineseWouldYouRatherQuestionByUuid` mutation. */
+export type DeleteChineseWouldYouRatherQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteChineseWouldYouRatherQuestion` mutation. */
+export type DeleteChineseWouldYouRatherQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `ChineseWouldYouRatherQuestion` mutation. */
+export type DeleteChineseWouldYouRatherQuestionPayload = {
+  __typename?: 'DeleteChineseWouldYouRatherQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseWouldYouRatherQuestion` that was deleted by this mutation. */
+  chineseWouldYouRatherQuestion?: Maybe<ChineseWouldYouRatherQuestion>;
+  deletedWouldYouRatherQuestionsZhNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ChineseWouldYouRatherQuestion`. May be used by Relay 1. */
+  chineseWouldYouRatherQuestionEdge?: Maybe<ChineseWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our delete `ChineseWouldYouRatherQuestion` mutation. */
+export type DeleteChineseWouldYouRatherQuestionPayloadChineseWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** All input for the `deleteEnglishRandomQuestionByNodeId` mutation. */
+export type DeleteEnglishRandomQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `EnglishRandomQuestion` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteEnglishRandomQuestionByUuid` mutation. */
+export type DeleteEnglishRandomQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteEnglishRandomQuestion` mutation. */
+export type DeleteEnglishRandomQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `EnglishRandomQuestion` mutation. */
+export type DeleteEnglishRandomQuestionPayload = {
+  __typename?: 'DeleteEnglishRandomQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishRandomQuestion` that was deleted by this mutation. */
+  englishRandomQuestion?: Maybe<EnglishRandomQuestion>;
+  deletedRandomQuestionsEnNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `EnglishRandomQuestion`. May be used by Relay 1. */
+  englishRandomQuestionEdge?: Maybe<EnglishRandomQuestionsEdge>;
+};
+
+
+/** The output of our delete `EnglishRandomQuestion` mutation. */
+export type DeleteEnglishRandomQuestionPayloadEnglishRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<EnglishRandomQuestionsOrderBy>>;
+};
+
+/** All input for the `deleteEnglishWordByNodeId` mutation. */
+export type DeleteEnglishWordByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `EnglishWord` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteEnglishWordByUuid` mutation. */
+export type DeleteEnglishWordByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteEnglishWord` mutation. */
+export type DeleteEnglishWordInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `EnglishWord` mutation. */
+export type DeleteEnglishWordPayload = {
+  __typename?: 'DeleteEnglishWordPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishWord` that was deleted by this mutation. */
+  englishWord?: Maybe<EnglishWord>;
+  deletedWordsEnNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `EnglishWord`. May be used by Relay 1. */
+  englishWordEdge?: Maybe<EnglishWordsEdge>;
+};
+
+
+/** The output of our delete `EnglishWord` mutation. */
+export type DeleteEnglishWordPayloadEnglishWordEdgeArgs = {
+  orderBy?: Maybe<Array<EnglishWordsOrderBy>>;
+};
+
+/** All input for the `deleteEnglishWouldYouRatherQuestionByNodeId` mutation. */
+export type DeleteEnglishWouldYouRatherQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `EnglishWouldYouRatherQuestion` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteEnglishWouldYouRatherQuestionByUuid` mutation. */
+export type DeleteEnglishWouldYouRatherQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteEnglishWouldYouRatherQuestion` mutation. */
+export type DeleteEnglishWouldYouRatherQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `EnglishWouldYouRatherQuestion` mutation. */
+export type DeleteEnglishWouldYouRatherQuestionPayload = {
+  __typename?: 'DeleteEnglishWouldYouRatherQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishWouldYouRatherQuestion` that was deleted by this mutation. */
+  englishWouldYouRatherQuestion?: Maybe<EnglishWouldYouRatherQuestion>;
+  deletedWouldYouRatherQuestionsEnNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `EnglishWouldYouRatherQuestion`. May be used by Relay 1. */
+  englishWouldYouRatherQuestionEdge?: Maybe<EnglishWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our delete `EnglishWouldYouRatherQuestion` mutation. */
+export type DeleteEnglishWouldYouRatherQuestionPayloadEnglishWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** All input for the `deleteGermanRandomQuestionByNodeId` mutation. */
+export type DeleteGermanRandomQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `GermanRandomQuestion` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteGermanRandomQuestionByUuid` mutation. */
+export type DeleteGermanRandomQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteGermanRandomQuestion` mutation. */
+export type DeleteGermanRandomQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `GermanRandomQuestion` mutation. */
+export type DeleteGermanRandomQuestionPayload = {
+  __typename?: 'DeleteGermanRandomQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanRandomQuestion` that was deleted by this mutation. */
+  germanRandomQuestion?: Maybe<GermanRandomQuestion>;
+  deletedRandomQuestionsDeNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `GermanRandomQuestion`. May be used by Relay 1. */
+  germanRandomQuestionEdge?: Maybe<GermanRandomQuestionsEdge>;
+};
+
+
+/** The output of our delete `GermanRandomQuestion` mutation. */
+export type DeleteGermanRandomQuestionPayloadGermanRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<GermanRandomQuestionsOrderBy>>;
+};
+
+/** All input for the `deleteGermanWordByNodeId` mutation. */
+export type DeleteGermanWordByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `GermanWord` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteGermanWordByUuid` mutation. */
+export type DeleteGermanWordByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteGermanWord` mutation. */
+export type DeleteGermanWordInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `GermanWord` mutation. */
+export type DeleteGermanWordPayload = {
+  __typename?: 'DeleteGermanWordPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanWord` that was deleted by this mutation. */
+  germanWord?: Maybe<GermanWord>;
+  deletedWordsDeNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `GermanWord`. May be used by Relay 1. */
+  germanWordEdge?: Maybe<GermanWordsEdge>;
+};
+
+
+/** The output of our delete `GermanWord` mutation. */
+export type DeleteGermanWordPayloadGermanWordEdgeArgs = {
+  orderBy?: Maybe<Array<GermanWordsOrderBy>>;
+};
+
+/** All input for the `deleteGermanWouldYouRatherQuestionByNodeId` mutation. */
+export type DeleteGermanWouldYouRatherQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `GermanWouldYouRatherQuestion` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteGermanWouldYouRatherQuestionByUuid` mutation. */
+export type DeleteGermanWouldYouRatherQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteGermanWouldYouRatherQuestion` mutation. */
+export type DeleteGermanWouldYouRatherQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `GermanWouldYouRatherQuestion` mutation. */
+export type DeleteGermanWouldYouRatherQuestionPayload = {
+  __typename?: 'DeleteGermanWouldYouRatherQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanWouldYouRatherQuestion` that was deleted by this mutation. */
+  germanWouldYouRatherQuestion?: Maybe<GermanWouldYouRatherQuestion>;
+  deletedWouldYouRatherQuestionsDeNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `GermanWouldYouRatherQuestion`. May be used by Relay 1. */
+  germanWouldYouRatherQuestionEdge?: Maybe<GermanWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our delete `GermanWouldYouRatherQuestion` mutation. */
+export type DeleteGermanWouldYouRatherQuestionPayloadGermanWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteGroupByNodeId` mutation. */
@@ -977,6 +2135,716 @@ export type DeleteUserSessionPayload = {
 export type DeleteUserSessionPayloadUserSessionEdgeArgs = {
   orderBy?: Maybe<Array<UserSessionsOrderBy>>;
 };
+
+export type EnglishRandomQuestion = Node & {
+  __typename?: 'EnglishRandomQuestion';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  question: Scalars['String'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+};
+
+/**
+ * A condition to be used against `EnglishRandomQuestion` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type EnglishRandomQuestionCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `question` field. */
+  question?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `EnglishRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
+export type EnglishRandomQuestionFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `question` field. */
+  question?: Maybe<StringFilter>;
+  /** Filter by the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<EnglishRandomQuestionFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<EnglishRandomQuestionFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<EnglishRandomQuestionFilter>;
+};
+
+/** An input for mutations affecting `EnglishRandomQuestion` */
+export type EnglishRandomQuestionInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid: Scalars['UUID'];
+  question: Scalars['String'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `EnglishRandomQuestion`. Fields that are set will be updated. */
+export type EnglishRandomQuestionPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  question?: Maybe<Scalars['String']>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `EnglishRandomQuestion` values. */
+export type EnglishRandomQuestionsConnection = {
+  __typename?: 'EnglishRandomQuestionsConnection';
+  /** A list of `EnglishRandomQuestion` objects. */
+  nodes: Array<Maybe<EnglishRandomQuestion>>;
+  /** A list of edges which contains the `EnglishRandomQuestion` and cursor to aid in pagination. */
+  edges: Array<EnglishRandomQuestionsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `EnglishRandomQuestion` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `EnglishRandomQuestion` edge in the connection. */
+export type EnglishRandomQuestionsEdge = {
+  __typename?: 'EnglishRandomQuestionsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `EnglishRandomQuestion` at the end of the edge. */
+  node?: Maybe<EnglishRandomQuestion>;
+};
+
+/** Methods to use when ordering `EnglishRandomQuestion`. */
+export enum EnglishRandomQuestionsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  QuestionAsc = 'QUESTION_ASC',
+  QuestionDesc = 'QUESTION_DESC',
+  RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
+  RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+export type EnglishWord = Node & {
+  __typename?: 'EnglishWord';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  word: Scalars['String'];
+  /** Ranges from 0 to 1 (higher is more frequent) */
+  frequency: Scalars['Float'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+};
+
+/**
+ * A condition to be used against `EnglishWord` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
+export type EnglishWordCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `word` field. */
+  word?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `frequency` field. */
+  frequency?: Maybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `EnglishWord` object types. All fields are combined with a logical ‘and.’ */
+export type EnglishWordFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `word` field. */
+  word?: Maybe<StringFilter>;
+  /** Filter by the object’s `frequency` field. */
+  frequency?: Maybe<FloatFilter>;
+  /** Filter by the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<EnglishWordFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<EnglishWordFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<EnglishWordFilter>;
+};
+
+/** An input for mutations affecting `EnglishWord` */
+export type EnglishWordInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid: Scalars['UUID'];
+  word: Scalars['String'];
+  /** Ranges from 0 to 1 (higher is more frequent) */
+  frequency: Scalars['Float'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `EnglishWord`. Fields that are set will be updated. */
+export type EnglishWordPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  word?: Maybe<Scalars['String']>;
+  /** Ranges from 0 to 1 (higher is more frequent) */
+  frequency?: Maybe<Scalars['Float']>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `EnglishWord` values. */
+export type EnglishWordsConnection = {
+  __typename?: 'EnglishWordsConnection';
+  /** A list of `EnglishWord` objects. */
+  nodes: Array<Maybe<EnglishWord>>;
+  /** A list of edges which contains the `EnglishWord` and cursor to aid in pagination. */
+  edges: Array<EnglishWordsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `EnglishWord` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `EnglishWord` edge in the connection. */
+export type EnglishWordsEdge = {
+  __typename?: 'EnglishWordsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `EnglishWord` at the end of the edge. */
+  node?: Maybe<EnglishWord>;
+};
+
+/** Methods to use when ordering `EnglishWord`. */
+export enum EnglishWordsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  WordAsc = 'WORD_ASC',
+  WordDesc = 'WORD_DESC',
+  FrequencyAsc = 'FREQUENCY_ASC',
+  FrequencyDesc = 'FREQUENCY_DESC',
+  RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
+  RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+export type EnglishWouldYouRatherQuestion = Node & {
+  __typename?: 'EnglishWouldYouRatherQuestion';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  question: Scalars['String'];
+  answers: Array<Maybe<Scalars['String']>>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+};
+
+/**
+ * A condition to be used against `EnglishWouldYouRatherQuestion` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type EnglishWouldYouRatherQuestionCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `question` field. */
+  question?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `answers` field. */
+  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `EnglishWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
+export type EnglishWouldYouRatherQuestionFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `question` field. */
+  question?: Maybe<StringFilter>;
+  /** Filter by the object’s `answers` field. */
+  answers?: Maybe<StringListFilter>;
+  /** Filter by the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<EnglishWouldYouRatherQuestionFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<EnglishWouldYouRatherQuestionFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<EnglishWouldYouRatherQuestionFilter>;
+};
+
+/** An input for mutations affecting `EnglishWouldYouRatherQuestion` */
+export type EnglishWouldYouRatherQuestionInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid: Scalars['UUID'];
+  question: Scalars['String'];
+  answers: Array<Maybe<Scalars['String']>>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `EnglishWouldYouRatherQuestion`. Fields that are set will be updated. */
+export type EnglishWouldYouRatherQuestionPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  question?: Maybe<Scalars['String']>;
+  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `EnglishWouldYouRatherQuestion` values. */
+export type EnglishWouldYouRatherQuestionsConnection = {
+  __typename?: 'EnglishWouldYouRatherQuestionsConnection';
+  /** A list of `EnglishWouldYouRatherQuestion` objects. */
+  nodes: Array<Maybe<EnglishWouldYouRatherQuestion>>;
+  /** A list of edges which contains the `EnglishWouldYouRatherQuestion` and cursor to aid in pagination. */
+  edges: Array<EnglishWouldYouRatherQuestionsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `EnglishWouldYouRatherQuestion` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `EnglishWouldYouRatherQuestion` edge in the connection. */
+export type EnglishWouldYouRatherQuestionsEdge = {
+  __typename?: 'EnglishWouldYouRatherQuestionsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `EnglishWouldYouRatherQuestion` at the end of the edge. */
+  node?: Maybe<EnglishWouldYouRatherQuestion>;
+};
+
+/** Methods to use when ordering `EnglishWouldYouRatherQuestion`. */
+export enum EnglishWouldYouRatherQuestionsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  QuestionAsc = 'QUESTION_ASC',
+  QuestionDesc = 'QUESTION_DESC',
+  AnswersAsc = 'ANSWERS_ASC',
+  AnswersDesc = 'ANSWERS_DESC',
+  RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
+  RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/** A filter to be used against Float fields. All fields are combined with a logical ‘and.’ */
+export type FloatFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['Float']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['Float']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['Float']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['Float']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['Float']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['Float']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['Float']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['Float']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['Float']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['Float']>;
+};
+
+export type GermanRandomQuestion = Node & {
+  __typename?: 'GermanRandomQuestion';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  question: Scalars['String'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+};
+
+/**
+ * A condition to be used against `GermanRandomQuestion` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type GermanRandomQuestionCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `question` field. */
+  question?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `GermanRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
+export type GermanRandomQuestionFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `question` field. */
+  question?: Maybe<StringFilter>;
+  /** Filter by the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<GermanRandomQuestionFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<GermanRandomQuestionFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<GermanRandomQuestionFilter>;
+};
+
+/** An input for mutations affecting `GermanRandomQuestion` */
+export type GermanRandomQuestionInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid: Scalars['UUID'];
+  question: Scalars['String'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `GermanRandomQuestion`. Fields that are set will be updated. */
+export type GermanRandomQuestionPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  question?: Maybe<Scalars['String']>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `GermanRandomQuestion` values. */
+export type GermanRandomQuestionsConnection = {
+  __typename?: 'GermanRandomQuestionsConnection';
+  /** A list of `GermanRandomQuestion` objects. */
+  nodes: Array<Maybe<GermanRandomQuestion>>;
+  /** A list of edges which contains the `GermanRandomQuestion` and cursor to aid in pagination. */
+  edges: Array<GermanRandomQuestionsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `GermanRandomQuestion` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `GermanRandomQuestion` edge in the connection. */
+export type GermanRandomQuestionsEdge = {
+  __typename?: 'GermanRandomQuestionsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `GermanRandomQuestion` at the end of the edge. */
+  node?: Maybe<GermanRandomQuestion>;
+};
+
+/** Methods to use when ordering `GermanRandomQuestion`. */
+export enum GermanRandomQuestionsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  QuestionAsc = 'QUESTION_ASC',
+  QuestionDesc = 'QUESTION_DESC',
+  RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
+  RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+export type GermanWord = Node & {
+  __typename?: 'GermanWord';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  word: Scalars['String'];
+  /** Ranges from 0 to 1 (higher is more frequent) */
+  frequency: Scalars['Float'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+};
+
+/**
+ * A condition to be used against `GermanWord` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
+export type GermanWordCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `word` field. */
+  word?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `frequency` field. */
+  frequency?: Maybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `GermanWord` object types. All fields are combined with a logical ‘and.’ */
+export type GermanWordFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `word` field. */
+  word?: Maybe<StringFilter>;
+  /** Filter by the object’s `frequency` field. */
+  frequency?: Maybe<FloatFilter>;
+  /** Filter by the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<GermanWordFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<GermanWordFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<GermanWordFilter>;
+};
+
+/** An input for mutations affecting `GermanWord` */
+export type GermanWordInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid: Scalars['UUID'];
+  word: Scalars['String'];
+  /** Ranges from 0 to 1 (higher is more frequent) */
+  frequency: Scalars['Float'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `GermanWord`. Fields that are set will be updated. */
+export type GermanWordPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  word?: Maybe<Scalars['String']>;
+  /** Ranges from 0 to 1 (higher is more frequent) */
+  frequency?: Maybe<Scalars['Float']>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `GermanWord` values. */
+export type GermanWordsConnection = {
+  __typename?: 'GermanWordsConnection';
+  /** A list of `GermanWord` objects. */
+  nodes: Array<Maybe<GermanWord>>;
+  /** A list of edges which contains the `GermanWord` and cursor to aid in pagination. */
+  edges: Array<GermanWordsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `GermanWord` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `GermanWord` edge in the connection. */
+export type GermanWordsEdge = {
+  __typename?: 'GermanWordsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `GermanWord` at the end of the edge. */
+  node?: Maybe<GermanWord>;
+};
+
+/** Methods to use when ordering `GermanWord`. */
+export enum GermanWordsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  WordAsc = 'WORD_ASC',
+  WordDesc = 'WORD_DESC',
+  FrequencyAsc = 'FREQUENCY_ASC',
+  FrequencyDesc = 'FREQUENCY_DESC',
+  RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
+  RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+export type GermanWouldYouRatherQuestion = Node & {
+  __typename?: 'GermanWouldYouRatherQuestion';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  question: Scalars['String'];
+  answers: Array<Maybe<Scalars['String']>>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+};
+
+/**
+ * A condition to be used against `GermanWouldYouRatherQuestion` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type GermanWouldYouRatherQuestionCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `question` field. */
+  question?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `answers` field. */
+  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `GermanWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
+export type GermanWouldYouRatherQuestionFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `question` field. */
+  question?: Maybe<StringFilter>;
+  /** Filter by the object’s `answers` field. */
+  answers?: Maybe<StringListFilter>;
+  /** Filter by the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<GermanWouldYouRatherQuestionFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<GermanWouldYouRatherQuestionFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<GermanWouldYouRatherQuestionFilter>;
+};
+
+/** An input for mutations affecting `GermanWouldYouRatherQuestion` */
+export type GermanWouldYouRatherQuestionInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid: Scalars['UUID'];
+  question: Scalars['String'];
+  answers: Array<Maybe<Scalars['String']>>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `GermanWouldYouRatherQuestion`. Fields that are set will be updated. */
+export type GermanWouldYouRatherQuestionPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  question?: Maybe<Scalars['String']>;
+  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `GermanWouldYouRatherQuestion` values. */
+export type GermanWouldYouRatherQuestionsConnection = {
+  __typename?: 'GermanWouldYouRatherQuestionsConnection';
+  /** A list of `GermanWouldYouRatherQuestion` objects. */
+  nodes: Array<Maybe<GermanWouldYouRatherQuestion>>;
+  /** A list of edges which contains the `GermanWouldYouRatherQuestion` and cursor to aid in pagination. */
+  edges: Array<GermanWouldYouRatherQuestionsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `GermanWouldYouRatherQuestion` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `GermanWouldYouRatherQuestion` edge in the connection. */
+export type GermanWouldYouRatherQuestionsEdge = {
+  __typename?: 'GermanWouldYouRatherQuestionsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `GermanWouldYouRatherQuestion` at the end of the edge. */
+  node?: Maybe<GermanWouldYouRatherQuestion>;
+};
+
+/** Methods to use when ordering `GermanWouldYouRatherQuestion`. */
+export enum GermanWouldYouRatherQuestionsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  QuestionAsc = 'QUESTION_ASC',
+  QuestionDesc = 'QUESTION_DESC',
+  AnswersAsc = 'ANSWERS_ASC',
+  AnswersDesc = 'ANSWERS_DESC',
+  RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
+  RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
 
 export type Group = Node & {
   __typename?: 'Group';
@@ -1958,6 +3826,24 @@ export type LanguageSkillLevel = Node & {
   userLanguages: UserLanguagesConnection;
   /** Reads and enables pagination through a set of `Group`. */
   groups: GroupsConnection;
+  /** Reads and enables pagination through a set of `EnglishWord`. */
+  englishWordsByRecommendedSkillLevelId: EnglishWordsConnection;
+  /** Reads and enables pagination through a set of `GermanWord`. */
+  germanWordsByRecommendedSkillLevelId: GermanWordsConnection;
+  /** Reads and enables pagination through a set of `EnglishRandomQuestion`. */
+  englishRandomQuestionsByRecommendedSkillLevelId: EnglishRandomQuestionsConnection;
+  /** Reads and enables pagination through a set of `GermanRandomQuestion`. */
+  germanRandomQuestionsByRecommendedSkillLevelId: GermanRandomQuestionsConnection;
+  /** Reads and enables pagination through a set of `EnglishWouldYouRatherQuestion`. */
+  englishWouldYouRatherQuestionsByRecommendedSkillLevelId: EnglishWouldYouRatherQuestionsConnection;
+  /** Reads and enables pagination through a set of `GermanWouldYouRatherQuestion`. */
+  germanWouldYouRatherQuestionsByRecommendedSkillLevelId: GermanWouldYouRatherQuestionsConnection;
+  /** Reads and enables pagination through a set of `ChineseRandomQuestion`. */
+  chineseRandomQuestionsByRecommendedSkillLevelId: ChineseRandomQuestionsConnection;
+  /** Reads and enables pagination through a set of `ChineseWouldYouRatherQuestion`. */
+  chineseWouldYouRatherQuestionsByRecommendedSkillLevelId: ChineseWouldYouRatherQuestionsConnection;
+  /** Reads and enables pagination through a set of `ChineseGuessCharacterQuestion`. */
+  chineseGuessCharacterQuestionsByRecommendedSkillLevelId: ChineseGuessCharacterQuestionsConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByUserLanguageLanguageSkillLevelIdAndUserId: LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Language`. */
@@ -1988,6 +3874,114 @@ export type LanguageSkillLevelGroupsArgs = {
   orderBy?: Maybe<Array<GroupsOrderBy>>;
   condition?: Maybe<GroupCondition>;
   filter?: Maybe<GroupFilter>;
+};
+
+
+export type LanguageSkillLevelEnglishWordsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<EnglishWordsOrderBy>>;
+  condition?: Maybe<EnglishWordCondition>;
+  filter?: Maybe<EnglishWordFilter>;
+};
+
+
+export type LanguageSkillLevelGermanWordsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GermanWordsOrderBy>>;
+  condition?: Maybe<GermanWordCondition>;
+  filter?: Maybe<GermanWordFilter>;
+};
+
+
+export type LanguageSkillLevelEnglishRandomQuestionsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<EnglishRandomQuestionsOrderBy>>;
+  condition?: Maybe<EnglishRandomQuestionCondition>;
+  filter?: Maybe<EnglishRandomQuestionFilter>;
+};
+
+
+export type LanguageSkillLevelGermanRandomQuestionsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GermanRandomQuestionsOrderBy>>;
+  condition?: Maybe<GermanRandomQuestionCondition>;
+  filter?: Maybe<GermanRandomQuestionFilter>;
+};
+
+
+export type LanguageSkillLevelEnglishWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+  condition?: Maybe<EnglishWouldYouRatherQuestionCondition>;
+  filter?: Maybe<EnglishWouldYouRatherQuestionFilter>;
+};
+
+
+export type LanguageSkillLevelGermanWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
+  condition?: Maybe<GermanWouldYouRatherQuestionCondition>;
+  filter?: Maybe<GermanWouldYouRatherQuestionFilter>;
+};
+
+
+export type LanguageSkillLevelChineseRandomQuestionsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
+  condition?: Maybe<ChineseRandomQuestionCondition>;
+  filter?: Maybe<ChineseRandomQuestionFilter>;
+};
+
+
+export type LanguageSkillLevelChineseWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
+  condition?: Maybe<ChineseWouldYouRatherQuestionCondition>;
+  filter?: Maybe<ChineseWouldYouRatherQuestionFilter>;
+};
+
+
+export type LanguageSkillLevelChineseGuessCharacterQuestionsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
+  condition?: Maybe<ChineseGuessCharacterQuestionCondition>;
+  filter?: Maybe<ChineseGuessCharacterQuestionFilter>;
 };
 
 
@@ -2728,6 +4722,8 @@ export type Mutation = {
   createGroupUser?: Maybe<CreateGroupUserPayload>;
   /** Creates a single `Group`. */
   createGroup?: Maybe<CreateGroupPayload>;
+  /** Creates a single `ChineseGuessCharacterQuestion`. */
+  createChineseGuessCharacterQuestion?: Maybe<CreateChineseGuessCharacterQuestionPayload>;
   /** Creates a single `InviteToken`. */
   createInviteToken?: Maybe<CreateInviteTokenPayload>;
   /** Creates a single `LanguageSkillLevel`. */
@@ -2738,12 +4734,28 @@ export type Mutation = {
   createMessagePreview?: Maybe<CreateMessagePreviewPayload>;
   /** Creates a single `Message`. */
   createMessage?: Maybe<CreateMessagePayload>;
+  /** Creates a single `GermanRandomQuestion`. */
+  createGermanRandomQuestion?: Maybe<CreateGermanRandomQuestionPayload>;
+  /** Creates a single `EnglishRandomQuestion`. */
+  createEnglishRandomQuestion?: Maybe<CreateEnglishRandomQuestionPayload>;
+  /** Creates a single `ChineseRandomQuestion`. */
+  createChineseRandomQuestion?: Maybe<CreateChineseRandomQuestionPayload>;
   /** Creates a single `UserLanguage`. */
   createUserLanguage?: Maybe<CreateUserLanguagePayload>;
   /** Creates a single `UserSession`. */
   createUserSession?: Maybe<CreateUserSessionPayload>;
   /** Creates a single `User`. */
   createUser?: Maybe<CreateUserPayload>;
+  /** Creates a single `GermanWord`. */
+  createGermanWord?: Maybe<CreateGermanWordPayload>;
+  /** Creates a single `EnglishWord`. */
+  createEnglishWord?: Maybe<CreateEnglishWordPayload>;
+  /** Creates a single `GermanWouldYouRatherQuestion`. */
+  createGermanWouldYouRatherQuestion?: Maybe<CreateGermanWouldYouRatherQuestionPayload>;
+  /** Creates a single `EnglishWouldYouRatherQuestion`. */
+  createEnglishWouldYouRatherQuestion?: Maybe<CreateEnglishWouldYouRatherQuestionPayload>;
+  /** Creates a single `ChineseWouldYouRatherQuestion`. */
+  createChineseWouldYouRatherQuestion?: Maybe<CreateChineseWouldYouRatherQuestionPayload>;
   /** Updates a single `GroupUser` using its globally unique id and a patch. */
   updateGroupUserByNodeId?: Maybe<UpdateGroupUserPayload>;
   /** Updates a single `GroupUser` using a unique key and a patch. */
@@ -2754,6 +4766,12 @@ export type Mutation = {
   updateGroup?: Maybe<UpdateGroupPayload>;
   /** Updates a single `Group` using a unique key and a patch. */
   updateGroupByUuid?: Maybe<UpdateGroupPayload>;
+  /** Updates a single `ChineseGuessCharacterQuestion` using its globally unique id and a patch. */
+  updateChineseGuessCharacterQuestionByNodeId?: Maybe<UpdateChineseGuessCharacterQuestionPayload>;
+  /** Updates a single `ChineseGuessCharacterQuestion` using a unique key and a patch. */
+  updateChineseGuessCharacterQuestion?: Maybe<UpdateChineseGuessCharacterQuestionPayload>;
+  /** Updates a single `ChineseGuessCharacterQuestion` using a unique key and a patch. */
+  updateChineseGuessCharacterQuestionByUuid?: Maybe<UpdateChineseGuessCharacterQuestionPayload>;
   /** Updates a single `InviteToken` using its globally unique id and a patch. */
   updateInviteTokenByNodeId?: Maybe<UpdateInviteTokenPayload>;
   /** Updates a single `InviteToken` using a unique key and a patch. */
@@ -2782,6 +4800,24 @@ export type Mutation = {
   updateMessage?: Maybe<UpdateMessagePayload>;
   /** Updates a single `Message` using a unique key and a patch. */
   updateMessageByUuid?: Maybe<UpdateMessagePayload>;
+  /** Updates a single `GermanRandomQuestion` using its globally unique id and a patch. */
+  updateGermanRandomQuestionByNodeId?: Maybe<UpdateGermanRandomQuestionPayload>;
+  /** Updates a single `GermanRandomQuestion` using a unique key and a patch. */
+  updateGermanRandomQuestion?: Maybe<UpdateGermanRandomQuestionPayload>;
+  /** Updates a single `GermanRandomQuestion` using a unique key and a patch. */
+  updateGermanRandomQuestionByUuid?: Maybe<UpdateGermanRandomQuestionPayload>;
+  /** Updates a single `EnglishRandomQuestion` using its globally unique id and a patch. */
+  updateEnglishRandomQuestionByNodeId?: Maybe<UpdateEnglishRandomQuestionPayload>;
+  /** Updates a single `EnglishRandomQuestion` using a unique key and a patch. */
+  updateEnglishRandomQuestion?: Maybe<UpdateEnglishRandomQuestionPayload>;
+  /** Updates a single `EnglishRandomQuestion` using a unique key and a patch. */
+  updateEnglishRandomQuestionByUuid?: Maybe<UpdateEnglishRandomQuestionPayload>;
+  /** Updates a single `ChineseRandomQuestion` using its globally unique id and a patch. */
+  updateChineseRandomQuestionByNodeId?: Maybe<UpdateChineseRandomQuestionPayload>;
+  /** Updates a single `ChineseRandomQuestion` using a unique key and a patch. */
+  updateChineseRandomQuestion?: Maybe<UpdateChineseRandomQuestionPayload>;
+  /** Updates a single `ChineseRandomQuestion` using a unique key and a patch. */
+  updateChineseRandomQuestionByUuid?: Maybe<UpdateChineseRandomQuestionPayload>;
   /** Updates a single `UserLanguage` using its globally unique id and a patch. */
   updateUserLanguageByNodeId?: Maybe<UpdateUserLanguagePayload>;
   /** Updates a single `UserLanguage` using a unique key and a patch. */
@@ -2798,6 +4834,36 @@ export type Mutation = {
   updateUserByEmail?: Maybe<UpdateUserPayload>;
   /** Updates a single `User` using a unique key and a patch. */
   updateUserByUuid?: Maybe<UpdateUserPayload>;
+  /** Updates a single `GermanWord` using its globally unique id and a patch. */
+  updateGermanWordByNodeId?: Maybe<UpdateGermanWordPayload>;
+  /** Updates a single `GermanWord` using a unique key and a patch. */
+  updateGermanWord?: Maybe<UpdateGermanWordPayload>;
+  /** Updates a single `GermanWord` using a unique key and a patch. */
+  updateGermanWordByUuid?: Maybe<UpdateGermanWordPayload>;
+  /** Updates a single `EnglishWord` using its globally unique id and a patch. */
+  updateEnglishWordByNodeId?: Maybe<UpdateEnglishWordPayload>;
+  /** Updates a single `EnglishWord` using a unique key and a patch. */
+  updateEnglishWord?: Maybe<UpdateEnglishWordPayload>;
+  /** Updates a single `EnglishWord` using a unique key and a patch. */
+  updateEnglishWordByUuid?: Maybe<UpdateEnglishWordPayload>;
+  /** Updates a single `GermanWouldYouRatherQuestion` using its globally unique id and a patch. */
+  updateGermanWouldYouRatherQuestionByNodeId?: Maybe<UpdateGermanWouldYouRatherQuestionPayload>;
+  /** Updates a single `GermanWouldYouRatherQuestion` using a unique key and a patch. */
+  updateGermanWouldYouRatherQuestion?: Maybe<UpdateGermanWouldYouRatherQuestionPayload>;
+  /** Updates a single `GermanWouldYouRatherQuestion` using a unique key and a patch. */
+  updateGermanWouldYouRatherQuestionByUuid?: Maybe<UpdateGermanWouldYouRatherQuestionPayload>;
+  /** Updates a single `EnglishWouldYouRatherQuestion` using its globally unique id and a patch. */
+  updateEnglishWouldYouRatherQuestionByNodeId?: Maybe<UpdateEnglishWouldYouRatherQuestionPayload>;
+  /** Updates a single `EnglishWouldYouRatherQuestion` using a unique key and a patch. */
+  updateEnglishWouldYouRatherQuestion?: Maybe<UpdateEnglishWouldYouRatherQuestionPayload>;
+  /** Updates a single `EnglishWouldYouRatherQuestion` using a unique key and a patch. */
+  updateEnglishWouldYouRatherQuestionByUuid?: Maybe<UpdateEnglishWouldYouRatherQuestionPayload>;
+  /** Updates a single `ChineseWouldYouRatherQuestion` using its globally unique id and a patch. */
+  updateChineseWouldYouRatherQuestionByNodeId?: Maybe<UpdateChineseWouldYouRatherQuestionPayload>;
+  /** Updates a single `ChineseWouldYouRatherQuestion` using a unique key and a patch. */
+  updateChineseWouldYouRatherQuestion?: Maybe<UpdateChineseWouldYouRatherQuestionPayload>;
+  /** Updates a single `ChineseWouldYouRatherQuestion` using a unique key and a patch. */
+  updateChineseWouldYouRatherQuestionByUuid?: Maybe<UpdateChineseWouldYouRatherQuestionPayload>;
   /** Deletes a single `GroupUser` using its globally unique id. */
   deleteGroupUserByNodeId?: Maybe<DeleteGroupUserPayload>;
   /** Deletes a single `GroupUser` using a unique key. */
@@ -2808,6 +4874,12 @@ export type Mutation = {
   deleteGroup?: Maybe<DeleteGroupPayload>;
   /** Deletes a single `Group` using a unique key. */
   deleteGroupByUuid?: Maybe<DeleteGroupPayload>;
+  /** Deletes a single `ChineseGuessCharacterQuestion` using its globally unique id. */
+  deleteChineseGuessCharacterQuestionByNodeId?: Maybe<DeleteChineseGuessCharacterQuestionPayload>;
+  /** Deletes a single `ChineseGuessCharacterQuestion` using a unique key. */
+  deleteChineseGuessCharacterQuestion?: Maybe<DeleteChineseGuessCharacterQuestionPayload>;
+  /** Deletes a single `ChineseGuessCharacterQuestion` using a unique key. */
+  deleteChineseGuessCharacterQuestionByUuid?: Maybe<DeleteChineseGuessCharacterQuestionPayload>;
   /** Deletes a single `InviteToken` using its globally unique id. */
   deleteInviteTokenByNodeId?: Maybe<DeleteInviteTokenPayload>;
   /** Deletes a single `InviteToken` using a unique key. */
@@ -2836,6 +4908,24 @@ export type Mutation = {
   deleteMessage?: Maybe<DeleteMessagePayload>;
   /** Deletes a single `Message` using a unique key. */
   deleteMessageByUuid?: Maybe<DeleteMessagePayload>;
+  /** Deletes a single `GermanRandomQuestion` using its globally unique id. */
+  deleteGermanRandomQuestionByNodeId?: Maybe<DeleteGermanRandomQuestionPayload>;
+  /** Deletes a single `GermanRandomQuestion` using a unique key. */
+  deleteGermanRandomQuestion?: Maybe<DeleteGermanRandomQuestionPayload>;
+  /** Deletes a single `GermanRandomQuestion` using a unique key. */
+  deleteGermanRandomQuestionByUuid?: Maybe<DeleteGermanRandomQuestionPayload>;
+  /** Deletes a single `EnglishRandomQuestion` using its globally unique id. */
+  deleteEnglishRandomQuestionByNodeId?: Maybe<DeleteEnglishRandomQuestionPayload>;
+  /** Deletes a single `EnglishRandomQuestion` using a unique key. */
+  deleteEnglishRandomQuestion?: Maybe<DeleteEnglishRandomQuestionPayload>;
+  /** Deletes a single `EnglishRandomQuestion` using a unique key. */
+  deleteEnglishRandomQuestionByUuid?: Maybe<DeleteEnglishRandomQuestionPayload>;
+  /** Deletes a single `ChineseRandomQuestion` using its globally unique id. */
+  deleteChineseRandomQuestionByNodeId?: Maybe<DeleteChineseRandomQuestionPayload>;
+  /** Deletes a single `ChineseRandomQuestion` using a unique key. */
+  deleteChineseRandomQuestion?: Maybe<DeleteChineseRandomQuestionPayload>;
+  /** Deletes a single `ChineseRandomQuestion` using a unique key. */
+  deleteChineseRandomQuestionByUuid?: Maybe<DeleteChineseRandomQuestionPayload>;
   /** Deletes a single `UserLanguage` using its globally unique id. */
   deleteUserLanguageByNodeId?: Maybe<DeleteUserLanguagePayload>;
   /** Deletes a single `UserLanguage` using a unique key. */
@@ -2852,6 +4942,36 @@ export type Mutation = {
   deleteUserByEmail?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
   deleteUserByUuid?: Maybe<DeleteUserPayload>;
+  /** Deletes a single `GermanWord` using its globally unique id. */
+  deleteGermanWordByNodeId?: Maybe<DeleteGermanWordPayload>;
+  /** Deletes a single `GermanWord` using a unique key. */
+  deleteGermanWord?: Maybe<DeleteGermanWordPayload>;
+  /** Deletes a single `GermanWord` using a unique key. */
+  deleteGermanWordByUuid?: Maybe<DeleteGermanWordPayload>;
+  /** Deletes a single `EnglishWord` using its globally unique id. */
+  deleteEnglishWordByNodeId?: Maybe<DeleteEnglishWordPayload>;
+  /** Deletes a single `EnglishWord` using a unique key. */
+  deleteEnglishWord?: Maybe<DeleteEnglishWordPayload>;
+  /** Deletes a single `EnglishWord` using a unique key. */
+  deleteEnglishWordByUuid?: Maybe<DeleteEnglishWordPayload>;
+  /** Deletes a single `GermanWouldYouRatherQuestion` using its globally unique id. */
+  deleteGermanWouldYouRatherQuestionByNodeId?: Maybe<DeleteGermanWouldYouRatherQuestionPayload>;
+  /** Deletes a single `GermanWouldYouRatherQuestion` using a unique key. */
+  deleteGermanWouldYouRatherQuestion?: Maybe<DeleteGermanWouldYouRatherQuestionPayload>;
+  /** Deletes a single `GermanWouldYouRatherQuestion` using a unique key. */
+  deleteGermanWouldYouRatherQuestionByUuid?: Maybe<DeleteGermanWouldYouRatherQuestionPayload>;
+  /** Deletes a single `EnglishWouldYouRatherQuestion` using its globally unique id. */
+  deleteEnglishWouldYouRatherQuestionByNodeId?: Maybe<DeleteEnglishWouldYouRatherQuestionPayload>;
+  /** Deletes a single `EnglishWouldYouRatherQuestion` using a unique key. */
+  deleteEnglishWouldYouRatherQuestion?: Maybe<DeleteEnglishWouldYouRatherQuestionPayload>;
+  /** Deletes a single `EnglishWouldYouRatherQuestion` using a unique key. */
+  deleteEnglishWouldYouRatherQuestionByUuid?: Maybe<DeleteEnglishWouldYouRatherQuestionPayload>;
+  /** Deletes a single `ChineseWouldYouRatherQuestion` using its globally unique id. */
+  deleteChineseWouldYouRatherQuestionByNodeId?: Maybe<DeleteChineseWouldYouRatherQuestionPayload>;
+  /** Deletes a single `ChineseWouldYouRatherQuestion` using a unique key. */
+  deleteChineseWouldYouRatherQuestion?: Maybe<DeleteChineseWouldYouRatherQuestionPayload>;
+  /** Deletes a single `ChineseWouldYouRatherQuestion` using a unique key. */
+  deleteChineseWouldYouRatherQuestionByUuid?: Maybe<DeleteChineseWouldYouRatherQuestionPayload>;
   joinGlobalGroup?: Maybe<JoinGlobalGroupPayload>;
   registerUserActivity?: Maybe<RegisterUserActivityPayload>;
 };
@@ -2866,6 +4986,12 @@ export type MutationCreateGroupUserArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateGroupArgs = {
   input: CreateGroupInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateChineseGuessCharacterQuestionArgs = {
+  input: CreateChineseGuessCharacterQuestionInput;
 };
 
 
@@ -2900,6 +5026,24 @@ export type MutationCreateMessageArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateGermanRandomQuestionArgs = {
+  input: CreateGermanRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateEnglishRandomQuestionArgs = {
+  input: CreateEnglishRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateChineseRandomQuestionArgs = {
+  input: CreateChineseRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateUserLanguageArgs = {
   input: CreateUserLanguageInput;
 };
@@ -2914,6 +5058,36 @@ export type MutationCreateUserSessionArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateGermanWordArgs = {
+  input: CreateGermanWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateEnglishWordArgs = {
+  input: CreateEnglishWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateGermanWouldYouRatherQuestionArgs = {
+  input: CreateGermanWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateEnglishWouldYouRatherQuestionArgs = {
+  input: CreateEnglishWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateChineseWouldYouRatherQuestionArgs = {
+  input: CreateChineseWouldYouRatherQuestionInput;
 };
 
 
@@ -2944,6 +5118,24 @@ export type MutationUpdateGroupArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGroupByUuidArgs = {
   input: UpdateGroupByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateChineseGuessCharacterQuestionByNodeIdArgs = {
+  input: UpdateChineseGuessCharacterQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateChineseGuessCharacterQuestionArgs = {
+  input: UpdateChineseGuessCharacterQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateChineseGuessCharacterQuestionByUuidArgs = {
+  input: UpdateChineseGuessCharacterQuestionByUuidInput;
 };
 
 
@@ -3032,6 +5224,60 @@ export type MutationUpdateMessageByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGermanRandomQuestionByNodeIdArgs = {
+  input: UpdateGermanRandomQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGermanRandomQuestionArgs = {
+  input: UpdateGermanRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGermanRandomQuestionByUuidArgs = {
+  input: UpdateGermanRandomQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateEnglishRandomQuestionByNodeIdArgs = {
+  input: UpdateEnglishRandomQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateEnglishRandomQuestionArgs = {
+  input: UpdateEnglishRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateEnglishRandomQuestionByUuidArgs = {
+  input: UpdateEnglishRandomQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateChineseRandomQuestionByNodeIdArgs = {
+  input: UpdateChineseRandomQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateChineseRandomQuestionArgs = {
+  input: UpdateChineseRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateChineseRandomQuestionByUuidArgs = {
+  input: UpdateChineseRandomQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateUserLanguageByNodeIdArgs = {
   input: UpdateUserLanguageByNodeIdInput;
 };
@@ -3080,6 +5326,96 @@ export type MutationUpdateUserByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGermanWordByNodeIdArgs = {
+  input: UpdateGermanWordByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGermanWordArgs = {
+  input: UpdateGermanWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGermanWordByUuidArgs = {
+  input: UpdateGermanWordByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateEnglishWordByNodeIdArgs = {
+  input: UpdateEnglishWordByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateEnglishWordArgs = {
+  input: UpdateEnglishWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateEnglishWordByUuidArgs = {
+  input: UpdateEnglishWordByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGermanWouldYouRatherQuestionByNodeIdArgs = {
+  input: UpdateGermanWouldYouRatherQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGermanWouldYouRatherQuestionArgs = {
+  input: UpdateGermanWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGermanWouldYouRatherQuestionByUuidArgs = {
+  input: UpdateGermanWouldYouRatherQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateEnglishWouldYouRatherQuestionByNodeIdArgs = {
+  input: UpdateEnglishWouldYouRatherQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateEnglishWouldYouRatherQuestionArgs = {
+  input: UpdateEnglishWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateEnglishWouldYouRatherQuestionByUuidArgs = {
+  input: UpdateEnglishWouldYouRatherQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateChineseWouldYouRatherQuestionByNodeIdArgs = {
+  input: UpdateChineseWouldYouRatherQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateChineseWouldYouRatherQuestionArgs = {
+  input: UpdateChineseWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateChineseWouldYouRatherQuestionByUuidArgs = {
+  input: UpdateChineseWouldYouRatherQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGroupUserByNodeIdArgs = {
   input: DeleteGroupUserByNodeIdInput;
 };
@@ -3106,6 +5442,24 @@ export type MutationDeleteGroupArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGroupByUuidArgs = {
   input: DeleteGroupByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteChineseGuessCharacterQuestionByNodeIdArgs = {
+  input: DeleteChineseGuessCharacterQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteChineseGuessCharacterQuestionArgs = {
+  input: DeleteChineseGuessCharacterQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteChineseGuessCharacterQuestionByUuidArgs = {
+  input: DeleteChineseGuessCharacterQuestionByUuidInput;
 };
 
 
@@ -3194,6 +5548,60 @@ export type MutationDeleteMessageByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGermanRandomQuestionByNodeIdArgs = {
+  input: DeleteGermanRandomQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGermanRandomQuestionArgs = {
+  input: DeleteGermanRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGermanRandomQuestionByUuidArgs = {
+  input: DeleteGermanRandomQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteEnglishRandomQuestionByNodeIdArgs = {
+  input: DeleteEnglishRandomQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteEnglishRandomQuestionArgs = {
+  input: DeleteEnglishRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteEnglishRandomQuestionByUuidArgs = {
+  input: DeleteEnglishRandomQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteChineseRandomQuestionByNodeIdArgs = {
+  input: DeleteChineseRandomQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteChineseRandomQuestionArgs = {
+  input: DeleteChineseRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteChineseRandomQuestionByUuidArgs = {
+  input: DeleteChineseRandomQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserLanguageByNodeIdArgs = {
   input: DeleteUserLanguageByNodeIdInput;
 };
@@ -3238,6 +5646,96 @@ export type MutationDeleteUserByEmailArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByUuidArgs = {
   input: DeleteUserByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGermanWordByNodeIdArgs = {
+  input: DeleteGermanWordByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGermanWordArgs = {
+  input: DeleteGermanWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGermanWordByUuidArgs = {
+  input: DeleteGermanWordByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteEnglishWordByNodeIdArgs = {
+  input: DeleteEnglishWordByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteEnglishWordArgs = {
+  input: DeleteEnglishWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteEnglishWordByUuidArgs = {
+  input: DeleteEnglishWordByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGermanWouldYouRatherQuestionByNodeIdArgs = {
+  input: DeleteGermanWouldYouRatherQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGermanWouldYouRatherQuestionArgs = {
+  input: DeleteGermanWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGermanWouldYouRatherQuestionByUuidArgs = {
+  input: DeleteGermanWouldYouRatherQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteEnglishWouldYouRatherQuestionByNodeIdArgs = {
+  input: DeleteEnglishWouldYouRatherQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteEnglishWouldYouRatherQuestionArgs = {
+  input: DeleteEnglishWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteEnglishWouldYouRatherQuestionByUuidArgs = {
+  input: DeleteEnglishWouldYouRatherQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteChineseWouldYouRatherQuestionByNodeIdArgs = {
+  input: DeleteChineseWouldYouRatherQuestionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteChineseWouldYouRatherQuestionArgs = {
+  input: DeleteChineseWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteChineseWouldYouRatherQuestionByUuidArgs = {
+  input: DeleteChineseWouldYouRatherQuestionByUuidInput;
 };
 
 
@@ -3287,6 +5785,8 @@ export type Query = Node & {
   groupUsers?: Maybe<GroupUsersConnection>;
   /** Reads and enables pagination through a set of `Group`. */
   groups?: Maybe<GroupsConnection>;
+  /** Reads and enables pagination through a set of `ChineseGuessCharacterQuestion`. */
+  chineseGuessCharacterQuestions?: Maybe<ChineseGuessCharacterQuestionsConnection>;
   /** Reads and enables pagination through a set of `InviteToken`. */
   inviteTokens?: Maybe<InviteTokensConnection>;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
@@ -3297,15 +5797,33 @@ export type Query = Node & {
   messagePreviews?: Maybe<MessagePreviewsConnection>;
   /** Reads and enables pagination through a set of `Message`. */
   messages?: Maybe<MessagesConnection>;
+  /** Reads and enables pagination through a set of `GermanRandomQuestion`. */
+  germanRandomQuestions?: Maybe<GermanRandomQuestionsConnection>;
+  /** Reads and enables pagination through a set of `EnglishRandomQuestion`. */
+  englishRandomQuestions?: Maybe<EnglishRandomQuestionsConnection>;
+  /** Reads and enables pagination through a set of `ChineseRandomQuestion`. */
+  chineseRandomQuestions?: Maybe<ChineseRandomQuestionsConnection>;
   /** Reads and enables pagination through a set of `UserLanguage`. */
   userLanguages?: Maybe<UserLanguagesConnection>;
   /** Reads and enables pagination through a set of `UserSession`. */
   userSessions?: Maybe<UserSessionsConnection>;
   /** Reads and enables pagination through a set of `User`. */
   users?: Maybe<UsersConnection>;
+  /** Reads and enables pagination through a set of `GermanWord`. */
+  germanWords?: Maybe<GermanWordsConnection>;
+  /** Reads and enables pagination through a set of `EnglishWord`. */
+  englishWords?: Maybe<EnglishWordsConnection>;
+  /** Reads and enables pagination through a set of `GermanWouldYouRatherQuestion`. */
+  germanWouldYouRatherQuestions?: Maybe<GermanWouldYouRatherQuestionsConnection>;
+  /** Reads and enables pagination through a set of `EnglishWouldYouRatherQuestion`. */
+  englishWouldYouRatherQuestions?: Maybe<EnglishWouldYouRatherQuestionsConnection>;
+  /** Reads and enables pagination through a set of `ChineseWouldYouRatherQuestion`. */
+  chineseWouldYouRatherQuestions?: Maybe<ChineseWouldYouRatherQuestionsConnection>;
   groupUser?: Maybe<GroupUser>;
   group?: Maybe<Group>;
   groupByUuid?: Maybe<Group>;
+  chineseGuessCharacterQuestion?: Maybe<ChineseGuessCharacterQuestion>;
+  chineseGuessCharacterQuestionByUuid?: Maybe<ChineseGuessCharacterQuestion>;
   inviteToken?: Maybe<InviteToken>;
   languageSkillLevel?: Maybe<LanguageSkillLevel>;
   language?: Maybe<Language>;
@@ -3315,11 +5833,27 @@ export type Query = Node & {
   messagePreviewByUuid?: Maybe<MessagePreview>;
   message?: Maybe<Message>;
   messageByUuid?: Maybe<Message>;
+  germanRandomQuestion?: Maybe<GermanRandomQuestion>;
+  germanRandomQuestionByUuid?: Maybe<GermanRandomQuestion>;
+  englishRandomQuestion?: Maybe<EnglishRandomQuestion>;
+  englishRandomQuestionByUuid?: Maybe<EnglishRandomQuestion>;
+  chineseRandomQuestion?: Maybe<ChineseRandomQuestion>;
+  chineseRandomQuestionByUuid?: Maybe<ChineseRandomQuestion>;
   userLanguage?: Maybe<UserLanguage>;
   userSession?: Maybe<UserSession>;
   user?: Maybe<User>;
   userByEmail?: Maybe<User>;
   userByUuid?: Maybe<User>;
+  germanWord?: Maybe<GermanWord>;
+  germanWordByUuid?: Maybe<GermanWord>;
+  englishWord?: Maybe<EnglishWord>;
+  englishWordByUuid?: Maybe<EnglishWord>;
+  germanWouldYouRatherQuestion?: Maybe<GermanWouldYouRatherQuestion>;
+  germanWouldYouRatherQuestionByUuid?: Maybe<GermanWouldYouRatherQuestion>;
+  englishWouldYouRatherQuestion?: Maybe<EnglishWouldYouRatherQuestion>;
+  englishWouldYouRatherQuestionByUuid?: Maybe<EnglishWouldYouRatherQuestion>;
+  chineseWouldYouRatherQuestion?: Maybe<ChineseWouldYouRatherQuestion>;
+  chineseWouldYouRatherQuestionByUuid?: Maybe<ChineseWouldYouRatherQuestion>;
   currentUser?: Maybe<User>;
   currentUserId?: Maybe<Scalars['Int']>;
   groupIsGlobal?: Maybe<Scalars['Boolean']>;
@@ -3332,6 +5866,8 @@ export type Query = Node & {
   groupUserByNodeId?: Maybe<GroupUser>;
   /** Reads a single `Group` using its globally unique `ID`. */
   groupByNodeId?: Maybe<Group>;
+  /** Reads a single `ChineseGuessCharacterQuestion` using its globally unique `ID`. */
+  chineseGuessCharacterQuestionByNodeId?: Maybe<ChineseGuessCharacterQuestion>;
   /** Reads a single `InviteToken` using its globally unique `ID`. */
   inviteTokenByNodeId?: Maybe<InviteToken>;
   /** Reads a single `LanguageSkillLevel` using its globally unique `ID`. */
@@ -3342,12 +5878,28 @@ export type Query = Node & {
   messagePreviewByNodeId?: Maybe<MessagePreview>;
   /** Reads a single `Message` using its globally unique `ID`. */
   messageByNodeId?: Maybe<Message>;
+  /** Reads a single `GermanRandomQuestion` using its globally unique `ID`. */
+  germanRandomQuestionByNodeId?: Maybe<GermanRandomQuestion>;
+  /** Reads a single `EnglishRandomQuestion` using its globally unique `ID`. */
+  englishRandomQuestionByNodeId?: Maybe<EnglishRandomQuestion>;
+  /** Reads a single `ChineseRandomQuestion` using its globally unique `ID`. */
+  chineseRandomQuestionByNodeId?: Maybe<ChineseRandomQuestion>;
   /** Reads a single `UserLanguage` using its globally unique `ID`. */
   userLanguageByNodeId?: Maybe<UserLanguage>;
   /** Reads a single `UserSession` using its globally unique `ID`. */
   userSessionByNodeId?: Maybe<UserSession>;
   /** Reads a single `User` using its globally unique `ID`. */
   userByNodeId?: Maybe<User>;
+  /** Reads a single `GermanWord` using its globally unique `ID`. */
+  germanWordByNodeId?: Maybe<GermanWord>;
+  /** Reads a single `EnglishWord` using its globally unique `ID`. */
+  englishWordByNodeId?: Maybe<EnglishWord>;
+  /** Reads a single `GermanWouldYouRatherQuestion` using its globally unique `ID`. */
+  germanWouldYouRatherQuestionByNodeId?: Maybe<GermanWouldYouRatherQuestion>;
+  /** Reads a single `EnglishWouldYouRatherQuestion` using its globally unique `ID`. */
+  englishWouldYouRatherQuestionByNodeId?: Maybe<EnglishWouldYouRatherQuestion>;
+  /** Reads a single `ChineseWouldYouRatherQuestion` using its globally unique `ID`. */
+  chineseWouldYouRatherQuestionByNodeId?: Maybe<ChineseWouldYouRatherQuestion>;
 };
 
 
@@ -3380,6 +5932,19 @@ export type QueryGroupsArgs = {
   orderBy?: Maybe<Array<GroupsOrderBy>>;
   condition?: Maybe<GroupCondition>;
   filter?: Maybe<GroupFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChineseGuessCharacterQuestionsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
+  condition?: Maybe<ChineseGuessCharacterQuestionCondition>;
+  filter?: Maybe<ChineseGuessCharacterQuestionFilter>;
 };
 
 
@@ -3449,6 +6014,45 @@ export type QueryMessagesArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryGermanRandomQuestionsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GermanRandomQuestionsOrderBy>>;
+  condition?: Maybe<GermanRandomQuestionCondition>;
+  filter?: Maybe<GermanRandomQuestionFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnglishRandomQuestionsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<EnglishRandomQuestionsOrderBy>>;
+  condition?: Maybe<EnglishRandomQuestionCondition>;
+  filter?: Maybe<EnglishRandomQuestionFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChineseRandomQuestionsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
+  condition?: Maybe<ChineseRandomQuestionCondition>;
+  filter?: Maybe<ChineseRandomQuestionFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryUserLanguagesArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
@@ -3488,6 +6092,71 @@ export type QueryUsersArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryGermanWordsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GermanWordsOrderBy>>;
+  condition?: Maybe<GermanWordCondition>;
+  filter?: Maybe<GermanWordFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnglishWordsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<EnglishWordsOrderBy>>;
+  condition?: Maybe<EnglishWordCondition>;
+  filter?: Maybe<EnglishWordFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGermanWouldYouRatherQuestionsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
+  condition?: Maybe<GermanWouldYouRatherQuestionCondition>;
+  filter?: Maybe<GermanWouldYouRatherQuestionFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnglishWouldYouRatherQuestionsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+  condition?: Maybe<EnglishWouldYouRatherQuestionCondition>;
+  filter?: Maybe<EnglishWouldYouRatherQuestionFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChineseWouldYouRatherQuestionsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
+  condition?: Maybe<ChineseWouldYouRatherQuestionCondition>;
+  filter?: Maybe<ChineseWouldYouRatherQuestionFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryGroupUserArgs = {
   id: Scalars['Int'];
 };
@@ -3501,6 +6170,18 @@ export type QueryGroupArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryGroupByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChineseGuessCharacterQuestionArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChineseGuessCharacterQuestionByUuidArgs = {
   uuid: Scalars['UUID'];
 };
 
@@ -3560,6 +6241,42 @@ export type QueryMessageByUuidArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryGermanRandomQuestionArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGermanRandomQuestionByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnglishRandomQuestionArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnglishRandomQuestionByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChineseRandomQuestionArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChineseRandomQuestionByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryUserLanguageArgs = {
   id: Scalars['Int'];
 };
@@ -3585,6 +6302,66 @@ export type QueryUserByEmailArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUserByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGermanWordArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGermanWordByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnglishWordArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnglishWordByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGermanWouldYouRatherQuestionArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGermanWouldYouRatherQuestionByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnglishWouldYouRatherQuestionArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnglishWouldYouRatherQuestionByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChineseWouldYouRatherQuestionArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChineseWouldYouRatherQuestionByUuidArgs = {
   uuid: Scalars['UUID'];
 };
 
@@ -3639,6 +6416,12 @@ export type QueryGroupByNodeIdArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryChineseGuessCharacterQuestionByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryInviteTokenByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
@@ -3669,6 +6452,24 @@ export type QueryMessageByNodeIdArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryGermanRandomQuestionByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnglishRandomQuestionByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChineseRandomQuestionByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryUserLanguageByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
@@ -3682,6 +6483,36 @@ export type QueryUserSessionByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUserByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGermanWordByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnglishWordByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGermanWouldYouRatherQuestionByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnglishWouldYouRatherQuestionByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryChineseWouldYouRatherQuestionByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
 
@@ -3786,6 +6617,46 @@ export type StringFilter = {
   greaterThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
 };
 
+/** A filter to be used against String List fields. All fields are combined with a logical ‘and.’ */
+export type StringListFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Contains the specified list of values. */
+  contains?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Contained by the specified list of values. */
+  containedBy?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Overlaps the specified list of values. */
+  overlaps?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any array item is equal to the specified value. */
+  anyEqualTo?: Maybe<Scalars['String']>;
+  /** Any array item is not equal to the specified value. */
+  anyNotEqualTo?: Maybe<Scalars['String']>;
+  /** Any array item is less than the specified value. */
+  anyLessThan?: Maybe<Scalars['String']>;
+  /** Any array item is less than or equal to the specified value. */
+  anyLessThanOrEqualTo?: Maybe<Scalars['String']>;
+  /** Any array item is greater than the specified value. */
+  anyGreaterThan?: Maybe<Scalars['String']>;
+  /** Any array item is greater than or equal to the specified value. */
+  anyGreaterThanOrEqualTo?: Maybe<Scalars['String']>;
+};
+
 
 /** A filter to be used against UUID fields. All fields are combined with a logical ‘and.’ */
 export type UuidFilter = {
@@ -3811,6 +6682,555 @@ export type UuidFilter = {
   greaterThan?: Maybe<Scalars['UUID']>;
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the `updateChineseGuessCharacterQuestionByNodeId` mutation. */
+export type UpdateChineseGuessCharacterQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `ChineseGuessCharacterQuestion` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `ChineseGuessCharacterQuestion` being updated. */
+  patch: ChineseGuessCharacterQuestionPatch;
+};
+
+/** All input for the `updateChineseGuessCharacterQuestionByUuid` mutation. */
+export type UpdateChineseGuessCharacterQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `ChineseGuessCharacterQuestion` being updated. */
+  patch: ChineseGuessCharacterQuestionPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateChineseGuessCharacterQuestion` mutation. */
+export type UpdateChineseGuessCharacterQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `ChineseGuessCharacterQuestion` being updated. */
+  patch: ChineseGuessCharacterQuestionPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `ChineseGuessCharacterQuestion` mutation. */
+export type UpdateChineseGuessCharacterQuestionPayload = {
+  __typename?: 'UpdateChineseGuessCharacterQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseGuessCharacterQuestion` that was updated by this mutation. */
+  chineseGuessCharacterQuestion?: Maybe<ChineseGuessCharacterQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseGuessCharacterQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ChineseGuessCharacterQuestion`. May be used by Relay 1. */
+  chineseGuessCharacterQuestionEdge?: Maybe<ChineseGuessCharacterQuestionsEdge>;
+};
+
+
+/** The output of our update `ChineseGuessCharacterQuestion` mutation. */
+export type UpdateChineseGuessCharacterQuestionPayloadChineseGuessCharacterQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
+};
+
+/** All input for the `updateChineseRandomQuestionByNodeId` mutation. */
+export type UpdateChineseRandomQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `ChineseRandomQuestion` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `ChineseRandomQuestion` being updated. */
+  patch: ChineseRandomQuestionPatch;
+};
+
+/** All input for the `updateChineseRandomQuestionByUuid` mutation. */
+export type UpdateChineseRandomQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `ChineseRandomQuestion` being updated. */
+  patch: ChineseRandomQuestionPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateChineseRandomQuestion` mutation. */
+export type UpdateChineseRandomQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `ChineseRandomQuestion` being updated. */
+  patch: ChineseRandomQuestionPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `ChineseRandomQuestion` mutation. */
+export type UpdateChineseRandomQuestionPayload = {
+  __typename?: 'UpdateChineseRandomQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseRandomQuestion` that was updated by this mutation. */
+  chineseRandomQuestion?: Maybe<ChineseRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ChineseRandomQuestion`. May be used by Relay 1. */
+  chineseRandomQuestionEdge?: Maybe<ChineseRandomQuestionsEdge>;
+};
+
+
+/** The output of our update `ChineseRandomQuestion` mutation. */
+export type UpdateChineseRandomQuestionPayloadChineseRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
+};
+
+/** All input for the `updateChineseWouldYouRatherQuestionByNodeId` mutation. */
+export type UpdateChineseWouldYouRatherQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `ChineseWouldYouRatherQuestion` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `ChineseWouldYouRatherQuestion` being updated. */
+  patch: ChineseWouldYouRatherQuestionPatch;
+};
+
+/** All input for the `updateChineseWouldYouRatherQuestionByUuid` mutation. */
+export type UpdateChineseWouldYouRatherQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `ChineseWouldYouRatherQuestion` being updated. */
+  patch: ChineseWouldYouRatherQuestionPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateChineseWouldYouRatherQuestion` mutation. */
+export type UpdateChineseWouldYouRatherQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `ChineseWouldYouRatherQuestion` being updated. */
+  patch: ChineseWouldYouRatherQuestionPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `ChineseWouldYouRatherQuestion` mutation. */
+export type UpdateChineseWouldYouRatherQuestionPayload = {
+  __typename?: 'UpdateChineseWouldYouRatherQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseWouldYouRatherQuestion` that was updated by this mutation. */
+  chineseWouldYouRatherQuestion?: Maybe<ChineseWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ChineseWouldYouRatherQuestion`. May be used by Relay 1. */
+  chineseWouldYouRatherQuestionEdge?: Maybe<ChineseWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our update `ChineseWouldYouRatherQuestion` mutation. */
+export type UpdateChineseWouldYouRatherQuestionPayloadChineseWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** All input for the `updateEnglishRandomQuestionByNodeId` mutation. */
+export type UpdateEnglishRandomQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `EnglishRandomQuestion` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `EnglishRandomQuestion` being updated. */
+  patch: EnglishRandomQuestionPatch;
+};
+
+/** All input for the `updateEnglishRandomQuestionByUuid` mutation. */
+export type UpdateEnglishRandomQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `EnglishRandomQuestion` being updated. */
+  patch: EnglishRandomQuestionPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateEnglishRandomQuestion` mutation. */
+export type UpdateEnglishRandomQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `EnglishRandomQuestion` being updated. */
+  patch: EnglishRandomQuestionPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `EnglishRandomQuestion` mutation. */
+export type UpdateEnglishRandomQuestionPayload = {
+  __typename?: 'UpdateEnglishRandomQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishRandomQuestion` that was updated by this mutation. */
+  englishRandomQuestion?: Maybe<EnglishRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `EnglishRandomQuestion`. May be used by Relay 1. */
+  englishRandomQuestionEdge?: Maybe<EnglishRandomQuestionsEdge>;
+};
+
+
+/** The output of our update `EnglishRandomQuestion` mutation. */
+export type UpdateEnglishRandomQuestionPayloadEnglishRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<EnglishRandomQuestionsOrderBy>>;
+};
+
+/** All input for the `updateEnglishWordByNodeId` mutation. */
+export type UpdateEnglishWordByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `EnglishWord` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `EnglishWord` being updated. */
+  patch: EnglishWordPatch;
+};
+
+/** All input for the `updateEnglishWordByUuid` mutation. */
+export type UpdateEnglishWordByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `EnglishWord` being updated. */
+  patch: EnglishWordPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateEnglishWord` mutation. */
+export type UpdateEnglishWordInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `EnglishWord` being updated. */
+  patch: EnglishWordPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `EnglishWord` mutation. */
+export type UpdateEnglishWordPayload = {
+  __typename?: 'UpdateEnglishWordPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishWord` that was updated by this mutation. */
+  englishWord?: Maybe<EnglishWord>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `EnglishWord`. May be used by Relay 1. */
+  englishWordEdge?: Maybe<EnglishWordsEdge>;
+};
+
+
+/** The output of our update `EnglishWord` mutation. */
+export type UpdateEnglishWordPayloadEnglishWordEdgeArgs = {
+  orderBy?: Maybe<Array<EnglishWordsOrderBy>>;
+};
+
+/** All input for the `updateEnglishWouldYouRatherQuestionByNodeId` mutation. */
+export type UpdateEnglishWouldYouRatherQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `EnglishWouldYouRatherQuestion` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `EnglishWouldYouRatherQuestion` being updated. */
+  patch: EnglishWouldYouRatherQuestionPatch;
+};
+
+/** All input for the `updateEnglishWouldYouRatherQuestionByUuid` mutation. */
+export type UpdateEnglishWouldYouRatherQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `EnglishWouldYouRatherQuestion` being updated. */
+  patch: EnglishWouldYouRatherQuestionPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateEnglishWouldYouRatherQuestion` mutation. */
+export type UpdateEnglishWouldYouRatherQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `EnglishWouldYouRatherQuestion` being updated. */
+  patch: EnglishWouldYouRatherQuestionPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `EnglishWouldYouRatherQuestion` mutation. */
+export type UpdateEnglishWouldYouRatherQuestionPayload = {
+  __typename?: 'UpdateEnglishWouldYouRatherQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishWouldYouRatherQuestion` that was updated by this mutation. */
+  englishWouldYouRatherQuestion?: Maybe<EnglishWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `EnglishWouldYouRatherQuestion`. May be used by Relay 1. */
+  englishWouldYouRatherQuestionEdge?: Maybe<EnglishWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our update `EnglishWouldYouRatherQuestion` mutation. */
+export type UpdateEnglishWouldYouRatherQuestionPayloadEnglishWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** All input for the `updateGermanRandomQuestionByNodeId` mutation. */
+export type UpdateGermanRandomQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `GermanRandomQuestion` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `GermanRandomQuestion` being updated. */
+  patch: GermanRandomQuestionPatch;
+};
+
+/** All input for the `updateGermanRandomQuestionByUuid` mutation. */
+export type UpdateGermanRandomQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `GermanRandomQuestion` being updated. */
+  patch: GermanRandomQuestionPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateGermanRandomQuestion` mutation. */
+export type UpdateGermanRandomQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `GermanRandomQuestion` being updated. */
+  patch: GermanRandomQuestionPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `GermanRandomQuestion` mutation. */
+export type UpdateGermanRandomQuestionPayload = {
+  __typename?: 'UpdateGermanRandomQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanRandomQuestion` that was updated by this mutation. */
+  germanRandomQuestion?: Maybe<GermanRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `GermanRandomQuestion`. May be used by Relay 1. */
+  germanRandomQuestionEdge?: Maybe<GermanRandomQuestionsEdge>;
+};
+
+
+/** The output of our update `GermanRandomQuestion` mutation. */
+export type UpdateGermanRandomQuestionPayloadGermanRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<GermanRandomQuestionsOrderBy>>;
+};
+
+/** All input for the `updateGermanWordByNodeId` mutation. */
+export type UpdateGermanWordByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `GermanWord` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `GermanWord` being updated. */
+  patch: GermanWordPatch;
+};
+
+/** All input for the `updateGermanWordByUuid` mutation. */
+export type UpdateGermanWordByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `GermanWord` being updated. */
+  patch: GermanWordPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateGermanWord` mutation. */
+export type UpdateGermanWordInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `GermanWord` being updated. */
+  patch: GermanWordPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `GermanWord` mutation. */
+export type UpdateGermanWordPayload = {
+  __typename?: 'UpdateGermanWordPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanWord` that was updated by this mutation. */
+  germanWord?: Maybe<GermanWord>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `GermanWord`. May be used by Relay 1. */
+  germanWordEdge?: Maybe<GermanWordsEdge>;
+};
+
+
+/** The output of our update `GermanWord` mutation. */
+export type UpdateGermanWordPayloadGermanWordEdgeArgs = {
+  orderBy?: Maybe<Array<GermanWordsOrderBy>>;
+};
+
+/** All input for the `updateGermanWouldYouRatherQuestionByNodeId` mutation. */
+export type UpdateGermanWouldYouRatherQuestionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `GermanWouldYouRatherQuestion` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `GermanWouldYouRatherQuestion` being updated. */
+  patch: GermanWouldYouRatherQuestionPatch;
+};
+
+/** All input for the `updateGermanWouldYouRatherQuestionByUuid` mutation. */
+export type UpdateGermanWouldYouRatherQuestionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `GermanWouldYouRatherQuestion` being updated. */
+  patch: GermanWouldYouRatherQuestionPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateGermanWouldYouRatherQuestion` mutation. */
+export type UpdateGermanWouldYouRatherQuestionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `GermanWouldYouRatherQuestion` being updated. */
+  patch: GermanWouldYouRatherQuestionPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `GermanWouldYouRatherQuestion` mutation. */
+export type UpdateGermanWouldYouRatherQuestionPayload = {
+  __typename?: 'UpdateGermanWouldYouRatherQuestionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanWouldYouRatherQuestion` that was updated by this mutation. */
+  germanWouldYouRatherQuestion?: Maybe<GermanWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `GermanWouldYouRatherQuestion`. May be used by Relay 1. */
+  germanWouldYouRatherQuestionEdge?: Maybe<GermanWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our update `GermanWouldYouRatherQuestion` mutation. */
+export type UpdateGermanWouldYouRatherQuestionPayloadGermanWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `updateGroupByNodeId` mutation. */

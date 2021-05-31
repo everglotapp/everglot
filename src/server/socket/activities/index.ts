@@ -103,7 +103,7 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                         getGroupActivity(chatUser.groupUuid)
                     )
                 }
-            }, 5000)
+            }, 6000)
         }
     )
 }

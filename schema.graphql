@@ -4155,6 +4155,7 @@ type EnglishWord implements Node {
 
   """Ranges from 0 to 1 (higher is more frequent)"""
   frequency: Float!
+  length: Int
   recommendedSkillLevelId: Int
   createdAt: Datetime!
 
@@ -4184,6 +4185,8 @@ enum EnglishWordsOrderBy {
   WORD_DESC
   FREQUENCY_ASC
   FREQUENCY_DESC
+  LENGTH_ASC
+  LENGTH_DESC
   RECOMMENDED_SKILL_LEVEL_ID_ASC
   RECOMMENDED_SKILL_LEVEL_ID_DESC
   CREATED_AT_ASC
@@ -4209,6 +4212,9 @@ input EnglishWordCondition {
   """Checks for equality with the object’s `frequency` field."""
   frequency: Float
 
+  """Checks for equality with the object’s `length` field."""
+  length: Int
+
   """Checks for equality with the object’s `recommendedSkillLevelId` field."""
   recommendedSkillLevelId: Int
 
@@ -4231,6 +4237,9 @@ input EnglishWordFilter {
 
   """Filter by the object’s `frequency` field."""
   frequency: FloatFilter
+
+  """Filter by the object’s `length` field."""
+  length: IntFilter
 
   """Filter by the object’s `recommendedSkillLevelId` field."""
   recommendedSkillLevelId: IntFilter
@@ -4318,6 +4327,7 @@ type GermanWord implements Node {
 
   """Ranges from 0 to 1 (higher is more frequent)"""
   frequency: Float!
+  length: Int
   recommendedSkillLevelId: Int
   createdAt: Datetime!
 
@@ -4347,6 +4357,8 @@ enum GermanWordsOrderBy {
   WORD_DESC
   FREQUENCY_ASC
   FREQUENCY_DESC
+  LENGTH_ASC
+  LENGTH_DESC
   RECOMMENDED_SKILL_LEVEL_ID_ASC
   RECOMMENDED_SKILL_LEVEL_ID_DESC
   CREATED_AT_ASC
@@ -4372,6 +4384,9 @@ input GermanWordCondition {
   """Checks for equality with the object’s `frequency` field."""
   frequency: Float
 
+  """Checks for equality with the object’s `length` field."""
+  length: Int
+
   """Checks for equality with the object’s `recommendedSkillLevelId` field."""
   recommendedSkillLevelId: Int
 
@@ -4394,6 +4409,9 @@ input GermanWordFilter {
 
   """Filter by the object’s `frequency` field."""
   frequency: FloatFilter
+
+  """Filter by the object’s `length` field."""
+  length: IntFilter
 
   """Filter by the object’s `recommendedSkillLevelId` field."""
   recommendedSkillLevelId: IntFilter
@@ -8625,6 +8643,7 @@ input GermanWordInput {
 
   """Ranges from 0 to 1 (higher is more frequent)"""
   frequency: Float!
+  length: Int
   recommendedSkillLevelId: Int
   createdAt: Datetime
 }
@@ -8677,6 +8696,7 @@ input EnglishWordInput {
 
   """Ranges from 0 to 1 (higher is more frequent)"""
   frequency: Float!
+  length: Int
   recommendedSkillLevelId: Int
   createdAt: Datetime
 }
@@ -10102,6 +10122,7 @@ input GermanWordPatch {
 
   """Ranges from 0 to 1 (higher is more frequent)"""
   frequency: Float
+  length: Int
   recommendedSkillLevelId: Int
   createdAt: Datetime
 }
@@ -10193,6 +10214,7 @@ input EnglishWordPatch {
 
   """Ranges from 0 to 1 (higher is more frequent)"""
   frequency: Float
+  length: Int
   recommendedSkillLevelId: Int
   createdAt: Datetime
 }

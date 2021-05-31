@@ -2252,6 +2252,7 @@ export type EnglishWord = Node & {
   word: Scalars['String'];
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
+  length?: Maybe<Scalars['Int']>;
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt: Scalars['Datetime'];
   /** Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`. */
@@ -2271,6 +2272,8 @@ export type EnglishWordCondition = {
   word?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `frequency` field. */
   frequency?: Maybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `length` field. */
+  length?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `createdAt` field. */
@@ -2287,6 +2290,8 @@ export type EnglishWordFilter = {
   word?: Maybe<StringFilter>;
   /** Filter by the object’s `frequency` field. */
   frequency?: Maybe<FloatFilter>;
+  /** Filter by the object’s `length` field. */
+  length?: Maybe<IntFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
   recommendedSkillLevelId?: Maybe<IntFilter>;
   /** Filter by the object’s `createdAt` field. */
@@ -2306,6 +2311,7 @@ export type EnglishWordInput = {
   word: Scalars['String'];
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
+  length?: Maybe<Scalars['Int']>;
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
 };
@@ -2317,6 +2323,7 @@ export type EnglishWordPatch = {
   word?: Maybe<Scalars['String']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency?: Maybe<Scalars['Float']>;
+  length?: Maybe<Scalars['Int']>;
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
 };
@@ -2354,6 +2361,8 @@ export enum EnglishWordsOrderBy {
   WordDesc = 'WORD_DESC',
   FrequencyAsc = 'FREQUENCY_ASC',
   FrequencyDesc = 'FREQUENCY_DESC',
+  LengthAsc = 'LENGTH_ASC',
+  LengthDesc = 'LENGTH_DESC',
   RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
   RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
   CreatedAtAsc = 'CREATED_AT_ASC',
@@ -2620,6 +2629,7 @@ export type GermanWord = Node & {
   word: Scalars['String'];
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
+  length?: Maybe<Scalars['Int']>;
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt: Scalars['Datetime'];
   /** Reads a single `LanguageSkillLevel` that is related to this `GermanWord`. */
@@ -2639,6 +2649,8 @@ export type GermanWordCondition = {
   word?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `frequency` field. */
   frequency?: Maybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `length` field. */
+  length?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `createdAt` field. */
@@ -2655,6 +2667,8 @@ export type GermanWordFilter = {
   word?: Maybe<StringFilter>;
   /** Filter by the object’s `frequency` field. */
   frequency?: Maybe<FloatFilter>;
+  /** Filter by the object’s `length` field. */
+  length?: Maybe<IntFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
   recommendedSkillLevelId?: Maybe<IntFilter>;
   /** Filter by the object’s `createdAt` field. */
@@ -2674,6 +2688,7 @@ export type GermanWordInput = {
   word: Scalars['String'];
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
+  length?: Maybe<Scalars['Int']>;
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
 };
@@ -2685,6 +2700,7 @@ export type GermanWordPatch = {
   word?: Maybe<Scalars['String']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency?: Maybe<Scalars['Float']>;
+  length?: Maybe<Scalars['Int']>;
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
 };
@@ -2722,6 +2738,8 @@ export enum GermanWordsOrderBy {
   WordDesc = 'WORD_DESC',
   FrequencyAsc = 'FREQUENCY_ASC',
   FrequencyDesc = 'FREQUENCY_DESC',
+  LengthAsc = 'LENGTH_ASC',
+  LengthDesc = 'LENGTH_DESC',
   RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
   RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
   CreatedAtAsc = 'CREATED_AT_ASC',

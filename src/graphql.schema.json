@@ -10043,6 +10043,18 @@
             "deprecationReason": null
           },
           {
+            "name": "length",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "recommendedSkillLevelId",
             "description": null,
             "args": [],
@@ -10159,6 +10171,18 @@
             "deprecationReason": null
           },
           {
+            "name": "length",
+            "description": "Checks for equality with the object’s `length` field.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "recommendedSkillLevelId",
             "description": "Checks for equality with the object’s `recommendedSkillLevelId` field.",
             "type": {
@@ -10235,6 +10259,18 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "FloatFilter",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "length",
+            "description": "Filter by the object’s `length` field.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntFilter",
               "ofType": null
             },
             "defaultValue": null,
@@ -10389,6 +10425,18 @@
             "deprecationReason": null
           },
           {
+            "name": "length",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "recommendedSkillLevelId",
             "description": null,
             "type": {
@@ -10465,6 +10513,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "Float",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "length",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
               "ofType": null
             },
             "defaultValue": null,
@@ -10680,6 +10740,18 @@
           },
           {
             "name": "FREQUENCY_DESC",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LENGTH_ASC",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LENGTH_DESC",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -12416,6 +12488,18 @@
             "deprecationReason": null
           },
           {
+            "name": "length",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "recommendedSkillLevelId",
             "description": null,
             "args": [],
@@ -12522,6 +12606,18 @@
             "deprecationReason": null
           },
           {
+            "name": "length",
+            "description": "Checks for equality with the object’s `length` field.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "recommendedSkillLevelId",
             "description": "Checks for equality with the object’s `recommendedSkillLevelId` field.",
             "type": {
@@ -12598,6 +12694,18 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "FloatFilter",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "length",
+            "description": "Filter by the object’s `length` field.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntFilter",
               "ofType": null
             },
             "defaultValue": null,
@@ -12752,6 +12860,18 @@
             "deprecationReason": null
           },
           {
+            "name": "length",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "recommendedSkillLevelId",
             "description": null,
             "type": {
@@ -12828,6 +12948,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "Float",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "length",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
               "ofType": null
             },
             "defaultValue": null,
@@ -13043,6 +13175,18 @@
           },
           {
             "name": "FREQUENCY_DESC",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LENGTH_ASC",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LENGTH_DESC",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

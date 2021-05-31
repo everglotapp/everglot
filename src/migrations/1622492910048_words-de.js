@@ -18,6 +18,10 @@ exports.up = (pgm) => {
                 notNull: true,
                 comment: "Ranges from 0 to 1 (higher is more frequent)",
             },
+            length: {
+                type: "integer",
+                expressionGenerated: "char_length(word)",
+            },
             recommended_skill_level_id: {
                 type: "integer",
                 references: {

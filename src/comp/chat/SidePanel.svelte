@@ -13,6 +13,8 @@
     import type { GroupActivity } from "../../types/activities"
 
     import { groupUuid } from "../../stores"
+    import { currentGroupLocale } from "../../stores/locales"
+    import { HANGMAN_LOCALES } from "../../constants"
 
     const chat = getContext("CHAT")
 
@@ -20,6 +22,9 @@
     let startingActivity = false
     // @ts-ignore
     $: activity, (startingActivity = false)
+    $: groupCanPlayHangman =
+        $currentGroupLocale &&
+        (HANGMAN_LOCALES as readonly string[]).includes($currentGroupLocale)
 </script>
 
 <div>
@@ -45,25 +50,27 @@
                     />
                 </div>
                 <div class="flex flex-col items-center pt-32">
-                    <div class="menu-item">
-                        <ButtonLarge
-                            tag="button"
-                            className="w-full justify-center"
-                            color="SECONDARY"
-                            variant="OUTLINED"
-                            disabled={startingActivity ||
-                                !$currentUserIsGroupMember}
-                            on:click={() => {
-                                chat.emit("startGroupActivity", {
-                                    kind: GroupActivityKind.Hangman,
-                                })
-                                startingActivity = true
-                            }}
-                            ><Localized
-                                id="chat-side-panel-menu-hangman"
-                            /></ButtonLarge
-                        >
-                    </div>
+                    {#if groupCanPlayHangman}
+                        <div class="menu-item">
+                            <ButtonLarge
+                                tag="button"
+                                className="w-full justify-center"
+                                color="SECONDARY"
+                                variant="OUTLINED"
+                                disabled={startingActivity ||
+                                    !$currentUserIsGroupMember}
+                                on:click={() => {
+                                    chat.emit("startGroupActivity", {
+                                        kind: GroupActivityKind.Hangman,
+                                    })
+                                    startingActivity = true
+                                }}
+                                ><Localized
+                                    id="chat-side-panel-menu-hangman"
+                                /></ButtonLarge
+                            >
+                        </div>
+                    {/if}
                     <div class="menu-item">
                         <ButtonLarge
                             tag="button"

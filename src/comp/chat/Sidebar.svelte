@@ -11,6 +11,7 @@
     import Spinner from "../util/Spinner.svelte"
 
     import { groupUuid } from "../../stores"
+    import { currentUserIsGroupMember } from "../../stores/chat"
 
     import type { IAgoraRTCRemoteUser } from "agora-rtc-sdk-ng"
 
@@ -230,7 +231,7 @@
                             </div>
                         </div></Modal
                     >
-                {:else}
+                {:else if $currentUserIsGroupMember}
                     <div class="flex justify-center">
                         <ButtonLarge
                             tag="button"
@@ -242,7 +243,7 @@
                         >
                     </div>
                 {/if}
-            {:else}
+            {:else if $currentUserIsGroupMember}
                 <div class="flex justify-center">
                     <ButtonLarge
                         tag="button"

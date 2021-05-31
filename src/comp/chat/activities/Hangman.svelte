@@ -69,7 +69,11 @@
     const handleQuit = () => dispatch("quit")
 
     const handleEnter = () => {
-        if (!inputValue || !validateInput(inputValue)) {
+        if (!inputValue) {
+            return
+        }
+        if (!validateInput(inputValue)) {
+            inputValue = ""
             return
         }
         submitGuess(inputValue)
@@ -77,7 +81,11 @@
     }
 
     const handleSubmit = () => {
-        if (!inputValue || !validateInput(inputValue)) {
+        if (!inputValue) {
+            return
+        }
+        if (!validateInput(inputValue)) {
+            inputValue = ""
             return
         }
         submitGuess(inputValue)

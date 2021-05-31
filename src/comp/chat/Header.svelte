@@ -31,7 +31,7 @@
         @apply flex;
         @apply justify-between;
         @apply items-center;
-        @apply bg-secondary;
+        @apply bg-secondary-dark;
         @apply text-white;
         @apply shadow-sm;
         @apply p-0;

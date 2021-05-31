@@ -35,6 +35,7 @@ module.exports = {
                 },
                 secondary: {
                     DEFAULT: "#7f5b53",
+                    dark: "#7d6863",
                 },
                 accent: {
                     DEFAULT: "rgb(24, 237, 227)",

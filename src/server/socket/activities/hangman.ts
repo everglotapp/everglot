@@ -14,39 +14,75 @@ const DICTIONARY: Record<HangmanLocale, string[]> = {
         "new",
         "old",
         "forever",
+        "time",
+        "path",
         "think",
         "believe",
+        "undermine",
         "stubborn",
         "indicate",
         "imply",
         "lose",
         "win",
         "I",
+        "way",
         "you",
         "he",
+        "celebrate",
         "she",
+        "join",
+        "love",
+        "why",
         "we",
         "us",
+        "boss",
         "they",
         "thus",
         "hangman",
+        "improve",
+        "client",
+        "call",
         "city",
+        "welcome",
+        "leave",
+        "sit",
         "country",
+        "house",
         "land",
         "river",
+        "severe",
         "sea",
         "surprise",
         "zip",
+        "fast",
         "natives",
         "speedup",
+        "date",
+        "run",
         "abort",
-        "unsurprisingly",
+        "see",
+        "employee",
+        "scenario",
         "absolutely",
+        "change",
         "effect",
         "bone",
+        "leg",
+        "grow",
+        "stand",
         "place",
         "body",
         "eye",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+        "ten",
     ],
     de: [
         "ich",
@@ -59,13 +95,17 @@ const DICTIONARY: Record<HangmanLocale, string[]> = {
         "Spiel",
         "Galgenmännchen",
         "daher",
+        "Haus",
+        "Mal",
         "sobald",
         "immer",
+        "Bein",
         "oft",
         "stur",
         "Auge",
         "Hintergrund",
         "Körper",
+        "überhaupt",
         "selten",
         "Überraschung",
         "Brot",
@@ -79,16 +119,31 @@ const DICTIONARY: Record<HangmanLocale, string[]> = {
         "Stadt",
         "Land",
         "Fluss",
+        "stets",
         "See",
         "Meer",
+        "eins",
+        "zwei",
+        "drei",
+        "vier",
+        "fünf",
+        "sechs",
+        "sieben",
+        "acht",
+        "neun",
+        "zehn",
     ],
 }
+
+const MAX_WRONG_LETTERS = 5
 
 export class HangmanGame {
     language: HangmanLocale
     pickedLetters: string[] = []
     availableLetters: string[] = []
     word: string
+    wrongLetters = 0
+    wrongWords = 0
 
     constructor(language: HangmanLocale) {
         this.language = language
@@ -112,10 +167,19 @@ export class HangmanGame {
         this.availableLetters = this.availableLetters.filter(
             (av: string) => l.toLowerCase() !== av
         )
-        return this.word.includes(l)
+        const included = this.word.includes(l.toLowerCase())
+        if (included) {
+            return true
+        }
+        this.wrongLetters += 1
+        return false
     }
 
     get over(): boolean {
+        if (this.wrongLetters > MAX_WRONG_LETTERS) {
+            return true
+        }
+
         for (let i = 0; i < this.word.length; ++i) {
             if (!this.pickedLetters.includes(this.word[i].toLowerCase())) {
                 return false
@@ -141,6 +205,8 @@ export class HangmanGame {
         this.availableLetters = ALPHABET[this.language].filter(
             (l: string) => l === l.toLowerCase()
         )
+        this.wrongLetters = 0
+        this.wrongWords = 0
     }
 
     get publicState(): HangmanState {
@@ -148,6 +214,7 @@ export class HangmanGame {
             over: this.over,
             currentWord: this.currentWord,
             pickedLetters: this.pickedLetters,
+            solution: this.over ? this.word : null,
         }
     }
 

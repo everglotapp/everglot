@@ -36,9 +36,11 @@ chat-side-panel-menu-would-you-rather = Play Would You Rather
 chat-side-panel-menu-random-question = Ask a Random Question
 chat-side-panel-activity-hangman = Hangman
 chat-side-panel-activity-would-you-rather = Would You Rather
-chat-side-panel-activity-quit = Quit Game
+chat-side-panel-activity-quit = End Game
 chat-side-panel-activity-hangman-guess = Make a guess
 chat-side-panel-activity-hangman-enter = Enter
+chat-side-panel-activity-hangman-solution-correct = You correctly guessed:
+chat-side-panel-activity-hangman-solution-wrong = The word would have been:
 chat-submit-form-send = Send
 chat-submit-form-connecting = Connecting …
 # Chat text message input field

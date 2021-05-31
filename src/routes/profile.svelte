@@ -185,7 +185,7 @@
                             href={`/chat?group=${group.group?.uuid}`}
                             on:click={() => ($groupUuid = group.group?.uuid)}
                             variant="TEXT"
-                            color="SECONDARY"
+                            color="PRIMARY"
                         >
                             {group.group?.groupName}
                             {#if group.userType === UserType.Global}

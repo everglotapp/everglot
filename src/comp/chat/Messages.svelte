@@ -123,7 +123,7 @@
                 tag="button"
                 on:click={fetchMoreMessages}
                 variant="TEXT"
-                color="SECONDARY"
+                color="PRIMARY"
                 className="text-sm mb-2">Try again</ButtonSmall
             >
         </div>
@@ -133,7 +133,7 @@
                 tag="button"
                 on:click={fetchMoreMessages}
                 variant="TEXT"
-                color="SECONDARY"
+                color="PRIMARY"
                 className="text-sm mb-2">Get older messages</ButtonSmall
             >
         </div>

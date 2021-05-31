@@ -2,8 +2,10 @@
     import { createEventDispatcher } from "svelte"
     import { scale } from "svelte/transition"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
     import ButtonLarge from "../../util/ButtonLarge.svelte"
+    import Headline4 from "../../typography/Headline4.svelte"
 
     const dispatch = createEventDispatcher()
 
@@ -17,16 +19,20 @@
     in:scale={{ duration: 200, delay: 350 }}
     out:scale={{ duration: 200, delay: 0 }}
 >
-    <div class="text-lg py-1 px-3 bg-gray-lightest border-primary border-b-2">
-        <Localized id="chat-side-panel-activity-would-you-rather" />
-    </div>
+    <Headline4
+        ><Localized id="chat-side-panel-activity-would-you-rather" /></Headline4
+    >
     <ButtonSmall
         tag="button"
-        className="justify-center"
+        className="items-center justify-center"
         color="PRIMARY"
         variant="TEXT"
         on:click={handleQuit}
-        ><Localized id="chat-side-panel-activity-quit" /></ButtonSmall
+    >
+        <XIcon size="20" />
+        <span class="ml-1"
+            ><Localized id="chat-side-panel-activity-quit" /></span
+        ></ButtonSmall
     >
 </div>
 
@@ -48,7 +54,7 @@
             <ButtonLarge
                 tag="button"
                 className="w-full justify-center"
-                color="PRIMARY"
+                color="SECONDARY"
                 variant="OUTLINED"
                 on:click={() => {}}>Walnut</ButtonLarge
             >
@@ -57,7 +63,7 @@
             <ButtonLarge
                 tag="button"
                 className="w-full justify-center"
-                color="PRIMARY"
+                color="SECONDARY"
                 variant="OUTLINED"
                 on:click={() => {}}>Hazelnut</ButtonLarge
             >

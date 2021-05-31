@@ -7,7 +7,7 @@
 
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
-    import SidebarHeadline from "../comp/typography/SidebarHeadline.svelte"
+    import Headline3 from "../comp/typography/Headline3.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
 
     import { groupUuid } from "../stores"
@@ -67,8 +67,7 @@
     {:else}
         <div class="sidebar">
             <div class="languages-container px-4 text-lg w-full mb-4">
-                <SidebarHeadline
-                    ><Localized id="global-sidebar-language" /></SidebarHeadline
+                <Headline3><Localized id="global-sidebar-language" /></Headline3
                 >
                 <div class="languages" role="tablist">
                     {#each SUPPORTED_LOCALES as locale}
@@ -89,7 +88,7 @@
         >
             {#each groups[lang] as group (group.uuid)}
                 <div
-                    class="flex"
+                    class="group flex"
                     in:scale|local={{ duration: 100, delay: 200 }}
                     out:scale|local={{ duration: 100 }}
                     style="transform-origin: center;"
@@ -97,7 +96,7 @@
                     <ButtonLarge
                         className="w-full justify-between"
                         color="SECONDARY"
-                        variant="FILLED"
+                        variant="TEXT"
                         href={`/chat?group=${group.uuid}`}
                         on:click={() => ($groupUuid = group.uuid)}
                         ><span class="name" title={group.groupName || undefined}
@@ -143,14 +142,23 @@
 
     .languages button[aria-selected="true"] {
         @apply border-accent;
-        @apply bg-primary-lightest;
+        @apply bg-gray-lightest;
     }
 
     .groups {
         @apply flex-grow;
     }
 
-    .groups .name {
+    .group {
+        @apply mb-2;
+    }
+
+    .group:not(:last-child) {
+        @apply border-b;
+        @apply border-gray-light;
+    }
+
+    .group .name {
         max-width: 368px;
 
         @apply mr-3;
@@ -158,9 +166,10 @@
         @apply whitespace-nowrap;
         @apply overflow-hidden;
         @apply overflow-ellipsis;
+        @apply font-normal;
     }
 
-    .groups .members-count {
+    .group .members-count {
         @apply text-sm;
         @apply align-middle;
     }

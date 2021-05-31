@@ -87,7 +87,6 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 .error("Failed to get group by UUID for user message")
             return
         }
-        // const alpha2 = group.groupByUuid?.language?.alpha2
 
         if (!msg.startsWith("!")) {
             chlog.child({ message }).debug("Trying to obtain message preview")
@@ -106,68 +105,6 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 }
             )
         }
-
-        // if (msg.startsWith("!")) {
-        //     if (msg.startsWith("!help")) {
-        //         bots[chatUser.groupUuid].send("available-commands")
-        //         return
-        //     } else if (
-        //         HANGMAN_LOCALES.some((locale) => locale === alpha2)
-        //     ) {
-        //         const hangman = hangmanGames[alpha2 as HangmanLocale]
-        //         if (hangman.running) {
-        //             if (msg.length === 1) {
-        //                 if (
-        //                     !hangman.letterPicked(msg) &&
-        //                     hangman.letterAvailable(msg)
-        //                 ) {
-        //                     hangman.pickLetter(msg)
-        //                     bots[chatUser.groupUuid].send(
-        //                         "hangman-current-word",
-        //                         {
-        //                             word: hangman.publicWord,
-        //                         }
-        //                     )
-        //                     io.to(chatUser.groupUuid).emit(
-        //                         "hangman",
-        //                         hangman.publicState
-        //                     )
-        //                     if (hangman.nextRound()) {
-        //                         bots[chatUser.groupUuid].send(
-        //                             "hangman-guessed-correctly",
-        //                             {
-        //                                 nextWord: hangman.publicWord,
-        //                             }
-        //                         )
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //         if (msg.startsWith("!hangman")) {
-        //             if (hangman.running) {
-        //                 bots[chatUser.groupUuid].send(
-        //                     "hangman-already-running"
-        //                 )
-        //             } else {
-        //                 hangman.start()
-        //                 bots[chatUser.groupUuid].send("hangman-started", {
-        //                     word: hangman.publicWord,
-        //                 })
-        //             }
-
-        //             io.to(chatUser.groupUuid).emit(
-        //                 "hangman",
-        //                 hangman.publicState
-        //             )
-        //         }
-        //     } else {
-        //         if (msg.startsWith("!hangman")) {
-        //             bots[chatUser.groupUuid].send(
-        //                 "hangman-lang-not-supported"
-        //             )
-        //         }
-        //     }
-        // }
     })
 }
 

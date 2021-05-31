@@ -4,7 +4,7 @@
 
     import GroupMembers from "./GroupMembers.svelte"
 
-    import SidebarHeadline from "../typography/SidebarHeadline.svelte"
+    import Headline3 from "../typography/Headline3.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import Modal from "../util/Modal.svelte"
@@ -61,17 +61,13 @@
 {#key $groupUuid}
     <div class="sidebar">
         <div class="users-container py-3 px-4 text-lg w-full mb-4">
-            <SidebarHeadline
-                ><Localized id="chat-sidebar-members" /></SidebarHeadline
-            >
+            <Headline3><Localized id="chat-sidebar-members" /></Headline3>
             <GroupMembers />
         </div>
         <div
             class="toggles py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4"
         >
-            <SidebarHeadline
-                ><Localized id="chat-sidebar-controls" /></SidebarHeadline
-            >
+            <Headline3><Localized id="chat-sidebar-controls" /></Headline3>
             <div class="toggle-row">
                 <svg
                     width="35"
@@ -216,7 +212,7 @@
                                     tag="button"
                                     on:click={() => (wantsToJoinCall = false)}
                                     variant="TEXT"
-                                    color="SECONDARY"
+                                    color="PRIMARY"
                                     ><Localized
                                         id="chat-sidebar-switch-call-cancel"
                                     /></ButtonSmall

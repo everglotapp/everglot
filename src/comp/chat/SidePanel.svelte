@@ -47,7 +47,7 @@
                         <ButtonLarge
                             tag="button"
                             className="w-full justify-center"
-                            color="PRIMARY"
+                            color="SECONDARY"
                             variant="OUTLINED"
                             disabled={startingActivity}
                             on:click={() => {
@@ -65,7 +65,7 @@
                         <ButtonLarge
                             tag="button"
                             className="w-full justify-center"
-                            color="PRIMARY"
+                            color="SECONDARY"
                             variant="OUTLINED"
                             disabled={startingActivity}
                             on:click={() => {
@@ -83,7 +83,7 @@
                         <ButtonLarge
                             tag="button"
                             className="w-full justify-center"
-                            color="PRIMARY"
+                            color="SECONDARY"
                             variant="OUTLINED"
                             on:click={() => console.log("Random q")}
                             ><Localized
@@ -99,6 +99,7 @@
                 over={activity.state.over}
                 pickedLetters={activity.state.pickedLetters}
                 word={activity.state.currentWord}
+                solution={activity.state.solution}
             />
         {:else if activity.kind === GroupActivityKind.WouldYouRather}
             <WouldYouRather on:quit={() => chat.emit("endGroupActivity")} />

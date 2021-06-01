@@ -14,7 +14,7 @@
 
     import { groupUuid } from "../../stores"
     import { currentGroupLocale } from "../../stores/locales"
-    import { HANGMAN_LOCALES } from "../../constants"
+    import { HANGMAN_LOCALES, WOULD_YOU_RATHER_LOCALES } from "../../constants"
 
     const chat = getContext("CHAT")
 
@@ -25,6 +25,11 @@
     $: groupCanPlayHangman =
         $currentGroupLocale &&
         (HANGMAN_LOCALES as readonly string[]).includes($currentGroupLocale)
+    $: groupCanPlayWouldYouRather =
+        $currentGroupLocale &&
+        (WOULD_YOU_RATHER_LOCALES as readonly string[]).includes(
+            $currentGroupLocale
+        )
 </script>
 
 <div>
@@ -71,25 +76,27 @@
                             >
                         </div>
                     {/if}
-                    <div class="menu-item">
-                        <ButtonLarge
-                            tag="button"
-                            className="w-full justify-center"
-                            color="SECONDARY"
-                            variant="OUTLINED"
-                            disabled={startingActivity ||
-                                !$currentUserIsGroupMember}
-                            on:click={() => {
-                                chat.emit("startGroupActivity", {
-                                    kind: GroupActivityKind.WouldYouRather,
-                                })
-                                startingActivity = true
-                            }}
-                            ><Localized
-                                id="chat-side-panel-menu-would-you-rather"
-                            /></ButtonLarge
-                        >
-                    </div>
+                    {#if groupCanPlayWouldYouRather}
+                        <div class="menu-item">
+                            <ButtonLarge
+                                tag="button"
+                                className="w-full justify-center"
+                                color="SECONDARY"
+                                variant="OUTLINED"
+                                disabled={startingActivity ||
+                                    !$currentUserIsGroupMember}
+                                on:click={() => {
+                                    chat.emit("startGroupActivity", {
+                                        kind: GroupActivityKind.WouldYouRather,
+                                    })
+                                    startingActivity = true
+                                }}
+                                ><Localized
+                                    id="chat-side-panel-menu-would-you-rather"
+                                /></ButtonLarge
+                            >
+                        </div>
+                    {/if}
                     <div class="menu-item">
                         <ButtonLarge
                             tag="button"
@@ -114,7 +121,12 @@
                 solution={activity.state.solution}
             />
         {:else if activity.kind === GroupActivityKind.WouldYouRather}
-            <WouldYouRather on:quit={() => chat.emit("endGroupActivity")} />
+            <WouldYouRather
+                on:quit={() => chat.emit("endGroupActivity")}
+                question={activity.state.question}
+                answers={activity.state.answers}
+                endTime={activity.state.endTime}
+            />
         {/if}
     {/key}
 </div>

@@ -16,3 +16,9 @@ export interface HangmanState extends GroupActivityState {
     pickedLetters: string[]
     solution: string | null
 }
+
+export interface WouldYouRatherState extends GroupActivityState {
+    endTime: string | null
+    question: string | null
+    answers: string[] | null
+}

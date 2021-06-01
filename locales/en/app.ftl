@@ -161,6 +161,7 @@ user-bio-error = Error
 
 global-browser-window-title = Global – { -brand-name }
 global-sidebar-language = Language
+global-main-channels = Channels
 global-group-members-count = { $membersCount } { $membersCount ->
     [one] member
     *[other] members

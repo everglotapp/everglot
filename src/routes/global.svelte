@@ -65,8 +65,8 @@
     {:else if !$globalGroups.length}
         <RedirectOnce to={"/signup"} />
     {:else}
-        <div class="sidebar">
-            <div class="languages-container px-4 text-lg w-full mb-4">
+        <div class="sidebar md:py-8">
+            <div class="px-4 text-lg w-full pt-4 md:pt-0 mb-4">
                 <Headline3><Localized id="global-sidebar-language" /></Headline3
                 >
                 <div class="languages" role="tablist">
@@ -82,37 +82,45 @@
                 </div>
             </div>
         </div>
-        <div
-            class="groups text-xl font-light p-8 rounded-xl text-center justify-center"
-            role="tabpanel"
-        >
-            {#each groups[lang] as group (group.uuid)}
-                <div
-                    class="group flex"
-                    in:scale|local={{ duration: 100, delay: 200 }}
-                    out:scale|local={{ duration: 100 }}
-                    style="transform-origin: center;"
-                >
-                    <ButtonLarge
-                        className="w-full justify-between"
-                        color="SECONDARY"
-                        variant="TEXT"
-                        href={`/chat?group=${group.uuid}`}
-                        on:click={() => ($groupUuid = group.uuid)}
-                        ><span class="name" title={group.groupName || undefined}
-                            >{group.groupName}</span
-                        >
-                        <span class="members-count"
-                            ><Localized
-                                id="global-group-members-count"
-                                args={{
-                                    membersCount: group.groupUsers.totalCount,
-                                }}
-                            /></span
-                        ></ButtonLarge
+        <div class="md:border-l flex-grow pt-4 md:py-8">
+            <div>
+                <Headline3><Localized id="global-main-channels" /></Headline3>
+            </div>
+            <div
+                class="text-xl font-light px-8 py-2 text-center justify-center"
+                role="tabpanel"
+            >
+                {#each groups[lang] as group (group.uuid)}
+                    <div
+                        class="group flex"
+                        in:scale|local={{ duration: 100, delay: 200 }}
+                        out:scale|local={{ duration: 100 }}
+                        style="transform-origin: center;"
                     >
-                </div>
-            {/each}
+                        <ButtonLarge
+                            className="w-full justify-between flex flex-wrap"
+                            color="SECONDARY"
+                            variant="TEXT"
+                            href={`/chat?group=${group.uuid}`}
+                            on:click={() => ($groupUuid = group.uuid)}
+                            ><span
+                                class="name"
+                                title={group.groupName || undefined}
+                                >{group.groupName}</span
+                            >
+                            <span class="members-count"
+                                ><Localized
+                                    id="global-group-members-count"
+                                    args={{
+                                        membersCount:
+                                            group.groupUsers.totalCount,
+                                    }}
+                                /></span
+                            ></ButtonLarge
+                        >
+                    </div>
+                {/each}
+            </div>
         </div>
     {/if}
 </div>
@@ -121,7 +129,6 @@
     .sidebar {
         min-width: 16rem;
 
-        @apply py-8;
         @apply flex-shrink;
     }
 
@@ -145,10 +152,6 @@
         @apply bg-gray-lightest;
     }
 
-    .groups {
-        @apply flex-grow;
-    }
-
     .group {
         @apply mb-2;
     }
@@ -159,7 +162,7 @@
     }
 
     .group .name {
-        max-width: 368px;
+        max-width: 200px;
 
         @apply mr-3;
         @apply align-middle;

@@ -1,13 +1,53 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte"
+    import {
+        createEventDispatcher,
+        getContext,
+        onMount,
+        onDestroy,
+    } from "svelte"
     import { scale } from "svelte/transition"
-    import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { Localized, Overlay } from "@nubolab-ffwd/svelte-fluent"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
     import ButtonLarge from "../../util/ButtonLarge.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
 
     import { currentUserIsGroupMember } from "../../../stores/chat"
+
+    export let answers: string[]
+    export let question: string
+    export let endTime: string
+
+    const chat = getContext("CHAT")
+    const { connected: connectedToChat } = chat
+
+    let pickedAnswer: number | null = null
+    $: endDate = new Date(endTime)
+    $: over = new Date() > endDate
+    let updateInterval: number | undefined
+    let remainingSeconds: number | null
+    onMount(() => {
+        updateInterval = setInterval(() => {
+            remainingSeconds = over
+                ? null
+                : Math.ceil((endDate.getTime() - Date.now()) / 1000)
+        }, 1000)
+    })
+    onDestroy(() => {
+        clearInterval(updateInterval)
+        updateInterval = undefined
+    })
+
+    function pickAnswer(answerIndex: number) {
+        if (!$connectedToChat) {
+            return
+        }
+        if (pickedAnswer !== null) {
+            return
+        }
+        pickedAnswer = answerIndex
+        chat.emit("groupActivity.wouldYouRatherAnswer", { answerIndex })
+    }
 
     const dispatch = createEventDispatcher()
 
@@ -44,7 +84,7 @@
         <div
             class="squirrel-bubble bg-primary-lightest p-4 max-w-sm font-bold text-lg text-gray-bitdark"
         >
-            Would you rather eat a walnut or a hazelnut?
+            {question}
         </div>
         <img
             src="/squirrel.png"
@@ -53,26 +93,45 @@
         />
     </div>
     <div class="flex flex-col items-center pt-32">
-        <div class="answer">
-            <ButtonLarge
-                tag="button"
-                className="w-full justify-center"
-                color="SECONDARY"
-                variant="OUTLINED"
-                disabled={!$currentUserIsGroupMember}
-                on:click={() => {}}>Walnut</ButtonLarge
-            >
-        </div>
-        <div class="answer">
-            <ButtonLarge
-                tag="button"
-                className="w-full justify-center"
-                color="SECONDARY"
-                variant="OUTLINED"
-                disabled={!$currentUserIsGroupMember}
-                on:click={() => {}}>Hazelnut</ButtonLarge
-            >
-        </div>
+        {#if pickedAnswer !== null}
+            <div class="mb-8">
+                <Overlay
+                    id="chat-side-panel-activity-would-you-rather-picked-answer"
+                    args={{
+                        answer: answers[pickedAnswer],
+                    }}
+                >
+                    You picked <strong class="text-gray-bitdark"
+                        >{answers[pickedAnswer]}</strong
+                    >!
+                </Overlay>
+            </div>
+        {:else}
+            <div class="mb-4">
+                {#each answers as answer, i}
+                    <div class="answer">
+                        <ButtonLarge
+                            tag="button"
+                            className="w-full justify-center"
+                            color="SECONDARY"
+                            variant="OUTLINED"
+                            disabled={!$currentUserIsGroupMember}
+                            on:click={() => {
+                                pickAnswer(i)
+                            }}>{answer}</ButtonLarge
+                        >
+                    </div>
+                {/each}
+            </div>
+        {/if}
+        {#if typeof remainingSeconds === "number" && remainingSeconds > 0 && (pickedAnswer !== null || remainingSeconds <= 10)}
+            <div class="text-sm">
+                <Localized
+                    id="chat-side-panel-activity-would-you-rather-timer"
+                    args={{ seconds: remainingSeconds }}
+                />
+            </div>
+        {/if}
     </div>
 </div>
 

@@ -11,3 +11,5 @@ hangman-guessed-correctly = You guessed correctly! Here's the next word: { $next
 hangman-already-running = Hangman is already running.
 hangman-started = Started a hangman game: { $word }
 hangman-lang-not-supported = So far, hangman is only supported in English and German.
+
+would-you-rather-answer-picked = @{ $username } picked "{ $answer }"!

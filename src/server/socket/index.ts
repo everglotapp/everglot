@@ -24,6 +24,8 @@ const chlog = log.child({
     namespace: "chat",
 })
 
+export const bots: Record<Group["uuid"], Bot> = {}
+
 export function start(server: Server, pool: Pool) {
     const io = new SocketIO(server)
 
@@ -33,8 +35,6 @@ export function start(server: Server, pool: Pool) {
         // @ts-ignore
         sessionMiddleware(socket.request, {}, next)
     })
-
-    const bots: Record<Group["uuid"], Bot> = {}
 
     // Run when client connects
     io.on("connection", (socket: EverglotChatSocket) => {

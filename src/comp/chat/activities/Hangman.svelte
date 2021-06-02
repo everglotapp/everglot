@@ -2,6 +2,7 @@
     import { createEventDispatcher, getContext } from "svelte"
     import { scale } from "svelte/transition"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/FluentProvider.svelte"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
@@ -28,6 +29,7 @@
 
     let feedback: string | undefined
     let feedbackSuccess = false
+    const { translate } = fluentStores()!
     $: if ($connectedToChat) {
         chat.on(
             "groupActivity.hangmanGuess",
@@ -47,17 +49,49 @@
                 if ($currentUser && guessingUser) {
                     if (guessingUser === $currentUser.uuid) {
                         feedback = success
-                            ? `${guess} is correct, nice!`
-                            : `${guess} is incorrect, careful!`
+                            ? $translate(
+                                  "chat-side-panel-activity-hangman-feedback-own-guess-correct",
+                                  {
+                                      guess,
+                                  }
+                              )
+                            : $translate(
+                                  "chat-side-panel-activity-hangman-feedback-own-guess-wrong",
+                                  {
+                                      guess,
+                                  }
+                              )
                     } else {
                         feedback = success
-                            ? `${guessingUser.username} guessed ${guess} which is correct!`
-                            : `${guessingUser.username} guessed ${guess} which is incorrect!`
+                            ? $translate(
+                                  "chat-side-panel-activity-hangman-feedback-guess-correct",
+                                  {
+                                      username: guessingUser.username,
+                                      guess,
+                                  }
+                              )
+                            : $translate(
+                                  "chat-side-panel-activity-hangman-feedback-guess-wrong",
+                                  {
+                                      username: guessingUser.username,
+                                      guess,
+                                  }
+                              )
                     }
                 } else {
                     feedback = success
-                        ? `${guess} is correct!`
-                        : `${guess} is incorrect!`
+                        ? $translate(
+                              "chat-side-panel-activity-hangman-feedback-own-guess-correct",
+                              {
+                                  guess,
+                              }
+                          )
+                        : $translate(
+                              "chat-side-panel-activity-hangman-feedback-own-guess-wrong",
+                              {
+                                  guess,
+                              }
+                          )
                 }
             }
         )
@@ -108,16 +142,22 @@
                     letter.toLowerCase() === input.toLowerCase()
             )
         ) {
-            feedback = `The letter ${input} has already been picked`
+            feedback = $translate(
+                "chat-side-panel-activity-hangman-feedback-letter-already-picked",
+                { input }
+            )
             feedbackSuccess = false
             return false
         }
         if (alphabet !== null) {
-            const letterNotInAlphabet = input
+            const badLetter = input
                 .split("")
                 .find((letter) => !alphabet!.includes(letter))
-            if (letterNotInAlphabet) {
-                feedback = `The letter ${letterNotInAlphabet} is not available`
+            if (badLetter) {
+                feedback = $translate(
+                    "chat-side-panel-activity-hangman-feedback-letter-not-available",
+                    { badLetter }
+                )
                 feedbackSuccess = false
                 return false
             }

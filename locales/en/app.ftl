@@ -44,11 +44,24 @@ chat-side-panel-activity-hangman-guess = Make a guess
 chat-side-panel-activity-hangman-enter = Enter
 chat-side-panel-activity-hangman-solution-correct = You correctly guessed:
 chat-side-panel-activity-hangman-solution-wrong = The word would have been:
+chat-side-panel-activity-hangman-feedback-guess-correct = { $username } guessed { $guess } which is correct!
+chat-side-panel-activity-hangman-feedback-guess-wrong = { $username } guessed { $guess } which is incorrect!
+chat-side-panel-activity-hangman-feedback-own-guess-correct = { $guess } is correct, nice!
+chat-side-panel-activity-hangman-feedback-own-guess-wrong = { $guess } is incorrect, careful!
+chat-side-panel-activity-hangman-feedback-letter-already-picked = The letter { $input } has already been picked
+chat-side-panel-activity-hangman-feedback-letter-not-available = The letter { $badLetter } is not available
 chat-side-panel-activity-guess-character-guess = Make a guess
 chat-side-panel-activity-guess-character-enter = Enter
 chat-side-panel-activity-guess-character-hint = { $hint }
 chat-side-panel-activity-guess-character-solution-correct = You correctly guessed: { $solution } ({ $hint })
 chat-side-panel-activity-guess-character-solution-wrong = The word would have been: { $solution } ({ $hint })
+chat-side-panel-activity-guess-character-feedback-guess-correct = { $username } guessed { $guess } which is correct!
+chat-side-panel-activity-guess-character-feedback-guess-wrong = { $username } guessed { $guess } which is incorrect!
+chat-side-panel-activity-guess-character-feedback-own-guess-correct = { $guess } is correct, nice!
+chat-side-panel-activity-guess-character-feedback-own-guess-wrong = { $guess } is incorrect, careful!
+chat-side-panel-activity-guess-character-feedback-character-single-characters-only = Only single characters are accepted, you wrote { $input }
+chat-side-panel-activity-guess-character-feedback-character-already-picked = The character { $input } has already been picked
+chat-side-panel-activity-guess-character-feedback-character-not-available = The character { $badCharacter } is not available
 chat-side-panel-activity-would-you-rather-picked-answer = You picked <strong class="text-gray-bitdark">{ $answer }</strong>!
 chat-side-panel-activity-would-you-rather-timer =
         The poll ends in { $seconds ->

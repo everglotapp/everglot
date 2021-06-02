@@ -288,7 +288,7 @@ export async function handleUserConnected(
                     guess,
                     success,
                 })
-                .debug("User attempted hangman guess")
+                .trace("User attempted hangman guess")
             // Tell group users about the new game state.
             io.to(chatUser.groupUuid).emit(
                 "groupActivity",

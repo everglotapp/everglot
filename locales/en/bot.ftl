@@ -5,12 +5,11 @@ available-commands = Available commands: !hangman, !help
 
 user-joined = { $username } has joined the chat.
 
-hangman-current-word = Current word: { $word }
-hangman-guessed-correctly = You guessed correctly! Here's the next word: { $nextWord }
-hangman-already-running = Hangman is already running.
-hangman-lang-not-supported = So far, hangman is only supported in English and German.
 hangman-started = @{ $username } has started a hangman game.
 hangman-ended = @{ $username } has ended the hangman game.
+
+guess-character-started = @{ $username } has started a Guess the Character game.
+guess-character-ended = @{ $username } has ended the Guess the Character game.
 
 would-you-rather-answer-picked = @{ $username } picked "{ $answer }"!
 would-you-rather-started = @{ $username } has started a Would You Rather poll: { $question }

@@ -2,6 +2,7 @@
     import { createEventDispatcher, getContext } from "svelte"
     import { scale } from "svelte/transition"
     import { Localized, Overlay } from "@nubolab-ffwd/svelte-fluent"
+    import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/FluentProvider.svelte"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
@@ -27,6 +28,7 @@
 
     let feedback: string | undefined
     let feedbackSuccess = false
+    const { translate } = fluentStores()!
     $: if ($connectedToChat) {
         chat.on(
             "groupActivity.guessCharacterGuess",
@@ -46,17 +48,49 @@
                 if ($currentUser && guessingUser) {
                     if (guessingUser === $currentUser.uuid) {
                         feedback = success
-                            ? `${guess} is correct, nice!`
-                            : `${guess} is incorrect, careful!`
+                            ? $translate(
+                                  "chat-side-panel-activity-guess-character-feedback-own-guess-correct",
+                                  {
+                                      guess,
+                                  }
+                              )
+                            : $translate(
+                                  "chat-side-panel-activity-guess-character-feedback-own-guess-wrong",
+                                  {
+                                      guess,
+                                  }
+                              )
                     } else {
                         feedback = success
-                            ? `${guessingUser.username} guessed ${guess} which is correct!`
-                            : `${guessingUser.username} guessed ${guess} which is incorrect!`
+                            ? $translate(
+                                  "chat-side-panel-activity-guess-character-feedback-guess-correct",
+                                  {
+                                      username: guessingUser.username,
+                                      guess,
+                                  }
+                              )
+                            : $translate(
+                                  "chat-side-panel-activity-guess-character-feedback-guess-wrong",
+                                  {
+                                      username: guessingUser.username,
+                                      guess,
+                                  }
+                              )
                     }
                 } else {
                     feedback = success
-                        ? `${guess} is correct!`
-                        : `${guess} is incorrect!`
+                        ? $translate(
+                              "chat-side-panel-activity-guess-character-feedback-own-guess-correct",
+                              {
+                                  guess,
+                              }
+                          )
+                        : $translate(
+                              "chat-side-panel-activity-guess-character-feedback-own-guess-wrong",
+                              {
+                                  guess,
+                              }
+                          )
                 }
             }
         )
@@ -97,7 +131,10 @@
 
     const validateInput = (input: string) => {
         if (input.length !== 1) {
-            feedback = `Only single characters are accepted, you wrote ${input}`
+            feedback = $translate(
+                "chat-side-panel-activity-guess-character-feedback-character-single-characters-only",
+                { input }
+            )
             feedbackSuccess = false
             return false
         }
@@ -108,7 +145,10 @@
                     character.toLowerCase() === input.toLowerCase()
             )
         ) {
-            feedback = `The character ${input} has already been picked`
+            feedback = $translate(
+                `chat-side-panel-activity-guess-character-feedback-character-already-picked`,
+                { input }
+            )
             feedbackSuccess = false
             return false
         }
@@ -117,7 +157,10 @@
                 .split("")
                 .find((character) => !isChineseCharacter(character))
             if (badCharacter) {
-                feedback = `The character ${badCharacter} is not a Chinese character`
+                feedback = $translate(
+                    `chat-side-panel-activity-guess-character-feedback-character-not-available`,
+                    { badCharacter }
+                )
                 feedbackSuccess = false
                 return false
             }

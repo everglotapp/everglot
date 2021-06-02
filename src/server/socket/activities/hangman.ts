@@ -1,7 +1,11 @@
 import { ALPHABET } from "../../../constants"
 import type { HangmanLocale } from "../../../constants"
 import { getCurrentUser } from "../users"
-import { GroupActivityKind, HangmanState } from "../../../types/activities"
+import {
+    GroupActivity,
+    GroupActivityKind,
+    HangmanState,
+} from "../../../types/activities"
 
 import { db } from "../../db"
 
@@ -9,6 +13,8 @@ import log from "../../../logger"
 import { getGroupActivity } from "./utils"
 import type { Group } from "../../../types/generated/graphql"
 import type { Server as SocketIO } from "socket.io"
+import { bots } from ".."
+import type { ChatUser } from "../../../types/chat"
 
 const chlog = log.child({
     namespace: "hangman",
@@ -205,7 +211,10 @@ export class HangmanGame {
     }
 }
 
-export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
+export async function handleUserConnected(
+    io: SocketIO,
+    socket: EverglotChatSocket
+) {
     socket.on(
         "groupActivity.hangmanGuess",
         async ({ guess }: { guess: string }) => {
@@ -302,6 +311,40 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     )
 }
 
+export async function handleStarted(
+    _io: SocketIO,
+    chatUser: ChatUser,
+    _activity: GroupActivity
+) {
+    const { groupUuid } = chatUser
+    const bot = bots[groupUuid]
+    if (bot) {
+        await bot.send("hangman-started", {
+            username: chatUser.user.username || "?",
+        })
+    }
+}
+
+export async function handleEnded(
+    _io: SocketIO,
+    chatUser: ChatUser,
+    _activity: GroupActivity
+) {
+    const { groupUuid } = chatUser
+    const bot = bots[groupUuid]
+    if (bot) {
+        await bot.send("hangman-ended", {
+            username: chatUser.user.username || "?",
+        })
+    }
+}
+
+export const getPublicState = (groupUuid: Group["uuid"]) =>
+    games[groupUuid].publicState
+
 export default {
+    handleStarted,
+    handleEnded,
     handleUserConnected,
+    getPublicState,
 }

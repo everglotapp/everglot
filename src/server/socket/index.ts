@@ -37,7 +37,7 @@ export function start(server: Server, pool: Pool) {
     })
 
     // Run when client connects
-    io.on("connection", (socket: EverglotChatSocket) => {
+    io.on("connection", async (socket: EverglotChatSocket) => {
         const { session } = socket.request
 
         socket.on("joinRoom", async ({ groupUuid }: { groupUuid: string }) => {
@@ -71,9 +71,15 @@ export function start(server: Server, pool: Pool) {
             const chatUser = userJoin(socket, userMeta, groupUuid)
             socket.join(groupUuid)
             if (userIsNew(chatUser) && chatUser?.user?.username) {
-                bots[groupUuid].send("welcome", {
-                    username: chatUser.user.username,
-                })
+                /**
+                 * TODO: Store first greeting date in group membership table.
+                 * Only greet user once per group:
+                 *   - Upon membership creation for global groups
+                 *   - Upon first joinRoom for private groups
+                 */
+                // bots[groupUuid].send("welcome", {
+                //     username: chatUser.user.username,
+                // })
 
                 userGreeted(chatUser)
             }
@@ -105,15 +111,11 @@ export function start(server: Server, pool: Pool) {
             if (!chatUser) {
                 return
             }
-
-            bots[chatUser.groupUuid].broadcastFrom(socket, "user-left", {
-                username: chatUser.user.username || "?",
-            })
         })
 
         messages.handleUserConnected(io, socket)
         call.handleUserConnected(io, socket)
-        activities.handleUserConnected(io, socket)
+        await activities.handleUserConnected(io, socket)
     })
 }
 

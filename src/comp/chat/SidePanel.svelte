@@ -6,11 +6,17 @@
 
     import Hangman from "./activities/Hangman.svelte"
     import WouldYouRather from "./activities/WouldYouRather.svelte"
+    import RandomQuestion from "./activities/RandomQuestion.svelte"
 
     import { currentUserIsGroupMember } from "../../stores/chat"
 
     import { GroupActivityKind } from "../../types/activities"
-    import type { GroupActivity } from "../../types/activities"
+    import type {
+        GroupActivity,
+        HangmanGroupActivity,
+        WouldYouRatherGroupActivity,
+        RandomQuestionGroupActivity,
+    } from "../../types/activities"
 
     import { groupUuid } from "../../stores"
     import { currentGroupLocale } from "../../stores/locales"
@@ -21,11 +27,34 @@
     } from "../../constants"
 
     const chat = getContext("CHAT")
+    const { connected: connectedToChat } = chat
 
     export let activity: GroupActivity | null = null
     let startingActivity = false
+    let forceDisableInputs = false
     // @ts-ignore
     $: activity, (startingActivity = false)
+
+    $: if ($connectedToChat) {
+        chat.on("startGroupActivity.failure", () => {
+            startingActivity = false
+        })
+    }
+
+    function handleStartActivity(kind: GroupActivityKind) {
+        if (startingActivity) {
+            return
+        }
+        chat.emit("startGroupActivity", {
+            kind,
+        })
+        forceDisableInputs = true
+        startingActivity = true
+        setTimeout(() => {
+            forceDisableInputs = false
+        }, 1000)
+    }
+
     $: groupCanPlayHangman =
         $currentGroupLocale &&
         (HANGMAN_LOCALES as readonly string[]).includes($currentGroupLocale)
@@ -39,6 +68,18 @@
         (RANDOM_QUESTION_LOCALES as readonly string[]).includes(
             $currentGroupLocale
         )
+    $: hangmanActivity =
+        activity && activity.kind === GroupActivityKind.Hangman
+            ? (activity as HangmanGroupActivity)
+            : null
+    $: wouldYouRatherActivity =
+        activity && activity.kind === GroupActivityKind.WouldYouRather
+            ? (activity as WouldYouRatherGroupActivity)
+            : null
+    $: randomQuestionActivity =
+        activity && activity.kind === GroupActivityKind.RandomQuestion
+            ? (activity as RandomQuestionGroupActivity)
+            : null
 </script>
 
 <div>
@@ -72,7 +113,8 @@
                                 color="SECONDARY"
                                 variant="OUTLINED"
                                 disabled={startingActivity ||
-                                    !$currentUserIsGroupMember}
+                                    !$currentUserIsGroupMember ||
+                                    forceDisableInputs}
                                 on:click={() => {
                                     chat.emit("startGroupActivity", {
                                         kind: GroupActivityKind.Hangman,
@@ -93,7 +135,8 @@
                                 color="SECONDARY"
                                 variant="OUTLINED"
                                 disabled={startingActivity ||
-                                    !$currentUserIsGroupMember}
+                                    !$currentUserIsGroupMember ||
+                                    forceDisableInputs}
                                 on:click={() => {
                                     chat.emit("startGroupActivity", {
                                         kind: GroupActivityKind.WouldYouRather,
@@ -113,8 +156,13 @@
                                 className="w-full justify-center"
                                 color="SECONDARY"
                                 variant="OUTLINED"
-                                disabled={!$currentUserIsGroupMember}
-                                on:click={() => console.log("Random q")}
+                                disabled={startingActivity ||
+                                    !$currentUserIsGroupMember ||
+                                    forceDisableInputs}
+                                on:click={() =>
+                                    handleStartActivity(
+                                        GroupActivityKind.RandomQuestion
+                                    )}
                                 ><Localized
                                     id="chat-side-panel-menu-random-question"
                                 /></ButtonLarge
@@ -123,22 +171,27 @@
                     {/if}
                 </div>
             </div>
-        {:else if activity.kind === GroupActivityKind.Hangman}
+        {:else if hangmanActivity}
             <Hangman
                 on:quit={() => chat.emit("endGroupActivity")}
-                over={activity.state.over}
-                pickedLetters={activity.state.pickedLetters}
-                pickedWords={activity.state.pickedWords}
-                word={activity.state.currentWord}
-                solution={activity.state.solution}
+                over={hangmanActivity.state.over}
+                pickedLetters={hangmanActivity.state.pickedLetters}
+                pickedWords={hangmanActivity.state.pickedWords}
+                word={hangmanActivity.state.currentWord}
+                solution={hangmanActivity.state.solution}
                 locale={$currentGroupLocale}
             />
-        {:else if activity.kind === GroupActivityKind.WouldYouRather}
+        {:else if wouldYouRatherActivity}
             <WouldYouRather
                 on:quit={() => chat.emit("endGroupActivity")}
-                question={activity.state.question}
-                answers={activity.state.answers}
-                endTime={activity.state.endTime}
+                question={wouldYouRatherActivity.state.question}
+                answers={wouldYouRatherActivity.state.answers}
+                endTime={wouldYouRatherActivity.state.endTime}
+            />
+        {:else if randomQuestionActivity}
+            <RandomQuestion
+                on:quit={() => chat.emit("endGroupActivity")}
+                question={randomQuestionActivity.state.question}
             />
         {/if}
     {/key}

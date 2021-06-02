@@ -1,6 +1,7 @@
 import { getCurrentUser } from "../users"
-import { getGroupActivity } from "./utils"
+import { endGroupActivity, getGroupActivity } from "./utils"
 import {
+    GroupActivity,
     GroupActivityKind,
     WouldYouRatherState,
 } from "../../../types/activities"
@@ -17,12 +18,14 @@ import { db } from "../../db"
 
 import log from "../../../logger"
 import { bots } from ".."
+import type { ChatUser } from "../../../types/chat"
 
 const chlog = log.child({
     namespace: "would-you-rather",
 })
 
 export const games: Record<Group["uuid"], WouldYouRatherGame> = {} as const
+let endActivityTimeout: NodeJS.Timeout | null = null
 
 type WouldYouRatherQuestion =
     | EnglishWouldYouRatherQuestion
@@ -118,7 +121,10 @@ export class WouldYouRatherGame {
     }
 }
 
-export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
+export async function handleUserConnected(
+    io: SocketIO,
+    socket: EverglotChatSocket
+) {
     socket.on(
         "groupActivity.wouldYouRatherAnswer",
         async ({ answerIndex }: { answerIndex: number }) => {
@@ -205,7 +211,7 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
             if (!bot) {
                 return
             }
-            bot.send("would-you-rather-answer-picked", {
+            await bot.send("would-you-rather-answer-picked", {
                 username: chatUser.user.username || "?",
                 answer,
             })
@@ -213,6 +219,58 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     )
 }
 
+export async function handleStarted(
+    io: SocketIO,
+    chatUser: ChatUser,
+    _activity: GroupActivity
+) {
+    const { groupUuid } = chatUser
+    const game = games[groupUuid]
+    if (endActivityTimeout) {
+        clearTimeout(endActivityTimeout)
+        endActivityTimeout = setTimeout(() => {
+            delete games[groupUuid]
+            const endedActivity = endGroupActivity(groupUuid)
+            if (
+                endedActivity &&
+                endedActivity.kind === GroupActivityKind.WouldYouRather
+            ) {
+                if (games.hasOwnProperty(groupUuid)) {
+                    delete games[groupUuid]
+                }
+            }
+            io.to(groupUuid).emit("groupActivity", getGroupActivity(groupUuid))
+        }, game.endTime?.getTime()! - Date.now())
+    }
+    const bot = bots[groupUuid]
+    if (bot) {
+        await bot.send("would-you-rather-started", {
+            username: chatUser.user.username || "?",
+            question: game.question!.question,
+        })
+    }
+}
+
+export async function handleEnded(
+    _io: SocketIO,
+    chatUser: ChatUser,
+    _activity: GroupActivity
+) {
+    const { groupUuid } = chatUser
+    const bot = bots[groupUuid]
+    if (bot) {
+        await bot.send("would-you-rather-ended", {
+            username: chatUser.user.username || "?",
+        })
+    }
+}
+
+export const getPublicState = (groupUuid: Group["uuid"]) =>
+    games[groupUuid].publicState
+
 export default {
+    handleStarted,
+    handleEnded,
     handleUserConnected,
+    getPublicState,
 }

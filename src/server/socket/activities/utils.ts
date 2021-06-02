@@ -3,15 +3,21 @@ import { getGroupLanguageByUuid } from "../../groups"
 import {
     HangmanLocale,
     HANGMAN_LOCALES,
+    RandomQuestionLocale,
+    RANDOM_QUESTION_LOCALES,
     WouldYouRatherLocale,
     WOULD_YOU_RATHER_LOCALES,
 } from "../../../constants"
 
-import { HangmanGame, games as hangmanGames } from "./hangman"
-import {
+import hangman, { HangmanGame, games as hangmanGames } from "./hangman"
+import wouldYouRather, {
     WouldYouRatherGame,
     games as wouldYouRatherGames,
 } from "./wouldYouRather"
+import randomQuestion, {
+    RandomQuestionGame,
+    games as randomQuestionGames,
+} from "./randomQuestion"
 
 import { GroupActivityKind } from "../../../types/activities"
 import type { GroupActivity } from "../../../types/activities"
@@ -41,6 +47,8 @@ export async function startGroupActivity(
         groupActivities[groupUuid] = await makeHangmanActivity(groupUuid)
     } else if (kind === GroupActivityKind.WouldYouRather) {
         groupActivities[groupUuid] = await makeWouldYouRatherActivity(groupUuid)
+    } else if (kind === GroupActivityKind.RandomQuestion) {
+        groupActivities[groupUuid] = await makeRandomQuestionActivity(groupUuid)
     } else {
         groupActivities[groupUuid] = {
             kind,
@@ -75,12 +83,17 @@ export function getGroupActivity(
     if (activity.kind === GroupActivityKind.Hangman) {
         return {
             kind: activity.kind,
-            state: hangmanGames[groupUuid].publicState,
+            state: hangman.getPublicState(groupUuid),
         }
     } else if (activity.kind === GroupActivityKind.WouldYouRather) {
         return {
             kind: activity.kind,
-            state: wouldYouRatherGames[groupUuid].publicState,
+            state: wouldYouRather.getPublicState(groupUuid),
+        }
+    } else if (activity.kind === GroupActivityKind.RandomQuestion) {
+        return {
+            kind: activity.kind,
+            state: randomQuestion.getPublicState(groupUuid),
         }
     }
     return activity
@@ -152,6 +165,41 @@ async function makeWouldYouRatherActivity(
     }
     return {
         kind: GroupActivityKind.WouldYouRather,
+        state: game.publicState,
+    }
+}
+
+async function makeRandomQuestionActivity(
+    groupUuid: Group["uuid"]
+): Promise<GroupActivity | null> {
+    const group = await getGroupLanguageByUuid(groupUuid)
+    if (!group || !group.groupByUuid?.language?.alpha2) {
+        chlog
+            .child({
+                groupUuid,
+            })
+            .debug("Group not found")
+        return null
+    }
+    const alpha2 = group.groupByUuid?.language?.alpha2
+    if (!RANDOM_QUESTION_LOCALES.some((locale) => locale === alpha2)) {
+        chlog
+            .child({
+                groupUuid,
+                alpha2,
+            })
+            .debug("Group locale does not support Random Question activity")
+        return null
+    }
+    const game = (randomQuestionGames[groupUuid] ||= new RandomQuestionGame(
+        alpha2 as RandomQuestionLocale
+    ))
+    if (!(await game.start())) {
+        delete randomQuestionGames[groupUuid]
+        return null
+    }
+    return {
+        kind: GroupActivityKind.RandomQuestion,
         state: game.publicState,
     }
 }

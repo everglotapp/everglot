@@ -1,24 +1,24 @@
-import { bots } from "../index"
-
 import hangman from "./hangman"
+import wouldYouRather from "./wouldYouRather"
+import randomQuestion from "./randomQuestion"
 
 import log from "../../../logger"
 
-import { GroupActivityKind } from "../../../types/activities"
+import { GroupActivity, GroupActivityKind } from "../../../types/activities"
 import type { Group } from "../../../types/generated/graphql"
 
 import type { Server as SocketIO } from "socket.io"
 import { getCurrentUser } from "../users"
 import { endGroupActivity, getGroupActivity, startGroupActivity } from "./utils"
-import wouldYouRather, { games as wouldYouRatherGames } from "./wouldYouRather"
 
 const chlog = log.child({
     namespace: "activities",
 })
 
-let endWouldYouRatherActivityTimeout: NodeJS.Timeout | null = null
-
-export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
+export async function handleUserConnected(
+    io: SocketIO,
+    socket: EverglotChatSocket
+) {
     socket.on(
         "startGroupActivity",
         async ({ kind }: { kind: GroupActivityKind }) => {
@@ -29,10 +29,14 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                     .debug("User trying to start group activity not found")
                 return
             }
-            const groupUuid = chatUser.groupUuid
-            const userUuid = chatUser.user.uuid
+            const {
+                groupUuid,
+                user: { uuid: userUuid },
+            } = chatUser
             const activity = await startGroupActivity(groupUuid, kind)
             if (!activity) {
+                // Send this to the creating client so it knows the creation failed.
+                socket.emit("startGroupActivity.failure")
                 return
             }
             chlog
@@ -43,43 +47,10 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 })
                 .debug("User successfully started group activity")
             io.to(groupUuid).emit("groupActivity", getGroupActivity(groupUuid))
-            if (activity.kind === GroupActivityKind.WouldYouRather) {
-                const game = wouldYouRatherGames[groupUuid]
-                if (endWouldYouRatherActivityTimeout) {
-                    clearTimeout(endWouldYouRatherActivityTimeout)
-                    endWouldYouRatherActivityTimeout = setTimeout(() => {
-                        delete wouldYouRatherGames[groupUuid]
-                        const endedActivity = endGroupActivity(groupUuid)
 
-                        if (
-                            endedActivity &&
-                            endedActivity.kind ===
-                                GroupActivityKind.WouldYouRather
-                        ) {
-                            if (wouldYouRatherGames.hasOwnProperty(groupUuid)) {
-                                delete wouldYouRatherGames[groupUuid]
-                            }
-                        }
-                        io.to(groupUuid).emit(
-                            "groupActivity",
-                            getGroupActivity(groupUuid)
-                        )
-                    }, game.endTime?.getTime()! - Date.now())
-                }
-            }
-            const bot = bots[groupUuid]
-            if (bot) {
-                if (activity.kind === GroupActivityKind.Hangman) {
-                    bot.send("hangman-started", {
-                        username: chatUser.user.username || "?",
-                    })
-                } else if (activity.kind === GroupActivityKind.WouldYouRather) {
-                    const game = wouldYouRatherGames[groupUuid]
-                    bot.send("would-you-rather-started", {
-                        username: chatUser.user.username || "?",
-                        question: game.question!.question,
-                    })
-                }
+            const module = getActivityModule(activity)
+            if (module) {
+                await module.handleStarted(io, chatUser, activity)
             }
         }
     )
@@ -91,8 +62,10 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 .debug("User trying to end group activity not found")
             return
         }
-        const groupUuid = chatUser.groupUuid
-        const userUuid = chatUser.user.uuid
+        const {
+            groupUuid,
+            user: { uuid: userUuid },
+        } = chatUser
         const endedActivity = endGroupActivity(groupUuid)
         if (!endedActivity) {
             return
@@ -107,24 +80,15 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
             "groupActivity",
             getGroupActivity(groupUuid)
         )
-        const bot = bots[groupUuid]
-        if (bot) {
-            if (endedActivity.kind === GroupActivityKind.Hangman) {
-                bot.send("hangman-ended", {
-                    username: chatUser.user.username || "?",
-                })
-            } else if (
-                endedActivity.kind === GroupActivityKind.WouldYouRather
-            ) {
-                bot.send("would-you-rather-ended", {
-                    username: chatUser.user.username || "?",
-                })
-            }
+
+        const module = getActivityModule(endedActivity)
+        if (module) {
+            await module.handleEnded(io, chatUser, endedActivity)
         }
     })
 
-    hangman.handleUserConnected(io, socket)
-    wouldYouRather.handleUserConnected(io, socket)
+    await hangman.handleUserConnected(io, socket)
+    await wouldYouRather.handleUserConnected(io, socket)
 }
 
 export function handleUserJoinedRoom(
@@ -133,6 +97,16 @@ export function handleUserJoinedRoom(
     groupUuid: Group["uuid"]
 ) {
     socket.emit("groupActivity", getGroupActivity(groupUuid))
+}
+
+function getActivityModule(activity: GroupActivity) {
+    if (activity.kind === GroupActivityKind.WouldYouRather) {
+        return wouldYouRather
+    } else if (activity.kind === GroupActivityKind.Hangman) {
+        return hangman
+    } else if (activity.kind === GroupActivityKind.RandomQuestion) {
+        return randomQuestion
+    }
 }
 
 export default {

@@ -28,7 +28,8 @@ chat-sidebar-controls-toggle-off = Aus
 chat-sidebar-start-call = Anruf starten
 chat-submit-form-send = Senden
 chat-submit-form-connecting = Verbinde …
-chat-submit-form-input = {""}
+# Chat text message input field
+chat-submit-form-input = { "" }
     .placeholder = Nachricht eingeben …
 chat-message-username-unknown = unbekannt
 chat-message-show-less = Weniger anzeigen
@@ -132,6 +133,7 @@ global-group-members-count =
         [one] Mitglied
        *[other] Mitglieder
     }
+global-error = Fehler
 
 ## Profile page
 
@@ -149,7 +151,9 @@ profile-gender-unknown = unbekannt
 profile-languages = Meine Sprachen
 profile-language-native-hint = (Muttersprache)
 profile-groups = Meine Gruppen
+
 ## Locales
+
 locale-en = Englisch
 locale-de = Deutsch
 locale-zh = Chinesisch

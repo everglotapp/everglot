@@ -39,10 +39,15 @@ export class Bot {
             fluentMessageId,
             args,
             errors
-        )
-        if (messageText) {
-            await this.sendMessage(messageText)
+        ).catch(() => {
+            chlog
+                .child({ fluentMessageId, args, errors, locale: this.locale })
+                .warn("Failed to send message, translation not found!")
+        })
+        if (!messageText) {
+            return
         }
+        await this.sendMessage(messageText)
     }
 
     async broadcastFrom(
@@ -55,12 +60,23 @@ export class Bot {
             fluentMessageId,
             args,
             errors
-        )
-        if (messageText) {
-            socket.broadcast
-                .to(this.groupUuid)
-                .emit("message", formatMessage(messageText))
+        ).catch(() => {
+            chlog
+                .child({
+                    socketId: socket.id,
+                    fluentMessageId,
+                    args,
+                    errors,
+                    locale: this.locale,
+                })
+                .warn("Failed to broadcast message, translation not found!")
+        })
+        if (!messageText) {
+            return
         }
+        socket.broadcast
+            .to(this.groupUuid)
+            .emit("message", formatMessage(messageText))
     }
 
     async sendMessage(msg: string, delay = 300) {

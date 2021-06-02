@@ -13,7 +13,6 @@
     import Headline4 from "../../typography/Headline4.svelte"
 
     import { currentUserIsGroupMember } from "../../../stores/chat"
-    import type { WouldYouRatherLocale } from "../../../constants"
 
     export let answers: string[]
     export let question: string

@@ -3,7 +3,7 @@ schema: "schema.graphql"
 documents: "src/**/*.graphql"
 hooks:
     afterAllFileWrite:
-        - node addToPersistedOperations.js
+        - node scripts/addToPersistedOperations.js
 generates:
     src/graphql.client.json:
         plugins:

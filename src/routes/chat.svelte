@@ -37,7 +37,7 @@
     import type { GroupActivity } from "../types/activities"
     import type { User } from "../types/generated/graphql"
 
-    import { ChevronLeftIcon } from "svelte-feather-icons"
+    import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons"
 
     let messages: ChatMessage[] = []
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
@@ -387,6 +387,19 @@
                                             <ChevronLeftIcon size="24" />
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        {:else}
+                            <div
+                                class="toggle-split-screen"
+                                style="right: unset; left: -5px;"
+                                on:click={() => (split = true)}
+                            >
+                                <div class="absolute" style="left: 1px;">
+                                    <ChevronRightIcon size="24" />
+                                </div>
+                                <div class="absolute" style="left: 7px;">
+                                    <ChevronRightIcon size="24" />
                                 </div>
                             </div>
                         {/if}

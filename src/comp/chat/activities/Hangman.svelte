@@ -8,13 +8,17 @@
 
     import { currentUser } from "../../../stores"
     import { currentUserIsGroupMember, chatUsers } from "../../../stores/chat"
+    import { ALPHABET } from "../../../constants"
+    import type { HangmanLocale } from "../../../constants"
 
     let inputValue: string | undefined
 
     export let over: boolean
     export let pickedLetters: string[]
+    export let pickedWords: string[]
     export let word: (string | null)[]
     export let solution: string | null = null
+    export let locale: HangmanLocale | null
     let forceDisableInputs = false
 
     const chat = getContext("CHAT")
@@ -92,11 +96,10 @@
         inputValue = ""
     }
 
+    $: alphabet = locale === null ? null : ALPHABET[locale as HangmanLocale]
     const validateInput = (input: string) => {
         if (input.length !== 1) {
-            feedback = `You can only enter single letters (you entered: ${input})`
-            feedbackSuccess = false
-            return false
+            return true
         }
         if (
             pickedLetters.some(
@@ -109,11 +112,30 @@
             feedbackSuccess = false
             return false
         }
+        if (alphabet !== null) {
+            const letterNotInAlphabet = input
+                .split("")
+                .find((letter) => !alphabet!.includes(letter))
+            if (letterNotInAlphabet) {
+                feedback = `The letter ${letterNotInAlphabet} is not available`
+                feedbackSuccess = false
+                return false
+            }
+        }
         return true
     }
 
-    $: wordGuessedCorrectly = word.every((character) => character !== null)
-    $: wrongGuesses = pickedLetters.filter(characterWasIncorrect).length
+    $: wordGuessedCorrectly =
+        word.every((character) => character !== null) ||
+        (solution !== null && pickedWords.includes(solution.toLowerCase()))
+    $: wrongLetterGuesses = pickedLetters.filter(characterWasIncorrect).length
+    $: wrongWordGuesses =
+        solution === null
+            ? pickedWords.length
+            : pickedWords.filter(
+                  (pickedWord) =>
+                      pickedWord.toLowerCase() !== solution!.toLowerCase()
+              ).length
     const characterWasIncorrect = (character: string) => {
         const lower = character.toLowerCase()
         return word.every(
@@ -161,7 +183,11 @@
             class="rope"
             style={`transition: height 400ms ease-in-out; height: ${Math.max(
                 0,
-                175 - wrongGuesses * 12
+                175 -
+                    Math.min(
+                        wrongLetterGuesses * 12 + wrongWordGuesses * 30,
+                        60
+                    )
             )}px`}
         />
         <div class="box-top" />
@@ -192,9 +218,10 @@
         <div class="squirrel-container">
             <div
                 class="relative"
-                style={`transition: transform 400ms ease-in-out; transform: translateY(-${
-                    wrongGuesses * 15
-                }px)`}
+                style={`transition: transform 400ms ease-in-out; transform: translateY(-${Math.min(
+                    wrongLetterGuesses * 12 + wrongWordGuesses * 30,
+                    60
+                )}px)`}
             >
                 <img src="/squirrel.png" alt="Squirrel" />
                 {#if over && !wordGuessedCorrectly}
@@ -226,6 +253,7 @@
             id="hangman-input"
             class="border border-gray shadow-md inline-flex"
             bind:value={inputValue}
+            required
             disabled={over || forceDisableInputs || !$currentUserIsGroupMember}
         />
         <ButtonSmall

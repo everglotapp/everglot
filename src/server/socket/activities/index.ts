@@ -57,12 +57,9 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                     "groupActivity",
                     getGroupActivity(chatUser.groupUuid)
                 )
+                const bot = bots[chatUser.groupUuid]
                 if (activity.kind === GroupActivityKind.WouldYouRather) {
-                    const bot = bots[chatUser.groupUuid]
                     const game = wouldYouRatherGames[chatUser.groupUuid]
-                    if (bot) {
-                        bot.sendMessage(game.question!.question)
-                    }
                     endWouldYouRatherActivityTimeout = setTimeout(() => {
                         delete wouldYouRatherGames[chatUser.groupUuid]
                         endGroupActivity(chatUser.groupUuid)
@@ -71,6 +68,21 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                             getGroupActivity(chatUser.groupUuid)
                         )
                     }, game.endTime?.getTime()! - Date.now())
+                }
+                if (bot) {
+                    if (activity.kind === GroupActivityKind.Hangman) {
+                        bot.send("hangman-started", {
+                            username: chatUser.user.username || "?",
+                        })
+                    } else if (
+                        activity.kind === GroupActivityKind.WouldYouRather
+                    ) {
+                        const game = wouldYouRatherGames[chatUser.groupUuid]
+                        bot.send("would-you-rather-started", {
+                            username: chatUser.user.username || "?",
+                            question: game.question!.question,
+                        })
+                    }
                 }
             }
         }
@@ -83,7 +95,8 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 .debug("User trying to end group activity not found")
             return
         }
-        if (endGroupActivity(chatUser.groupUuid)) {
+        const endedActivity = endGroupActivity(chatUser.groupUuid)
+        if (endedActivity) {
             chlog
                 .child({
                     groupUuid: chatUser.groupUuid,
@@ -94,6 +107,20 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 "groupActivity",
                 getGroupActivity(chatUser.groupUuid)
             )
+            const bot = bots[chatUser.groupUuid]
+            if (bot) {
+                if (endedActivity.kind === GroupActivityKind.Hangman) {
+                    bot.send("hangman-ended", {
+                        username: chatUser.user.username || "?",
+                    })
+                } else if (
+                    endedActivity.kind === GroupActivityKind.WouldYouRather
+                ) {
+                    bot.send("would-you-rather-ended", {
+                        username: chatUser.user.username || "?",
+                    })
+                }
+            }
         }
     })
 
@@ -322,7 +349,9 @@ export async function startGroupActivity(
     return groupActivities[groupUuid]
 }
 
-export function endGroupActivity(groupUuid: Group["uuid"]) {
+export function endGroupActivity(
+    groupUuid: Group["uuid"]
+): GroupActivity | null {
     const activity = groupActivities[groupUuid]
     if (!activity) {
         chlog
@@ -330,7 +359,7 @@ export function endGroupActivity(groupUuid: Group["uuid"]) {
                 groupUuid,
             })
             .debug("No activity is running for this group")
-        return false
+        return null
     }
     if (activity.kind === GroupActivityKind.WouldYouRather) {
         if (wouldYouRatherGames.hasOwnProperty(groupUuid)) {
@@ -338,7 +367,7 @@ export function endGroupActivity(groupUuid: Group["uuid"]) {
         }
     }
     groupActivities[groupUuid] = null
-    return true
+    return activity
 }
 
 export function getGroupActivity(

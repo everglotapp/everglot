@@ -40,9 +40,13 @@ export class Bot {
             args,
             errors
         )
-        if (messageText) {
-            await this.sendMessage(messageText)
+        if (!messageText) {
+            chlog
+                .child({ fluentMessageId, args, errors, locale: this.locale })
+                .warn("Failed to send message, translation not found!")
+            return
         }
+        await this.sendMessage(messageText)
     }
 
     async broadcastFrom(

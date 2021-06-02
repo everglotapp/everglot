@@ -9,7 +9,10 @@ user-left = { $username } hat den Chat verlassen.
 hangman-current-word = Aktuelles Wort: {$word}
 hangman-guessed-correctly = Du hast richtig geraten! Hier ist das nächste Wort: { $nextWord }
 hangman-already-running = Es läuft bereits ein Hangman-Spiel.
-hangman-started = Wir fangen ein Hangman-Spiel an: { $word }
 hangman-lang-not-supported = Bisher wird Hangman nur auf Deutsch und Englisch unterstützt.
+hangman-started = @{ $username } hat ein Hangman-Spiel gestartet.
+hangman-ended = @{ $username } hat das Hangman-Spiel beendet.
 
 would-you-rather-answer-picked = @{ $username } hat „{ $answer }“ gewählt!
+would-you-rather-started = @{ $username } hat eine Würdest-Du-Lieber-Umfrage gestartet: { $question }
+would-you-rather-ended = @{ $username } hat die Würdest-Du-Lieber-Umfrage beendet.

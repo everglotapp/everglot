@@ -150,11 +150,13 @@
             forceDisableInputs = false
         }, 3000)
         setTimeout(() => {
-            if (over) {
-                feedback = undefined
-            }
-        }, 3000)
+            feedback = undefined
+        }, 1000)
     }
+
+    const WRONG_LETTER_MOVE_Y_PX = 15
+    const WRONG_WORD_MOVE_Y_PX = 60
+    const MAX_MOVE_Y_PX = 90
 </script>
 
 <div
@@ -185,8 +187,9 @@
                 0,
                 175 -
                     Math.min(
-                        wrongLetterGuesses * 12 + wrongWordGuesses * 30,
-                        60
+                        wrongLetterGuesses * WRONG_LETTER_MOVE_Y_PX +
+                            wrongWordGuesses * WRONG_WORD_MOVE_Y_PX,
+                        MAX_MOVE_Y_PX
                     )
             )}px`}
         />
@@ -219,8 +222,9 @@
             <div
                 class="relative"
                 style={`transition: transform 400ms ease-in-out; transform: translateY(-${Math.min(
-                    wrongLetterGuesses * 12 + wrongWordGuesses * 30,
-                    60
+                    wrongLetterGuesses * WRONG_LETTER_MOVE_Y_PX +
+                        wrongWordGuesses * WRONG_WORD_MOVE_Y_PX,
+                    MAX_MOVE_Y_PX
                 )}px)`}
             >
                 <img src="/squirrel.png" alt="Squirrel" />
@@ -268,13 +272,17 @@
         >
     </form>
     {#if feedback}
-        <div
-            class={`px-8 py-4 font-bold ${
-                feedbackSuccess ? "text-green-600" : "text-red-700"
-            }`}
-        >
-            {feedback}
-        </div>
+        {#key feedback}
+            <div
+                class={`px-8 py-4 font-bold ${
+                    feedbackSuccess ? "text-green-600" : "text-red-700"
+                }`}
+                in:scale={{ duration: 200, delay: 150 }}
+                out:scale={{ duration: 100, delay: 0 }}
+            >
+                {feedback}
+            </div>
+        {/key}
     {/if}
 </div>
 

@@ -131,14 +131,20 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                     )
                 return
             }
-            // TODO: allow word guesses
             const game = hangmanGames[chatUser.groupUuid]!
-            if (
-                typeof guess !== "string" ||
-                guess.length !== 1 ||
-                game.letterPicked(guess) ||
-                !game.letterAvailable(guess)
-            ) {
+            if (typeof guess !== "string") {
+                chlog
+                    .child({
+                        groupUuid: chatUser.groupUuid,
+                        userUuid: chatUser.user.uuid,
+                        guess,
+                    })
+                    .debug(
+                        "User attempted hangman guess with a non-string guess"
+                    )
+                return
+            }
+            if (!game.guessValid(guess)) {
                 chlog
                     .child({
                         groupUuid: chatUser.groupUuid,
@@ -148,7 +154,7 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                     .debug("User attempted hangman guess but guess was invalid")
                 return
             }
-            const success = game.pickLetter(guess)
+            const success = game.processGuess(guess)
             // Tell group users about the guess and whether it was successful.
             io.to(chatUser.groupUuid).emit("groupActivity.hangmanGuess", {
                 guess,

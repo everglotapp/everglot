@@ -117,8 +117,10 @@
                 on:quit={() => chat.emit("endGroupActivity")}
                 over={activity.state.over}
                 pickedLetters={activity.state.pickedLetters}
+                pickedWords={activity.state.pickedWords}
                 word={activity.state.currentWord}
                 solution={activity.state.solution}
+                locale={$currentGroupLocale}
             />
         {:else if activity.kind === GroupActivityKind.WouldYouRather}
             <WouldYouRather

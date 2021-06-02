@@ -14,6 +14,7 @@ export interface HangmanState extends GroupActivityState {
     over: boolean
     currentWord: (string | null)[]
     pickedLetters: string[]
+    pickedWords: string[]
     solution: string | null
 }
 

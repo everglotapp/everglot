@@ -31,11 +31,13 @@ async function getRandomWord(language: HangmanLocale): Promise<string | null> {
 }
 
 const MAX_WRONG_LETTERS = 5
+const MAX_WRONG_WORDS = 0
 
 export class HangmanGame {
     #language: HangmanLocale
     #pickedLetters: string[] = []
     #availableLetters: string[] = []
+    #pickedWords: string[] = []
     #word: string | undefined
     #wrongLetters = 0
     #wrongWords = 0
@@ -56,6 +58,36 @@ export class HangmanGame {
         this.#word = word
         this.#started = true
         return true
+    }
+
+    guessValid(guess: string): boolean {
+        if (guess.length > 50 || guess.length < 1) {
+            return false
+        }
+        if (guess.length === 1) {
+            return !this.letterPicked(guess) && this.letterAvailable(guess)
+        }
+        return guess
+            .split("")
+            .every((character) => ALPHABET[this.#language].includes(character))
+    }
+
+    processGuess(guess: string): boolean {
+        if (guess.length === 1) {
+            return this.pickLetter(guess)
+        }
+        const lowerGuess = guess.toLowerCase()
+        if (lowerGuess === this.#word!.toLowerCase()) {
+            if (!this.#pickedWords.includes(lowerGuess)) {
+                this.#pickedWords.push(lowerGuess)
+            }
+            return true
+        }
+        if (!this.#pickedWords.includes(lowerGuess)) {
+            this.#pickedWords.push(lowerGuess)
+        }
+        this.#wrongWords += 1
+        return false
     }
 
     letterPicked(l: string): boolean {
@@ -91,12 +123,28 @@ export class HangmanGame {
             return true
         }
 
+        if (this.#wrongWords > MAX_WRONG_WORDS) {
+            return true
+        }
+
+        if (this.#pickedWords.includes(this.#word!.toLowerCase())) {
+            chlog
+                .child({ word: this.#word })
+                .trace(
+                    "Hangman round completed successfully, the word has been guessed"
+                )
+            return true
+        }
         for (let i = 0; i < this.#word!.length; ++i) {
             if (!this.#pickedLetters.includes(this.#word![i].toLowerCase())) {
                 return false
             }
         }
-        chlog.trace("Hangman round completed successfully")
+        chlog
+            .child({ word: this.#word })
+            .trace(
+                "Hangman round completed successfully, all letters have been guessed"
+            )
         return true
     }
 
@@ -116,6 +164,7 @@ export class HangmanGame {
     reset(newWord: string): void {
         this.#word = newWord
         this.#pickedLetters = []
+        this.#pickedWords = []
         this.#availableLetters = ALPHABET[this.#language].filter(
             (l: string) => l === l.toLowerCase()
         )
@@ -128,6 +177,7 @@ export class HangmanGame {
             over: this.over,
             currentWord: this.currentWord,
             pickedLetters: this.#pickedLetters,
+            pickedWords: this.#pickedWords,
             solution: this.over ? this.#word || null : null,
         }
     }

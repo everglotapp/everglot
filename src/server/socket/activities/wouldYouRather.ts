@@ -1,18 +1,28 @@
-import type { WouldYouRatherLocale } from "../../../constants"
-import type { WouldYouRatherState } from "../../../types/activities"
+import { getCurrentUser } from "../users"
+import { getGroupActivity } from "./utils"
+import {
+    GroupActivityKind,
+    WouldYouRatherState,
+} from "../../../types/activities"
 import type {
     ChineseWouldYouRatherQuestion,
     EnglishWouldYouRatherQuestion,
     GermanWouldYouRatherQuestion,
+    Group,
 } from "../../../types/generated/graphql"
+import type { WouldYouRatherLocale } from "../../../constants"
+import type { Server as SocketIO } from "socket.io"
 
 import { db } from "../../db"
 
 import log from "../../../logger"
+import { bots } from ".."
 
 const chlog = log.child({
     namespace: "would-you-rather",
 })
+
+export const games: Record<Group["uuid"], WouldYouRatherGame> = {} as const
 
 type WouldYouRatherQuestion =
     | EnglishWouldYouRatherQuestion
@@ -106,4 +116,103 @@ export class WouldYouRatherGame {
                 : null,
         }
     }
+}
+
+export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
+    socket.on(
+        "groupActivity.wouldYouRatherAnswer",
+        async ({ answerIndex }: { answerIndex: number }) => {
+            const chatUser = getCurrentUser(socket)
+            if (!chatUser) {
+                chlog
+                    .child({ socketId: socket.id, answerIndex })
+                    .debug(
+                        "User trying to pick an answer in Would You Rather not found"
+                    )
+                return
+            }
+            const activity = getGroupActivity(chatUser.groupUuid)
+            if (!activity) {
+                chlog
+                    .child({
+                        groupUuid: chatUser.groupUuid,
+                        userUuid: chatUser.user.uuid,
+                        answerIndex,
+                    })
+                    .debug(
+                        "User tried to pick an answer in Would You Rather but no activity is running for their group"
+                    )
+                return
+            }
+            if (activity.kind !== GroupActivityKind.WouldYouRather) {
+                chlog
+                    .child({
+                        groupUuid: chatUser.groupUuid,
+                        userUuid: chatUser.user.uuid,
+                        answerIndex,
+                    })
+                    .debug(
+                        "User tried to pick an answer in Would You Rather but current group activity is not Would You Rather"
+                    )
+                return
+            }
+            const game = games[chatUser.groupUuid]!
+            if (game.over) {
+                chlog
+                    .child({
+                        groupUuid: chatUser.groupUuid,
+                        userUuid: chatUser.user.uuid,
+                        questionUuid: game.question?.uuid || null,
+                        answerIndex,
+                    })
+                    .debug(
+                        "User tried to pick an answer in Would You Rather but game is over"
+                    )
+                return
+            }
+            const answer = game.pickAnswer(chatUser.user.uuid, answerIndex)
+            if (!answer) {
+                chlog
+                    .child({
+                        groupUuid: chatUser.groupUuid,
+                        userUuid: chatUser.user.uuid,
+                        questionUuid: game.question?.uuid || null,
+                        answerIndex,
+                    })
+                    .debug(
+                        "User tried to pick an answer in Would You Rather but answer was invalid"
+                    )
+                return
+            }
+            // Tell group users about the guess and whether it was successful.
+            io.to(chatUser.groupUuid).emit(
+                "groupActivity.wouldYouRatherAnswer",
+                {
+                    answerIndex,
+                    userUuid: chatUser.user.uuid,
+                }
+            )
+
+            chlog
+                .child({
+                    groupUuid: chatUser.groupUuid,
+                    userUuid: chatUser.user.uuid,
+                    questionUuid: game.question?.uuid || null,
+                    answerIndex,
+                })
+                .debug("User picked an answer in Would You Rather")
+            const bot = bots[chatUser.groupUuid]
+            if (!bot) {
+                return
+            }
+            bot.send("would-you-rather-answer-picked", {
+                username: chatUser.user.username || "?",
+                answer,
+            })
+        }
+    )
+}
+
+export default {
+    handleUserConnected,
 }

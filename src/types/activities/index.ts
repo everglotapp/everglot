@@ -1,6 +1,7 @@
 export enum GroupActivityKind {
     Hangman,
     WouldYouRather,
+    RandomQuestion,
 }
 
 export interface GroupActivity {

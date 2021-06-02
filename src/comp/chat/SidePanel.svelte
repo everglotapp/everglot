@@ -14,7 +14,11 @@
 
     import { groupUuid } from "../../stores"
     import { currentGroupLocale } from "../../stores/locales"
-    import { HANGMAN_LOCALES, WOULD_YOU_RATHER_LOCALES } from "../../constants"
+    import {
+        HANGMAN_LOCALES,
+        WOULD_YOU_RATHER_LOCALES,
+        RANDOM_QUESTION_LOCALES,
+    } from "../../constants"
 
     const chat = getContext("CHAT")
 
@@ -28,6 +32,11 @@
     $: groupCanPlayWouldYouRather =
         $currentGroupLocale &&
         (WOULD_YOU_RATHER_LOCALES as readonly string[]).includes(
+            $currentGroupLocale
+        )
+    $: groupCanBeAskedRandomQuestion =
+        $currentGroupLocale &&
+        (RANDOM_QUESTION_LOCALES as readonly string[]).includes(
             $currentGroupLocale
         )
 </script>
@@ -97,19 +106,21 @@
                             >
                         </div>
                     {/if}
-                    <div class="menu-item">
-                        <ButtonLarge
-                            tag="button"
-                            className="w-full justify-center"
-                            color="SECONDARY"
-                            variant="OUTLINED"
-                            disabled={!$currentUserIsGroupMember}
-                            on:click={() => console.log("Random q")}
-                            ><Localized
-                                id="chat-side-panel-menu-random-question"
-                            /></ButtonLarge
-                        >
-                    </div>
+                    {#if groupCanBeAskedRandomQuestion}
+                        <div class="menu-item">
+                            <ButtonLarge
+                                tag="button"
+                                className="w-full justify-center"
+                                color="SECONDARY"
+                                variant="OUTLINED"
+                                disabled={!$currentUserIsGroupMember}
+                                on:click={() => console.log("Random q")}
+                                ><Localized
+                                    id="chat-side-panel-menu-random-question"
+                                /></ButtonLarge
+                            >
+                        </div>
+                    {/if}
                 </div>
             </div>
         {:else if activity.kind === GroupActivityKind.Hangman}

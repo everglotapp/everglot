@@ -1,11 +1,12 @@
 <script lang="ts">
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { groupUuid } from "../../stores"
     import {
         groupChatStore,
-        language,
         languageSkillLevel,
         groupName,
     } from "../../stores/chat"
+    import { currentGroupLocale } from "../../stores/locales"
 </script>
 
 <header>
@@ -14,9 +15,13 @@
             <span class="text-xl py-2 font-bold text-gray-lightest"
                 >{$groupName || ""}</span
             >
-            <span class="text-xl py-2"
-                >{$language?.englishName || ""}
-                {$languageSkillLevel?.name || ""}</span
+            <span class="text-xl py-2">
+                {#if $currentGroupLocale !== null}
+                    <Localized id={`locale-${$currentGroupLocale}`} />
+                {/if}
+                {#if $languageSkillLevel?.name}
+                    &nbsp;{$languageSkillLevel.name}
+                {/if}</span
             >
         {:else if $groupChatStore.error}
             error

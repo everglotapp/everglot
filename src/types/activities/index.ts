@@ -2,6 +2,7 @@ export enum GroupActivityKind {
     Hangman,
     WouldYouRather,
     RandomQuestion,
+    GuessCharacter,
 }
 
 export interface GroupActivity {
@@ -12,6 +13,11 @@ export interface GroupActivity {
 export interface HangmanGroupActivity extends GroupActivity {
     kind: GroupActivityKind.Hangman
     state: HangmanState
+}
+
+export interface GuessCharacterGroupActivity extends GroupActivity {
+    kind: GroupActivityKind.GuessCharacter
+    state: GuessCharacterState
 }
 
 export interface WouldYouRatherGroupActivity extends GroupActivity {
@@ -31,6 +37,13 @@ export interface HangmanState extends GroupActivityState {
     currentWord: (string | null)[]
     pickedLetters: string[]
     pickedWords: string[]
+    solution: string | null
+}
+
+export interface GuessCharacterState extends GroupActivityState {
+    over: boolean
+    hint: string | null
+    pickedCharacters: string[]
     solution: string | null
 }
 

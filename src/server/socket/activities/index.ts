@@ -1,4 +1,5 @@
 import hangman from "./hangman"
+import guessCharacter from "./guessCharacter"
 import wouldYouRather from "./wouldYouRather"
 import randomQuestion from "./randomQuestion"
 
@@ -88,6 +89,7 @@ export async function handleUserConnected(
     })
 
     await hangman.handleUserConnected(io, socket)
+    await guessCharacter.handleUserConnected(io, socket)
     await wouldYouRather.handleUserConnected(io, socket)
 }
 
@@ -106,6 +108,8 @@ function getActivityModule(activity: GroupActivity) {
         return hangman
     } else if (activity.kind === GroupActivityKind.RandomQuestion) {
         return randomQuestion
+    } else if (activity.kind === GroupActivityKind.GuessCharacter) {
+        return guessCharacter
     }
 }
 

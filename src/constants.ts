@@ -8,6 +8,9 @@ export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
 export const HANGMAN_LOCALES = ["en", "de"] as const
 export type HangmanLocale = typeof HANGMAN_LOCALES[number]
 
+export const GUESS_CHARACTER_LOCALES = ["zh"] as const
+export type GuessCharacterLocale = typeof GUESS_CHARACTER_LOCALES[number]
+
 export const WOULD_YOU_RATHER_LOCALES = ["en", "de", "zh"] as const
 export type WouldYouRatherLocale = typeof WOULD_YOU_RATHER_LOCALES[number]
 

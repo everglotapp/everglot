@@ -5,6 +5,7 @@
     import ButtonLarge from "../util/ButtonLarge.svelte"
 
     import Hangman from "./activities/Hangman.svelte"
+    import GuessCharacter from "./activities/GuessCharacter.svelte"
     import WouldYouRather from "./activities/WouldYouRather.svelte"
     import RandomQuestion from "./activities/RandomQuestion.svelte"
 
@@ -16,6 +17,7 @@
         HangmanGroupActivity,
         WouldYouRatherGroupActivity,
         RandomQuestionGroupActivity,
+        GuessCharacterGroupActivity,
     } from "../../types/activities"
 
     import { groupUuid } from "../../stores"
@@ -24,6 +26,7 @@
         HANGMAN_LOCALES,
         WOULD_YOU_RATHER_LOCALES,
         RANDOM_QUESTION_LOCALES,
+        GUESS_CHARACTER_LOCALES,
     } from "../../constants"
 
     const chat = getContext("CHAT")
@@ -58,6 +61,11 @@
     $: groupCanPlayHangman =
         $currentGroupLocale &&
         (HANGMAN_LOCALES as readonly string[]).includes($currentGroupLocale)
+    $: groupCanPlayGuessCharacter =
+        $currentGroupLocale &&
+        (GUESS_CHARACTER_LOCALES as readonly string[]).includes(
+            $currentGroupLocale
+        )
     $: groupCanPlayWouldYouRather =
         $currentGroupLocale &&
         (WOULD_YOU_RATHER_LOCALES as readonly string[]).includes(
@@ -71,6 +79,10 @@
     $: hangmanActivity =
         activity && activity.kind === GroupActivityKind.Hangman
             ? (activity as HangmanGroupActivity)
+            : null
+    $: guessCharacterActivity =
+        activity && activity.kind === GroupActivityKind.GuessCharacter
+            ? (activity as GuessCharacterGroupActivity)
             : null
     $: wouldYouRatherActivity =
         activity && activity.kind === GroupActivityKind.WouldYouRather
@@ -127,6 +139,28 @@
                             >
                         </div>
                     {/if}
+                    {#if groupCanPlayGuessCharacter}
+                        <div class="menu-item">
+                            <ButtonLarge
+                                tag="button"
+                                className="w-full justify-center"
+                                color="SECONDARY"
+                                variant="OUTLINED"
+                                disabled={startingActivity ||
+                                    !$currentUserIsGroupMember ||
+                                    forceDisableInputs}
+                                on:click={() => {
+                                    chat.emit("startGroupActivity", {
+                                        kind: GroupActivityKind.GuessCharacter,
+                                    })
+                                    startingActivity = true
+                                }}
+                                ><Localized
+                                    id="chat-side-panel-menu-guess-character"
+                                /></ButtonLarge
+                            >
+                        </div>
+                    {/if}
                     {#if groupCanPlayWouldYouRather}
                         <div class="menu-item">
                             <ButtonLarge
@@ -179,6 +213,15 @@
                 pickedWords={hangmanActivity.state.pickedWords}
                 word={hangmanActivity.state.currentWord}
                 solution={hangmanActivity.state.solution}
+                locale={$currentGroupLocale}
+            />
+        {:else if guessCharacterActivity}
+            <GuessCharacter
+                on:quit={() => chat.emit("endGroupActivity")}
+                over={guessCharacterActivity.state.over}
+                pickedCharacters={guessCharacterActivity.state.pickedCharacters}
+                hint={guessCharacterActivity.state.hint}
+                solution={guessCharacterActivity.state.solution}
                 locale={$currentGroupLocale}
             />
         {:else if wouldYouRatherActivity}

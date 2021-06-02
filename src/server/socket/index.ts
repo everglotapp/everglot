@@ -92,9 +92,9 @@ export function start(server: Server, pool: Pool) {
             })
 
             // Broadcast to other clients when a client connects
-            bots[chatUser.groupUuid].broadcastFrom(socket, "user-joined", {
-                username: chatUser.user.username || "?",
-            })
+            // bots[chatUser.groupUuid].broadcastFrom(socket, "user-joined", {
+            //     username: chatUser.user.username || "?",
+            // })
 
             call.handleUserJoinedRoom(io, socket, groupUuid)
             activities.handleUserJoinedRoom(io, socket, groupUuid)

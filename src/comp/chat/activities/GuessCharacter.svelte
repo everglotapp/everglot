@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher, getContext } from "svelte"
     import { scale } from "svelte/transition"
-    import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { Localized, Overlay } from "@nubolab-ffwd/svelte-fluent"
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/FluentProvider.svelte"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
@@ -9,17 +9,16 @@
 
     import { currentUser } from "../../../stores"
     import { currentUserIsGroupMember, chatUsers } from "../../../stores/chat"
-    import { ALPHABET } from "../../../constants"
-    import type { HangmanLocale } from "../../../constants"
+    import type { GuessCharacterLocale } from "../../../constants"
+    import { isChineseCharacter } from "../../../utils"
 
     let inputValue: string | undefined
 
     export let over: boolean
-    export let pickedLetters: string[]
-    export let pickedWords: string[]
-    export let word: (string | null)[]
+    export let pickedCharacters: string[]
+    export let hint: string | null = null
     export let solution: string | null = null
-    export let locale: HangmanLocale | null
+    export let locale: GuessCharacterLocale | null
     let forceDisableInputs = false
 
     const chat = getContext("CHAT")
@@ -32,7 +31,7 @@
     const { translate } = fluentStores()!
     $: if ($connectedToChat) {
         chat.on(
-            "groupActivity.hangmanGuess",
+            "groupActivity.guessCharacterGuess",
             ({
                 userUuid,
                 success,
@@ -50,13 +49,13 @@
                     if (guessingUser === $currentUser.uuid) {
                         feedback = success
                             ? $translate(
-                                  "chat-side-panel-activity-hangman-feedback-own-guess-correct",
+                                  "chat-side-panel-activity-guess-character-feedback-own-guess-correct",
                                   {
                                       guess,
                                   }
                               )
                             : $translate(
-                                  "chat-side-panel-activity-hangman-feedback-own-guess-wrong",
+                                  "chat-side-panel-activity-guess-character-feedback-own-guess-wrong",
                                   {
                                       guess,
                                   }
@@ -64,14 +63,14 @@
                     } else {
                         feedback = success
                             ? $translate(
-                                  "chat-side-panel-activity-hangman-feedback-guess-correct",
+                                  "chat-side-panel-activity-guess-character-feedback-guess-correct",
                                   {
                                       username: guessingUser.username,
                                       guess,
                                   }
                               )
                             : $translate(
-                                  "chat-side-panel-activity-hangman-feedback-guess-wrong",
+                                  "chat-side-panel-activity-guess-character-feedback-guess-wrong",
                                   {
                                       username: guessingUser.username,
                                       guess,
@@ -81,13 +80,13 @@
                 } else {
                     feedback = success
                         ? $translate(
-                              "chat-side-panel-activity-hangman-feedback-own-guess-correct",
+                              "chat-side-panel-activity-guess-character-feedback-own-guess-correct",
                               {
                                   guess,
                               }
                           )
                         : $translate(
-                              "chat-side-panel-activity-hangman-feedback-own-guess-wrong",
+                              "chat-side-panel-activity-guess-character-feedback-own-guess-wrong",
                               {
                                   guess,
                               }
@@ -101,7 +100,7 @@
         if (!$connectedToChat) {
             return
         }
-        chat.emit("groupActivity.hangmanGuess", { guess })
+        chat.emit("groupActivity.guessCharacterGuess", { guess })
     }
 
     const handleQuit = () => dispatch("quit")
@@ -130,33 +129,37 @@
         inputValue = ""
     }
 
-    $: alphabet = locale === null ? null : ALPHABET[locale as HangmanLocale]
     const validateInput = (input: string) => {
         if (input.length !== 1) {
-            return true
-        }
-        if (
-            pickedLetters.some(
-                (letter) =>
-                    letter !== null &&
-                    letter.toLowerCase() === input.toLowerCase()
-            )
-        ) {
             feedback = $translate(
-                "chat-side-panel-activity-hangman-feedback-letter-already-picked",
+                "chat-side-panel-activity-guess-character-feedback-character-single-characters-only",
                 { input }
             )
             feedbackSuccess = false
             return false
         }
-        if (alphabet !== null) {
-            const badLetter = input
+        if (
+            pickedCharacters.some(
+                (character) =>
+                    character !== null &&
+                    character.toLowerCase() === input.toLowerCase()
+            )
+        ) {
+            feedback = $translate(
+                `chat-side-panel-activity-guess-character-feedback-character-already-picked`,
+                { input }
+            )
+            feedbackSuccess = false
+            return false
+        }
+        if (locale === "zh") {
+            const badCharacter = input
                 .split("")
-                .find((letter) => !alphabet!.includes(letter))
-            if (badLetter) {
+                .find((character) => !isChineseCharacter(character))
+            if (badCharacter) {
                 feedback = $translate(
-                    "chat-side-panel-activity-hangman-feedback-letter-not-available",
-                    { badLetter }
+                    `chat-side-panel-activity-guess-character-feedback-character-not-available`,
+                    { badCharacter }
                 )
                 feedbackSuccess = false
                 return false
@@ -165,23 +168,12 @@
         return true
     }
 
-    $: wordGuessedCorrectly =
-        word.every((character) => character !== null) ||
-        (solution !== null && pickedWords.includes(solution.toLowerCase()))
-    $: wrongLetterGuesses = pickedLetters.filter(characterWasIncorrect).length
-    $: wrongWordGuesses =
-        solution === null
-            ? pickedWords.length
-            : pickedWords.filter(
-                  (pickedWord) =>
-                      pickedWord.toLowerCase() !== solution!.toLowerCase()
-              ).length
+    $: characterGuessedCorrectly =
+        solution !== null && pickedCharacters.includes(solution)
+    $: wrongCharacterGuesses = pickedCharacters.filter(characterWasIncorrect)
+        .length
     const characterWasIncorrect = (character: string) => {
-        const lower = character.toLowerCase()
-        return word.every(
-            (wordCharacter) =>
-                wordCharacter === null || wordCharacter.toLowerCase() !== lower
-        )
+        return solution === null || character !== solution
     }
 
     $: if (over) {
@@ -194,8 +186,7 @@
         }, 1000)
     }
 
-    const WRONG_LETTER_MOVE_Y_PX = 15
-    const WRONG_WORD_MOVE_Y_PX = 60
+    const WRONG_CHARACTER_MOVE_Y_PX = 15
     const MAX_MOVE_Y_PX = 90
 </script>
 
@@ -204,7 +195,9 @@
     in:scale={{ duration: 200, delay: 350 }}
     out:scale={{ duration: 200, delay: 0 }}
 >
-    <Headline4><Localized id="chat-side-panel-activity-hangman" /></Headline4>
+    <Headline4
+        ><Localized id="chat-side-panel-activity-guess-character" /></Headline4
+    >
     <ButtonSmall
         tag="button"
         className="items-center justify-center"
@@ -227,8 +220,7 @@
                 0,
                 175 -
                     Math.min(
-                        wrongLetterGuesses * WRONG_LETTER_MOVE_Y_PX +
-                            wrongWordGuesses * WRONG_WORD_MOVE_Y_PX,
+                        wrongCharacterGuesses * WRONG_CHARACTER_MOVE_Y_PX,
                         MAX_MOVE_Y_PX
                     )
             )}px`}
@@ -237,38 +229,49 @@
         <div class="box-left" />
         <div class="box-bottom px-8 py-5">
             {#if over}
-                {#if wordGuessedCorrectly}
-                    <Localized
-                        id="chat-side-panel-activity-hangman-solution-correct"
-                    /> <span class="font-bold">{solution}</span>
+                {#if characterGuessedCorrectly}
+                    <Overlay
+                        id="chat-side-panel-activity-guess-character-solution-correct"
+                        args={{
+                            solution,
+                            hint,
+                        }}
+                    >
+                        You guessed correctly: <span class="font-bold"
+                            >{solution}</span
+                        >
+                    </Overlay>
                 {:else}
-                    <Localized
-                        id="chat-side-panel-activity-hangman-solution-wrong"
-                    /> <span class="font-bold">{solution}</span>
+                    <Overlay
+                        id="chat-side-panel-activity-guess-character-solution-wrong"
+                        args={{
+                            solution,
+                            hint,
+                        }}
+                    >
+                        The solution would have been: <span
+                            class="font-bold"
+                            data-l10n-name="solution">{solution}</span
+                        >
+                    </Overlay>
                 {/if}
             {:else}
-                {#each word as character}
-                    <span class="character">
-                        {#if character === null}
-                            &nbsp;
-                        {:else}
-                            {character}
-                        {/if}
-                    </span>
-                {/each}
+                <Localized
+                    id="chat-side-panel-activity-guess-character-hint"
+                    args={{ hint: hint || "" }}
+                />
             {/if}
         </div>
         <div class="squirrel-container">
             <div
                 class="relative"
                 style={`transition: transform 400ms ease-in-out; transform: translateY(-${Math.min(
-                    wrongLetterGuesses * WRONG_LETTER_MOVE_Y_PX +
-                        wrongWordGuesses * WRONG_WORD_MOVE_Y_PX,
+                    wrongCharacterGuesses * WRONG_CHARACTER_MOVE_Y_PX,
                     MAX_MOVE_Y_PX
                 )}px)`}
             >
                 <img src="/squirrel.png" alt="Squirrel" />
-                {#if over && !wordGuessedCorrectly}
+                {#if over && !characterGuessedCorrectly}
                     <div
                         class="absolute font-bold"
                         style="right: 64px; top: 36px;"
@@ -290,11 +293,13 @@
         </div>
     </div>
     <form on:submit|preventDefault={handleSubmit}>
-        <label for="hangman-input"
-            ><Localized id="chat-side-panel-activity-hangman-guess" /></label
+        <label for="guess-character-input"
+            ><Localized
+                id="chat-side-panel-activity-guess-character-guess"
+            /></label
         >
         <input
-            id="hangman-input"
+            id="guess-character-input"
             class="border border-gray shadow-md inline-flex"
             bind:value={inputValue}
             required
@@ -307,7 +312,7 @@
             disabled={over || forceDisableInputs || !$currentUserIsGroupMember}
             on:click={handleEnter}
             ><Localized
-                id="chat-side-panel-activity-hangman-enter"
+                id="chat-side-panel-activity-guess-character-enter"
             /></ButtonSmall
         >
     </form>

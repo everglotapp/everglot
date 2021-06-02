@@ -147,6 +147,7 @@ export class HangmanGame {
                 )
             return true
         }
+        // Game is not over as long as there are missing letters in the word
         for (let i = 0; i < this.#word!.length; ++i) {
             if (!this.#pickedLetters.includes(this.#word![i].toLowerCase())) {
                 return false
@@ -287,7 +288,7 @@ export async function handleUserConnected(
                     guess,
                     success,
                 })
-                .debug("User attempted hangman guess")
+                .trace("User attempted hangman guess")
             // Tell group users about the new game state.
             io.to(chatUser.groupUuid).emit(
                 "groupActivity",

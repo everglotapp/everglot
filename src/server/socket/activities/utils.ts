@@ -1,6 +1,8 @@
 import { getGroupLanguageByUuid } from "../../groups"
 
 import {
+    GuessCharacterLocale,
+    GUESS_CHARACTER_LOCALES,
     HangmanLocale,
     HANGMAN_LOCALES,
     RandomQuestionLocale,
@@ -10,6 +12,10 @@ import {
 } from "../../../constants"
 
 import hangman, { HangmanGame, games as hangmanGames } from "./hangman"
+import guessCharacter, {
+    GuessCharacterGame,
+    games as guessCharacterGames,
+} from "./guessCharacter"
 import wouldYouRather, {
     WouldYouRatherGame,
     games as wouldYouRatherGames,
@@ -19,7 +25,13 @@ import randomQuestion, {
     games as randomQuestionGames,
 } from "./randomQuestion"
 
-import { GroupActivityKind } from "../../../types/activities"
+import {
+    GroupActivityKind,
+    GuessCharacterGroupActivity,
+    HangmanGroupActivity,
+    RandomQuestionGroupActivity,
+    WouldYouRatherGroupActivity,
+} from "../../../types/activities"
 import type { GroupActivity } from "../../../types/activities"
 import type { Group } from "../../../types/generated/graphql"
 
@@ -49,6 +61,8 @@ export async function startGroupActivity(
         groupActivities[groupUuid] = await makeWouldYouRatherActivity(groupUuid)
     } else if (kind === GroupActivityKind.RandomQuestion) {
         groupActivities[groupUuid] = await makeRandomQuestionActivity(groupUuid)
+    } else if (kind === GroupActivityKind.GuessCharacter) {
+        groupActivities[groupUuid] = await makeGuessCharacterActivity(groupUuid)
     } else {
         groupActivities[groupUuid] = {
             kind,
@@ -85,6 +99,11 @@ export function getGroupActivity(
             kind: activity.kind,
             state: hangman.getPublicState(groupUuid),
         }
+    } else if (activity.kind === GroupActivityKind.GuessCharacter) {
+        return {
+            kind: activity.kind,
+            state: guessCharacter.getPublicState(groupUuid),
+        }
     } else if (activity.kind === GroupActivityKind.WouldYouRather) {
         return {
             kind: activity.kind,
@@ -101,7 +120,7 @@ export function getGroupActivity(
 
 async function makeHangmanActivity(
     groupUuid: Group["uuid"]
-): Promise<GroupActivity | null> {
+): Promise<HangmanGroupActivity | null> {
     const group = await getGroupLanguageByUuid(groupUuid)
     if (!group || !group.groupByUuid?.language?.alpha2) {
         chlog
@@ -136,7 +155,7 @@ async function makeHangmanActivity(
 
 async function makeWouldYouRatherActivity(
     groupUuid: Group["uuid"]
-): Promise<GroupActivity | null> {
+): Promise<WouldYouRatherGroupActivity | null> {
     const group = await getGroupLanguageByUuid(groupUuid)
     if (!group || !group.groupByUuid?.language?.alpha2) {
         chlog
@@ -171,7 +190,7 @@ async function makeWouldYouRatherActivity(
 
 async function makeRandomQuestionActivity(
     groupUuid: Group["uuid"]
-): Promise<GroupActivity | null> {
+): Promise<RandomQuestionGroupActivity | null> {
     const group = await getGroupLanguageByUuid(groupUuid)
     if (!group || !group.groupByUuid?.language?.alpha2) {
         chlog
@@ -200,6 +219,41 @@ async function makeRandomQuestionActivity(
     }
     return {
         kind: GroupActivityKind.RandomQuestion,
+        state: game.publicState,
+    }
+}
+
+async function makeGuessCharacterActivity(
+    groupUuid: Group["uuid"]
+): Promise<GuessCharacterGroupActivity | null> {
+    const group = await getGroupLanguageByUuid(groupUuid)
+    if (!group || !group.groupByUuid?.language?.alpha2) {
+        chlog
+            .child({
+                groupUuid,
+            })
+            .debug("Group not found")
+        return null
+    }
+    const alpha2 = group.groupByUuid?.language?.alpha2
+    if (!GUESS_CHARACTER_LOCALES.some((locale) => locale === alpha2)) {
+        chlog
+            .child({
+                groupUuid,
+                alpha2,
+            })
+            .debug("Group locale does not support Guess Character")
+        return null
+    }
+    const game = (guessCharacterGames[groupUuid] ||= new GuessCharacterGame(
+        alpha2 as GuessCharacterLocale
+    ))
+    if (!(await game.start())) {
+        delete guessCharacterGames[groupUuid]
+        return null
+    }
+    return {
+        kind: GroupActivityKind.GuessCharacter,
         state: game.publicState,
     }
 }

@@ -25,14 +25,58 @@ chat-sidebar-controls-mic = Mikro
 chat-sidebar-controls-audio = Ton
 chat-sidebar-controls-toggle-on = An
 chat-sidebar-controls-toggle-off = Aus
-chat-sidebar-start-call = Anruf starten
+chat-sidebar-start-call = Anruf beitreten
+chat-sidebar-leave-call = Anruf verlassen
+chat-sidebar-switch-call-text = Du bist schon in einem Anruf, willst du zu dieser Gruppe wechseln?
+chat-sidebar-switch-call-cancel = Abbrechen
+chat-sidebar-switch-call-confirm = Wechseln
+chat-side-panel-bubble = Willkommen im Spiele-Zentrum. Wähle ein Spiel, das deine Lerngruppe gemeinsam spielen soll.
+chat-side-panel-menu-hangman = Galgenmännchen spielen
+chat-side-panel-menu-would-you-rather = Würdest-Du-Lieber spielen
+chat-side-panel-menu-random-question = Zufällige Frage stellen
+chat-side-panel-menu-guess-character = Rate das Zeichen spielen
+chat-side-panel-activity-hangman = Galgenmännchen
+chat-side-panel-activity-would-you-rather = Würdest-Du-Lieber
+chat-side-panel-activity-random-question = Zufällige Frage
+chat-side-panel-activity-guess-character = Rate das Zeichen
+chat-side-panel-activity-quit = Spiel beenden
+chat-side-panel-activity-hangman-guess = Errate das Wort
+chat-side-panel-activity-hangman-enter = Raten
+chat-side-panel-activity-hangman-solution-correct = Du hast richtig geraten:
+chat-side-panel-activity-hangman-solution-wrong = Das Wort wäre gewesen:
+chat-side-panel-activity-hangman-feedback-guess-correct = { $username } hat { $guess } geraten und lag richtig!
+chat-side-panel-activity-hangman-feedback-guess-wrong = { $username } hat { $guess } geraten und lag falsch!
+chat-side-panel-activity-hangman-feedback-own-guess-correct = { $guess } ist richtig, sehr gut!
+chat-side-panel-activity-hangman-feedback-own-guess-wrong = { $guess } ist nicht richtig, Vorsicht!
+chat-side-panel-activity-hangman-feedback-letter-already-picked = Der Buchstabe { $input } wurde bereits probiert
+chat-side-panel-activity-hangman-feedback-letter-not-available = Das Zeichen { $badLetter } ist ungültig
+chat-side-panel-activity-guess-character-guess = Errate das Zeichen
+chat-side-panel-activity-guess-character-enter = Raten
+chat-side-panel-activity-guess-character-hint = Hinweis: { $hint }
+chat-side-panel-activity-guess-character-solution-correct = Du hast richtig geraten: { $solution } ({ $hint })
+chat-side-panel-activity-guess-character-solution-wrong = Das Zeichen wäre gewesen: { $solution } ({ $hint })
+chat-side-panel-activity-guess-character-feedback-guess-correct = { $username } hat { $guess } geraten und lag richtig!
+chat-side-panel-activity-guess-character-feedback-guess-wrong = { $username } hat { $guess } geraten und lag falsch!
+chat-side-panel-activity-guess-character-feedback-own-guess-correct = { $guess } ist richtig, sehr gut!
+chat-side-panel-activity-guess-character-feedback-own-guess-wrong = { $guess } ist nicht richtig, Vorsicht!
+chat-side-panel-activity-guess-character-feedback-character-single-characters-only = Nur einzelne Zeichen sind gültig, du hast { $input } geschrieben
+chat-side-panel-activity-guess-character-feedback-character-already-picked = Das Zeichen { $input } wurde bereits probiert
+chat-side-panel-activity-guess-character-feedback-character-not-available = Das Zeichen { $badLetter } ist ungültig
+chat-side-panel-activity-would-you-rather-picked-answer = Du hast <strong class="text-gray-bitdark">{ $answer }</strong> gewählt!
+chat-side-panel-activity-would-you-rather-timer =
+    Die Umfrage endet in { $seconds ->
+        [one] { $seconds } Sekunde
+       *[other] { $seconds } Sekunden
+    }.
 chat-submit-form-send = Senden
 chat-submit-form-connecting = Verbinde …
-chat-submit-form-input = {""}
+# Chat text message input field
+chat-submit-form-input = { "" }
     .placeholder = Nachricht eingeben …
 chat-message-username-unknown = unbekannt
 chat-message-show-less = Weniger anzeigen
 chat-message-show-more = Mehr anzeigen
+chat-message-username-bot = Ebo
 
 ## Main Navigation
 
@@ -41,6 +85,7 @@ main-nav-groups = Gruppen
 main-nav-profile = Profil
 main-nav-invite-friends = Freunde einladen
 main-nav-logout = Abmelden
+main-nav-go-to-call = Zum Anruf gehen
 
 ## Signup successful page
 
@@ -68,6 +113,7 @@ login-form-email = E-Mail
 login-form-password = Passwort
 login-form-submit = Einloggen
 login-form-signup = Ich habe keinen Account
+login-form-google = Mit Google einloggen
 
 ## Join page
 
@@ -77,6 +123,7 @@ join-form-email = E-Mail
 join-form-password = Passwort
 join-form-submit = Registrieren
 join-form-login = Ich habe schon einen Account
+join-form-google = Meinen Google-Account nutzen
 
 ## Signup page
 
@@ -127,11 +174,13 @@ user-bio-error = Fehler
 
 global-browser-window-title = Global – { -brand-name }
 global-sidebar-language = Sprache
+global-main-channels = Kanäle
 global-group-members-count =
     { $membersCount } { $membersCount ->
         [one] Mitglied
        *[other] Mitglieder
     }
+global-error = Fehler
 
 ## Profile page
 
@@ -149,7 +198,10 @@ profile-gender-unknown = unbekannt
 profile-languages = Meine Sprachen
 profile-language-native-hint = (Muttersprache)
 profile-groups = Meine Gruppen
+profile-avatar-upload-failed = Dein Avatar konnte nicht erfolgreich geändert werden. Probiere es noch einmal.
+
 ## Locales
+
 locale-en = Englisch
 locale-de = Deutsch
 locale-zh = Chinesisch

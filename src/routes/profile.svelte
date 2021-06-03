@@ -72,6 +72,11 @@
                 errorId = "profile-avatar-upload-failed"
             })
     }
+
+    $: email = userProfile?.email
+    $: username = userProfile?.username
+    $: gender = userProfile?.gender
+    $: avatarUrl = userProfile?.avatarUrl
 </script>
 
 <svelte:head />
@@ -95,21 +100,21 @@
         <div class="flex flex-row flex-wrap-reverse">
             <div class="w-full md:w-1/2">
                 <h4><Localized id="profile-email" /></h4>
-                <div class="mb-4">{userProfile?.email}</div>
+                <div class="mb-4">{email || ""}</div>
                 <div>
                     <a href="/changepassword">
                         <Localized id="profile-change-password" />
                     </a>
                 </div>
                 <h4><Localized id="profile-username" /></h4>
-                <div>{userProfile?.username}</div>
+                <div>{username || ""}</div>
                 <h4><Localized id="profile-gender" /></h4>
                 <div>
-                    {#if userProfile?.gender == Gender.MALE}
+                    {#if gender == Gender.MALE}
                         <Localized id="profile-gender-male" />
-                    {:else if userProfile?.gender == Gender.FEMALE}
+                    {:else if gender == Gender.FEMALE}
                         <Localized id="profile-gender-female" />
-                    {:else if userProfile?.gender == Gender.OTHER}
+                    {:else if gender == Gender.OTHER}
                         <Localized id="profile-gender-other" />
                     {:else}
                         <Localized id="profile-gender-unknown" />
@@ -124,10 +129,10 @@
                         style="border-radius: 50%; width: 96px; height: 96px;"
                     >
                         <Avatar
-                            username={userProfile?.username || ""}
+                            username={username || ""}
                             url={$userProfileStore.fetching && newAvatarUrl
                                 ? newAvatarUrl
-                                : userProfile?.avatarUrl || ""}
+                                : avatarUrl || ""}
                             size={96}
                         />
                     </div>
@@ -167,11 +172,13 @@
             <ul>
                 {#each userLanguages as language}
                     <li>
-                        {language.language?.englishName}
-                        {#if language?.native}
+                        {language.language ? language.language.englishName : ""}
+                        {#if language && language.native}
                             <Localized id="profile-language-native-hint" />
                         {:else}
-                            ({language?.languageSkillLevel?.name})
+                            ({language && language.languageSkillLevel
+                                ? language.languageSkillLevel.name || ""
+                                : ""})
                         {/if}
                     </li>
                 {/each}
@@ -180,22 +187,34 @@
             <h4><Localized id="profile-groups" /></h4>
             <ul>
                 {#each groupUsers as group}
-                    <li>
-                        <ButtonSmall
-                            href={`/chat?group=${group.group?.uuid}`}
-                            on:click={() => ($groupUuid = group.group?.uuid)}
-                            variant="TEXT"
-                            color="PRIMARY"
-                        >
-                            {group.group?.groupName}
-                            {#if group.userType === UserType.Global}
-                                ({group.group?.language?.englishName})
-                            {:else}
-                                ({group.group?.language?.englishName}
-                                {group.group?.languageSkillLevel?.name})
-                            {/if}
-                        </ButtonSmall>
-                    </li>
+                    {#if group.group}
+                        <li>
+                            <ButtonSmall
+                                href={`/chat?group=${group.group.uuid}`}
+                                on:click={() => {
+                                    if (group.group) {
+                                        $groupUuid = group.group.uuid
+                                    }
+                                }}
+                                variant="TEXT"
+                                color="PRIMARY"
+                            >
+                                {group.group.groupName}
+                                {#if group.userType === UserType.Global}
+                                    ({group.group.language
+                                        ? group.group.language.englishName
+                                        : ""})
+                                {:else}
+                                    ({group.group.language
+                                        ? group.group.language.englishName
+                                        : ""}
+                                    {group.group.languageSkillLevel
+                                        ? group.group.languageSkillLevel.name
+                                        : ""})
+                                {/if}
+                            </ButtonSmall>
+                        </li>
+                    {/if}
                 {/each}
             </ul>
         </div>

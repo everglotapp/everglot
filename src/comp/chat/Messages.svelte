@@ -109,6 +109,10 @@
             }
         }, 150)
     })
+
+    $: hasEarlierMessages =
+        $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId
+            .pageInfo.hasPreviousPage
 </script>
 
 <div class="messages" on:scroll={handleScroll} bind:this={messagesContainer}>
@@ -127,7 +131,7 @@
                 className="text-sm mb-2">Try again</ButtonSmall
             >
         </div>
-    {:else if $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId.pageInfo.hasPreviousPage}
+    {:else if hasEarlierMessages}
         <div class="flex justify-center">
             <ButtonSmall
                 tag="button"

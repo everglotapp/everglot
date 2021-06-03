@@ -218,11 +218,15 @@
                                                             ($groupUuid =
                                                                 group.uuid)}
                                                         >{group.groupName || ""}
-                                                        ({group.language?.alpha2.toUpperCase() ||
-                                                            ""}
-                                                        {group
-                                                            ?.languageSkillLevel
-                                                            ?.name || ""})
+                                                        ({group.language
+                                                            ? group.language.alpha2.toUpperCase() ||
+                                                              ""
+                                                            : ""}
+                                                        {group.languageSkillLevel
+                                                            ? group
+                                                                  .languageSkillLevel
+                                                                  .name || ""
+                                                            : ""})
                                                         {#if group.uuid === $joinedCallRoom}<MicIcon
                                                                 size="18"
                                                                 class="text-gray-bitdark ml-2"
@@ -393,8 +397,12 @@
                     >
                         {#if !$currentUserStore.fetching}
                             <Avatar
-                                url={$currentUser?.avatarUrl || ""}
-                                username={$currentUser?.username || ""}
+                                url={$currentUser
+                                    ? $currentUser.avatarUrl || ""
+                                    : ""}
+                                username={$currentUser
+                                    ? $currentUser.username || ""
+                                    : ""}
                                 size={42}
                             />
                             {#if $joinedCallRoom}

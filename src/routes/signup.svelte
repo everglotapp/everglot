@@ -306,8 +306,11 @@
                     {#each learningCodes as code}
                         <div class="level flex items-center py-1">
                             <label for={`level_${code}`}>
-                                {languages.find(({ alpha2 }) => alpha2 === code)
-                                    ?.englishName}:
+                                {languages
+                                    .filter(({ alpha2 }) => alpha2 === code)
+                                    .map(
+                                        (language) => language.englishName
+                                    )[0] || ""}:
                             </label>
                             <div>
                                 <select
@@ -373,8 +376,12 @@
                                         id="signup-form-not-supported-msg"
                                         args={{
                                             learnCount: learnOther.length,
-                                            lang1: learnOther[0]?.label || "",
-                                            lang2: learnOther[1]?.label || "",
+                                            lang1: learnOther[0]
+                                                ? learnOther[0].label || ""
+                                                : "",
+                                            lang2: learnOther[1]
+                                                ? learnOther[1].label || ""
+                                                : "",
                                         }}
                                     >
                                         <p data-l10n-name="sorry" />

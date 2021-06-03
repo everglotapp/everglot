@@ -19,7 +19,7 @@
                 {#if $currentGroupLocale !== null}
                     <Localized id={`locale-${$currentGroupLocale}`} />
                 {/if}
-                {#if $languageSkillLevel?.name}
+                {#if $languageSkillLevel && languageSkillLevel.name}
                     &nbsp;{$languageSkillLevel.name}
                 {/if}</span
             >

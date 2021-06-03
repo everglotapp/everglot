@@ -8,6 +8,6 @@ module.exports = {
             },
         }),
         require("autoprefixer"),
-        // require("cssnano"), // TODO: activate as soon as PostCSS is supported by cssnano (https://github.com/cssnano/cssnano/issues/952)
+        require("cssnano"),
     ],
 }

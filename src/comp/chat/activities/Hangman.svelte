@@ -2,7 +2,7 @@
     import { createEventDispatcher, getContext } from "svelte"
     import { scale } from "svelte/transition"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
-    import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/FluentProvider.svelte"
+    import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
     import Headline4 from "../../typography/Headline4.svelte"

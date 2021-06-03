@@ -3,7 +3,7 @@
     import { svelteTime } from "svelte-time"
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
-    import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/FluentProvider.svelte"
+    import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
 
     // @ts-ignore
     import _anchorme from "anchorme"
@@ -246,7 +246,7 @@
         <div class="meta">
             <div class="flex items-center">
                 {#if userUuid}
-                    {#if user?.username}
+                    {#if user && user.username}
                         <span
                             class="username mr-2 cursor-pointer"
                             on:click={(event) => {

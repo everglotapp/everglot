@@ -46,7 +46,6 @@ declare module "*.ftl" {
 
 declare module "svelte-feather-icons"
 declare module "svelte-emoji-selector"
-declare module "@graphile-contrib/pg-many-to-many"
 declare module "@nubolab-ffwd/svelte-fluent"
 
 // From https://raw.githubusercontent.com/icebob/fakerator/master/fakerator.d.ts

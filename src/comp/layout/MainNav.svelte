@@ -601,7 +601,7 @@
         }
     }
 
-    .avatar {
+    :global(.avatar) {
         border-radius: 50%;
         width: 42px;
         height: 42px;
@@ -613,7 +613,7 @@
         @apply items-center;
     }
 
-    .avatar > .initial {
+    :global(.avatar > .initial) {
         height: 1.625rem;
     }
 

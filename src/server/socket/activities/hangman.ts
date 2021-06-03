@@ -332,6 +332,7 @@ export async function handleEnded(
     _activity: GroupActivity
 ) {
     const { groupUuid } = chatUser
+    delete games[groupUuid]
     const bot = bots[groupUuid]
     if (bot) {
         await bot.send("hangman-ended", {

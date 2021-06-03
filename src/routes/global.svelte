@@ -170,6 +170,10 @@
         @apply overflow-hidden;
         @apply overflow-ellipsis;
         @apply font-normal;
+
+        @screen md {
+            max-width: 368px;
+        }
     }
 
     .group .members-count {

@@ -1,4 +1,4 @@
-import { ALPHABET } from "../../../constants"
+import { ALPHABET, HANGMAN_LOCALES } from "../../../constants"
 import type { HangmanLocale } from "../../../constants"
 import { getCurrentUser } from "../users"
 import {
@@ -15,6 +15,7 @@ import type { Group } from "../../../types/generated/graphql"
 import type { Server as SocketIO } from "socket.io"
 import { bots } from ".."
 import type { ChatUser } from "../../../types/chat"
+import { getGroupLanguageByUuid } from "../../groups"
 
 const chlog = log.child({
     namespace: "hangman",
@@ -332,7 +333,7 @@ export async function handleEnded(
     _activity: GroupActivity
 ) {
     const { groupUuid } = chatUser
-    delete games[groupUuid]
+    end(groupUuid)
     const bot = bots[groupUuid]
     if (bot) {
         await bot.send("hangman-ended", {
@@ -344,9 +345,43 @@ export async function handleEnded(
 export const getPublicState = (groupUuid: Group["uuid"]) =>
     games[groupUuid].publicState
 
+export async function start(groupUuid: Group["uuid"]) {
+    const group = await getGroupLanguageByUuid(groupUuid)
+    if (!group || !group.groupByUuid?.language?.alpha2) {
+        chlog
+            .child({
+                groupUuid,
+            })
+            .debug("Group not found")
+        return null
+    }
+    const alpha2 = group.groupByUuid?.language?.alpha2
+    if (!HANGMAN_LOCALES.some((locale) => locale === alpha2)) {
+        chlog
+            .child({
+                groupUuid,
+                alpha2,
+            })
+            .debug("Group locale does not support hangman")
+        return null
+    }
+    const game = (games[groupUuid] ||= new HangmanGame(alpha2 as HangmanLocale))
+    if (!(await game.start())) {
+        end(groupUuid)
+        return null
+    }
+    return {
+        kind: GroupActivityKind.Hangman,
+        state: game.publicState,
+    }
+}
+
+const end = (groupUuid: Group["uuid"]) => delete games[groupUuid]
+
 export default {
     handleStarted,
     handleEnded,
     handleUserConnected,
     getPublicState,
+    start,
 }

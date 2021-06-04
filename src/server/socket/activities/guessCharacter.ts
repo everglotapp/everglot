@@ -1,4 +1,7 @@
-import type { GuessCharacterLocale } from "../../../constants"
+import {
+    GuessCharacterLocale,
+    GUESS_CHARACTER_LOCALES,
+} from "../../../constants"
 import { getCurrentUser } from "../users"
 import {
     GroupActivity,
@@ -18,6 +21,7 @@ import type {
 import type { Server as SocketIO } from "socket.io"
 import { bots } from ".."
 import type { ChatUser } from "../../../types/chat"
+import { getGroupLanguageByUuid } from "../../groups"
 
 const chlog = log.child({
     namespace: "guess-character",
@@ -277,6 +281,7 @@ export async function handleEnded(
     _activity: GroupActivity
 ) {
     const { groupUuid } = chatUser
+    delete games[groupUuid]
     const bot = bots[groupUuid]
     if (bot) {
         await bot.send("guess-character-ended", {
@@ -288,9 +293,45 @@ export async function handleEnded(
 export const getPublicState = (groupUuid: Group["uuid"]) =>
     games[groupUuid].publicState
 
+export async function start(groupUuid: Group["uuid"]) {
+    const group = await getGroupLanguageByUuid(groupUuid)
+    if (!group || !group.groupByUuid?.language?.alpha2) {
+        chlog
+            .child({
+                groupUuid,
+            })
+            .debug("Group not found")
+        return null
+    }
+    const alpha2 = group.groupByUuid?.language?.alpha2
+    if (!GUESS_CHARACTER_LOCALES.some((locale) => locale === alpha2)) {
+        chlog
+            .child({
+                groupUuid,
+                alpha2,
+            })
+            .debug("Group locale does not support Guess Character")
+        return null
+    }
+    const game = (games[groupUuid] ||= new GuessCharacterGame(
+        alpha2 as GuessCharacterLocale
+    ))
+    if (!(await game.start())) {
+        end(groupUuid)
+        return null
+    }
+    return {
+        kind: GroupActivityKind.GuessCharacter,
+        state: game.publicState,
+    }
+}
+
+const end = (groupUuid: Group["uuid"]) => delete games[groupUuid]
+
 export default {
     handleStarted,
     handleEnded,
     handleUserConnected,
     getPublicState,
+    start,
 }

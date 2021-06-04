@@ -8,8 +8,7 @@ const socketHistories: Record<string, SocketHistory> = {}
 
 const users: ChatUser[] = []
 
-// Join user to chat
-export function userJoin(
+export function handleJoin(
     socket: EverglotChatSocket,
     user: Pick<User, "id" | "username" | "uuid" | "avatarUrl">,
     groupUuid: Group["uuid"]
@@ -36,7 +35,6 @@ export function userJoin(
     }
 }
 
-// Get current user
 export function getCurrentUser(socket: EverglotChatSocket) {
     const { session } = socket.request
     if (!session.user_id) {
@@ -50,8 +48,7 @@ export function getCurrentUser(socket: EverglotChatSocket) {
     )
 }
 
-// User leaves chat
-export function userLeave(socket: EverglotChatSocket) {
+export function handleLeave(socket: EverglotChatSocket) {
     const index = users.findIndex((user) => user.socketId === socket.id)
 
     if (index !== -1) {
@@ -59,7 +56,9 @@ export function userLeave(socket: EverglotChatSocket) {
     }
 }
 
-// Get room users
+/**
+ * @returns The users currently in the given group's chat room.
+ */
 export function getGroupChatUsers(groupUuid: Group["uuid"]) {
     return users
         .filter((user) => user.groupUuid === groupUuid)
@@ -70,12 +69,23 @@ export function getGroupChatUsers(groupUuid: Group["uuid"]) {
         }))
 }
 
-// Whether user has been greeted before.
-export function userIsNew(user: ChatUser) {
-    return !socketHistories[user.socketId].greeted
+/**
+ * @returns Whether user has been greeted before.
+ */
+export function hasBeenGreeted(user: ChatUser) {
+    return socketHistories[user.socketId].greeted
 }
 
-// Mark user as greeted.
-export function userGreeted(user: ChatUser) {
+/** Mark user as greeted. */
+export function handleGreeted(user: ChatUser) {
     socketHistories[user.socketId].greeted = true
+}
+
+export default {
+    handleJoin,
+    handleLeave,
+    handleGreeted,
+    getCurrentUser,
+    hasBeenGreeted,
+    getGroupChatUsers,
 }

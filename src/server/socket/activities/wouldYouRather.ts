@@ -11,7 +11,10 @@ import type {
     GermanWouldYouRatherQuestion,
     Group,
 } from "../../../types/generated/graphql"
-import type { WouldYouRatherLocale } from "../../../constants"
+import {
+    WouldYouRatherLocale,
+    WOULD_YOU_RATHER_LOCALES,
+} from "../../../constants"
 import type { Server as SocketIO } from "socket.io"
 
 import { db } from "../../db"
@@ -19,6 +22,7 @@ import { db } from "../../db"
 import log from "../../../logger"
 import { bots } from ".."
 import type { ChatUser } from "../../../types/chat"
+import { getGroupLanguageByUuid } from "../../groups"
 
 const chlog = log.child({
     namespace: "would-you-rather",
@@ -268,9 +272,45 @@ export async function handleEnded(
 export const getPublicState = (groupUuid: Group["uuid"]) =>
     games[groupUuid].publicState
 
+export async function start(groupUuid: Group["uuid"]) {
+    const group = await getGroupLanguageByUuid(groupUuid)
+    if (!group || !group.groupByUuid?.language?.alpha2) {
+        chlog
+            .child({
+                groupUuid,
+            })
+            .debug("Group not found")
+        return null
+    }
+    const alpha2 = group.groupByUuid?.language?.alpha2
+    if (!WOULD_YOU_RATHER_LOCALES.some((locale) => locale === alpha2)) {
+        chlog
+            .child({
+                groupUuid,
+                alpha2,
+            })
+            .debug("Group locale does not support Would You Rather")
+        return null
+    }
+    const game = (games[groupUuid] ||= new WouldYouRatherGame(
+        alpha2 as WouldYouRatherLocale
+    ))
+    if (!(await game.start())) {
+        end(groupUuid)
+        return null
+    }
+    return {
+        kind: GroupActivityKind.WouldYouRather,
+        state: game.publicState,
+    }
+}
+
+const end = (groupUuid: Group["uuid"]) => delete games[groupUuid]
+
 export default {
     handleStarted,
     handleEnded,
     handleUserConnected,
     getPublicState,
+    start,
 }

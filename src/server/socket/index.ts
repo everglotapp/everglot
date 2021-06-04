@@ -4,7 +4,7 @@ import log from "../../logger"
 
 import session from "../middlewares/session"
 
-import { userJoin, userLeave, userIsNew, userGreeted } from "./users"
+import users from "./users"
 import call from "./call"
 import activities from "./activities"
 import messages from "./messages"
@@ -68,9 +68,9 @@ export function start(server: Server, pool: Pool) {
                 io
             )
 
-            const chatUser = userJoin(socket, userMeta, groupUuid)
+            const chatUser = users.handleJoin(socket, userMeta, groupUuid)
             socket.join(groupUuid)
-            if (userIsNew(chatUser) && chatUser?.user?.username) {
+            if (!users.hasBeenGreeted(chatUser) && chatUser?.user?.username) {
                 /**
                  * TODO: Store first greeting date in group membership table.
                  * Only greet user once per group:
@@ -81,7 +81,7 @@ export function start(server: Server, pool: Pool) {
                 //     username: chatUser.user.username,
                 // })
 
-                userGreeted(chatUser)
+                users.handleGreeted(chatUser)
             }
 
             socket.emit("welcome", {
@@ -102,12 +102,12 @@ export function start(server: Server, pool: Pool) {
 
         // Listen for chatMessage
         socket.on("leaveRoom", () => {
-            userLeave(socket)
+            users.handleLeave(socket)
         })
 
         // Runs when client disconnects
         socket.on("disconnect", () => {
-            const chatUser = userLeave(socket)
+            const chatUser = users.handleLeave(socket)
             if (!chatUser) {
                 return
             }

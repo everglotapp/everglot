@@ -1,5 +1,6 @@
-import type {
+import {
     GroupActivity,
+    GroupActivityKind,
     RandomQuestionState,
 } from "../../../types/activities"
 import type {
@@ -8,8 +9,9 @@ import type {
     GermanRandomQuestion,
     Group,
 } from "../../../types/generated/graphql"
-import type {
+import {
     RandomQuestionLocale,
+    RANDOM_QUESTION_LOCALES,
     WouldYouRatherLocale,
 } from "../../../constants"
 import type { Server as SocketIO } from "socket.io"
@@ -19,6 +21,7 @@ import { db } from "../../db"
 import log from "../../../logger"
 import { bots } from ".."
 import type { ChatUser } from "../../../types/chat"
+import { getGroupLanguageByUuid } from "../../groups"
 
 const chlog = log.child({
     namespace: "would-you-rather",
@@ -99,6 +102,7 @@ export async function handleEnded(
     _activity: GroupActivity
 ) {
     const { groupUuid } = chatUser
+    end(groupUuid)
     const bot = bots[groupUuid]
     if (bot) {
         await bot.send("random-question-ended", {
@@ -110,8 +114,44 @@ export async function handleEnded(
 export const getPublicState = (groupUuid: Group["uuid"]) =>
     games[groupUuid].publicState
 
+export async function start(groupUuid: Group["uuid"]) {
+    const group = await getGroupLanguageByUuid(groupUuid)
+    if (!group || !group.groupByUuid?.language?.alpha2) {
+        chlog
+            .child({
+                groupUuid,
+            })
+            .debug("Group not found")
+        return null
+    }
+    const alpha2 = group.groupByUuid?.language?.alpha2
+    if (!RANDOM_QUESTION_LOCALES.some((locale) => locale === alpha2)) {
+        chlog
+            .child({
+                groupUuid,
+                alpha2,
+            })
+            .debug("Group locale does not support Random Question activity")
+        return null
+    }
+    const game = (games[groupUuid] ||= new RandomQuestionGame(
+        alpha2 as RandomQuestionLocale
+    ))
+    if (!(await game.start())) {
+        end(groupUuid)
+        return null
+    }
+    return {
+        kind: GroupActivityKind.RandomQuestion,
+        state: game.publicState,
+    }
+}
+
+const end = (groupUuid: Group["uuid"]) => delete games[groupUuid]
+
 export default {
     handleStarted,
     handleEnded,
     getPublicState,
+    start,
 }

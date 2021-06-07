@@ -1,7 +1,6 @@
 import { getChatUserByUserId } from "./utils"
 import { authenticateUserInGroup } from "../auth"
 
-import type { Group, User } from "../../types/generated/graphql"
 import type { VoiceChatUser } from "../../types/call"
 import log from "../../logger"
 import { getAllGroupUuids } from "../groups"

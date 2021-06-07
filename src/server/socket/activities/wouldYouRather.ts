@@ -9,7 +9,6 @@ import type {
     ChineseWouldYouRatherQuestion,
     EnglishWouldYouRatherQuestion,
     GermanWouldYouRatherQuestion,
-    Group,
 } from "../../../types/generated/graphql"
 import {
     WouldYouRatherLocale,
@@ -302,6 +301,7 @@ export async function start(groupUuid: string) {
     return {
         kind: GroupActivityKind.WouldYouRather,
         state: game.publicState,
+        groupUuid,
     }
 }
 

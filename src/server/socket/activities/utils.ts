@@ -5,7 +5,6 @@ import randomQuestion from "./randomQuestion"
 
 import { GroupActivityKind } from "../../../types/activities"
 import type { GroupActivity } from "../../../types/activities"
-import type { Group } from "../../../types/generated/graphql"
 
 import log from "../../../logger"
 
@@ -67,21 +66,25 @@ export function getGroupActivity(groupUuid: string): GroupActivity | null {
         return {
             kind: activity.kind,
             state: hangman.getPublicState(groupUuid),
+            groupUuid,
         }
     } else if (activity.kind === GroupActivityKind.GuessCharacter) {
         return {
             kind: activity.kind,
             state: guessCharacter.getPublicState(groupUuid),
+            groupUuid,
         }
     } else if (activity.kind === GroupActivityKind.WouldYouRather) {
         return {
             kind: activity.kind,
             state: wouldYouRather.getPublicState(groupUuid),
+            groupUuid,
         }
     } else if (activity.kind === GroupActivityKind.RandomQuestion) {
         return {
             kind: activity.kind,
             state: randomQuestion.getPublicState(groupUuid),
+            groupUuid,
         }
     }
     return activity

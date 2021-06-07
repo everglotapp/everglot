@@ -1,6 +1,5 @@
 import { writable, derived, get } from "svelte/store"
 import { groupUuid } from "."
-import type { Group } from "../types/generated/graphql"
 
 import type { VoiceChatUser } from "../types/call"
 

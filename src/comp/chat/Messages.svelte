@@ -1,9 +1,11 @@
 <script lang="ts">
-    import { onMount, afterUpdate } from "svelte"
+    import { onMount, getContext, beforeUpdate, afterUpdate } from "svelte"
 
     import Message from "./Message.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import Spinner from "../util/Spinner.svelte"
+    import { CHAT_CONTEXT } from "../util/ChatProvider.svelte"
+    import type { ChatContext } from "../util/ChatProvider.svelte"
     import { groupChatMessagesStore } from "../../stores/chat"
 
     import type { ChatMessage, ChatMessagePreview } from "../../types/chat"
@@ -19,80 +21,71 @@
     let messagesContainer: HTMLElement | undefined
     export let messages: ChatMessage[] = []
     export let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
-    export let lastSentMessage: ChatMessage | null = null
-    export let lastMessageSentAt: number | null = null
 
-    let latestSentMessageHandledAt: number | null = null
+    const { lastSentMessage, lastMessageSentAt } =
+        getContext<ChatContext>(CHAT_CONTEXT)
+
+    let latestSentMessageHandledAt: number = Date.now()
     let scrollFunction: Function | null = null
+    let scrolledToBottomBeforeRender: boolean = true
+    let containerHeightBeforeRender: number | null = null
 
     $: {
         messages // dependency
         previews // dependency
 
-        console.log("Got new messages or previews")
-        const forceScrollToBottom =
-            messagesContainer && isScrolledToBottom(messagesContainer)
+        console.log("Got new messages or previews", {
+            scrolledToBottomBeforeRender,
+        })
 
-        const tryScroll = () => {
+        const adjustScrollPosition = () => {
             if (!messagesContainer) {
                 console.log("No messages container")
                 return
             }
             const handlingLatestSentMessage =
-                !!latestSentMessageHandledAt &&
-                !!lastSentMessage &&
-                !!lastMessageSentAt &&
-                lastMessageSentAt > latestSentMessageHandledAt
+                !!$lastSentMessage &&
+                !!$lastMessageSentAt &&
+                $lastMessageSentAt > latestSentMessageHandledAt
+            console.log("Adjusting scroll position", {
+                handlingLatestSentMessage,
+                latestSentMessageHandledAt,
+                scrolledToBottomBeforeRender,
+                containerHeightBeforeRender,
+                lastMessageSentAt: $lastMessageSentAt,
+                lastSentMessage: $lastSentMessage,
+            })
+            let forceBottom: boolean = scrolledToBottomBeforeRender
             if (handlingLatestSentMessage) {
                 /**
                  * Force auto-scroll if the user sent the message themselves
                  * or if the user didn't scroll upwards before receiving the message.
                  */
-                const force =
-                    isOwnMessage(lastSentMessage!) ||
-                    isScrolledToBottom(messagesContainer)
-                console.log("[Manually sent message]", {
-                    force,
-                    isOwn: isOwnMessage(lastSentMessage!),
-                    isScrolledToBottom: isScrolledToBottom(messagesContainer),
+                forceBottom ||= isOwnMessage($lastSentMessage!)
+                console.log("[Handling latest sent message]", {
+                    forceBottom,
+                    isOwn: isOwnMessage($lastSentMessage!),
                 })
-                scrollToBottom(messagesContainer, force)
-
                 latestSentMessageHandledAt = Date.now()
-            } else {
-                // handle multiple loaded messages
-                const previousHeight = messagesContainer
-                    ? messagesContainer.scrollHeight
-                    : null
-                if (previousHeight === null) {
-                    console.log(
-                        "[Non manually sent message] No previous height"
-                    )
-                    scrollToBottom(messagesContainer, forceScrollToBottom)
-                    return
-                }
+            }
+            if (containerHeightBeforeRender === null) {
+                console.log("No previous height, forcing bottom")
+                forceBottom = true
+            } else if (!forceBottom) {
+                // Reset scroll position that changed due to new messages being inserted.
                 const heightDifference =
-                    messagesContainer.scrollHeight - previousHeight
-                console.log(
-                    "[Non manually sent message] With previous height",
-                    {
-                        heightDifference,
-                    }
-                )
-                if (heightDifference > 0) {
+                    messagesContainer.scrollHeight - containerHeightBeforeRender
+                console.log("Resetting scroll position", {
+                    heightDifference,
+                    scrollHeight: messagesContainer.scrollHeight,
+                })
+                if (heightDifference !== 0) {
                     messagesContainer.scrollTop += heightDifference
                 }
             }
+            scrollToBottom(messagesContainer, forceBottom)
         }
-        const oldScrollFunction = scrollFunction
-        scrollFunction = () => {
-            if (oldScrollFunction) {
-                oldScrollFunction()
-            }
-            if (tryScroll) {
-                tryScroll()
-            }
-        }
+        scrollFunction = adjustScrollPosition
     }
 
     const FETCH_OLDER_MAX_SCROLL_TOP_PX = 1500
@@ -124,6 +117,18 @@
                 scrollToBottom(messagesContainer)
             }
         }, 150)
+    })
+
+    beforeUpdate(() => {
+        if (messagesContainer) {
+            scrolledToBottomBeforeRender = isScrolledToBottom(messagesContainer)
+            // TODO: Update this scroll height upon new scroll events that happen
+            // before the next afterUpdate() is triggered. Obviously it can change.
+            // The latest scroll height should therefore always be tracked.
+            containerHeightBeforeRender = messagesContainer.scrollHeight
+        } else {
+            containerHeightBeforeRender = null
+        }
     })
 
     afterUpdate(() => {

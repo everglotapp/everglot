@@ -4,7 +4,6 @@
     import { chatUsers } from "../../stores/chat"
 
     import Avatar from "./Avatar.svelte"
-    import type { User } from "../../types/generated/graphql"
 
     export let userUuid: string | null
 

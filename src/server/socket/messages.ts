@@ -13,7 +13,6 @@ const anchorme: typeof _anchorme = _anchorme.default || _anchorme
 import { performQuery } from "../gql"
 
 import type {
-    User,
     CreateMessageMutation,
     CreateMessageMutationVariables,
     CreateMessagePreviewMutation,

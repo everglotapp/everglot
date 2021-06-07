@@ -14,10 +14,7 @@ import { db } from "../../db"
 import log from "../../../logger"
 import { getGroupActivity } from "./utils"
 import { isChineseCharacter } from "../../../utils"
-import type {
-    ChineseGuessCharacterQuestion,
-    Group,
-} from "../../../types/generated/graphql"
+import type { ChineseGuessCharacterQuestion } from "../../../types/generated/graphql"
 import type { Server as SocketIO } from "socket.io"
 import { bots } from ".."
 import type { ChatUser } from "../../../types/chat"
@@ -323,6 +320,7 @@ export async function start(groupUuid: string) {
     return {
         kind: GroupActivityKind.GuessCharacter,
         state: game.publicState,
+        groupUuid,
     }
 }
 

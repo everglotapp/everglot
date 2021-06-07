@@ -7,7 +7,6 @@ import type {
     ChineseRandomQuestion,
     EnglishRandomQuestion,
     GermanRandomQuestion,
-    Group,
 } from "../../../types/generated/graphql"
 import {
     RandomQuestionLocale,
@@ -144,6 +143,7 @@ export async function start(groupUuid: string) {
     return {
         kind: GroupActivityKind.RandomQuestion,
         state: game.publicState,
+        groupUuid,
     }
 }
 

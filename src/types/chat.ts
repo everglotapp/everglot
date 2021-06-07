@@ -1,5 +1,5 @@
 import { MESSAGE_PREVIEW_BASE_PATH } from "../constants"
-import type { Group, User } from "./generated/graphql"
+import type { User } from "./generated/graphql"
 
 export type ChatUser = {
     socketId: string

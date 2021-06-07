@@ -4,6 +4,8 @@
     export interface ChatContext {
         joinedRoom: Readable<string | null>
         connected: Readable<boolean>
+        lastMessageSentAt: Readable<number | null>
+        lastSentMessage: Readable<ChatMessage | null>
         connect: () => void
         disconnect: () => void
         joinRoom: (room: string) => void
@@ -27,14 +29,19 @@
     import type { Socket } from "socket.io-client"
 
     import { setUsersInCall } from "../../stores/call"
+    import type { ChatMessage } from "../../types/chat"
 
     const joinedRoom = writable<string | null>(null)
     const socket = writable<Socket | null>(null)
     const connected = writable(false)
+    const lastSentMessage = writable<ChatMessage | null>(null)
+    const lastMessageSentAt = writable<number | null>(null)
 
     setContext(CHAT_CONTEXT, {
         joinedRoom,
         connected,
+        lastMessageSentAt,
+        lastSentMessage,
         connect,
         disconnect,
         joinRoom,
@@ -124,6 +131,7 @@
         }
         // console.log("Sending", msg)
         $socket.emit("chatMessage", msg)
+        $lastMessageSentAt = Date.now()
         return true
     }
 

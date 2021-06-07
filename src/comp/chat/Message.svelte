@@ -19,8 +19,6 @@
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
 
-    import type { User } from "../../types/generated/graphql"
-
     export let userUuid: string | null
     $: user = userUuid
         ? $chatUsers.find((u) => u?.uuid === userUuid) || null

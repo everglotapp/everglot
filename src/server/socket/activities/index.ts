@@ -6,7 +6,6 @@ import randomQuestion from "./randomQuestion"
 import log from "../../../logger"
 
 import { GroupActivity, GroupActivityKind } from "../../../types/activities"
-import type { Group } from "../../../types/generated/graphql"
 
 import type { Server as SocketIO } from "socket.io"
 import { getCurrentUser } from "../users"

@@ -32,28 +32,26 @@
     import { setCallUserMeta, removeUserFromCall } from "../stores/call"
 
     import { makeChatMessagePreview } from "../types/chat"
-    import type {
-        ChatUser,
-        ChatMessage,
-        ChatMessagePreview,
-    } from "../types/chat"
+    import type { ChatMessage, ChatMessagePreview } from "../types/chat"
 
     import type { GroupActivity } from "../types/activities"
-    import type { Group, User } from "../types/generated/graphql"
 
     import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons"
 
     let messages: ChatMessage[] = []
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
-    let lastSentMessage: ChatMessage | null = null
-    let lastMessageSentAt: number | null = null
     let currentActivity: GroupActivity | null = null
     let currentActivityKnownForGroupUuid: string | null = null
 
     const webrtc = getContext<WebrtcContext>(WEBRTC_CONTEXT)
     const { outgoing, remoteUsers, joinedRoom: joinedCallRoom } = webrtc
     const chat = getContext<ChatContext>(CHAT_CONTEXT)
-    const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
+    const {
+        connected: connectedToChat,
+        joinedRoom: joinedChatRoom,
+        lastSentMessage,
+        lastMessageSentAt,
+    } = chat
 
     let myUuid: string | null = null
 
@@ -199,8 +197,6 @@
         message.userUuid === myUuid
 
     function handleMessage(message: ChatMessage): void {
-        lastSentMessage = message
-        lastMessageSentAt = Date.now()
         messages = [...messages, message]
     }
 
@@ -421,8 +417,6 @@
                                     <Messages
                                         {messages}
                                         {previews}
-                                        {lastSentMessage}
-                                        {lastMessageSentAt}
                                         bind:this={messagesComponent}
                                         {handleEnlargenImage}
                                         {fetchMoreMessages}

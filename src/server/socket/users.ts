@@ -1,4 +1,4 @@
-import type { User, Group } from "../../types/generated/graphql"
+import type { User } from "../../types/generated/graphql"
 import type { ChatUser } from "../../types/chat"
 
 type SocketHistory = {

@@ -14,7 +14,7 @@ const chlog = log.child({
 
 const users: VoiceChatUser[] = []
 
-export function handleUserConnected(_io: SocketIO, socket: EverglotChatSocket) {
+export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     const { session } = socket.request
 
     socket.on("userJoinCall", async ({ groupUuid }: { groupUuid: string }) => {
@@ -38,7 +38,7 @@ export function handleUserConnected(_io: SocketIO, socket: EverglotChatSocket) {
                 .debug("Could not add user to group call")
             return
         }
-        socket.broadcast.to(groupUuid).emit("callUsers", getUsers(groupUuid))
+        io.to(groupUuid).emit("callUsers", getUsers(groupUuid))
     })
 
     socket.on("userLeaveCall", async ({ groupUuid }: { groupUuid: string }) => {
@@ -65,9 +65,10 @@ export function handleUserConnected(_io: SocketIO, socket: EverglotChatSocket) {
                 )
             return
         }
-        socket.broadcast
-            .to(userLeaving.groupUuid)
-            .emit("callUsers", getUsers(userLeaving.groupUuid))
+        io.to(userLeaving.groupUuid).emit(
+            "callUsers",
+            getUsers(userLeaving.groupUuid)
+        )
     })
 
     socket.on(

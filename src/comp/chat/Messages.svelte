@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte"
+    import { onMount, afterUpdate } from "svelte"
 
     import Message from "./Message.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
@@ -23,59 +23,75 @@
     export let lastMessageSentAt: number | null = null
 
     let latestSentMessageHandledAt: number | null = null
+    let scrollFunction: Function | null = null
 
     $: {
         messages // dependency
         previews // dependency
 
+        console.log("Got new messages or previews")
         const forceScrollToBottom =
             messagesContainer && isScrolledToBottom(messagesContainer)
-        const handleLastMessage =
-            !!latestSentMessageHandledAt &&
-            !!lastSentMessage &&
-            !!lastMessageSentAt &&
-            lastMessageSentAt > latestSentMessageHandledAt
 
-        if (handleLastMessage) {
-            // handle single message sent by user
-
-            setTimeout(() => {
-                if (!messagesContainer) {
-                    return
-                }
-
+        const tryScroll = () => {
+            if (!messagesContainer) {
+                console.log("No messages container")
+                return
+            }
+            const handlingLatestSentMessage =
+                !!latestSentMessageHandledAt &&
+                !!lastSentMessage &&
+                !!lastMessageSentAt &&
+                lastMessageSentAt > latestSentMessageHandledAt
+            if (handlingLatestSentMessage) {
                 /**
                  * Force auto-scroll if the user sent the message themselves
                  * or if the user didn't scroll upwards before receiving the message.
                  */
                 const force =
                     isOwnMessage(lastSentMessage!) ||
-                    (!!messagesContainer &&
-                        isScrolledToBottom(messagesContainer))
+                    isScrolledToBottom(messagesContainer)
+                console.log("[Manually sent message]", {
+                    force,
+                    isOwn: isOwnMessage(lastSentMessage!),
+                    isScrolledToBottom: isScrolledToBottom(messagesContainer),
+                })
                 scrollToBottom(messagesContainer, force)
 
                 latestSentMessageHandledAt = Date.now()
-            }, 100)
-        } else {
-            // handle multiple loaded messages
-
-            const previousHeight = messagesContainer
-                ? messagesContainer.scrollHeight
-                : null
-            setTimeout(() => {
-                if (!messagesContainer) {
-                    return
-                }
+            } else {
+                // handle multiple loaded messages
+                const previousHeight = messagesContainer
+                    ? messagesContainer.scrollHeight
+                    : null
                 if (previousHeight === null) {
+                    console.log(
+                        "[Non manually sent message] No previous height"
+                    )
                     scrollToBottom(messagesContainer, forceScrollToBottom)
                     return
                 }
                 const heightDifference =
                     messagesContainer.scrollHeight - previousHeight
+                console.log(
+                    "[Non manually sent message] With previous height",
+                    {
+                        heightDifference,
+                    }
+                )
                 if (heightDifference > 0) {
                     messagesContainer.scrollTop += heightDifference
                 }
-            }, 150)
+            }
+        }
+        const oldScrollFunction = scrollFunction
+        scrollFunction = () => {
+            if (oldScrollFunction) {
+                oldScrollFunction()
+            }
+            if (tryScroll) {
+                tryScroll()
+            }
         }
     }
 
@@ -108,6 +124,13 @@
                 scrollToBottom(messagesContainer)
             }
         }, 150)
+    })
+
+    afterUpdate(() => {
+        if (scrollFunction !== null) {
+            scrollFunction()
+            scrollFunction = null
+        }
     })
 
     $: hasEarlierMessages =

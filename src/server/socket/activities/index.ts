@@ -96,7 +96,7 @@ export async function handleUserConnected(
 export function handleUserJoinedRoom(
     _io: SocketIO,
     socket: EverglotChatSocket,
-    groupUuid: Group["uuid"]
+    groupUuid: string
 ) {
     socket.emit("groupActivity", getGroupActivity(groupUuid))
 }

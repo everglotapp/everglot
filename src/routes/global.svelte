@@ -7,6 +7,8 @@
 
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+    import ErrorMessage from "../comp/util/ErrorMessage.svelte"
+    import Spinner from "../comp/util/Spinner.svelte"
     import Headline3 from "../comp/typography/Headline3.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
 
@@ -57,11 +59,18 @@
 
 <div
     class="container flex gap-x-4 flex-wrap justify-center md:justify-start py-4 md:py-12 w-full max-w-sm md:max-w-4xl"
+    style="min-height: 60vh;"
 >
     {#if $allGroupsStore.fetching}
-        <div />
+        <div
+            class="flex w-full items-center justify-center"
+            style="padding: 30vh 0;"
+            in:scale={{ duration: 100, delay: 600 }}
+        >
+            <Spinner size={48} />
+        </div>
     {:else if $allGroupsStore.error}
-        <Localized id="global-error" />
+        <ErrorMessage><Localized id="global-error" /></ErrorMessage>
     {:else if !$globalGroups.length}
         <RedirectOnce to={"/signup"} />
     {:else}
@@ -87,7 +96,7 @@
                 <Headline3><Localized id="global-main-channels" /></Headline3>
             </div>
             <div
-                class="text-xl font-light px-8 py-2 text-center justify-center"
+                class="text-xl font-light px-0 md:px-8 py-2 text-center justify-center"
                 role="tabpanel"
             >
                 {#each groups[lang] as group (group.uuid)}

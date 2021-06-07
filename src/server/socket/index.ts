@@ -14,7 +14,6 @@ import { getGroupLanguageByUuid } from "../groups"
 import Bot from "./bot"
 
 import type { Pool } from "pg"
-import type { Group } from "../../types/generated/graphql"
 
 import type { Server } from "http"
 import { authenticateUserInGroup } from "../auth"
@@ -24,7 +23,7 @@ const chlog = log.child({
     namespace: "chat",
 })
 
-export const bots: Record<Group["uuid"], Bot> = {}
+export const bots: Record<string, Bot> = {}
 
 export function start(server: Server, pool: Pool) {
     const io = new SocketIO(server)
@@ -86,9 +85,7 @@ export function start(server: Server, pool: Pool) {
 
             socket.emit("welcome", {
                 groupUuid,
-                user: {
-                    uuid: chatUser.user.uuid,
-                },
+                userUuid: chatUser.user.uuid,
             })
 
             // Broadcast to other clients when a client connects

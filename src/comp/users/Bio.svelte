@@ -6,7 +6,7 @@
     import Avatar from "./Avatar.svelte"
     import type { User } from "../../types/generated/graphql"
 
-    export let userUuid: User["uuid"] | null
+    export let userUuid: string | null
 
     $: user = userUuid
         ? $chatUsers.find((u) => u?.uuid === userUuid) || null

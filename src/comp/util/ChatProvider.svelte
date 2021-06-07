@@ -28,10 +28,6 @@
 
     import { setUsersInCall } from "../../stores/call"
 
-    import type { Group } from "../../types/generated/graphql"
-
-    import type { ChatUser } from "../../types/chat"
-
     const joinedRoom = writable<string | null>(null)
     const socket = writable<Socket | null>(null)
     const connected = writable(false)
@@ -74,15 +70,9 @@
             $joinedRoom = null
         })
 
-        s.on(
-            "welcome",
-            (detail: {
-                user: Pick<ChatUser["user"], "uuid">
-                groupUuid: Group["uuid"]
-            }) => {
-                $joinedRoom = detail.groupUuid
-            }
-        )
+        s.on("welcome", (detail: { userUuid: string; groupUuid: string }) => {
+            $joinedRoom = detail.groupUuid
+        })
         s.on("callUsers", setUsersInCall)
 
         $socket = s

@@ -28,7 +28,7 @@ const chlog = log.child({
     namespace: "would-you-rather",
 })
 
-export const games: Record<Group["uuid"], WouldYouRatherGame> = {} as const
+export const games: Record<string, WouldYouRatherGame> = {} as const
 let endActivityTimeout: NodeJS.Timeout | null = null
 
 type WouldYouRatherQuestion =
@@ -269,10 +269,10 @@ export async function handleEnded(
     }
 }
 
-export const getPublicState = (groupUuid: Group["uuid"]) =>
+export const getPublicState = (groupUuid: string) =>
     games[groupUuid].publicState
 
-export async function start(groupUuid: Group["uuid"]) {
+export async function start(groupUuid: string) {
     const group = await getGroupLanguageByUuid(groupUuid)
     if (!group || !group.groupByUuid?.language?.alpha2) {
         chlog
@@ -305,7 +305,7 @@ export async function start(groupUuid: Group["uuid"]) {
     }
 }
 
-const end = (groupUuid: Group["uuid"]) => delete games[groupUuid]
+const end = (groupUuid: string) => delete games[groupUuid]
 
 export default {
     handleStarted,

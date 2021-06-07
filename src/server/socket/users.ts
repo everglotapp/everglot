@@ -11,7 +11,7 @@ const users: ChatUser[] = []
 export function handleJoin(
     socket: EverglotChatSocket,
     user: Pick<User, "id" | "username" | "uuid" | "avatarUrl">,
-    groupUuid: Group["uuid"]
+    groupUuid: string
 ) {
     const chatUser = {
         socketId: socket.id,
@@ -59,7 +59,7 @@ export function handleLeave(socket: EverglotChatSocket) {
 /**
  * @returns The users currently in the given group's chat room.
  */
-export function getGroupChatUsers(groupUuid: Group["uuid"]) {
+export function getGroupChatUsers(groupUuid: string) {
     return users
         .filter((user) => user.groupUuid === groupUuid)
         .map(({ user: { uuid, username, avatarUrl } }) => ({

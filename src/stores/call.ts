@@ -4,7 +4,7 @@ import type { Group } from "../types/generated/graphql"
 
 import type { VoiceChatUser } from "../types/call"
 
-type CallUserRecord = Record<Group["uuid"], readonly VoiceChatUser[]>
+type CallUserRecord = Record<string, readonly VoiceChatUser[]>
 
 const callUsers = writable<CallUserRecord>({})
 const NO_USERS: readonly VoiceChatUser[] = [] as const

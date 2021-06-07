@@ -371,6 +371,21 @@
                                                 >
                                             </div>
                                         {/if}
+                                        <hr class="mt-2" />
+                                        <div>
+                                            <ButtonSmall
+                                                variant="TEXT"
+                                                color="SECONDARY"
+                                                tag="a"
+                                                className="w-full"
+                                                href="https://everglot.com/privacy"
+                                                ><span class="mr-1"
+                                                    ><Localized
+                                                        id="main-nav-privacy"
+                                                    /></span
+                                                ></ButtonSmall
+                                            >
+                                        </div>
                                         <div>
                                             <ButtonSmall
                                                 variant="TEXT"
@@ -509,8 +524,8 @@
     .nav-container {
         @apply shadow-md;
         @apply bg-white;
+        @apply relative;
 
-        position: relative;
         z-index: 10;
         max-height: 58px;
 

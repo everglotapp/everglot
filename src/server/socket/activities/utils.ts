@@ -13,10 +13,10 @@ const chlog = log.child({
     namespace: "activities-utils",
 })
 
-const groupActivities: Record<Group["uuid"], GroupActivity | null> = {} as const
+const groupActivities: Record<string, GroupActivity | null> = {} as const
 
 export async function startGroupActivity(
-    groupUuid: Group["uuid"],
+    groupUuid: string,
     kind: GroupActivityKind
 ): Promise<GroupActivity | null> {
     if (groupActivities[groupUuid]) {
@@ -44,9 +44,7 @@ export async function startGroupActivity(
     return groupActivities[groupUuid]
 }
 
-export function endGroupActivity(
-    groupUuid: Group["uuid"]
-): GroupActivity | null {
+export function endGroupActivity(groupUuid: string): GroupActivity | null {
     const activity = groupActivities[groupUuid]
     if (!activity) {
         chlog
@@ -60,9 +58,7 @@ export function endGroupActivity(
     return activity
 }
 
-export function getGroupActivity(
-    groupUuid: Group["uuid"]
-): GroupActivity | null {
+export function getGroupActivity(groupUuid: string): GroupActivity | null {
     const activity = groupActivities[groupUuid]
     if (!activity) {
         return null

@@ -359,9 +359,7 @@ export async function tryFormingGroupsWithUser(
     return groupIds
 }
 
-export async function getGroupIdByUuid(
-    uuid: Group["uuid"]
-): Promise<number | null> {
+export async function getGroupIdByUuid(uuid: string): Promise<number | null> {
     const res = await performQuery<GroupIdByUuidQuery>(
         `query GroupIdByUuid($uuid: UUID!) {
             groupByUuid(uuid: $uuid) {
@@ -379,7 +377,7 @@ export async function getGroupIdByUuid(
 
 export async function userIsInGroup(
     userId: User["id"],
-    groupUuid: Group["uuid"]
+    groupUuid: string
 ): Promise<boolean | null> {
     const res = await performQuery<UserIsInGroupQuery>(
         `query UserIsInGroup($userId: Int!, $groupUuid: UUID!) {
@@ -419,7 +417,7 @@ export async function getAllGroupUuids(): Promise<string[] | null> {
 }
 
 export async function getGroupLanguageByUuid(
-    uuid: Group["uuid"]
+    uuid: string
 ): Promise<GroupLanguageByUuidQuery | null> {
     const res = await performQuery<GroupLanguageByUuidQuery>(
         `query GroupLanguageByUuid($uuid: UUID!) {

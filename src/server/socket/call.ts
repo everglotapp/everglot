@@ -120,7 +120,7 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
 export function handleUserJoinedRoom(
     _io: SocketIO,
     socket: EverglotChatSocket,
-    groupUuid: Group["uuid"]
+    groupUuid: string
 ) {
     socket.emit("callUsers", getUsers(groupUuid))
 }
@@ -129,7 +129,7 @@ function getUsers(groupUuid: string) {
     return users.filter((user) => user.groupUuid === groupUuid)
 }
 
-function userJoin(userUuid: User["uuid"], groupUuid: Group["uuid"]) {
+function userJoin(userUuid: string, groupUuid: string) {
     chlog
         .child({ userUuid, groupUuid })
         .trace("User claims to have joined group call")
@@ -150,7 +150,7 @@ function userJoin(userUuid: User["uuid"], groupUuid: Group["uuid"]) {
     return true
 }
 
-function userLeave(userUuid: User["uuid"], groupUuid: Group["uuid"]) {
+function userLeave(userUuid: string, groupUuid: string) {
     const index = users.findIndex((user) => user.uuid === userUuid)
     const existingUser = index === -1 ? null : users[index]
     chlog
@@ -175,8 +175,8 @@ function userLeave(userUuid: User["uuid"], groupUuid: Group["uuid"]) {
 }
 
 function userUpdateMeta(
-    userUuid: User["uuid"],
-    groupUuid: Group["uuid"],
+    userUuid: string,
+    groupUuid: string,
     meta: Pick<VoiceChatUser, "micMuted" | "audioMuted">
 ) {
     const index = users.findIndex(

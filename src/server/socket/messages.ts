@@ -110,7 +110,7 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
 
 export function formatMessage(
     text: string,
-    userUuid: User["uuid"] | null = null
+    userUuid: string | null = null
 ): ChatMessage {
     return {
         uuid: uuidv4(),

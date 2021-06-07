@@ -48,14 +48,14 @@
     let lastSentMessage: ChatMessage | null = null
     let lastMessageSentAt: number | null = null
     let currentActivity: GroupActivity | null = null
-    let currentActivityKnownForGroupUuid: Group["uuid"] | null = null
+    let currentActivityKnownForGroupUuid: string | null = null
 
     const webrtc = getContext<WebrtcContext>(WEBRTC_CONTEXT)
     const { outgoing, remoteUsers, joinedRoom: joinedCallRoom } = webrtc
     const chat = getContext<ChatContext>(CHAT_CONTEXT)
     const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
 
-    let myUuid: User["uuid"] | null = null
+    let myUuid: string | null = null
 
     let fetchGroupMetadataInterval: number | null = null
 
@@ -178,12 +178,12 @@
     }
 
     function handleWelcome({
-        user,
+        userUuid,
     }: {
-        user: Pick<ChatUser["user"], "uuid">
-        groupUuid: Group["uuid"]
+        userUuid: string
+        groupUuid: string
     }): void {
-        myUuid = user.uuid
+        myUuid = userUuid
     }
 
     function handleGroupActivity(activity: GroupActivity) {
@@ -322,7 +322,10 @@
                         groupUuid: $groupUuid,
                         callMeta,
                     })
-                    setCallUserMeta(myUuid, $groupUuid, callMeta)
+                    if (myUuid) {
+                        // TODO: what if this is not truthy?
+                        setCallUserMeta(myUuid, $groupUuid, callMeta)
+                    }
                 }
             }}
             handleToggleAudio={() => {

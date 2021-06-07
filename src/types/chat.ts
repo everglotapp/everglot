@@ -4,7 +4,7 @@ import type { Group, User } from "./generated/graphql"
 export type ChatUser = {
     socketId: string
     user: Pick<User, "id" | "username" | "uuid" | "avatarUrl">
-    groupUuid: Group["uuid"]
+    groupUuid: string
     joinedAt: Date
 }
 
@@ -12,7 +12,7 @@ export type ChatMessage = {
     text: string
     time: string
     uuid: string
-    userUuid: User["uuid"] | null
+    userUuid: string | null
 }
 
 const enum ChatMessagePreviewType {

@@ -191,7 +191,7 @@
 <div
     class="message"
     in:scale|local={{
-        duration: 100,
+        duration: 200,
         delay: 200,
     }}
 >

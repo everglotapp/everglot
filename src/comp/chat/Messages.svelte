@@ -223,7 +223,7 @@
             {#each previews[message.uuid] as preview (preview.uuid)}
                 <div
                     class="message-preview"
-                    in:scale|local={{ duration: 100, delay: 200 }}
+                    in:scale|local={{ duration: 200, delay: 200 }}
                 >
                     <img
                         src={preview.url}

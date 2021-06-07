@@ -101,7 +101,7 @@
             <div class="w-full md:w-1/2">
                 <h4><Localized id="profile-email" /></h4>
                 <div class="mb-4">{email || ""}</div>
-                <div>
+                <div class="hidden">
                     <a href="/changepassword">
                         <Localized id="profile-change-password" />
                     </a>
@@ -197,7 +197,7 @@
                                     }
                                 }}
                                 variant="TEXT"
-                                color="PRIMARY"
+                                color="SECONDARY"
                             >
                                 {group.group.groupName}
                                 {#if group.userType === UserType.Global}
@@ -225,46 +225,5 @@
     h4 {
         margin-top: 1rem;
         margin-bottom: 0.25rem;
-    }
-
-    .sidebar {
-        min-width: 16rem;
-
-        @apply py-8;
-        @apply flex-shrink;
-    }
-
-    .languages button {
-        border-left-width: 3px;
-
-        @apply border-transparent;
-        @apply flex;
-        @apply w-full;
-        @apply py-2;
-        @apply px-3;
-        @apply items-center;
-    }
-
-    .languages button:hover {
-        @apply bg-primary-lightest;
-    }
-
-    .languages button[aria-selected="true"] {
-        @apply text-primary;
-        @apply border-primary;
-    }
-
-    .groups {
-        @apply flex-grow;
-    }
-
-    .groups .name {
-        @apply mr-3;
-        @apply align-middle;
-    }
-
-    .groups .members-count {
-        @apply text-sm;
-        @apply align-middle;
     }
 </style>

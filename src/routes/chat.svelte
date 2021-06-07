@@ -9,6 +9,10 @@
     import SidePanel from "../comp/chat/SidePanel.svelte"
     import Messages from "../comp/chat/Messages.svelte"
     import SubmitForm from "../comp/chat/SubmitForm.svelte"
+    import { CHAT_CONTEXT } from "../comp/util/ChatProvider.svelte"
+    import type { ChatContext } from "../comp/util/ChatProvider.svelte"
+    import { WEBRTC_CONTEXT } from "../comp/util/WebrtcProvider.svelte"
+    import type { WebrtcContext } from "../comp/util/WebrtcProvider.svelte"
 
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
@@ -35,7 +39,7 @@
     } from "../types/chat"
 
     import type { GroupActivity } from "../types/activities"
-    import type { User } from "../types/generated/graphql"
+    import type { Group, User } from "../types/generated/graphql"
 
     import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons"
 
@@ -46,9 +50,9 @@
     let currentActivity: GroupActivity | null = null
     let currentActivityKnownForGroupUuid: Group["uuid"] | null = null
 
-    const webrtc = getContext("WEBRTC")
+    const webrtc = getContext<WebrtcContext>(WEBRTC_CONTEXT)
     const { outgoing, remoteUsers, joinedRoom: joinedCallRoom } = webrtc
-    const chat = getContext("CHAT")
+    const chat = getContext<ChatContext>(CHAT_CONTEXT)
     const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
 
     let myUuid: User["uuid"] | null = null
@@ -247,25 +251,25 @@
     }
 
     async function handleLeaveCall(): Promise<boolean> {
-        if (!$groupUuid) {
+        if (!$joinedCallRoom) {
             return false
         }
         if (!(await webrtc.leaveRoom())) {
             // TODO: error
-            console.log("failed to leave call")
+            // console.log("failed to leave call")
             return false
         }
         if (chat) {
-            chat.emit("userLeaveCall", { groupUuid: $groupUuid })
-            removeUserFromCall(myUuid, $groupUuid)
+            chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
+            removeUserFromCall(myUuid, $joinedCallRoom)
         }
         return true
     }
 
     function handleBeforeunload() {
-        if ($groupUuid) {
+        if ($joinedCallRoom) {
             if (chat && chat.hasOwnProperty("emit")) {
-                chat.emit("userLeaveCall", { groupUuid: $groupUuid })
+                chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
             }
         }
         if (chat) {

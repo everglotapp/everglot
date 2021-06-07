@@ -1,9 +1,9 @@
 <script lang="ts">
     import { createEventDispatcher, onDestroy, onMount } from "svelte"
 
-    import ButtonLarge from "../../../comp/util/ButtonLarge.svelte"
+    import ButtonLarge from "./ButtonLarge.svelte"
 
-    import { GOOGLE_SIGNIN_CLIENT_ID } from "../../../constants"
+    import { GOOGLE_SIGNIN_CLIENT_ID } from "../../constants"
 
     const dispatch = createEventDispatcher()
 

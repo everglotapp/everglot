@@ -33,6 +33,9 @@ export function handleUserConnected(_io: SocketIO, socket: EverglotChatSocket) {
             return
         }
         if (!userJoin(userMeta.uuid, groupUuid)) {
+            chlog
+                .child({ userId, groupUuid, userMeta })
+                .debug("Could not add user to group call")
             return
         }
         socket.broadcast.to(groupUuid).emit("callUsers", getUsers(groupUuid))
@@ -49,14 +52,22 @@ export function handleUserConnected(_io: SocketIO, socket: EverglotChatSocket) {
         }
         if (!authenticateUserInGroup(userId, groupUuid)) {
             chlog
-                .child({ userId, groupUuid })
+                .child({ userId, groupUuid, userMeta })
                 .debug("User is not in group but tried to leave call")
             return
         }
-        if (!userLeave(userMeta.uuid, groupUuid)) {
+        const userLeaving = userLeave(userMeta.uuid, groupUuid)
+        if (!userLeaving) {
+            chlog
+                .child({ userId, groupUuid, userMeta })
+                .debug(
+                    "Could not remove user from group call. They are not in any group call."
+                )
             return
         }
-        socket.broadcast.to(groupUuid).emit("callUsers", getUsers(groupUuid))
+        socket.broadcast
+            .to(userLeaving.groupUuid)
+            .emit("callUsers", getUsers(userLeaving.groupUuid))
     })
 
     socket.on(
@@ -121,14 +132,11 @@ function userJoin(userUuid: User["uuid"], groupUuid: Group["uuid"]) {
     chlog
         .child({ userUuid, groupUuid })
         .trace("User claims to have joined group call")
-    if (
-        users.some(
-            (user) => user.uuid === userUuid && user.groupUuid === groupUuid
-        )
-    ) {
+    const existingUser = users.find((user) => user.uuid === userUuid)
+    if (typeof existingUser !== "undefined") {
         chlog
-            .child({ userUuid, groupUuid })
-            .debug("User already in group call, preventing join")
+            .child({ userUuid, groupUuid, existingUser })
+            .debug("User already in some group call, preventing join")
         return false
     }
     users.push({
@@ -142,21 +150,27 @@ function userJoin(userUuid: User["uuid"], groupUuid: Group["uuid"]) {
 }
 
 function userLeave(userUuid: User["uuid"], groupUuid: Group["uuid"]) {
-    const index = users.findIndex(
-        (user) => user.uuid === userUuid && user.groupUuid === groupUuid
-    )
+    const index = users.findIndex((user) => user.uuid === userUuid)
+    const existingUser = index === -1 ? null : users[index]
     chlog
         .child({ userUuid, groupUuid })
         .trace("User claims to have left group call")
 
-    if (index === -1) {
+    if (!existingUser) {
         chlog
             .child({ userUuid, groupUuid })
             .debug("User is not in group call, preventing leave")
         return false
-    } else {
-        return users.splice(index, 1)[0]
     }
+    if (existingUser.groupUuid !== groupUuid) {
+        chlog
+            .child({ userUuid, groupUuid, existingUser })
+            .debug(
+                "User is leaving group call but for a different group than the one in whose call they are. " +
+                    "We're letting them leave that call anyways."
+            )
+    }
+    return users.splice(index, 1)[0]
 }
 
 function userUpdateMeta(

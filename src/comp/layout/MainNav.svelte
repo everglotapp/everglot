@@ -20,6 +20,8 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
     import Modal from "../util/Modal.svelte"
+    import { WEBRTC_CONTEXT } from "../util/WebrtcProvider.svelte"
+    import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
 
     import {
         currentUser,
@@ -35,7 +37,7 @@
 
     export let segment: string | undefined
 
-    const webrtc = getContext("WEBRTC")
+    const webrtc = getContext<WebrtcContext>(WEBRTC_CONTEXT)
     const { joinedRoom: joinedCallRoom } = webrtc
 
     async function handleLogout() {
@@ -325,7 +327,8 @@
                                                     className="w-full justify-between items-center"
                                                     href={`/chat?group=${$joinedCallRoom}`}
                                                     on:click={() =>
-                                                        ($groupUuid = $joinedCallRoom)}
+                                                        ($groupUuid =
+                                                            $joinedCallRoom)}
                                                     ><span class="mr-1"
                                                         ><Localized
                                                             id="main-nav-go-to-call"
@@ -599,22 +602,6 @@
         @screen md {
             width: 32px;
         }
-    }
-
-    :global(.avatar) {
-        border-radius: 50%;
-        width: 42px;
-        height: 42px;
-
-        @apply bg-gray-light;
-        @apply overflow-hidden;
-        @apply flex;
-        @apply justify-center;
-        @apply items-center;
-    }
-
-    :global(.avatar > .initial) {
-        height: 1.625rem;
     }
 
     .dropdown {

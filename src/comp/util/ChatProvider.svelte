@@ -1,22 +1,42 @@
+<script lang="ts" context="module">
+    import type { Readable } from "svelte/store"
+    export const CHAT_CONTEXT = {}
+    export interface ChatContext {
+        joinedRoom: Readable<string | null>
+        connected: Readable<boolean>
+        connect: () => void
+        disconnect: () => void
+        joinRoom: (room: string) => void
+        leaveRoom: () => boolean
+        sendMessage: (msg: string) => boolean
+        emit: (ev: string, ...args: any[]) => boolean
+        on: (ev: string, listener: ListenerFunction) => boolean
+        off: (
+            ev?: string | undefined,
+            listener?: ListenerFunction | undefined
+        ) => boolean
+    }
+    type ListenerFunction = (...args: any[]) => void
+</script>
+
 <script lang="ts">
     import { onDestroy, setContext } from "svelte"
     import { writable } from "svelte/store"
 
     import { io } from "socket.io-client"
-    import type SocketIO from "socket.io-client"
+    import type { Socket } from "socket.io-client"
 
-    import { setUsersInCall } from "../../../stores/call"
+    import { setUsersInCall } from "../../stores/call"
 
-    import type { Group } from "../../../types/generated/graphql"
+    import type { Group } from "../../types/generated/graphql"
 
-    import type { ChatUser } from "../../../types/chat"
+    import type { ChatUser } from "../../types/chat"
 
     const joinedRoom = writable<string | null>(null)
-    const socket = writable<SocketIO.Socket | null>(null)
+    const socket = writable<Socket | null>(null)
     const connected = writable(false)
 
-    export let contextKey: string
-    setContext(contextKey, {
+    setContext(CHAT_CONTEXT, {
         joinedRoom,
         connected,
         connect,
@@ -51,6 +71,7 @@
         s.on("disconnecting", () => {
             $connected = false
             $socket = null
+            $joinedRoom = null
         })
 
         s.on(
@@ -102,6 +123,7 @@
         }
         // console.log("Leaving room", { joinedRoom: $joinedRoom })
         $socket.emit("leaveRoom")
+        $joinedRoom = null
         return true
     }
 
@@ -123,7 +145,7 @@
         return true
     }
 
-    export function on(ev: string, listener: Function): boolean {
+    export function on(ev: string, listener: ListenerFunction): boolean {
         if (!$socket || !$socket.connected) {
             return false
         }
@@ -131,7 +153,7 @@
         return true
     }
 
-    export function off(ev?: string, listener?: Function): boolean {
+    export function off(ev?: string, listener?: ListenerFunction): boolean {
         if (!$socket || !$socket.connected) {
             return false
         }

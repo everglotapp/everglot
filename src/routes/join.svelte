@@ -7,7 +7,7 @@
     import PageTitle from "../comp/typography/PageTitle.svelte"
     import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
-    import GoogleAuthButton from "./_helpers/auth/GoogleAuthButton.svelte"
+    import GoogleAuthButton from "../comp/util/GoogleAuthButton.svelte"
 
     import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
     import { username } from "../stores"

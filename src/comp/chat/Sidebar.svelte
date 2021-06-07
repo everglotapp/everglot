@@ -9,6 +9,8 @@
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import Modal from "../util/Modal.svelte"
     import Spinner from "../util/Spinner.svelte"
+    import { WEBRTC_CONTEXT } from "../util/WebrtcProvider.svelte"
+    import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
 
     import { groupUuid } from "../../stores"
     import { currentUserIsGroupMember } from "../../stores/chat"
@@ -19,7 +21,7 @@
         isInCall,
         joinedRoom: joinedCallRoom,
         joining: joiningCall,
-    } = getContext("WEBRTC")
+    } = getContext<WebrtcContext>(WEBRTC_CONTEXT)
 
     export let handleToggleSplit: () => void
     export let handleToggleMic: () => void

@@ -28,6 +28,8 @@
     import { io } from "socket.io-client"
     import type { Socket } from "socket.io-client"
 
+    import { v4 as uuidv4 } from "uuid"
+
     import { setUsersInCall } from "../../stores/call"
     import type { ChatMessage } from "../../types/chat"
 
@@ -124,7 +126,7 @@
         return true
     }
 
-    export function sendMessage(msg: string): boolean {
+    export function sendMessage(msg: string, userUuid: string | null): boolean {
         if (!$socket || !$socket.connected) {
             // console.log("Not sending", msg, "no socket")
             return false
@@ -132,6 +134,12 @@
         // console.log("Sending", msg)
         $socket.emit("chatMessage", msg)
         $lastMessageSentAt = Date.now()
+        $lastSentMessage = {
+            uuid: uuidv4(),
+            text: msg,
+            time: new Date().toISOString(),
+            userUuid,
+        }
         return true
     }
 

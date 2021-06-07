@@ -29,6 +29,7 @@
     let msg = ""
     export let isOwnMessage: (message: ChatMessage) => boolean
     export let messages: ChatMessage[] = []
+    export let myUuid: string | null
 
     const { joinedRoom: joinedChatRoom, sendMessage } =
         getContext<ChatContext>(CHAT_CONTEXT)
@@ -70,7 +71,7 @@
             msg = ""
             return
         }
-        const sent = sendMessage(trimmedMsg)
+        const sent = sendMessage(trimmedMsg, myUuid)
         if (sent) {
             msg = ""
         }

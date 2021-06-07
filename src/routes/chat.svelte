@@ -46,12 +46,7 @@
     const webrtc = getContext<WebrtcContext>(WEBRTC_CONTEXT)
     const { outgoing, remoteUsers, joinedRoom: joinedCallRoom } = webrtc
     const chat = getContext<ChatContext>(CHAT_CONTEXT)
-    const {
-        connected: connectedToChat,
-        joinedRoom: joinedChatRoom,
-        lastSentMessage,
-        lastMessageSentAt,
-    } = chat
+    const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
 
     let myUuid: string | null = null
 
@@ -422,7 +417,7 @@
                                         {fetchMoreMessages}
                                         {isOwnMessage}
                                     />
-                                    <SubmitForm {isOwnMessage} />
+                                    <SubmitForm {myUuid} {isOwnMessage} />
                                 </div>
                             {/key}
                         </div>

@@ -190,8 +190,9 @@
 
 <div
     class="message"
-    transition:scale|local={{
-        duration: 200,
+    in:scale|local={{
+        duration: 100,
+        delay: 200,
     }}
 >
     <div class="avatar" id={`message-${uuid}-avatar`}>

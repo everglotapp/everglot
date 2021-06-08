@@ -6,7 +6,6 @@ import randomQuestion from "./randomQuestion"
 import log from "../../../logger"
 
 import { GroupActivity, GroupActivityKind } from "../../../types/activities"
-import type { Group } from "../../../types/generated/graphql"
 
 import type { Server as SocketIO } from "socket.io"
 import { getCurrentUser } from "../users"
@@ -96,7 +95,7 @@ export async function handleUserConnected(
 export function handleUserJoinedRoom(
     _io: SocketIO,
     socket: EverglotChatSocket,
-    groupUuid: Group["uuid"]
+    groupUuid: string
 ) {
     socket.emit("groupActivity", getGroupActivity(groupUuid))
 }

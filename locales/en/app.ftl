@@ -86,6 +86,7 @@ main-nav-profile = Profile
 main-nav-invite-friends = Invite Friends
 main-nav-logout = Logout
 main-nav-go-to-call = Go to Call
+main-nav-privacy = Privacy
 
 ## Signup successful page
 
@@ -173,11 +174,6 @@ signup-form-gender-female = Female
 signup-form-gender-male = Male
 signup-form-gender-other = Other
 signup-form-submit = Next
-
-## Footer component
-
-footer-privacy = Privacy
-footer-imprint = Imprint
 
 ## User Bio component
 

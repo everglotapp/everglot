@@ -3,9 +3,15 @@
 </script>
 
 <div
-    in:scale={{ duration: 150, delay: 150 }}
+    in:scale={{ duration: 100, delay: 250 }}
     out:scale={{ duration: 150 }}
-    class="px-8 py-4 bg-red-200 text-gray-dark font-bold rounded-md"
+    class="wrapper px-8 py-4 bg-red-200 text-gray-dark font-bold rounded-md"
 >
     <slot />
 </div>
+
+<style>
+    .wrapper {
+        height: min-content;
+    }
+</style>

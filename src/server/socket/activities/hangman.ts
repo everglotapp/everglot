@@ -1,4 +1,4 @@
-import { ALPHABET } from "../../../constants"
+import { ALPHABET, HANGMAN_LOCALES } from "../../../constants"
 import type { HangmanLocale } from "../../../constants"
 import { getCurrentUser } from "../users"
 import {
@@ -11,16 +11,16 @@ import { db } from "../../db"
 
 import log from "../../../logger"
 import { getGroupActivity } from "./utils"
-import type { Group } from "../../../types/generated/graphql"
 import type { Server as SocketIO } from "socket.io"
 import { bots } from ".."
 import type { ChatUser } from "../../../types/chat"
+import { getGroupLanguageByUuid } from "../../groups"
 
 const chlog = log.child({
     namespace: "hangman",
 })
 
-export const games: Record<Group["uuid"], HangmanGame> = {} as const
+export const games: Record<string, HangmanGame> = {} as const
 
 const MIN_WORD_LENGTH = 3
 const MAX_WORD_LENGTH = 11
@@ -332,6 +332,7 @@ export async function handleEnded(
     _activity: GroupActivity
 ) {
     const { groupUuid } = chatUser
+    end(groupUuid)
     const bot = bots[groupUuid]
     if (bot) {
         await bot.send("hangman-ended", {
@@ -340,12 +341,47 @@ export async function handleEnded(
     }
 }
 
-export const getPublicState = (groupUuid: Group["uuid"]) =>
+export const getPublicState = (groupUuid: string) =>
     games[groupUuid].publicState
+
+export async function start(groupUuid: string) {
+    const group = await getGroupLanguageByUuid(groupUuid)
+    if (!group || !group.groupByUuid?.language?.alpha2) {
+        chlog
+            .child({
+                groupUuid,
+            })
+            .debug("Group not found")
+        return null
+    }
+    const alpha2 = group.groupByUuid?.language?.alpha2
+    if (!HANGMAN_LOCALES.some((locale) => locale === alpha2)) {
+        chlog
+            .child({
+                groupUuid,
+                alpha2,
+            })
+            .debug("Group locale does not support hangman")
+        return null
+    }
+    const game = (games[groupUuid] ||= new HangmanGame(alpha2 as HangmanLocale))
+    if (!(await game.start())) {
+        end(groupUuid)
+        return null
+    }
+    return {
+        kind: GroupActivityKind.Hangman,
+        state: game.publicState,
+        groupUuid,
+    }
+}
+
+const end = (groupUuid: string) => delete games[groupUuid]
 
 export default {
     handleStarted,
     handleEnded,
     handleUserConnected,
     getPublicState,
+    start,
 }

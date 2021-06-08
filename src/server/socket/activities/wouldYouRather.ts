@@ -9,9 +9,11 @@ import type {
     ChineseWouldYouRatherQuestion,
     EnglishWouldYouRatherQuestion,
     GermanWouldYouRatherQuestion,
-    Group,
 } from "../../../types/generated/graphql"
-import type { WouldYouRatherLocale } from "../../../constants"
+import {
+    WouldYouRatherLocale,
+    WOULD_YOU_RATHER_LOCALES,
+} from "../../../constants"
 import type { Server as SocketIO } from "socket.io"
 
 import { db } from "../../db"
@@ -19,12 +21,13 @@ import { db } from "../../db"
 import log from "../../../logger"
 import { bots } from ".."
 import type { ChatUser } from "../../../types/chat"
+import { getGroupLanguageByUuid } from "../../groups"
 
 const chlog = log.child({
     namespace: "would-you-rather",
 })
 
-export const games: Record<Group["uuid"], WouldYouRatherGame> = {} as const
+export const games: Record<string, WouldYouRatherGame> = {} as const
 let endActivityTimeout: NodeJS.Timeout | null = null
 
 type WouldYouRatherQuestion =
@@ -265,12 +268,49 @@ export async function handleEnded(
     }
 }
 
-export const getPublicState = (groupUuid: Group["uuid"]) =>
+export const getPublicState = (groupUuid: string) =>
     games[groupUuid].publicState
+
+export async function start(groupUuid: string) {
+    const group = await getGroupLanguageByUuid(groupUuid)
+    if (!group || !group.groupByUuid?.language?.alpha2) {
+        chlog
+            .child({
+                groupUuid,
+            })
+            .debug("Group not found")
+        return null
+    }
+    const alpha2 = group.groupByUuid?.language?.alpha2
+    if (!WOULD_YOU_RATHER_LOCALES.some((locale) => locale === alpha2)) {
+        chlog
+            .child({
+                groupUuid,
+                alpha2,
+            })
+            .debug("Group locale does not support Would You Rather")
+        return null
+    }
+    const game = (games[groupUuid] ||= new WouldYouRatherGame(
+        alpha2 as WouldYouRatherLocale
+    ))
+    if (!(await game.start())) {
+        end(groupUuid)
+        return null
+    }
+    return {
+        kind: GroupActivityKind.WouldYouRather,
+        state: game.publicState,
+        groupUuid,
+    }
+}
+
+const end = (groupUuid: string) => delete games[groupUuid]
 
 export default {
     handleStarted,
     handleEnded,
     handleUserConnected,
     getPublicState,
+    start,
 }

@@ -5,15 +5,15 @@
 
     import { validate as uuidValidate } from "uuid"
 
-    import en from "../../../../locales/en/app.ftl"
-    import de from "../../../../locales/de/app.ftl"
-    import zh from "../../../../locales/zh-CN/app.ftl"
+    import en from "../../../locales/en/app.ftl"
+    import de from "../../../locales/de/app.ftl"
+    import zh from "../../../locales/zh-CN/app.ftl"
 
-    import { groupUuid } from "../../../stores"
-    import { currentGroupLocale } from "../../../stores/locales"
+    import { groupUuid } from "../../stores"
+    import { currentGroupLocale } from "../../stores/locales"
 
-    import { SUPPORTED_LOCALES } from "../../../constants"
-    import type { SupportedLocale } from "../../../constants"
+    import { SUPPORTED_LOCALES } from "../../constants"
+    import type { SupportedLocale } from "../../constants"
 
     export let segment: string | undefined = undefined
     segment = segment // get rid of unused prop warning

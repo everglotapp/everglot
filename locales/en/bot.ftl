@@ -16,3 +16,4 @@ would-you-rather-started = @{ $username } has started a Would You Rather poll: {
 would-you-rather-ended = @{ $username } has ended the Would You Rather poll.
 
 random-question-started = @{ $username } wants me to ask a question: { $question }
+random-question-ended = @{ $username } no longer wants to discuss the question.

@@ -3,6 +3,8 @@
     import { scale } from "svelte/transition"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import ButtonLarge from "../util/ButtonLarge.svelte"
+    import { CHAT_CONTEXT } from "../util/ChatProvider.svelte"
+    import type { ChatContext } from "../util/ChatProvider.svelte"
 
     import Hangman from "./activities/Hangman.svelte"
     import GuessCharacter from "./activities/GuessCharacter.svelte"
@@ -29,7 +31,7 @@
         GUESS_CHARACTER_LOCALES,
     } from "../../constants"
 
-    const chat = getContext("CHAT")
+    const chat = getContext<ChatContext>(CHAT_CONTEXT)
     const { connected: connectedToChat } = chat
 
     export let activity: GroupActivity | null = null

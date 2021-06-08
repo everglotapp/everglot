@@ -9,11 +9,10 @@
     import { currentUserStore } from "../stores"
     import { allGroupsStore } from "../stores/groups"
 
-    import LocaleProvider from "./_helpers/locales/LocaleProvider.svelte"
+    import LocaleProvider from "../comp/util/LocaleProvider.svelte"
     import MainNav from "../comp/layout/MainNav.svelte"
-    import Footer from "../comp/layout/Footer.svelte"
-    import WebrtcProvider from "./_helpers/webrtc/WebrtcProvider.svelte"
-    import ChatProvider from "./_helpers/chat/ChatProvider.svelte"
+    import WebrtcProvider from "../comp/util/WebrtcProvider.svelte"
+    import ChatProvider from "../comp/util/ChatProvider.svelte"
 
     setupUrql()
 
@@ -26,7 +25,6 @@
     $: segment, handlePageChange()
 
     $: showMainNav = segment !== "login" && segment !== "join"
-    $: showFooter = segment !== "chat"
     $: noscroll = segment === "chat"
 
     onMount(() => {
@@ -50,8 +48,8 @@
 </script>
 
 <LocaleProvider {segment}>
-    <WebrtcProvider contextKey="WEBRTC">
-        <ChatProvider contextKey="CHAT">
+    <WebrtcProvider>
+        <ChatProvider>
             <div id="app" class:noscroll class:with-main-nav={showMainNav}>
                 {#if showMainNav}
                     <MainNav {segment} />
@@ -68,10 +66,6 @@
                         </div>
                     {/key}
                 </main>
-
-                {#if showFooter}
-                    <Footer />
-                {/if}
             </div>
         </ChatProvider>
     </WebrtcProvider>
@@ -90,6 +84,15 @@
         position: relative;
         background-color: white;
         box-sizing: border-box;
+        min-height: 70vh;
+
+        @screen md {
+            min-height: 75vh;
+        }
+
+        @screen xl {
+            min-height: 80vh;
+        }
     }
 
     #app.noscroll {

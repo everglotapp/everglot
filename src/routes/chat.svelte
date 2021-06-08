@@ -9,6 +9,10 @@
     import SidePanel from "../comp/chat/SidePanel.svelte"
     import Messages from "../comp/chat/Messages.svelte"
     import SubmitForm from "../comp/chat/SubmitForm.svelte"
+    import { CHAT_CONTEXT } from "../comp/util/ChatProvider.svelte"
+    import type { ChatContext } from "../comp/util/ChatProvider.svelte"
+    import { WEBRTC_CONTEXT } from "../comp/util/WebrtcProvider.svelte"
+    import type { WebrtcContext } from "../comp/util/WebrtcProvider.svelte"
 
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
@@ -28,30 +32,23 @@
     import { setCallUserMeta, removeUserFromCall } from "../stores/call"
 
     import { makeChatMessagePreview } from "../types/chat"
-    import type {
-        ChatUser,
-        ChatMessage,
-        ChatMessagePreview,
-    } from "../types/chat"
+    import type { ChatMessage, ChatMessagePreview } from "../types/chat"
 
     import type { GroupActivity } from "../types/activities"
-    import type { User } from "../types/generated/graphql"
 
     import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons"
 
     let messages: ChatMessage[] = []
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
-    let lastSentMessage: ChatMessage | null = null
-    let lastMessageSentAt: number | null = null
     let currentActivity: GroupActivity | null = null
-    let currentActivityKnownForGroupUuid: Group["uuid"] | null = null
+    let currentActivityKnownForGroupUuid: string | null = null
 
-    const webrtc = getContext("WEBRTC")
+    const webrtc = getContext<WebrtcContext>(WEBRTC_CONTEXT)
     const { outgoing, remoteUsers, joinedRoom: joinedCallRoom } = webrtc
-    const chat = getContext("CHAT")
+    const chat = getContext<ChatContext>(CHAT_CONTEXT)
     const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
 
-    let myUuid: User["uuid"] | null = null
+    let myUuid: string | null = null
 
     let fetchGroupMetadataInterval: number | null = null
 
@@ -174,12 +171,12 @@
     }
 
     function handleWelcome({
-        user,
+        userUuid,
     }: {
-        user: Pick<ChatUser["user"], "uuid">
-        groupUuid: Group["uuid"]
+        userUuid: string
+        groupUuid: string
     }): void {
-        myUuid = user.uuid
+        myUuid = userUuid
     }
 
     function handleGroupActivity(activity: GroupActivity) {
@@ -195,8 +192,6 @@
         message.userUuid === myUuid
 
     function handleMessage(message: ChatMessage): void {
-        lastSentMessage = message
-        lastMessageSentAt = Date.now()
         messages = [...messages, message]
     }
 
@@ -247,25 +242,25 @@
     }
 
     async function handleLeaveCall(): Promise<boolean> {
-        if (!$groupUuid) {
+        if (!$joinedCallRoom) {
             return false
         }
         if (!(await webrtc.leaveRoom())) {
             // TODO: error
-            console.log("failed to leave call")
+            // console.log("failed to leave call")
             return false
         }
         if (chat) {
-            chat.emit("userLeaveCall", { groupUuid: $groupUuid })
-            removeUserFromCall(myUuid, $groupUuid)
+            chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
+            removeUserFromCall(myUuid, $joinedCallRoom)
         }
         return true
     }
 
     function handleBeforeunload() {
-        if ($groupUuid) {
+        if ($joinedCallRoom) {
             if (chat && chat.hasOwnProperty("emit")) {
-                chat.emit("userLeaveCall", { groupUuid: $groupUuid })
+                chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
             }
         }
         if (chat) {
@@ -318,7 +313,10 @@
                         groupUuid: $groupUuid,
                         callMeta,
                     })
-                    setCallUserMeta(myUuid, $groupUuid, callMeta)
+                    if (myUuid) {
+                        // TODO: what if this is not truthy?
+                        setCallUserMeta(myUuid, $groupUuid, callMeta)
+                    }
                 }
             }}
             handleToggleAudio={() => {
@@ -414,14 +412,12 @@
                                     <Messages
                                         {messages}
                                         {previews}
-                                        {lastSentMessage}
-                                        {lastMessageSentAt}
                                         bind:this={messagesComponent}
                                         {handleEnlargenImage}
                                         {fetchMoreMessages}
                                         {isOwnMessage}
                                     />
-                                    <SubmitForm {isOwnMessage} />
+                                    <SubmitForm {myUuid} {isOwnMessage} />
                                 </div>
                             {/key}
                         </div>

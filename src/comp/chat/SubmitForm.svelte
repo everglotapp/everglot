@@ -8,6 +8,8 @@
 
     import ButtonLarge from "../util/ButtonLarge.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import { CHAT_CONTEXT } from "../util/ChatProvider.svelte"
+    import type { ChatContext } from "../util/ChatProvider.svelte"
 
     import { groupUuid } from "../../stores"
     import {
@@ -27,8 +29,10 @@
     let msg = ""
     export let isOwnMessage: (message: ChatMessage) => boolean
     export let messages: ChatMessage[] = []
+    export let myUuid: string | null
 
-    const { joinedRoom: joinedChatRoom, sendMessage } = getContext("CHAT")
+    const { joinedRoom: joinedChatRoom, sendMessage } =
+        getContext<ChatContext>(CHAT_CONTEXT)
 
     const joinGlobalGroup = mutation<JoinGlobalGroupMutation>({
         query: JoinGlobalGroup,
@@ -67,7 +71,7 @@
             msg = ""
             return
         }
-        const sent = sendMessage(trimmedMsg)
+        const sent = sendMessage(trimmedMsg, myUuid)
         if (sent) {
             msg = ""
         }

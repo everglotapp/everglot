@@ -19,9 +19,7 @@
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
 
-    import type { User } from "../../types/generated/graphql"
-
-    export let userUuid: User["uuid"] | null
+    export let userUuid: string | null
     $: user = userUuid
         ? $chatUsers.find((u) => u?.uuid === userUuid) || null
         : null
@@ -192,8 +190,9 @@
 
 <div
     class="message"
-    transition:scale|local={{
+    in:scale|local={{
         duration: 200,
+        delay: 200,
     }}
 >
     <div class="avatar" id={`message-${uuid}-avatar`}>

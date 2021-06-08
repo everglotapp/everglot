@@ -1,4 +1,7 @@
-import type { GuessCharacterLocale } from "../../../constants"
+import {
+    GuessCharacterLocale,
+    GUESS_CHARACTER_LOCALES,
+} from "../../../constants"
 import { getCurrentUser } from "../users"
 import {
     GroupActivity,
@@ -11,13 +14,11 @@ import { db } from "../../db"
 import log from "../../../logger"
 import { getGroupActivity } from "./utils"
 import { isChineseCharacter } from "../../../utils"
-import type {
-    ChineseGuessCharacterQuestion,
-    Group,
-} from "../../../types/generated/graphql"
+import type { ChineseGuessCharacterQuestion } from "../../../types/generated/graphql"
 import type { Server as SocketIO } from "socket.io"
 import { bots } from ".."
 import type { ChatUser } from "../../../types/chat"
+import { getGroupLanguageByUuid } from "../../groups"
 
 const chlog = log.child({
     namespace: "guess-character",
@@ -25,7 +26,7 @@ const chlog = log.child({
 
 type GuessCharacterQuestion = ChineseGuessCharacterQuestion
 
-export const games: Record<Group["uuid"], GuessCharacterGame> = {} as const
+export const games: Record<string, GuessCharacterGame> = {} as const
 
 async function getRandomCharacter(
     language: GuessCharacterLocale
@@ -277,6 +278,7 @@ export async function handleEnded(
     _activity: GroupActivity
 ) {
     const { groupUuid } = chatUser
+    delete games[groupUuid]
     const bot = bots[groupUuid]
     if (bot) {
         await bot.send("guess-character-ended", {
@@ -285,12 +287,49 @@ export async function handleEnded(
     }
 }
 
-export const getPublicState = (groupUuid: Group["uuid"]) =>
+export const getPublicState = (groupUuid: string) =>
     games[groupUuid].publicState
+
+export async function start(groupUuid: string) {
+    const group = await getGroupLanguageByUuid(groupUuid)
+    if (!group || !group.groupByUuid?.language?.alpha2) {
+        chlog
+            .child({
+                groupUuid,
+            })
+            .debug("Group not found")
+        return null
+    }
+    const alpha2 = group.groupByUuid?.language?.alpha2
+    if (!GUESS_CHARACTER_LOCALES.some((locale) => locale === alpha2)) {
+        chlog
+            .child({
+                groupUuid,
+                alpha2,
+            })
+            .debug("Group locale does not support Guess Character")
+        return null
+    }
+    const game = (games[groupUuid] ||= new GuessCharacterGame(
+        alpha2 as GuessCharacterLocale
+    ))
+    if (!(await game.start())) {
+        end(groupUuid)
+        return null
+    }
+    return {
+        kind: GroupActivityKind.GuessCharacter,
+        state: game.publicState,
+        groupUuid,
+    }
+}
+
+const end = (groupUuid: string) => delete games[groupUuid]
 
 export default {
     handleStarted,
     handleEnded,
     handleUserConnected,
     getPublicState,
+    start,
 }

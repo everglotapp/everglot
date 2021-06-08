@@ -14,17 +14,13 @@ const chlog = log.child({
 })
 
 export class Bot {
-    groupUuid: Group["uuid"]
+    groupUuid: string
     locale: Language["alpha2"]
     io: SocketIO
 
     groupId: Maybe<Group["id"]> = null
 
-    constructor(
-        groupUuid: Group["uuid"],
-        locale: Language["alpha2"],
-        io: SocketIO
-    ) {
+    constructor(groupUuid: string, locale: Language["alpha2"], io: SocketIO) {
         this.groupUuid = groupUuid
         this.locale = locale
         this.io = io

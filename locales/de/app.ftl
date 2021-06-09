@@ -124,7 +124,7 @@ join-form-email = E-Mail
 join-form-password = Passwort
 join-form-submit = Registrieren
 join-form-login = Ich habe schon einen Account
-join-form-google = Meinen Google-Account nutzen
+join-form-google = Google-Account nutzen
 
 ## Signup page
 

@@ -7,7 +7,7 @@
 
 ## Chat page
 
-chat-browser-window-title = { -brand-name } – Language Community
+chat-browser-window-title = { -brand-name } – Learn Together.
 chat-panel-games = Games
 chat-panel-subtitles = Subtitles
 chat-submit-form-join-group = Join Group
@@ -64,14 +64,14 @@ chat-side-panel-activity-guess-character-feedback-character-already-picked = The
 chat-side-panel-activity-guess-character-feedback-character-not-available = The character { $badCharacter } is not available
 chat-side-panel-activity-would-you-rather-picked-answer = You picked <strong class="text-gray-bitdark">{ $answer }</strong>!
 chat-side-panel-activity-would-you-rather-timer =
-        The poll ends in { $seconds ->
+    The poll ends in { $seconds ->
         [one] { $seconds } second
        *[other] { $seconds } seconds
     }.
 chat-submit-form-send = Send
 chat-submit-form-connecting = Connecting …
 # Chat text message input field
-chat-submit-form-input = {""}
+chat-submit-form-input = { "" }
     .placeholder = Enter text message …
 chat-message-username-unknown = unknown
 chat-message-show-less = Show less
@@ -189,11 +189,13 @@ user-bio-error = Error
 global-browser-window-title = Global – { -brand-name }
 global-sidebar-language = Language
 global-main-channels = Channels
-global-group-members-count = { $membersCount } { $membersCount ->
-    [one] member
-    *[other] members
-}
+global-group-members-count =
+    { $membersCount } { $membersCount ->
+        [one] member
+       *[other] members
+    }
 global-error = Error
+
 ## Profile page
 
 profile-browser-window-title = My Profile – { -brand-name }
@@ -211,7 +213,9 @@ profile-languages = My Languages
 profile-language-native-hint = (Native)
 profile-groups = My Groups
 profile-avatar-upload-failed = Your avatar could not be changed successfully. Please try again.
+
 ## Locales
+
 locale-en = English
 locale-de = German
 locale-zh = Chinese

@@ -34,14 +34,13 @@ export async function connectToDatabase() {
 }
 
 export async function disconnectFromDatabase() {
-    return destroyDatabasePool().then(() => {
-        chlog.info("Disconnected from database")
-    })
+    await destroyDatabasePool()
+    chlog.info("Disconnected from database")
 }
 
 export const createDatabasePool = () => (db ||= makeDatabasePool())
 
-export const destroyDatabasePool = async () => {
+export const destroyDatabasePool = async (): Promise<void> => {
     if (!db) {
         return
     }

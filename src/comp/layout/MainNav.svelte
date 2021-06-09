@@ -94,32 +94,30 @@
         clearTimeout(resetCopiedTimeout)
         setTimeout(reset, 5000)
     }
-    function handleCopyClipboard(event: MouseEvent) {
+    async function handleCopyClipboard(event: MouseEvent): Promise<void> {
         event.preventDefault()
         clearTimeout(resetCopiedTimeout)
         if (navigator?.clipboard && inviteLink) {
-            navigator.clipboard
-                .writeText(inviteLink)
-                .then(async () => {
-                    if (copiedInviteLink === true) {
-                        // If it succeeded before, make sure there is a transition so
-                        // that the user can see the new success happening
-                        copiedInviteLink = null
-                        await tick()
-                    }
-                    copiedInviteLink = true
-                    debounceReset()
-                })
-                .catch(async () => {
-                    if (copiedInviteLink === false) {
-                        // If it failed before, make sure there is a transition so
-                        // that the user can see the new failure happening
-                        copiedInviteLink = null
-                        await tick()
-                    }
-                    copiedInviteLink = false
-                    debounceReset()
-                })
+            try {
+                await navigator.clipboard.writeText(inviteLink)
+                if (copiedInviteLink === true) {
+                    // If it succeeded before, make sure there is a transition so
+                    // that the user can see the new success happening
+                    copiedInviteLink = null
+                    await tick()
+                }
+                copiedInviteLink = true
+            } catch (e) {
+                if (copiedInviteLink === false) {
+                    // If it failed before, make sure there is a transition so
+                    // that the user can see the new failure happening
+                    copiedInviteLink = null
+                    await tick()
+                }
+                copiedInviteLink = false
+            } finally {
+                debounceReset()
+            }
         }
     }
 </script>

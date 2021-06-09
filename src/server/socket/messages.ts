@@ -13,7 +13,6 @@ const anchorme: typeof _anchorme = _anchorme.default || _anchorme
 import { performQuery } from "../gql"
 
 import type {
-    User,
     CreateMessageMutation,
     CreateMessageMutationVariables,
     CreateMessagePreviewMutation,
@@ -110,7 +109,7 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
 
 export function formatMessage(
     text: string,
-    userUuid: User["uuid"] | null = null
+    userUuid: string | null = null
 ): ChatMessage {
     return {
         uuid: uuidv4(),

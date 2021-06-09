@@ -1,5 +1,6 @@
 <script lang="ts">
     import PageTitle from "../comp/typography/PageTitle.svelte"
+    import ErrorMessage from "../comp/util/ErrorMessage.svelte"
     export let status: number
     export let error: Error
 
@@ -13,7 +14,7 @@
 <div class="container px-4 mx-auto mt-16 mb-32 max-w-sm">
     <PageTitle>{status}</PageTitle>
 
-    <p>{error.message}</p>
+    <ErrorMessage>{error.message}</ErrorMessage>
 
     {#if dev && error.stack}
         <pre>{error.stack}</pre>

@@ -20,6 +20,8 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
     import Modal from "../util/Modal.svelte"
+    import { WEBRTC_CONTEXT } from "../util/WebrtcProvider.svelte"
+    import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
 
     import {
         currentUser,
@@ -35,7 +37,7 @@
 
     export let segment: string | undefined
 
-    const webrtc = getContext("WEBRTC")
+    const webrtc = getContext<WebrtcContext>(WEBRTC_CONTEXT)
     const { joinedRoom: joinedCallRoom } = webrtc
 
     async function handleLogout() {
@@ -218,11 +220,15 @@
                                                             ($groupUuid =
                                                                 group.uuid)}
                                                         >{group.groupName || ""}
-                                                        ({group.language?.alpha2.toUpperCase() ||
-                                                            ""}
-                                                        {group
-                                                            ?.languageSkillLevel
-                                                            ?.name || ""})
+                                                        ({group.language
+                                                            ? group.language.alpha2.toUpperCase() ||
+                                                              ""
+                                                            : ""}
+                                                        {group.languageSkillLevel
+                                                            ? group
+                                                                  .languageSkillLevel
+                                                                  .name || ""
+                                                            : ""})
                                                         {#if group.uuid === $joinedCallRoom}<MicIcon
                                                                 size="18"
                                                                 class="text-gray-bitdark ml-2"
@@ -321,7 +327,8 @@
                                                     className="w-full justify-between items-center"
                                                     href={`/chat?group=${$joinedCallRoom}`}
                                                     on:click={() =>
-                                                        ($groupUuid = $joinedCallRoom)}
+                                                        ($groupUuid =
+                                                            $joinedCallRoom)}
                                                     ><span class="mr-1"
                                                         ><Localized
                                                             id="main-nav-go-to-call"
@@ -364,6 +371,21 @@
                                                 >
                                             </div>
                                         {/if}
+                                        <hr class="mt-2" />
+                                        <div>
+                                            <ButtonSmall
+                                                variant="TEXT"
+                                                color="SECONDARY"
+                                                tag="a"
+                                                className="w-full"
+                                                href="https://everglot.com/privacy"
+                                                ><span class="mr-1"
+                                                    ><Localized
+                                                        id="main-nav-privacy"
+                                                    /></span
+                                                ></ButtonSmall
+                                            >
+                                        </div>
                                         <div>
                                             <ButtonSmall
                                                 variant="TEXT"
@@ -393,8 +415,12 @@
                     >
                         {#if !$currentUserStore.fetching}
                             <Avatar
-                                url={$currentUser?.avatarUrl || ""}
-                                username={$currentUser?.username || ""}
+                                url={$currentUser
+                                    ? $currentUser.avatarUrl || ""
+                                    : ""}
+                                username={$currentUser
+                                    ? $currentUser.username || ""
+                                    : ""}
                                 size={42}
                             />
                             {#if $joinedCallRoom}
@@ -498,8 +524,8 @@
     .nav-container {
         @apply shadow-md;
         @apply bg-white;
+        @apply relative;
 
-        position: relative;
         z-index: 10;
         max-height: 58px;
 
@@ -591,22 +617,6 @@
         @screen md {
             width: 32px;
         }
-    }
-
-    .avatar {
-        border-radius: 50%;
-        width: 42px;
-        height: 42px;
-
-        @apply bg-gray-light;
-        @apply overflow-hidden;
-        @apply flex;
-        @apply justify-center;
-        @apply items-center;
-    }
-
-    .avatar > .initial {
-        height: 1.625rem;
     }
 
     .dropdown {

@@ -1,3 +1,18 @@
+<script lang="ts" context="module">
+    import type { Readable } from "svelte/store"
+    export const WEBRTC_CONTEXT = {}
+    export interface WebrtcContext {
+        outgoing: Readable<IMicrophoneAudioTrack | null>
+        remoteUsers: Readable<IAgoraRTCRemoteUser[]>
+        isInCall: Readable<boolean>
+        joinedRoom: Readable<string | null>
+        joining: Readable<boolean>
+        init: () => Promise<void>
+        joinRoom: (roomId: string, userId: string) => Promise<boolean>
+        leaveRoom: () => Promise<boolean>
+    }
+</script>
+
 <script lang="ts">
     import { onDestroy, setContext } from "svelte"
     import { writable } from "svelte/store"
@@ -9,7 +24,7 @@
         IMicrophoneAudioTrack,
     } from "agora-rtc-sdk-ng"
 
-    import { AGORA_APP_ID } from "../../../constants"
+    import { AGORA_APP_ID } from "../../constants"
 
     let AgoraRTC: IAgoraRTC
 
@@ -21,16 +36,15 @@
     const isInCall = writable(false)
     $: isInCall.set($outgoing !== null)
 
-    export let contextKey: string
-    setContext(contextKey, {
+    setContext<WebrtcContext>(WEBRTC_CONTEXT, {
         outgoing,
         remoteUsers,
         isInCall,
         joinedRoom,
+        joining,
         init,
         joinRoom,
         leaveRoom,
-        joining,
     })
 
     let client: IAgoraRTCClient | undefined

@@ -8,6 +8,7 @@ export enum GroupActivityKind {
 export interface GroupActivity {
     kind: GroupActivityKind
     state?: GroupActivityState
+    groupUuid: string
 }
 
 export interface HangmanGroupActivity extends GroupActivity {

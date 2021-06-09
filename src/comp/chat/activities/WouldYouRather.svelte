@@ -10,6 +10,8 @@
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
     import ButtonLarge from "../../util/ButtonLarge.svelte"
+    import { CHAT_CONTEXT } from "../../util/ChatProvider.svelte"
+    import type { ChatContext } from "../../util/ChatProvider.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
 
     import { currentUserIsGroupMember } from "../../../stores/chat"
@@ -18,7 +20,7 @@
     export let question: string
     export let endTime: string
 
-    const chat = getContext("CHAT")
+    const chat = getContext<ChatContext>(CHAT_CONTEXT)
     const { connected: connectedToChat } = chat
 
     let pickedAnswer: number | null = null

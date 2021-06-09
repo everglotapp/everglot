@@ -1,24 +1,49 @@
+<script lang="ts" context="module">
+    import type { Readable } from "svelte/store"
+    export const CHAT_CONTEXT = {}
+    export interface ChatContext {
+        joinedRoom: Readable<string | null>
+        connected: Readable<boolean>
+        lastMessageSentAt: Readable<number | null>
+        lastSentMessage: Readable<ChatMessage | null>
+        connect: () => void
+        disconnect: () => void
+        joinRoom: (room: string) => void
+        leaveRoom: () => boolean
+        sendMessage: (msg: string) => boolean
+        emit: (ev: string, ...args: any[]) => boolean
+        on: (ev: string, listener: ListenerFunction) => boolean
+        off: (
+            ev?: string | undefined,
+            listener?: ListenerFunction | undefined
+        ) => boolean
+    }
+    type ListenerFunction = (...args: any[]) => void
+</script>
+
 <script lang="ts">
     import { onDestroy, setContext } from "svelte"
     import { writable } from "svelte/store"
 
     import { io } from "socket.io-client"
-    import type SocketIO from "socket.io-client"
+    import type { Socket } from "socket.io-client"
 
-    import { setUsersInCall } from "../../../stores/call"
+    import { v4 as uuidv4 } from "uuid"
 
-    import type { Group } from "../../../types/generated/graphql"
-
-    import type { ChatUser } from "../../../types/chat"
+    import { setUsersInCall } from "../../stores/call"
+    import type { ChatMessage } from "../../types/chat"
 
     const joinedRoom = writable<string | null>(null)
-    const socket = writable<SocketIO.Socket | null>(null)
+    const socket = writable<Socket | null>(null)
     const connected = writable(false)
+    const lastSentMessage = writable<ChatMessage | null>(null)
+    const lastMessageSentAt = writable<number | null>(null)
 
-    export let contextKey: string
-    setContext(contextKey, {
+    setContext(CHAT_CONTEXT, {
         joinedRoom,
         connected,
+        lastMessageSentAt,
+        lastSentMessage,
         connect,
         disconnect,
         joinRoom,
@@ -51,17 +76,12 @@
         s.on("disconnecting", () => {
             $connected = false
             $socket = null
+            $joinedRoom = null
         })
 
-        s.on(
-            "welcome",
-            (detail: {
-                user: Pick<ChatUser["user"], "uuid">
-                groupUuid: Group["uuid"]
-            }) => {
-                $joinedRoom = detail.groupUuid
-            }
-        )
+        s.on("welcome", (detail: { userUuid: string; groupUuid: string }) => {
+            $joinedRoom = detail.groupUuid
+        })
         s.on("callUsers", setUsersInCall)
 
         $socket = s
@@ -102,16 +122,24 @@
         }
         // console.log("Leaving room", { joinedRoom: $joinedRoom })
         $socket.emit("leaveRoom")
+        $joinedRoom = null
         return true
     }
 
-    export function sendMessage(msg: string): boolean {
+    export function sendMessage(msg: string, userUuid: string | null): boolean {
         if (!$socket || !$socket.connected) {
             // console.log("Not sending", msg, "no socket")
             return false
         }
         // console.log("Sending", msg)
         $socket.emit("chatMessage", msg)
+        $lastMessageSentAt = Date.now()
+        $lastSentMessage = {
+            uuid: uuidv4(),
+            text: msg,
+            time: new Date().toISOString(),
+            userUuid,
+        }
         return true
     }
 
@@ -123,7 +151,7 @@
         return true
     }
 
-    export function on(ev: string, listener: Function): boolean {
+    export function on(ev: string, listener: ListenerFunction): boolean {
         if (!$socket || !$socket.connected) {
             return false
         }
@@ -131,7 +159,7 @@
         return true
     }
 
-    export function off(ev?: string, listener?: Function): boolean {
+    export function off(ev?: string, listener?: ListenerFunction): boolean {
         if (!$socket || !$socket.connected) {
             return false
         }

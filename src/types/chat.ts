@@ -1,10 +1,10 @@
 import { MESSAGE_PREVIEW_BASE_PATH } from "../constants"
-import type { Group, User } from "./generated/graphql"
+import type { User } from "./generated/graphql"
 
 export type ChatUser = {
     socketId: string
     user: Pick<User, "id" | "username" | "uuid" | "avatarUrl">
-    groupUuid: Group["uuid"]
+    groupUuid: string
     joinedAt: Date
 }
 
@@ -12,7 +12,7 @@ export type ChatMessage = {
     text: string
     time: string
     uuid: string
-    userUuid: User["uuid"] | null
+    userUuid: string | null
 }
 
 const enum ChatMessagePreviewType {
@@ -23,14 +23,6 @@ export type ChatMessagePreview = {
     uuid: string
     url: string
     type: string
-}
-
-export type VoiceChatUser = {
-    userUuid: User["uuid"]
-    groupUuid: Group["uuid"]
-    joinedAt: Date
-    micMuted: boolean
-    audioMuted: boolean
 }
 
 export function makeChatMessagePreview(

@@ -41,10 +41,12 @@ export default {
                 preventAssignment: true,
             }),
             svelte({
-                dev,
-                hydratable: true,
                 emitCss: true,
                 preprocess,
+                compilerOptions: {
+                    dev,
+                    hydratable: true,
+                },
             }),
             url({
                 sourceDir: path.resolve(__dirname, "src/node_modules/images"),
@@ -124,10 +126,12 @@ export default {
                 preventAssignment: true,
             }),
             svelte({
-                generate: "ssr",
-                hydratable: true,
-                dev,
                 preprocess,
+                compilerOptions: {
+                    generate: "ssr",
+                    hydratable: true,
+                    dev,
+                },
             }),
             url({
                 sourceDir: path.resolve(__dirname, "src/node_modules/images"),

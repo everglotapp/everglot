@@ -2,9 +2,11 @@
     import { createEventDispatcher, getContext } from "svelte"
     import { scale } from "svelte/transition"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
-    import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/FluentProvider.svelte"
+    import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
+    import { CHAT_CONTEXT } from "../../util/ChatProvider.svelte"
+    import type { ChatContext } from "../../util/ChatProvider.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
 
     import { currentUser } from "../../../stores"
@@ -22,7 +24,7 @@
     export let locale: HangmanLocale | null
     let forceDisableInputs = false
 
-    const chat = getContext("CHAT")
+    const chat = getContext<ChatContext>(CHAT_CONTEXT)
     const { connected: connectedToChat } = chat
 
     const dispatch = createEventDispatcher()

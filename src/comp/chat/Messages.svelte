@@ -1,9 +1,12 @@
 <script lang="ts">
-    import { onMount } from "svelte"
+    import { onMount, getContext, beforeUpdate, afterUpdate } from "svelte"
+    import { scale } from "svelte/transition"
 
     import Message from "./Message.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import Spinner from "../util/Spinner.svelte"
+    import { CHAT_CONTEXT } from "../util/ChatProvider.svelte"
+    import type { ChatContext } from "../util/ChatProvider.svelte"
     import { groupChatMessagesStore } from "../../stores/chat"
 
     import type { ChatMessage, ChatMessagePreview } from "../../types/chat"
@@ -19,64 +22,103 @@
     let messagesContainer: HTMLElement | undefined
     export let messages: ChatMessage[] = []
     export let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
-    export let lastSentMessage: ChatMessage | null = null
-    export let lastMessageSentAt: number | null = null
 
-    let latestSentMessageHandledAt: number | null = null
+    const { lastSentMessage, lastMessageSentAt } =
+        getContext<ChatContext>(CHAT_CONTEXT)
+
+    let latestSentMessageHandledAt: number = Date.now()
+    let scrollFunction: Function | null = null
+    let scrolledToBottomBeforeRender: boolean = true
+    let scrollHeightBeforeRender: number | null = null
+    let oldMessageUuids: string[] = []
+    let oldPreviewUuids: string[] = []
 
     $: {
         messages // dependency
         previews // dependency
 
-        const forceScrollToBottom =
-            messagesContainer && isScrolledToBottom(messagesContainer)
-        const handleLastMessage =
-            !!latestSentMessageHandledAt &&
-            !!lastSentMessage &&
-            !!lastMessageSentAt &&
-            lastMessageSentAt > latestSentMessageHandledAt
+        // console.log("Got new messages or previews", {
+        //     scrolledToBottomBeforeRender,
+        // })
+        const newMessageUuids = messages.map((message) => message.uuid)
+        const newPreviewUuids = newMessageUuids.reduce((uuids, messageUuid) => {
+            if (typeof previews[messageUuid] === "undefined") {
+                return uuids
+            }
+            previews[messageUuid].forEach((preview) => {
+                uuids.push(preview.uuid)
+            })
+            return uuids
+        }, [] as string[])
+        const anythingInsertedAtTop =
+            (newMessageUuids.length > oldMessageUuids.length &&
+                oldMessageUuids.some(
+                    (oldUuid, i) => oldUuid !== newMessageUuids[i]
+                )) ||
+            (newPreviewUuids.length > oldPreviewUuids.length &&
+                oldPreviewUuids.some(
+                    (oldUuid, i) => oldUuid !== newPreviewUuids[i]
+                ))
 
-        if (handleLastMessage) {
-            // handle single message sent by user
-
-            setTimeout(() => {
-                if (!messagesContainer) {
-                    return
-                }
-
+        const adjustScrollPosition = () => {
+            if (!messagesContainer) {
+                // console.log("No messages container")
+                return
+            }
+            const handlingLatestSentMessage =
+                !!$lastSentMessage &&
+                !!$lastMessageSentAt &&
+                $lastMessageSentAt > latestSentMessageHandledAt
+            // console.log("Adjusting scroll position", {
+            //     handlingLatestSentMessage,
+            //     latestSentMessageHandledAt,
+            //     scrolledToBottomBeforeRender,
+            //     scrollHeightBeforeRender,
+            //     anythingInsertedAtTop,
+            //     newMessageUuidsLength: newMessageUuids.length,
+            //     newPreviewUuidsLength: newPreviewUuids.length,
+            //     oldMessageUuidsLength: oldMessageUuids.length,
+            //     oldPreviewUuidsLength: oldPreviewUuids.length,
+            //     lastMessageSentAt: $lastMessageSentAt,
+            //     lastSentMessage: $lastSentMessage,
+            // })
+            let forceBottom: boolean = scrolledToBottomBeforeRender
+            if (handlingLatestSentMessage) {
                 /**
                  * Force auto-scroll if the user sent the message themselves
                  * or if the user didn't scroll upwards before receiving the message.
                  */
-                const force =
-                    isOwnMessage(lastSentMessage!) ||
-                    (!!messagesContainer &&
-                        isScrolledToBottom(messagesContainer))
-                scrollToBottom(messagesContainer, force)
-
+                forceBottom ||= isOwnMessage($lastSentMessage!)
+                // console.log("Handling latest sent message", {
+                //     forceBottom,
+                //     isOwn: isOwnMessage($lastSentMessage!),
+                // })
                 latestSentMessageHandledAt = Date.now()
-            }, 100)
-        } else {
-            // handle multiple loaded messages
-
-            const previousHeight = messagesContainer
-                ? messagesContainer.scrollHeight
-                : null
-            setTimeout(() => {
-                if (!messagesContainer) {
-                    return
+            }
+            if (scrollHeightBeforeRender === null) {
+                // console.log("No previous height, forcing bottom")
+                forceBottom = true
+            } else if (!forceBottom) {
+                if (anythingInsertedAtTop) {
+                    // Reset scroll position that changed due to new messages or previews being inserted at the top.
+                    const heightDifference =
+                        messagesContainer.scrollHeight -
+                        scrollHeightBeforeRender
+                    // console.log("Resetting scroll position", {
+                    //     heightDifference,
+                    //     scrollHeight: messagesContainer.scrollHeight,
+                    //     scrollTop: messagesContainer.scrollTop,
+                    // })
+                    if (heightDifference > 0) {
+                        messagesContainer.scrollTop += heightDifference
+                    }
                 }
-                if (previousHeight === null) {
-                    scrollToBottom(messagesContainer, forceScrollToBottom)
-                    return
-                }
-                const heightDifference =
-                    messagesContainer.scrollHeight - previousHeight
-                if (heightDifference > 0) {
-                    messagesContainer.scrollTop += heightDifference
-                }
-            }, 150)
+            }
+            scrollToBottom(messagesContainer, forceBottom)
         }
+        scrollFunction = adjustScrollPosition
+        oldMessageUuids = newMessageUuids
+        oldPreviewUuids = newPreviewUuids
     }
 
     const FETCH_OLDER_MAX_SCROLL_TOP_PX = 1500
@@ -109,6 +151,29 @@
             }
         }, 150)
     })
+
+    beforeUpdate(() => {
+        if (messagesContainer) {
+            scrolledToBottomBeforeRender = isScrolledToBottom(messagesContainer)
+            // TODO: Update this scroll height upon new scroll events that happen
+            // before the next afterUpdate() is triggered. Obviously it can change.
+            // The latest scroll height should therefore always be tracked.
+            scrollHeightBeforeRender = messagesContainer.scrollHeight
+        } else {
+            scrollHeightBeforeRender = null
+        }
+    })
+
+    afterUpdate(() => {
+        if (scrollFunction !== null) {
+            scrollFunction()
+            scrollFunction = null
+        }
+    })
+
+    $: hasEarlierMessages =
+        $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId
+            .pageInfo.hasPreviousPage
 </script>
 
 <div class="messages" on:scroll={handleScroll} bind:this={messagesContainer}>
@@ -127,7 +192,7 @@
                 className="text-sm mb-2">Try again</ButtonSmall
             >
         </div>
-    {:else if $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId.pageInfo.hasPreviousPage}
+    {:else if hasEarlierMessages}
         <div class="flex justify-center">
             <ButtonSmall
                 tag="button"
@@ -156,7 +221,10 @@
         />
         {#if previews[message.uuid]}
             {#each previews[message.uuid] as preview (preview.uuid)}
-                <div class="message-preview">
+                <div
+                    class="message-preview"
+                    in:scale|local={{ duration: 200, delay: 200 }}
+                >
                     <img
                         src={preview.url}
                         alt="Preview"

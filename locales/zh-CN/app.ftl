@@ -77,6 +77,7 @@ main-nav-profile = 个人面板
 main-nav-invite-friends = 邀请朋友
 main-nav-logout = 注销
 main-nav-go-to-call = 回到语音组
+main-nav-privacy = 隐私
 
 ## Signup successful page
 
@@ -144,11 +145,6 @@ signup-form-gender-female = 女生
 signup-form-gender-male = 男生
 signup-form-gender-other = 其他
 signup-form-submit = 下一步
-
-## Footer component
-
-footer-privacy = 隐私
-footer-imprint = 版本说明
 
 ## User Bio component
 

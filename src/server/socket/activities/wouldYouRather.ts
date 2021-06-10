@@ -101,12 +101,38 @@ export class WouldYouRatherGame {
             })
             .trace("User tried to pick an answer")
         if (!this.question) {
+            chlog
+                .child({
+                    userUuid,
+                    answerIndex,
+                    question: this.question,
+                    picks: this.#picks,
+                })
+                .debug("No question")
             return null
         }
         if (answerIndex < 0 || answerIndex >= this.question.answers.length) {
+            chlog
+                .child({
+                    userUuid,
+                    answerIndex,
+                    question: this.question,
+                    picks: this.#picks,
+                    answers: this.question?.answers || "unknown",
+                })
+                .debug("answerIndex wrong")
             return null
         }
         if (this.#picks.hasOwnProperty(userUuid)) {
+            chlog
+                .child({
+                    userUuid,
+                    answerIndex,
+                    question: this.question,
+                    picks: this.#picks,
+                    answers: this.question?.answers || "unknown",
+                })
+                .debug("userUuid has picked already")
             return null
         }
         this.#picks[userUuid] = answerIndex
@@ -260,6 +286,7 @@ export async function handleEnded(
     _activity: GroupActivity
 ) {
     const { groupUuid } = chatUser
+    end(groupUuid)
     const bot = bots[groupUuid]
     if (bot) {
         await bot.send("would-you-rather-ended", {

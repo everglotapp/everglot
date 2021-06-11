@@ -31,6 +31,7 @@ chat-sidebar-switch-call-text = You are already in a call, do you want to switch
 chat-sidebar-switch-call-cancel = Cancel
 chat-sidebar-switch-call-confirm = Switch
 chat-side-panel-bubble = Welcome to the game center. Select a game to play with your study group.
+chat-side-panel-bubble-no-activity-available = Sorry, Everglot does not support games for { $language }, yet.
 chat-side-panel-menu-hangman = Play Hangman
 chat-side-panel-menu-would-you-rather = Play Would You Rather
 chat-side-panel-menu-random-question = Ask a Random Question

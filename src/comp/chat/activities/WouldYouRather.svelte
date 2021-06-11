@@ -37,10 +37,17 @@
                 : Math.ceil((endDate.getTime() - Date.now()) / 1000)
         }, 1000)
     })
+
     onDestroy(() => {
         clearInterval(updateInterval)
         updateInterval = undefined
     })
+
+    const handleQuestionChanged = () => {
+        pickedAnswer = null
+    }
+    // @ts-ignore
+    $: question, handleQuestionChanged()
 
     function pickAnswer(answerIndex: number) {
         if (!$connectedToChat) {
@@ -117,7 +124,7 @@
                     >!
                 </Overlay>
             </div>
-        {:else}
+        {:else if !over}
             <div class="mb-4">
                 {#each answers as answer, i}
                     <div class="answer">
@@ -146,7 +153,7 @@
         {#if over}
             <ButtonLarge
                 tag="button"
-                className="w-full justify-center"
+                className="justify-center"
                 color="SECONDARY"
                 variant="OUTLINED"
                 disabled={!$currentUserIsGroupMember || !$connectedToChat}

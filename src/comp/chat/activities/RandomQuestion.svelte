@@ -17,7 +17,8 @@
     import { currentUserIsGroupMember } from "../../../stores/chat"
 
     export let question: string
-    let endTime = Date.now()
+    const MIN_RANDOM_QUESTION_DURATION_SECONDS = 20
+    let endTime = Date.now() + 1000 * MIN_RANDOM_QUESTION_DURATION_SECONDS
     // @ts-ignore
     $: question, resetEndTime()
     $: endDate = new Date(endTime)
@@ -25,7 +26,7 @@
     let updateInterval: number | undefined
 
     const resetEndTime = () => {
-        endTime = Date.now() + 1000 * 10
+        endTime = Date.now() + 1000 * MIN_RANDOM_QUESTION_DURATION_SECONDS
     }
 
     onMount(() => {
@@ -95,7 +96,7 @@
         {#if over}
             <ButtonLarge
                 tag="button"
-                className="w-full justify-center"
+                className="justify-center"
                 color="SECONDARY"
                 variant="OUTLINED"
                 disabled={!$currentUserIsGroupMember || !$connectedToChat}

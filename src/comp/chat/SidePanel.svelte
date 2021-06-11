@@ -23,7 +23,10 @@
     } from "../../types/activities"
 
     import { groupUuid } from "../../stores"
-    import { currentGroupLocale } from "../../stores/locales"
+    import {
+        currentGroupLocale,
+        currentGroupLanguage,
+    } from "../../stores/locales"
     import {
         HANGMAN_LOCALES,
         WOULD_YOU_RATHER_LOCALES,
@@ -61,23 +64,28 @@
     }
 
     $: groupCanPlayHangman =
-        $currentGroupLocale &&
+        $currentGroupLocale !== null &&
         (HANGMAN_LOCALES as readonly string[]).includes($currentGroupLocale)
     $: groupCanPlayGuessCharacter =
-        $currentGroupLocale &&
+        $currentGroupLocale !== null &&
         (GUESS_CHARACTER_LOCALES as readonly string[]).includes(
             $currentGroupLocale
         )
     $: groupCanPlayWouldYouRather =
-        $currentGroupLocale &&
+        $currentGroupLocale !== null &&
         (WOULD_YOU_RATHER_LOCALES as readonly string[]).includes(
             $currentGroupLocale
         )
     $: groupCanBeAskedRandomQuestion =
-        $currentGroupLocale &&
+        $currentGroupLocale !== null &&
         (RANDOM_QUESTION_LOCALES as readonly string[]).includes(
             $currentGroupLocale
         )
+    $: groupCanPlayAnyGame =
+        groupCanPlayHangman ||
+        groupCanPlayGuessCharacter ||
+        groupCanPlayWouldYouRather ||
+        groupCanBeAskedRandomQuestion
     $: hangmanActivity =
         activity && activity.kind === GroupActivityKind.Hangman
             ? (activity as HangmanGroupActivity)
@@ -98,7 +106,7 @@
 
 <div>
     {#key $groupUuid}
-        {#if activity === null}
+        {#if activity === null && groupCanPlayAnyGame}
             <div
                 class="px-16 py-8 md:py-24"
                 in:scale={{ duration: 200, delay: 250 }}
@@ -205,6 +213,35 @@
                             >
                         </div>
                     {/if}
+                </div>
+            </div>
+        {:else if !groupCanPlayAnyGame}
+            <div
+                class="px-16 py-8 md:py-24"
+                in:scale={{ duration: 200, delay: 250 }}
+            >
+                <div
+                    class="relative flex justify-end"
+                    style="padding-right: 190px;"
+                >
+                    <div
+                        class="squirrel-bubble bg-primary-lightest p-4 max-w-sm font-bold text-lg text-gray-bitdark"
+                    >
+                        <Localized
+                            id="chat-side-panel-bubble-no-activity-available"
+                            args={{
+                                language:
+                                    $currentGroupLanguage === null
+                                        ? "this language"
+                                        : $currentGroupLanguage,
+                            }}
+                        />
+                    </div>
+                    <img
+                        src="/squirrel.png"
+                        alt="Squirrel"
+                        class="squirrel absolute right-4 top-4"
+                    />
                 </div>
             </div>
         {:else if hangmanActivity}

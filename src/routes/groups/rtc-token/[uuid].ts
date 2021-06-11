@@ -10,6 +10,7 @@ import log from "../../../logger"
 import { serverError } from "../../../helpers"
 
 import type { Request, Response } from "express"
+import { RTC_TOKEN_VALID_SECONDS } from "../../../server/constants"
 
 const { AGORA_APP_CERTIFICATE } = process.env
 if (!AGORA_APP_CERTIFICATE || !AGORA_APP_CERTIFICATE.length) {
@@ -17,6 +18,10 @@ if (!AGORA_APP_CERTIFICATE || !AGORA_APP_CERTIFICATE.length) {
         "AGORA_APP_CERTIFICATE environment variable required. Users will not be able to join voice chats."
     )
 }
+
+const chlog = log.child({
+    namespace: "rtc-token",
+})
 
 export async function get(req: Request, res: Response, _next: () => void) {
     if (!req.session.user_id) {
@@ -27,20 +32,24 @@ export async function get(req: Request, res: Response, _next: () => void) {
     const groupUuid = req.params["uuid"]
     // Check that this is an actual group UUID
     if (!groupUuid || !uuidValidate(groupUuid)) {
-        log.child({
-            userId,
-            groupUuid,
-        }).debug("Bad group UUID")
+        chlog
+            .child({
+                userId,
+                groupUuid,
+            })
+            .debug("Bad group UUID")
         res.json({
             success: false,
         })
         return
     }
     if (!userIsInGroup(userId, groupUuid)) {
-        log.child({
-            userId,
-            groupUuid,
-        }).debug("User not in group")
+        chlog
+            .child({
+                userId,
+                groupUuid,
+            })
+            .debug("User not in group")
         res.json({
             success: false,
         })
@@ -48,17 +57,21 @@ export async function get(req: Request, res: Response, _next: () => void) {
     }
     const userUuid = await getUserUuidById(userId)
     if (!userUuid) {
-        log.child({
-            userId,
-            groupUuid,
-        }).error("User UUID not found")
+        chlog
+            .child({
+                userId,
+                groupUuid,
+            })
+            .error("User UUID not found")
         serverError(res)
         return
     }
-    log.child({
-        userId,
-        groupUuid,
-    }).info("Generating RTC token")
+    chlog
+        .child({
+            userId,
+            groupUuid,
+        })
+        .info("Generating Agora RTC token")
     res.json({
         success: true,
         token: generateRtcToken(userUuid, groupUuid),
@@ -69,18 +82,29 @@ function generateRtcToken(userUuid: string, groupUuid: string) {
     if (!AGORA_APP_CERTIFICATE || !AGORA_APP_CERTIFICATE.length) {
         return ""
     }
-    const expireAfterSeconds = 86400
     const currentTimestamp = Math.floor(Date.now() / 1000)
-    const expirationTimestamp = currentTimestamp + expireAfterSeconds
+    const expirationTimestamp = currentTimestamp + RTC_TOKEN_VALID_SECONDS
 
     // Build token with user account
+    const channelName = groupUuid
+    const account = userUuid
+    const role = RtcRole.PUBLISHER
     const rtcToken = RtcTokenBuilder.buildTokenWithAccount(
         AGORA_APP_ID,
         AGORA_APP_CERTIFICATE,
-        groupUuid,
-        userUuid,
-        RtcRole.PUBLISHER,
+        channelName,
+        account,
+        role,
         expirationTimestamp
     )
+    chlog
+        .child({
+            account,
+            channelName,
+            role,
+            expirationTimestamp,
+            AGORA_APP_ID,
+        })
+        .debug("Successfully generated RTC token")
     return rtcToken
 }

@@ -28,8 +28,10 @@
     $: over = new Date() > endDate
     let updateInterval: number | undefined
     let remainingSeconds: number | null
+
     onMount(() => {
         updateInterval = setInterval(() => {
+            over = new Date() > endDate
             remainingSeconds = over
                 ? null
                 : Math.ceil((endDate.getTime() - Date.now()) / 1000)
@@ -49,6 +51,13 @@
         }
         pickedAnswer = answerIndex
         chat.emit("groupActivity.wouldYouRatherAnswer", { answerIndex })
+    }
+
+    function nextQuestion() {
+        if (!$connectedToChat) {
+            return
+        }
+        chat.emit("groupActivity.wouldYouRatherNextQuestion")
     }
 
     const dispatch = createEventDispatcher()
@@ -71,7 +80,7 @@
         className="items-center justify-center"
         color="PRIMARY"
         variant="TEXT"
-        disabled={!$currentUserIsGroupMember}
+        disabled={!$currentUserIsGroupMember || !$connectedToChat}
         on:click={handleQuit}
     >
         <XIcon size="20" />
@@ -133,6 +142,22 @@
                     args={{ seconds: remainingSeconds }}
                 />
             </div>
+        {/if}
+        {#if over}
+            <ButtonLarge
+                tag="button"
+                className="w-full justify-center"
+                color="SECONDARY"
+                variant="OUTLINED"
+                disabled={!$currentUserIsGroupMember || !$connectedToChat}
+                on:click={() => {
+                    nextQuestion()
+                }}
+            >
+                <Localized
+                    id="chat-side-panel-activity-would-you-rather-next-question"
+                /></ButtonLarge
+            >
         {/if}
     </div>
 </div>

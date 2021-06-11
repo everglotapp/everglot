@@ -1,19 +1,57 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte"
+    import {
+        onMount,
+        onDestroy,
+        createEventDispatcher,
+        getContext,
+    } from "svelte"
     import { scale } from "svelte/transition"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
+    import ButtonLarge from "../../util/ButtonLarge.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
+    import { CHAT_CONTEXT } from "../../util/ChatProvider.svelte"
+    import type { ChatContext } from "../../util/ChatProvider.svelte"
 
     import { currentUserIsGroupMember } from "../../../stores/chat"
 
     export let question: string
+    let endTime = Date.now()
+    // @ts-ignore
+    $: question, resetEndTime()
+    $: endDate = new Date(endTime)
+    $: over = new Date() > endDate
+    let updateInterval: number | undefined
+
+    const resetEndTime = () => {
+        endTime = Date.now() + 1000 * 10
+    }
+
+    onMount(() => {
+        updateInterval = setInterval(() => {
+            over = new Date() > endDate
+        }, 1000)
+    })
+    onDestroy(() => {
+        clearInterval(updateInterval)
+        updateInterval = undefined
+    })
+
+    const chat = getContext<ChatContext>(CHAT_CONTEXT)
+    const { connected: connectedToChat } = chat
 
     const dispatch = createEventDispatcher()
 
     const handleQuit = (_event: MouseEvent) => {
         dispatch("quit")
+    }
+
+    function nextQuestion() {
+        if (!$connectedToChat) {
+            return
+        }
+        chat.emit("groupActivity.randomQuestionNextQuestion")
     }
 </script>
 
@@ -53,7 +91,24 @@
             class="squirrel absolute right-4 top-4"
         />
     </div>
-    <div class="flex flex-col items-center pt-32" />
+    <div class="flex flex-col items-center pt-32">
+        {#if over}
+            <ButtonLarge
+                tag="button"
+                className="w-full justify-center"
+                color="SECONDARY"
+                variant="OUTLINED"
+                disabled={!$currentUserIsGroupMember || !$connectedToChat}
+                on:click={() => {
+                    nextQuestion()
+                }}
+            >
+                <Localized
+                    id="chat-side-panel-activity-random-question-next-question"
+                /></ButtonLarge
+            >
+        {/if}
+    </div>
 </div>
 
 <style>

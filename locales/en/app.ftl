@@ -68,6 +68,8 @@ chat-side-panel-activity-would-you-rather-timer =
         [one] { $seconds } second
        *[other] { $seconds } seconds
     }.
+chat-side-panel-activity-would-you-rather-next-question = Ask another question
+chat-side-panel-activity-random-question-next-question = Ask another question
 chat-submit-form-send = Send
 chat-submit-form-connecting = Connecting …
 # Chat text message input field

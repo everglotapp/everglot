@@ -196,6 +196,10 @@
         }, 1000)
     }
 
+    $: if (!$connectedToChat) {
+        forceDisableInputs = true
+    }
+
     const WRONG_LETTER_MOVE_Y_PX = 15
     const WRONG_WORD_MOVE_Y_PX = 60
     const MAX_MOVE_Y_PX = 90

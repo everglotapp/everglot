@@ -3,7 +3,7 @@
 
     import ButtonLarge from "./ButtonLarge.svelte"
 
-    import { GOOGLE_SIGNIN_CLIENT_ID } from "../../constants"
+    import { GOOGLE_WEB_SIGNIN_CLIENT_ID } from "../../constants"
 
     const dispatch = createEventDispatcher()
 
@@ -24,7 +24,7 @@
         clearInterval(initInterval)
         gapi.load("auth2", () => {
             GoogleAuth = gapi.auth2.init({
-                client_id: GOOGLE_SIGNIN_CLIENT_ID,
+                client_id: GOOGLE_WEB_SIGNIN_CLIENT_ID,
             })
             GoogleAuth.then(handleInit, handleInitError)
         })

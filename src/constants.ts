@@ -1,5 +1,11 @@
-export const GOOGLE_SIGNIN_CLIENT_ID =
+export const GOOGLE_WEB_SIGNIN_CLIENT_ID =
     "457984069949-bgc3aj14fi47olkp0arn7is4cr07cfla.apps.googleusercontent.com"
+export const GOOGLE_IOS_SIGNIN_CLIENT_ID =
+    "457984069949-79sdutia34vvkn2fcetcq1sblmhe38gk.apps.googleusercontent.com"
+export const GOOGLE_SIGNIN_CLIENT_ID = [
+    GOOGLE_WEB_SIGNIN_CLIENT_ID,
+    GOOGLE_IOS_SIGNIN_CLIENT_ID,
+]
 export const AGORA_APP_ID = "38aefcc1e5254b578fb65665fe227ed5"
 
 export const SUPPORTED_LOCALES = ["en", "de", "zh"] as const

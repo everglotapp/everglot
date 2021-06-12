@@ -1,5 +1,11 @@
-export const GOOGLE_SIGNIN_CLIENT_ID =
+export const GOOGLE_WEB_SIGNIN_CLIENT_ID =
     "457984069949-bgc3aj14fi47olkp0arn7is4cr07cfla.apps.googleusercontent.com"
+export const GOOGLE_IOS_SIGNIN_CLIENT_ID =
+    "457984069949-79sdutia34vvkn2fcetcq1sblmhe38gk.apps.googleusercontent.com"
+export const GOOGLE_SIGNIN_AUDIENCE = [
+    GOOGLE_WEB_SIGNIN_CLIENT_ID,
+    GOOGLE_IOS_SIGNIN_CLIENT_ID,
+]
 export const AGORA_APP_ID = "38aefcc1e5254b578fb65665fe227ed5"
 
 export const SUPPORTED_LOCALES = ["en", "de", "zh"] as const
@@ -19,7 +25,8 @@ export type RandomQuestionLocale = typeof RANDOM_QUESTION_LOCALES[number]
 
 export const MESSAGE_PREVIEW_BASE_PATH = "/images/preview" as const
 export const USER_UPLOADED_IMAGES_BASE_PATH = "/images/uploads" as const
-export const USER_AVATARS_BASE_PATH = `${USER_UPLOADED_IMAGES_BASE_PATH}/avatars` as const
+export const USER_AVATARS_BASE_PATH =
+    `${USER_UPLOADED_IMAGES_BASE_PATH}/avatars` as const
 
 export const WEBRTC_CONTEXT_KEY = "WEBRTC"
 

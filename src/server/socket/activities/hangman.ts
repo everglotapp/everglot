@@ -226,12 +226,16 @@ export async function handleUserConnected(
                     .debug("User trying to guess in hangman not found")
                 return
             }
-            const activity = getGroupActivity(chatUser.groupUuid)
+            const {
+                groupUuid,
+                user: { uuid: userUuid },
+            } = chatUser
+            const activity = getGroupActivity(groupUuid)
             if (!activity) {
                 chlog
                     .child({
-                        groupUuid: chatUser.groupUuid,
-                        userUuid: chatUser.user.uuid,
+                        groupUuid,
+                        userUuid,
                     })
                     .debug(
                         "User attempted hangman guess but no activity is running for their group"
@@ -241,8 +245,8 @@ export async function handleUserConnected(
             if (activity.kind !== GroupActivityKind.Hangman) {
                 chlog
                     .child({
-                        groupUuid: chatUser.groupUuid,
-                        userUuid: chatUser.user.uuid,
+                        groupUuid,
+                        userUuid,
                         guess,
                     })
                     .debug(
@@ -250,12 +254,12 @@ export async function handleUserConnected(
                     )
                 return
             }
-            const game = games[chatUser.groupUuid]!
+            const game = games[groupUuid]!
             if (typeof guess !== "string") {
                 chlog
                     .child({
-                        groupUuid: chatUser.groupUuid,
-                        userUuid: chatUser.user.uuid,
+                        groupUuid,
+                        userUuid,
                         guess,
                     })
                     .debug(
@@ -266,8 +270,8 @@ export async function handleUserConnected(
             if (!game.guessValid(guess)) {
                 chlog
                     .child({
-                        groupUuid: chatUser.groupUuid,
-                        userUuid: chatUser.user.uuid,
+                        groupUuid,
+                        userUuid,
                         guess,
                     })
                     .debug("User attempted hangman guess but guess was invalid")
@@ -278,36 +282,34 @@ export async function handleUserConnected(
             io.to(chatUser.groupUuid).emit("groupActivity.hangmanGuess", {
                 guess,
                 success,
-                userUuid: chatUser.user.uuid,
+                userUuid,
             })
 
             chlog
                 .child({
-                    groupUuid: chatUser.groupUuid,
-                    userUuid: chatUser.user.uuid,
+                    groupUuid,
+                    userUuid,
                     guess,
                     success,
                 })
                 .trace("User attempted hangman guess")
             // Tell group users about the new game state.
-            io.to(chatUser.groupUuid).emit(
-                "groupActivity",
-                getGroupActivity(chatUser.groupUuid)
-            )
-            setTimeout(async () => {
+            io.to(groupUuid).emit("groupActivity", getGroupActivity(groupUuid))
+            await (async function () {
+                await new Promise((resolve) => setTimeout(resolve, 6000))
                 if (await game.nextRound()) {
                     chlog
                         .child({
-                            groupUuid: chatUser.groupUuid,
-                            userUuid: chatUser.user.uuid,
+                            groupUuid,
+                            userUuid,
                         })
                         .debug("Hangman game proceeded to next round")
-                    io.to(chatUser.groupUuid).emit(
+                    io.to(groupUuid).emit(
                         "groupActivity",
-                        getGroupActivity(chatUser.groupUuid)
+                        getGroupActivity(groupUuid)
                     )
                 }
-            }, 6000)
+            })()
         }
     )
 }

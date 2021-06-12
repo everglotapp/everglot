@@ -29,3 +29,16 @@ export const currentGroupLocale = derived([currentGroup], ([$currentGroup]) => {
     }
     return $currentGroup.language?.alpha2 || null
 })
+
+/**
+ * The currently selected group's language in English.
+ */
+export const currentGroupLanguage = derived(
+    [currentGroup],
+    ([$currentGroup]) => {
+        if (!$currentGroup) {
+            return null
+        }
+        return $currentGroup.language?.englishName || null
+    }
+)

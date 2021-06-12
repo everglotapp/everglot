@@ -31,6 +31,7 @@ chat-sidebar-switch-call-text = You are already in a call, do you want to switch
 chat-sidebar-switch-call-cancel = Cancel
 chat-sidebar-switch-call-confirm = Switch
 chat-side-panel-bubble = Welcome to the game center. Select a game to play with your study group.
+chat-side-panel-bubble-no-activity-available = Sorry, Everglot does not support games for { $language }, yet.
 chat-side-panel-menu-hangman = Play Hangman
 chat-side-panel-menu-would-you-rather = Play Would You Rather
 chat-side-panel-menu-random-question = Ask a Random Question
@@ -40,6 +41,9 @@ chat-side-panel-activity-would-you-rather = Would You Rather
 chat-side-panel-activity-random-question = Random Question
 chat-side-panel-activity-guess-character = Guess the Character
 chat-side-panel-activity-quit = End Game
+chat-side-panel-activity-quit-text = You will be ending the game for everyone in the group, are you sure?
+chat-side-panel-activity-quit-cancel = Cancel
+chat-side-panel-activity-quit-confirm = Yes, I'm sure!
 chat-side-panel-activity-hangman-guess = Make a guess
 chat-side-panel-activity-hangman-enter = Enter
 chat-side-panel-activity-hangman-solution-correct = You correctly guessed:
@@ -68,6 +72,9 @@ chat-side-panel-activity-would-you-rather-timer =
         [one] { $seconds } second
        *[other] { $seconds } seconds
     }.
+chat-side-panel-activity-would-you-rather-next-question = Ask another question
+chat-side-panel-activity-random-question-next-question = Ask another question
+chat-side-panel-activity-random-question-discuss = Discuss in your group.
 chat-submit-form-send = Send
 chat-submit-form-connecting = Connecting …
 # Chat text message input field

@@ -87,9 +87,14 @@ export async function handleUserConnected(
         }
     })
 
-    await hangman.handleUserConnected(io, socket)
-    await guessCharacter.handleUserConnected(io, socket)
-    await wouldYouRather.handleUserConnected(io, socket)
+    for (const module of [
+        hangman,
+        guessCharacter,
+        wouldYouRather,
+        randomQuestion,
+    ]) {
+        await module.handleUserConnected(io, socket)
+    }
 }
 
 export function handleUserJoinedRoom(

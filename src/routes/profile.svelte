@@ -40,37 +40,36 @@
         errorId = null
         newAvatarUrl = null
         const formData = new FormData(avatarForm)
-        await fetch("/profile/picture", {
-            method: "POST",
-            body: formData,
-        })
-            .then((response) => response.json())
-            .then((result) => {
-                if (result.success) {
-                    newAvatarUrl = result.meta.avatarUrl
-                    $userProfileStore.context = {
-                        requestPolicy: "cache-and-network",
-                        pause: true,
-                    }
-                    $userProfileStore.context = {
-                        requestPolicy: "cache-and-network",
-                        pause: false,
-                    }
-                    $currentUserStore.context = {
-                        requestPolicy: "cache-and-network",
-                        pause: true,
-                    }
-                    $currentUserStore.context = {
-                        requestPolicy: "cache-and-network",
-                        pause: false,
-                    }
-                } else {
-                    errorId = "profile-avatar-upload-failed"
+        try {
+            const response = await fetch("/profile/picture", {
+                method: "POST",
+                body: formData,
+            })
+            const res = await response.json()
+            if (res && res.success) {
+                newAvatarUrl = res.meta.avatarUrl
+                $userProfileStore.context = {
+                    requestPolicy: "cache-and-network",
+                    pause: true,
                 }
-            })
-            .catch(() => {
+                $userProfileStore.context = {
+                    requestPolicy: "cache-and-network",
+                    pause: false,
+                }
+                $currentUserStore.context = {
+                    requestPolicy: "cache-and-network",
+                    pause: true,
+                }
+                $currentUserStore.context = {
+                    requestPolicy: "cache-and-network",
+                    pause: false,
+                }
+            } else {
                 errorId = "profile-avatar-upload-failed"
-            })
+            }
+        } catch (e) {
+            errorId = "profile-avatar-upload-failed"
+        }
     }
 
     $: email = userProfile?.email

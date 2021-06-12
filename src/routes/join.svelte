@@ -58,17 +58,16 @@
         password?: string
     }
     async function doSubmit(body: SubmitBody): Promise<Response> {
-        return fetch("/join", {
+        const response = await fetch("/join", {
             method: "post",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(body),
-        }).then(async (response: Response) => {
-            submitting = false
-            return response
         })
+        submitting = false
+        return response
     }
 
     async function handleGoogleSignIn(

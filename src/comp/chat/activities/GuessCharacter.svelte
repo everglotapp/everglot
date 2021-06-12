@@ -5,6 +5,7 @@
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
+    import Modal from "../../util/Modal.svelte"
     import { CHAT_CONTEXT } from "../../util/ChatProvider.svelte"
     import type { ChatContext } from "../../util/ChatProvider.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
@@ -22,6 +23,7 @@
     export let solution: string | null = null
     export let locale: GuessCharacterLocale | null
     let forceDisableInputs = false
+    let wantsToEndActivity = false
 
     const chat = getContext<ChatContext>(CHAT_CONTEXT)
     const { connected: connectedToChat } = chat
@@ -193,11 +195,7 @@
     const MAX_MOVE_Y_PX = 90
 </script>
 
-<div
-    class="flex flex-row m-4 max-h-12 px-2 justify-between items-center"
-    in:scale={{ duration: 200, delay: 350 }}
-    out:scale={{ duration: 200, delay: 0 }}
->
+<div class="flex flex-row m-4 max-h-12 px-2 justify-between items-center">
     <Headline4
         ><Localized id="chat-side-panel-activity-guess-character" /></Headline4
     >
@@ -207,7 +205,7 @@
         color="PRIMARY"
         variant="TEXT"
         disabled={!$currentUserIsGroupMember}
-        on:click={handleQuit}
+        on:click={() => (wantsToEndActivity = true)}
     >
         <XIcon size="20" />
         <span class="ml-1"
@@ -333,6 +331,37 @@
         {/key}
     {/if}
 </div>
+
+{#if wantsToEndActivity}
+    <Modal>
+        <div class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg">
+            <p class="mb-6 text-center">
+                <Localized id="chat-side-panel-activity-quit-text" />
+            </p>
+            <div class="flex justify-end">
+                <ButtonSmall
+                    tag="button"
+                    on:click={() => (wantsToEndActivity = false)}
+                    variant="TEXT"
+                    color="PRIMARY"
+                    ><Localized
+                        id="chat-side-panel-activity-quit-cancel"
+                    /></ButtonSmall
+                >
+                <ButtonSmall
+                    tag="button"
+                    on:click={() => {
+                        wantsToEndActivity = false
+                        handleQuit()
+                    }}
+                    ><Localized
+                        id="chat-side-panel-activity-quit-confirm"
+                    /></ButtonSmall
+                >
+            </div>
+        </div></Modal
+    >
+{/if}
 
 <style>
     .squirrel-container {

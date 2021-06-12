@@ -5,11 +5,12 @@
         onMount,
         onDestroy,
     } from "svelte"
-    import { scale } from "svelte/transition"
+    import { fade } from "svelte/transition"
     import { Localized, Overlay } from "@nubolab-ffwd/svelte-fluent"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
     import ButtonLarge from "../../util/ButtonLarge.svelte"
+    import Modal from "../../util/Modal.svelte"
     import { CHAT_CONTEXT } from "../../util/ChatProvider.svelte"
     import type { ChatContext } from "../../util/ChatProvider.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
@@ -28,17 +29,27 @@
     $: over = new Date() > endDate
     let updateInterval: number | undefined
     let remainingSeconds: number | null
+    let wantsToEndActivity = false
+
     onMount(() => {
         updateInterval = setInterval(() => {
+            over = new Date() > endDate
             remainingSeconds = over
                 ? null
                 : Math.ceil((endDate.getTime() - Date.now()) / 1000)
         }, 1000)
     })
+
     onDestroy(() => {
         clearInterval(updateInterval)
         updateInterval = undefined
     })
+
+    const handleQuestionChanged = () => {
+        pickedAnswer = null
+    }
+    // @ts-ignore
+    $: question, handleQuestionChanged()
 
     function pickAnswer(answerIndex: number) {
         if (!$connectedToChat) {
@@ -51,18 +62,21 @@
         chat.emit("groupActivity.wouldYouRatherAnswer", { answerIndex })
     }
 
+    function nextQuestion() {
+        if (!$connectedToChat) {
+            return
+        }
+        chat.emit("groupActivity.wouldYouRatherNextQuestion")
+    }
+
     const dispatch = createEventDispatcher()
 
-    const handleQuit = (_event: MouseEvent) => {
+    const handleQuit = () => {
         dispatch("quit")
     }
 </script>
 
-<div
-    class="flex flex-row m-4 max-h-12 px-2 justify-between items-center"
-    in:scale={{ duration: 200, delay: 350 }}
-    out:scale={{ duration: 200, delay: 0 }}
->
+<div class="flex flex-row m-4 max-h-12 px-2 justify-between items-center">
     <Headline4
         ><Localized id="chat-side-panel-activity-would-you-rather" /></Headline4
     >
@@ -71,8 +85,8 @@
         className="items-center justify-center"
         color="PRIMARY"
         variant="TEXT"
-        disabled={!$currentUserIsGroupMember}
-        on:click={handleQuit}
+        disabled={!$currentUserIsGroupMember || !$connectedToChat}
+        on:click={() => (wantsToEndActivity = true)}
     >
         <XIcon size="20" />
         <span class="ml-1"
@@ -86,7 +100,12 @@
         <div
             class="squirrel-bubble bg-primary-lightest p-4 max-w-sm font-bold text-lg text-gray-bitdark"
         >
-            {question}
+            <span
+                in:fade={{ duration: 200, delay: 350 }}
+                out:fade={{ duration: 200, delay: 0 }}
+            >
+                {question}</span
+            >
         </div>
         <img
             src="/squirrel.png"
@@ -108,7 +127,7 @@
                     >!
                 </Overlay>
             </div>
-        {:else}
+        {:else if !over}
             <div class="mb-4">
                 {#each answers as answer, i}
                     <div class="answer">
@@ -134,8 +153,55 @@
                 />
             </div>
         {/if}
+        {#if over}
+            <ButtonLarge
+                tag="button"
+                className="justify-center"
+                color="SECONDARY"
+                variant="OUTLINED"
+                disabled={!$currentUserIsGroupMember || !$connectedToChat}
+                on:click={() => {
+                    nextQuestion()
+                }}
+            >
+                <Localized
+                    id="chat-side-panel-activity-would-you-rather-next-question"
+                /></ButtonLarge
+            >
+        {/if}
     </div>
 </div>
+
+{#if wantsToEndActivity}
+    <Modal>
+        <div class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg">
+            <p class="mb-6 text-center">
+                <Localized id="chat-side-panel-activity-quit-text" />
+            </p>
+            <div class="flex justify-end">
+                <ButtonSmall
+                    tag="button"
+                    on:click={() => (wantsToEndActivity = false)}
+                    variant="TEXT"
+                    color="PRIMARY"
+                    ><Localized
+                        id="chat-side-panel-activity-quit-cancel"
+                    /></ButtonSmall
+                >
+                <ButtonSmall
+                    tag="button"
+                    on:click={() => {
+                        wantsToEndActivity = false
+                        handleQuit()
+                    }}
+                    ><Localized
+                        id="chat-side-panel-activity-quit-confirm"
+                    /></ButtonSmall
+                >
+            </div>
+        </div></Modal
+    >
+{/if}
 
 <style>
     .squirrel {

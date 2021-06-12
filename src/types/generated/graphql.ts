@@ -107,7 +107,7 @@ export type ChineseGuessCharacterQuestionFilter = {
 /** An input for mutations affecting `ChineseGuessCharacterQuestion` */
 export type ChineseGuessCharacterQuestionInput = {
   id?: Maybe<Scalars['Int']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
   character: Scalars['String'];
   hint: Scalars['String'];
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
@@ -218,7 +218,7 @@ export type ChineseRandomQuestionFilter = {
 /** An input for mutations affecting `ChineseRandomQuestion` */
 export type ChineseRandomQuestionInput = {
   id?: Maybe<Scalars['Int']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
   question: Scalars['String'];
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
@@ -330,7 +330,7 @@ export type ChineseWouldYouRatherQuestionFilter = {
 /** An input for mutations affecting `ChineseWouldYouRatherQuestion` */
 export type ChineseWouldYouRatherQuestionInput = {
   id?: Maybe<Scalars['Int']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
   question: Scalars['String'];
   answers: Array<Maybe<Scalars['String']>>;
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
@@ -2189,7 +2189,7 @@ export type EnglishRandomQuestionFilter = {
 /** An input for mutations affecting `EnglishRandomQuestion` */
 export type EnglishRandomQuestionInput = {
   id?: Maybe<Scalars['Int']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
   question: Scalars['String'];
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
@@ -2307,7 +2307,7 @@ export type EnglishWordFilter = {
 /** An input for mutations affecting `EnglishWord` */
 export type EnglishWordInput = {
   id?: Maybe<Scalars['Int']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
   word: Scalars['String'];
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
@@ -2429,7 +2429,7 @@ export type EnglishWouldYouRatherQuestionFilter = {
 /** An input for mutations affecting `EnglishWouldYouRatherQuestion` */
 export type EnglishWouldYouRatherQuestionInput = {
   id?: Maybe<Scalars['Int']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
   question: Scalars['String'];
   answers: Array<Maybe<Scalars['String']>>;
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
@@ -2566,7 +2566,7 @@ export type GermanRandomQuestionFilter = {
 /** An input for mutations affecting `GermanRandomQuestion` */
 export type GermanRandomQuestionInput = {
   id?: Maybe<Scalars['Int']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
   question: Scalars['String'];
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
@@ -2684,7 +2684,7 @@ export type GermanWordFilter = {
 /** An input for mutations affecting `GermanWord` */
 export type GermanWordInput = {
   id?: Maybe<Scalars['Int']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
   word: Scalars['String'];
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
@@ -2806,7 +2806,7 @@ export type GermanWouldYouRatherQuestionFilter = {
 /** An input for mutations affecting `GermanWouldYouRatherQuestion` */
 export type GermanWouldYouRatherQuestionInput = {
   id?: Maybe<Scalars['Int']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
   question: Scalars['String'];
   answers: Array<Maybe<Scalars['String']>>;
   recommendedSkillLevelId?: Maybe<Scalars['Int']>;
@@ -3015,7 +3015,7 @@ export type GroupInput = {
   languageId?: Maybe<Scalars['Int']>;
   languageSkillLevelId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `Message` values, with data from `Message`. */
@@ -4471,7 +4471,7 @@ export type MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyEd
 /** An input for mutations affecting `Message` */
 export type MessageInput = {
   id?: Maybe<Scalars['Int']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
   senderId?: Maybe<Scalars['Int']>;
   recipientId?: Maybe<Scalars['Int']>;
   recipientGroupId?: Maybe<Scalars['Int']>;
@@ -4552,7 +4552,7 @@ export type MessagePreviewFilter = {
 /** An input for mutations affecting `MessagePreview` */
 export type MessagePreviewInput = {
   id?: Maybe<Scalars['Int']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
   /** Basename without extension */
   filename: Scalars['String'];
   /** Extension without leading dot */
@@ -8248,7 +8248,7 @@ export type UserInput = {
   lastActiveAt?: Maybe<Scalars['Datetime']>;
   createdAt?: Maybe<Scalars['Datetime']>;
   passwordHash?: Maybe<Scalars['String']>;
-  uuid: Scalars['UUID'];
+  uuid?: Maybe<Scalars['UUID']>;
   avatarUrl?: Maybe<Scalars['String']>;
   locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;

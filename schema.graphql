@@ -7992,7 +7992,7 @@ input GroupInput {
   languageId: Int
   languageSkillLevelId: Int
   createdAt: Datetime
-  uuid: UUID!
+  uuid: UUID
 }
 
 """The output of our create `ChineseGuessCharacterQuestion` mutation."""
@@ -8040,7 +8040,7 @@ input CreateChineseGuessCharacterQuestionInput {
 """An input for mutations affecting `ChineseGuessCharacterQuestion`"""
 input ChineseGuessCharacterQuestionInput {
   id: Int
-  uuid: UUID!
+  uuid: UUID
   character: String!
   hint: String!
   recommendedSkillLevelId: Int
@@ -8220,7 +8220,7 @@ input CreateMessagePreviewInput {
 """An input for mutations affecting `MessagePreview`"""
 input MessagePreviewInput {
   id: Int
-  uuid: UUID!
+  uuid: UUID
 
   """Basename without extension"""
   filename: String!
@@ -8281,7 +8281,7 @@ input CreateMessageInput {
 """An input for mutations affecting `Message`"""
 input MessageInput {
   id: Int
-  uuid: UUID!
+  uuid: UUID
   senderId: Int
   recipientId: Int
   recipientGroupId: Int
@@ -8333,7 +8333,7 @@ input CreateGermanRandomQuestionInput {
 """An input for mutations affecting `GermanRandomQuestion`"""
 input GermanRandomQuestionInput {
   id: Int
-  uuid: UUID!
+  uuid: UUID
   question: String!
   recommendedSkillLevelId: Int
   createdAt: Datetime
@@ -8382,7 +8382,7 @@ input CreateEnglishRandomQuestionInput {
 """An input for mutations affecting `EnglishRandomQuestion`"""
 input EnglishRandomQuestionInput {
   id: Int
-  uuid: UUID!
+  uuid: UUID
   question: String!
   recommendedSkillLevelId: Int
   createdAt: Datetime
@@ -8431,7 +8431,7 @@ input CreateChineseRandomQuestionInput {
 """An input for mutations affecting `ChineseRandomQuestion`"""
 input ChineseRandomQuestionInput {
   id: Int
-  uuid: UUID!
+  uuid: UUID
   question: String!
   recommendedSkillLevelId: Int
   createdAt: Datetime
@@ -8588,7 +8588,7 @@ input UserInput {
   lastActiveAt: Datetime
   createdAt: Datetime
   passwordHash: String
-  uuid: UUID!
+  uuid: UUID
   avatarUrl: String
   locale: Int
   googleId: String
@@ -8638,7 +8638,7 @@ input CreateGermanWordInput {
 """An input for mutations affecting `GermanWord`"""
 input GermanWordInput {
   id: Int
-  uuid: UUID!
+  uuid: UUID
   word: String!
 
   """Ranges from 0 to 1 (higher is more frequent)"""
@@ -8691,7 +8691,7 @@ input CreateEnglishWordInput {
 """An input for mutations affecting `EnglishWord`"""
 input EnglishWordInput {
   id: Int
-  uuid: UUID!
+  uuid: UUID
   word: String!
 
   """Ranges from 0 to 1 (higher is more frequent)"""
@@ -8746,7 +8746,7 @@ input CreateGermanWouldYouRatherQuestionInput {
 """An input for mutations affecting `GermanWouldYouRatherQuestion`"""
 input GermanWouldYouRatherQuestionInput {
   id: Int
-  uuid: UUID!
+  uuid: UUID
   question: String!
   answers: [String]!
   recommendedSkillLevelId: Int
@@ -8798,7 +8798,7 @@ input CreateEnglishWouldYouRatherQuestionInput {
 """An input for mutations affecting `EnglishWouldYouRatherQuestion`"""
 input EnglishWouldYouRatherQuestionInput {
   id: Int
-  uuid: UUID!
+  uuid: UUID
   question: String!
   answers: [String]!
   recommendedSkillLevelId: Int
@@ -8850,7 +8850,7 @@ input CreateChineseWouldYouRatherQuestionInput {
 """An input for mutations affecting `ChineseWouldYouRatherQuestion`"""
 input ChineseWouldYouRatherQuestionInput {
   id: Int
-  uuid: UUID!
+  uuid: UUID
   question: String!
   answers: [String]!
   recommendedSkillLevelId: Int

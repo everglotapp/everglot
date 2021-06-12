@@ -5,7 +5,7 @@
         onMount,
         onDestroy,
     } from "svelte"
-    import { scale } from "svelte/transition"
+    import { fade } from "svelte/transition"
     import { Localized, Overlay } from "@nubolab-ffwd/svelte-fluent"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
@@ -74,11 +74,7 @@
     }
 </script>
 
-<div
-    class="flex flex-row m-4 max-h-12 px-2 justify-between items-center"
-    in:scale={{ duration: 200, delay: 350 }}
-    out:scale={{ duration: 200, delay: 0 }}
->
+<div class="flex flex-row m-4 max-h-12 px-2 justify-between items-center">
     <Headline4
         ><Localized id="chat-side-panel-activity-would-you-rather" /></Headline4
     >
@@ -102,7 +98,12 @@
         <div
             class="squirrel-bubble bg-primary-lightest p-4 max-w-sm font-bold text-lg text-gray-bitdark"
         >
-            {question}
+            <span
+                in:fade={{ duration: 200, delay: 350 }}
+                out:fade={{ duration: 200, delay: 0 }}
+            >
+                {question}</span
+            >
         </div>
         <img
             src="/squirrel.png"

@@ -205,11 +205,7 @@
     const MAX_MOVE_Y_PX = 90
 </script>
 
-<div
-    class="flex flex-row m-4 max-h-12 px-2 justify-between items-center"
-    in:scale={{ duration: 200, delay: 350 }}
-    out:scale={{ duration: 200, delay: 0 }}
->
+<div class="flex flex-row m-4 max-h-12 px-2 justify-between items-center">
     <Headline4><Localized id="chat-side-panel-activity-hangman" /></Headline4>
     <ButtonSmall
         tag="button"

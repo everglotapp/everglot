@@ -1,8 +1,8 @@
 export enum GroupActivityKind {
-    Hangman,
-    WouldYouRather,
-    RandomQuestion,
-    GuessCharacter,
+    Hangman = "HANGMAN",
+    WouldYouRather = "WOULD_YOU_RATHER",
+    RandomQuestion = "RANDOM_QUESTION",
+    GuessCharacter = "GUESS_CHARACTER",
 }
 
 export interface GroupActivity {

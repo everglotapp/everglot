@@ -244,37 +244,47 @@
                     />
                 </div>
             </div>
-        {:else if hangmanActivity}
-            <Hangman
-                on:quit={() => chat.emit("endGroupActivity")}
-                over={hangmanActivity.state.over}
-                pickedLetters={hangmanActivity.state.pickedLetters}
-                pickedWords={hangmanActivity.state.pickedWords}
-                word={hangmanActivity.state.currentWord}
-                solution={hangmanActivity.state.solution}
-                locale={$currentGroupLocale}
-            />
-        {:else if guessCharacterActivity}
-            <GuessCharacter
-                on:quit={() => chat.emit("endGroupActivity")}
-                over={guessCharacterActivity.state.over}
-                pickedCharacters={guessCharacterActivity.state.pickedCharacters}
-                hint={guessCharacterActivity.state.hint}
-                solution={guessCharacterActivity.state.solution}
-                locale={$currentGroupLocale}
-            />
-        {:else if wouldYouRatherActivity}
-            <WouldYouRather
-                on:quit={() => chat.emit("endGroupActivity")}
-                question={wouldYouRatherActivity.state.question}
-                answers={wouldYouRatherActivity.state.answers}
-                endTime={wouldYouRatherActivity.state.endTime}
-            />
-        {:else if randomQuestionActivity}
-            <RandomQuestion
-                on:quit={() => chat.emit("endGroupActivity")}
-                question={randomQuestionActivity.state.question}
-            />
+        {:else if activity}
+            {#key activity.kind}
+                <div
+                    in:scale={{ duration: 200, delay: 350 }}
+                    out:scale={{ duration: 200, delay: 0 }}
+                >
+                    {#if hangmanActivity}
+                        <Hangman
+                            on:quit={() => chat.emit("endGroupActivity")}
+                            over={hangmanActivity.state.over}
+                            pickedLetters={hangmanActivity.state.pickedLetters}
+                            pickedWords={hangmanActivity.state.pickedWords}
+                            word={hangmanActivity.state.currentWord}
+                            solution={hangmanActivity.state.solution}
+                            locale={$currentGroupLocale}
+                        />
+                    {:else if guessCharacterActivity}
+                        <GuessCharacter
+                            on:quit={() => chat.emit("endGroupActivity")}
+                            over={guessCharacterActivity.state.over}
+                            pickedCharacters={guessCharacterActivity.state
+                                .pickedCharacters}
+                            hint={guessCharacterActivity.state.hint}
+                            solution={guessCharacterActivity.state.solution}
+                            locale={$currentGroupLocale}
+                        />
+                    {:else if wouldYouRatherActivity}
+                        <WouldYouRather
+                            on:quit={() => chat.emit("endGroupActivity")}
+                            question={wouldYouRatherActivity.state.question}
+                            answers={wouldYouRatherActivity.state.answers}
+                            endTime={wouldYouRatherActivity.state.endTime}
+                        />
+                    {:else if randomQuestionActivity}
+                        <RandomQuestion
+                            on:quit={() => chat.emit("endGroupActivity")}
+                            question={randomQuestionActivity.state.question}
+                        />
+                    {/if}
+                </div>
+            {/key}
         {/if}
     {/key}
 </div>

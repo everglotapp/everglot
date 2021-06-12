@@ -59,9 +59,11 @@ async function getRandomQuestion(
     return res.rows[0]
 }
 
+const MIN_QUESTION_DURATION_SECONDS = 20
 export class RandomQuestionGame {
     #language: RandomQuestionLocale
     question: Pick<RandomQuestion, "uuid" | "question"> | undefined
+    startTime: Date | undefined
 
     constructor(language: RandomQuestionLocale) {
         this.#language = language
@@ -73,6 +75,7 @@ export class RandomQuestionGame {
             return false
         }
         this.question = question
+        this.startTime = new Date(Date.now())
         return true
     }
 
@@ -83,6 +86,9 @@ export class RandomQuestionGame {
     }
 
     async nextQuestion(): Promise<boolean> {
+        if (!this.userCanSkipToNextQuestion) {
+            return false
+        }
         const question = await getRandomQuestion(
             this.#language,
             this.question ? [this.question.uuid] : []
@@ -91,7 +97,19 @@ export class RandomQuestionGame {
             return false
         }
         this.question = question
+        this.startTime = new Date()
         return true
+    }
+
+    get userCanSkipToNextQuestion(): boolean {
+        if (!this.startTime) {
+            return false
+        }
+        const now = new Date()
+        const minDateToSkip = new Date(
+            this.startTime.getTime() + MIN_QUESTION_DURATION_SECONDS * 1000
+        )
+        return now >= minDateToSkip
     }
 }
 

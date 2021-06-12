@@ -5,7 +5,7 @@
         createEventDispatcher,
         getContext,
     } from "svelte"
-    import { scale } from "svelte/transition"
+    import { fade } from "svelte/transition"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
@@ -56,11 +56,7 @@
     }
 </script>
 
-<div
-    class="flex flex-row m-4 max-h-12 px-2 justify-between items-center"
-    in:scale={{ duration: 200, delay: 350 }}
-    out:scale={{ duration: 200, delay: 0 }}
->
+<div class="flex flex-row m-4 max-h-12 px-2 justify-between items-center">
     <Headline4
         ><Localized id="chat-side-panel-activity-random-question" /></Headline4
     >
@@ -81,11 +77,19 @@
 
 <div class="px-16 py-8 md:py-24">
     <div class="relative flex justify-end" style="padding-right: 190px;">
-        <div
-            class="squirrel-bubble bg-primary-lightest p-4 max-w-sm font-bold text-lg text-gray-bitdark"
-        >
-            {question}
-        </div>
+        {#key question}
+            <div
+                class="squirrel-bubble bg-primary-lightest p-4 max-w-sm font-bold text-lg text-gray-bitdark"
+            >
+                <span
+                    class="w-full"
+                    in:fade={{ duration: 200, delay: 350 }}
+                    out:fade={{ duration: 200, delay: 0 }}
+                >
+                    {question}</span
+                >
+            </div>
+        {/key}
         <img
             src="/squirrel.png"
             alt="Squirrel"
@@ -108,6 +112,12 @@
                     id="chat-side-panel-activity-random-question-next-question"
                 /></ButtonLarge
             >
+        {:else}
+            <div>
+                <Localized
+                    id="chat-side-panel-activity-random-question-discuss"
+                />
+            </div>
         {/if}
     </div>
 </div>

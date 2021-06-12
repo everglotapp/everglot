@@ -128,6 +128,6 @@
     :global(button:disabled, button[disabled]) {
         background: transparent !important;
         color: theme("colors.primary.DEFAULT") !important;
-        border-color: theme("colors.gray.lightest") !important;
+        border-color: theme("colors.gray.light") !important;
     }
 </style>

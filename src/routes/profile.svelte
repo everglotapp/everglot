@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte"
     import { scale } from "svelte/transition"
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
@@ -76,6 +77,20 @@
     $: username = userProfile?.username
     $: gender = userProfile?.gender
     $: avatarUrl = userProfile?.avatarUrl
+
+    // Hide these in mobile webviews until file uploads work.
+    let hideUploadAvatarForm = false
+    onMount(() => {
+        const ANDROID_WEBVIEW_USER_AGENT = "ANDROID_WEBVIEW"
+        const IOS_WEBVIEW_USER_AGENT = "IOS_WEBVIEW"
+        const WEBVIEW_USER_AGENTS = [
+            ANDROID_WEBVIEW_USER_AGENT,
+            IOS_WEBVIEW_USER_AGENT,
+        ]
+        if (WEBVIEW_USER_AGENTS.includes(navigator.userAgent)) {
+            hideUploadAvatarForm = true
+        }
+    })
 </script>
 
 <svelte:head />
@@ -136,34 +151,35 @@
                         />
                     </div>
                 {/key}
-
-                <form
-                    action="/profile/picture"
-                    enctype="multipart/form-data"
-                    method="post"
-                    bind:this={avatarForm}
-                    on:submit={handleUploadAvatar}
-                >
-                    <div>
-                        <input
-                            type="file"
-                            name="avatar"
-                            accept="image/png,image/jpeg"
-                            required
-                            class="mb-2"
-                        />
-                        <ButtonLarge
-                            tag="button"
-                            type="submit"
-                            variant="TEXT"
-                            className="w-full justify-center mb-2"
-                            >Upload Avatar</ButtonLarge
-                        >
-                        <p class="text-gray-bitdark text-sm">
-                            Avatars must be smaller than 5 MB in size.
-                        </p>
-                    </div>
-                </form>
+                {#if !hideUploadAvatarForm}
+                    <form
+                        action="/profile/picture"
+                        enctype="multipart/form-data"
+                        method="post"
+                        bind:this={avatarForm}
+                        on:submit={handleUploadAvatar}
+                    >
+                        <div>
+                            <input
+                                type="file"
+                                name="avatar"
+                                accept="image/png,image/jpeg"
+                                required
+                                class="mb-2"
+                            />
+                            <ButtonLarge
+                                tag="button"
+                                type="submit"
+                                variant="TEXT"
+                                className="w-full justify-center mb-2"
+                                >Upload Avatar</ButtonLarge
+                            >
+                            <p class="text-gray-bitdark text-sm">
+                                Avatars must be smaller than 5 MB in size.
+                            </p>
+                        </div>
+                    </form>
+                {/if}
             </div>
         </div>
         <div class="container">

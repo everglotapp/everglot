@@ -5,7 +5,7 @@ import { createToken, getTokenIdByToken } from "../server/inviteTokens"
 import { ensureJson, serverError } from "../helpers"
 import {
     GOOGLE_WEB_SIGNIN_CLIENT_ID,
-    GOOGLE_SIGNIN_CLIENT_ID,
+    GOOGLE_SIGNIN_AUDIENCE,
 } from "../constants"
 
 import log from "../logger"
@@ -104,7 +104,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             // Check integrity of ID token (make sure that it's valid and comes from Google)
             const ticket = await client.verifyIdToken({
                 idToken: googleIdToken,
-                audience: GOOGLE_SIGNIN_CLIENT_ID,
+                audience: GOOGLE_SIGNIN_AUDIENCE,
             })
             if (!ticket) {
                 throw new Error("Empty ticket")
@@ -170,11 +170,9 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     emailValidation,
                 }).info("User provided an invalid email")
                 invalidEmailMsg = {
-                    smtp:
-                        "It looks like the email address you provided does not exist.",
+                    smtp: "It looks like the email address you provided does not exist.",
                     regex: "That email address looks wrong to us.",
-                    mx:
-                        "It looks like the email address you provided does not exist.",
+                    mx: "It looks like the email address you provided does not exist.",
                     disposable: "Please use a different email provider.",
                     typo: "Did you misspell the email address by accident?",
                 }[reason as InvalidEmailReason]

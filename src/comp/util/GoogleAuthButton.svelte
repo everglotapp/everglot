@@ -91,7 +91,10 @@
 </script>
 
 <svelte:head>
-    <meta name="google-signin-client_id" content={GOOGLE_SIGNIN_CLIENT_ID} />
+    <meta
+        name="google-signin-client_id"
+        content={GOOGLE_WEB_SIGNIN_CLIENT_ID}
+    />
 </svelte:head>
 
 <div bind:this={container}>

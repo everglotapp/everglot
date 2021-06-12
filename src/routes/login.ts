@@ -3,7 +3,7 @@ import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import { ensureJson, serverError } from "../helpers"
 import {
     GOOGLE_WEB_SIGNIN_CLIENT_ID,
-    GOOGLE_SIGNIN_CLIENT_ID,
+    GOOGLE_SIGNIN_AUDIENCE,
 } from "../constants"
 import log from "../logger"
 
@@ -59,7 +59,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             // Check integrity of ID token (make sure that it's valid and comes from Google)
             const ticket = await client.verifyIdToken({
                 idToken,
-                audience: GOOGLE_SIGNIN_CLIENT_ID,
+                audience: GOOGLE_SIGNIN_AUDIENCE,
             })
             if (!ticket) {
                 throw new Error("Empty ticket")

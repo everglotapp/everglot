@@ -38,8 +38,8 @@
         gapiJsScript.async = true
         gapiJsScript.defer = true
         container!.appendChild(gapiJsScript)
-        initInterval = setInterval(init, 50)
-        attachClickHandlerInterval = setInterval(attachClickHandler, 50)
+        initInterval = setInterval(init, 10)
+        attachClickHandlerInterval = setInterval(attachClickHandler, 25)
     })
 
     onDestroy(() => {
@@ -123,5 +123,11 @@
         height: 18px;
         width: 18px;
         margin-right: 24px;
+    }
+
+    :global(button:disabled, button[disabled]) {
+        background: transparent !important;
+        color: theme("colors.primary.DEFAULT") !important;
+        border-color: theme("colors.gray.lightest") !important;
     }
 </style>

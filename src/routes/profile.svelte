@@ -82,12 +82,10 @@
     let hideUploadAvatarForm = false
     onMount(() => {
         const ANDROID_WEBVIEW_USER_AGENT = "ANDROID_WEBVIEW"
-        const IOS_WEBVIEW_USER_AGENT = "IOS_WEBVIEW"
-        const WEBVIEW_USER_AGENTS = [
-            ANDROID_WEBVIEW_USER_AGENT,
-            IOS_WEBVIEW_USER_AGENT,
-        ]
-        if (WEBVIEW_USER_AGENTS.includes(navigator.userAgent)) {
+        if (navigator.userAgent === ANDROID_WEBVIEW_USER_AGENT) {
+            /**
+             * @see https://github.com/flutter/plugins/pull/3225
+             */
             hideUploadAvatarForm = true
         }
     })

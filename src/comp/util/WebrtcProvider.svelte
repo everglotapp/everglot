@@ -164,6 +164,9 @@
         if (!client) {
             return false
         }
+        if (!$joinedRoom) {
+            return false
+        }
         if ($remoteUsers) {
             for (const remoteUser of $remoteUsers) {
                 await client.unsubscribe(remoteUser, "audio")

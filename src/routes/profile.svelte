@@ -191,11 +191,6 @@
                         <li>
                             <ButtonSmall
                                 href={`/chat?group=${group.group.uuid}`}
-                                on:click={() => {
-                                    if (group.group) {
-                                        $groupUuid = group.group.uuid
-                                    }
-                                }}
                                 variant="TEXT"
                                 color="SECONDARY"
                             >

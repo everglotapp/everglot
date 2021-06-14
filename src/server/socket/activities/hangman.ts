@@ -290,7 +290,7 @@ export async function handleUserConnected(
     )
 }
 
-const DELAY_NEXT_ROUND_MS = 6000
+const DELAY_NEXT_ROUND_MS = 5000
 async function handleGuessProcessed(
     io: SocketIO,
     guess: string,

@@ -210,9 +210,6 @@
                                                         color="SECONDARY"
                                                         href={`/chat?group=${group.uuid}`}
                                                         className="w-full justify-between items-center"
-                                                        on:click={() =>
-                                                            ($groupUuid =
-                                                                group.uuid)}
                                                         >{group.groupName || ""}
                                                         ({group.language
                                                             ? group.language.alpha2.toUpperCase() ||
@@ -320,9 +317,6 @@
                                                     color="PRIMARY"
                                                     className="w-full justify-between items-center"
                                                     href={`/chat?group=${$joinedCallRoom}`}
-                                                    on:click={() =>
-                                                        ($groupUuid =
-                                                            $joinedCallRoom)}
                                                     ><span class="mr-1"
                                                         ><Localized
                                                             id="main-nav-go-to-call"

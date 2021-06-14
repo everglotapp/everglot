@@ -25,7 +25,6 @@
     $: {
         segment // dependency
         handlePageChange()
-        setTimeout(() => ($groupUuid = resolveCurrentGroup()), 50)
     }
 
     $: showMainNav = segment !== "login" && segment !== "join"
@@ -47,24 +46,6 @@
         $currentUserStore.context = {
             requestPolicy: "cache-and-network",
             transitionId, // This forces a re-execution by changing the object contents.
-        }
-    }
-
-    function resolveCurrentGroup() {
-        if (segment !== "chat") {
-            return null
-        }
-        if (typeof window === "undefined") {
-            /**
-             * Prevent loading group data on server-side.
-             */
-            return null
-        }
-        const group = new URL(window.location.href).searchParams.get("group")
-        if (group && group.length && uuidValidate(group)) {
-            return group
-        } else {
-            return null
         }
     }
 </script>

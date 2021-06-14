@@ -1,8 +1,10 @@
 <script lang="ts">
-    import { onDestroy, getContext } from "svelte"
+    import { getContext } from "svelte"
+    import { stores as sapperStores } from "@sapper/app"
     import { fly, blur } from "svelte/transition"
     import { query } from "@urql/svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { validate as uuidValidate } from "uuid"
 
     import Sidebar from "../comp/chat/Sidebar.svelte"
     import Header from "../comp/chat/Header.svelte"
@@ -49,6 +51,36 @@
     const chat = getContext<ChatContext>(CHAT_CONTEXT)
     const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
 
+    const { page } = sapperStores()
+
+    page.subscribe(({ query }) => {
+        if (typeof window === "undefined") {
+            /**
+             * Prevent loading group data on server-side.
+             */
+            $groupUuid = null
+            return
+        }
+        let { group } = query
+        if (!group || !group.length) {
+            $groupUuid = null
+            return
+        }
+        group = group as string
+        if (!uuidValidate(group)) {
+            $groupUuid = null
+            return
+        }
+        if ($joinedChatRoom === group) {
+            /**
+             * Fix edge case where a user leaves and immediately re-visits the same group's chat page.
+             * We need to leave the room now and then re-join it (will be done below).
+             */
+            chat.leaveRoom()
+        }
+        $groupUuid = group
+    })
+
     let fetchGroupMetadataInterval: number | null = null
 
     query(groupChatStore)
@@ -64,16 +96,6 @@
         chat.on("messagePreview", handleMessagePreview)
         chat.on("groupActivity", handleGroupActivity)
     }
-    $: if ($connectedToChat && $groupUuid) {
-        chat.joinRoom($groupUuid)
-    }
-
-    onDestroy(() => {
-        if (fetchGroupMetadataInterval) {
-            clearInterval(fetchGroupMetadataInterval)
-            fetchGroupMetadataInterval = null
-        }
-    })
 
     let messagesStartCursor: any = null
     const fetchMoreMessages = () => {
@@ -251,14 +273,15 @@
         if (!$joinedCallRoom) {
             return false
         }
+        const callRoom = $joinedCallRoom
         if (!(await webrtc.leaveRoom())) {
             // TODO: error
             // console.log("failed to leave call")
             return false
         }
-        chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
+        chat.emit("userLeaveCall", { groupUuid: callRoom })
         if ($currentUserUuid) {
-            removeUserFromCall($currentUserUuid, $joinedCallRoom)
+            removeUserFromCall($currentUserUuid, callRoom)
         }
         return true
     }

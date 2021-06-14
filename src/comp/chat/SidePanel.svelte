@@ -104,7 +104,7 @@
             : null
 </script>
 
-<div>
+<div class="pb-4 overflow-y-auto">
     {#key $groupUuid}
         {#if activity === null && groupCanPlayAnyGame}
             <div

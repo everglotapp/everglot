@@ -167,12 +167,16 @@ export async function handleUserConnected(
                     .debug("User trying to guess in Guess Character not found")
                 return
             }
-            const activity = getGroupActivity(chatUser.groupUuid)
+            const {
+                groupUuid,
+                user: { uuid: userUuid },
+            } = chatUser
+            const activity = getGroupActivity(groupUuid)
             if (!activity) {
                 chlog
                     .child({
-                        groupUuid: chatUser.groupUuid,
-                        userUuid: chatUser.user.uuid,
+                        groupUuid,
+                        userUuid,
                     })
                     .debug(
                         "User attempted Guess Character guess but no activity is running for their group"
@@ -182,8 +186,8 @@ export async function handleUserConnected(
             if (activity.kind !== GroupActivityKind.GuessCharacter) {
                 chlog
                     .child({
-                        groupUuid: chatUser.groupUuid,
-                        userUuid: chatUser.user.uuid,
+                        groupUuid,
+                        userUuid,
                         guess,
                     })
                     .debug(
@@ -191,12 +195,12 @@ export async function handleUserConnected(
                     )
                 return
             }
-            const game = games[chatUser.groupUuid]!
+            const game = games[groupUuid]!
             if (typeof guess !== "string") {
                 chlog
                     .child({
-                        groupUuid: chatUser.groupUuid,
-                        userUuid: chatUser.user.uuid,
+                        groupUuid,
+                        userUuid,
                         guess,
                     })
                     .debug(
@@ -207,8 +211,8 @@ export async function handleUserConnected(
             if (!game.guessValid(guess)) {
                 chlog
                     .child({
-                        groupUuid: chatUser.groupUuid,
-                        userUuid: chatUser.user.uuid,
+                        groupUuid,
+                        userUuid,
                         guess,
                     })
                     .debug(
@@ -217,45 +221,54 @@ export async function handleUserConnected(
                 return
             }
             const success = game.processGuess(guess)
-            // Tell group users about the guess and whether it was successful.
-            io.to(chatUser.groupUuid).emit(
-                "groupActivity.guessCharacterGuess",
-                {
-                    guess,
-                    success,
-                    userUuid: chatUser.user.uuid,
-                }
+            await handleGuessProcessed(
+                io,
+                guess,
+                success,
+                game,
+                groupUuid,
+                userUuid
             )
-
-            chlog
-                .child({
-                    groupUuid: chatUser.groupUuid,
-                    userUuid: chatUser.user.uuid,
-                    guess,
-                    success,
-                })
-                .trace("User attempted Guess Character guess")
-            // Tell group users about the new game state.
-            io.to(chatUser.groupUuid).emit(
-                "groupActivity",
-                getGroupActivity(chatUser.groupUuid)
-            )
-            setTimeout(async () => {
-                if (await game.nextRound()) {
-                    chlog
-                        .child({
-                            groupUuid: chatUser.groupUuid,
-                            userUuid: chatUser.user.uuid,
-                        })
-                        .debug("Guess Character game proceeded to next round")
-                    io.to(chatUser.groupUuid).emit(
-                        "groupActivity",
-                        getGroupActivity(chatUser.groupUuid)
-                    )
-                }
-            }, 6000)
         }
     )
+}
+
+const DELAY_NEXT_ROUND_MS = 5000
+async function handleGuessProcessed(
+    io: SocketIO,
+    guess: string,
+    success: boolean,
+    game: GuessCharacterGame,
+    groupUuid: string,
+    userUuid: string
+) {
+    // Tell group users about the guess and whether it was successful.
+    io.to(groupUuid).emit("groupActivity.guessCharacterGuess", {
+        guess,
+        success,
+        userUuid,
+    })
+
+    chlog
+        .child({
+            groupUuid,
+            userUuid,
+            guess,
+            success,
+        })
+        .trace("User attempted Guess Character guess")
+    // Tell group users about the new game state.
+    io.to(groupUuid).emit("groupActivity", getGroupActivity(groupUuid))
+    if (await game.nextRound()) {
+        await new Promise((resolve) => setTimeout(resolve, DELAY_NEXT_ROUND_MS))
+        chlog
+            .child({
+                groupUuid,
+                userUuid,
+            })
+            .debug("Guess Character game proceeded to next round")
+        io.to(groupUuid).emit("groupActivity", getGroupActivity(groupUuid))
+    }
 }
 
 export async function handleStarted(

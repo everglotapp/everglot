@@ -194,6 +194,7 @@
         forceDisableInputs = true
         setTimeout(() => {
             forceDisableInputs = false
+            inputValue = ""
         }, 3000)
         setTimeout(() => {
             feedback = undefined

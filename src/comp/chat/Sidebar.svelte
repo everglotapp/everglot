@@ -43,7 +43,9 @@
             if (!audioTrack) {
                 continue
             }
-            audioTrack.setVolume(event.target.value)
+            audioTrack.setVolume(
+                Number((<HTMLInputElement>event.currentTarget).value)
+            )
         }
     }
 

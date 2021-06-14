@@ -184,6 +184,7 @@
     $: if (over) {
         forceDisableInputs = true
         setTimeout(() => {
+            inputValue = ""
             forceDisableInputs = false
         }, 3000)
         setTimeout(() => {

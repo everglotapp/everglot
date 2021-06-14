@@ -9,7 +9,7 @@
     import _anchorme from "anchorme"
     const anchorme: typeof _anchorme = _anchorme.default || _anchorme
 
-    import { currentUser } from "../../stores"
+    import { currentUser } from "../../stores/currentUser"
     import { chatUsers } from "../../stores/chat"
 
     import Avatar from "../users/Avatar.svelte"

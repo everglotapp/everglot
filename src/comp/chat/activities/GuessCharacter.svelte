@@ -10,7 +10,7 @@
     import type { ChatContext } from "../../util/ChatProvider.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
 
-    import { currentUser } from "../../../stores"
+    import { currentUserUuid } from "../../../stores/currentUser"
     import { currentUserIsGroupMember, chatUsers } from "../../../stores/chat"
     import type { GuessCharacterLocale } from "../../../constants"
     import { isChineseCharacter } from "../../../utils"
@@ -49,8 +49,8 @@
                 const guessingUser = $chatUsers.find(
                     (user) => user.uuid === userUuid
                 )
-                if ($currentUser && guessingUser) {
-                    if (guessingUser === $currentUser.uuid) {
+                if ($currentUserUuid && guessingUser) {
+                    if (guessingUser.uuid === $currentUserUuid) {
                         feedback = success
                             ? $translate(
                                   "chat-side-panel-activity-guess-character-feedback-own-guess-correct",
@@ -305,6 +305,7 @@
             bind:value={inputValue}
             required
             disabled={over || forceDisableInputs || !$currentUserIsGroupMember}
+            autocomplete="off"
         />
         <ButtonSmall
             tag="button"

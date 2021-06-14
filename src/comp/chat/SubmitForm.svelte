@@ -12,6 +12,7 @@
     import type { ChatContext } from "../util/ChatProvider.svelte"
 
     import { groupUuid } from "../../stores"
+    import { currentUserUuid } from "../../stores/currentUser"
     import {
         groupChatStore,
         currentUserIsGroupMember,
@@ -29,7 +30,6 @@
     let msg = ""
     export let isOwnMessage: (message: ChatMessage) => boolean
     export let messages: ChatMessage[] = []
-    export let myUuid: string | null
 
     const { joinedRoom: joinedChatRoom, sendMessage } =
         getContext<ChatContext>(CHAT_CONTEXT)
@@ -71,7 +71,7 @@
             msg = ""
             return
         }
-        const sent = sendMessage(trimmedMsg, myUuid)
+        const sent = sendMessage(trimmedMsg, $currentUserUuid)
         if (sent) {
             msg = ""
         }

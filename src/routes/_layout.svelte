@@ -1,12 +1,13 @@
 <script lang="ts">
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
-    import { v4 as uuidv4 } from "uuid"
+    import { v4 as uuidv4, validate as uuidValidate } from "uuid"
 
     import { setupUrql } from "./_helpers/urql"
     import { query } from "@urql/svelte"
 
-    import { currentUserStore } from "../stores"
+    import { groupUuid } from "../stores"
+    import { currentUserStore } from "../stores/currentUser"
     import { allGroupsStore } from "../stores/groups"
 
     import LocaleProvider from "../comp/util/LocaleProvider.svelte"
@@ -20,9 +21,12 @@
     query(allGroupsStore)
 
     export let segment: string | undefined = undefined
-    segment = segment // get rid of unused prop warning
-    // @ts-ignore (left side of comma operator isn't.
-    $: segment, handlePageChange()
+
+    $: {
+        segment // dependency
+        handlePageChange()
+        setTimeout(() => ($groupUuid = resolveCurrentGroup()), 50)
+    }
 
     $: showMainNav = segment !== "login" && segment !== "join"
     $: noscroll = segment === "chat"
@@ -43,6 +47,24 @@
         $currentUserStore.context = {
             requestPolicy: "cache-and-network",
             transitionId, // This forces a re-execution by changing the object contents.
+        }
+    }
+
+    function resolveCurrentGroup() {
+        if (segment !== "chat") {
+            return null
+        }
+        if (typeof window === "undefined") {
+            /**
+             * Prevent loading group data on server-side.
+             */
+            return null
+        }
+        const group = new URL(window.location.href).searchParams.get("group")
+        if (group && group.length && uuidValidate(group)) {
+            return group
+        } else {
+            return null
         }
     }
 </script>

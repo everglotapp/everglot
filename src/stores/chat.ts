@@ -1,7 +1,8 @@
 import { derived, get } from "svelte/store"
 import { operationStore } from "@urql/svelte"
 
-import { groupUuid, currentUser } from "./index"
+import { groupUuid } from "./"
+import { currentUser } from "./currentUser"
 import { globalGroups } from "./groups"
 
 import {

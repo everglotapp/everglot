@@ -10,7 +10,7 @@
         disconnect: () => void
         joinRoom: (room: string) => void
         leaveRoom: () => boolean
-        sendMessage: (msg: string) => boolean
+        sendMessage: (msg: string, userUuid: string | null) => boolean
         emit: (ev: string, ...args: any[]) => boolean
         on: (ev: string, listener: ListenerFunction) => boolean
         off: (

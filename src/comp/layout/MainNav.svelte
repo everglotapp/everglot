@@ -23,12 +23,8 @@
     import { WEBRTC_CONTEXT } from "../util/WebrtcProvider.svelte"
     import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
 
-    import {
-        currentUser,
-        currentUserStore,
-        userHasCompletedProfile,
-        groupUuid,
-    } from "../../stores"
+    import { userHasCompletedProfile, groupUuid } from "../../stores"
+    import { currentUser, currentUserStore } from "../../stores/currentUser"
     import { allGroupsStore, privateGroups } from "../../stores/groups"
     import { currentGroupIsGlobal } from "../../stores/chat"
 

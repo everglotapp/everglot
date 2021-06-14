@@ -3,7 +3,7 @@
 
     import ButtonLarge from "./ButtonLarge.svelte"
 
-    import { GOOGLE_SIGNIN_CLIENT_ID } from "../../constants"
+    import { GOOGLE_WEB_SIGNIN_CLIENT_ID } from "../../constants"
 
     const dispatch = createEventDispatcher()
 
@@ -24,7 +24,7 @@
         clearInterval(initInterval)
         gapi.load("auth2", () => {
             GoogleAuth = gapi.auth2.init({
-                client_id: GOOGLE_SIGNIN_CLIENT_ID,
+                client_id: GOOGLE_WEB_SIGNIN_CLIENT_ID,
             })
             GoogleAuth.then(handleInit, handleInitError)
         })
@@ -38,8 +38,8 @@
         gapiJsScript.async = true
         gapiJsScript.defer = true
         container!.appendChild(gapiJsScript)
-        initInterval = setInterval(init, 50)
-        attachClickHandlerInterval = setInterval(attachClickHandler, 50)
+        initInterval = setInterval(init, 10)
+        attachClickHandlerInterval = setInterval(attachClickHandler, 25)
     })
 
     onDestroy(() => {
@@ -91,7 +91,10 @@
 </script>
 
 <svelte:head>
-    <meta name="google-signin-client_id" content={GOOGLE_SIGNIN_CLIENT_ID} />
+    <meta
+        name="google-signin-client_id"
+        content={GOOGLE_WEB_SIGNIN_CLIENT_ID}
+    />
 </svelte:head>
 
 <div bind:this={container}>
@@ -120,5 +123,11 @@
         height: 18px;
         width: 18px;
         margin-right: 24px;
+    }
+
+    :global(button:disabled, button[disabled]) {
+        background: transparent !important;
+        color: theme("colors.primary.DEFAULT") !important;
+        border-color: theme("colors.gray.light") !important;
     }
 </style>

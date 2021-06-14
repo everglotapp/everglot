@@ -48,11 +48,34 @@ export function getCurrentUser(socket: EverglotChatSocket) {
     )
 }
 
-export function handleLeave(socket: EverglotChatSocket) {
-    const index = users.findIndex((user) => user.socketId === socket.id)
-
-    if (index !== -1) {
-        return users.splice(index, 1)[0]
+export function handleLeave(
+    socket: EverglotChatSocket,
+    userUuid: string,
+    groupUuid?: string
+) {
+    if (groupUuid) {
+        const index = users.findIndex(
+            (user) =>
+                user.socketId === socket.id &&
+                user.groupUuid === groupUuid &&
+                user.user.uuid === userUuid
+        )
+        if (index !== -1) {
+            return users.splice(index, 1)[0]
+        }
+        return null
+    } else {
+        const leavingUsers = []
+        while (true) {
+            const index = users.findIndex(
+                (user) =>
+                    user.socketId === socket.id && user.user.uuid === userUuid
+            )
+            if (index === -1) {
+                return users
+            }
+            leavingUsers.push(users.splice(index, 1)[0])
+        }
     }
 }
 

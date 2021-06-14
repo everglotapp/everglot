@@ -1,8 +1,10 @@
 <script lang="ts">
-    import { onDestroy, getContext } from "svelte"
+    import { getContext } from "svelte"
+    import { stores as sapperStores } from "@sapper/app"
     import { fly, blur } from "svelte/transition"
     import { query } from "@urql/svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { validate as uuidValidate } from "uuid"
 
     import Sidebar from "../comp/chat/Sidebar.svelte"
     import Header from "../comp/chat/Header.svelte"
@@ -22,6 +24,7 @@
     import Modal from "../comp/util/Modal.svelte"
 
     import { groupUuid } from "../stores"
+    import { currentUserUuid, currentChatUserUuid } from "../stores/currentUser"
     import {
         groupChatStore,
         groupChatMessagesStore,
@@ -41,14 +44,42 @@
     let messages: ChatMessage[] = []
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
     let currentActivity: GroupActivity | null = null
-    let currentActivityKnownForGroupUuid: string | null = null
+    let currentActivityGroupUuid: string | null = null
 
     const webrtc = getContext<WebrtcContext>(WEBRTC_CONTEXT)
     const { outgoing, remoteUsers, joinedRoom: joinedCallRoom } = webrtc
     const chat = getContext<ChatContext>(CHAT_CONTEXT)
     const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
 
-    let myUuid: string | null = null
+    const { page } = sapperStores()
+
+    page.subscribe(({ query }) => {
+        if (typeof window === "undefined") {
+            /**
+             * Prevent loading group data on server-side.
+             */
+            $groupUuid = null
+            return
+        }
+        let { group } = query
+        if (!group || !group.length) {
+            $groupUuid = null
+            return
+        }
+        group = group as string
+        if (!uuidValidate(group)) {
+            $groupUuid = null
+            return
+        }
+        if ($joinedChatRoom === group) {
+            /**
+             * Fix edge case where a user leaves and immediately re-visits the same group's chat page.
+             * We need to leave the room now and then re-join it (will be done below).
+             */
+            chat.leaveRoom()
+        }
+        $groupUuid = group
+    })
 
     let fetchGroupMetadataInterval: number | null = null
 
@@ -65,16 +96,6 @@
         chat.on("messagePreview", handleMessagePreview)
         chat.on("groupActivity", handleGroupActivity)
     }
-    $: if ($connectedToChat && $groupUuid) {
-        chat.joinRoom($groupUuid)
-    }
-
-    onDestroy(() => {
-        if (fetchGroupMetadataInterval) {
-            clearInterval(fetchGroupMetadataInterval)
-            fetchGroupMetadataInterval = null
-        }
-    })
 
     let messagesStartCursor: any = null
     const fetchMoreMessages = () => {
@@ -176,20 +197,26 @@
         userUuid: string
         groupUuid: string
     }): void {
-        myUuid = userUuid
+        $currentChatUserUuid = userUuid
     }
 
-    function handleGroupActivity(activity: GroupActivity) {
+    function handleGroupActivity(activity: GroupActivity | null) {
+        if (!$groupUuid || (activity && activity?.groupUuid !== $groupUuid)) {
+            // They should always match and be known, something went wrong here.
+            return
+        }
         currentActivity = activity
-        currentActivityKnownForGroupUuid = $groupUuid
+        if ($groupUuid) {
+            currentActivityGroupUuid = $groupUuid
+        }
     }
 
     let messagesComponent: Messages
 
     const isOwnMessage = (message: ChatMessage) =>
         message.userUuid !== null &&
-        myUuid !== null &&
-        message.userUuid === myUuid
+        $currentUserUuid !== null &&
+        message.userUuid === $currentUserUuid
 
     function handleMessage(message: ChatMessage): void {
         messages = [...messages, message]
@@ -222,22 +249,23 @@
         if (!$groupUuid) {
             return false
         }
-        if ($joinedCallRoom !== $groupUuid && chat) {
+        if (!$currentUserUuid) {
+            return false
+        }
+        if ($joinedCallRoom !== $groupUuid) {
             chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
         }
-        if (!(await webrtc.joinRoom($groupUuid, myUuid))) {
+        if (!(await webrtc.joinRoom($groupUuid, $currentUserUuid))) {
             // TODO: error
             console.log("failed to join call")
             return false
         }
-        if (chat) {
-            chat.emit("userJoinCall", { groupUuid: $groupUuid })
-            const callMeta = {
-                micMuted: !mic,
-                audioMuted: !audio,
-            }
-            setCallUserMeta(myUuid, $groupUuid, callMeta)
+        chat.emit("userJoinCall", { groupUuid: $groupUuid })
+        const callMeta = {
+            micMuted: !mic,
+            audioMuted: !audio,
         }
+        setCallUserMeta($currentUserUuid, $groupUuid, callMeta)
         return true
     }
 
@@ -245,28 +273,25 @@
         if (!$joinedCallRoom) {
             return false
         }
+        const callRoom = $joinedCallRoom
         if (!(await webrtc.leaveRoom())) {
             // TODO: error
             // console.log("failed to leave call")
             return false
         }
-        if (chat) {
-            chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
-            removeUserFromCall(myUuid, $joinedCallRoom)
+        chat.emit("userLeaveCall", { groupUuid: callRoom })
+        if ($currentUserUuid) {
+            removeUserFromCall($currentUserUuid, callRoom)
         }
         return true
     }
 
     function handleBeforeunload() {
         if ($joinedCallRoom) {
-            if (chat && chat.hasOwnProperty("emit")) {
-                chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
-            }
+            chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
         }
-        if (chat) {
-            chat.leaveRoom()
-            chat.disconnect()
-        }
+        chat.leaveRoom()
+        chat.disconnect()
         webrtc.leaveRoom()
     }
 </script>
@@ -313,9 +338,9 @@
                         groupUuid: $groupUuid,
                         callMeta,
                     })
-                    if (myUuid) {
+                    if ($currentUserUuid) {
                         // TODO: what if this is not truthy?
-                        setCallUserMeta(myUuid, $groupUuid, callMeta)
+                        setCallUserMeta($currentUserUuid, $groupUuid, callMeta)
                     }
                 }
             }}
@@ -341,7 +366,9 @@
                         groupUuid: $groupUuid,
                         callMeta,
                     })
-                    setCallUserMeta(myUuid, $groupUuid, callMeta)
+                    if ($currentUserUuid) {
+                        setCallUserMeta($currentUserUuid, $groupUuid, callMeta)
+                    }
                 }
             }}
             {handleJoinCall}
@@ -365,7 +392,7 @@
                                         duration: 300,
                                     }}
                                 >
-                                    {#if $groupUuid !== null && currentActivityKnownForGroupUuid === $groupUuid}
+                                    {#if $groupUuid !== null && currentActivityGroupUuid === $groupUuid}
                                         <SidePanel activity={currentActivity} />
                                     {/if}
                                     <div
@@ -417,7 +444,7 @@
                                         {fetchMoreMessages}
                                         {isOwnMessage}
                                     />
-                                    <SubmitForm {myUuid} {isOwnMessage} />
+                                    <SubmitForm {isOwnMessage} />
                                 </div>
                             {/key}
                         </div>

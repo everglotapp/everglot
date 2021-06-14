@@ -23,12 +23,8 @@
     import { WEBRTC_CONTEXT } from "../util/WebrtcProvider.svelte"
     import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
 
-    import {
-        currentUser,
-        currentUserStore,
-        userHasCompletedProfile,
-        groupUuid,
-    } from "../../stores"
+    import { userHasCompletedProfile, groupUuid } from "../../stores"
+    import { currentUser, currentUserStore } from "../../stores/currentUser"
     import { allGroupsStore, privateGroups } from "../../stores/groups"
     import { currentGroupIsGlobal } from "../../stores/chat"
 
@@ -214,9 +210,6 @@
                                                         color="SECONDARY"
                                                         href={`/chat?group=${group.uuid}`}
                                                         className="w-full justify-between items-center"
-                                                        on:click={() =>
-                                                            ($groupUuid =
-                                                                group.uuid)}
                                                         >{group.groupName || ""}
                                                         ({group.language
                                                             ? group.language.alpha2.toUpperCase() ||
@@ -324,9 +317,6 @@
                                                     color="PRIMARY"
                                                     className="w-full justify-between items-center"
                                                     href={`/chat?group=${$joinedCallRoom}`}
-                                                    on:click={() =>
-                                                        ($groupUuid =
-                                                            $joinedCallRoom)}
                                                     ><span class="mr-1"
                                                         ><Localized
                                                             id="main-nav-go-to-call"

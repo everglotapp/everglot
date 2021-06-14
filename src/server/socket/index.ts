@@ -1,4 +1,5 @@
 import { Server as SocketIO } from "socket.io"
+import { validate as uuidValidate } from "uuid"
 
 import log from "../../logger"
 
@@ -97,17 +98,43 @@ export function start(server: Server, pool: Pool) {
             activities.handleUserJoinedRoom(io, socket, groupUuid)
         })
 
-        // Listen for chatMessage
-        socket.on("leaveRoom", () => {
-            users.handleLeave(socket)
-        })
+        socket.on(
+            "leaveRoom",
+            async ({ room: groupUuid }: { room: string }) => {
+                if (!groupUuid || !groupUuid || !uuidValidate(groupUuid)) {
+                    return
+                }
+                const userId = session.user_id
+                const userMeta = await getChatUserByUserId(userId)
+                if (!userMeta) {
+                    return
+                }
+                const { uuid: userUuid } = userMeta
+
+                if (!authenticateUserInGroup(userId, groupUuid)) {
+                    return
+                }
+
+                const leavingUser = users.handleLeave(
+                    socket,
+                    userUuid,
+                    groupUuid
+                )
+                if (leavingUser) {
+                    socket.leave(groupUuid)
+                }
+            }
+        )
 
         // Runs when client disconnects
-        socket.on("disconnect", () => {
-            const chatUser = users.handleLeave(socket)
-            if (!chatUser) {
+        socket.on("disconnect", async () => {
+            const userId = session.user_id
+            const userMeta = await getChatUserByUserId(userId)
+            if (!userMeta) {
                 return
             }
+            const { uuid: userUuid } = userMeta
+            users.handleLeave(socket, userUuid)
         })
 
         messages.handleUserConnected(io, socket)

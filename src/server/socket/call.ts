@@ -87,13 +87,14 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                     .error("Failed to get group call user metadata")
                 return
             }
+            const { uuid: userUuid } = userMeta
             if (!authenticateUserInGroup(userId, groupUuid)) {
                 chlog
-                    .child({ userId, groupUuid })
+                    .child({ userId, userUuid, groupUuid })
                     .debug("User is not in group but tried to join call")
                 return
             }
-            if (!userUpdateMeta(userMeta.uuid, groupUuid, callMeta)) {
+            if (!userUpdateMeta(userUuid, groupUuid, callMeta)) {
                 return
             }
             socket.broadcast

@@ -4,13 +4,14 @@
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import { XIcon } from "svelte-feather-icons"
+    import SquirrelOnRope from "./SquirrelOnRope.svelte"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
     import Modal from "../../util/Modal.svelte"
     import { CHAT_CONTEXT } from "../../util/ChatProvider.svelte"
     import type { ChatContext } from "../../util/ChatProvider.svelte"
     import Headline4 from "../../typography/Headline4.svelte"
 
-    import { currentUser } from "../../../stores"
+    import { currentUserUuid } from "../../../stores/currentUser"
     import { currentUserIsGroupMember, chatUsers } from "../../../stores/chat"
     import { ALPHABET } from "../../../constants"
     import type { HangmanLocale } from "../../../constants"
@@ -50,8 +51,8 @@
                 const guessingUser = $chatUsers.find(
                     (user) => user.uuid === userUuid
                 )
-                if ($currentUser && guessingUser) {
-                    if (guessingUser === $currentUser.uuid) {
+                if ($currentUserUuid && guessingUser) {
+                    if (guessingUser.uuid === $currentUserUuid) {
                         feedback = success
                             ? $translate(
                                   "chat-side-panel-activity-hangman-feedback-own-guess-correct",
@@ -194,6 +195,7 @@
         forceDisableInputs = true
         setTimeout(() => {
             forceDisableInputs = false
+            inputValue = ""
         }, 3000)
         setTimeout(() => {
             feedback = undefined
@@ -206,7 +208,6 @@
 
     const WRONG_LETTER_MOVE_Y_PX = 15
     const WRONG_WORD_MOVE_Y_PX = 60
-    const MAX_MOVE_Y_PX = 90
 </script>
 
 <div class="flex flex-row m-4 max-h-12 px-2 justify-between items-center">
@@ -227,73 +228,35 @@
 </div>
 <div class="flex flex-col items-center">
     <div class="inline-block relative mb-4">
-        <div
-            class="rope"
-            style={`transition: height 400ms ease-in-out; height: ${Math.max(
-                0,
-                175 -
-                    Math.min(
-                        wrongLetterGuesses * WRONG_LETTER_MOVE_Y_PX +
-                            wrongWordGuesses * WRONG_WORD_MOVE_Y_PX,
-                        MAX_MOVE_Y_PX
-                    )
-            )}px`}
-        />
-        <div class="box-top" />
-        <div class="box-left" />
-        <div class="box-bottom px-8 py-5">
-            {#if over}
-                {#if wordGuessedCorrectly}
-                    <Localized
-                        id="chat-side-panel-activity-hangman-solution-correct"
-                    /> <span class="font-bold">{solution}</span>
+        <SquirrelOnRope
+            confused={over && !wordGuessedCorrectly}
+            verticalOffset={wrongLetterGuesses * WRONG_LETTER_MOVE_Y_PX +
+                wrongWordGuesses * WRONG_WORD_MOVE_Y_PX}
+        >
+            <svelte:fragment slot="bottom-box">
+                {#if over}
+                    {#if wordGuessedCorrectly}
+                        <Localized
+                            id="chat-side-panel-activity-hangman-solution-correct"
+                        /> <span class="font-bold">{solution}</span>
+                    {:else}
+                        <Localized
+                            id="chat-side-panel-activity-hangman-solution-wrong"
+                        /> <span class="font-bold">{solution}</span>
+                    {/if}
                 {:else}
-                    <Localized
-                        id="chat-side-panel-activity-hangman-solution-wrong"
-                    /> <span class="font-bold">{solution}</span>
+                    {#each word as character}
+                        <span class="character">
+                            {#if character === null}
+                                &nbsp;
+                            {:else}
+                                {character}
+                            {/if}
+                        </span>
+                    {/each}
                 {/if}
-            {:else}
-                {#each word as character}
-                    <span class="character">
-                        {#if character === null}
-                            &nbsp;
-                        {:else}
-                            {character}
-                        {/if}
-                    </span>
-                {/each}
-            {/if}
-        </div>
-        <div class="squirrel-container">
-            <div
-                class="relative"
-                style={`transition: transform 400ms ease-in-out; transform: translateY(-${Math.min(
-                    wrongLetterGuesses * WRONG_LETTER_MOVE_Y_PX +
-                        wrongWordGuesses * WRONG_WORD_MOVE_Y_PX,
-                    MAX_MOVE_Y_PX
-                )}px)`}
-            >
-                <img src="/squirrel.png" alt="Squirrel" />
-                {#if over && !wordGuessedCorrectly}
-                    <div
-                        class="absolute font-bold"
-                        style="right: 64px; top: 36px;"
-                    >
-                        x
-                    </div>
-                    <div
-                        class="absolute font-bold"
-                        style="right: 55px; top: 60px; width: 11px; border-bottom: 2px solid black;"
-                    />
-                    <div
-                        class="absolute font-bold"
-                        style="right: 49px; top: 36px;"
-                    >
-                        x
-                    </div>
-                {/if}
-            </div>
-        </div>
+            </svelte:fragment>
+        </SquirrelOnRope>
     </div>
     <form on:submit|preventDefault={handleSubmit}>
         <label for="hangman-input"
@@ -305,6 +268,7 @@
             bind:value={inputValue}
             required
             disabled={over || forceDisableInputs || !$currentUserIsGroupMember}
+            autocomplete="off"
         />
         <ButtonSmall
             tag="button"
@@ -364,13 +328,6 @@
 {/if}
 
 <style>
-    .squirrel-container {
-        position: absolute;
-        max-width: 170px;
-        bottom: 48px;
-        left: 107px;
-    }
-
     .character {
         @apply text-lg;
         @apply font-bold;
@@ -380,35 +337,5 @@
         width: 20px;
         display: inline-block;
         text-align: center;
-    }
-
-    .rope {
-        width: 3px;
-        background: #664e27;
-        margin-left: 8px;
-        position: absolute;
-        top: 23px;
-        left: 193px;
-    }
-
-    .box-top {
-        height: 23px;
-        width: 236px;
-        background: #b57a57;
-        margin-left: 20px;
-    }
-
-    .box-left {
-        height: 300px;
-        width: 20px;
-        background: #b57a57;
-        margin-left: 20px;
-    }
-
-    .box-bottom {
-        height: 66px;
-        width: 381px;
-        background: #b57a57;
-        margin-left: 8px;
     }
 </style>

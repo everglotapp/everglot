@@ -8,13 +8,12 @@
     import { query } from "@urql/svelte"
 
     import {
-        currentUser,
-        currentUserStore,
         userHasCompletedProfile,
         username,
         room,
         languageCodeMappings,
     } from "../stores"
+    import { currentUser, currentUserStore } from "../stores/currentUser"
     import {
         MAX_LEARNING,
         MAX_TEACHING,

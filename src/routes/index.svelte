@@ -1,7 +1,8 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte"
     import { goto } from "@sapper/app"
-    import { currentUserStore, userHasCompletedProfile } from "../stores"
+    import { userHasCompletedProfile } from "../stores"
+    import { currentUserStore } from "../stores/currentUser"
 
     import { query } from "@urql/svelte"
 

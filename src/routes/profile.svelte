@@ -15,7 +15,8 @@
     import type { UserProfileQuery } from "../types/generated/graphql"
     import { Gender } from "../users"
     import Avatar from "../comp/users/Avatar.svelte"
-    import { groupUuid, currentUserStore } from "../stores"
+    import { groupUuid } from "../stores"
+    import { currentUserStore } from "../stores/currentUser"
 
     const userProfileStore = operationStore<UserProfileQuery>(UserProfile)
     query(userProfileStore)
@@ -204,11 +205,6 @@
                         <li>
                             <ButtonSmall
                                 href={`/chat?group=${group.group.uuid}`}
-                                on:click={() => {
-                                    if (group.group) {
-                                        $groupUuid = group.group.uuid
-                                    }
-                                }}
                                 variant="TEXT"
                                 color="SECONDARY"
                             >

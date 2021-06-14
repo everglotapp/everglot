@@ -111,7 +111,6 @@
                             color="SECONDARY"
                             variant="TEXT"
                             href={`/chat?group=${group.uuid}`}
-                            on:click={() => ($groupUuid = group.uuid)}
                             ><span
                                 class="name"
                                 title={group.groupName || undefined}

@@ -10,7 +10,7 @@
         disconnect: () => void
         joinRoom: (room: string) => void
         leaveRoom: () => boolean
-        sendMessage: (msg: string) => boolean
+        sendMessage: (msg: string, userUuid: string | null) => boolean
         emit: (ev: string, ...args: any[]) => boolean
         on: (ev: string, listener: ListenerFunction) => boolean
         off: (
@@ -88,11 +88,12 @@
     }
 
     export function disconnect() {
-        if ($socket) {
-            $socket.off()
-            $socket.disconnect()
-            $socket = null
+        if (!$socket) {
+            return
         }
+        $socket.off()
+        $socket.disconnect()
+        $socket = null
     }
 
     export function joinRoom(room: string) {
@@ -121,7 +122,7 @@
             return false
         }
         // console.log("Leaving room", { joinedRoom: $joinedRoom })
-        $socket.emit("leaveRoom")
+        $socket.emit("leaveRoom", { room: $joinedRoom })
         $joinedRoom = null
         return true
     }

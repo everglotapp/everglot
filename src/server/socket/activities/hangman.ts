@@ -278,40 +278,54 @@ export async function handleUserConnected(
                 return
             }
             const success = game.processGuess(guess)
-            // Tell group users about the guess and whether it was successful.
-            io.to(chatUser.groupUuid).emit("groupActivity.hangmanGuess", {
+            await handleGuessProcessed(
+                io,
                 guess,
                 success,
-                userUuid,
-            })
-
-            chlog
-                .child({
-                    groupUuid,
-                    userUuid,
-                    guess,
-                    success,
-                })
-                .trace("User attempted hangman guess")
-            // Tell group users about the new game state.
-            io.to(groupUuid).emit("groupActivity", getGroupActivity(groupUuid))
-            await (async function () {
-                await new Promise((resolve) => setTimeout(resolve, 6000))
-                if (await game.nextRound()) {
-                    chlog
-                        .child({
-                            groupUuid,
-                            userUuid,
-                        })
-                        .debug("Hangman game proceeded to next round")
-                    io.to(groupUuid).emit(
-                        "groupActivity",
-                        getGroupActivity(groupUuid)
-                    )
-                }
-            })()
+                game,
+                groupUuid,
+                userUuid
+            )
         }
     )
+}
+
+const DELAY_NEXT_ROUND_MS = 5000
+async function handleGuessProcessed(
+    io: SocketIO,
+    guess: string,
+    success: boolean,
+    game: HangmanGame,
+    groupUuid: string,
+    userUuid: string
+) {
+    // Tell group users about the guess and whether it was successful.
+    io.to(groupUuid).emit("groupActivity.hangmanGuess", {
+        guess,
+        success,
+        userUuid,
+    })
+
+    chlog
+        .child({
+            groupUuid,
+            userUuid,
+            guess,
+            success,
+        })
+        .trace("User attempted hangman guess")
+    // Tell group users about the new game state.
+    io.to(groupUuid).emit("groupActivity", getGroupActivity(groupUuid))
+    if (await game.nextRound()) {
+        await new Promise((resolve) => setTimeout(resolve, DELAY_NEXT_ROUND_MS))
+        chlog
+            .child({
+                groupUuid,
+                userUuid,
+            })
+            .debug("Hangman game proceeded to next round")
+        io.to(groupUuid).emit("groupActivity", getGroupActivity(groupUuid))
+    }
 }
 
 export async function handleStarted(

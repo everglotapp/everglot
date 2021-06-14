@@ -4,6 +4,7 @@
     import { Localized, Overlay } from "@nubolab-ffwd/svelte-fluent"
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import { XIcon } from "svelte-feather-icons"
+    import SquirrelOnRope from "./SquirrelOnRope.svelte"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
     import Modal from "../../util/Modal.svelte"
     import { CHAT_CONTEXT } from "../../util/ChatProvider.svelte"
@@ -193,7 +194,6 @@
     }
 
     const WRONG_CHARACTER_MOVE_Y_PX = 15
-    const MAX_MOVE_Y_PX = 90
 </script>
 
 <div class="flex flex-row m-4 max-h-12 px-2 justify-between items-center">
@@ -216,83 +216,46 @@
 </div>
 <div class="flex flex-col items-center">
     <div class="inline-block relative mb-4">
-        <div
-            class="rope"
-            style={`transition: height 400ms ease-in-out; height: ${Math.max(
-                0,
-                175 -
-                    Math.min(
-                        wrongCharacterGuesses * WRONG_CHARACTER_MOVE_Y_PX,
-                        MAX_MOVE_Y_PX
-                    )
-            )}px`}
-        />
-        <div class="box-top" />
-        <div class="box-left" />
-        <div class="box-bottom px-8 py-5">
-            {#if over}
-                {#if characterGuessedCorrectly}
-                    <Overlay
-                        id="chat-side-panel-activity-guess-character-solution-correct"
-                        args={{
-                            solution,
-                            hint,
-                        }}
-                    >
-                        You guessed correctly: <span class="font-bold"
-                            >{solution}</span
+        <SquirrelOnRope
+            confused={over && !characterGuessedCorrectly}
+            verticalOffset={wrongCharacterGuesses * WRONG_CHARACTER_MOVE_Y_PX}
+        >
+            <svelte:fragment slot="bottom-box">
+                {#if over}
+                    {#if characterGuessedCorrectly}
+                        <Overlay
+                            id="chat-side-panel-activity-guess-character-solution-correct"
+                            args={{
+                                solution,
+                                hint,
+                            }}
                         >
-                    </Overlay>
+                            You guessed correctly: <span class="font-bold"
+                                >{solution}</span
+                            >
+                        </Overlay>
+                    {:else}
+                        <Overlay
+                            id="chat-side-panel-activity-guess-character-solution-wrong"
+                            args={{
+                                solution,
+                                hint,
+                            }}
+                        >
+                            The solution would have been: <span
+                                class="font-bold"
+                                data-l10n-name="solution">{solution}</span
+                            >
+                        </Overlay>
+                    {/if}
                 {:else}
-                    <Overlay
-                        id="chat-side-panel-activity-guess-character-solution-wrong"
-                        args={{
-                            solution,
-                            hint,
-                        }}
-                    >
-                        The solution would have been: <span
-                            class="font-bold"
-                            data-l10n-name="solution">{solution}</span
-                        >
-                    </Overlay>
-                {/if}
-            {:else}
-                <Localized
-                    id="chat-side-panel-activity-guess-character-hint"
-                    args={{ hint: hint || "" }}
-                />
-            {/if}
-        </div>
-        <div class="squirrel-container">
-            <div
-                class="relative"
-                style={`transition: transform 400ms ease-in-out; transform: translateY(-${Math.min(
-                    wrongCharacterGuesses * WRONG_CHARACTER_MOVE_Y_PX,
-                    MAX_MOVE_Y_PX
-                )}px)`}
-            >
-                <img src="/squirrel.png" alt="Squirrel" />
-                {#if over && !characterGuessedCorrectly}
-                    <div
-                        class="absolute font-bold"
-                        style="right: 64px; top: 36px;"
-                    >
-                        x
-                    </div>
-                    <div
-                        class="absolute font-bold"
-                        style="right: 55px; top: 60px; width: 11px; border-bottom: 2px solid black;"
+                    <Localized
+                        id="chat-side-panel-activity-guess-character-hint"
+                        args={{ hint: hint || "" }}
                     />
-                    <div
-                        class="absolute font-bold"
-                        style="right: 49px; top: 36px;"
-                    >
-                        x
-                    </div>
                 {/if}
-            </div>
-        </div>
+            </svelte:fragment>
+        </SquirrelOnRope>
     </div>
     <form on:submit|preventDefault={handleSubmit}>
         <label for="guess-character-input"

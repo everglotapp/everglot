@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte"
     import Select from "svelte-select"
+    import { SearchIcon } from "svelte-feather-icons"
 
     export let items: unknown[]
     export let selected: unknown[] | null
@@ -15,7 +16,7 @@
     }
 </script>
 
-<div class="wrapper inline-flex" class:hideInput>
+<div class="wrapper inline-flex relative" class:hideInput>
     <Select
         {items}
         selectedValue={selected}
@@ -24,6 +25,13 @@
         {placeholder}
         isDisabled={disabled}
     />
+    {#if selected === null}
+        <div
+            class="absolute right-2 top-0 bottom-0 flex items-center text-gray"
+        >
+            <SearchIcon size="18" />
+        </div>
+    {/if}
 </div>
 
 <style>
@@ -50,6 +58,10 @@
 
     .wrapper :global(input) {
         max-width: 5rem;
+    }
+
+    .wrapper :global(.selectContainer) {
+        @apply pr-4;
     }
 
     .wrapper :global(.selectContainer.focused) {

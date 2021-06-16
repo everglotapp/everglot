@@ -10,7 +10,6 @@
     import {
         userHasCompletedProfile,
         username,
-        room,
         languageCodeMappings,
     } from "../stores"
     import { currentUser, currentUserStore } from "../stores/currentUser"

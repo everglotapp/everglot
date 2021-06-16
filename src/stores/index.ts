@@ -8,7 +8,6 @@ import {
 import { currentUser, currentUserStore } from "./currentUser"
 
 export const username = writable<string | null>(null)
-export const room = writable<string>("English")
 export const groupUuid = writable<string | null>(null)
 
 export const userHasCompletedProfile = derived(

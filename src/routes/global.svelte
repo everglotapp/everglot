@@ -12,7 +12,6 @@
     import Headline3 from "../comp/typography/Headline3.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
 
-    import { groupUuid } from "../stores"
     import {
         allGroupsStore,
         globalGroups,

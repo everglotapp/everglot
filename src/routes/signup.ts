@@ -6,36 +6,12 @@ import {
     MAX_TEACHING,
 } from "../users"
 
+import { userHasCompletedProfile } from "../server/users"
+
 import type { Request, Response } from "express"
 import { ensureJson, serverError } from "../helpers"
 
 import { createDatabasePool } from "../server/db"
-import { performQuery } from "../server/gql"
-import type { UserHasCompletedProfileQuery } from "../types/generated/graphql"
-
-async function userHasCompletedProfile(userId: number): Promise<boolean> {
-    const queryResult = await performQuery<UserHasCompletedProfileQuery>(
-        `query UserHasCompletedProfile($id: Int!) {
-            user(id: $id) {
-                username
-                userLanguages {
-                    totalCount
-                }
-            }
-        }
-        `,
-        { id: userId }
-    )
-    if (queryResult.data && queryResult.data.user) {
-        const {
-            user: { username, userLanguages },
-        } = queryResult.data
-        if (username !== null && userLanguages.totalCount) {
-            return true
-        }
-    }
-    return false
-}
 
 export async function get(req: Request, res: Response, next: () => void) {
     if (!req.session.user_id) {

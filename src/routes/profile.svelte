@@ -15,7 +15,6 @@
     import type { UserProfileQuery } from "../types/generated/graphql"
     import { Gender } from "../users"
     import Avatar from "../comp/users/Avatar.svelte"
-    import { groupUuid } from "../stores"
     import { currentUserStore } from "../stores/currentUser"
 
     const userProfileStore = operationStore<UserProfileQuery>(UserProfile)

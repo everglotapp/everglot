@@ -105,7 +105,7 @@
             return
         }
         if (res.success === true) {
-            goto("/signup")
+            window.location.href = "/"
         } else {
             errorMessage = res.message
         }

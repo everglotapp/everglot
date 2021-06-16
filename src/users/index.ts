@@ -23,3 +23,22 @@ export enum AuthMethod {
     EMAIL = "email",
     GOOGLE = "google",
 }
+
+export enum ActiveStatus {
+    ACTIVE = "online",
+    IDLE = "idle",
+    OFFLINE = "offline",
+}
+
+export const getActiveStatus = (lastActiveDate: Date): ActiveStatus => {
+    const now = Date.now()
+    const lastActive = lastActiveDate.getTime()
+    const THREE_MINS = 3 * 60 * 1000
+    const ONE_HOUR = 60 * 60 * 1000
+    if (now - lastActive < THREE_MINS) {
+        return ActiveStatus.ACTIVE
+    } else if (now - lastActive < ONE_HOUR) {
+        return ActiveStatus.IDLE
+    }
+    return ActiveStatus.OFFLINE
+}

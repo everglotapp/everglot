@@ -11,6 +11,8 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
     import { usersInCurrentCall } from "../../stores/call"
+    import { chatUsers } from "../../stores/chat"
+    import { getActiveStatus } from "../../users"
 
     export let id: string
     export let avatarUrl: Maybe<string> | undefined
@@ -23,6 +25,11 @@
 
     $: callUser = uuid
         ? $usersInCurrentCall.find((callUser) => callUser.uuid === uuid) || null
+        : null
+
+    $: chatUser = uuid ? $chatUsers.find((u) => u?.uuid === uuid) || null : null
+    $: activeStatus = chatUser
+        ? getActiveStatus(new Date(chatUser.lastActiveAt))
         : null
 </script>
 
@@ -37,6 +44,9 @@
 >
     <div class="avatar">
         <Avatar url={avatarUrl || ""} username={username || ""} size={32} />
+        {#if activeStatus}
+            <div class={`active-status ${activeStatus}`} />
+        {/if}
     </div>
     <span class="username">{username || ""}</span>
     {#if callUser}
@@ -67,7 +77,7 @@
                         delay: 0,
                     }}
                 >
-                    <Bio userUuid={uuid} />
+                    <Bio userUuid={uuid || null} />
                 </div>
             </div>
         </div>
@@ -91,6 +101,8 @@
     .avatar {
         width: 32px;
         height: 32px;
+
+        @apply relative;
     }
 
     .avatar :global(*) {
@@ -107,5 +119,28 @@
         @apply overflow-ellipsis;
         @apply text-left;
         @apply whitespace-nowrap;
+    }
+
+    .active-status {
+        border-radius: 50%;
+        height: 12px;
+        width: 12px;
+        right: 0;
+        bottom: -2px;
+        border: 1px solid white;
+
+        @apply absolute;
+    }
+
+    .active-status.online {
+        background: #82ed93;
+    }
+
+    .active-status.idle {
+        background: #f9ef0a;
+    }
+
+    .active-status.offline {
+        background: #ccc;
     }
 </style>

@@ -11,6 +11,7 @@ import type {
     UpdateUserAvatarUrlMutationVariables,
     User,
     UserUuidByIdQuery,
+    UserHasCompletedProfileQuery,
 } from "../types/generated/graphql"
 
 export async function registerUserActivity(
@@ -63,4 +64,30 @@ export async function getUserUuidById(id: User["id"]): Promise<string | null> {
         return null
     }
     return res.data.user?.uuid || null
+}
+
+export async function userHasCompletedProfile(
+    userId: number
+): Promise<boolean> {
+    const queryResult = await performQuery<UserHasCompletedProfileQuery>(
+        `query UserHasCompletedProfile($id: Int!) {
+            user(id: $id) {
+                username
+                userLanguages {
+                    totalCount
+                }
+            }
+        }
+        `,
+        { id: userId }
+    )
+    if (queryResult.data && queryResult.data.user) {
+        const {
+            user: { username, userLanguages },
+        } = queryResult.data
+        if (username !== null && userLanguages.totalCount) {
+            return true
+        }
+    }
+    return false
 }

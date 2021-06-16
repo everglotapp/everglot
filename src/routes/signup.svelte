@@ -10,7 +10,6 @@
     import {
         userHasCompletedProfile,
         username,
-        room,
         languageCodeMappings,
     } from "../stores"
     import { currentUser, currentUserStore } from "../stores/currentUser"
@@ -207,12 +206,6 @@
             return
         }
         if (res.success === true) {
-            $room = learn.en
-                ? "English"
-                : learn.de
-                ? "German"
-                : // : learnOther[0].label // FIXME: learnOther[0] can be undefined here … why?
-                  "English"
             goto("/signup/success")
         } else {
             errorMessage = res.message

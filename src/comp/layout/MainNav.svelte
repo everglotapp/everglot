@@ -366,7 +366,7 @@
                                                 color="SECONDARY"
                                                 tag="a"
                                                 className="w-full"
-                                                href="https://everglot.com/privacy"
+                                                href="/privacy"
                                                 ><span class="mr-1"
                                                     ><Localized
                                                         id="main-nav-privacy"

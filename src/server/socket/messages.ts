@@ -87,23 +87,21 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
             return
         }
 
-        if (!msg.startsWith("!")) {
-            chlog.child({ message }).debug("Trying to obtain message preview")
-            generateMessagePreview(
-                { id: message.message.id, body: msg },
-                (imageUrl) => {
-                    // TODO: Send preview metadata
-                    chlog
-                        .child({ message, imageUrl })
-                        .debug("Callback for message preview was called")
-                    io.to(chatUser.groupUuid).emit("messagePreview", {
-                        messageUuid: message.message!.uuid,
-                        type: "image",
-                        url: imageUrl,
-                    })
-                }
-            )
-        }
+        chlog.child({ message }).debug("Trying to obtain message preview")
+        await generateMessagePreview(
+            { id: message.message.id, body: msg },
+            (imageUrl) => {
+                // TODO: Send preview metadata
+                chlog
+                    .child({ message, imageUrl })
+                    .debug("Callback for message preview was called")
+                io.to(chatUser.groupUuid).emit("messagePreview", {
+                    messageUuid: message.message!.uuid,
+                    type: "image",
+                    url: imageUrl,
+                })
+            }
+        )
     })
 }
 
@@ -248,7 +246,7 @@ export async function generateMessagePreview(
             callback(imageUrl)
 
             // Create in database
-            createMessagePreview({
+            await createMessagePreview({
                 messageId: message.id,
                 filename,
                 extension: extension || null,

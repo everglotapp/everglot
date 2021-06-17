@@ -12,6 +12,7 @@ import type {
     User,
     UserUuidByIdQuery,
     UserHasCompletedProfileQuery,
+    UserGroupMembershipsQuery,
 } from "../types/generated/graphql"
 
 export async function registerUserActivity(
@@ -90,4 +91,36 @@ export async function userHasCompletedProfile(
         }
     }
     return false
+}
+
+export async function userGroupMemberships(userId: number) {
+    const queryResult = await performQuery<UserGroupMembershipsQuery>(
+        `query UserGroupMemberships($id: Int!) {
+            user(id: $id) {
+                groupUsers {
+                    edges {
+                        node {
+                            group {
+                                global
+                                uuid
+                                groupName
+                                language {
+                                    alpha2
+                                }
+                                languageSkillLevel {
+                                    name
+                                }
+                            }
+                            userType
+                        }
+                    }
+                }
+            }
+        }`,
+        { id: userId }
+    )
+    if (queryResult.data && queryResult.data.user?.groupUsers.edges) {
+        return queryResult.data.user.groupUsers.edges
+    }
+    return null
 }

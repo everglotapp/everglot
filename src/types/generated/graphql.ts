@@ -9177,6 +9177,39 @@ export type UpdateUserAvatarUrlMutation = (
   )> }
 );
 
+export type UserGroupMembershipsQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserGroupMembershipsQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & { groupUsers: (
+      { __typename?: 'GroupUsersConnection' }
+      & { edges: Array<(
+        { __typename?: 'GroupUsersEdge' }
+        & { node?: Maybe<(
+          { __typename?: 'GroupUser' }
+          & Pick<GroupUser, 'userType'>
+          & { group?: Maybe<(
+            { __typename?: 'Group' }
+            & Pick<Group, 'global' | 'uuid' | 'groupName'>
+            & { language?: Maybe<(
+              { __typename?: 'Language' }
+              & Pick<Language, 'alpha2'>
+            )>, languageSkillLevel?: Maybe<(
+              { __typename?: 'LanguageSkillLevel' }
+              & Pick<LanguageSkillLevel, 'name'>
+            )> }
+          )> }
+        )> }
+      )> }
+    ) }
+  )> }
+);
+
 export type UserHasCompletedProfileQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -9550,6 +9583,30 @@ export const UpdateUserAvatarUrl = gql`
   updateUser(input: {patch: {avatarUrl: $avatarUrl}, id: $id}) {
     user {
       avatarUrl
+    }
+  }
+}
+    `;
+export const UserGroupMemberships = gql`
+    query UserGroupMemberships($id: Int!) {
+  user(id: $id) {
+    groupUsers {
+      edges {
+        node {
+          group {
+            global
+            uuid
+            groupName
+            language {
+              alpha2
+            }
+            languageSkillLevel {
+              name
+            }
+          }
+          userType
+        }
+      }
     }
   }
 }

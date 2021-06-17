@@ -1,0 +1,22 @@
+query UserGroupMemberships($id: Int!) {
+    user(id: $id) {
+        groupUsers {
+            edges {
+                node {
+                    group {
+                        global
+                        uuid
+                        groupName
+                        language {
+                            alpha2
+                        }
+                        languageSkillLevel {
+                            name
+                        }
+                    }
+                    userType
+                }
+            }
+        }
+    }
+}

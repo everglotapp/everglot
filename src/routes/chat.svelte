@@ -231,7 +231,7 @@
         url: string
         type: string
     }) {
-        previews[messageUuid] = [{ uuid: "", url, type }]
+        previews = { ...previews, [messageUuid]: [{ uuid: "", url, type }] }
     }
 
     let split = true
@@ -469,7 +469,7 @@
                     src={showLargeImageModalUrl}
                     alt="Enlargened"
                     role="presentation"
-                    style="max-width: 80vw; max-height: 90vh; box-shadow: 1px 1px 3px #393939, 1px 1px 9px #777;"
+                    style="max-width: 80vw; max-height: 90vh; box-shadow: 1px 1px 3px #393939, 1px 1px 9px #777; background: radial-gradient(circle at center, #fff 0, #fff 50%, #dcdcdc 100%);"
                 />
             </div>
         </Modal>

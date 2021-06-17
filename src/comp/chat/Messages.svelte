@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount, getContext, beforeUpdate, afterUpdate } from "svelte"
-    import { scale } from "svelte/transition"
 
     import Message from "./Message.svelte"
+    import MessagePreview from "./MessagePreview.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import Spinner from "../util/Spinner.svelte"
     import { CHAT_CONTEXT } from "../util/ChatProvider.svelte"
@@ -32,6 +32,7 @@
     let scrollHeightBeforeRender: number | null = null
     let oldMessageUuids: string[] = []
     let oldPreviewUuids: string[] = []
+    let forceScrollByPx: number = 0
 
     $: {
         messages // dependency
@@ -96,7 +97,7 @@
                 latestSentMessageHandledAt = Date.now()
             }
             if (scrollHeightBeforeRender === null) {
-                // console.log("No previous height, forcing bottom")
+                console.log("No previous height, forcing bottom")
                 forceBottom = true
             } else if (!forceBottom) {
                 if (anythingInsertedAtTop) {
@@ -114,11 +115,17 @@
                     }
                 }
             }
+            // console.log("Attempting scroll to bottom", { forceBottom })
             scrollToBottom(messagesContainer, forceBottom)
         }
         scrollFunction = adjustScrollPosition
         oldMessageUuids = newMessageUuids
         oldPreviewUuids = newPreviewUuids
+    }
+
+    $: if (messagesContainer && forceScrollByPx > 0) {
+        messagesContainer.scrollTop += forceScrollByPx
+        forceScrollByPx = 0
     }
 
     const FETCH_OLDER_MAX_SCROLL_TOP_PX = 1500
@@ -171,6 +178,11 @@
         }
     })
 
+    const handlePreviewImageLoaded = (event: Event) => {
+        const element = event.currentTarget!
+        forceScrollByPx += (element as HTMLElement).scrollHeight
+    }
+
     $: hasEarlierMessages =
         $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId
             .pageInfo.hasPreviousPage
@@ -219,20 +231,13 @@
             time={message.time}
             text={message.text}
         />
-        {#if previews[message.uuid]}
+        {#if typeof previews[message.uuid] !== "undefined"}
             {#each previews[message.uuid] as preview (preview.uuid)}
-                <div
-                    class="message-preview"
-                    in:scale|local={{ duration: 200, delay: 200 }}
-                >
-                    <img
-                        src={preview.url}
-                        alt="Preview"
-                        role="presentation"
-                        class="cursor-pointer"
-                        on:click={handleEnlargenImage(preview.url)}
-                    />
-                </div>
+                <MessagePreview
+                    url={preview.url}
+                    on:click={handleEnlargenImage(preview.url)}
+                    on:load={handlePreviewImageLoaded}
+                />
             {/each}
         {/if}
     {/each}
@@ -246,15 +251,5 @@
         @apply pr-2;
         @apply rounded-bl-lg;
         @apply rounded-br-lg;
-    }
-
-    .message-preview {
-        padding-left: 4.5rem;
-
-        @apply mb-3;
-    }
-
-    .message-preview img {
-        max-height: 256px;
     }
 </style>

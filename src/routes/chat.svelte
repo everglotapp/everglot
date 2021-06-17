@@ -257,7 +257,7 @@
         }
         if (!(await webrtc.joinRoom($groupUuid, $currentUserUuid))) {
             // TODO: error
-            console.log("failed to join call")
+            // console.log("failed to join call")
             return false
         }
         chat.emit("userJoinCall", { groupUuid: $groupUuid })

@@ -57,13 +57,17 @@
         }
     }
 
-    let teach: Record<string, boolean> = {
+    const PRIORITIZED_LANGUAGES = ["en", "de", "zh"] as const
+    type PrioritizedLanguage = typeof PRIORITIZED_LANGUAGES[number]
+    let teach: Record<PrioritizedLanguage, boolean> = {
         de: false,
         en: false,
+        zh: false,
     }
-    let learn: Record<string, boolean> = {
+    let learn: Record<PrioritizedLanguage, boolean> = {
         de: false,
         en: false,
+        zh: false,
     }
 
     let errorMessage: string | null = null
@@ -78,7 +82,10 @@
     type LanguageItem = { value: string; label: string }
     let items: LanguageItem[] = []
     $: items = languages
-        .filter(({ alpha2 }) => alpha2 !== "en" && alpha2 !== "de")
+        .filter(
+            ({ alpha2 }) =>
+                !(PRIORITIZED_LANGUAGES as readonly string[]).includes(alpha2)
+        )
         .map(({ alpha2, englishName }) => ({
             value: alpha2,
             label: englishName,
@@ -90,6 +97,7 @@
     let learningLevels: Record<string, CefrLevel | ""> = {
         en: "",
         de: "",
+        zh: "",
         ...Object.fromEntries(items.map((item) => [item.value, ""])),
     }
 
@@ -103,7 +111,9 @@
             .reduce((n, i) => n + i) + learnOther.length
 
     $: learningCodes = [
-        ...Object.keys(learn).filter((code) => learn[code]),
+        ...Object.keys(learn).filter(
+            (code) => learn[code as PrioritizedLanguage]
+        ),
         ...learnOther.map((item) => item.value),
     ]
 
@@ -176,7 +186,9 @@
         submitting = true
         errorMessage = null
         const teachingCodes = [
-            ...Object.keys(teach).filter((code) => teach[code]),
+            ...Object.keys(teach).filter(
+                (code) => teach[code as PrioritizedLanguage]
+            ),
             ...teachOther.map((item) => item.value),
         ]
         const response = await fetch("/signup", {
@@ -283,11 +295,20 @@
                             (!learn.en && totalLearning >= MAX_LEARNING)}
                         on:click={() => toggleLearn("en")}>English</ButtonSmall
                     >
+                    <ButtonSmall
+                        tag="button"
+                        className="mr-1 mb-1"
+                        variant={learn.zh ? "FILLED" : "OUTLINED"}
+                        disabled={teach.zh ||
+                            (!learn.zh && totalLearning >= MAX_LEARNING)}
+                        on:click={() => toggleLearn("zh")}>Chinese</ButtonSmall
+                    >
                     <GroupSelect
                         items={learnable}
                         selected={learnOther.length ? learnOther : null}
                         hideInput={totalLearning >= MAX_LEARNING}
-                        disabled={learn.de && learn.en}
+                        disabled={Object.values(learn).filter(Boolean).length >=
+                            MAX_LEARNING}
                         on:select={handleSelectLearnOther}
                     />
                 </div>
@@ -412,11 +433,20 @@
                             (!teach.en && totalTeaching >= MAX_TEACHING)}
                         on:click={() => toggleTeach("en")}>English</ButtonSmall
                     >
+                    <ButtonSmall
+                        tag="button"
+                        className="mr-1"
+                        variant={teach.zh ? "FILLED" : "OUTLINED"}
+                        disabled={learn.zh ||
+                            (!teach.zh && totalTeaching >= MAX_TEACHING)}
+                        on:click={() => toggleTeach("zh")}>Chinese</ButtonSmall
+                    >
                     <GroupSelect
                         items={teachable}
                         selected={teachOther.length ? teachOther : null}
                         hideInput={totalTeaching >= MAX_TEACHING}
-                        disabled={teach.de && teach.en}
+                        disabled={Object.values(teach).filter(Boolean).length >=
+                            MAX_TEACHING}
                         on:select={handleSelectTeachOther}
                     />
                 </div>

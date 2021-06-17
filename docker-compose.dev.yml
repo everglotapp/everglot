@@ -5,8 +5,8 @@ services:
         volumes:
             - ./:/home/node/app
         ports:
-            - "127.0.0.1:8002:3000"
-            - "127.0.0.1:10000:10000"
+            - "0.0.0.0:8002:3000"
+            - "0.0.0.0:10000:10000"
         environment:
             NODE_ENV: "development"
             ROARR_LOG: "true"

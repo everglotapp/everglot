@@ -20,9 +20,3 @@
         <pre>{error.stack}</pre>
     {/if}
 </div>
-
-<style>
-    p {
-        margin: 1em auto;
-    }
-</style>

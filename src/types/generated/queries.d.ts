@@ -161,6 +161,15 @@ declare module '*/updateUserAvatarUrl.graphql' {
 }
     
 
+declare module '*/userGroupMemberships.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserGroupMemberships: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/userHasCompletedProfile.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

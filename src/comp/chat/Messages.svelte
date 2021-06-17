@@ -97,7 +97,7 @@
                 latestSentMessageHandledAt = Date.now()
             }
             if (scrollHeightBeforeRender === null) {
-                console.log("No previous height, forcing bottom")
+                // console.log("No previous height, forcing bottom")
                 forceBottom = true
             } else if (!forceBottom) {
                 if (anythingInsertedAtTop) {
@@ -179,8 +179,16 @@
     })
 
     const handlePreviewImageLoaded = (event: Event) => {
-        const element = event.currentTarget!
-        forceScrollByPx += (element as HTMLElement).scrollHeight
+        const element = event.currentTarget as HTMLElement | null
+        if (!element || typeof window === "undefined") {
+            return
+        }
+        const container = element.parentElement! as HTMLElement
+        const computedStyle = window.getComputedStyle(container)
+        forceScrollByPx +=
+            container.clientHeight +
+            parseInt(computedStyle.marginTop) +
+            parseInt(computedStyle.marginBottom)
     }
 
     $: hasEarlierMessages =

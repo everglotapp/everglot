@@ -6,7 +6,6 @@
 <div class="message-preview" in:scale|local={{ duration: 200, delay: 200 }}>
     <img
         src={url}
-        height="256"
         alt="Preview"
         role="presentation"
         class="cursor-pointer"

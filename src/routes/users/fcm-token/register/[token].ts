@@ -31,11 +31,6 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
     const fcmToken = req.params["token"]
-    if (!fcmToken || typeof fcmToken !== "string" || !fcmToken.length) {
-        chlog.child({ fcmToken, userId }).debug("Malformed FCM token")
-        unprocessableEntity(res, "Malformed FCM token")
-        return
-    }
     if (!(await fcmTokenValid(fcmToken))) {
         chlog.child({ fcmToken, userId }).debug("Invalid FCM token")
         unprocessableEntity(res, "Invalid FCM token")

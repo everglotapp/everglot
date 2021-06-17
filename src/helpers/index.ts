@@ -1,6 +1,16 @@
 import log from "../logger"
 import type { Request, Response } from "express"
 
+export function unprocessableEntity(
+    res: Response,
+    message = "Request data invalid."
+) {
+    res.status(422).json({
+        success: false,
+        message,
+    })
+}
+
 export function serverError(
     res: Response,
     message = "Something went wrong while processing your request."

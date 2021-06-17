@@ -7,3 +7,4 @@ yarn-error.log
 /dynamic/
 .env
 /src/graphql.server.json
+/src/firebaseServiceAccount.json

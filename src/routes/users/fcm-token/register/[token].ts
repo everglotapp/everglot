@@ -8,6 +8,7 @@ const chlog = log.child({
 })
 
 import type { Request, Response } from "express"
+import { getUserUuidById } from "../../../../server/users"
 
 async function fcmTokenValid(token: string): Promise<boolean> {
     try {
@@ -24,6 +25,8 @@ async function fcmTokenValid(token: string): Promise<boolean> {
     }
 }
 
+export const userFcmToken: Record<string, string> = {}
+
 export async function post(req: Request, res: Response, _next: () => void) {
     const { user_id: userId } = req.session
     if (!userId) {
@@ -37,6 +40,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
     chlog.child({ fcmToken, userId }).debug("FCM token valid")
-    // TODO: Store FCM token (if not stored yet)
+    // TODO: Store FCM token in database (if not stored yet)
+    const userUuid = await getUserUuidById(userId)
+    if (userUuid) {
+        userFcmToken[userUuid] = fcmToken
+    }
     res.json({ success: true })
 }

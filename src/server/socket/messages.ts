@@ -38,6 +38,8 @@ import {
 } from "../constants"
 import { getCurrentUser } from "./users"
 import { getGroupIdByUuid, getGroupLanguageByUuid } from "../groups"
+import { userFcmToken } from "../../routes/users/fcm-token/register/[token]"
+import { getApp } from "../firebase"
 
 export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     socket.on("chatMessage", async (msg) => {
@@ -72,6 +74,23 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 text: msg,
                 time: message.message.createdAt,
             })
+            const tokens = Object.values(userFcmToken)
+            if (tokens.length) {
+                getApp()
+                    .messaging()
+                    .sendMulticast({
+                        tokens,
+                        notification: {
+                            title: "New message",
+                            body: msg,
+                        },
+                        data: {
+                            uuid: message.message.uuid,
+                            userUuid: message.sender.uuid,
+                            time: message.message.createdAt,
+                        },
+                    })
+            }
         } else {
             chlog.child({ message }).error("User text message creation failed")
             return

@@ -9,7 +9,6 @@ import {
     CreateGroupMutation,
     GroupIdByUuidQuery,
     GroupLanguageByUuidQuery,
-    GroupMessageNotificationQuery,
     UserIsInGroupQuery,
     UserLanguageInfoQuery,
     UserType,
@@ -426,35 +425,6 @@ export async function getGroupLanguageByUuid(
                 language {
                     alpha2
                 }
-            }
-        }`,
-        { uuid }
-    )
-    if (!res.data?.groupByUuid) {
-        return null
-    }
-    return res.data || null
-}
-
-export async function getGroupMessageNotification(
-    uuid: string
-): Promise<GroupMessageNotificationQuery | null> {
-    const res = await performQuery<GroupMessageNotificationQuery>(
-        `query GroupMessageNotification($uuid: UUID!) {
-            groupByUuid(uuid: $uuid) {
-                groupUsers {
-                    nodes {
-                        user {
-                            uuid
-                            userDevices {
-                                nodes {
-                                    fcmToken
-                                }
-                            }
-                        }
-                    }
-                }
-                groupName
             }
         }`,
         { uuid }

@@ -37,12 +37,8 @@ import {
     MESSAGE_PREVIEW_IMAGES_ACCEPTED_CONTENT_TYPES,
 } from "../constants"
 import { getCurrentUser } from "./users"
-import {
-    getGroupIdByUuid,
-    getGroupLanguageByUuid,
-    getGroupMessageNotification,
-} from "../groups"
-import { getApp } from "../firebase"
+import { getGroupIdByUuid, getGroupLanguageByUuid } from "../groups"
+import { notifyMessageRecipients } from "../notifications"
 
 export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     socket.on("chatMessage", async (msg) => {
@@ -296,43 +292,6 @@ export async function createMessagePreview(
         return null
     }
     return res.data?.createMessagePreview?.messagePreview?.id || null
-}
-
-async function notifyMessageRecipients(
-    chatMessage: ChatMessage,
-    groupUuid: string
-) {
-    const notification = await getGroupMessageNotification(groupUuid)
-    if (!notification) {
-        return
-    }
-    const tokens =
-        notification.groupByUuid?.groupUsers.nodes.reduce(
-            (tokenArr, groupUser) => [
-                ...tokenArr,
-                ...(groupUser?.user?.userDevices.nodes
-                    .filter((device) => device && device.fcmToken !== null)
-                    .map((device) => device!.fcmToken!) || []),
-            ],
-            []
-        ) || []
-    if (!tokens.length) {
-        return
-    }
-    const groupName = notification.groupByUuid?.groupName
-    getApp()
-        .messaging()
-        .sendMulticast({
-            tokens,
-            notification: {
-                title:
-                    groupName && groupName.length
-                        ? `New message in ${notification.groupByUuid?.groupName}`
-                        : `New message in group chat`,
-                body: chatMessage.text,
-            },
-            // data: {},
-        })
 }
 
 export default {

@@ -9345,6 +9345,23 @@ export type CreateUserMutation = (
   )> }
 );
 
+export type CreateUserDeviceMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  fcmToken?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CreateUserDeviceMutation = (
+  { __typename?: 'Mutation' }
+  & { createUserDevice?: Maybe<(
+    { __typename?: 'CreateUserDevicePayload' }
+    & { userDevice?: Maybe<(
+      { __typename?: 'UserDevice' }
+      & Pick<UserDevice, 'uuid' | 'fcmToken' | 'id'>
+    )> }
+  )> }
+);
+
 export type CreateUserLanguageMutationVariables = Exact<{
   languageId: Scalars['Int'];
   languageSkillLevelId?: Maybe<Scalars['Int']>;
@@ -9848,6 +9865,17 @@ export const CreateUser = gql`
     input: {user: {email: $email, gender: $gender, passwordHash: $passwordHash, username: $username, uuid: $uuid, avatarUrl: $avatarUrl, locale: $locale}}
   ) {
     user {
+      id
+    }
+  }
+}
+    `;
+export const CreateUserDevice = gql`
+    mutation CreateUserDevice($userId: Int!, $fcmToken: String) {
+  createUserDevice(input: {userDevice: {userId: $userId, fcmToken: $fcmToken}}) {
+    userDevice {
+      uuid
+      fcmToken
       id
     }
   }

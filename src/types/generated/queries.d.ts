@@ -62,6 +62,15 @@ declare module '*/createUser.graphql' {
 }
     
 
+declare module '*/createUserDevice.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateUserDevice: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createUserLanguage.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

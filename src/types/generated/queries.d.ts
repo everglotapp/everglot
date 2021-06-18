@@ -116,6 +116,15 @@ declare module '*/groupLanguageByUuid.graphql' {
 }
     
 
+declare module '*/groupMessageNotification.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const GroupMessageNotification: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/joinGlobalGroup.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

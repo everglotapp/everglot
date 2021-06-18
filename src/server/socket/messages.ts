@@ -37,8 +37,11 @@ import {
     MESSAGE_PREVIEW_IMAGES_ACCEPTED_CONTENT_TYPES,
 } from "../constants"
 import { getCurrentUser } from "./users"
-import { getGroupIdByUuid, getGroupLanguageByUuid } from "../groups"
-import { userFcmToken } from "../../routes/users/fcm-token/register/[token]"
+import {
+    getGroupIdByUuid,
+    getGroupLanguageByUuid,
+    getGroupMessageNotification,
+} from "../groups"
 import { getApp } from "../firebase"
 
 export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
@@ -47,16 +50,17 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
         if (!chatUser) {
             return
         }
+        const { groupUuid } = chatUser
 
         if (!msg) {
             chlog.debug("User sent chatMessage with empty body")
             return
         }
-        const recipientGroupId = await getGroupIdByUuid(chatUser.groupUuid)
+        const recipientGroupId = await getGroupIdByUuid(groupUuid)
         if (!recipientGroupId) {
             chlog
                 .child({
-                    groupUuid: chatUser.groupUuid,
+                    groupUuid,
                 })
                 .error("Failed to get group ID by UUID for user message")
             return
@@ -68,39 +72,24 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
             senderId: chatUser.user.id,
         })
         if (message && message.message && message.sender) {
-            io.to(chatUser.groupUuid).emit("message", {
+            const chatMessage = {
                 uuid: message.message.uuid,
                 userUuid: message.sender.uuid,
                 text: msg,
                 time: message.message.createdAt,
-            })
-            const tokens = Object.values(userFcmToken)
-            if (tokens.length) {
-                getApp()
-                    .messaging()
-                    .sendMulticast({
-                        tokens,
-                        notification: {
-                            title: "New message",
-                            body: msg,
-                        },
-                        data: {
-                            uuid: message.message.uuid,
-                            userUuid: message.sender.uuid,
-                            time: message.message.createdAt,
-                        },
-                    })
-            }
+            } as ChatMessage
+            io.to(groupUuid).emit("message", chatMessage)
+            notifyMessageRecipients(chatMessage, groupUuid)
         } else {
             chlog.child({ message }).error("User text message creation failed")
             return
         }
 
-        const group = await getGroupLanguageByUuid(chatUser.groupUuid)
+        const group = await getGroupLanguageByUuid(groupUuid)
         if (!group || !group.groupByUuid?.language?.alpha2) {
             chlog
                 .child({
-                    groupUuid: chatUser.groupUuid,
+                    groupUuid,
                 })
                 .error("Failed to get group by UUID for user message")
             return
@@ -307,6 +296,43 @@ export async function createMessagePreview(
         return null
     }
     return res.data?.createMessagePreview?.messagePreview?.id || null
+}
+
+async function notifyMessageRecipients(
+    chatMessage: ChatMessage,
+    groupUuid: string
+) {
+    const notification = await getGroupMessageNotification(groupUuid)
+    if (!notification) {
+        return
+    }
+    const tokens =
+        notification.groupByUuid?.groupUsers.nodes.reduce(
+            (tokenArr, groupUser) => [
+                ...tokenArr,
+                ...(groupUser?.user?.userDevices.nodes
+                    .filter((device) => device && device.fcmToken !== null)
+                    .map((device) => device!.fcmToken!) || []),
+            ],
+            []
+        ) || []
+    if (!tokens.length) {
+        return
+    }
+    const groupName = notification.groupByUuid?.groupName
+    getApp()
+        .messaging()
+        .sendMulticast({
+            tokens,
+            notification: {
+                title:
+                    groupName && groupName.length
+                        ? `New message in ${notification.groupByUuid?.groupName}`
+                        : `New message in group chat`,
+                body: chatMessage.text,
+            },
+            // data: {},
+        })
 }
 
 export default {

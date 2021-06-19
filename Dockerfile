@@ -21,7 +21,11 @@ RUN set -eux \
 ARG NODE_ENV=development
 ENV NODE_ENV=$NODE_ENV
 
+ARG NODE_OPTIONS=--max_old_space_size=8192
+ENV NODE_OPTIONS=$NODE_OPTIONS
+
 RUN echo "$NODE_ENV"
+RUN echo "$NODE_OPTIONS"
 
 RUN set -eux\
     & [ "$NODE_ENV" != "development" ] || \

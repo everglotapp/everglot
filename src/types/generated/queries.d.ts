@@ -62,6 +62,15 @@ declare module '*/createUser.graphql' {
 }
     
 
+declare module '*/createUserDevice.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateUserDevice: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createUserLanguage.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -111,6 +120,15 @@ declare module '*/groupLanguageByUuid.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const GroupLanguageByUuid: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/groupMessageNotification.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const GroupMessageNotification: DocumentNode;
 
   export default defaultDocument;
 }

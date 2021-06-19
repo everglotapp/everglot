@@ -1,6 +1,16 @@
 import log from "../logger"
 import type { Request, Response } from "express"
 
+export function unprocessableEntity(
+    res: Response,
+    message = "Request data invalid."
+) {
+    res.status(422).json({
+        success: false,
+        message,
+    })
+}
+
 export function serverError(
     res: Response,
     message = "Something went wrong while processing your request."
@@ -32,7 +42,7 @@ export function ensureJson(req: Request, res: Response): boolean {
 export function ensureJsonRequest(req: Request, res: Response): boolean {
     if (
         !req.headers.hasOwnProperty("content-type") ||
-        req.headers["content-type"] !== CONTENT_TYPE_JSON
+        req.headers["content-type"]?.split(";")[0] !== CONTENT_TYPE_JSON
     ) {
         log.debug("Received non-JSON request to JSON only endpoint")
         res.status(415).json({

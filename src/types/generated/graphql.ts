@@ -954,6 +954,41 @@ export type CreateMessagePreviewPayloadMessagePreviewEdgeArgs = {
   orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
 };
 
+/** All input for the create `UserDevice` mutation. */
+export type CreateUserDeviceInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserDevice` to be created by this mutation. */
+  userDevice: UserDeviceInput;
+};
+
+/** The output of our create `UserDevice` mutation. */
+export type CreateUserDevicePayload = {
+  __typename?: 'CreateUserDevicePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserDevice` that was created by this mutation. */
+  userDevice?: Maybe<UserDevice>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserDevice`. */
+  user?: Maybe<User>;
+  /** An edge for our `UserDevice`. May be used by Relay 1. */
+  userDeviceEdge?: Maybe<UserDevicesEdge>;
+};
+
+
+/** The output of our create `UserDevice` mutation. */
+export type CreateUserDevicePayloadUserDeviceEdgeArgs = {
+  orderBy?: Maybe<Array<UserDevicesOrderBy>>;
+};
+
 /** All input for the create `User` mutation. */
 export type CreateUserInput = {
   /**
@@ -2003,6 +2038,72 @@ export type DeleteUserByUuidInput = {
    */
   clientMutationId?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteUserDeviceByFcmToken` mutation. */
+export type DeleteUserDeviceByFcmTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  fcmToken: Scalars['String'];
+};
+
+/** All input for the `deleteUserDeviceByNodeId` mutation. */
+export type DeleteUserDeviceByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `UserDevice` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteUserDeviceByUuid` mutation. */
+export type DeleteUserDeviceByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteUserDevice` mutation. */
+export type DeleteUserDeviceInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `UserDevice` mutation. */
+export type DeleteUserDevicePayload = {
+  __typename?: 'DeleteUserDevicePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserDevice` that was deleted by this mutation. */
+  userDevice?: Maybe<UserDevice>;
+  deletedUserDeviceNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserDevice`. */
+  user?: Maybe<User>;
+  /** An edge for our `UserDevice`. May be used by Relay 1. */
+  userDeviceEdge?: Maybe<UserDevicesEdge>;
+};
+
+
+/** The output of our delete `UserDevice` mutation. */
+export type DeleteUserDevicePayloadUserDeviceEdgeArgs = {
+  orderBy?: Maybe<Array<UserDevicesOrderBy>>;
 };
 
 /** All input for the `deleteUser` mutation. */
@@ -4758,6 +4859,8 @@ export type Mutation = {
   createEnglishRandomQuestion?: Maybe<CreateEnglishRandomQuestionPayload>;
   /** Creates a single `ChineseRandomQuestion`. */
   createChineseRandomQuestion?: Maybe<CreateChineseRandomQuestionPayload>;
+  /** Creates a single `UserDevice`. */
+  createUserDevice?: Maybe<CreateUserDevicePayload>;
   /** Creates a single `UserLanguage`. */
   createUserLanguage?: Maybe<CreateUserLanguagePayload>;
   /** Creates a single `UserSession`. */
@@ -4836,6 +4939,14 @@ export type Mutation = {
   updateChineseRandomQuestion?: Maybe<UpdateChineseRandomQuestionPayload>;
   /** Updates a single `ChineseRandomQuestion` using a unique key and a patch. */
   updateChineseRandomQuestionByUuid?: Maybe<UpdateChineseRandomQuestionPayload>;
+  /** Updates a single `UserDevice` using its globally unique id and a patch. */
+  updateUserDeviceByNodeId?: Maybe<UpdateUserDevicePayload>;
+  /** Updates a single `UserDevice` using a unique key and a patch. */
+  updateUserDevice?: Maybe<UpdateUserDevicePayload>;
+  /** Updates a single `UserDevice` using a unique key and a patch. */
+  updateUserDeviceByUuid?: Maybe<UpdateUserDevicePayload>;
+  /** Updates a single `UserDevice` using a unique key and a patch. */
+  updateUserDeviceByFcmToken?: Maybe<UpdateUserDevicePayload>;
   /** Updates a single `UserLanguage` using its globally unique id and a patch. */
   updateUserLanguageByNodeId?: Maybe<UpdateUserLanguagePayload>;
   /** Updates a single `UserLanguage` using a unique key and a patch. */
@@ -4944,6 +5055,14 @@ export type Mutation = {
   deleteChineseRandomQuestion?: Maybe<DeleteChineseRandomQuestionPayload>;
   /** Deletes a single `ChineseRandomQuestion` using a unique key. */
   deleteChineseRandomQuestionByUuid?: Maybe<DeleteChineseRandomQuestionPayload>;
+  /** Deletes a single `UserDevice` using its globally unique id. */
+  deleteUserDeviceByNodeId?: Maybe<DeleteUserDevicePayload>;
+  /** Deletes a single `UserDevice` using a unique key. */
+  deleteUserDevice?: Maybe<DeleteUserDevicePayload>;
+  /** Deletes a single `UserDevice` using a unique key. */
+  deleteUserDeviceByUuid?: Maybe<DeleteUserDevicePayload>;
+  /** Deletes a single `UserDevice` using a unique key. */
+  deleteUserDeviceByFcmToken?: Maybe<DeleteUserDevicePayload>;
   /** Deletes a single `UserLanguage` using its globally unique id. */
   deleteUserLanguageByNodeId?: Maybe<DeleteUserLanguagePayload>;
   /** Deletes a single `UserLanguage` using a unique key. */
@@ -5058,6 +5177,12 @@ export type MutationCreateEnglishRandomQuestionArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateChineseRandomQuestionArgs = {
   input: CreateChineseRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateUserDeviceArgs = {
+  input: CreateUserDeviceInput;
 };
 
 
@@ -5292,6 +5417,30 @@ export type MutationUpdateChineseRandomQuestionArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateChineseRandomQuestionByUuidArgs = {
   input: UpdateChineseRandomQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserDeviceByNodeIdArgs = {
+  input: UpdateUserDeviceByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserDeviceArgs = {
+  input: UpdateUserDeviceInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserDeviceByUuidArgs = {
+  input: UpdateUserDeviceByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserDeviceByFcmTokenArgs = {
+  input: UpdateUserDeviceByFcmTokenInput;
 };
 
 
@@ -5620,6 +5769,30 @@ export type MutationDeleteChineseRandomQuestionByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserDeviceByNodeIdArgs = {
+  input: DeleteUserDeviceByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserDeviceArgs = {
+  input: DeleteUserDeviceInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserDeviceByUuidArgs = {
+  input: DeleteUserDeviceByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserDeviceByFcmTokenArgs = {
+  input: DeleteUserDeviceByFcmTokenInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserLanguageByNodeIdArgs = {
   input: DeleteUserLanguageByNodeIdInput;
 };
@@ -5821,6 +5994,8 @@ export type Query = Node & {
   englishRandomQuestions?: Maybe<EnglishRandomQuestionsConnection>;
   /** Reads and enables pagination through a set of `ChineseRandomQuestion`. */
   chineseRandomQuestions?: Maybe<ChineseRandomQuestionsConnection>;
+  /** Reads and enables pagination through a set of `UserDevice`. */
+  userDevices?: Maybe<UserDevicesConnection>;
   /** Reads and enables pagination through a set of `UserLanguage`. */
   userLanguages?: Maybe<UserLanguagesConnection>;
   /** Reads and enables pagination through a set of `UserSession`. */
@@ -5857,6 +6032,9 @@ export type Query = Node & {
   englishRandomQuestionByUuid?: Maybe<EnglishRandomQuestion>;
   chineseRandomQuestion?: Maybe<ChineseRandomQuestion>;
   chineseRandomQuestionByUuid?: Maybe<ChineseRandomQuestion>;
+  userDevice?: Maybe<UserDevice>;
+  userDeviceByUuid?: Maybe<UserDevice>;
+  userDeviceByFcmToken?: Maybe<UserDevice>;
   userLanguage?: Maybe<UserLanguage>;
   userSession?: Maybe<UserSession>;
   user?: Maybe<User>;
@@ -5902,6 +6080,8 @@ export type Query = Node & {
   englishRandomQuestionByNodeId?: Maybe<EnglishRandomQuestion>;
   /** Reads a single `ChineseRandomQuestion` using its globally unique `ID`. */
   chineseRandomQuestionByNodeId?: Maybe<ChineseRandomQuestion>;
+  /** Reads a single `UserDevice` using its globally unique `ID`. */
+  userDeviceByNodeId?: Maybe<UserDevice>;
   /** Reads a single `UserLanguage` using its globally unique `ID`. */
   userLanguageByNodeId?: Maybe<UserLanguage>;
   /** Reads a single `UserSession` using its globally unique `ID`. */
@@ -6067,6 +6247,19 @@ export type QueryChineseRandomQuestionsArgs = {
   orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
   condition?: Maybe<ChineseRandomQuestionCondition>;
   filter?: Maybe<ChineseRandomQuestionFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserDevicesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserDevicesOrderBy>>;
+  condition?: Maybe<UserDeviceCondition>;
+  filter?: Maybe<UserDeviceFilter>;
 };
 
 
@@ -6295,6 +6488,24 @@ export type QueryChineseRandomQuestionByUuidArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryUserDeviceArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserDeviceByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserDeviceByFcmTokenArgs = {
+  fcmToken: Scalars['String'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryUserLanguageArgs = {
   id: Scalars['Int'];
 };
@@ -6483,6 +6694,12 @@ export type QueryEnglishRandomQuestionByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryChineseRandomQuestionByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserDeviceByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
 
@@ -7698,6 +7915,79 @@ export type UpdateUserByUuidInput = {
   uuid: Scalars['UUID'];
 };
 
+/** All input for the `updateUserDeviceByFcmToken` mutation. */
+export type UpdateUserDeviceByFcmTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `UserDevice` being updated. */
+  patch: UserDevicePatch;
+  fcmToken: Scalars['String'];
+};
+
+/** All input for the `updateUserDeviceByNodeId` mutation. */
+export type UpdateUserDeviceByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `UserDevice` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `UserDevice` being updated. */
+  patch: UserDevicePatch;
+};
+
+/** All input for the `updateUserDeviceByUuid` mutation. */
+export type UpdateUserDeviceByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `UserDevice` being updated. */
+  patch: UserDevicePatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateUserDevice` mutation. */
+export type UpdateUserDeviceInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `UserDevice` being updated. */
+  patch: UserDevicePatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `UserDevice` mutation. */
+export type UpdateUserDevicePayload = {
+  __typename?: 'UpdateUserDevicePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserDevice` that was updated by this mutation. */
+  userDevice?: Maybe<UserDevice>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserDevice`. */
+  user?: Maybe<User>;
+  /** An edge for our `UserDevice`. May be used by Relay 1. */
+  userDeviceEdge?: Maybe<UserDevicesEdge>;
+};
+
+
+/** The output of our update `UserDevice` mutation. */
+export type UpdateUserDevicePayloadUserDeviceEdgeArgs = {
+  orderBy?: Maybe<Array<UserDevicesOrderBy>>;
+};
+
 /** All input for the `updateUser` mutation. */
 export type UpdateUserInput = {
   /**
@@ -7868,6 +8158,8 @@ export type User = Node & {
   messagesByRecipientId: MessagesConnection;
   /** Reads and enables pagination through a set of `InviteToken`. */
   inviteTokens: InviteTokensConnection;
+  /** Reads and enables pagination through a set of `UserDevice`. */
+  userDevices: UserDevicesConnection;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByUserLanguageUserIdAndLanguageId: UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
@@ -7946,6 +8238,18 @@ export type UserInviteTokensArgs = {
   orderBy?: Maybe<Array<InviteTokensOrderBy>>;
   condition?: Maybe<InviteTokenCondition>;
   filter?: Maybe<InviteTokenFilter>;
+};
+
+
+export type UserUserDevicesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserDevicesOrderBy>>;
+  condition?: Maybe<UserDeviceCondition>;
+  filter?: Maybe<UserDeviceFilter>;
 };
 
 
@@ -8087,6 +8391,113 @@ export type UserCondition = {
   /** Checks for equality with the object’s `signedUpWithTokenId` field. */
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
 };
+
+export type UserDevice = Node & {
+  __typename?: 'UserDevice';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  userId?: Maybe<Scalars['Int']>;
+  fcmToken?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `User` that is related to this `UserDevice`. */
+  user?: Maybe<User>;
+};
+
+/**
+ * A condition to be used against `UserDevice` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
+export type UserDeviceCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `fcmToken` field. */
+  fcmToken?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `UserDevice` object types. All fields are combined with a logical ‘and.’ */
+export type UserDeviceFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `fcmToken` field. */
+  fcmToken?: Maybe<StringFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<UserDeviceFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<UserDeviceFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<UserDeviceFilter>;
+};
+
+/** An input for mutations affecting `UserDevice` */
+export type UserDeviceInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  userId?: Maybe<Scalars['Int']>;
+  fcmToken?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `UserDevice`. Fields that are set will be updated. */
+export type UserDevicePatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  userId?: Maybe<Scalars['Int']>;
+  fcmToken?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `UserDevice` values. */
+export type UserDevicesConnection = {
+  __typename?: 'UserDevicesConnection';
+  /** A list of `UserDevice` objects. */
+  nodes: Array<Maybe<UserDevice>>;
+  /** A list of edges which contains the `UserDevice` and cursor to aid in pagination. */
+  edges: Array<UserDevicesEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `UserDevice` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `UserDevice` edge in the connection. */
+export type UserDevicesEdge = {
+  __typename?: 'UserDevicesEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `UserDevice` at the end of the edge. */
+  node?: Maybe<UserDevice>;
+};
+
+/** Methods to use when ordering `UserDevice`. */
+export enum UserDevicesOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+  FcmTokenAsc = 'FCM_TOKEN_ASC',
+  FcmTokenDesc = 'FCM_TOKEN_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
 
 /** A filter to be used against `User` object types. All fields are combined with a logical ‘and.’ */
 export type UserFilter = {
@@ -8934,6 +9345,23 @@ export type CreateUserMutation = (
   )> }
 );
 
+export type CreateUserDeviceMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  fcmToken?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CreateUserDeviceMutation = (
+  { __typename?: 'Mutation' }
+  & { createUserDevice?: Maybe<(
+    { __typename?: 'CreateUserDevicePayload' }
+    & { userDevice?: Maybe<(
+      { __typename?: 'UserDevice' }
+      & Pick<UserDevice, 'uuid' | 'fcmToken' | 'id'>
+    )> }
+  )> }
+);
+
 export type CreateUserLanguageMutationVariables = Exact<{
   languageId: Scalars['Int'];
   languageSkillLevelId?: Maybe<Scalars['Int']>;
@@ -9094,6 +9522,36 @@ export type GroupLanguageByUuidQuery = (
       { __typename?: 'Language' }
       & Pick<Language, 'alpha2'>
     )> }
+  )> }
+);
+
+export type GroupMessageNotificationQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type GroupMessageNotificationQuery = (
+  { __typename?: 'Query' }
+  & { groupByUuid?: Maybe<(
+    { __typename?: 'Group' }
+    & Pick<Group, 'groupName'>
+    & { groupUsers: (
+      { __typename?: 'GroupUsersConnection' }
+      & { nodes: Array<Maybe<(
+        { __typename?: 'GroupUser' }
+        & { user?: Maybe<(
+          { __typename?: 'User' }
+          & Pick<User, 'uuid'>
+          & { userDevices: (
+            { __typename?: 'UserDevicesConnection' }
+            & { nodes: Array<Maybe<(
+              { __typename?: 'UserDevice' }
+              & Pick<UserDevice, 'fcmToken'>
+            )>> }
+          ) }
+        )> }
+      )>> }
+    ) }
   )> }
 );
 
@@ -9412,6 +9870,17 @@ export const CreateUser = gql`
   }
 }
     `;
+export const CreateUserDevice = gql`
+    mutation CreateUserDevice($userId: Int!, $fcmToken: String) {
+  createUserDevice(input: {userDevice: {userId: $userId, fcmToken: $fcmToken}}) {
+    userDevice {
+      uuid
+      fcmToken
+      id
+    }
+  }
+}
+    `;
 export const CreateUserLanguage = gql`
     mutation CreateUserLanguage($languageId: Int!, $languageSkillLevelId: Int, $native: Boolean!, $userId: Int!) {
   createUserLanguage(
@@ -9536,6 +10005,25 @@ export const GroupLanguageByUuid = gql`
       alpha2
     }
     uuid
+  }
+}
+    `;
+export const GroupMessageNotification = gql`
+    query GroupMessageNotification($uuid: UUID!) {
+  groupByUuid(uuid: $uuid) {
+    groupUsers {
+      nodes {
+        user {
+          uuid
+          userDevices {
+            nodes {
+              fcmToken
+            }
+          }
+        }
+      }
+    }
+    groupName
   }
 }
     `;

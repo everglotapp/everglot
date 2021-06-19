@@ -38,6 +38,7 @@ import {
 } from "../constants"
 import { getCurrentUser } from "./users"
 import { getGroupIdByUuid, getGroupLanguageByUuid } from "../groups"
+import { notifyMessageRecipients } from "../notifications"
 
 export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     socket.on("chatMessage", async (msg) => {
@@ -45,16 +46,17 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
         if (!chatUser) {
             return
         }
+        const { groupUuid } = chatUser
 
         if (!msg) {
             chlog.debug("User sent chatMessage with empty body")
             return
         }
-        const recipientGroupId = await getGroupIdByUuid(chatUser.groupUuid)
+        const recipientGroupId = await getGroupIdByUuid(groupUuid)
         if (!recipientGroupId) {
             chlog
                 .child({
-                    groupUuid: chatUser.groupUuid,
+                    groupUuid,
                 })
                 .error("Failed to get group ID by UUID for user message")
             return
@@ -66,22 +68,24 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
             senderId: chatUser.user.id,
         })
         if (message && message.message && message.sender) {
-            io.to(chatUser.groupUuid).emit("message", {
+            const chatMessage = {
                 uuid: message.message.uuid,
                 userUuid: message.sender.uuid,
                 text: msg,
                 time: message.message.createdAt,
-            })
+            } as ChatMessage
+            io.to(groupUuid).emit("message", chatMessage)
+            notifyMessageRecipients(chatMessage, groupUuid)
         } else {
             chlog.child({ message }).error("User text message creation failed")
             return
         }
 
-        const group = await getGroupLanguageByUuid(chatUser.groupUuid)
+        const group = await getGroupLanguageByUuid(groupUuid)
         if (!group || !group.groupByUuid?.language?.alpha2) {
             chlog
                 .child({
-                    groupUuid: chatUser.groupUuid,
+                    groupUuid,
                 })
                 .error("Failed to get group by UUID for user message")
             return

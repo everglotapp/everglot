@@ -19,6 +19,9 @@ jobs:
                   echo "POSTGRES_DB=everglot_app_db" >> .env
                   echo "SESSION_COOKIE_VALIDATION_SECRETS=[\"MySecretCookieValidationSecret123\"]" >> .env
                   echo "AGORA_APP_CERTIFICATE=whatever" >> .env
+            - name: "Setup server-side Firebase credentials file"
+              run: |
+                  echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON_BASE64 }}" | base64 -d > src/firebaseServiceAccount.json
             - name: Build app docker image
               run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml build --build-arg NODE_ENV=development --parallel everglot-app
             - name: Start database
@@ -48,6 +51,10 @@ jobs:
                   token: ${{ secrets.GH_ACCESS_TOKEN }}
                   path: k8s-setup
                   ref: main
+
+            - name: "Setup server-side Firebase credentials file"
+              run: |
+                  echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON_BASE64 }}" | base64 -d > src/firebaseServiceAccount.json
 
             - name: Build container image
               run: docker build -t registry.digitalocean.com/everglot/everglot:latest .

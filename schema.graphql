@@ -393,6 +393,40 @@ type Query implements Node {
     filter: ChineseRandomQuestionFilter
   ): ChineseRandomQuestionsConnection
 
+  """Reads and enables pagination through a set of `UserDevice`."""
+  userDevices(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `UserDevice`."""
+    orderBy: [UserDevicesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserDeviceCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserDeviceFilter
+  ): UserDevicesConnection
+
   """Reads and enables pagination through a set of `UserLanguage`."""
   userLanguages(
     """Only read the first `n` values of the set."""
@@ -690,6 +724,9 @@ type Query implements Node {
   englishRandomQuestionByUuid(uuid: UUID!): EnglishRandomQuestion
   chineseRandomQuestion(id: Int!): ChineseRandomQuestion
   chineseRandomQuestionByUuid(uuid: UUID!): ChineseRandomQuestion
+  userDevice(id: Int!): UserDevice
+  userDeviceByUuid(uuid: UUID!): UserDevice
+  userDeviceByFcmToken(fcmToken: String!): UserDevice
   userLanguage(id: Int!): UserLanguage
   userSession(sid: String!): UserSession
   user(id: Int!): User
@@ -848,6 +885,14 @@ type Query implements Node {
     """
     nodeId: ID!
   ): ChineseRandomQuestion
+
+  """Reads a single `UserDevice` using its globally unique `ID`."""
+  userDeviceByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `UserDevice`.
+    """
+    nodeId: ID!
+  ): UserDevice
 
   """Reads a single `UserLanguage` using its globally unique `ID`."""
   userLanguageByNodeId(
@@ -1169,6 +1214,40 @@ type User implements Node {
     """
     filter: InviteTokenFilter
   ): InviteTokensConnection!
+
+  """Reads and enables pagination through a set of `UserDevice`."""
+  userDevices(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `UserDevice`."""
+    orderBy: [UserDevicesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserDeviceCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserDeviceFilter
+  ): UserDevicesConnection!
 
   """Reads and enables pagination through a set of `Language`."""
   languagesByUserLanguageUserIdAndLanguageId(
@@ -6086,6 +6165,114 @@ type InviteTokensEdge {
   node: InviteToken
 }
 
+"""A connection to a list of `UserDevice` values."""
+type UserDevicesConnection {
+  """A list of `UserDevice` objects."""
+  nodes: [UserDevice]!
+
+  """
+  A list of edges which contains the `UserDevice` and cursor to aid in pagination.
+  """
+  edges: [UserDevicesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `UserDevice` you could get from the connection."""
+  totalCount: Int!
+}
+
+type UserDevice implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  userId: Int
+  fcmToken: String
+  createdAt: Datetime!
+
+  """Reads a single `User` that is related to this `UserDevice`."""
+  user: User
+}
+
+"""A `UserDevice` edge in the connection."""
+type UserDevicesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `UserDevice` at the end of the edge."""
+  node: UserDevice
+}
+
+"""Methods to use when ordering `UserDevice`."""
+enum UserDevicesOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  FCM_TOKEN_ASC
+  FCM_TOKEN_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `UserDevice` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input UserDeviceCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `fcmToken` field."""
+  fcmToken: String
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `UserDevice` object types. All fields are combined with a logical ‘and.’
+"""
+input UserDeviceFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `fcmToken` field."""
+  fcmToken: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [UserDeviceFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [UserDeviceFilter!]
+
+  """Negates the expression."""
+  not: UserDeviceFilter
+}
+
 """
 A connection to a list of `Language` values, with data from `UserLanguage`.
 """
@@ -6887,6 +7074,14 @@ type Mutation {
     input: CreateChineseRandomQuestionInput!
   ): CreateChineseRandomQuestionPayload
 
+  """Creates a single `UserDevice`."""
+  createUserDevice(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateUserDeviceInput!
+  ): CreateUserDevicePayload
+
   """Creates a single `UserLanguage`."""
   createUserLanguage(
     """
@@ -7228,6 +7423,40 @@ type Mutation {
     """
     input: UpdateChineseRandomQuestionByUuidInput!
   ): UpdateChineseRandomQuestionPayload
+
+  """
+  Updates a single `UserDevice` using its globally unique id and a patch.
+  """
+  updateUserDeviceByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserDeviceByNodeIdInput!
+  ): UpdateUserDevicePayload
+
+  """Updates a single `UserDevice` using a unique key and a patch."""
+  updateUserDevice(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserDeviceInput!
+  ): UpdateUserDevicePayload
+
+  """Updates a single `UserDevice` using a unique key and a patch."""
+  updateUserDeviceByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserDeviceByUuidInput!
+  ): UpdateUserDevicePayload
+
+  """Updates a single `UserDevice` using a unique key and a patch."""
+  updateUserDeviceByFcmToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserDeviceByFcmTokenInput!
+  ): UpdateUserDevicePayload
 
   """
   Updates a single `UserLanguage` using its globally unique id and a patch.
@@ -7688,6 +7917,38 @@ type Mutation {
     """
     input: DeleteChineseRandomQuestionByUuidInput!
   ): DeleteChineseRandomQuestionPayload
+
+  """Deletes a single `UserDevice` using its globally unique id."""
+  deleteUserDeviceByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserDeviceByNodeIdInput!
+  ): DeleteUserDevicePayload
+
+  """Deletes a single `UserDevice` using a unique key."""
+  deleteUserDevice(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserDeviceInput!
+  ): DeleteUserDevicePayload
+
+  """Deletes a single `UserDevice` using a unique key."""
+  deleteUserDeviceByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserDeviceByUuidInput!
+  ): DeleteUserDevicePayload
+
+  """Deletes a single `UserDevice` using a unique key."""
+  deleteUserDeviceByFcmToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserDeviceByFcmTokenInput!
+  ): DeleteUserDevicePayload
 
   """Deletes a single `UserLanguage` using its globally unique id."""
   deleteUserLanguageByNodeId(
@@ -8434,6 +8695,53 @@ input ChineseRandomQuestionInput {
   uuid: UUID
   question: String!
   recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""The output of our create `UserDevice` mutation."""
+type CreateUserDevicePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserDevice` that was created by this mutation."""
+  userDevice: UserDevice
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserDevice`."""
+  user: User
+
+  """An edge for our `UserDevice`. May be used by Relay 1."""
+  userDeviceEdge(
+    """The method to use when ordering `UserDevice`."""
+    orderBy: [UserDevicesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserDevicesEdge
+}
+
+"""All input for the create `UserDevice` mutation."""
+input CreateUserDeviceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `UserDevice` to be created by this mutation."""
+  userDevice: UserDeviceInput!
+}
+
+"""An input for mutations affecting `UserDevice`"""
+input UserDeviceInput {
+  id: Int
+  uuid: UUID
+  userId: Int
+  fcmToken: String
   createdAt: Datetime
 }
 
@@ -9805,6 +10113,107 @@ input UpdateChineseRandomQuestionByUuidInput {
   """
   patch: ChineseRandomQuestionPatch!
   uuid: UUID!
+}
+
+"""The output of our update `UserDevice` mutation."""
+type UpdateUserDevicePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserDevice` that was updated by this mutation."""
+  userDevice: UserDevice
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserDevice`."""
+  user: User
+
+  """An edge for our `UserDevice`. May be used by Relay 1."""
+  userDeviceEdge(
+    """The method to use when ordering `UserDevice`."""
+    orderBy: [UserDevicesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserDevicesEdge
+}
+
+"""All input for the `updateUserDeviceByNodeId` mutation."""
+input UpdateUserDeviceByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `UserDevice` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `UserDevice` being updated.
+  """
+  patch: UserDevicePatch!
+}
+
+"""
+Represents an update to a `UserDevice`. Fields that are set will be updated.
+"""
+input UserDevicePatch {
+  id: Int
+  uuid: UUID
+  userId: Int
+  fcmToken: String
+  createdAt: Datetime
+}
+
+"""All input for the `updateUserDevice` mutation."""
+input UpdateUserDeviceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `UserDevice` being updated.
+  """
+  patch: UserDevicePatch!
+  id: Int!
+}
+
+"""All input for the `updateUserDeviceByUuid` mutation."""
+input UpdateUserDeviceByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `UserDevice` being updated.
+  """
+  patch: UserDevicePatch!
+  uuid: UUID!
+}
+
+"""All input for the `updateUserDeviceByFcmToken` mutation."""
+input UpdateUserDeviceByFcmTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `UserDevice` being updated.
+  """
+  patch: UserDevicePatch!
+  fcmToken: String!
 }
 
 """The output of our update `UserLanguage` mutation."""
@@ -11206,6 +11615,77 @@ input DeleteChineseRandomQuestionByUuidInput {
   """
   clientMutationId: String
   uuid: UUID!
+}
+
+"""The output of our delete `UserDevice` mutation."""
+type DeleteUserDevicePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserDevice` that was deleted by this mutation."""
+  userDevice: UserDevice
+  deletedUserDeviceNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserDevice`."""
+  user: User
+
+  """An edge for our `UserDevice`. May be used by Relay 1."""
+  userDeviceEdge(
+    """The method to use when ordering `UserDevice`."""
+    orderBy: [UserDevicesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserDevicesEdge
+}
+
+"""All input for the `deleteUserDeviceByNodeId` mutation."""
+input DeleteUserDeviceByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `UserDevice` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteUserDevice` mutation."""
+input DeleteUserDeviceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deleteUserDeviceByUuid` mutation."""
+input DeleteUserDeviceByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""All input for the `deleteUserDeviceByFcmToken` mutation."""
+input DeleteUserDeviceByFcmTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  fcmToken: String!
 }
 
 """The output of our delete `UserLanguage` mutation."""

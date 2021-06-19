@@ -135,6 +135,7 @@ export function start(server: Server, pool: Pool) {
             }
             const { uuid: userUuid } = userMeta
             users.handleLeave(socket, userUuid)
+            socket.disconnect()
         })
 
         messages.handleUserConnected(io, socket)

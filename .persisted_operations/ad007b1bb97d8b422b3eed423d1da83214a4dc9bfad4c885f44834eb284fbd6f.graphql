@@ -1,0 +1,11 @@
+mutation CreateUserDevice($userId: Int!, $fcmToken: String) {
+  createUserDevice(input: {userDevice: {userId: $userId, fcmToken: $fcmToken}}) {
+    userDevice {
+      uuid
+      fcmToken
+      id
+      __typename
+    }
+    __typename
+  }
+}

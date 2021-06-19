@@ -8,12 +8,11 @@ import {
 } from "../../../../utils"
 import type { TestUser } from "../../../../utils"
 import { start } from "../../../../../server/gql"
-import { createAndAssignGroup } from "../../../../../server/groups"
 import { Pool } from "pg"
 import { connectToDatabase } from "../../../../../server/db"
 import type { Maybe } from "../../../../../types/generated/graphql"
 
-describe("[uuid] route", () => {
+describe("[token] route", () => {
     let exampleUser: Maybe<TestUser> = null
 
     let db: Pool = new Pool()
@@ -44,15 +43,27 @@ describe("[uuid] route", () => {
         await truncateAllTables(db)
     })
 
-    test("GET fails", async () => {
+    test("GET redirects when not signed in", async () => {
         const res = await fetch("/users/fcm-token/register/whatever-token", {
             redirect: "manual",
+        })
+        expect(res.status).toBe(302)
+    })
+
+    test("GET fails when signed in", async () => {
+        await signIn()
+        const res = await fetch("/users/fcm-token/register/whatever-token", {
+            redirect: "manual",
+            headers: {
+                cookie: sessionCookieHeader(sessionCookie),
+            },
         })
         expect(res.status).toBe(404)
     })
 
     test("POST redirects when not signed in", async () => {
         const res = await fetch("/users/fcm-token/register/whatever-token", {
+            method: "post",
             redirect: "manual",
         })
         expect(res.status).toBe(302)
@@ -61,31 +72,16 @@ describe("[uuid] route", () => {
     test("POST fails when giving an invalid token", async () => {
         await signIn()
         const res = await fetch("/users/fcm-token/register/wrong-token", {
+            method: "post",
             headers: {
                 cookie: sessionCookieHeader(sessionCookie),
             },
             redirect: "manual",
         })
-        expect(res.status).toBe(200)
+        expect(res.status).toBe(422)
         expect(await res.json()).toEqual({
             success: false,
             message: "Invalid FCM token",
         })
-    })
-
-    test("POST works when giving the UUID of a group that the user is in", async () => {
-        const group = await createAndAssignGroup([exampleUser!.id], [], 1, 1)
-        expect(group).not.toBeNull()
-        await signIn()
-        const res = await fetch(`/users/fcm-token/register/wrong-token`, {
-            headers: {
-                cookie: sessionCookieHeader(sessionCookie),
-            },
-            redirect: "manual",
-        })
-        expect(res.status).toBe(200)
-        const json = await res.json()
-        expect(json).toBeTruthy()
-        expect(json.success).toBe(true)
     })
 })

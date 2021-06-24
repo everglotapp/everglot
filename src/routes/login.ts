@@ -26,6 +26,11 @@ export function get(req: Request, res: Response, next: () => void) {
 }
 
 export async function post(req: Request, res: Response, _next: () => void) {
+    if (req.session.user_id) {
+        res.status(200).json({ success: true })
+        return
+    }
+
     if (!ensureJson(req, res)) {
         return
     }

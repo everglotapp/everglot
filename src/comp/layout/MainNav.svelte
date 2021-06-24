@@ -12,7 +12,7 @@
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
-    import { MicIcon } from "svelte-feather-icons"
+    import { MenuIcon, MicIcon } from "svelte-feather-icons"
 
     import Avatar from "../users/Avatar.svelte"
 
@@ -26,7 +26,10 @@
     import { userHasCompletedProfile, groupUuid } from "../../stores"
     import { currentUser, currentUserStore } from "../../stores/currentUser"
     import { allGroupsStore, privateGroups } from "../../stores/groups"
-    import { currentGroupIsGlobal } from "../../stores/chat"
+    import {
+        showChatSidebarDrawer,
+        currentGroupIsGlobal,
+    } from "../../stores/chat"
 
     query(currentUserStore)
     query(allGroupsStore)
@@ -116,17 +119,33 @@
             }
         }
     }
+
+    $: showSidebarMenuIcon = segment === "chat"
 </script>
 
 <div class="nav-container">
     <nav class="flex container mx-auto px-2">
-        <div class="flex flex-grow-0 self-center">
+        <div class="hidden md:flex flex-grow-0 self-center">
             <a
                 aria-current={segment === undefined ? "page" : undefined}
                 class="logo font-bold uppercase tracking-wide"
                 href="/">Everglot</a
             >
         </div>
+        {#if showSidebarMenuIcon}
+            <div class="flex justify-center md:hidden">
+                <ButtonSmall
+                    variant="TEXT"
+                    color="SECONDARY"
+                    tag="button"
+                    on:click={() =>
+                        ($showChatSidebarDrawer = !$showChatSidebarDrawer)}
+                    className="w-full justify-between items-center"
+                >
+                    <MenuIcon size="24" />
+                </ButtonSmall>
+            </div>
+        {/if}
         <div
             class="flex flex-1 mx-auto justify-end items-center"
             style="max-width: 820px;"

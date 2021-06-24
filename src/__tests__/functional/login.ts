@@ -62,6 +62,19 @@ describe("login route", () => {
         expect(res.status).toBe(302)
     })
 
+    test("POST succeeds when signed in", async () => {
+        await signIn()
+        const res = await fetch("/login", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                cookie: sessionCookieHeader(sessionCookie),
+            },
+            redirect: "manual",
+        })
+        expect(res.status).toBe(200)
+    })
+
     test("POST with email fails without auth method", async () => {
         const body = JSON.stringify({
             email: exampleUser!.email,

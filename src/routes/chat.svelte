@@ -26,6 +26,7 @@
     import { groupUuid } from "../stores"
     import { currentUserUuid, currentChatUserUuid } from "../stores/currentUser"
     import {
+        showChatSidebarDrawer,
         groupChatStore,
         groupChatMessagesStore,
         fetchGroupMetadata,
@@ -314,66 +315,80 @@
         <RedirectOnce to="/" />
     {/if}
     <div class="wrapper">
-        <Sidebar
-            {split}
-            {audio}
-            {mic}
-            handleToggleSplit={() => (split = !split)}
-            handleToggleMic={() => {
-                if (!$outgoing) {
-                    return
-                }
-                mic = !mic
-                if (mic) {
-                    $outgoing.setVolume(100)
-                } else {
-                    $outgoing.setVolume(0)
-                }
-                if (chat && $groupUuid) {
-                    const callMeta = {
-                        micMuted: !mic,
-                        audioMuted: !audio,
+        <div
+            class="drawer-wrapper hidden md:flex"
+            class:shown={$showChatSidebarDrawer}
+        >
+            <Sidebar
+                {split}
+                {audio}
+                {mic}
+                handleToggleSplit={() => (split = !split)}
+                handleToggleMic={() => {
+                    if (!$outgoing) {
+                        return
                     }
-                    chat.emit("userCallMeta", {
-                        groupUuid: $groupUuid,
-                        callMeta,
-                    })
-                    if ($currentUserUuid) {
-                        // TODO: what if this is not truthy?
-                        setCallUserMeta($currentUserUuid, $groupUuid, callMeta)
-                    }
-                }
-            }}
-            handleToggleAudio={() => {
-                audio = !audio
-                for (const remoteUser of $remoteUsers) {
-                    const { audioTrack } = remoteUser
-                    if (!audioTrack) {
-                        continue
-                    }
-                    if (audio) {
-                        audioTrack.setVolume(100)
+                    mic = !mic
+                    if (mic) {
+                        $outgoing.setVolume(100)
                     } else {
-                        audioTrack.setVolume(0)
+                        $outgoing.setVolume(0)
                     }
-                }
-                if (chat && $groupUuid) {
-                    const callMeta = {
-                        micMuted: !mic,
-                        audioMuted: !audio,
+                    if (chat && $groupUuid) {
+                        const callMeta = {
+                            micMuted: !mic,
+                            audioMuted: !audio,
+                        }
+                        chat.emit("userCallMeta", {
+                            groupUuid: $groupUuid,
+                            callMeta,
+                        })
+                        if ($currentUserUuid) {
+                            // TODO: what if this is not truthy?
+                            setCallUserMeta(
+                                $currentUserUuid,
+                                $groupUuid,
+                                callMeta
+                            )
+                        }
                     }
-                    chat.emit("userCallMeta", {
-                        groupUuid: $groupUuid,
-                        callMeta,
-                    })
-                    if ($currentUserUuid) {
-                        setCallUserMeta($currentUserUuid, $groupUuid, callMeta)
+                }}
+                handleToggleAudio={() => {
+                    audio = !audio
+                    for (const remoteUser of $remoteUsers) {
+                        const { audioTrack } = remoteUser
+                        if (!audioTrack) {
+                            continue
+                        }
+                        if (audio) {
+                            audioTrack.setVolume(100)
+                        } else {
+                            audioTrack.setVolume(0)
+                        }
                     }
-                }
-            }}
-            {handleJoinCall}
-            {handleLeaveCall}
-        />
+                    if (chat && $groupUuid) {
+                        const callMeta = {
+                            micMuted: !mic,
+                            audioMuted: !audio,
+                        }
+                        chat.emit("userCallMeta", {
+                            groupUuid: $groupUuid,
+                            callMeta,
+                        })
+                        if ($currentUserUuid) {
+                            setCallUserMeta(
+                                $currentUserUuid,
+                                $groupUuid,
+                                callMeta
+                            )
+                        }
+                    }
+                }}
+                {handleJoinCall}
+                {handleLeaveCall}
+            />
+        </div>
+        <div class="drawer-modal" class:hidden={!$showChatSidebarDrawer} />
         <div class="section-wrapper">
             <section>
                 <Header />
@@ -603,6 +618,41 @@
         @apply cursor-pointer;
         @apply bg-gray-lightest;
         @apply z-10;
+    }
+
+    @media (max-width: theme("screens.sm")) {
+        .drawer-wrapper {
+            @apply flex;
+            @apply absolute;
+
+            top: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-60vw);
+            transition: transform 100ms;
+            z-index: 100000;
+            background: white;
+        }
+
+        .drawer-wrapper.shown {
+            @apply shadow-lg;
+
+            transform: translateX(0);
+            width: 60vw;
+        }
+
+        .drawer-modal {
+            @apply absolute;
+            @apply left-0;
+            @apply top-0;
+            @apply right-0;
+            @apply bottom-0;
+            @apply z-20;
+
+            background: rgba(0, 0, 0, 0.2);
+            height: 100vh;
+            width: 100vw;
+        }
     }
 
     @media (max-width: 700px) {

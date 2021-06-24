@@ -1,12 +1,11 @@
 <script lang="ts">
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
-    import { v4 as uuidv4, validate as uuidValidate } from "uuid"
+    import { v4 as uuidv4 } from "uuid"
 
     import { setupUrql } from "./_helpers/urql"
     import { query } from "@urql/svelte"
 
-    import { groupUuid } from "../stores"
     import { currentUserStore } from "../stores/currentUser"
     import { allGroupsStore } from "../stores/groups"
 
@@ -14,6 +13,7 @@
     import MainNav from "../comp/layout/MainNav.svelte"
     import WebrtcProvider from "../comp/util/WebrtcProvider.svelte"
     import ChatProvider from "../comp/util/ChatProvider.svelte"
+    import { showChatSidebarDrawer } from "../stores/chat"
 
     setupUrql()
 
@@ -46,6 +46,9 @@
         $currentUserStore.context = {
             requestPolicy: "cache-and-network",
             transitionId, // This forces a re-execution by changing the object contents.
+        }
+        if (segment === "chat") {
+            $showChatSidebarDrawer = false
         }
     }
 </script>

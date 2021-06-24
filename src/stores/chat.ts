@@ -1,4 +1,4 @@
-import { derived, get } from "svelte/store"
+import { derived, get, writable } from "svelte/store"
 import { operationStore } from "@urql/svelte"
 
 import { groupUuid } from "./"
@@ -14,6 +14,8 @@ import {
     GroupChatMessagesQueryVariables,
     UserType,
 } from "../types/generated/graphql"
+
+export const showChatSidebarDrawer = writable<boolean>(false)
 
 export const groupChatStore = operationStore<
     GroupChatQuery,

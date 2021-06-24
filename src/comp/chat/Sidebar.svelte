@@ -267,6 +267,7 @@
         @apply rounded-tl-md;
         @apply flex;
         @apply flex-col;
+        @apply flex-1;
         @apply justify-between;
     }
 
@@ -306,11 +307,5 @@
         @apply bg-primary;
 
         transition: background-color 100ms ease-in;
-    }
-
-    @media (max-width: 700px) {
-        .sidebar {
-            display: none;
-        }
     }
 </style>

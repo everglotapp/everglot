@@ -315,8 +315,19 @@
         <RedirectOnce to="/" />
     {/if}
     <div class="wrapper">
+        {#if $showChatSidebarDrawer && typeof window !== "undefined"}
+            <ClickAwayListener
+                elementId="sidebar-drawer-click-catcher"
+                on:clickaway={() =>
+                    console.log("caught click", {
+                        show: $showChatSidebarDrawer,
+                    }) || ($showChatSidebarDrawer = false)}
+            />
+            <div class="drawer-modal" />
+        {/if}
         <div
             class="drawer-wrapper hidden md:flex"
+            id="sidebar-drawer-click-catcher"
             class:shown={$showChatSidebarDrawer}
         >
             <Sidebar
@@ -388,7 +399,6 @@
                 {handleLeaveCall}
             />
         </div>
-        <div class="drawer-modal" class:hidden={!$showChatSidebarDrawer} />
         <div class="section-wrapper">
             <section>
                 <Header />

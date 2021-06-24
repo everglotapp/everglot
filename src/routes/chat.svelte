@@ -396,7 +396,7 @@
                     <div class="views" class:split>
                         {#if split}
                             <div
-                                class="view view-left hidden"
+                                class="view view-left"
                                 in:fly={{ duration: 200, x: -600 }}
                                 out:fly={{ duration: 200, x: -600 }}
                                 style="transform-origin: center left;"
@@ -443,7 +443,10 @@
                                 </div>
                             </div>
                         {/if}
-                        <div class="view view-right rounded-tr-md">
+                        <div
+                            class="view view-right rounded-tr-md"
+                            class:hidden={split}
+                        >
                             {#key $groupUuid}
                                 <div
                                     class="view-inner view-right-inner"
@@ -560,15 +563,31 @@
         @apply relative;
         @apply w-full;
         @apply h-full;
-        @apply flex;
         @apply flex-col;
     }
 
-    .view-left {
-        @apply hidden;
+    .views:not(.split) .view-left {
+        @screen sm {
+            @apply hidden;
+        }
+    }
 
+    .view-left {
         @screen md {
-            @apply block;
+            @apply flex;
+        }
+    }
+
+    .views.split .view-right {
+        @screen sm {
+            @apply hidden;
+        }
+    }
+
+    .view-right,
+    .views.split .view-right {
+        @screen md {
+            @apply flex;
         }
     }
 
@@ -618,6 +637,11 @@
         @apply cursor-pointer;
         @apply bg-gray-lightest;
         @apply z-10;
+        @apply hidden;
+
+        @screen md {
+            @apply block;
+        }
     }
 
     @media (max-width: theme("screens.sm")) {

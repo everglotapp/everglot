@@ -393,43 +393,41 @@
             <section>
                 <Header />
                 <div class="views-wrapper">
-                    <div class="views" class:split>
-                        {#if split}
+                    <div
+                        class="views"
+                        class:split
+                        class:mobile-games={!split}
+                        class:mobile-chat={split}
+                    >
+                        <div
+                            class="view view-left"
+                            in:fly={{ duration: 200, x: -600 }}
+                            out:fly={{ duration: 200, x: -600 }}
+                            style="transform-origin: center left;"
+                        >
                             <div
-                                class="view view-left hidden"
-                                in:fly={{ duration: 200, x: -600 }}
-                                out:fly={{ duration: 200, x: -600 }}
-                                style="transform-origin: center left;"
+                                class="view-inner view-left-inner"
+                                transition:blur|local={{
+                                    duration: 300,
+                                }}
                             >
+                                {#if $groupUuid !== null && currentActivityGroupUuid === $groupUuid}
+                                    <SidePanel activity={currentActivity} />
+                                {/if}
                                 <div
-                                    class="view-inner view-left-inner"
-                                    transition:blur|local={{
-                                        duration: 300,
-                                    }}
+                                    class="toggle-split-screen"
+                                    on:click={() => (split = false)}
                                 >
-                                    {#if $groupUuid !== null && currentActivityGroupUuid === $groupUuid}
-                                        <SidePanel activity={currentActivity} />
-                                    {/if}
-                                    <div
-                                        class="toggle-split-screen"
-                                        on:click={() => (split = false)}
-                                    >
-                                        <div
-                                            class="absolute"
-                                            style="left: -1px;"
-                                        >
-                                            <ChevronLeftIcon size="24" />
-                                        </div>
-                                        <div
-                                            class="absolute"
-                                            style="left: 5px;"
-                                        >
-                                            <ChevronLeftIcon size="24" />
-                                        </div>
+                                    <div class="absolute" style="left: -1px;">
+                                        <ChevronLeftIcon size="24" />
+                                    </div>
+                                    <div class="absolute" style="left: 5px;">
+                                        <ChevronLeftIcon size="24" />
                                     </div>
                                 </div>
                             </div>
-                        {:else}
+                        </div>
+                        {#if !split}
                             <div
                                 class="toggle-split-screen"
                                 style="right: unset; left: -5px;"
@@ -557,18 +555,35 @@
     }
 
     .view {
+        @apply hidden;
         @apply relative;
         @apply w-full;
         @apply h-full;
-        @apply flex;
         @apply flex-col;
     }
 
-    .view-left {
-        @apply hidden;
-
+    .views.split .view-left {
         @screen md {
-            @apply block;
+            @apply flex;
+        }
+    }
+
+    .views.mobile-games .view-left {
+        @media (max-width: theme("screens.sm")) {
+            @apply flex;
+        }
+    }
+
+    .views.mobile-chat .view-right {
+        @media (max-width: theme("screens.sm")) {
+            @apply flex;
+        }
+    }
+
+    .view-right,
+    .views.split .view-right {
+        @screen md {
+            @apply flex;
         }
     }
 
@@ -618,6 +633,11 @@
         @apply cursor-pointer;
         @apply bg-gray-lightest;
         @apply z-10;
+        @apply hidden;
+
+        @screen md {
+            @apply block;
+        }
     }
 
     @media (max-width: theme("screens.sm")) {

@@ -21,6 +21,7 @@ chat-sidebar-members-learners = Learners
 chat-sidebar-members-native = Native Speakers
 chat-sidebar-controls = Controls
 chat-sidebar-controls-display = Display
+chat-sidebar-controls-games = Games
 chat-sidebar-controls-mic = Mic
 chat-sidebar-controls-audio = Audio
 chat-sidebar-controls-toggle-on = On

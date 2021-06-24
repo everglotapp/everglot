@@ -29,6 +29,7 @@
     export let handleJoinCall: () => Promise<boolean>
     export let handleLeaveCall: () => Promise<boolean>
     export let split = false
+    $: showGamesOnMobile = !split
     export let mic = false
     export let audio = false
     export let remoteUsers: IAgoraRTCRemoteUser[] = []
@@ -69,11 +70,9 @@
             <Headline3><Localized id="chat-sidebar-members" /></Headline3>
             <GroupMembers />
         </div>
-        <div
-            class="toggles py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4"
-        >
+        <div class="py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4">
             <Headline3><Localized id="chat-sidebar-controls" /></Headline3>
-            <div class="toggle-row">
+            <div class="toggle-row hidden md:flex">
                 <svg
                     width="35"
                     height="35"
@@ -96,10 +95,33 @@
                     </div>
                 </div>
             </div>
+            <div class="toggle-row flex md:hidden">
+                <svg
+                    width="35"
+                    height="35"
+                    viewBox="0 0 40 40"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M32.5 6.08124H7.5C6.50578 6.08235 5.5526 6.4778 4.84958 7.18082C4.14656 7.88384 3.75112 8.83702 3.75 9.83124V27.3312C3.75112 28.3255 4.14656 29.2786 4.84958 29.9817C5.5526 30.6847 6.50578 31.0801 7.5 31.0812H32.5C33.4942 31.0801 34.4474 30.6847 35.1504 29.9817C35.8534 29.2786 36.2489 28.3255 36.25 27.3312V9.83124C36.2489 8.83702 35.8534 7.88384 35.1504 7.18082C34.4474 6.4778 33.4942 6.08235 32.5 6.08124ZM33.75 27.3312C33.7496 27.6626 33.6178 27.9803 33.3834 28.2147C33.1491 28.449 32.8314 28.5808 32.5 28.5812H7.5C7.16861 28.5808 6.8509 28.449 6.61657 28.2147C6.38224 27.9803 6.25041 27.6626 6.25 27.3312V9.83124C6.25041 9.49984 6.38224 9.18214 6.61657 8.94781C6.8509 8.71348 7.16861 8.58165 7.5 8.58124H32.5C32.8314 8.58165 33.1491 8.71348 33.3834 8.94781C33.6178 9.18214 33.7496 9.49984 33.75 9.83124V27.3312ZM26.25 34.8312C26.25 35.1628 26.1183 35.4807 25.8839 35.7151C25.6495 35.9495 25.3315 36.0812 25 36.0812H15C14.6685 36.0812 14.3505 35.9495 14.1161 35.7151C13.8817 35.4807 13.75 35.1628 13.75 34.8312C13.75 34.4997 13.8817 34.1818 14.1161 33.9474C14.3505 33.7129 14.6685 33.5812 15 33.5812H25C25.3315 33.5812 25.6495 33.7129 25.8839 33.9474C26.1183 34.1818 26.25 34.4997 26.25 34.8312Z"
+                        fill="#45CDCD"
+                    />
+                </svg>
+                <span><Localized id="chat-sidebar-controls-games" /></span>
+                <div class="toggle" on:click={handleToggleSplit}>
+                    <div aria-selected={showGamesOnMobile}>
+                        <Localized id="chat-sidebar-controls-toggle-on" />
+                    </div>
+                    <div aria-selected={!showGamesOnMobile}>
+                        <Localized id="chat-sidebar-controls-toggle-off" />
+                    </div>
+                </div>
+            </div>
             {#if $joiningCall}
                 <div class="flex justify-center pt-3 pb-2"><Spinner /></div>
             {:else if $isInCall && $joinedCallRoom === $groupUuid}
-                <div class="toggle-row">
+                <div class="toggle-row flex">
                     <svg
                         width="35"
                         height="35"
@@ -158,7 +180,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="toggle-row">
+                <div class="toggle-row flex">
                     <svg
                         width="35"
                         height="35"
@@ -278,7 +300,6 @@
     .toggle-row {
         max-width: 200px;
 
-        @apply flex;
         @apply items-center;
         @apply justify-between;
         @apply mx-auto;

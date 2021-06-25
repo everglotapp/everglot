@@ -314,17 +314,14 @@
     {#if $groupUuid && !$groupChatStore.error && $groupChatStore.data && !$groupChatStore.data.groupByUuid}
         <RedirectOnce to="/" />
     {/if}
+    {#if $showChatSidebarDrawer && typeof window !== "undefined"}
+        <ClickAwayListener
+            elementId="sidebar-drawer-click-catcher"
+            on:clickaway={() => {}}
+        />
+        <div class="drawer-modal" />
+    {/if}
     <div class="wrapper">
-        {#if $showChatSidebarDrawer && typeof window !== "undefined"}
-            <ClickAwayListener
-                elementId="sidebar-drawer-click-catcher"
-                on:clickaway={() =>
-                    console.log("caught click", {
-                        show: $showChatSidebarDrawer,
-                    }) || ($showChatSidebarDrawer = false)}
-            />
-            <div class="drawer-modal" />
-        {/if}
         <div
             class="drawer-wrapper hidden md:flex"
             id="sidebar-drawer-click-catcher"
@@ -501,10 +498,13 @@
 
 <style>
     .wrapper {
-        display: grid;
-        grid-template-columns: 300px 1fr;
         width: 100%;
         height: 100%;
+
+        @screen md {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+        }
     }
 
     .section-wrapper {
@@ -579,13 +579,13 @@
     }
 
     .views.mobile-games .view-left {
-        @media (max-width: theme("screens.sm")) {
+        @media (max-width: theme("screens.md")) {
             @apply flex;
         }
     }
 
     .views.mobile-chat .view-right {
-        @media (max-width: theme("screens.sm")) {
+        @media (max-width: theme("screens.md")) {
             @apply flex;
         }
     }
@@ -650,7 +650,7 @@
         }
     }
 
-    @media (max-width: theme("screens.sm")) {
+    @media (max-width: theme("screens.md")) {
         .drawer-wrapper {
             @apply flex;
             @apply absolute;
@@ -682,12 +682,6 @@
             background: rgba(0, 0, 0, 0.2);
             height: 100vh;
             width: 100vw;
-        }
-    }
-
-    @media (max-width: 700px) {
-        .wrapper {
-            display: block;
         }
     }
 </style>

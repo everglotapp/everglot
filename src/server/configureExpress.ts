@@ -82,6 +82,7 @@ function pathIsProtected(path: string): boolean {
         "/global.css",
         "/favicon.ico",
         "/manifest.json",
+        "/placeholder",
     ]
     if (UNPROTECTED_ROUTES.includes(path)) {
         return false

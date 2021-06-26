@@ -64,12 +64,27 @@
             return
         }
 
-        const s = io()
+        const s = io({
+            autoConnect: false,
+            reconnection: true,
+            reconnectionAttempts: Infinity,
+            // At first every second, each attempt doubles the delay.
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 60 * 1000, // max 1 minute
+            randomizationFactor: 0.5,
+            timeout: 5 * 1000, // 5 seconds
+        })
         if (!s) {
             return
         }
 
         s.on("connect", () => {
+            /**
+             * Empty the internal buffer upon reconnection.
+             * Prevents huge spike of events when connection is restored.
+             * @see https://socket.io/docs/v4/client-offline-behavior/
+             */
+            s.sendBuffer = []
             $connected = true
         })
 
@@ -83,6 +98,8 @@
             $joinedRoom = detail.groupUuid
         })
         s.on("callUsers", setUsersInCall)
+
+        s.connect()
 
         $socket = s
     }

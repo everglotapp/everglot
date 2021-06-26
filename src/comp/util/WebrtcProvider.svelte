@@ -93,8 +93,12 @@
             if (!client) {
                 return
             }
-            // Subscribe to a remote user.
-            await client.subscribe(user, mediaType)
+            try {
+                // Subscribe to a remote user.
+                await client.subscribe(user, mediaType)
+            } catch (_e) {
+                return
+            }
 
             // If the subscribed track is audio.
             if (mediaType === "audio") {
@@ -112,7 +116,9 @@
             if (!client) {
                 return
             }
-            await client.unsubscribe(user, mediaType)
+            try {
+                await client.unsubscribe(user, mediaType)
+            } catch (_e) {}
         })
 
         const rtcToken = await getAgoraToken(roomId)
@@ -148,7 +154,7 @@
             $joining = false
             try {
                 await client!.leave()
-            } catch (e) {
+            } catch (_e) {
                 return false
             }
             return false
@@ -167,9 +173,14 @@
         if (!$joinedRoom) {
             return false
         }
+        let unsubscribedFromAllRemoteUsers = true
         if ($remoteUsers) {
             for (const remoteUser of $remoteUsers) {
-                await client.unsubscribe(remoteUser, "audio")
+                try {
+                    await client.unsubscribe(remoteUser, "audio")
+                } catch (e) {
+                    unsubscribedFromAllRemoteUsers = false
+                }
                 remoteUser.audioTrack?.stop()
             }
         }
@@ -181,7 +192,7 @@
         }
         await client.leave()
         $joinedRoom = null
-        return true
+        return unsubscribedFromAllRemoteUsers
     }
 
     async function getAgoraToken(roomId: string): Promise<string | false> {

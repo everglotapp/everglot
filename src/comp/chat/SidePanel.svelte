@@ -282,10 +282,11 @@
         @apply pl-6;
         @apply pr-6;
         @apply py-8;
-        @apply h-full;
         @apply flex;
         @apply flex-col;
         @apply justify-center;
+
+        min-height: 100%;
 
         @screen md {
             @apply pl-16;
@@ -302,23 +303,22 @@
         @apply pb-48;
 
         @screen md {
-            padding-bottom: calc(min(26px + min(154px, 24vh), 30vh));
+            padding-bottom: calc(min(180px, 30vh));
         }
     }
 
     .squirrel {
         transform: rotateY(180deg);
-        max-width: calc(min(154px, 24vh));
+        max-width: 154px;
         right: 9px;
     }
 
     .squirrel-bubble {
         position: relative;
         border-radius: 0.4rem;
-        @apply mr-48;
 
         @screen md {
-            margin-right: calc(min(30vh, 12rem));
+            @apply mr-48;
         }
     }
 
@@ -341,8 +341,9 @@
             border-right: 0;
             border-bottom: 0;
             border-top: 1.5rem solid transparent;
-            bottom: 15px;
-            right: 0;
+            right: 4px;
+            bottom: -7px;
+            transform: rotate(20deg);
         }
     }
 

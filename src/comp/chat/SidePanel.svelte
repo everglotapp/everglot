@@ -107,14 +107,8 @@
 <div class="pb-4 overflow-y-auto">
     {#key $groupUuid}
         {#if activity === null && groupCanPlayAnyGame}
-            <div
-                class="px-16 py-8 md:py-24"
-                in:scale={{ duration: 200, delay: 250 }}
-            >
-                <div
-                    class="relative flex justify-end"
-                    style="padding-right: 190px;"
-                >
+            <div class="wrapper" in:scale={{ duration: 200, delay: 250 }}>
+                <div class="squirrel-bubble-wrapper">
                     <div
                         class="squirrel-bubble bg-primary-lightest p-4 max-w-sm font-bold text-lg text-gray-bitdark"
                     >
@@ -123,10 +117,10 @@
                     <img
                         src="/squirrel.png"
                         alt="Squirrel"
-                        class="squirrel absolute right-4 top-4"
+                        class="squirrel absolute right-4 bottom-4"
                     />
                 </div>
-                <div class="flex flex-col items-center pt-32">
+                <div class="flex flex-col items-center">
                     {#if groupCanPlayHangman}
                         <div class="menu-item">
                             <ButtonLarge
@@ -216,14 +210,8 @@
                 </div>
             </div>
         {:else if !groupCanPlayAnyGame}
-            <div
-                class="px-16 py-8 md:py-24"
-                in:scale={{ duration: 200, delay: 250 }}
-            >
-                <div
-                    class="relative flex justify-end"
-                    style="padding-right: 190px;"
-                >
+            <div class="wrapper" in:scale={{ duration: 200, delay: 250 }}>
+                <div class="squirrel-bubble-wrapper">
                     <div
                         class="squirrel-bubble bg-primary-lightest p-4 max-w-sm font-bold text-lg text-gray-bitdark"
                     >
@@ -240,7 +228,7 @@
                     <img
                         src="/squirrel.png"
                         alt="Squirrel"
-                        class="squirrel absolute right-4 top-4"
+                        class="squirrel absolute right-4 bottom-4"
                     />
                 </div>
             </div>
@@ -290,31 +278,72 @@
 </div>
 
 <style>
+    .wrapper {
+        @apply pl-6;
+        @apply pr-6;
+        @apply py-8;
+        @apply h-full;
+        @apply flex;
+        @apply flex-col;
+        @apply justify-center;
+
+        @screen md {
+            @apply pl-16;
+
+            padding-top: 8vh;
+            padding-bottom: 8vh;
+        }
+    }
+
+    .squirrel-bubble-wrapper {
+        @apply relative;
+        @apply flex;
+        @apply justify-end;
+        @apply pb-48;
+
+        @screen md {
+            padding-bottom: calc(min(26px + min(154px, 24vh), 30vh));
+        }
+    }
+
     .squirrel {
         transform: rotateY(180deg);
-        max-width: 154px;
+        max-width: calc(min(154px, 24vh));
         right: 9px;
-        top: max(35px, calc(400px - 24vw));
     }
 
     .squirrel-bubble {
         position: relative;
         border-radius: 0.4rem;
+        @apply mr-48;
+
+        @screen md {
+            margin-right: calc(min(30vh, 12rem));
+        }
     }
 
     .squirrel-bubble::after {
         content: "";
         position: absolute;
-        right: 0;
-        bottom: 10%;
         width: 0;
         height: 0;
         border: 1.5rem solid transparent;
-        border-left-color: theme("colors.primary.lightest");
-        border-right: 0;
-        border-bottom: 0;
-        margin-top: -0.75rem;
+        border-top: 0;
+        border-right-color: theme("colors.primary.lightest");
+        border-left: 0;
+        right: 150px;
         margin-right: -1.5rem;
+        margin-top: -0.75rem;
+        bottom: -1.5rem;
+
+        @screen md {
+            border-left: 1.5rem solid theme("colors.primary.lightest");
+            border-right: 0;
+            border-bottom: 0;
+            border-top: 1.5rem solid transparent;
+            bottom: 15px;
+            right: 0;
+        }
     }
 
     .menu-item {

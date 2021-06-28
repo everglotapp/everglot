@@ -19,7 +19,7 @@
                 {#if $currentGroupLocale !== null}
                     <Localized id={`locale-${$currentGroupLocale}`} />
                 {/if}
-                {#if $languageSkillLevel && languageSkillLevel.name}
+                {#if $languageSkillLevel && $languageSkillLevel.name}
                     &nbsp;{$languageSkillLevel.name}
                 {/if}</span
             >
@@ -33,9 +33,10 @@
     header {
         background: #47aaaa;
 
+        @apply h-0;
+        @apply flex;
         @apply relative;
         @apply w-full;
-        @apply flex;
         @apply justify-between;
         @apply items-center;
         @apply text-white;
@@ -43,6 +44,7 @@
         @apply p-0;
 
         @screen md {
+            @apply h-auto;
             @apply py-4;
             @apply px-8;
         }

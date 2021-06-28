@@ -1,3 +1,22 @@
+export enum Direction {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+}
+
+export interface SwipeEvent extends CustomEvent {
+    detail: {
+        dx: number
+        dy: number
+        xBefore: number
+        yBefore: number
+        xAfter: number
+        yAfter: number
+        direction: Direction
+    }
+}
+
 export function pannable(node: HTMLElement) {
     if (typeof window === "undefined") {
         return
@@ -47,49 +66,55 @@ export function pannable(node: HTMLElement) {
         window.removeEventListener("mouseup", handleMouseup)
     }
 
-    // function handleTouchstart(event: TouchEvent) {
-    //     x = event.clientX
-    //     y = event.clientY
+    let xBefore: number | null = null
+    let yBefore: number | null = null
 
-    //     node.dispatchEvent(
-    //         new CustomEvent("panstart", {
-    //             detail: { x, y },
-    //         })
-    //     )
+    function handleTouchstart(event: TouchEvent) {
+        const firstTouch = event.touches[0]
+        xBefore = firstTouch.clientX
+        yBefore = firstTouch.clientY
 
-    //     window.addEventListener("touchmove", handleTouchmove)
-    //     window.addEventListener("touchend", handleTouchend)
-    // }
+        window.addEventListener("touchmove", handleTouchmove)
+    }
 
-    // function handleTouchmove(event: TouchEvent) {
-    //     const dx = event.clientX - x
-    //     const dy = event.clientY - y
-    //     x = event.clientX
-    //     y = event.clientY
+    function handleTouchmove(event: TouchEvent) {
+        if (!xBefore || !yBefore) {
+            return
+        }
 
-    //     node.dispatchEvent(
-    //         new CustomEvent("panmove", {
-    //             detail: { x, y, dx, dy },
-    //         })
-    //     )
-    // }
+        const xAfter = event.touches[0].clientX
+        const yAfter = event.touches[0].clientY
 
-    // function handleTouchend(event: TouchEvent) {
-    //     x = event.
-    //     y = event.clientY
+        const dx = xBefore - xAfter
+        const dy = yBefore - yAfter
 
-    //     node.dispatchEvent(
-    //         new CustomEvent("panend", {
-    //             detail: { x, y },
-    //         })
-    //     )
+        let direction: Direction | null = null
+        if (Math.abs(dx) > Math.abs(dy)) {
+            if (dx > 0) {
+                direction = Direction.LEFT
+            } else {
+                direction = Direction.RIGHT
+            }
+        } else {
+            if (dy > 0) {
+                direction = Direction.UP
+            } else {
+                direction = Direction.DOWN
+            }
+        }
 
-    //     window.removeEventListener("touchmove", handleTouchmove)
-    //     window.removeEventListener("touchend", handleTouchend)
-    // }
+        node.dispatchEvent(
+            new CustomEvent("swipe", {
+                detail: { dx, dy, xBefore, xAfter, yBefore, yAfter, direction },
+            }) as SwipeEvent
+        )
+
+        xBefore = null
+        yBefore = null
+    }
 
     node.addEventListener("mousedown", handleMousedown)
-    // node.addEventListener("touchstart", handleTouchstart)
+    node.addEventListener("touchstart", handleTouchstart)
 
     return {
         destroy() {
@@ -97,3 +122,4 @@ export function pannable(node: HTMLElement) {
         },
     }
 }
+export default pannable

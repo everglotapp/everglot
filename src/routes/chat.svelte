@@ -6,6 +6,8 @@
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { validate as uuidValidate } from "uuid"
 
+    import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons"
+
     import Sidebar from "../comp/chat/Sidebar.svelte"
     import Header from "../comp/chat/Header.svelte"
     import SidePanel from "../comp/chat/SidePanel.svelte"
@@ -39,8 +41,8 @@
     import type { ChatMessage, ChatMessagePreview } from "../types/chat"
 
     import type { GroupActivity } from "../types/activities"
-
-    import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons"
+    import pannable, { Direction } from "./_helpers/pannable"
+    import type { SwipeEvent } from "./_helpers/pannable"
 
     let messages: ChatMessage[] = []
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
@@ -295,6 +297,43 @@
         chat.disconnect()
         webrtc.leaveRoom()
     }
+
+    let drawerWrapper: HTMLElement
+    function handleSwipe(event: SwipeEvent) {
+        if (
+            $showChatSidebarDrawer &&
+            event.detail.direction === Direction.LEFT
+        ) {
+            if (Math.abs(event.detail.dx) > 15) {
+                $showChatSidebarDrawer = false
+            }
+        }
+        if (
+            !$showChatSidebarDrawer &&
+            event.detail.direction === Direction.RIGHT
+        ) {
+            if (Math.abs(event.detail.dx) > 15 && event.detail.xBefore <= 40) {
+                $showChatSidebarDrawer = true
+            }
+        }
+        /*if (
+            [Direction.LEFT, Direction.RIGHT].includes(event.detail.direction)
+        ) {
+            const transform =
+                getComputedStyle(drawerWrapper).getPropertyValue("transform")
+            const matrix = new DOMMatrixReadOnly(transform)
+            const translate = {
+                x: matrix.m41,
+                y: matrix.m42,
+            }
+            drawerWrapper.style.setProperty(
+                "transform",
+                `translateX(calc(min(-60vw, ${
+                    translate.x - event.detail.dx ** 1.2
+                }px))`
+            )
+        }*/
+    }
 </script>
 
 <Localized id="chat-browser-window-title" let:text>
@@ -321,10 +360,11 @@
         />
         <div class="drawer-modal" />
     {/if}
-    <div class="wrapper">
+    <div class="wrapper" use:pannable on:swipe={handleSwipe}>
         <div
             class="drawer-wrapper hidden md:flex"
             id="sidebar-drawer-click-catcher"
+            bind:this={drawerWrapper}
             class:shown={$showChatSidebarDrawer}
         >
             <Sidebar
@@ -678,6 +718,7 @@
             @apply right-0;
             @apply bottom-0;
             @apply z-20;
+            @apply pointer-events-none;
 
             background: rgba(0, 0, 0, 0.2);
             height: 100vh;

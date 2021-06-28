@@ -10,6 +10,7 @@
     import GuessCharacter from "./activities/GuessCharacter.svelte"
     import WouldYouRather from "./activities/WouldYouRather.svelte"
     import RandomQuestion from "./activities/RandomQuestion.svelte"
+    import SquirrelBubble from "./activities/_SquirrelBubble.svelte"
 
     import { currentUserIsGroupMember } from "../../stores/chat"
 
@@ -108,18 +109,9 @@
     {#key $groupUuid}
         {#if activity === null && groupCanPlayAnyGame}
             <div class="wrapper" in:scale={{ duration: 200, delay: 250 }}>
-                <div class="squirrel-bubble-wrapper">
-                    <div
-                        class="squirrel-bubble bg-primary-lightest p-4 max-w-sm font-bold text-lg text-gray-bitdark"
-                    >
-                        <Localized id="chat-side-panel-bubble" />
-                    </div>
-                    <img
-                        src="/squirrel.png"
-                        alt="Squirrel"
-                        class="squirrel absolute right-4 bottom-4"
-                    />
-                </div>
+                <SquirrelBubble
+                    ><Localized id="chat-side-panel-bubble" /></SquirrelBubble
+                >
                 <div class="flex flex-col items-center">
                     {#if groupCanPlayHangman}
                         <div class="menu-item">
@@ -211,30 +203,22 @@
             </div>
         {:else if !groupCanPlayAnyGame}
             <div class="wrapper" in:scale={{ duration: 200, delay: 250 }}>
-                <div class="squirrel-bubble-wrapper">
-                    <div
-                        class="squirrel-bubble bg-primary-lightest p-4 max-w-sm font-bold text-lg text-gray-bitdark"
-                    >
-                        <Localized
-                            id="chat-side-panel-bubble-no-activity-available"
-                            args={{
-                                language:
-                                    $currentGroupLanguage === null
-                                        ? "this language"
-                                        : $currentGroupLanguage,
-                            }}
-                        />
-                    </div>
-                    <img
-                        src="/squirrel.png"
-                        alt="Squirrel"
-                        class="squirrel absolute right-4 bottom-4"
+                <SquirrelBubble
+                    ><Localized
+                        id="chat-side-panel-bubble-no-activity-available"
+                        args={{
+                            language:
+                                $currentGroupLanguage === null
+                                    ? "this language"
+                                    : $currentGroupLanguage,
+                        }}
                     />
-                </div>
+                </SquirrelBubble>
             </div>
         {:else if activity}
             {#key activity.kind}
                 <div
+                    class="flex flex-col h-full"
                     in:scale={{ duration: 200, delay: 350 }}
                     out:scale={{ duration: 200, delay: 0 }}
                 >
@@ -293,57 +277,6 @@
 
             padding-top: 8vh;
             padding-bottom: 8vh;
-        }
-    }
-
-    .squirrel-bubble-wrapper {
-        @apply relative;
-        @apply flex;
-        @apply justify-end;
-        @apply pb-48;
-
-        @screen md {
-            padding-bottom: calc(min(180px, 30vh));
-        }
-    }
-
-    .squirrel {
-        transform: rotateY(180deg);
-        max-width: 154px;
-        right: 9px;
-    }
-
-    .squirrel-bubble {
-        position: relative;
-        border-radius: 0.4rem;
-
-        @screen md {
-            @apply mr-48;
-        }
-    }
-
-    .squirrel-bubble::after {
-        content: "";
-        position: absolute;
-        width: 0;
-        height: 0;
-        border: 1.5rem solid transparent;
-        border-top: 0;
-        border-right-color: theme("colors.primary.lightest");
-        border-left: 0;
-        right: 150px;
-        margin-right: -1.5rem;
-        margin-top: -0.75rem;
-        bottom: -1.5rem;
-
-        @screen md {
-            border-left: 1.5rem solid theme("colors.primary.lightest");
-            border-right: 0;
-            border-bottom: 0;
-            border-top: 1.5rem solid transparent;
-            right: 4px;
-            bottom: -7px;
-            transform: rotate(20deg);
         }
     }
 

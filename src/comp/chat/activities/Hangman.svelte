@@ -4,7 +4,7 @@
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import { XIcon } from "svelte-feather-icons"
-    import SquirrelOnRope from "./SquirrelOnRope.svelte"
+    import SquirrelOnRope from "./_SquirrelOnRope.svelte"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
     import Modal from "../../util/Modal.svelte"
     import { CHAT_CONTEXT } from "../../util/ChatProvider.svelte"
@@ -210,7 +210,9 @@
     const WRONG_WORD_MOVE_Y_PX = 60
 </script>
 
-<div class="flex flex-row m-4 max-h-12 px-2 justify-between items-center">
+<div
+    class="flex flex-row mt-1 mb-2 mx-4 md:my-4 max-h-12 px-2 justify-between items-center"
+>
     <Headline4><Localized id="chat-side-panel-activity-hangman" /></Headline4>
     <ButtonSmall
         tag="button"
@@ -226,8 +228,11 @@
         ></ButtonSmall
     >
 </div>
-<div class="flex flex-col items-center">
-    <div class="inline-block relative mb-4">
+<div
+    class="flex flex-col justify-start items-center overflow-hidden"
+    style="min-height: 100%;"
+>
+    <div class="inline-block relative mb-2 md:mb-4">
         <SquirrelOnRope
             confused={over && !wordGuessedCorrectly}
             verticalOffset={wrongLetterGuesses * WRONG_LETTER_MOVE_Y_PX +

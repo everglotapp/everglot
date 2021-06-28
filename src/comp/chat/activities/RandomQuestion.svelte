@@ -14,6 +14,7 @@
     import Headline4 from "../../typography/Headline4.svelte"
     import { CHAT_CONTEXT } from "../../util/ChatProvider.svelte"
     import type { ChatContext } from "../../util/ChatProvider.svelte"
+    import SquirrelBubble from "./_SquirrelBubble.svelte"
 
     import { currentUserIsGroupMember } from "../../../stores/chat"
 
@@ -58,7 +59,9 @@
     }
 </script>
 
-<div class="flex flex-row m-4 max-h-12 px-2 justify-between items-center">
+<div
+    class="flex flex-row mt-1 mb-2 mx-4 md:my-4 max-h-12 px-2 justify-between items-center"
+>
     <Headline4
         ><Localized id="chat-side-panel-activity-random-question" /></Headline4
     >
@@ -77,28 +80,19 @@
     >
 </div>
 
-<div class="px-16 py-8 md:py-24">
-    <div class="relative flex justify-end" style="padding-right: 190px;">
-        {#key question}
-            <div
-                class="squirrel-bubble bg-primary-lightest p-4 max-w-sm font-bold text-lg text-gray-bitdark"
+<div class="px-6 md:px-16 py-8 md:py-24">
+    {#key question}
+        <SquirrelBubble
+            ><span
+                class="w-full"
+                in:fade={{ duration: 200, delay: 350 }}
+                out:fade={{ duration: 200, delay: 0 }}
             >
-                <span
-                    class="w-full"
-                    in:fade={{ duration: 200, delay: 350 }}
-                    out:fade={{ duration: 200, delay: 0 }}
-                >
-                    {question}</span
-                >
-            </div>
-        {/key}
-        <img
-            src="/squirrel.png"
-            alt="Squirrel"
-            class="squirrel absolute right-4 top-4"
-        />
-    </div>
-    <div class="flex flex-col items-center pt-32">
+                {question}</span
+            ></SquirrelBubble
+        >
+    {/key}
+    <div class="flex flex-col items-center pt-4">
         {#if over}
             <ButtonLarge
                 tag="button"
@@ -154,32 +148,3 @@
         </div></Modal
     >
 {/if}
-
-<style>
-    .squirrel {
-        transform: rotateY(180deg);
-        max-width: 154px;
-        right: 9px;
-        top: max(35px, calc(400px - 24vw));
-    }
-
-    .squirrel-bubble {
-        position: relative;
-        border-radius: 0.4rem;
-    }
-
-    .squirrel-bubble::after {
-        content: "";
-        position: absolute;
-        right: 0;
-        bottom: 10%;
-        width: 0;
-        height: 0;
-        border: 1.5rem solid transparent;
-        border-left-color: theme("colors.primary.lightest");
-        border-right: 0;
-        border-bottom: 0;
-        margin-top: -0.75rem;
-        margin-right: -1.5rem;
-    }
-</style>

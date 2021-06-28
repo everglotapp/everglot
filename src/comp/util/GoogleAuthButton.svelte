@@ -125,7 +125,8 @@
         margin-right: 24px;
     }
 
-    :global(button:disabled, button[disabled]) {
+    :global(button):disabled,
+    :global(button[disabled]) {
         background: transparent !important;
         color: theme("colors.primary.DEFAULT") !important;
         border-color: theme("colors.gray.light") !important;

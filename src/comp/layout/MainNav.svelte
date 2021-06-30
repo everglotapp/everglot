@@ -129,7 +129,12 @@
             <a
                 aria-current={segment === undefined ? "page" : undefined}
                 class="logo font-bold uppercase tracking-wide"
-                href="/">Everglot</a
+                href="/"
+                ><img
+                    src="/logo-192.png"
+                    alt="Everglot"
+                    style="max-height: 28px;"
+                /></a
             >
         </div>
         {#if showSidebarMenuIcon}

@@ -698,13 +698,13 @@
         .drawer-wrapper {
             @apply flex;
             @apply absolute;
+            @apply z-20;
 
             top: 0;
             bottom: 0;
             left: 0;
             transform: translateX(-60vw);
             transition: transform 100ms;
-            z-index: 100000;
             background: white;
             max-width: 60vw;
         }

@@ -304,7 +304,7 @@
             $showChatSidebarDrawer &&
             event.detail.direction === Direction.LEFT
         ) {
-            if (Math.abs(event.detail.dx) > 15) {
+            if (Math.abs(event.detail.dx) > 10) {
                 $showChatSidebarDrawer = false
             }
         }
@@ -312,7 +312,7 @@
             !$showChatSidebarDrawer &&
             event.detail.direction === Direction.RIGHT
         ) {
-            if (Math.abs(event.detail.dx) > 15 && event.detail.xBefore <= 40) {
+            if (Math.abs(event.detail.dx) > 10 && event.detail.xBefore <= 160) {
                 $showChatSidebarDrawer = true
             }
         }
@@ -360,12 +360,16 @@
         />
         <div class="drawer-modal" />
     {/if}
-    <div class="wrapper" use:pannable on:swipe={handleSwipe}>
+    <div
+        class="wrapper"
+        use:pannable
+        on:swipe={handleSwipe}
+        class:show-sidebar-drawer={$showChatSidebarDrawer}
+    >
         <div
             class="drawer-wrapper hidden md:flex"
             id="sidebar-drawer-click-catcher"
             bind:this={drawerWrapper}
-            class:shown={$showChatSidebarDrawer}
         >
             <Sidebar
                 {split}
@@ -694,17 +698,18 @@
         .drawer-wrapper {
             @apply flex;
             @apply absolute;
+            @apply z-20;
 
             top: 0;
             bottom: 0;
             left: 0;
             transform: translateX(-60vw);
             transition: transform 100ms;
-            z-index: 100000;
             background: white;
+            max-width: 60vw;
         }
 
-        .drawer-wrapper.shown {
+        .show-sidebar-drawer .drawer-wrapper {
             @apply shadow-lg;
 
             transform: translateX(0);
@@ -723,6 +728,10 @@
             background: rgba(0, 0, 0, 0.2);
             height: 100vh;
             width: 100vw;
+        }
+
+        .show-sidebar-drawer .section-wrapper {
+            @apply pointer-events-none;
         }
     }
 </style>

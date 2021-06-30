@@ -537,8 +537,8 @@
         @apply shadow-md;
         @apply bg-white;
         @apply relative;
+        @apply z-30;
 
-        z-index: 10;
         max-height: 58px;
 
         @screen md {

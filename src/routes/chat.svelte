@@ -360,12 +360,16 @@
         />
         <div class="drawer-modal" />
     {/if}
-    <div class="wrapper" use:pannable on:swipe={handleSwipe}>
+    <div
+        class="wrapper"
+        use:pannable
+        on:swipe={handleSwipe}
+        class:show-sidebar-drawer={$showChatSidebarDrawer}
+    >
         <div
             class="drawer-wrapper hidden md:flex"
             id="sidebar-drawer-click-catcher"
             bind:this={drawerWrapper}
-            class:shown={$showChatSidebarDrawer}
         >
             <Sidebar
                 {split}
@@ -705,7 +709,7 @@
             max-width: 60vw;
         }
 
-        .drawer-wrapper.shown {
+        .show-sidebar-drawer .drawer-wrapper {
             @apply shadow-lg;
 
             transform: translateX(0);
@@ -724,6 +728,10 @@
             background: rgba(0, 0, 0, 0.2);
             height: 100vh;
             width: 100vw;
+        }
+
+        .show-sidebar-drawer .section-wrapper {
+            @apply pointer-events-none;
         }
     }
 </style>

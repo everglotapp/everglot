@@ -702,6 +702,7 @@
             transition: transform 100ms;
             z-index: 100000;
             background: white;
+            max-width: 60vw;
         }
 
         .drawer-wrapper.shown {

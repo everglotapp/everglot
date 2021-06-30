@@ -304,7 +304,7 @@
             $showChatSidebarDrawer &&
             event.detail.direction === Direction.LEFT
         ) {
-            if (Math.abs(event.detail.dx) > 15) {
+            if (Math.abs(event.detail.dx) > 10) {
                 $showChatSidebarDrawer = false
             }
         }
@@ -312,7 +312,7 @@
             !$showChatSidebarDrawer &&
             event.detail.direction === Direction.RIGHT
         ) {
-            if (Math.abs(event.detail.dx) > 15 && event.detail.xBefore <= 40) {
+            if (Math.abs(event.detail.dx) > 10 && event.detail.xBefore <= 160) {
                 $showChatSidebarDrawer = true
             }
         }

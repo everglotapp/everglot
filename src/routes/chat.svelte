@@ -190,8 +190,7 @@
             )
         }
 
-        chat.leaveRoom()
-        chat.joinRoom($groupUuid)
+        chat.switchRoom($groupUuid)
     }
 
     function handleWelcome({
@@ -289,13 +288,21 @@
         return true
     }
 
-    function handleBeforeunload() {
+    function handleBeforeunload(): void {
         if ($joinedCallRoom) {
             chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
         }
         chat.leaveRoom()
         chat.disconnect()
         webrtc.leaveRoom()
+    }
+
+    function handleVisibilityChange(): void {
+        if (!document.hidden) {
+            if (!$connectedToChat) {
+                chat.connect()
+            }
+        }
     }
 
     let drawerWrapper: HTMLElement
@@ -340,7 +347,10 @@
     <BrowserTitle title={text} />
 </Localized>
 
-<svelte:window on:beforeunload={handleBeforeunload} />
+<svelte:window
+    on:beforeunload={handleBeforeunload}
+    on:visibilitychange={handleVisibilityChange}
+/>
 
 {#if !$groupChatStore.stale && $groupChatStore.error}
     <div class="container max-w-sm my-8">

@@ -10,6 +10,7 @@
         disconnect: () => void
         joinRoom: (room: string) => void
         leaveRoom: () => boolean
+        switchRoom: (room: string) => void
         sendMessage: (msg: string, userUuid: string | null) => boolean
         emit: (ev: string, ...args: any[]) => boolean
         on: (ev: string, listener: ListenerFunction) => boolean
@@ -48,6 +49,7 @@
         disconnect,
         joinRoom,
         leaveRoom,
+        switchRoom,
         sendMessage,
         emit,
         on,
@@ -88,10 +90,13 @@
             $connected = true
         })
 
-        s.on("disconnecting", () => {
+        s.on("disconnect", (reason) => {
             $connected = false
             $socket = null
             $joinedRoom = null
+            if (reason === "io server disconnect") {
+                s.connect()
+            }
         })
 
         s.on("welcome", (detail: { userUuid: string; groupUuid: string }) => {
@@ -159,6 +164,11 @@
             userUuid,
         }
         return true
+    }
+
+    export function switchRoom(room: string) {
+        leaveRoom()
+        joinRoom(room)
     }
 
     export function emit(ev: string, ...args: any[]): boolean {

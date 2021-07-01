@@ -3473,6 +3473,7 @@ export type InviteToken = Node & {
   userId?: Maybe<Scalars['Int']>;
   inviteToken: Scalars['String'];
   createdAt: Scalars['Datetime'];
+  description?: Maybe<Scalars['String']>;
   /** Reads a single `User` that is related to this `InviteToken`. */
   user?: Maybe<User>;
   /** Reads and enables pagination through a set of `User`. */
@@ -3518,6 +3519,8 @@ export type InviteTokenCondition = {
   inviteToken?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `createdAt` field. */
   createdAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `description` field. */
+  description?: Maybe<Scalars['String']>;
 };
 
 /** A filter to be used against `InviteToken` object types. All fields are combined with a logical ‘and.’ */
@@ -3530,6 +3533,8 @@ export type InviteTokenFilter = {
   inviteToken?: Maybe<StringFilter>;
   /** Filter by the object’s `createdAt` field. */
   createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `description` field. */
+  description?: Maybe<StringFilter>;
   /** Checks for all expressions in this list. */
   and?: Maybe<Array<InviteTokenFilter>>;
   /** Checks for any expressions in this list. */
@@ -3544,6 +3549,7 @@ export type InviteTokenInput = {
   userId?: Maybe<Scalars['Int']>;
   inviteToken?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['Datetime']>;
+  description?: Maybe<Scalars['String']>;
 };
 
 /** A connection to a list of `Language` values, with data from `User`. */
@@ -3589,6 +3595,7 @@ export type InviteTokenPatch = {
   userId?: Maybe<Scalars['Int']>;
   inviteToken?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['Datetime']>;
+  description?: Maybe<Scalars['String']>;
 };
 
 /** A connection to a list of `InviteToken` values. */
@@ -3624,6 +3631,8 @@ export enum InviteTokensOrderBy {
   InviteTokenDesc = 'INVITE_TOKEN_DESC',
   CreatedAtAsc = 'CREATED_AT_ASC',
   CreatedAtDesc = 'CREATED_AT_DESC',
+  DescriptionAsc = 'DESCRIPTION_ASC',
+  DescriptionDesc = 'DESCRIPTION_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }

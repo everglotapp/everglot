@@ -10,7 +10,8 @@
     import GoogleAuthButton from "../comp/util/GoogleAuthButton.svelte"
 
     import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
-    import { username } from "../stores"
+    import { username, inviteToken } from "../stores"
+    import { onMount } from "svelte"
 
     let errorMessage: string | null = null
     let submitting = false
@@ -34,10 +35,7 @@
             method: AuthMethod.EMAIL,
             email,
             password,
-            token:
-                typeof window === "undefined"
-                    ? null
-                    : new URL(window.location.href).searchParams.get("token"),
+            token: $inviteToken,
         })
         const res = await response.json()
         if (!res.hasOwnProperty("success")) {
@@ -78,10 +76,7 @@
         const response = await doSubmit({
             method: AuthMethod.GOOGLE,
             idToken: googleUser.getAuthResponse().id_token,
-            token:
-                typeof window === "undefined"
-                    ? null
-                    : new URL(window.location.href).searchParams.get("token"),
+            token: $inviteToken,
         })
         const res = await response.json()
         if (!res.hasOwnProperty("success")) {
@@ -93,6 +88,14 @@
             errorMessage = res.message
         }
     }
+
+    onMount(() => {
+        if ($inviteToken === null) {
+            $inviteToken = new URL(window.location.href).searchParams.get(
+                "token"
+            )
+        }
+    })
 
     let email = ""
     let password = ""

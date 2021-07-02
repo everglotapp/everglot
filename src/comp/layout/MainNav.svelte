@@ -30,6 +30,7 @@
         showChatSidebarDrawer,
         currentGroupIsGlobal,
     } from "../../stores/chat"
+    import { EVERGLOT_WEBSITE_BASE_URL } from "../../constants"
 
     query(currentUserStore)
     query(allGroupsStore)
@@ -72,7 +73,7 @@
     $: inviteToken = $currentUser?.inviteTokens?.nodes[0]?.inviteToken || null
     $: inviteLink =
         inviteToken && typeof window !== "undefined"
-            ? `${window.location.origin}/join?token=${inviteToken}`
+            ? `${EVERGLOT_WEBSITE_BASE_URL}/?token=${inviteToken}`
             : null
     let showInviteModal = false
     let copiedInviteLink: boolean | null = null

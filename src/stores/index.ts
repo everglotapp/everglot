@@ -9,6 +9,7 @@ import { currentUser, currentUserStore } from "./currentUser"
 
 export const username = writable<string | null>(null)
 export const groupUuid = writable<string | null>(null)
+export const inviteToken = writable<string | null>(null)
 
 export const userHasCompletedProfile = derived(
     currentUser,

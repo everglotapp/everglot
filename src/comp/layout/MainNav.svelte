@@ -235,20 +235,25 @@
                                                         color="SECONDARY"
                                                         href={`/chat?group=${group.uuid}`}
                                                         className="w-full justify-between items-center"
-                                                        >{group.groupName || ""}
-                                                        ({group.language
-                                                            ? group.language.alpha2.toUpperCase() ||
-                                                              ""
-                                                            : ""}
-                                                        {group.languageSkillLevel
-                                                            ? group
-                                                                  .languageSkillLevel
-                                                                  .name || ""
-                                                            : ""})
-                                                        {#if group.uuid === $joinedCallRoom}<MicIcon
-                                                                size="18"
-                                                                class="text-gray-bitdark ml-2"
-                                                            />{/if}
+                                                    >
+                                                        <span class="font-sans"
+                                                            >{group.groupName ||
+                                                                ""}
+                                                            ({group.language
+                                                                ? group.language.alpha2.toUpperCase() ||
+                                                                  ""
+                                                                : ""}
+                                                            {group.languageSkillLevel
+                                                                ? group
+                                                                      .languageSkillLevel
+                                                                      .name ||
+                                                                  ""
+                                                                : ""})
+                                                            {#if group.uuid === $joinedCallRoom}<MicIcon
+                                                                    size="18"
+                                                                    class="text-gray-bitdark ml-2"
+                                                                />{/if}
+                                                        </span>
                                                     </ButtonSmall>
                                                 </div>
                                             {/each}
@@ -593,6 +598,7 @@
         @apply text-gray-bitdark;
         @apply font-bold;
         @apply text-center;
+        @apply font-secondary;
 
         @screen md {
             padding: 0.5rem 2rem;

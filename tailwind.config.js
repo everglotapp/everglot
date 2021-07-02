@@ -22,7 +22,8 @@ module.exports = {
             center: true,
         },
         fontFamily: {
-            sans: ["Noto Sans", "Helvetica", "Arial", "sans-serif"],
+            sans: ['"Noto Sans"', "Helvetica", "Arial", "sans-serif"],
+            secondary: ["Poppins", "Verdana", "Geneva", "Tahoma", "sans-serif"],
         },
         extend: {
             colors: {

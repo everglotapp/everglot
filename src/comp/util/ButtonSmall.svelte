@@ -69,12 +69,20 @@
     @layer components {
         button,
         a {
-            @apply py-2 px-4 inline-flex rounded-xl font-bold cursor-pointer transition-colors;
+            @apply py-2;
+            @apply px-4;
+            @apply inline-flex;
+            @apply rounded-xl;
+            @apply font-bold;
+            @apply cursor-pointer;
+            @apply transition-colors;
+            @apply font-secondary;
         }
 
         button:focus,
         a:focus {
-            @apply ring-primary border-primary;
+            @apply ring-primary;
+            @apply border-primary;
         }
 
         button:disabled,

@@ -510,7 +510,7 @@
                     out:scale={{ duration: 100 }}
                 >
                     <div
-                        class={`flex relative items-center ${
+                        class={`flex relative items-center font-secondary ${
                             copiedInviteLink
                                 ? "text-primary"
                                 : "text-primary-dark"

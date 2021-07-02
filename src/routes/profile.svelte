@@ -198,7 +198,7 @@
             </ul>
 
             <h4><Localized id="profile-groups" /></h4>
-            <ul>
+            <ul class="max-w-sm">
                 {#each groupUsers as group}
                     {#if group.group}
                         <li>
@@ -206,20 +206,28 @@
                                 href={`/chat?group=${group.group.uuid}`}
                                 variant="TEXT"
                                 color="SECONDARY"
+                                className="w-full flex justify-between"
                             >
-                                {group.group.groupName}
-                                {#if group.userType === UserType.Global}
-                                    ({group.group.language
-                                        ? group.group.language.englishName
-                                        : ""})
-                                {:else}
-                                    ({group.group.language
-                                        ? group.group.language.englishName
-                                        : ""}
-                                    {group.group.languageSkillLevel
-                                        ? group.group.languageSkillLevel.name
-                                        : ""})
-                                {/if}
+                                <span
+                                    class="font-sans overflow-hidden overflow-ellipsis pr-8"
+                                >
+                                    {group.group.groupName}</span
+                                >
+                                <span class="font-sans font-normal">
+                                    {#if group.userType === UserType.Global}
+                                        ({group.group.language
+                                            ? group.group.language.englishName
+                                            : ""})
+                                    {:else}
+                                        ({group.group.language
+                                            ? group.group.language.englishName
+                                            : ""}
+                                        {group.group.languageSkillLevel
+                                            ? group.group.languageSkillLevel
+                                                  .name
+                                            : ""})
+                                    {/if}</span
+                                >
                             </ButtonSmall>
                         </li>
                     {/if}

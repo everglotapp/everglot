@@ -53,7 +53,8 @@
         --multiSelectPadding: theme("padding.0") theme("padding.2");
         --inputFontSize: theme("fontSize.base");
         --inputLeft: theme("spacing.1");
-        @apply text-white font-bold;
+        @apply text-white;
+        @apply font-bold;
     }
 
     .wrapper :global(input) {
@@ -71,6 +72,7 @@
 
     .wrapper :global(.selectContainer input) {
         @apply cursor-text;
+        @apply font-secondary;
     }
 
     .wrapper :global(.selectContainer.disabled),
@@ -80,6 +82,7 @@
 
     .wrapper :global(.selectContainer .multiSelectItem) {
         @apply self-center;
+        @apply font-secondary;
     }
 
     .wrapper.hideInput :global(.selectContainer .multiSelectItem + input) {
@@ -102,5 +105,6 @@
     .wrapper :global(.listContainer .listItem),
     .wrapper :global(.listContainer .listItem .item) {
         @apply cursor-pointer;
+        @apply font-secondary;
     }
 </style>

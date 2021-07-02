@@ -111,11 +111,11 @@
                             variant="TEXT"
                             href={`/chat?group=${group.uuid}`}
                             ><span
-                                class="name"
+                                class="name font-sans"
                                 title={group.groupName || undefined}
                                 >{group.groupName}</span
                             >
-                            <span class="members-count"
+                            <span class="members-count font-sans"
                                 ><Localized
                                     id="global-group-members-count"
                                     args={{

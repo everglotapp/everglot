@@ -74,6 +74,7 @@
             @apply inline-flex;
             @apply rounded-xl;
             @apply font-bold;
+            @apply font-secondary;
             @apply cursor-pointer;
             @apply transition-colors;
             @apply items-center;

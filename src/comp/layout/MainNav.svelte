@@ -332,11 +332,10 @@
                                     out:scale={{ duration: 200, delay: 0 }}
                                 >
                                     <div class="my-auto pt-2">
-                                        {#if $currentUser}
+                                        {#if $currentUser && $currentUser.username && $currentUser.username.length}
                                             <span
                                                 class="px-4 pb-2 text-gray-bitdark font-bold"
-                                                >{$currentUser.username ||
-                                                    ""}</span
+                                                >{$currentUser.username}</span
                                             >
                                             <hr class="mt-2" />
                                         {/if}

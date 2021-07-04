@@ -148,31 +148,30 @@
                                     >
                                         {#each group.groupUsers.nodes
                                             .filter(Boolean)
+                                            .slice(0, 5)
                                             .map((node) => node && node.user) as user, i (user.uuid)}
-                                            {#if i < 5}
-                                                <div
-                                                    style={`position: absolute; right: ${
-                                                        10 *
-                                                        (group.groupUsers
-                                                            .totalCount -
-                                                            i -
-                                                            1)
-                                                    }px; z-index: ${
-                                                        10 +
-                                                        group.groupUsers
-                                                            .totalCount -
+                                            <div
+                                                style={`position: absolute; right: ${
+                                                    10 *
+                                                    (group.groupUsers
+                                                        .totalCount -
                                                         i -
-                                                        1
-                                                    }; border-right-width: 2px; border-style: solid; border-color: white; border-radius: 50%;`}
-                                                >
-                                                    <Avatar
-                                                        url={user.avatarUrl}
-                                                        username={user.username}
-                                                        showShadow={false}
-                                                        size={32}
-                                                    />
-                                                </div>
-                                            {/if}
+                                                        1)
+                                                }px; z-index: ${
+                                                    10 +
+                                                    group.groupUsers
+                                                        .totalCount -
+                                                    i -
+                                                    1
+                                                }; border-right-width: 2px; border-style: solid; border-color: white; border-radius: 50%;`}
+                                            >
+                                                <Avatar
+                                                    url={user.avatarUrl}
+                                                    username={user.username}
+                                                    showShadow={false}
+                                                    size={32}
+                                                />
+                                            </div>
                                         {/each}
                                     </div>
                                     <ChevronRightIcon size="18" />

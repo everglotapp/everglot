@@ -2,6 +2,7 @@
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
     import { query } from "@urql/svelte"
+    import { ChevronRightIcon } from "svelte-feather-icons"
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
@@ -11,6 +12,7 @@
     import Spinner from "../comp/util/Spinner.svelte"
     import Headline3 from "../comp/typography/Headline3.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
+    import Avatar from "../comp/users/Avatar.svelte"
 
     import {
         allGroupsStore,
@@ -49,7 +51,7 @@
         $allGroupsStore.context = { ...$allGroupsStore.context, pause: false }
     })
 
-    let lang: SupportedLocale = "en"
+    let lang: SupportedLocale | null = "en"
 </script>
 
 <Localized id="global-browser-window-title" let:text>
@@ -74,16 +76,37 @@
         <RedirectOnce to={"/signup"} />
     {:else}
         <div class="sidebar md:py-8">
-            <div class="px-4 text-lg w-full pt-4 md:pt-0 mb-4">
+            <div class="px-4 w-full pt-4 md:pt-0 mb-4">
                 <Headline3><Localized id="global-sidebar-language" /></Headline3
                 >
                 <div class="languages" role="tablist">
                     {#each SUPPORTED_LOCALES as locale}
                         <Localized id={`locale-${locale}`} let:text>
                             <button
-                                on:click={() => (lang = locale)}
+                                on:click={() => {
+                                    if (lang === locale) {
+                                        lang = null
+                                        setTimeout(() => (lang = locale), 50)
+                                    } else {
+                                        lang = locale
+                                    }
+                                }}
                                 aria-selected={lang === locale}
-                                role="tab">{text}</button
+                                role="tab"
+                                class="flex justify-between items-center"
+                                ><span>{text}</span>
+                                {#if lang === locale}
+                                    <span
+                                        in:scale|local={{
+                                            duration: 150,
+                                            delay: 0,
+                                        }}
+                                        out:scale|local={{
+                                            duration: 150,
+                                            delay: 0,
+                                        }}><ChevronRightIcon size="18" /></span
+                                    >
+                                {/if}</button
                             ></Localized
                         >
                     {/each}
@@ -98,35 +121,66 @@
                 class="text-xl font-light px-0 md:px-8 py-2 text-center justify-center"
                 role="tabpanel"
             >
-                {#each groups[lang] as group (group.uuid)}
-                    <div
-                        class="group flex"
-                        in:scale|local={{ duration: 100, delay: 200 }}
-                        out:scale|local={{ duration: 100 }}
-                        style="transform-origin: center;"
-                    >
-                        <ButtonLarge
-                            className="w-full justify-between flex flex-wrap"
-                            color="SECONDARY"
-                            variant="TEXT"
-                            href={`/chat?group=${group.uuid}`}
-                            ><span
-                                class="name font-sans"
-                                title={group.groupName || undefined}
-                                >{group.groupName}</span
-                            >
-                            <span class="members-count font-sans"
-                                ><Localized
-                                    id="global-group-members-count"
-                                    args={{
-                                        membersCount:
-                                            group.groupUsers.totalCount,
-                                    }}
-                                /></span
-                            ></ButtonLarge
+                {#if lang}
+                    {#each groups[lang] as group (group.uuid)}
+                        <div
+                            class="group flex"
+                            in:scale={{ duration: 100, delay: 200 }}
+                            out:scale={{ duration: 100 }}
+                            style="transform-origin: center;"
                         >
-                    </div>
-                {/each}
+                            <ButtonLarge
+                                className="w-full justify-between flex flex-wrap"
+                                color="SECONDARY"
+                                variant="TEXT"
+                                href={`/chat?group=${group.uuid}`}
+                                ><span
+                                    class="name font-sans"
+                                    title={group.groupName || undefined}
+                                    >{group.groupName}</span
+                                >
+                                <div class="flex items-center">
+                                    <div
+                                        class="w-16 relative ml-12 mr-2"
+                                        style="margin-top: -4px;
+                                        margin-bottom: -4px;
+                                        height: 32px;"
+                                    >
+                                        {#each group.groupUsers.nodes
+                                            .filter(Boolean)
+                                            .map((node) => node && node.user) as user, i (user.uuid)}
+                                            {#if i < 5}
+                                                <div
+                                                    style={`position: absolute; right: ${
+                                                        10 *
+                                                        (group.groupUsers
+                                                            .totalCount -
+                                                            i -
+                                                            1)
+                                                    }px; z-index: ${
+                                                        10 +
+                                                        group.groupUsers
+                                                            .totalCount -
+                                                        i -
+                                                        1
+                                                    }; border-right-width: 2px; border-style: solid; border-color: white; border-radius: 50%;`}
+                                                >
+                                                    <Avatar
+                                                        url={user.avatarUrl}
+                                                        username={user.username}
+                                                        showShadow={false}
+                                                        size={32}
+                                                    />
+                                                </div>
+                                            {/if}
+                                        {/each}
+                                    </div>
+                                    <ChevronRightIcon size="18" />
+                                </div></ButtonLarge
+                            >
+                        </div>
+                    {/each}
+                {/if}
             </div>
         </div>
     {/if}
@@ -155,8 +209,10 @@
     }
 
     .languages button[aria-selected="true"] {
-        @apply border-accent;
+        @apply border-primary;
         @apply bg-gray-lightest;
+
+        transition: border-color 100ms;
     }
 
     .group {
@@ -172,10 +228,11 @@
         max-width: 200px;
 
         @apply mr-3;
-        @apply align-middle;
         @apply whitespace-nowrap;
         @apply overflow-hidden;
         @apply overflow-ellipsis;
+        @apply text-base;
+        @apply text-black;
         @apply font-normal;
 
         @screen md {
@@ -184,7 +241,10 @@
     }
 
     .group .members-count {
-        @apply text-sm;
+        @apply text-xs;
         @apply align-middle;
+        @apply bg-gray-lightest;
+        @apply rounded-md;
+        @apply p-1;
     }
 </style>

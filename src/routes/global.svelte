@@ -50,7 +50,7 @@
         $allGroupsStore.context = { ...$allGroupsStore.context, pause: false }
     })
 
-    let lang: SupportedLocale = "en"
+    let lang: SupportedLocale | null = "en"
 </script>
 
 <Localized id="global-browser-window-title" let:text>
@@ -82,7 +82,14 @@
                     {#each SUPPORTED_LOCALES as locale}
                         <Localized id={`locale-${locale}`} let:text>
                             <button
-                                on:click={() => (lang = locale)}
+                                on:click={() => {
+                                    if (lang === locale) {
+                                        lang = null
+                                        setTimeout(() => (lang = locale), 50)
+                                    } else {
+                                        lang = locale
+                                    }
+                                }}
                                 aria-selected={lang === locale}
                                 role="tab"
                                 class="flex justify-between items-center"
@@ -113,38 +120,40 @@
                 class="text-xl font-light px-0 md:px-8 py-2 text-center justify-center"
                 role="tabpanel"
             >
-                {#each groups[lang] as group (group.uuid)}
-                    <div
-                        class="group flex"
-                        in:scale|local={{ duration: 100, delay: 200 }}
-                        out:scale|local={{ duration: 100 }}
-                        style="transform-origin: center;"
-                    >
-                        <ButtonLarge
-                            className="w-full justify-between flex flex-wrap"
-                            color="SECONDARY"
-                            variant="TEXT"
-                            href={`/chat?group=${group.uuid}`}
-                            ><span
-                                class="name font-sans"
-                                title={group.groupName || undefined}
-                                >{group.groupName}</span
-                            >
-                            <div class="flex items-center">
-                                <span class="members-count font-sans mr-4"
-                                    ><Localized
-                                        id="global-group-members-count"
-                                        args={{
-                                            membersCount:
-                                                group.groupUsers.totalCount,
-                                        }}
-                                    /></span
-                                >
-                                <ChevronRightIcon size="18" />
-                            </div></ButtonLarge
+                {#if lang}
+                    {#each groups[lang] as group (group.uuid)}
+                        <div
+                            class="group flex"
+                            in:scale={{ duration: 100, delay: 200 }}
+                            out:scale={{ duration: 100 }}
+                            style="transform-origin: center;"
                         >
-                    </div>
-                {/each}
+                            <ButtonLarge
+                                className="w-full justify-between flex flex-wrap"
+                                color="SECONDARY"
+                                variant="TEXT"
+                                href={`/chat?group=${group.uuid}`}
+                                ><span
+                                    class="name font-sans"
+                                    title={group.groupName || undefined}
+                                    >{group.groupName}</span
+                                >
+                                <div class="flex items-center">
+                                    <span class="members-count font-sans mr-4"
+                                        ><Localized
+                                            id="global-group-members-count"
+                                            args={{
+                                                membersCount:
+                                                    group.groupUsers.totalCount,
+                                            }}
+                                        /></span
+                                    >
+                                    <ChevronRightIcon size="18" />
+                                </div></ButtonLarge
+                            >
+                        </div>
+                    {/each}
+                {/if}
             </div>
         </div>
     {/if}

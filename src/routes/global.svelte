@@ -2,6 +2,7 @@
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
     import { query } from "@urql/svelte"
+    import { ChevronRightIcon } from "svelte-feather-icons"
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
@@ -74,7 +75,7 @@
         <RedirectOnce to={"/signup"} />
     {:else}
         <div class="sidebar md:py-8">
-            <div class="px-4 text-lg w-full pt-4 md:pt-0 mb-4">
+            <div class="px-4 w-full pt-4 md:pt-0 mb-4">
                 <Headline3><Localized id="global-sidebar-language" /></Headline3
                 >
                 <div class="languages" role="tablist">
@@ -83,7 +84,21 @@
                             <button
                                 on:click={() => (lang = locale)}
                                 aria-selected={lang === locale}
-                                role="tab">{text}</button
+                                role="tab"
+                                class="flex justify-between items-center"
+                                ><span>{text}</span>
+                                {#if lang === locale}
+                                    <span
+                                        in:scale|local={{
+                                            duration: 150,
+                                            delay: 0,
+                                        }}
+                                        out:scale|local={{
+                                            duration: 150,
+                                            delay: 0,
+                                        }}><ChevronRightIcon size="18" /></span
+                                    >
+                                {/if}</button
                             ></Localized
                         >
                     {/each}
@@ -115,15 +130,18 @@
                                 title={group.groupName || undefined}
                                 >{group.groupName}</span
                             >
-                            <span class="members-count font-sans"
-                                ><Localized
-                                    id="global-group-members-count"
-                                    args={{
-                                        membersCount:
-                                            group.groupUsers.totalCount,
-                                    }}
-                                /></span
-                            ></ButtonLarge
+                            <div class="flex items-center">
+                                <span class="members-count font-sans mr-4"
+                                    ><Localized
+                                        id="global-group-members-count"
+                                        args={{
+                                            membersCount:
+                                                group.groupUsers.totalCount,
+                                        }}
+                                    /></span
+                                >
+                                <ChevronRightIcon size="18" />
+                            </div></ButtonLarge
                         >
                     </div>
                 {/each}
@@ -155,8 +173,10 @@
     }
 
     .languages button[aria-selected="true"] {
-        @apply border-accent;
+        @apply border-primary;
         @apply bg-gray-lightest;
+
+        transition: border-color 100ms;
     }
 
     .group {
@@ -172,10 +192,11 @@
         max-width: 200px;
 
         @apply mr-3;
-        @apply align-middle;
         @apply whitespace-nowrap;
         @apply overflow-hidden;
         @apply overflow-ellipsis;
+        @apply text-base;
+        @apply text-black;
         @apply font-normal;
 
         @screen md {
@@ -184,7 +205,10 @@
     }
 
     .group .members-count {
-        @apply text-sm;
+        @apply text-xs;
         @apply align-middle;
+        @apply bg-gray-lightest;
+        @apply rounded-md;
+        @apply p-1;
     }
 </style>

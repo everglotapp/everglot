@@ -1,0 +1,35 @@
+query AllGroups {
+  groups {
+    nodes {
+      uuid
+      groupName
+      global
+      language {
+        alpha2
+        englishName
+        __typename
+      }
+      languageSkillLevel {
+        name
+        nodeId
+        __typename
+      }
+      groupUsers {
+        totalCount
+        nodes {
+          user {
+            avatarUrl
+            username
+            uuid
+            __typename
+          }
+          joinedOn
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

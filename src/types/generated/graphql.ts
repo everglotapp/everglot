@@ -9251,6 +9251,14 @@ export type AllGroupsQuery = (
       )>, groupUsers: (
         { __typename?: 'GroupUsersConnection' }
         & Pick<GroupUsersConnection, 'totalCount'>
+        & { nodes: Array<Maybe<(
+          { __typename?: 'GroupUser' }
+          & Pick<GroupUser, 'joinedOn'>
+          & { user?: Maybe<(
+            { __typename?: 'User' }
+            & Pick<User, 'avatarUrl' | 'username' | 'uuid'>
+          )> }
+        )>> }
       ) }
     )>> }
   )> }
@@ -9814,6 +9822,14 @@ export const AllGroups = gql`
       }
       groupUsers {
         totalCount
+        nodes {
+          user {
+            avatarUrl
+            username
+            uuid
+          }
+          joinedOn
+        }
       }
     }
   }

@@ -12,6 +12,7 @@
     import Spinner from "../comp/util/Spinner.svelte"
     import Headline3 from "../comp/typography/Headline3.svelte"
     import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
+    import Avatar from "../comp/users/Avatar.svelte"
 
     import {
         allGroupsStore,
@@ -139,15 +140,41 @@
                                     >{group.groupName}</span
                                 >
                                 <div class="flex items-center">
-                                    <span class="members-count font-sans mr-4"
-                                        ><Localized
-                                            id="global-group-members-count"
-                                            args={{
-                                                membersCount:
-                                                    group.groupUsers.totalCount,
-                                            }}
-                                        /></span
+                                    <div
+                                        class="w-16 relative ml-12 mr-2"
+                                        style="margin-top: -4px;
+                                        margin-bottom: -4px;
+                                        height: 32px;"
                                     >
+                                        {#each group.groupUsers.nodes
+                                            .filter(Boolean)
+                                            .map((node) => node && node.user) as user, i (user.uuid)}
+                                            {#if i < 5}
+                                                <div
+                                                    style={`position: absolute; right: ${
+                                                        10 *
+                                                        (group.groupUsers
+                                                            .totalCount -
+                                                            i -
+                                                            1)
+                                                    }px; z-index: ${
+                                                        10 +
+                                                        group.groupUsers
+                                                            .totalCount -
+                                                        i -
+                                                        1
+                                                    }; border-right-width: 2px; border-style: solid; border-color: white; border-radius: 50%;`}
+                                                >
+                                                    <Avatar
+                                                        url={user.avatarUrl}
+                                                        username={user.username}
+                                                        showShadow={false}
+                                                        size={32}
+                                                    />
+                                                </div>
+                                            {/if}
+                                        {/each}
+                                    </div>
                                     <ChevronRightIcon size="18" />
                                 </div></ButtonLarge
                             >

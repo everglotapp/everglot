@@ -10,3 +10,4 @@ would-you-rather-answer-picked = @{ $username }选了“{ $answer }”！
 would-you-rather-started = { $username }让我问：{ $question }
 would-you-rather-ended = { $username }结束了你宁愿游戏。
 random-question-started = { $username }让我问：{ $question }
+random-question-ended = @{ $username } 结束了问题讨论。

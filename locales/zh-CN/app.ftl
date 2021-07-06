@@ -7,7 +7,7 @@
 
 ## Chat page
 
-chat-browser-window-title = { -brand-name } - 识遍天下字，读尽人间书。
+chat-browser-window-title = { -brand-name } - 识遍天下字。
 chat-panel-games = 游戏
 chat-panel-subtitles = 字幕
 chat-submit-form-join-group = 加入小组
@@ -45,7 +45,7 @@ chat-side-panel-activity-hangman-solution-correct = 你猜对了：
 chat-side-panel-activity-guess-character-guess = 我猜
 chat-side-panel-activity-guess-character-enter = 确认
 chat-side-panel-activity-guess-character-hint = 字谜：{ $hint }
-chat-side-panel-activity-guess-character-solution-correct = 你猜对了！
+chat-side-panel-activity-guess-character-solution-correct = 你猜对了！答案：{ $solution }
 chat-side-panel-activity-guess-character-solution-wrong = 答案是：{ $solution }
 chat-side-panel-activity-guess-character-feedback-guess-correct = { $username } 猜对了：{ $guess }
 chat-side-panel-activity-guess-character-feedback-guess-wrong = { $username } 猜 { $guess }， 可惜不对

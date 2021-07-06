@@ -16,6 +16,7 @@
     import { Gender } from "../users"
     import Avatar from "../comp/users/Avatar.svelte"
     import { currentUserStore } from "../stores/currentUser"
+    import { ANDROID_WEBVIEW_USER_AGENT } from "../constants"
 
     const userProfileStore = operationStore<UserProfileQuery>(UserProfile)
     query(userProfileStore)
@@ -81,7 +82,6 @@
     // Hide these in mobile webviews until file uploads work.
     let hideUploadAvatarForm = false
     onMount(() => {
-        const ANDROID_WEBVIEW_USER_AGENT = "ANDROID_WEBVIEW"
         if (navigator.userAgent === ANDROID_WEBVIEW_USER_AGENT) {
             /**
              * @see https://github.com/flutter/plugins/pull/3225

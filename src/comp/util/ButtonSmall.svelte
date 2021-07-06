@@ -27,6 +27,7 @@
     export let variant: Variant = "FILLED"
     export let color: Color = "PRIMARY"
     export let tag: "a" | "button" = "a"
+    export let target: string | undefined = undefined
     export let href: string = ""
     export let type: string = "button"
     export let disabled: boolean = false
@@ -58,6 +59,7 @@
     <a
         class={`${computedClasses} ${className}`}
         {href}
+        {target}
         disabled={disabled ? true : undefined}
         on:click
     >

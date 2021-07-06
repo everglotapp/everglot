@@ -95,6 +95,8 @@ main-nav-invite-friends = Invite Friends
 main-nav-logout = Logout
 main-nav-go-to-call = Go to Call
 main-nav-privacy = Privacy
+main-nav-download-app-ios = iOS App
+main-nav-download-app-android = Android App
 
 ## Signup successful page
 
@@ -104,6 +106,8 @@ signup-success-msg =
     Stand by while we sort you into a study group. This may take awhile.  We will notify you by email once this process is complete.
     In the meantime, you can create and explore open discussion channels in the Global Channel.
 signup-success-explore = Explore Global Channel
+signup-success-download-app-ios = Download Everglot for iOS
+signup-success-download-app-android = Download Everglot for Android
 
 ## Invite Modal
 

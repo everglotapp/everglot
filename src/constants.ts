@@ -1,5 +1,8 @@
 export const EVERGLOT_WEBSITE_BASE_URL = "https://everglot.com"
 
+export const ANDROID_WEBVIEW_USER_AGENT = "ANDROID_WEBVIEW"
+export const IOS_WEBVIEW_USER_AGENT = "IOS_WEBVIEW"
+
 export const GOOGLE_WEB_SIGNIN_CLIENT_ID =
     "457984069949-bgc3aj14fi47olkp0arn7is4cr07cfla.apps.googleusercontent.com"
 export const GOOGLE_IOS_SIGNIN_CLIENT_ID =

@@ -33,8 +33,6 @@ describe("signup route", () => {
         expect(pool).toBeTruthy()
         db = pool!
         await start()
-        english = await getLanguage({ alpha2: "en" })
-        expect(english).toBeTruthy()
     })
 
     beforeEach(async () => {
@@ -42,6 +40,8 @@ describe("signup route", () => {
         await seedDatabase(db)
 
         exampleUser = await createUser()
+        english = await getLanguage({ alpha2: "en" })
+        expect(english).toBeTruthy()
     })
 
     afterEach(async () => {

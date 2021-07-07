@@ -7,6 +7,8 @@ import {
     sessionCookieHeader,
     getLanguage,
     createUserLanguage,
+    TestLanguage,
+    getAppUrl,
 } from "../utils"
 import type { TestUser } from "../utils"
 import { start } from "../../server/gql"
@@ -53,6 +55,7 @@ describe("index route", () => {
             redirect: "manual",
         })
         expect(res.status).toBe(302)
+        expect(res.headers.get("location")).toBe(getAppUrl("/login"))
     })
 
     test("GET redirects when signed in but profile has not been set up", async () => {
@@ -64,9 +67,10 @@ describe("index route", () => {
             redirect: "manual",
         })
         expect(res.status).toBe(302)
+        expect(res.headers.get("location")).toBe(getAppUrl("/signup"))
     })
 
-    test("GET works when signed in and profile has been set up", async () => {
+    test("GET redirects when signed in and profile has been set up", async () => {
         await signIn()
         await createUserLanguage({
             userId: exampleUser!.id,
@@ -80,6 +84,7 @@ describe("index route", () => {
             },
             redirect: "manual",
         })
-        expect(res.status).toBe(200)
+        expect(res.status).toBe(302)
+        expect(res.headers.get("location")).toBe(getAppUrl("/global"))
     })
 })

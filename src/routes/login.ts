@@ -93,7 +93,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             res.status(422).json({
                 success: false,
                 message:
-                    "Something went wrong while signing you up with your Google account. Please try again or sign up with your email address.",
+                    "Something went wrong while signing you in with your Google account. Please try again or sign in with your email address.",
             })
             return
         }

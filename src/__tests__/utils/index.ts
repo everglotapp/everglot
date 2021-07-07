@@ -314,3 +314,7 @@ function getSessionCookieValue(res: Response) {
     }
     return headerToCookie(sessionCookie).value
 }
+
+export function getAppUrl(path = "/") {
+    return `http://everglot-app:3000${path}`
+}

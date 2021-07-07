@@ -25,5 +25,5 @@ export async function get(req: Request, res: Response, next: () => void) {
         res.redirect("/global")
         return
     }
-    next()
+    res.redirect("/signup")
 }

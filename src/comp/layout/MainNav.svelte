@@ -130,18 +130,33 @@
 
 <div class="nav-container">
     <nav class="flex container mx-auto px-2">
-        <div class="hidden md:flex flex-grow-0 self-center">
-            <a
-                aria-current={segment === undefined ? "page" : undefined}
-                class="logo font-bold uppercase tracking-wide"
-                href="/"
-                ><img
-                    src="/logo-192.png"
-                    alt="Everglot"
-                    style="max-height: 28px;"
-                /></a
+        {#if $userHasCompletedProfile}
+            <div class="hidden md:flex flex-grow-0 self-center">
+                <a
+                    aria-current={segment === undefined ? "page" : undefined}
+                    class="logo font-bold uppercase tracking-wide"
+                    href="/"
+                    ><img
+                        src="/logo-192.png"
+                        alt="Everglot"
+                        style="max-height: 28px;"
+                    /></a
+                >
+            </div>
+        {:else if segment !== "signup"}
+            <div
+                class="flex self-center pt-1 items-center h-full justify-center"
             >
-        </div>
+                <ButtonSmall
+                    variant="FILLED"
+                    color="PRIMARY"
+                    className="w-full"
+                    href="/"
+                    ><span><Localized id="main-nav-continue" /></span
+                    ></ButtonSmall
+                >
+            </div>
+        {/if}
         {#if showSidebarMenuIcon}
             <div class="flex justify-center md:hidden">
                 <ButtonSmall
@@ -361,19 +376,21 @@
                                                 >
                                             </div>
                                         {/if}
-                                        <div>
-                                            <ButtonSmall
-                                                variant="TEXT"
-                                                color="SECONDARY"
-                                                className="w-full"
-                                                href="/profile"
-                                                ><span
-                                                    ><Localized
-                                                        id="main-nav-profile"
-                                                    /></span
-                                                ></ButtonSmall
-                                            >
-                                        </div>
+                                        {#if $userHasCompletedProfile}
+                                            <div>
+                                                <ButtonSmall
+                                                    variant="TEXT"
+                                                    color="SECONDARY"
+                                                    className="w-full"
+                                                    href="/profile"
+                                                    ><span
+                                                        ><Localized
+                                                            id="main-nav-profile"
+                                                        /></span
+                                                    ></ButtonSmall
+                                                >
+                                            </div>
+                                        {/if}
                                         {#if $userHasCompletedProfile && inviteToken}
                                             <div>
                                                 <ButtonSmall
@@ -510,7 +527,7 @@
                                                 >
                                             </div>
                                         {/if}
-                                        <hr class="mt-2" />
+                                        <hr />
                                         <div>
                                             <ButtonSmall
                                                 variant="TEXT"

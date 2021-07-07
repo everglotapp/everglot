@@ -58,6 +58,6 @@ describe("index route", () => {
             },
             redirect: "manual",
         })
-        expect(res.status).toBe(200)
+        expect(res.status).toBe(302)
     })
 })

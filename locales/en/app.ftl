@@ -97,6 +97,7 @@ main-nav-go-to-call = Go to Call
 main-nav-privacy = Privacy
 main-nav-download-app-ios = iOS App
 main-nav-download-app-android = Android App
+main-nav-continue = Continue
 
 ## Signup successful page
 

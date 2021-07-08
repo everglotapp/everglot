@@ -209,6 +209,9 @@
                         duration: 200,
                     }}
                     on:keydown={handleMessageInputKeydown}
+                    enterkeyhint="send"
+                    mozactionhint="send"
+                    autocapitalize="sentences"
                 />
                 <span class="hidden md:inline">
                     <EmojiSelector on:emoji={handleEmoji} />

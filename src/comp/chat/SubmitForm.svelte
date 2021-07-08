@@ -3,13 +3,20 @@
     import { scale } from "svelte/transition"
     import EmojiSelector from "svelte-emoji-selector"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
-    import { ChevronsRightIcon } from "svelte-feather-icons"
+    import {
+        MicIcon,
+        MicOffIcon,
+        ChevronsRightIcon,
+        CornerRightUpIcon,
+    } from "svelte-feather-icons"
     import { mutation } from "@urql/svelte"
 
     import ButtonLarge from "../util/ButtonLarge.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import { CHAT_CONTEXT } from "../util/ChatProvider.svelte"
     import type { ChatContext } from "../util/ChatProvider.svelte"
+    import { WEBRTC_CONTEXT } from "../util/WebrtcProvider.svelte"
+    import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
 
     import { groupUuid } from "../../stores"
     import { currentUserUuid } from "../../stores/currentUser"
@@ -30,9 +37,16 @@
     let msg = ""
     export let isOwnMessage: (message: ChatMessage) => boolean
     export let messages: ChatMessage[] = []
+    export let split: boolean
+    export let mic: boolean
+    export let handleToggleGames: () => void
+    export let handleToggleVoice: () => void
 
     const { joinedRoom: joinedChatRoom, sendMessage } =
         getContext<ChatContext>(CHAT_CONTEXT)
+
+    const { joinedRoom: joinedCallRoom } =
+        getContext<WebrtcContext>(WEBRTC_CONTEXT)
 
     const joinGlobalGroup = mutation<JoinGlobalGroupMutation>({
         query: JoinGlobalGroup,
@@ -143,6 +157,41 @@
                 ><Localized id="chat-submit-form-join-group" />
             </ButtonLarge>
         {:else if $joinedChatRoom}
+            <ButtonSmall
+                tag="button"
+                variant="FILLED"
+                color="PRIMARY"
+                on:click={handleToggleGames}
+                className="m-0 ml-0 mr-0"
+                ><svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 40 40"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M31.8 11C30.6 9 28.4 8 26 8H14C11.6 8 9.4 9 8.2 11C3.6 18 2.6 28.6 5.8 30.8C9 33 16.2 23.4 20 23.4C23.8 23.4 30.8 33 34.2 30.8C37.4 28.6 36.4 18 31.8 11ZM16 18H14V20H12V18H10V16H12V14H14V16H16V18ZM26.8 19C26.8 20 26 20.8 25 20.8C24 20.8 23.2 20 23.2 19C23.2 18 24 17.2 25 17.2C26 17.2 26.8 18 26.8 19ZM30.6 15C30.6 16 29.8 16.8 28.8 16.8C27.8 16.8 27 16 27 15C27 14 27.8 13.2 28.8 13.2C29.8 13.2 30.6 14 30.6 15Z"
+                        fill="currentColor"
+                    />
+                </svg>
+            </ButtonSmall>
+            <ButtonSmall
+                tag="button"
+                variant="TEXT"
+                color={$joinedCallRoom === null ? "SECONDARY" : "PRIMARY"}
+                on:click={handleToggleVoice}
+                className="m-0 ml-0 mr-0 relative"
+                >{#if mic}
+                    <MicIcon size="20" />
+                {:else}
+                    <MicOffIcon size="20" />
+                {/if}{#if $joinedCallRoom !== null && $joinedCallRoom === $joinedChatRoom}<div
+                        class="absolute right-1 top-0"
+                    >
+                        <CornerRightUpIcon size="16" />
+                    </div>{/if}
+            </ButtonSmall>
             <Localized id="chat-submit-form-input" let:attrs>
                 <input
                     id="send-msg-input"
@@ -150,7 +199,7 @@
                     placeholder={attrs.placeholder}
                     required
                     autocomplete="off"
-                    class="border-none shadow-md px-4 py-4 w-full rounded-md"
+                    class="border-none shadow-md px-4 py-4 w-full rounded-md ml-1 sm:ml-0"
                     bind:value={msg}
                     in:scale={{
                         duration: 200,
@@ -181,15 +230,19 @@
 
 <style>
     .submit-form-container {
-        padding: 18px 30px;
         box-shadow: -2px -2px 4px rgba(220, 220, 220, 0.5);
         min-height: 94px;
+        padding: 0 0 0 8px;
 
         @apply bg-gray-lightest;
         @apply absolute;
         @apply bottom-0;
         @apply left-0;
         @apply right-0;
+
+        @screen sm {
+            padding: 18px 30px;
+        }
     }
 
     .submit-form-container form {
@@ -219,6 +272,12 @@
     .submit-form-container :global(.svelte-emoji-picker__trigger svg) {
         width: 1.4rem;
         height: 1.4rem;
+    }
+
+    .submit-form-container :global(.send-msg-button) {
+        @media (max-width: theme("screens.sm")) {
+            display: none;
+        }
     }
 
     @media (max-width: 700px) {

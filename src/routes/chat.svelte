@@ -330,14 +330,13 @@
         if (!$currentUserIsGroupMember) {
             return
         }
-        if ($isInCall) {
-            if ($joinedCallRoom === $groupUuid) {
-                handleToggleMic()
-            } else {
-                $showSwitchCallModal = true
-            }
+        if (!$isInCall) {
+            return
+        }
+        if ($joinedCallRoom === $groupUuid) {
+            handleToggleMic()
         } else {
-            handleJoinCall()
+            $showSwitchCallModal = true
         }
     }
 
@@ -577,11 +576,12 @@
                                     />
                                     <SubmitForm
                                         {isOwnMessage}
-                                        {split}
                                         {mic}
                                         handleToggleGames={() =>
                                             (split = !split)}
                                         {handleToggleVoice}
+                                        {handleJoinCall}
+                                        {handleLeaveCall}
                                     />
                                 </div>
                             {/key}

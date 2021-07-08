@@ -52,6 +52,9 @@ module.exports = {
                     //lightest: "#f9fafc",
                     lightest: "rgb(239, 248, 246)",
                 },
+                danger: {
+                    DEFAULT: "#d23b41",
+                },
             },
         },
     },

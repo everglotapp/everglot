@@ -37,7 +37,6 @@
     let msg = ""
     export let isOwnMessage: (message: ChatMessage) => boolean
     export let messages: ChatMessage[] = []
-    export let split: boolean
     export let mic: boolean
     export let handleToggleGames: () => void
     export let handleToggleVoice: () => void
@@ -157,41 +156,43 @@
                 ><Localized id="chat-submit-form-join-group" />
             </ButtonLarge>
         {:else if $joinedChatRoom}
-            <ButtonSmall
-                tag="button"
-                variant="FILLED"
-                color="PRIMARY"
-                on:click={handleToggleGames}
-                className="m-0 ml-0 mr-0"
-                ><svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 40 40"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M31.8 11C30.6 9 28.4 8 26 8H14C11.6 8 9.4 9 8.2 11C3.6 18 2.6 28.6 5.8 30.8C9 33 16.2 23.4 20 23.4C23.8 23.4 30.8 33 34.2 30.8C37.4 28.6 36.4 18 31.8 11ZM16 18H14V20H12V18H10V16H12V14H14V16H16V18ZM26.8 19C26.8 20 26 20.8 25 20.8C24 20.8 23.2 20 23.2 19C23.2 18 24 17.2 25 17.2C26 17.2 26.8 18 26.8 19ZM30.6 15C30.6 16 29.8 16.8 28.8 16.8C27.8 16.8 27 16 27 15C27 14 27.8 13.2 28.8 13.2C29.8 13.2 30.6 14 30.6 15Z"
-                        fill="currentColor"
-                    />
-                </svg>
-            </ButtonSmall>
-            <ButtonSmall
-                tag="button"
-                variant="TEXT"
-                color={$joinedCallRoom === null ? "SECONDARY" : "PRIMARY"}
-                on:click={handleToggleVoice}
-                className="m-0 ml-0 mr-0 relative"
-                >{#if mic}
-                    <MicIcon size="20" />
-                {:else}
-                    <MicOffIcon size="20" />
-                {/if}{#if $joinedCallRoom !== null && $joinedCallRoom === $joinedChatRoom}<div
-                        class="absolute right-1 top-0"
+            <div class="flex sm:hidden">
+                <ButtonSmall
+                    tag="button"
+                    variant="FILLED"
+                    color="PRIMARY"
+                    on:click={handleToggleGames}
+                    className="m-0 ml-0 mr-0"
+                    ><svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 40 40"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                     >
-                        <CornerRightUpIcon size="16" />
-                    </div>{/if}
-            </ButtonSmall>
+                        <path
+                            d="M31.8 11C30.6 9 28.4 8 26 8H14C11.6 8 9.4 9 8.2 11C3.6 18 2.6 28.6 5.8 30.8C9 33 16.2 23.4 20 23.4C23.8 23.4 30.8 33 34.2 30.8C37.4 28.6 36.4 18 31.8 11ZM16 18H14V20H12V18H10V16H12V14H14V16H16V18ZM26.8 19C26.8 20 26 20.8 25 20.8C24 20.8 23.2 20 23.2 19C23.2 18 24 17.2 25 17.2C26 17.2 26.8 18 26.8 19ZM30.6 15C30.6 16 29.8 16.8 28.8 16.8C27.8 16.8 27 16 27 15C27 14 27.8 13.2 28.8 13.2C29.8 13.2 30.6 14 30.6 15Z"
+                            fill="currentColor"
+                        />
+                    </svg>
+                </ButtonSmall>
+                <ButtonSmall
+                    tag="button"
+                    variant="TEXT"
+                    color={$joinedCallRoom === null ? "SECONDARY" : "PRIMARY"}
+                    on:click={handleToggleVoice}
+                    className="m-0 ml-0 mr-0 relative"
+                    >{#if mic}
+                        <MicIcon size="20" />
+                    {:else}
+                        <MicOffIcon size="20" />
+                    {/if}{#if $joinedCallRoom !== null && $joinedCallRoom !== $joinedChatRoom}<div
+                            class="absolute right-1 top-0"
+                        >
+                            <CornerRightUpIcon size="16" />
+                        </div>{/if}
+                </ButtonSmall>
+            </div>
             <Localized id="chat-submit-form-input" let:attrs>
                 <input
                     id="send-msg-input"

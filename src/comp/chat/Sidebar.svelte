@@ -2,6 +2,7 @@
     import { getContext } from "svelte"
     import { SplitScreen24 } from "carbon-icons-svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { MicIcon } from "svelte-feather-icons"
 
     import GroupMembers from "./GroupMembers.svelte"
 
@@ -73,7 +74,9 @@
             <Headline3><Localized id="chat-sidebar-controls" /></Headline3>
             <div class="toggle-row hidden md:flex">
                 <SplitScreen24 fill="currentColor" class="text-primary" />
-                <span><Localized id="chat-sidebar-controls-display" /></span>
+                <button on:click={handleToggleSplit} class="font-bold"
+                    ><Localized id="chat-sidebar-controls-display" /></button
+                >
                 <div class="toggle" on:click={handleToggleSplit}>
                     <div aria-selected={split}>
                         <Localized id="chat-sidebar-controls-toggle-on" />
@@ -85,7 +88,9 @@
             </div>
             <div class="toggle-row flex md:hidden">
                 <SplitScreen24 fill="currentColor" class="text-primary" />
-                <span><Localized id="chat-sidebar-controls-games" /></span>
+                <button on:click={handleToggleSplit} class="font-bold"
+                    ><Localized id="chat-sidebar-controls-games" /></button
+                >
                 <div class="toggle" on:click={handleToggleSplit}>
                     <div aria-selected={showGamesOnMobile}>
                         <Localized id="chat-sidebar-controls-toggle-on" />
@@ -100,8 +105,8 @@
             {:else if $isInCall && $joinedCallRoom === $groupUuid}
                 <div class="toggle-row flex">
                     <svg
-                        width="35"
-                        height="35"
+                        width="24"
+                        height="24"
                         viewBox="0 0 40 35"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +152,9 @@
                             </clipPath>
                         </defs>
                     </svg>
-                    <span><Localized id="chat-sidebar-controls-mic" /></span>
+                    <button on:click={handleToggleMic} class="font-bold"
+                        ><Localized id="chat-sidebar-controls-mic" /></button
+                    >
                     <div class="toggle" on:click={handleToggleMic}>
                         <div aria-selected={mic}>
                             <Localized id="chat-sidebar-controls-toggle-on" />
@@ -159,8 +166,8 @@
                 </div>
                 <div class="toggle-row flex">
                     <svg
-                        width="35"
-                        height="35"
+                        width="24"
+                        height="24"
                         viewBox="0 0 22 28"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -170,7 +177,9 @@
                             fill="#45CDCD"
                         />
                     </svg>
-                    <span><Localized id="chat-sidebar-controls-audio" /></span>
+                    <button on:click={handleToggleAudioButton} class="font-bold"
+                        ><Localized id="chat-sidebar-controls-audio" /></button
+                    >
                     <div class="toggle" on:click={handleToggleAudioButton}>
                         <div aria-selected={audio}>
                             <Localized id="chat-sidebar-controls-toggle-on" />
@@ -209,7 +218,7 @@
                             tag="button"
                             on:click={handleWantsToJoinCall}
                             variant="TEXT"
-                            ><Localized
+                            ><MicIcon size="24" class="mr-2" /><Localized
                                 id="chat-sidebar-start-call"
                             /></ButtonLarge
                         >
@@ -221,7 +230,9 @@
                         tag="button"
                         on:click={handleJoinCall}
                         variant="TEXT"
-                        ><Localized id="chat-sidebar-start-call" /></ButtonLarge
+                        ><MicIcon size="24" class="mr-2" /><Localized
+                            id="chat-sidebar-start-call"
+                        /></ButtonLarge
                     >
                 </div>
             {/if}

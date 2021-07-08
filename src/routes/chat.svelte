@@ -408,7 +408,6 @@
                 {split}
                 {audio}
                 {mic}
-                {wantsToJoinCall}
                 handleToggleSplit={() => (split = !split)}
                 handleToggleMic={() => {
                     if (!$outgoing) {
@@ -578,6 +577,7 @@
                                     <SubmitForm
                                         {isOwnMessage}
                                         {split}
+                                        {mic}
                                         handleToggleGames={() =>
                                             (split = !split)}
                                         {handleToggleVoice}

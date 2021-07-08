@@ -8,6 +8,8 @@ type CallUserRecord = Record<string, readonly VoiceChatUser[]>
 const callUsers = writable<CallUserRecord>({})
 const NO_USERS: readonly VoiceChatUser[] = [] as const
 
+export const showSwitchCallModal = writable<boolean>(false)
+
 export const usersInCurrentCall = derived(
     [groupUuid, callUsers],
     ([$groupUuid, $callUsers]) => {

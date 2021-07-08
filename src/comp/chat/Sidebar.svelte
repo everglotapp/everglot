@@ -14,6 +14,7 @@
 
     import { groupUuid } from "../../stores"
     import { currentUserIsGroupMember } from "../../stores/chat"
+    import { showSwitchCallModal } from "../../stores/call"
 
     import type { IAgoraRTCRemoteUser } from "agora-rtc-sdk-ng"
 
@@ -26,7 +27,6 @@
     export let handleToggleSplit: () => void
     export let handleToggleMic: () => void
     export let handleToggleAudio: () => void
-    export let handleWantsToJoinCall: () => void
     export let handleJoinCall: () => Promise<boolean>
     export let handleLeaveCall: () => Promise<boolean>
     export let split = false
@@ -218,7 +218,7 @@
                     <div class="flex justify-center">
                         <ButtonLarge
                             tag="button"
-                            on:click={handleWantsToJoinCall}
+                            on:click={() => ($showSwitchCallModal = true)}
                             variant="TEXT"
                             ><MicIcon size="24" class="mr-2" /><Localized
                                 id="chat-sidebar-start-call"
@@ -244,13 +244,12 @@
 
 <style>
     .sidebar {
-        @apply overflow-y-scroll;
         @apply rounded-tl-md;
         @apply flex;
         @apply flex-col;
         @apply flex-1;
         @apply justify-between;
-        @apply fixed;
+        @apply absolute;
         @apply top-0;
         @apply bottom-0;
         @apply right-0;
@@ -261,7 +260,7 @@
         flex: 1 1 100%;
 
         @apply overflow-hidden;
-        @apply overflow-y-scroll;
+        @apply overflow-y-auto;
         @apply my-4;
     }
 

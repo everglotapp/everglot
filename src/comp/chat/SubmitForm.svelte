@@ -183,7 +183,10 @@
                     on:click={handleToggleVoice}
                     className="m-0 ml-0 mr-0 relative"
                     >{#if mic}
-                        <MicIcon size="20" />
+                        <MicIcon
+                            size="20"
+                            strokeWidth={$joinedCallRoom === null ? 2 : 3}
+                        />
                     {:else}
                         <MicOffIcon size="20" />
                     {/if}{#if $joinedCallRoom !== null && $joinedCallRoom !== $joinedChatRoom}<div

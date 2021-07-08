@@ -183,7 +183,10 @@
                     on:click={handleToggleVoice}
                     className="m-0 ml-0 mr-0 relative"
                     >{#if mic}
-                        <MicIcon size="20" />
+                        <MicIcon
+                            size="20"
+                            strokeWidth={$joinedCallRoom === null ? 2 : 3}
+                        />
                     {:else}
                         <MicOffIcon size="20" />
                     {/if}{#if $joinedCallRoom !== null && $joinedCallRoom !== $joinedChatRoom}<div
@@ -233,7 +236,7 @@
     .submit-form-container {
         box-shadow: -2px -2px 4px rgba(220, 220, 220, 0.5);
         min-height: 94px;
-        padding: 0 0 0 8px;
+        padding: 0 0 0 10px;
 
         @apply bg-gray-lightest;
         @apply absolute;

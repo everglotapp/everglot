@@ -37,7 +37,11 @@
         currentUserIsGroupMember,
     } from "../stores/chat"
 
-    import { setCallUserMeta, removeUserFromCall } from "../stores/call"
+    import {
+        setCallUserMeta,
+        removeUserFromCall,
+        showSwitchCallModal,
+    } from "../stores/call"
 
     import { makeChatMessagePreview } from "../types/chat"
     import type { ChatMessage, ChatMessagePreview } from "../types/chat"
@@ -50,7 +54,6 @@
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
     let currentActivity: GroupActivity | null = null
     let currentActivityGroupUuid: string | null = null
-    let wantsToJoinCall = false
 
     const webrtc = getContext<WebrtcContext>(WEBRTC_CONTEXT)
     const {
@@ -89,6 +92,7 @@
              */
             chat.leaveRoom()
         }
+        $showSwitchCallModal = false
         $groupUuid = group
     })
 
@@ -296,16 +300,16 @@
         return true
     }
 
-    function handleWantsToJoinCall(): void {
-        wantsToJoinCall = true
-    }
-
     function handleToggleVoice(): void {
         if (!$currentUserIsGroupMember) {
             return
         }
-        if ($isInCall && $joinedCallRoom !== $groupUuid) {
-            handleWantsToJoinCall()
+        if ($isInCall) {
+            if ($joinedCallRoom === $groupUuid) {
+                mic = !mic
+            } else {
+                $showSwitchCallModal = true
+            }
         } else {
             handleJoinCall()
         }
@@ -400,7 +404,7 @@
         class:show-sidebar-drawer={$showChatSidebarDrawer}
     >
         <div
-            class="drawer-wrapper hidden md:flex"
+            class="drawer-wrapper hidden md:flex relative"
             id="sidebar-drawer-click-catcher"
             bind:this={drawerWrapper}
         >
@@ -471,41 +475,40 @@
                 }}
                 {handleJoinCall}
                 {handleLeaveCall}
-                {handleWantsToJoinCall}
             />
-            {#if $isInCall && $joinedCallRoom !== $groupUuid && wantsToJoinCall}
-                <Modal>
-                    <div
-                        class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg"
-                    >
-                        <p class="mb-6 text-center">
-                            <Localized id="chat-sidebar-switch-call-text" />
-                        </p>
-                        <div class="flex justify-end">
-                            <ButtonSmall
-                                tag="button"
-                                on:click={() => (wantsToJoinCall = false)}
-                                variant="TEXT"
-                                color="PRIMARY"
-                                ><Localized
-                                    id="chat-sidebar-switch-call-cancel"
-                                /></ButtonSmall
-                            >
-                            <ButtonSmall
-                                tag="button"
-                                on:click={async () => {
-                                    wantsToJoinCall = false
-                                    handleJoinCall()
-                                }}
-                                ><Localized
-                                    id="chat-sidebar-switch-call-confirm"
-                                /></ButtonSmall
-                            >
-                        </div>
-                    </div></Modal
-                >
-            {/if}
         </div>
+        {#if $isInCall && $joinedCallRoom !== $groupUuid && $showSwitchCallModal}
+            <Modal>
+                <div
+                    class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg"
+                >
+                    <p class="mb-6 text-center">
+                        <Localized id="chat-sidebar-switch-call-text" />
+                    </p>
+                    <div class="flex justify-end">
+                        <ButtonSmall
+                            tag="button"
+                            on:click={() => ($showSwitchCallModal = false)}
+                            variant="TEXT"
+                            color="PRIMARY"
+                            ><Localized
+                                id="chat-sidebar-switch-call-cancel"
+                            /></ButtonSmall
+                        >
+                        <ButtonSmall
+                            tag="button"
+                            on:click={async () => {
+                                $showSwitchCallModal = false
+                                handleJoinCall()
+                            }}
+                            ><Localized
+                                id="chat-sidebar-switch-call-confirm"
+                            /></ButtonSmall
+                        >
+                    </div>
+                </div></Modal
+            >
+        {/if}
         <div class="section-wrapper">
             <section>
                 <Header />

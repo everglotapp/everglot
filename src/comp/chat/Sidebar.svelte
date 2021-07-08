@@ -7,13 +7,14 @@
     import GroupMembers from "./GroupMembers.svelte"
 
     import Headline3 from "../typography/Headline3.svelte"
-    import ButtonLarge from "../util/ButtonLarge.svelte"
+    import ButtonSmall from "../util/ButtonSmall.svelte"
     import Spinner from "../util/Spinner.svelte"
     import { WEBRTC_CONTEXT } from "../util/WebrtcProvider.svelte"
     import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
 
     import { groupUuid } from "../../stores"
     import { currentUserIsGroupMember } from "../../stores/chat"
+    import { showSwitchCallModal } from "../../stores/call"
 
     import type { IAgoraRTCRemoteUser } from "agora-rtc-sdk-ng"
 
@@ -26,7 +27,6 @@
     export let handleToggleSplit: () => void
     export let handleToggleMic: () => void
     export let handleToggleAudio: () => void
-    export let handleWantsToJoinCall: () => void
     export let handleJoinCall: () => Promise<boolean>
     export let handleLeaveCall: () => Promise<boolean>
     export let split = false
@@ -70,7 +70,7 @@
             <Headline3><Localized id="chat-sidebar-members" /></Headline3>
             <GroupMembers />
         </div>
-        <div class="py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4">
+        <div class="controls py-3 px-4 text-lg font-bold w-full text-gray-dark">
             <Headline3><Localized id="chat-sidebar-controls" /></Headline3>
             <div class="toggle-row hidden md:flex">
                 <SplitScreen24 fill="currentColor" class="text-primary" />
@@ -204,35 +204,37 @@
                     >
                 </div>
                 <div class="flex justify-center">
-                    <ButtonLarge
+                    <ButtonSmall
                         tag="button"
                         on:click={handleLeaveCall}
                         variant="TEXT"
-                        ><Localized id="chat-sidebar-leave-call" /></ButtonLarge
+                        ><Localized id="chat-sidebar-leave-call" /></ButtonSmall
                     >
                 </div>
             {:else if $isInCall && $joinedCallRoom !== $groupUuid}
                 {#if $currentUserIsGroupMember}
-                    <div class="flex justify-center">
-                        <ButtonLarge
+                    <div class="flex justify-center mt-2 mb-1">
+                        <ButtonSmall
                             tag="button"
-                            on:click={handleWantsToJoinCall}
-                            variant="TEXT"
+                            on:click={() => ($showSwitchCallModal = true)}
+                            variant="OUTLINED"
+                            color="PRIMARY"
                             ><MicIcon size="24" class="mr-2" /><Localized
                                 id="chat-sidebar-start-call"
-                            /></ButtonLarge
+                            /></ButtonSmall
                         >
                     </div>
                 {/if}
             {:else if $currentUserIsGroupMember}
-                <div class="flex justify-center">
-                    <ButtonLarge
+                <div class="flex justify-center mt-2 mb-1">
+                    <ButtonSmall
                         tag="button"
                         on:click={handleJoinCall}
-                        variant="TEXT"
+                        variant="OUTLINED"
+                        color="PRIMARY"
                         ><MicIcon size="24" class="mr-2" /><Localized
                             id="chat-sidebar-start-call"
-                        /></ButtonLarge
+                        /></ButtonSmall
                     >
                 </div>
             {/if}
@@ -242,16 +244,28 @@
 
 <style>
     .sidebar {
-        @apply overflow-y-scroll;
         @apply rounded-tl-md;
         @apply flex;
         @apply flex-col;
         @apply flex-1;
         @apply justify-between;
+        @apply absolute;
+        @apply top-0;
+        @apply bottom-0;
+        @apply right-0;
+        @apply left-0;
     }
 
     .users-container {
+        flex: 1 1 100%;
+
+        @apply overflow-hidden;
+        @apply overflow-y-auto;
         @apply my-4;
+    }
+
+    .controls {
+        flex: 1 0 auto;
     }
 
     .toggle-row {
@@ -261,6 +275,10 @@
         @apply justify-between;
         @apply mx-auto;
         @apply py-1;
+    }
+
+    .toggle-row button {
+        @apply text-base;
     }
 
     .toggle {

@@ -44,7 +44,6 @@ declare module "*.ftl" {
     export = value
 }
 
-declare module "svelte-feather-icons"
 declare module "svelte-emoji-selector"
 declare module "@nubolab-ffwd/svelte-fluent"
 

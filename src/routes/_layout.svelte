@@ -14,6 +14,7 @@
     import WebrtcProvider from "../comp/util/WebrtcProvider.svelte"
     import ChatProvider from "../comp/util/ChatProvider.svelte"
     import { showChatSidebarDrawer } from "../stores/chat"
+    import { showSwitchCallModal } from "../stores/call"
 
     setupUrql()
 
@@ -47,9 +48,8 @@
             requestPolicy: "cache-and-network",
             transitionId, // This forces a re-execution by changing the object contents.
         }
-        if (segment === "chat") {
-            $showChatSidebarDrawer = false
-        }
+        $showChatSidebarDrawer = false
+        $showSwitchCallModal = false
     }
 </script>
 

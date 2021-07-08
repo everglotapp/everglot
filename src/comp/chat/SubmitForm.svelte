@@ -1,5 +1,6 @@
 <script lang="ts">
     import { getContext } from "svelte"
+    import { v4 as uuidv4 } from "uuid"
     import { scale } from "svelte/transition"
     import EmojiSelector from "svelte-emoji-selector"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
@@ -13,6 +14,7 @@
 
     import ButtonLarge from "../util/ButtonLarge.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import Spinner from "../util/Spinner.svelte"
     import { CHAT_CONTEXT } from "../util/ChatProvider.svelte"
     import type { ChatContext } from "../util/ChatProvider.svelte"
     import { WEBRTC_CONTEXT } from "../util/WebrtcProvider.svelte"
@@ -40,16 +42,21 @@
     export let mic: boolean
     export let handleToggleGames: () => void
     export let handleToggleVoice: () => void
+    export let handleJoinCall: () => Promise<boolean>
+    export let handleLeaveCall: () => Promise<boolean>
 
     const { joinedRoom: joinedChatRoom, sendMessage } =
         getContext<ChatContext>(CHAT_CONTEXT)
 
-    const { joinedRoom: joinedCallRoom } =
+    const { joinedRoom: joinedCallRoom, joining: joiningCall } =
         getContext<WebrtcContext>(WEBRTC_CONTEXT)
 
     const joinGlobalGroup = mutation<JoinGlobalGroupMutation>({
         query: JoinGlobalGroup,
     })
+
+    const voicePopupId = uuidv4()
+    let showVoicePopup = false
 
     function handleEmoji(event: CustomEvent) {
         const input = getChatMessageInput()
@@ -131,8 +138,69 @@
 </script>
 
 <div
-    class="submit-form-container rounded-bl-md rounded-br-md grid items-center"
+    class="submit-form-container rounded-bl-md rounded-br-md grid items-center relative"
 >
+    {#if showVoicePopup}
+        <div id={voicePopupId} class="voice-popup" role="tooltip">
+            <div class="inner origin-bottom" in:scale={{ duration: 100 }}>
+                {#if $joinedCallRoom === null}
+                    <ButtonLarge
+                        tag="button"
+                        variant="FILLED"
+                        color="PRIMARY"
+                        on:click={() => {
+                            showVoicePopup = false
+                            handleJoinCall()
+                        }}
+                        className="w-full justify-center items-center"
+                        ><Localized id="chat-submit-form-voice-join-call" />
+                    </ButtonLarge>
+                {:else}<ButtonLarge
+                        tag="button"
+                        variant="TEXT"
+                        color="DANGER"
+                        on:click={() => {
+                            showVoicePopup = false
+                            handleLeaveCall()
+                        }}
+                        className="w-full justify-center items-center"
+                        ><Localized id="chat-submit-form-voice-leave-call" />
+                    </ButtonLarge>{#if $joinedCallRoom !== $groupUuid}<ButtonLarge
+                            tag="button"
+                            variant="TEXT"
+                            color="PRIMARY"
+                            on:click={() => {
+                                showVoicePopup = false
+                                handleToggleVoice()
+                            }}
+                            className="w-full justify-center items-center"
+                            ><Localized
+                                id="chat-submit-form-voice-switch-call"
+                            />
+                        </ButtonLarge>{/if}<ButtonLarge
+                        tag="button"
+                        variant="FILLED"
+                        color="PRIMARY"
+                        on:click={() => {
+                            showVoicePopup = false
+                            handleToggleVoice()
+                        }}
+                        className="w-full justify-center items-center"
+                        >{#if mic}<MicOffIcon
+                                size="18"
+                                class="mr-2"
+                            /><Localized
+                                id="chat-submit-form-voice-mute"
+                            />{:else}<MicIcon
+                                size="18"
+                                class="mr-2"
+                            /><Localized
+                                id="chat-submit-form-voice-unmute"
+                            />{/if}
+                    </ButtonLarge>{/if}
+            </div>
+        </div>
+    {/if}
     <form
         on:submit|preventDefault={handleSendMessage}
         class="submit-form justify-end items-center"
@@ -180,20 +248,31 @@
                     tag="button"
                     variant="TEXT"
                     color={$joinedCallRoom === null ? "SECONDARY" : "PRIMARY"}
-                    on:click={handleToggleVoice}
+                    on:click={() => {
+                        if ($joiningCall) {
+                            return
+                        }
+                        showVoicePopup = !showVoicePopup
+                    }}
+                    aria-describedby={voicePopupId}
                     className="m-0 ml-1 mr-0 relative items-center"
-                    >{#if mic}
-                        <MicIcon
-                            size="20"
-                            strokeWidth={$joinedCallRoom === null ? 2 : 3}
-                        />
+                >
+                    {#if $joiningCall}
+                        <Spinner size={20} />
                     {:else}
-                        <MicOffIcon size="20" />
-                    {/if}{#if $joinedCallRoom !== null && $joinedCallRoom !== $joinedChatRoom}<div
-                            class="absolute right-1 top-0"
-                        >
-                            <CornerRightUpIcon size="16" />
-                        </div>{/if}
+                        {#if mic || $joinedCallRoom === null}
+                            <MicIcon
+                                size="20"
+                                strokeWidth={$joinedCallRoom === null ? 2 : 3}
+                            />
+                        {:else}
+                            <MicOffIcon size="20" />
+                        {/if}{#if $joinedCallRoom !== null && $joinedCallRoom !== $joinedChatRoom}<div
+                                class="absolute right-1 top-0"
+                            >
+                                <CornerRightUpIcon size="16" />
+                            </div>{/if}
+                    {/if}
                 </ButtonSmall>
             </div>
             <Localized id="chat-submit-form-input" let:attrs>
@@ -284,6 +363,26 @@
         @media (max-width: theme("screens.sm")) {
             display: none;
         }
+    }
+
+    .voice-popup {
+        @apply absolute;
+
+        bottom: 50px;
+        left: 0;
+        right: 0;
+    }
+
+    .voice-popup .inner {
+        @apply py-2;
+        @apply px-2;
+        @apply rounded-md;
+        @apply flex;
+        @apply flex-col;
+        @apply items-center;
+        @apply justify-center;
+        @apply w-full;
+        @apply bg-white;
     }
 
     @media (max-width: 700px) {

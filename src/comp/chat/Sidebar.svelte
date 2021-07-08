@@ -70,7 +70,9 @@
             <Headline3><Localized id="chat-sidebar-members" /></Headline3>
             <GroupMembers />
         </div>
-        <div class="py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4">
+        <div
+            class="controls py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4"
+        >
             <Headline3><Localized id="chat-sidebar-controls" /></Headline3>
             <div class="toggle-row hidden md:flex">
                 <SplitScreen24 fill="currentColor" class="text-primary" />
@@ -248,10 +250,23 @@
         @apply flex-col;
         @apply flex-1;
         @apply justify-between;
+        @apply fixed;
+        @apply top-0;
+        @apply bottom-0;
+        @apply right-0;
+        @apply left-0;
     }
 
     .users-container {
+        flex: 1 1 100%;
+
+        @apply overflow-hidden;
+        @apply overflow-y-scroll;
         @apply my-4;
+    }
+
+    .controls {
+        flex: 1 0 auto;
     }
 
     .toggle-row {

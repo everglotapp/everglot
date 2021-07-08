@@ -181,7 +181,7 @@
                     variant="TEXT"
                     color={$joinedCallRoom === null ? "SECONDARY" : "PRIMARY"}
                     on:click={handleToggleVoice}
-                    className="m-0 ml-0 mr-0 relative items-center"
+                    className="m-0 ml-1 mr-0 relative items-center"
                     >{#if mic}
                         <MicIcon
                             size="20"
@@ -203,7 +203,7 @@
                     placeholder={attrs.placeholder}
                     required
                     autocomplete="off"
-                    class="border-none shadow-md px-4 py-4 w-full rounded-md ml-1 sm:ml-0"
+                    class="border-none shadow-md px-2 py-1 sm:px-4 sm:py-2 w-full rounded-md ml-1 sm:ml-0"
                     bind:value={msg}
                     in:scale={{
                         duration: 200,
@@ -235,8 +235,7 @@
 <style>
     .submit-form-container {
         box-shadow: -2px -2px 4px rgba(220, 220, 220, 0.5);
-        min-height: 94px;
-        padding: 0 0 0 10px;
+        padding: 4px 0 4px 10px;
 
         @apply bg-gray-lightest;
         @apply absolute;
@@ -245,7 +244,7 @@
         @apply right-0;
 
         @screen sm {
-            padding: 18px 30px;
+            padding: 12px 18px;
         }
     }
 

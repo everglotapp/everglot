@@ -642,7 +642,7 @@
         @apply grid;
         @apply h-full;
 
-        bottom: 94px;
+        bottom: 50px;
         grid-template-rows: 0 1fr;
 
         @apply px-3;
@@ -737,7 +737,7 @@
         @apply overflow-x-hidden;
 
         max-width: 100%;
-        grid-template-rows: 1fr 94px;
+        grid-template-rows: 1fr 50px;
     }
 
     .views.split .view-right-inner {

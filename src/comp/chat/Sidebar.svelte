@@ -219,6 +219,7 @@
                             on:click={() => ($showSwitchCallModal = true)}
                             variant="OUTLINED"
                             color="PRIMARY"
+                            className="items-center"
                             ><MicIcon size="24" class="mr-2" /><Localized
                                 id="chat-sidebar-start-call"
                             /></ButtonSmall
@@ -232,6 +233,7 @@
                         on:click={handleJoinCall}
                         variant="OUTLINED"
                         color="PRIMARY"
+                        className="items-center"
                         ><MicIcon size="24" class="mr-2" /><Localized
                             id="chat-sidebar-start-call"
                         /></ButtonSmall

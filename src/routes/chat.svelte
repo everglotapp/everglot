@@ -300,13 +300,39 @@
         return true
     }
 
+    function handleToggleMic(): void {
+        if (!$outgoing) {
+            return
+        }
+        mic = !mic
+        if (mic) {
+            $outgoing.setVolume(100)
+        } else {
+            $outgoing.setVolume(0)
+        }
+        if (chat && $groupUuid) {
+            const callMeta = {
+                micMuted: !mic,
+                audioMuted: !audio,
+            }
+            chat.emit("userCallMeta", {
+                groupUuid: $groupUuid,
+                callMeta,
+            })
+            if ($currentUserUuid) {
+                // TODO: what if this is not truthy?
+                setCallUserMeta($currentUserUuid, $groupUuid, callMeta)
+            }
+        }
+    }
+
     function handleToggleVoice(): void {
         if (!$currentUserIsGroupMember) {
             return
         }
         if ($isInCall) {
             if ($joinedCallRoom === $groupUuid) {
-                mic = !mic
+                handleToggleMic()
             } else {
                 $showSwitchCallModal = true
             }
@@ -413,35 +439,7 @@
                 {audio}
                 {mic}
                 handleToggleSplit={() => (split = !split)}
-                handleToggleMic={() => {
-                    if (!$outgoing) {
-                        return
-                    }
-                    mic = !mic
-                    if (mic) {
-                        $outgoing.setVolume(100)
-                    } else {
-                        $outgoing.setVolume(0)
-                    }
-                    if (chat && $groupUuid) {
-                        const callMeta = {
-                            micMuted: !mic,
-                            audioMuted: !audio,
-                        }
-                        chat.emit("userCallMeta", {
-                            groupUuid: $groupUuid,
-                            callMeta,
-                        })
-                        if ($currentUserUuid) {
-                            // TODO: what if this is not truthy?
-                            setCallUserMeta(
-                                $currentUserUuid,
-                                $groupUuid,
-                                callMeta
-                            )
-                        }
-                    }
-                }}
+                {handleToggleMic}
                 handleToggleAudio={() => {
                     audio = !audio
                     for (const remoteUser of $remoteUsers) {

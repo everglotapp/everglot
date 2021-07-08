@@ -162,7 +162,7 @@
                     variant="FILLED"
                     color="PRIMARY"
                     on:click={handleToggleGames}
-                    className="m-0 ml-0 mr-0"
+                    className="m-0 ml-0 mr-0 items-center"
                     ><svg
                         width="24"
                         height="24"
@@ -181,7 +181,7 @@
                     variant="TEXT"
                     color={$joinedCallRoom === null ? "SECONDARY" : "PRIMARY"}
                     on:click={handleToggleVoice}
-                    className="m-0 ml-0 mr-0 relative"
+                    className="m-0 ml-0 mr-0 relative items-center"
                     >{#if mic}
                         <MicIcon
                             size="20"

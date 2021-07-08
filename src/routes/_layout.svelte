@@ -48,10 +48,8 @@
             requestPolicy: "cache-and-network",
             transitionId, // This forces a re-execution by changing the object contents.
         }
-        if (segment === "chat") {
-            $showChatSidebarDrawer = false
-            $showSwitchCallModal = false
-        }
+        $showChatSidebarDrawer = false
+        $showSwitchCallModal = false
     }
 </script>
 

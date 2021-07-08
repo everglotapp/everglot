@@ -92,6 +92,7 @@
              */
             chat.leaveRoom()
         }
+        $showSwitchCallModal = false
         $groupUuid = group
     })
 

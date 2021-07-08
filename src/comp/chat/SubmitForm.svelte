@@ -236,7 +236,7 @@
     .submit-form-container {
         box-shadow: -2px -2px 4px rgba(220, 220, 220, 0.5);
         min-height: 94px;
-        padding: 0 0 0 8px;
+        padding: 0 0 0 10px;
 
         @apply bg-gray-lightest;
         @apply absolute;

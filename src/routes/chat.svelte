@@ -24,6 +24,7 @@
     import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
     import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
     import Modal from "../comp/util/Modal.svelte"
+    import ButtonSmall from "../comp/util/ButtonSmall.svelte"
 
     import { groupUuid } from "../stores"
     import { currentUserUuid, currentChatUserUuid } from "../stores/currentUser"
@@ -33,6 +34,7 @@
         groupChatMessagesStore,
         fetchGroupMetadata,
         fetchGroupChatMessages,
+        currentUserIsGroupMember,
     } from "../stores/chat"
 
     import { setCallUserMeta, removeUserFromCall } from "../stores/call"
@@ -48,9 +50,15 @@
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
     let currentActivity: GroupActivity | null = null
     let currentActivityGroupUuid: string | null = null
+    let wantsToJoinCall = false
 
     const webrtc = getContext<WebrtcContext>(WEBRTC_CONTEXT)
-    const { outgoing, remoteUsers, joinedRoom: joinedCallRoom } = webrtc
+    const {
+        outgoing,
+        remoteUsers,
+        joinedRoom: joinedCallRoom,
+        isInCall,
+    } = webrtc
     const chat = getContext<ChatContext>(CHAT_CONTEXT)
     const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
 
@@ -288,6 +296,21 @@
         return true
     }
 
+    function handleWantsToJoinCall(): void {
+        wantsToJoinCall = true
+    }
+
+    function handleToggleVoice(): void {
+        if (!$currentUserIsGroupMember) {
+            return
+        }
+        if ($isInCall && $joinedCallRoom !== $groupUuid) {
+            handleWantsToJoinCall()
+        } else {
+            handleJoinCall()
+        }
+    }
+
     function handleBeforeunload(): void {
         if ($joinedCallRoom) {
             chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
@@ -385,6 +408,7 @@
                 {split}
                 {audio}
                 {mic}
+                {wantsToJoinCall}
                 handleToggleSplit={() => (split = !split)}
                 handleToggleMic={() => {
                     if (!$outgoing) {
@@ -448,7 +472,40 @@
                 }}
                 {handleJoinCall}
                 {handleLeaveCall}
+                {handleWantsToJoinCall}
             />
+            {#if $isInCall && $joinedCallRoom !== $groupUuid && wantsToJoinCall}
+                <Modal>
+                    <div
+                        class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg"
+                    >
+                        <p class="mb-6 text-center">
+                            <Localized id="chat-sidebar-switch-call-text" />
+                        </p>
+                        <div class="flex justify-end">
+                            <ButtonSmall
+                                tag="button"
+                                on:click={() => (wantsToJoinCall = false)}
+                                variant="TEXT"
+                                color="PRIMARY"
+                                ><Localized
+                                    id="chat-sidebar-switch-call-cancel"
+                                /></ButtonSmall
+                            >
+                            <ButtonSmall
+                                tag="button"
+                                on:click={async () => {
+                                    wantsToJoinCall = false
+                                    handleJoinCall()
+                                }}
+                                ><Localized
+                                    id="chat-sidebar-switch-call-confirm"
+                                /></ButtonSmall
+                            >
+                        </div>
+                    </div></Modal
+                >
+            {/if}
         </div>
         <div class="section-wrapper">
             <section>
@@ -518,7 +575,13 @@
                                         {fetchMoreMessages}
                                         {isOwnMessage}
                                     />
-                                    <SubmitForm {isOwnMessage} />
+                                    <SubmitForm
+                                        {isOwnMessage}
+                                        {split}
+                                        handleToggleGames={() =>
+                                            (split = !split)}
+                                        {handleToggleVoice}
+                                    />
                                 </div>
                             {/key}
                         </div>

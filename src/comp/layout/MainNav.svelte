@@ -143,7 +143,7 @@
                     /></a
                 >
             </div>
-        {:else if segment !== "signup"}
+        {:else if !$currentUserStore.fetching && $currentUserStore.data && segment !== "signup"}
             <div
                 class="flex self-center pt-1 items-center h-full justify-center"
             >

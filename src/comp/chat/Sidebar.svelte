@@ -7,8 +7,6 @@
 
     import Headline3 from "../typography/Headline3.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
-    import ButtonSmall from "../util/ButtonSmall.svelte"
-    import Modal from "../util/Modal.svelte"
     import Spinner from "../util/Spinner.svelte"
     import { WEBRTC_CONTEXT } from "../util/WebrtcProvider.svelte"
     import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
@@ -27,6 +25,7 @@
     export let handleToggleSplit: () => void
     export let handleToggleMic: () => void
     export let handleToggleAudio: () => void
+    export let handleWantsToJoinCall: () => void
     export let handleJoinCall: () => Promise<boolean>
     export let handleLeaveCall: () => Promise<boolean>
     export let split = false
@@ -35,7 +34,6 @@
     export let audio = false
     export let remoteUsers: IAgoraRTCRemoteUser[] = []
 
-    let wantsToJoinCall = false
     let volume = 100
     let previousVolume = 100
 
@@ -205,42 +203,11 @@
                     >
                 </div>
             {:else if $isInCall && $joinedCallRoom !== $groupUuid}
-                {#if wantsToJoinCall}
-                    <Modal>
-                        <div
-                            class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg"
-                        >
-                            <p class="mb-6 text-center">
-                                <Localized id="chat-sidebar-switch-call-text" />
-                            </p>
-                            <div class="flex justify-end">
-                                <ButtonSmall
-                                    tag="button"
-                                    on:click={() => (wantsToJoinCall = false)}
-                                    variant="TEXT"
-                                    color="PRIMARY"
-                                    ><Localized
-                                        id="chat-sidebar-switch-call-cancel"
-                                    /></ButtonSmall
-                                >
-                                <ButtonSmall
-                                    tag="button"
-                                    on:click={async () => {
-                                        wantsToJoinCall = false
-                                        handleJoinCall()
-                                    }}
-                                    ><Localized
-                                        id="chat-sidebar-switch-call-confirm"
-                                    /></ButtonSmall
-                                >
-                            </div>
-                        </div></Modal
-                    >
-                {:else if $currentUserIsGroupMember}
+                {#if $currentUserIsGroupMember}
                     <div class="flex justify-center">
                         <ButtonLarge
                             tag="button"
-                            on:click={() => (wantsToJoinCall = true)}
+                            on:click={handleWantsToJoinCall}
                             variant="TEXT"
                             ><Localized
                                 id="chat-sidebar-start-call"

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext } from "svelte"
+    import { getContext, beforeUpdate, onMount } from "svelte"
     import { scale } from "svelte/transition"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import ButtonLarge from "../util/ButtonLarge.svelte"
@@ -35,6 +35,10 @@
         RANDOM_QUESTION_LOCALES,
         GUESS_CHARACTER_LOCALES,
     } from "../../constants"
+    import {
+        isScrolledToBottom,
+        scrollToBottom,
+    } from "../../routes/_helpers/scrolling"
 
     const chat = getContext<ChatContext>(CHAT_CONTEXT)
     const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
@@ -104,9 +108,58 @@
         activity && activity.kind === GroupActivityKind.RandomQuestion
             ? (activity as RandomQuestionGroupActivity)
             : null
+
+    let activityNode: Hangman | GuessCharacter | undefined
+    export function handleSendText(text: string): boolean {
+        if (!activityNode) {
+            return false
+        }
+        let success = activityNode.handleSendText(text)
+        forceScrollToBottom()
+        return success
+    }
+
+    let container: HTMLElement | undefined
+    let previouslyScrolledToBottom = true
+
+    function handleScroll(_event: Event) {
+        if (!container) {
+            return
+        }
+        previouslyScrolledToBottom = isScrolledToBottom(container)
+    }
+
+    onMount(() => {
+        setTimeout(forceScrollToBottom, 150)
+    })
+
+    beforeUpdate(() => {
+        if (!container) {
+            return
+        }
+        previouslyScrolledToBottom = isScrolledToBottom(container)
+    })
+
+    function forceScrollToBottom(): void {
+        if (container) {
+            scrollToBottom(container, true)
+        }
+    }
+
+    function handleWindowResize() {
+        if (!previouslyScrolledToBottom) {
+            return
+        }
+        forceScrollToBottom()
+    }
 </script>
 
-<div class="pb-4 overflow-y-auto">
+<svelte:window on:resize={handleWindowResize} />
+<div
+    class="pb-4 overflow-y-auto"
+    bind:this={container}
+    on:scroll={handleScroll}
+>
     {#if !$connectedToChat || !$groupUuid || $groupUuid !== $joinedChatRoom}
         <div
             class="py-8 absolute top-0 bottom-0 right-0 left-0 flex items-center justify-center"
@@ -228,13 +281,15 @@
             {:else if activity}
                 {#key activity.kind}
                     <div
-                        class="flex flex-col h-full"
+                        class="flex flex-col"
                         in:scale={{ duration: 200, delay: 350 }}
                         out:scale={{ duration: 200, delay: 0 }}
                     >
                         {#if hangmanActivity}
                             <Hangman
                                 on:quit={() => chat.emit("endGroupActivity")}
+                                on:feedback={() =>
+                                    setTimeout(forceScrollToBottom, 100)}
                                 over={hangmanActivity.state.over}
                                 pickedLetters={hangmanActivity.state
                                     .pickedLetters}
@@ -242,16 +297,20 @@
                                 word={hangmanActivity.state.currentWord}
                                 solution={hangmanActivity.state.solution}
                                 locale={$currentGroupLocale}
+                                bind:this={activityNode}
                             />
                         {:else if guessCharacterActivity}
                             <GuessCharacter
                                 on:quit={() => chat.emit("endGroupActivity")}
+                                on:feedback={() =>
+                                    setTimeout(forceScrollToBottom, 100)}
                                 over={guessCharacterActivity.state.over}
                                 pickedCharacters={guessCharacterActivity.state
                                     .pickedCharacters}
                                 hint={guessCharacterActivity.state.hint}
                                 solution={guessCharacterActivity.state.solution}
                                 locale={$currentGroupLocale}
+                                bind:this={activityNode}
                             />
                         {:else if wouldYouRatherActivity}
                             <WouldYouRather

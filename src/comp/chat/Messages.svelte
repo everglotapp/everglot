@@ -202,7 +202,7 @@
 </script>
 
 <svelte:window on:resize={handleWindowResize} />
-<div class="messages" on:scroll={handleScroll} bind:this={messagesContainer}>
+<div class="wrapper" on:scroll={handleScroll} bind:this={messagesContainer}>
     {#if $groupChatMessagesStore.fetching}
         <div class="text-center mb-2 text-gray-bitdark text-sm font-bold">
             <Spinner size={16} />
@@ -258,7 +258,7 @@
 </div>
 
 <style>
-    .messages {
+    .wrapper {
         @apply bg-white;
         @apply overflow-y-scroll;
         @apply py-2;

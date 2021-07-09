@@ -112,16 +112,22 @@
     const handleQuit = () => {
         dispatch("quit")
     }
+    // @ts-ignore
+    $: feedback, dispatch("feedback")
+
+    export function handleSendText(text: string): boolean {
+        if (!validateInput(text)) {
+            return false
+        }
+        submitGuess(text)
+        return true
+    }
 
     const handleEnter = () => {
         if (!inputValue) {
             return
         }
-        if (!validateInput(inputValue)) {
-            inputValue = ""
-            return
-        }
-        submitGuess(inputValue)
+        handleSendText(inputValue)
         inputValue = ""
     }
 
@@ -129,11 +135,7 @@
         if (!inputValue) {
             return
         }
-        if (!validateInput(inputValue)) {
-            inputValue = ""
-            return
-        }
-        submitGuess(inputValue)
+        handleSendText(inputValue)
         inputValue = ""
     }
 
@@ -211,7 +213,7 @@
 </script>
 
 <div
-    class="flex flex-row mt-1 mb-2 sm:mx-4 md:my-4 max-h-12 px-2 justify-between items-center"
+    class="flex flex-row mt-1 mb-2 sm:mx-4 md:my-4 max-h-12 justify-between items-center"
 >
     <Headline4><Localized id="chat-side-panel-activity-hangman" /></Headline4>
     <ButtonSmall
@@ -263,7 +265,7 @@
             </svelte:fragment>
         </SquirrelOnRope>
     </div>
-    <form on:submit|preventDefault={handleSubmit}>
+    <form on:submit|preventDefault={handleSubmit} class="hidden sm:block">
         <label for="hangman-input"
             ><Localized id="chat-side-panel-activity-hangman-guess" /></label
         >
@@ -286,19 +288,22 @@
             /></ButtonSmall
         >
     </form>
-    {#if feedback}
-        {#key feedback}
-            <div
-                class={`px-8 py-4 font-bold ${
-                    feedbackSuccess ? "text-green-600" : "text-red-700"
-                }`}
-                in:scale={{ duration: 200, delay: 150 }}
-                out:scale={{ duration: 100, delay: 0 }}
-            >
-                {feedback}
-            </div>
-        {/key}
-    {/if}
+    <div class="grid">
+        {#if feedback}
+            {#key feedback}
+                <div
+                    class={`px-8 py-4 font-bold ${
+                        feedbackSuccess ? "text-green-600" : "text-red-700"
+                    }`}
+                    in:scale={{ duration: 200, delay: 150 }}
+                    out:scale={{ duration: 100, delay: 0 }}
+                    style="grid-column: 1/2; grid-row: 1/2;"
+                >
+                    {feedback}
+                </div>
+            {/key}
+        {/if}
+    </div>
 </div>
 
 {#if wantsToEndActivity}

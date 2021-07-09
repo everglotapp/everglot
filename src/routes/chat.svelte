@@ -12,7 +12,7 @@
     import Header from "../comp/chat/Header.svelte"
     import SidePanel from "../comp/chat/SidePanel.svelte"
     import Messages from "../comp/chat/Messages.svelte"
-    import SubmitForm from "../comp/chat/SubmitForm.svelte"
+    import BottomBar from "../comp/chat/BottomBar.svelte"
     import { CHAT_CONTEXT } from "../comp/util/ChatProvider.svelte"
     import type { ChatContext } from "../comp/util/ChatProvider.svelte"
     import { WEBRTC_CONTEXT } from "../comp/util/WebrtcProvider.svelte"
@@ -46,6 +46,7 @@
     import { makeChatMessagePreview } from "../types/chat"
     import type { ChatMessage, ChatMessagePreview } from "../types/chat"
 
+    import { GroupActivityKind } from "../types/activities"
     import type { GroupActivity } from "../types/activities"
     import pannable, { Direction } from "./_helpers/pannable"
     import type { SwipeEvent } from "./_helpers/pannable"
@@ -63,7 +64,11 @@
         isInCall,
     } = webrtc
     const chat = getContext<ChatContext>(CHAT_CONTEXT)
-    const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
+    const {
+        connected: connectedToChat,
+        joinedRoom: joinedChatRoom,
+        sendMessage,
+    } = chat
 
     const { page } = sapperStores()
 
@@ -204,6 +209,18 @@
 
         chat.switchRoom($groupUuid)
     }
+
+    function handleSendActivityText(text: string) {
+        if (!sidePanel) {
+            return false
+        }
+        return sidePanel.handleSendText(text)
+    }
+
+    const ACTIVITY_KINDS_SUPPORTING_TEXT_INPUT: readonly GroupActivityKind[] = [
+        GroupActivityKind.Hangman,
+        GroupActivityKind.GuessCharacter,
+    ] as const
 
     function handleWelcome({
         userUuid,
@@ -393,6 +410,8 @@
             )
         }*/
     }
+
+    let sidePanel: SidePanel | undefined
 </script>
 
 <Localized id="chat-browser-window-title" let:text>
@@ -529,8 +548,32 @@
                                 }}
                             >
                                 {#if $groupUuid !== null && currentActivityGroupUuid === $groupUuid}
-                                    <SidePanel activity={currentActivity} />
+                                    <SidePanel
+                                        activity={currentActivity}
+                                        bind:this={sidePanel}
+                                    />
                                 {/if}
+                                <BottomBar
+                                    handleSubmit={handleSendActivityText}
+                                    showTextInput={$groupUuid !== null &&
+                                        currentActivityGroupUuid ===
+                                            $groupUuid &&
+                                        currentActivity !== null &&
+                                        ACTIVITY_KINDS_SUPPORTING_TEXT_INPUT.includes(
+                                            currentActivity.kind
+                                        )}
+                                    {mic}
+                                    gamesMode={!split}
+                                    handleToggleGamesMode={() =>
+                                        (split = !split)}
+                                    {handleToggleVoice}
+                                    {handleJoinCall}
+                                    {handleLeaveCall}
+                                    historySizeMax={0}
+                                    historyCheckMax={0}
+                                    textInputLocalizationId="chat-activity-text-input"
+                                    className="sm:hidden"
+                                />
                                 <div
                                     class="toggle-split-screen"
                                     on:click={() => (split = false)}
@@ -574,14 +617,18 @@
                                         {fetchMoreMessages}
                                         {isOwnMessage}
                                     />
-                                    <SubmitForm
-                                        {isOwnMessage}
+                                    <BottomBar
+                                        showTextInput={true}
                                         {mic}
-                                        handleToggleGames={() =>
+                                        gamesMode={!split}
+                                        handleSubmit={(msg) =>
+                                            sendMessage(msg, $currentUserUuid)}
+                                        handleToggleGamesMode={() =>
                                             (split = !split)}
                                         {handleToggleVoice}
                                         {handleJoinCall}
                                         {handleLeaveCall}
+                                        {isOwnMessage}
                                     />
                                 </div>
                             {/key}
@@ -652,6 +699,10 @@
 
             @apply bottom-0;
             @apply p-0;
+        }
+
+        @screen md {
+            bottom: 70px;
         }
     }
 
@@ -729,6 +780,19 @@
     .view-left-inner {
         @apply border-r;
         @apply border-gray-lightest;
+
+        grid-template-rows: 1fr 50px;
+
+        @screen sm {
+            grid-template-rows: 1fr 0;
+        }
+    }
+
+    .view-left-inner *:nth-child(2) {
+        /** Hide bottom bar. */
+        @screen md {
+            display: none;
+        }
     }
 
     .view-right-inner {
@@ -738,6 +802,10 @@
 
         max-width: 100%;
         grid-template-rows: 1fr 50px;
+
+        @screen md {
+            grid-template-rows: 1fr 70px;
+        }
     }
 
     .views.split .view-right-inner {

@@ -109,6 +109,8 @@
     }
 
     const handleQuit = () => dispatch("quit")
+    // @ts-ignore
+    $: feedback, dispatch("feedback")
 
     export function handleSendText(text: string): boolean {
         if (!validateInput(text)) {

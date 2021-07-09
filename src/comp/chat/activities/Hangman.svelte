@@ -112,6 +112,8 @@
     const handleQuit = () => {
         dispatch("quit")
     }
+    // @ts-ignore
+    $: feedback, dispatch("feedback")
 
     export function handleSendText(text: string): boolean {
         if (!validateInput(text)) {
@@ -286,19 +288,22 @@
             /></ButtonSmall
         >
     </form>
-    {#if feedback}
-        {#key feedback}
-            <div
-                class={`px-8 py-4 font-bold ${
-                    feedbackSuccess ? "text-green-600" : "text-red-700"
-                }`}
-                in:scale={{ duration: 200, delay: 150 }}
-                out:scale={{ duration: 100, delay: 0 }}
-            >
-                {feedback}
-            </div>
-        {/key}
-    {/if}
+    <div class="grid">
+        {#if feedback}
+            {#key feedback}
+                <div
+                    class={`px-8 py-4 font-bold ${
+                        feedbackSuccess ? "text-green-600" : "text-red-700"
+                    }`}
+                    in:scale={{ duration: 200, delay: 150 }}
+                    out:scale={{ duration: 100, delay: 0 }}
+                    style="grid-column: 1/2; grid-row: 1/2;"
+                >
+                    {feedback}
+                </div>
+            {/key}
+        {/if}
+    </div>
 </div>
 
 {#if wantsToEndActivity}

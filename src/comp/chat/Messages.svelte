@@ -28,8 +28,8 @@
 
     let latestSentMessageHandledAt: number = Date.now()
     let scrollFunction: Function | null = null
-    let scrolledToBottomBeforeRender: boolean = true
-    let scrollHeightBeforeRender: number | null = null
+    let previouslyScrolledToBottom: boolean = true
+    let previousScrollHeight: number | null = null
     let oldMessageUuids: string[] = []
     let oldPreviewUuids: string[] = []
     let forceScrollByPx: number = 0
@@ -83,7 +83,7 @@
             //     lastMessageSentAt: $lastMessageSentAt,
             //     lastSentMessage: $lastSentMessage,
             // })
-            let forceBottom: boolean = scrolledToBottomBeforeRender
+            let forceBottom: boolean = previouslyScrolledToBottom
             if (handlingLatestSentMessage) {
                 /**
                  * Force auto-scroll if the user sent the message themselves
@@ -96,15 +96,14 @@
                 // })
                 latestSentMessageHandledAt = Date.now()
             }
-            if (scrollHeightBeforeRender === null) {
+            if (previousScrollHeight === null) {
                 // console.log("No previous height, forcing bottom")
                 forceBottom = true
             } else if (!forceBottom) {
                 if (anythingInsertedAtTop) {
                     // Reset scroll position that changed due to new messages or previews being inserted at the top.
                     const heightDifference =
-                        messagesContainer.scrollHeight -
-                        scrollHeightBeforeRender
+                        messagesContainer.scrollHeight - previousScrollHeight
                     // console.log("Resetting scroll position", {
                     //     heightDifference,
                     //     scrollHeight: messagesContainer.scrollHeight,
@@ -148,6 +147,9 @@
             // element is scrolled near top
             fetchMoreMessages()
         }
+
+        previouslyScrolledToBottom = isScrolledToBottom(container)
+        previousScrollHeight = container.scrollHeight
     }
 
     onMount(() => {
@@ -161,13 +163,10 @@
 
     beforeUpdate(() => {
         if (messagesContainer) {
-            scrolledToBottomBeforeRender = isScrolledToBottom(messagesContainer)
-            // TODO: Update this scroll height upon new scroll events that happen
-            // before the next afterUpdate() is triggered. Obviously it can change.
-            // The latest scroll height should therefore always be tracked.
-            scrollHeightBeforeRender = messagesContainer.scrollHeight
+            previouslyScrolledToBottom = isScrolledToBottom(messagesContainer)
+            previousScrollHeight = messagesContainer.scrollHeight
         } else {
-            scrollHeightBeforeRender = null
+            previousScrollHeight = null
         }
     })
 
@@ -194,8 +193,15 @@
     $: hasEarlierMessages =
         $groupChatMessagesStore.data?.groupByUuid?.messagesByRecipientGroupId
             .pageInfo.hasPreviousPage
+
+    function handleWindowResize() {
+        if (messagesContainer && previouslyScrolledToBottom) {
+            scrollToBottom(messagesContainer, true)
+        }
+    }
 </script>
 
+<svelte:window on:resize={handleWindowResize} />
 <div class="messages" on:scroll={handleScroll} bind:this={messagesContainer}>
     {#if $groupChatMessagesStore.fetching}
         <div class="text-center mb-2 text-gray-bitdark text-sm font-bold">

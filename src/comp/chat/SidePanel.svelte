@@ -236,7 +236,7 @@
             {:else if activity}
                 {#key activity.kind}
                     <div
-                        class="flex flex-col h-full"
+                        class="flex flex-col"
                         in:scale={{ duration: 200, delay: 350 }}
                         out:scale={{ duration: 200, delay: 0 }}
                     >

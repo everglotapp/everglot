@@ -137,9 +137,7 @@
     }
 </script>
 
-<div
-    class="submit-form-container rounded-bl-md rounded-br-md grid items-center relative"
->
+<div class="wrapper rounded-bl-md rounded-br-md grid items-center relative">
     {#if showVoicePopup}
         <div id={voicePopupId} class="voice-popup" role="tooltip">
             <div class="inner origin-bottom" in:scale={{ duration: 100 }}>
@@ -230,10 +228,10 @@
                     variant="FILLED"
                     color="PRIMARY"
                     on:click={handleToggleGames}
-                    className="m-0 ml-0 mr-0 items-center"
+                    className="m-0 ml-0 mr-0 items-center toggle-games-button"
                     ><svg
-                        width="24"
-                        height="24"
+                        width="32"
+                        height="32"
                         viewBox="0 0 40 40"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -262,11 +260,11 @@
                     {:else}
                         {#if mic || $joinedCallRoom === null}
                             <MicIcon
-                                size="20"
+                                size="22"
                                 strokeWidth={$joinedCallRoom === null ? 2 : 3}
                             />
                         {:else}
-                            <MicOffIcon size="20" />
+                            <MicOffIcon size="22" />
                         {/if}{#if $joinedCallRoom !== null && $joinedCallRoom !== $joinedChatRoom}<div
                                 class="absolute right-1 top-0"
                             >
@@ -315,7 +313,7 @@
 </div>
 
 <style>
-    .submit-form-container {
+    .wrapper {
         box-shadow: -2px -2px 4px rgba(220, 220, 220, 0.5);
         padding: 4px 0 4px 10px;
 
@@ -330,7 +328,7 @@
         }
     }
 
-    .submit-form-container form {
+    .wrapper form {
         display: flex;
     }
 
@@ -338,15 +336,19 @@
         @apply mr-3;
     }
 
-    .submit-form-container :global(.send-msg-button) {
+    .wrapper :global(.send-msg-button) {
         @apply px-2 !important;
+
+        @media (max-width: theme("screens.sm")) {
+            display: none;
+        }
     }
 
-    .submit-form-container :global(.send-msg-button:hover) {
+    .wrapper :global(.send-msg-button:hover) {
         @apply text-primary !important;
     }
 
-    .submit-form-container :global(.svelte-emoji-picker__trigger) {
+    .wrapper :global(.svelte-emoji-picker__trigger) {
         @apply text-sm;
         @apply px-2;
         @apply py-2;
@@ -354,15 +356,14 @@
         @apply hover:text-primary;
     }
 
-    .submit-form-container :global(.svelte-emoji-picker__trigger svg) {
+    .wrapper :global(.svelte-emoji-picker__trigger svg) {
         width: 1.4rem;
         height: 1.4rem;
     }
 
-    .submit-form-container :global(.send-msg-button) {
-        @media (max-width: theme("screens.sm")) {
-            display: none;
-        }
+    :global(.toggle-games-button) {
+        @apply px-2 !important;
+        @apply py-1 !important;
     }
 
     .voice-popup {
@@ -386,7 +387,7 @@
     }
 
     @media (max-width: 700px) {
-        .submit-form-container {
+        .wrapper {
             position: fixed;
             left: 0;
             right: 0;

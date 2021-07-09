@@ -9,7 +9,7 @@ export function scrollToBottom(
 }
 
 export const isScrolledToBottom = (container: HTMLElement) =>
-    isScrolledTo(container, null)
+    isScrolledToOrLower(container, null)
 
 /**
  * This function will set the scrollTop of an element using either the
@@ -30,7 +30,10 @@ const scroll = (el: HTMLElement, scrollTop?: number): void => {
  * Whether the element is scrolled to the specified position.
  * @param scrollTop Position to check against, bottom if null.
  */
-const isScrolledTo = (el: HTMLElement, scrollTop: number | null): boolean => {
+const isScrolledToOrLower = (
+    el: HTMLElement,
+    scrollTop: number | null
+): boolean => {
     const top = scrollTop || el.scrollHeight - el.clientHeight
-    return el.scrollTop === top
+    return Math.ceil(el.scrollTop) >= top
 }

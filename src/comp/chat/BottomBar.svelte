@@ -49,6 +49,7 @@
     export let isOwnMessage: (message: ChatMessage) => boolean = () => {
         return false
     }
+    export let textInputLocalizationId = "chat-submit-form-input"
     export let className: string = ""
     export let historySizeMax: number = 1
     export let historyCheckMax: number = 50
@@ -314,7 +315,7 @@
                 </ButtonSmall>
             </div>
             {#if showTextInput}
-                <Localized id="chat-submit-form-input" let:attrs>
+                <Localized id={textInputLocalizationId} let:attrs>
                     <input
                         id={sendMessageInputId}
                         type="text"

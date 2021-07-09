@@ -571,6 +571,7 @@
                                     {handleLeaveCall}
                                     historySizeMax={0}
                                     historyCheckMax={0}
+                                    textInputLocalizationId="chat-activity-text-input"
                                     className="sm:hidden"
                                 />
                                 <div

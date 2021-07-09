@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid"
+
 export const EVERGLOT_WEBSITE_BASE_URL = "https://everglot.com"
 
 export const ANDROID_WEBVIEW_USER_AGENT = "ANDROID_WEBVIEW"
@@ -34,6 +36,8 @@ export const USER_AVATARS_BASE_PATH =
     `${USER_UPLOADED_IMAGES_BASE_PATH}/avatars` as const
 
 export const WEBRTC_CONTEXT_KEY = "WEBRTC"
+
+export const SIDEBAR_MENU_ICON_BUTTON_ID = uuidv4()
 
 export const ALPHABET: Record<HangmanLocale, readonly string[]> = {
     en: [

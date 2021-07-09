@@ -50,6 +50,7 @@
     import type { GroupActivity } from "../types/activities"
     import pannable, { Direction } from "./_helpers/pannable"
     import type { SwipeEvent } from "./_helpers/pannable"
+    import { SIDEBAR_MENU_ICON_BUTTON_ID } from "../constants"
 
     let messages: ChatMessage[] = []
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
@@ -436,8 +437,13 @@
     {/if}
     {#if $showChatSidebarDrawer && typeof window !== "undefined"}
         <ClickAwayListener
-            elementId="sidebar-drawer-click-catcher"
-            on:clickaway={() => {}}
+            elementId={[
+                "sidebar-drawer-click-catcher",
+                SIDEBAR_MENU_ICON_BUTTON_ID,
+            ]}
+            on:clickaway={() => {
+                $showChatSidebarDrawer = false
+            }}
         />
         <div class="drawer-modal" />
     {/if}

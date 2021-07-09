@@ -34,6 +34,7 @@
         ANDROID_WEBVIEW_USER_AGENT,
         EVERGLOT_WEBSITE_BASE_URL,
         IOS_WEBVIEW_USER_AGENT,
+        SIDEBAR_MENU_ICON_BUTTON_ID,
     } from "../../constants"
 
     query(currentUserStore)
@@ -158,7 +159,10 @@
             </div>
         {/if}
         {#if showSidebarMenuIcon}
-            <div class="flex justify-center md:hidden">
+            <div
+                class="flex justify-center md:hidden"
+                id={SIDEBAR_MENU_ICON_BUTTON_ID}
+            >
                 <ButtonSmall
                     variant="TEXT"
                     color="SECONDARY"

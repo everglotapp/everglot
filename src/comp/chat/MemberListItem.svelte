@@ -67,7 +67,7 @@
             aria-label={`User Bio`}
             style="height: 0; width: 0;"
         >
-            <div class="absolute" style="left: -42px;">
+            <div class="bio-outer absolute">
                 <div
                     class="fixed bg-white shadow-lg rounded-lg"
                     style="z-index: 1; min-width: 240px; transform-origin: top left;"
@@ -142,5 +142,13 @@
 
     .active-status.offline {
         background: #ccc;
+    }
+
+    .bio-outer {
+        left: -122px;
+
+        @screen sm {
+            left: -42px;
+        }
     }
 </style>

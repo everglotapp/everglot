@@ -5,7 +5,6 @@
         onMount,
         onDestroy,
     } from "svelte"
-    import { fade } from "svelte/transition"
     import { Localized, Overlay } from "@nubolab-ffwd/svelte-fluent"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"

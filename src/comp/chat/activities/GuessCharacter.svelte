@@ -110,15 +110,19 @@
 
     const handleQuit = () => dispatch("quit")
 
+    export function handleSendText(text: string): boolean {
+        if (!validateInput(text)) {
+            return false
+        }
+        submitGuess(text)
+        return true
+    }
+
     const handleEnter = () => {
         if (!inputValue) {
             return
         }
-        if (!validateInput(inputValue)) {
-            inputValue = ""
-            return
-        }
-        submitGuess(inputValue)
+        handleSendText(inputValue)
         inputValue = ""
     }
 
@@ -126,11 +130,7 @@
         if (!inputValue) {
             return
         }
-        if (!validateInput(inputValue)) {
-            inputValue = ""
-            return
-        }
-        submitGuess(inputValue)
+        handleSendText(inputValue)
         inputValue = ""
     }
 
@@ -262,7 +262,7 @@
             </svelte:fragment>
         </SquirrelOnRope>
     </div>
-    <form on:submit|preventDefault={handleSubmit}>
+    <form on:submit|preventDefault={handleSubmit} class="hidden sm:block">
         <label for="guess-character-input"
             ><Localized
                 id="chat-side-panel-activity-guess-character-guess"

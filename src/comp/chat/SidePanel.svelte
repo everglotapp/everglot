@@ -104,6 +104,14 @@
         activity && activity.kind === GroupActivityKind.RandomQuestion
             ? (activity as RandomQuestionGroupActivity)
             : null
+
+    let activityNode: Hangman | GuessCharacter | undefined
+    export function handleSendText(text: string): boolean {
+        if (!activityNode) {
+            return false
+        }
+        return activityNode.handleSendText(text)
+    }
 </script>
 
 <div class="pb-4 overflow-y-auto">
@@ -242,6 +250,7 @@
                                 word={hangmanActivity.state.currentWord}
                                 solution={hangmanActivity.state.solution}
                                 locale={$currentGroupLocale}
+                                bind:this={activityNode}
                             />
                         {:else if guessCharacterActivity}
                             <GuessCharacter
@@ -252,6 +261,7 @@
                                 hint={guessCharacterActivity.state.hint}
                                 solution={guessCharacterActivity.state.solution}
                                 locale={$currentGroupLocale}
+                                bind:this={activityNode}
                             />
                         {:else if wouldYouRatherActivity}
                             <WouldYouRather

@@ -40,7 +40,8 @@
     export let messages: ChatMessage[] = []
     export let mic: boolean
     export let gamesMode: boolean
-    export let showMessageInput: boolean
+    export let showTextInput: boolean
+    export let handleSubmit: (message: string) => boolean
     export let handleToggleGamesMode: () => void
     export let handleToggleVoice: () => void
     export let handleJoinCall: () => Promise<boolean>
@@ -52,8 +53,7 @@
     export let historySizeMax: number = 1
     export let historyCheckMax: number = 50
 
-    const { joinedRoom: joinedChatRoom, sendMessage } =
-        getContext<ChatContext>(CHAT_CONTEXT)
+    const { joinedRoom: joinedChatRoom } = getContext<ChatContext>(CHAT_CONTEXT)
 
     const { joinedRoom: joinedCallRoom, joining: joiningCall } =
         getContext<WebrtcContext>(WEBRTC_CONTEXT)
@@ -92,16 +92,14 @@
         }
     }
 
-    function handleSendMessage(): void {
+    function handleFormSubmit() {
         focusChatMessageInput()
         const trimmedMsg = msg.trim()
-
         if (!trimmedMsg) {
             msg = ""
             return
         }
-        const sent = sendMessage(trimmedMsg, $currentUserUuid)
-        if (sent) {
+        if (handleSubmit(trimmedMsg)) {
             msg = ""
         }
     }
@@ -170,7 +168,7 @@
                             showVoicePopup = false
                             handleLeaveCall()
                         }}
-                        className="w-full justify-center items-center"
+                        className="w-full justify-center items-center mt-1"
                         ><Localized id="chat-submit-form-voice-leave-call" />
                     </ButtonLarge>{#if $joinedCallRoom !== $groupUuid}<ButtonLarge
                             tag="button"
@@ -180,7 +178,7 @@
                                 showVoicePopup = false
                                 handleToggleVoice()
                             }}
-                            className="w-full justify-center items-center"
+                            className="w-full justify-center items-center mt-1"
                             ><Localized
                                 id="chat-submit-form-voice-switch-call"
                             />
@@ -209,14 +207,14 @@
         </div>
     {/if}
     <form
-        on:submit|preventDefault={handleSendMessage}
+        on:submit|preventDefault={handleFormSubmit}
         class={`submit-form items-center ${
-            showMessageInput ? "justify-end" : "justify-around"
+            showTextInput ? "justify-end" : "justify-around"
         }`}
     >
         {#if $groupChatStore.data && $currentGroupIsGlobal && !$currentUserIsGroupMember}
             <ButtonLarge
-                className="ml-4 px-6 w-full justify-center"
+                className="ml-4 mt-1 px-6 w-full justify-center"
                 tag="button"
                 on:click={async () => {
                     const res = await joinGlobalGroup({
@@ -233,7 +231,7 @@
                 ><Localized id="chat-submit-form-join-group" />
             </ButtonLarge>
         {:else if $joinedChatRoom}
-            <div class="flex sm:hidden" class:w-full={!showMessageInput}>
+            <div class="flex sm:hidden" class:w-full={!showTextInput}>
                 <ButtonSmall
                     tag="button"
                     variant="FILLED"
@@ -245,7 +243,7 @@
                         handleToggleGamesMode()
                     }}
                     className={`m-0 ml-0 mr-0 toggle-games-button items-center justify-center flex flex-row${
-                        showMessageInput ? "" : " w-full"
+                        showTextInput ? "" : " w-full"
                     }`}
                     ><div class="grid" style="width: 32px; height: 32px;">
                         {#if gamesMode}<svg
@@ -274,7 +272,7 @@
                                 />
                             </svg>{/if}
                     </div>
-                    {#if !showMessageInput}<span class="ml-1"
+                    {#if !showTextInput}<span class="ml-1"
                             ><Localized id="chat-submit-form-chat" /></span
                         >{/if}
                 </ButtonSmall>
@@ -288,8 +286,10 @@
                         }
                         showVoicePopup = !showVoicePopup
                     }}
-                    className={`m-0 ml-1 mr-0 relative justify-center items-center${
-                        showMessageInput ? "" : " w-full"
+                    className={`m-0 ${
+                        showTextInput ? "mr-0" : " mr-1"
+                    } ml-1 mt-1 relative justify-center items-center${
+                        showTextInput ? "" : " w-full"
                     }`}
                 >
                     {#if $joiningCall}
@@ -308,12 +308,12 @@
                                 <CornerRightUpIcon size="16" />
                             </div>{/if}
                     {/if}
-                    {#if !showMessageInput}<span class="ml-1"
+                    {#if !showTextInput}<span class="ml-1"
                             ><Localized id="chat-submit-form-voice" /></span
                         >{/if}
                 </ButtonSmall>
             </div>
-            {#if showMessageInput}
+            {#if showTextInput}
                 <Localized id="chat-submit-form-input" let:attrs>
                     <input
                         id={sendMessageInputId}
@@ -340,13 +340,13 @@
                     tag="button"
                     variant="TEXT"
                     color="SECONDARY"
-                    on:click={handleSendMessage}
+                    on:click={handleFormSubmit}
                     ><ChevronsRightIcon size="28" /></ButtonSmall
                 >
             {/if}
         {:else}
             <div
-                class="w-full h-full font-bold text-center text-lg text-gray-bitdark"
+                class="w-full h-full font-bold text-center text-lg text-gray-bitdark font-secondary"
                 style="padding-top: 7px; padding-bottom: 7px;"
             >
                 <Localized id="chat-submit-form-connecting" />
@@ -429,15 +429,15 @@
     }
 
     .voice-popup .inner {
-        @apply py-2;
+        @apply pt-1;
+        @apply pb-2;
         @apply px-2;
-        @apply rounded-md;
         @apply flex;
         @apply flex-col;
         @apply items-center;
         @apply justify-center;
         @apply w-full;
-        @apply bg-white;
+        @apply bg-gray-lightest;
     }
 
     @media (max-width: 700px) {

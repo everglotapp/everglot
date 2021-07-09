@@ -50,7 +50,6 @@
     import type { GroupActivity } from "../types/activities"
     import pannable, { Direction } from "./_helpers/pannable"
     import type { SwipeEvent } from "./_helpers/pannable"
-    import App from "svelte-emoji-selector/examples/src/App.svelte"
 
     let messages: ChatMessage[] = []
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
@@ -65,7 +64,11 @@
         isInCall,
     } = webrtc
     const chat = getContext<ChatContext>(CHAT_CONTEXT)
-    const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
+    const {
+        connected: connectedToChat,
+        joinedRoom: joinedChatRoom,
+        sendMessage,
+    } = chat
 
     const { page } = sapperStores()
 
@@ -207,9 +210,16 @@
         chat.switchRoom($groupUuid)
     }
 
+    function handleSendActivityText(text: string) {
+        if (!sidePanel) {
+            return false
+        }
+        return sidePanel.handleSendText(text)
+    }
+
     const ACTIVITY_KINDS_SUPPORTING_TEXT_INPUT: readonly GroupActivityKind[] = [
-        GroupActivityKind.HANGMAN,
-        GroupActivityKind.GUESS_CHARACTER,
+        GroupActivityKind.Hangman,
+        GroupActivityKind.GuessCharacter,
     ] as const
 
     function handleWelcome({
@@ -400,6 +410,8 @@
             )
         }*/
     }
+
+    let sidePanel: SidePanel | undefined
 </script>
 
 <Localized id="chat-browser-window-title" let:text>
@@ -536,10 +548,14 @@
                                 }}
                             >
                                 {#if $groupUuid !== null && currentActivityGroupUuid === $groupUuid}
-                                    <SidePanel activity={currentActivity} />
+                                    <SidePanel
+                                        activity={currentActivity}
+                                        bind:this={sidePanel}
+                                    />
                                 {/if}
                                 <BottomBar
-                                    showMessageInput={$groupUuid !== null &&
+                                    handleSubmit={handleSendActivityText}
+                                    showTextInput={$groupUuid !== null &&
                                         currentActivityGroupUuid ===
                                             $groupUuid &&
                                         currentActivity !== null &&
@@ -601,9 +617,11 @@
                                         {isOwnMessage}
                                     />
                                     <BottomBar
-                                        showMessageInput={true}
+                                        showTextInput={true}
                                         {mic}
                                         gamesMode={!split}
+                                        handleSubmit={(msg) =>
+                                            sendMessage(msg, $currentUserUuid)}
                                         handleToggleGamesMode={() =>
                                             (split = !split)}
                                         {handleToggleVoice}
@@ -680,6 +698,10 @@
 
             @apply bottom-0;
             @apply p-0;
+        }
+
+        @screen md {
+            bottom: 70px;
         }
     }
 
@@ -766,7 +788,8 @@
     }
 
     .view-left-inner *:nth-child(2) {
-        @screen sm {
+        /** Hide bottom bar. */
+        @screen md {
             display: none;
         }
     }
@@ -778,6 +801,10 @@
 
         max-width: 100%;
         grid-template-rows: 1fr 50px;
+
+        @screen md {
+            grid-template-rows: 1fr 70px;
+        }
     }
 
     .views.split .view-right-inner {

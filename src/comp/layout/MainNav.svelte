@@ -64,7 +64,7 @@
     function handleClickGroups(event: MouseEvent) {
         event.preventDefault()
         if (userHasPrivateGroups) {
-            showGroupsDropdown = true
+            showGroupsDropdown = !showGroupsDropdown
             return
         }
         if (userHasCompletedProfile) {

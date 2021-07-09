@@ -59,15 +59,15 @@
             AgoraRTC = await import("agora-rtc-sdk-ng")
         }
     }
-    init()
 
-    function createClientIfNotExists() {
+    async function createClientIfNotExists() {
         if (typeof client !== "undefined") {
             return
         }
         if (typeof window === "undefined") {
             return
         }
+        await init()
         client = AgoraRTC.createClient({
             mode: "rtc",
             codec: "vp8",
@@ -76,7 +76,7 @@
 
     async function joinRoom(roomId: string, userId: string): Promise<boolean> {
         if (!client) {
-            createClientIfNotExists()
+            await createClientIfNotExists()
         }
 
         if ($joining) {

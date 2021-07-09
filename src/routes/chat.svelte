@@ -12,7 +12,7 @@
     import Header from "../comp/chat/Header.svelte"
     import SidePanel from "../comp/chat/SidePanel.svelte"
     import Messages from "../comp/chat/Messages.svelte"
-    import SubmitForm from "../comp/chat/SubmitForm.svelte"
+    import BottomBar from "../comp/chat/BottomBar.svelte"
     import { CHAT_CONTEXT } from "../comp/util/ChatProvider.svelte"
     import type { ChatContext } from "../comp/util/ChatProvider.svelte"
     import { WEBRTC_CONTEXT } from "../comp/util/WebrtcProvider.svelte"
@@ -46,9 +46,11 @@
     import { makeChatMessagePreview } from "../types/chat"
     import type { ChatMessage, ChatMessagePreview } from "../types/chat"
 
+    import { GroupActivityKind } from "../types/activities"
     import type { GroupActivity } from "../types/activities"
     import pannable, { Direction } from "./_helpers/pannable"
     import type { SwipeEvent } from "./_helpers/pannable"
+    import App from "svelte-emoji-selector/examples/src/App.svelte"
 
     let messages: ChatMessage[] = []
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
@@ -204,6 +206,11 @@
 
         chat.switchRoom($groupUuid)
     }
+
+    const ACTIVITY_KINDS_SUPPORTING_TEXT_INPUT: readonly GroupActivityKind[] = [
+        GroupActivityKind.HANGMAN,
+        GroupActivityKind.GUESS_CHARACTER,
+    ] as const
 
     function handleWelcome({
         userUuid,
@@ -531,6 +538,25 @@
                                 {#if $groupUuid !== null && currentActivityGroupUuid === $groupUuid}
                                     <SidePanel activity={currentActivity} />
                                 {/if}
+                                <BottomBar
+                                    showMessageInput={$groupUuid !== null &&
+                                        currentActivityGroupUuid ===
+                                            $groupUuid &&
+                                        currentActivity !== null &&
+                                        ACTIVITY_KINDS_SUPPORTING_TEXT_INPUT.includes(
+                                            currentActivity.kind
+                                        )}
+                                    {mic}
+                                    gamesMode={!split}
+                                    handleToggleGamesMode={() =>
+                                        (split = !split)}
+                                    {handleToggleVoice}
+                                    {handleJoinCall}
+                                    {handleLeaveCall}
+                                    historySizeMax={0}
+                                    historyCheckMax={0}
+                                    className="sm:hidden"
+                                />
                                 <div
                                     class="toggle-split-screen"
                                     on:click={() => (split = false)}
@@ -574,14 +600,16 @@
                                         {fetchMoreMessages}
                                         {isOwnMessage}
                                     />
-                                    <SubmitForm
-                                        {isOwnMessage}
+                                    <BottomBar
+                                        showMessageInput={true}
                                         {mic}
-                                        handleToggleGames={() =>
+                                        gamesMode={!split}
+                                        handleToggleGamesMode={() =>
                                             (split = !split)}
                                         {handleToggleVoice}
                                         {handleJoinCall}
                                         {handleLeaveCall}
+                                        {isOwnMessage}
                                     />
                                 </div>
                             {/key}
@@ -729,6 +757,18 @@
     .view-left-inner {
         @apply border-r;
         @apply border-gray-lightest;
+
+        grid-template-rows: 1fr 50px;
+
+        @screen sm {
+            grid-template-rows: 1fr 0;
+        }
+    }
+
+    .view-left-inner *:nth-child(2) {
+        @screen sm {
+            display: none;
+        }
     }
 
     .view-right-inner {

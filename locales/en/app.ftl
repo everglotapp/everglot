@@ -81,11 +81,13 @@ chat-submit-form-connecting = Connecting …
 # Chat text message input field
 chat-submit-form-input = { "" }
     .placeholder = Enter text message …
+chat-submit-form-voice = Audio
 chat-submit-form-voice-join-call = Join Call
 chat-submit-form-voice-leave-call = Leave Call
 chat-submit-form-voice-switch-call = Switch Call
 chat-submit-form-voice-mute = Mute
 chat-submit-form-voice-unmute = Unmute
+chat-submit-form-chat = Chat
 chat-message-username-unknown = unknown
 chat-message-show-less = Show less
 chat-message-show-more = Show more

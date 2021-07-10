@@ -65,7 +65,7 @@
 </script>
 
 {#key $groupUuid}
-    <div class="sidebar">
+    <div class="wrapper">
         <div class="users-container py-3 px-4 text-lg w-full mb-4">
             <Headline3><Localized id="chat-sidebar-members" /></Headline3>
             <GroupMembers />
@@ -245,7 +245,7 @@
 {/key}
 
 <style>
-    .sidebar {
+    .wrapper {
         @apply rounded-tl-md;
         @apply flex;
         @apply flex-col;

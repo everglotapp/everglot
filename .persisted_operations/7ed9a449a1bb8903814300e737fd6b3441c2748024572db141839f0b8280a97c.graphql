@@ -1,0 +1,36 @@
+query GroupMessageNotification($groupUuid: UUID!, $senderUuid: UUID!) {
+  groupByUuid(uuid: $groupUuid) {
+    groupUsers {
+      nodes {
+        user {
+          uuid
+          userDevices {
+            nodes {
+              fcmToken
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    groupName
+    uuid
+    language {
+      alpha2
+      __typename
+    }
+    languageSkillLevel {
+      name
+      __typename
+    }
+    __typename
+  }
+  userByUuid(uuid: $senderUuid) {
+    username
+    __typename
+  }
+}

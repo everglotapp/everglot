@@ -4,6 +4,9 @@
 yarn-error.log
 /__sapper__/
 /static/global.css
+/static/fonts/poppins.css
+/static/fonts/noto-sans.css
+/static/fonts/noto-sans-sc.css
 /dynamic/
 .env
 /src/graphql.server.json

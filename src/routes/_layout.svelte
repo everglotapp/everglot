@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
+    import { goto } from "@sapper/app"
     import { v4 as uuidv4 } from "uuid"
 
     import { setupUrql } from "./_helpers/urql"
@@ -34,6 +35,20 @@
     onMount(() => {
         // TODO: is this really necessary?
         segment = window.location.pathname.split("/")[1]
+
+        window.addEventListener(
+            "everglotGoto",
+            (event: CustomEvent<{ path: string }>) => {
+                if (!event || !event.detail || !event.detail.path) {
+                    return
+                }
+                const { path } = event.detail
+                if (typeof path !== "string" || !path.length) {
+                    return
+                }
+                goto(path)
+            }
+        )
     })
 
     const timeout = 150

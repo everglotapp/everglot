@@ -202,7 +202,7 @@
 
         if (fetchGroupMetadataInterval === null) {
             const FETCH_GROUP_METADATA_INTERVAL_SECS = 30
-            fetchGroupMetadataInterval = setInterval(
+            fetchGroupMetadataInterval = window.setInterval(
                 () => fetchGroupMetadata({ groupUuid: $groupUuid }),
                 FETCH_GROUP_METADATA_INTERVAL_SECS * 1000
             )
@@ -360,7 +360,9 @@
 
     function handleBeforeunload(): void {
         if ($joinedCallRoom) {
-            chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
+            chat.emit("userLeaveCall", {
+                groupUuid: $joinedCallRoom,
+            })
         }
         chat.leaveRoom()
         chat.disconnect()

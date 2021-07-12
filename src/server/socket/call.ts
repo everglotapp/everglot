@@ -25,7 +25,7 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 .error("Failed to get group call user metadata")
             return
         }
-        if (!authenticateUserInGroup(userId, groupUuid)) {
+        if (!(await authenticateUserInGroup(userId, groupUuid))) {
             chlog
                 .child({ userId, groupUuid })
                 .debug("User is not in group but tried to join call")
@@ -49,13 +49,15 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 .error("Failed to get group call user metadata")
             return
         }
-        if (!authenticateUserInGroup(userId, groupUuid)) {
-            chlog
-                .child({ userId, groupUuid, userMeta })
-                .debug("User is not in group but tried to leave call")
-            return
+        if (groupUuid !== null) {
+            if (!(await authenticateUserInGroup(userId, groupUuid))) {
+                chlog
+                    .child({ userId, groupUuid, userMeta })
+                    .debug("User is not in group but tried to leave call")
+                return
+            }
         }
-        const userLeaving = userLeave(userMeta.uuid, groupUuid)
+        const userLeaving = userLeave(userMeta.uuid, groupUuid as string)
         if (!userLeaving) {
             chlog
                 .child({ userId, groupUuid, userMeta })
@@ -88,7 +90,7 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
                 return
             }
             const { uuid: userUuid } = userMeta
-            if (!authenticateUserInGroup(userId, groupUuid)) {
+            if (!(await authenticateUserInGroup(userId, groupUuid))) {
                 chlog
                     .child({ userId, userUuid, groupUuid })
                     .debug("User is not in group but tried to join call")
@@ -159,7 +161,7 @@ function userLeave(userUuid: string, groupUuid: string) {
 
     if (!existingUser) {
         chlog
-            .child({ userUuid, groupUuid })
+            .child({ userUuid, groupUuid, users })
             .debug("User is not in group call, preventing leave")
         return false
     }
@@ -167,11 +169,18 @@ function userLeave(userUuid: string, groupUuid: string) {
         chlog
             .child({ userUuid, groupUuid, existingUser })
             .debug(
-                "User is leaving group call but for a different group than the one in whose call they are. " +
-                    "We're letting them leave that call anyways."
+                groupUuid === null
+                    ? "User is leaving group call but they didn't say which group that call was in." +
+                          "We're letting them leave that call anyways."
+                    : "User is leaving group call but for a different group than the one in whose call they are. " +
+                          "We're letting them leave that call anyways."
             )
     }
-    return users.splice(index, 1)[0]
+    const removedUser = users.splice(index, 1)[0]
+    chlog
+        .child({ userUuid, groupUuid, removedUser, users })
+        .debug("Successfully removed user from voice call")
+    return removedUser
 }
 
 function userUpdateMeta(
@@ -187,7 +196,7 @@ function userUpdateMeta(
     if (index === -1) {
         chlog
             .child({ userUuid, groupUuid })
-            .debug("User is not in group call, preventing leave")
+            .debug("User is not in group call, preventing call meta update")
         return false
     } else {
         users[index] = {

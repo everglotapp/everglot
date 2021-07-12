@@ -44,10 +44,14 @@ export function start(server: Server, pool: Pool) {
             const userId = session.user_id
             const userMeta = await getChatUserByUserId(userId)
             if (!userMeta) {
+                chlog.child({ userId }).warn("Failed to retrieve user meta")
                 return
             }
 
-            if (!authenticateUserInGroup(userId, groupUuid)) {
+            if (!(await authenticateUserInGroup(userId, groupUuid))) {
+                chlog
+                    .child({ userId, groupUuid })
+                    .debug("User is not authorized to join this group")
                 return
             }
 
@@ -111,7 +115,7 @@ export function start(server: Server, pool: Pool) {
                 }
                 const { uuid: userUuid } = userMeta
 
-                if (!authenticateUserInGroup(userId, groupUuid)) {
+                if (!(await authenticateUserInGroup(userId, groupUuid))) {
                     return
                 }
 

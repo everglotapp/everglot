@@ -29,4 +29,6 @@ export async function authenticateUserInGroup(
             .debug("Group doesn't exist or user is not part of group")
         return false
     }
+
+    return true
 }

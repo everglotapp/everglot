@@ -16,10 +16,14 @@
     }
 </script>
 
-<div class="wrapper inline-flex relative" class:hideInput>
+<div
+    class="wrapper inline-flex relative w-32"
+    class:hideInput
+    class:hasItems={selected !== null && selected.length > 0}
+>
     <Select
         {items}
-        selectedValue={selected}
+        value={selected}
         on:select={handleSelect}
         isMulti={true}
         {placeholder}
@@ -42,6 +46,7 @@
         --multiItemBG: theme("colors.primary.DEFAULT");
         --multiItemActiveBG: theme("colors.primary.DEFAULT");
         --multiItemActiveColor: theme("colors.white");
+        --multiItemPadding: 0 8px;
         --placeholderColor: theme("colors.gray.bitdark");
         --itemColor: theme("colors.primary.DEFAULT");
         --multiItemBorderRadius: theme("borderRadius.lg");
@@ -62,7 +67,10 @@
     }
 
     .wrapper :global(.selectContainer) {
-        @apply pr-4;
+        row-gap: 4px;
+
+        @apply flex-nowrap;
+        @apply pr-10;
     }
 
     .wrapper :global(.selectContainer.focused) {
@@ -92,7 +100,39 @@
     .wrapper:not(.hideInput)
         :global(.selectContainer .multiSelectItem + input) {
         border-left: 2px solid theme("colors.primary.DEFAULT");
-        @apply rounded-none pl-2;
+        min-width: 3rem;
+
+        @apply pl-2;
+        @apply rounded-none;
+        @apply relative;
+    }
+
+    .wrapper.hasItems:not(.hideInput)
+        :global(.multiSelect:not(.focused)::before) {
+        animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s
+            infinite;
+        background: theme("colors.primary.DEFAULT");
+        border-radius: 50%;
+        content: "";
+        position: absolute;
+        right: 3.65rem;
+        top: 16px;
+        width: 10px;
+        height: 10px;
+    }
+
+    .wrapper.hasItems:not(.hideInput)
+        :global(.multiSelect:not(.focused)::after) {
+        background: theme("colors.primary.DEFAULT");
+        animation: pulse-ring 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s
+            infinite;
+        border-radius: 50%;
+        content: "";
+        position: absolute;
+        right: 3rem;
+        top: 6px;
+        width: 30px;
+        height: 30px;
     }
 
     .wrapper :global(.selectContainer.focused input),
@@ -106,5 +146,27 @@
     .wrapper :global(.listContainer .listItem .item) {
         @apply cursor-pointer;
         @apply font-secondary;
+    }
+
+    @keyframes pulse-ring {
+        0% {
+            transform: scale(0.33);
+        }
+        80%,
+        100% {
+            opacity: 0;
+        }
+    }
+
+    @keyframes pulse-dot {
+        0% {
+            transform: scale(0.8);
+        }
+        50% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale(0.8);
+        }
     }
 </style>

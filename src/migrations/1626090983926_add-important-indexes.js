@@ -15,6 +15,7 @@ exports.up = (pgm) => {
 }
 
 exports.down = (pgm) => {
+    pgm.dropIndex({ schema: "app_public", name: "users" }, "google_id")
     pgm.dropIndex({ schema: "app_public", name: "invite_tokens" }, "user_id")
     pgm.dropIndex(
         { schema: "app_public", name: "groups" },
@@ -23,5 +24,4 @@ exports.down = (pgm) => {
     pgm.dropIndex({ schema: "app_public", name: "groups" }, "language_id")
     pgm.dropIndex({ schema: "app_public", name: "group_users" }, "group_id")
     pgm.dropIndex({ schema: "app_public", name: "group_users" }, "user_id")
-    pgm.dropIndex({ schema: "app_public", name: "users" }, "google_id")
 }

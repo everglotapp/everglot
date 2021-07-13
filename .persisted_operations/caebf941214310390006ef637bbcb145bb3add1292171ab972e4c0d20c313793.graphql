@@ -1,0 +1,15 @@
+query AdminEmailsFcmTokens($in: [String!]!) {
+  users(filter: {email: {in: $in}}) {
+    nodes {
+      userDevices {
+        nodes {
+          fcmToken
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

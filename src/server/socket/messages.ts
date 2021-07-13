@@ -38,7 +38,7 @@ import {
 } from "../constants"
 import { getCurrentUser } from "./users"
 import { getGroupIdByUuid, getGroupLanguageByUuid } from "../groups"
-import { notifyMessageRecipients } from "../notifications"
+import { notifyMessageRecipients } from "../notifications/messages"
 
 export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     socket.on("chatMessage", async (msg) => {

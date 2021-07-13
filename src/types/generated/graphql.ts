@@ -9218,6 +9218,28 @@ export enum UsersOrderBy {
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
+export type AdminEmailsFcmTokensQueryVariables = Exact<{
+  in: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type AdminEmailsFcmTokensQuery = (
+  { __typename?: 'Query' }
+  & { users?: Maybe<(
+    { __typename?: 'UsersConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'User' }
+      & { userDevices: (
+        { __typename?: 'UserDevicesConnection' }
+        & { nodes: Array<Maybe<(
+          { __typename?: 'UserDevice' }
+          & Pick<UserDevice, 'fcmToken'>
+        )>> }
+      ) }
+    )>> }
+  )> }
+);
+
 export type AllGroupUuidsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -9806,6 +9828,19 @@ export type UserUuidByIdQuery = (
 );
 
 
+export const AdminEmailsFcmTokens = gql`
+    query AdminEmailsFcmTokens($in: [String!]!) {
+  users(filter: {email: {in: $in}}) {
+    nodes {
+      userDevices {
+        nodes {
+          fcmToken
+        }
+      }
+    }
+  }
+}
+    `;
 export const AllGroupUuids = gql`
     query AllGroupUuids {
   groups {

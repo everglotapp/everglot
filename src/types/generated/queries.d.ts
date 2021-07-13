@@ -1,4 +1,13 @@
 
+declare module '*/adminEmailsFcmTokens.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const AdminEmailsFcmTokens: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/allGroupUuids.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

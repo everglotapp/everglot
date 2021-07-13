@@ -12,6 +12,7 @@ import type { Request, Response } from "express"
 import { ensureJson, serverError } from "../helpers"
 
 import { createDatabasePool } from "../server/db"
+import { notifyAdminsOfSignUp } from "../server/notifications/admin"
 
 export async function get(req: Request, res: Response, next: () => void) {
     if (!req.session.user_id) {
@@ -176,6 +177,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             res.status(200).json({
                 success: true,
             })
+            notifyAdminsOfSignUp(req.body.username)
         } catch (e) {
             await client.query("ROLLBACK")
             throw e

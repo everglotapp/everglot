@@ -1,13 +1,9 @@
-import { performQuery } from "./gql"
-import { getApp } from "./firebase"
-import log from "../logger"
+import { performQuery } from "../gql"
+import { getApp } from "../firebase"
+import log from "../../logger"
 
-import type {
-    CreateUserDeviceMutation,
-    CreateUserDeviceMutationVariables,
-    GroupMessageNotificationQuery,
-} from "../types/generated/graphql"
-import type { ChatMessage } from "../types/chat"
+import type { GroupMessageNotificationQuery } from "../../types/generated/graphql"
+import type { ChatMessage } from "../../types/chat"
 
 const chlog = log.child({ namespace: "notifications" })
 
@@ -167,27 +163,4 @@ class GroupMessageNotification {
         }
         this.queryResult = res.data || null
     }
-}
-
-export async function createUserDevice(
-    userDevice: CreateUserDeviceMutationVariables
-): Promise<CreateUserDeviceMutation["createUserDevice"] | null> {
-    const res = await performQuery<CreateUserDeviceMutation>(
-        `mutation CreateUserDevice($userId: Int!, $fcmToken: String) {
-            createUserDevice(
-                input: { userDevice: { userId: $userId, fcmToken: $fcmToken } }
-            ) {
-                userDevice {
-                    uuid
-                    fcmToken
-                    id
-                }
-            }
-        }`,
-        { ...userDevice }
-    )
-    if (!res.data) {
-        return null
-    }
-    return res.data?.createUserDevice
 }

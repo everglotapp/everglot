@@ -16,6 +16,8 @@
     import ChatProvider from "../comp/util/ChatProvider.svelte"
     import { showChatSidebarDrawer } from "../stores/chat"
     import { showSwitchCallModal } from "../stores/call"
+    import { MOBILE_APP_USER_AGENTS } from "../constants"
+    import { userAgentIsMobileApp } from "../stores"
 
     setupUrql()
 
@@ -49,6 +51,16 @@
                 goto(path)
             }
         )
+
+        if (
+            typeof navigator !== "undefined" &&
+            navigator &&
+            navigator.userAgent
+        ) {
+            $userAgentIsMobileApp = (
+                MOBILE_APP_USER_AGENTS as readonly string[]
+            ).includes(navigator.userAgent)
+        }
     })
 
     const timeout = 150

@@ -23,7 +23,11 @@
     import { WEBRTC_CONTEXT } from "../util/WebrtcProvider.svelte"
     import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
 
-    import { userHasCompletedProfile, groupUuid } from "../../stores"
+    import {
+        userHasCompletedProfile,
+        groupUuid,
+        userAgentIsMobileApp,
+    } from "../../stores"
     import { currentUser, currentUserStore } from "../../stores/currentUser"
     import { allGroupsStore, privateGroups } from "../../stores/groups"
     import {
@@ -31,9 +35,7 @@
         currentGroupIsGlobal,
     } from "../../stores/chat"
     import {
-        ANDROID_WEBVIEW_USER_AGENT,
         EVERGLOT_WEBSITE_BASE_URL,
-        IOS_WEBVIEW_USER_AGENT,
         SIDEBAR_MENU_ICON_BUTTON_ID,
     } from "../../constants"
 
@@ -413,7 +415,7 @@
                                                 >
                                             </div>
                                         {/if}
-                                        {#if typeof navigator !== "undefined" && navigator && navigator.userAgent && ![IOS_WEBVIEW_USER_AGENT, ANDROID_WEBVIEW_USER_AGENT].includes(navigator.userAgent)}
+                                        {#if !$userAgentIsMobileApp}
                                             <hr class="mt-2" />
                                             <div>
                                                 <ButtonSmall
@@ -532,6 +534,23 @@
                                             </div>
                                         {/if}
                                         <hr />
+                                        <div>
+                                            <ButtonSmall
+                                                variant="TEXT"
+                                                color="PRIMARY"
+                                                tag="a"
+                                                className="w-full"
+                                                href="https://survey.everglot.com/index.php/381849"
+                                                target={$userAgentIsMobileApp
+                                                    ? "_blank"
+                                                    : "_self"}
+                                                ><span class="mr-1"
+                                                    ><Localized
+                                                        id="main-nav-feedback"
+                                                    /></span
+                                                ></ButtonSmall
+                                            >
+                                        </div>
                                         <div>
                                             <ButtonSmall
                                                 variant="TEXT"

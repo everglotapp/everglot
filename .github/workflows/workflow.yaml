@@ -91,6 +91,12 @@ jobs:
             - name: Inject Agora Certificate from Github Secrets
               run: kubectl create secret generic agora --from-literal=agora-app-certificate='${{ secrets.AGORA_APP_CERTIFICATE }}'
 
+            - name: Delete Admin Emails from Kubernetes Secrets if existed
+              run: kubectl delete secret adminemails --ignore-not-found
+
+            - name: Inject Admin Emails from Github Secrets
+              run: kubectl create secret generic adminemails --from-literal=admin-emails='${{ secrets.ADMIN_EMAILS }}'
+
             - name: Deploy Config to DigitalOcean Kubernetes
               run: kubectl apply -f $GITHUB_WORKSPACE/k8s-setup/everglot/service-deployment.yml
 

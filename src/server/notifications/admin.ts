@@ -7,26 +7,6 @@ const chlog = log.child({ namespace: "admin-notifications" })
 
 const { ADMIN_EMAILS = "[]" } = process.env
 
-export async function notifyAdminsOfNewUser() {
-    const tokens = await getAdminFcmTokens()
-    if (!tokens.length) {
-        chlog.trace(
-            "Admin new user registration notification could not be sent because there are no relevant FCM tokens to send to"
-        )
-        return
-    }
-    const multicastMessage = {
-        tokens,
-        notification: {
-            title: `New user registered`,
-        },
-    }
-    chlog
-        .child({ multicastMessage })
-        .debug("Dispatching admin new user registration message notification")
-    getApp().messaging().sendMulticast(multicastMessage)
-}
-
 export async function notifyAdminsOfSignUp(username: string) {
     const tokens = await getAdminFcmTokens()
     if (!tokens.length) {

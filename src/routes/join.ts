@@ -26,7 +26,6 @@ const BCRYPT_WORK_FACTOR = 14
 
 import type { Request, Response } from "express"
 import type { Maybe } from "../types/generated/graphql"
-import { notifyAdminsOfNewUser } from "../server/notifications/admin"
 
 type InvalidEmailReason = "smtp" | "regex" | "typo" | "mx" | "disposable"
 
@@ -295,6 +294,4 @@ export async function post(req: Request, res: Response, _next: () => void) {
             res.status(200).json({ success: true })
         }
     })
-
-    notifyAdminsOfNewUser()
 }

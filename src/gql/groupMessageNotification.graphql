@@ -1,5 +1,5 @@
-query GroupMessageNotification($uuid: UUID!) {
-    groupByUuid(uuid: $uuid) {
+query GroupMessageNotification($groupUuid: UUID!, $senderUuid: UUID!) {
+    groupByUuid(uuid: $groupUuid) {
         groupUsers {
             nodes {
                 user {
@@ -13,5 +13,15 @@ query GroupMessageNotification($uuid: UUID!) {
             }
         }
         groupName
+        uuid
+        language {
+            alpha2
+        }
+        languageSkillLevel {
+            name
+        }
+    }
+    userByUuid(uuid: $senderUuid) {
+        username
     }
 }

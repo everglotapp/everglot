@@ -1,4 +1,4 @@
-import log from "roarr"
+import { Roarr as log } from "roarr"
 
 const Logger = log.child({
     namespace: "everglot",

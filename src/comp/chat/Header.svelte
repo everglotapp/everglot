@@ -42,6 +42,7 @@
         @apply text-white;
         @apply shadow-sm;
         @apply p-0;
+        @apply overflow-hidden;
 
         @screen md {
             @apply h-auto;

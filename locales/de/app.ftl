@@ -87,6 +87,7 @@ main-nav-invite-friends = Freunde einladen
 main-nav-logout = Abmelden
 main-nav-go-to-call = Zum Anruf gehen
 main-nav-privacy = Datenschutz
+main-nav-feedback = Feedback geben
 
 ## Signup successful page
 

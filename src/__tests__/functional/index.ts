@@ -5,6 +5,10 @@ import {
     createUser,
     login,
     sessionCookieHeader,
+    getLanguage,
+    createUserLanguage,
+    TestLanguage,
+    getAppUrl,
 } from "../utils"
 import type { TestUser } from "../utils"
 import { start } from "../../server/gql"
@@ -14,6 +18,7 @@ import type { Maybe } from "../../types/generated/graphql"
 
 describe("index route", () => {
     let exampleUser: Maybe<TestUser> = null
+    let english: Maybe<TestLanguage> = null
 
     let db: Pool = new Pool()
 
@@ -37,6 +42,8 @@ describe("index route", () => {
         await seedDatabase(db)
 
         exampleUser = await createUser()
+        english = await getLanguage({ alpha2: "en" })
+        expect(english).toBeTruthy()
     })
 
     afterEach(async () => {
@@ -48,9 +55,10 @@ describe("index route", () => {
             redirect: "manual",
         })
         expect(res.status).toBe(302)
+        expect(res.headers.get("location")).toBe(getAppUrl("/login"))
     })
 
-    test("GET works when signed in", async () => {
+    test("GET redirects when signed in but profile has not been set up", async () => {
         await signIn()
         const res = await fetch("/", {
             headers: {
@@ -58,6 +66,25 @@ describe("index route", () => {
             },
             redirect: "manual",
         })
-        expect(res.status).toBe(200)
+        expect(res.status).toBe(302)
+        expect(res.headers.get("location")).toBe(getAppUrl("/signup"))
+    })
+
+    test("GET redirects when signed in and profile has been set up", async () => {
+        await signIn()
+        await createUserLanguage({
+            userId: exampleUser!.id,
+            languageId: english!.id,
+            native: true,
+            languageSkillLevelId: null,
+        })
+        const res = await fetch("/", {
+            headers: {
+                cookie: sessionCookieHeader(sessionCookie),
+            },
+            redirect: "manual",
+        })
+        expect(res.status).toBe(302)
+        expect(res.headers.get("location")).toBe(getAppUrl("/global"))
     })
 })

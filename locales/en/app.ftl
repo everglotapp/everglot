@@ -81,6 +81,15 @@ chat-submit-form-connecting = Connecting …
 # Chat text message input field
 chat-submit-form-input = { "" }
     .placeholder = Enter text message …
+chat-activity-text-input = { "" }
+    .placeholder = Enter your guess …
+chat-submit-form-voice = Audio
+chat-submit-form-voice-join-call = Join Call
+chat-submit-form-voice-leave-call = Leave Call
+chat-submit-form-voice-switch-call = Switch Call
+chat-submit-form-voice-mute = Mute
+chat-submit-form-voice-unmute = Unmute
+chat-submit-form-chat = Chat
 chat-message-username-unknown = unknown
 chat-message-show-less = Show less
 chat-message-show-more = Show more
@@ -95,6 +104,10 @@ main-nav-invite-friends = Invite Friends
 main-nav-logout = Logout
 main-nav-go-to-call = Go to Call
 main-nav-privacy = Privacy
+main-nav-download-app-ios = iOS App
+main-nav-download-app-android = Android App
+main-nav-feedback = Give Feedback
+main-nav-continue = Continue
 
 ## Signup successful page
 
@@ -102,6 +115,8 @@ signup-success-browser-window-title = Success – { -brand-name }
 signup-success-title = Success!
 signup-success-msg = Thank you for being among the first to try out our prototype! Stand by while we sort you into a study group. This may take awhile.  We will notify you via app notifications or by email once this process is complete.
 signup-success-explore = Explore Global Channel
+signup-success-download-app-ios = Download Everglot for iOS
+signup-success-download-app-android = Download Everglot for Android
 
 ## Invite Modal
 

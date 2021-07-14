@@ -12,7 +12,7 @@
     import Header from "../comp/chat/Header.svelte"
     import SidePanel from "../comp/chat/SidePanel.svelte"
     import Messages from "../comp/chat/Messages.svelte"
-    import SubmitForm from "../comp/chat/SubmitForm.svelte"
+    import BottomBar from "../comp/chat/BottomBar.svelte"
     import { CHAT_CONTEXT } from "../comp/util/ChatProvider.svelte"
     import type { ChatContext } from "../comp/util/ChatProvider.svelte"
     import { WEBRTC_CONTEXT } from "../comp/util/WebrtcProvider.svelte"
@@ -24,6 +24,7 @@
     import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
     import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
     import Modal from "../comp/util/Modal.svelte"
+    import ButtonSmall from "../comp/util/ButtonSmall.svelte"
 
     import { groupUuid } from "../stores"
     import { currentUserUuid, currentChatUserUuid } from "../stores/currentUser"
@@ -33,16 +34,23 @@
         groupChatMessagesStore,
         fetchGroupMetadata,
         fetchGroupChatMessages,
+        currentUserIsGroupMember,
     } from "../stores/chat"
 
-    import { setCallUserMeta, removeUserFromCall } from "../stores/call"
+    import {
+        setCallUserMeta,
+        removeUserFromCall,
+        showSwitchCallModal,
+    } from "../stores/call"
 
     import { makeChatMessagePreview } from "../types/chat"
     import type { ChatMessage, ChatMessagePreview } from "../types/chat"
 
+    import { GroupActivityKind } from "../types/activities"
     import type { GroupActivity } from "../types/activities"
     import pannable, { Direction } from "./_helpers/pannable"
     import type { SwipeEvent } from "./_helpers/pannable"
+    import { SIDEBAR_MENU_ICON_BUTTON_ID } from "../constants"
 
     let messages: ChatMessage[] = []
     let previews: Record<ChatMessage["uuid"], ChatMessagePreview[]> = {}
@@ -50,9 +58,18 @@
     let currentActivityGroupUuid: string | null = null
 
     const webrtc = getContext<WebrtcContext>(WEBRTC_CONTEXT)
-    const { outgoing, remoteUsers, joinedRoom: joinedCallRoom } = webrtc
+    const {
+        outgoing,
+        remoteUsers,
+        joinedRoom: joinedCallRoom,
+        isInCall,
+    } = webrtc
     const chat = getContext<ChatContext>(CHAT_CONTEXT)
-    const { connected: connectedToChat, joinedRoom: joinedChatRoom } = chat
+    const {
+        connected: connectedToChat,
+        joinedRoom: joinedChatRoom,
+        sendMessage,
+    } = chat
 
     const { page } = sapperStores()
 
@@ -81,6 +98,7 @@
              */
             chat.leaveRoom()
         }
+        $showSwitchCallModal = false
         $groupUuid = group
     })
 
@@ -193,6 +211,18 @@
         chat.switchRoom($groupUuid)
     }
 
+    function handleSendActivityText(text: string) {
+        if (!sidePanel) {
+            return false
+        }
+        return sidePanel.handleSendText(text)
+    }
+
+    const ACTIVITY_KINDS_SUPPORTING_TEXT_INPUT: readonly GroupActivityKind[] = [
+        GroupActivityKind.Hangman,
+        GroupActivityKind.GuessCharacter,
+    ] as const
+
     function handleWelcome({
         userUuid,
     }: {
@@ -288,6 +318,46 @@
         return true
     }
 
+    function handleToggleMic(): void {
+        if (!$outgoing) {
+            return
+        }
+        mic = !mic
+        if (mic) {
+            $outgoing.setVolume(100)
+        } else {
+            $outgoing.setVolume(0)
+        }
+        if (chat && $groupUuid) {
+            const callMeta = {
+                micMuted: !mic,
+                audioMuted: !audio,
+            }
+            chat.emit("userCallMeta", {
+                groupUuid: $groupUuid,
+                callMeta,
+            })
+            if ($currentUserUuid) {
+                // TODO: what if this is not truthy?
+                setCallUserMeta($currentUserUuid, $groupUuid, callMeta)
+            }
+        }
+    }
+
+    function handleToggleVoice(): void {
+        if (!$currentUserIsGroupMember) {
+            return
+        }
+        if (!$isInCall) {
+            return
+        }
+        if ($joinedCallRoom === $groupUuid) {
+            handleToggleMic()
+        } else {
+            $showSwitchCallModal = true
+        }
+    }
+
     function handleBeforeunload(): void {
         if ($joinedCallRoom) {
             chat.emit("userLeaveCall", { groupUuid: $joinedCallRoom })
@@ -341,6 +411,8 @@
             )
         }*/
     }
+
+    let sidePanel: SidePanel | undefined
 </script>
 
 <Localized id="chat-browser-window-title" let:text>
@@ -365,8 +437,13 @@
     {/if}
     {#if $showChatSidebarDrawer && typeof window !== "undefined"}
         <ClickAwayListener
-            elementId="sidebar-drawer-click-catcher"
-            on:clickaway={() => {}}
+            elementId={[
+                "sidebar-drawer-click-catcher",
+                SIDEBAR_MENU_ICON_BUTTON_ID,
+            ]}
+            on:clickaway={() => {
+                $showChatSidebarDrawer = false
+            }}
         />
         <div class="drawer-modal" />
     {/if}
@@ -377,7 +454,7 @@
         class:show-sidebar-drawer={$showChatSidebarDrawer}
     >
         <div
-            class="drawer-wrapper hidden md:flex"
+            class="drawer-wrapper hidden md:flex relative"
             id="sidebar-drawer-click-catcher"
             bind:this={drawerWrapper}
         >
@@ -386,35 +463,7 @@
                 {audio}
                 {mic}
                 handleToggleSplit={() => (split = !split)}
-                handleToggleMic={() => {
-                    if (!$outgoing) {
-                        return
-                    }
-                    mic = !mic
-                    if (mic) {
-                        $outgoing.setVolume(100)
-                    } else {
-                        $outgoing.setVolume(0)
-                    }
-                    if (chat && $groupUuid) {
-                        const callMeta = {
-                            micMuted: !mic,
-                            audioMuted: !audio,
-                        }
-                        chat.emit("userCallMeta", {
-                            groupUuid: $groupUuid,
-                            callMeta,
-                        })
-                        if ($currentUserUuid) {
-                            // TODO: what if this is not truthy?
-                            setCallUserMeta(
-                                $currentUserUuid,
-                                $groupUuid,
-                                callMeta
-                            )
-                        }
-                    }
-                }}
+                {handleToggleMic}
                 handleToggleAudio={() => {
                     audio = !audio
                     for (const remoteUser of $remoteUsers) {
@@ -450,6 +499,38 @@
                 {handleLeaveCall}
             />
         </div>
+        {#if $isInCall && $joinedCallRoom !== $groupUuid && $showSwitchCallModal}
+            <Modal>
+                <div
+                    class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg"
+                >
+                    <p class="mb-6 text-center">
+                        <Localized id="chat-sidebar-switch-call-text" />
+                    </p>
+                    <div class="flex justify-end">
+                        <ButtonSmall
+                            tag="button"
+                            on:click={() => ($showSwitchCallModal = false)}
+                            variant="TEXT"
+                            color="PRIMARY"
+                            ><Localized
+                                id="chat-sidebar-switch-call-cancel"
+                            /></ButtonSmall
+                        >
+                        <ButtonSmall
+                            tag="button"
+                            on:click={async () => {
+                                $showSwitchCallModal = false
+                                handleJoinCall()
+                            }}
+                            ><Localized
+                                id="chat-sidebar-switch-call-confirm"
+                            /></ButtonSmall
+                        >
+                    </div>
+                </div></Modal
+            >
+        {/if}
         <div class="section-wrapper">
             <section>
                 <Header />
@@ -473,8 +554,32 @@
                                 }}
                             >
                                 {#if $groupUuid !== null && currentActivityGroupUuid === $groupUuid}
-                                    <SidePanel activity={currentActivity} />
+                                    <SidePanel
+                                        activity={currentActivity}
+                                        bind:this={sidePanel}
+                                    />
                                 {/if}
+                                <BottomBar
+                                    handleSubmit={handleSendActivityText}
+                                    showTextInput={$groupUuid !== null &&
+                                        currentActivityGroupUuid ===
+                                            $groupUuid &&
+                                        currentActivity !== null &&
+                                        ACTIVITY_KINDS_SUPPORTING_TEXT_INPUT.includes(
+                                            currentActivity.kind
+                                        )}
+                                    {mic}
+                                    gamesMode={!split}
+                                    handleToggleGamesMode={() =>
+                                        (split = !split)}
+                                    {handleToggleVoice}
+                                    {handleJoinCall}
+                                    {handleLeaveCall}
+                                    historySizeMax={0}
+                                    historyCheckMax={0}
+                                    textInputLocalizationId="chat-activity-text-input"
+                                    className="sm:hidden"
+                                />
                                 <div
                                     class="toggle-split-screen"
                                     on:click={() => (split = false)}
@@ -518,7 +623,19 @@
                                         {fetchMoreMessages}
                                         {isOwnMessage}
                                     />
-                                    <SubmitForm {isOwnMessage} />
+                                    <BottomBar
+                                        showTextInput={true}
+                                        {mic}
+                                        gamesMode={!split}
+                                        handleSubmit={(msg) =>
+                                            sendMessage(msg, $currentUserUuid)}
+                                        handleToggleGamesMode={() =>
+                                            (split = !split)}
+                                        {handleToggleVoice}
+                                        {handleJoinCall}
+                                        {handleLeaveCall}
+                                        {isOwnMessage}
+                                    />
                                 </div>
                             {/key}
                         </div>
@@ -578,7 +695,7 @@
         @apply grid;
         @apply h-full;
 
-        bottom: 94px;
+        bottom: 50px;
         grid-template-rows: 0 1fr;
 
         @apply px-3;
@@ -588,6 +705,10 @@
 
             @apply bottom-0;
             @apply p-0;
+        }
+
+        @screen md {
+            bottom: 70px;
         }
     }
 
@@ -665,6 +786,19 @@
     .view-left-inner {
         @apply border-r;
         @apply border-gray-lightest;
+
+        grid-template-rows: 1fr 50px;
+
+        @screen sm {
+            grid-template-rows: 1fr 0;
+        }
+    }
+
+    .view-left-inner *:nth-child(2) {
+        /** Hide bottom bar. */
+        @screen md {
+            display: none;
+        }
     }
 
     .view-right-inner {
@@ -673,7 +807,11 @@
         @apply overflow-x-hidden;
 
         max-width: 100%;
-        grid-template-rows: 1fr 94px;
+        grid-template-rows: 1fr 50px;
+
+        @screen md {
+            grid-template-rows: 1fr 70px;
+        }
     }
 
     .views.split .view-right-inner {

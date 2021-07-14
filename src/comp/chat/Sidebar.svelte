@@ -2,19 +2,19 @@
     import { getContext } from "svelte"
     import { SplitScreen24 } from "carbon-icons-svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { MicIcon } from "svelte-feather-icons"
 
     import GroupMembers from "./GroupMembers.svelte"
 
     import Headline3 from "../typography/Headline3.svelte"
-    import ButtonLarge from "../util/ButtonLarge.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
-    import Modal from "../util/Modal.svelte"
     import Spinner from "../util/Spinner.svelte"
     import { WEBRTC_CONTEXT } from "../util/WebrtcProvider.svelte"
     import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
 
     import { groupUuid } from "../../stores"
     import { currentUserIsGroupMember } from "../../stores/chat"
+    import { showSwitchCallModal } from "../../stores/call"
 
     import type { IAgoraRTCRemoteUser } from "agora-rtc-sdk-ng"
 
@@ -35,7 +35,6 @@
     export let audio = false
     export let remoteUsers: IAgoraRTCRemoteUser[] = []
 
-    let wantsToJoinCall = false
     let volume = 100
     let previousVolume = 100
 
@@ -66,16 +65,18 @@
 </script>
 
 {#key $groupUuid}
-    <div class="sidebar">
+    <div class="wrapper">
         <div class="users-container py-3 px-4 text-lg w-full mb-4">
             <Headline3><Localized id="chat-sidebar-members" /></Headline3>
             <GroupMembers />
         </div>
-        <div class="py-3 px-4 text-lg font-bold w-full text-gray-dark mb-4">
+        <div class="controls py-3 px-4 text-lg font-bold w-full text-gray-dark">
             <Headline3><Localized id="chat-sidebar-controls" /></Headline3>
             <div class="toggle-row hidden md:flex">
                 <SplitScreen24 fill="currentColor" class="text-primary" />
-                <span><Localized id="chat-sidebar-controls-display" /></span>
+                <button on:click={handleToggleSplit} class="font-bold"
+                    ><Localized id="chat-sidebar-controls-display" /></button
+                >
                 <div class="toggle" on:click={handleToggleSplit}>
                     <div aria-selected={split}>
                         <Localized id="chat-sidebar-controls-toggle-on" />
@@ -87,7 +88,9 @@
             </div>
             <div class="toggle-row flex md:hidden">
                 <SplitScreen24 fill="currentColor" class="text-primary" />
-                <span><Localized id="chat-sidebar-controls-games" /></span>
+                <button on:click={handleToggleSplit} class="font-bold"
+                    ><Localized id="chat-sidebar-controls-games" /></button
+                >
                 <div class="toggle" on:click={handleToggleSplit}>
                     <div aria-selected={showGamesOnMobile}>
                         <Localized id="chat-sidebar-controls-toggle-on" />
@@ -102,8 +105,8 @@
             {:else if $isInCall && $joinedCallRoom === $groupUuid}
                 <div class="toggle-row flex">
                     <svg
-                        width="35"
-                        height="35"
+                        width="24"
+                        height="24"
                         viewBox="0 0 40 35"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +152,9 @@
                             </clipPath>
                         </defs>
                     </svg>
-                    <span><Localized id="chat-sidebar-controls-mic" /></span>
+                    <button on:click={handleToggleMic} class="font-bold"
+                        ><Localized id="chat-sidebar-controls-mic" /></button
+                    >
                     <div class="toggle" on:click={handleToggleMic}>
                         <div aria-selected={mic}>
                             <Localized id="chat-sidebar-controls-toggle-on" />
@@ -161,8 +166,8 @@
                 </div>
                 <div class="toggle-row flex">
                     <svg
-                        width="35"
-                        height="35"
+                        width="24"
+                        height="24"
                         viewBox="0 0 22 28"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +177,9 @@
                             fill="#45CDCD"
                         />
                     </svg>
-                    <span><Localized id="chat-sidebar-controls-audio" /></span>
+                    <button on:click={handleToggleAudioButton} class="font-bold"
+                        ><Localized id="chat-sidebar-controls-audio" /></button
+                    >
                     <div class="toggle" on:click={handleToggleAudioButton}>
                         <div aria-selected={audio}>
                             <Localized id="chat-sidebar-controls-toggle-on" />
@@ -197,64 +204,39 @@
                     >
                 </div>
                 <div class="flex justify-center">
-                    <ButtonLarge
+                    <ButtonSmall
                         tag="button"
                         on:click={handleLeaveCall}
                         variant="TEXT"
-                        ><Localized id="chat-sidebar-leave-call" /></ButtonLarge
+                        ><Localized id="chat-sidebar-leave-call" /></ButtonSmall
                     >
                 </div>
             {:else if $isInCall && $joinedCallRoom !== $groupUuid}
-                {#if wantsToJoinCall}
-                    <Modal>
-                        <div
-                            class="py-4 px-4 md:py-8 md:px-10 bg-white shadow-lg rounded-lg"
-                        >
-                            <p class="mb-6 text-center">
-                                <Localized id="chat-sidebar-switch-call-text" />
-                            </p>
-                            <div class="flex justify-end">
-                                <ButtonSmall
-                                    tag="button"
-                                    on:click={() => (wantsToJoinCall = false)}
-                                    variant="TEXT"
-                                    color="PRIMARY"
-                                    ><Localized
-                                        id="chat-sidebar-switch-call-cancel"
-                                    /></ButtonSmall
-                                >
-                                <ButtonSmall
-                                    tag="button"
-                                    on:click={async () => {
-                                        wantsToJoinCall = false
-                                        handleJoinCall()
-                                    }}
-                                    ><Localized
-                                        id="chat-sidebar-switch-call-confirm"
-                                    /></ButtonSmall
-                                >
-                            </div>
-                        </div></Modal
-                    >
-                {:else if $currentUserIsGroupMember}
-                    <div class="flex justify-center">
-                        <ButtonLarge
+                {#if $currentUserIsGroupMember}
+                    <div class="flex justify-center mt-2 mb-1">
+                        <ButtonSmall
                             tag="button"
-                            on:click={() => (wantsToJoinCall = true)}
-                            variant="TEXT"
-                            ><Localized
+                            on:click={() => ($showSwitchCallModal = true)}
+                            variant="OUTLINED"
+                            color="PRIMARY"
+                            className="items-center"
+                            ><MicIcon size="24" class="mr-2" /><Localized
                                 id="chat-sidebar-start-call"
-                            /></ButtonLarge
+                            /></ButtonSmall
                         >
                     </div>
                 {/if}
             {:else if $currentUserIsGroupMember}
-                <div class="flex justify-center">
-                    <ButtonLarge
+                <div class="flex justify-center mt-2 mb-1">
+                    <ButtonSmall
                         tag="button"
                         on:click={handleJoinCall}
-                        variant="TEXT"
-                        ><Localized id="chat-sidebar-start-call" /></ButtonLarge
+                        variant="OUTLINED"
+                        color="PRIMARY"
+                        className="items-center"
+                        ><MicIcon size="24" class="mr-2" /><Localized
+                            id="chat-sidebar-start-call"
+                        /></ButtonSmall
                     >
                 </div>
             {/if}
@@ -263,17 +245,29 @@
 {/key}
 
 <style>
-    .sidebar {
-        @apply overflow-y-scroll;
+    .wrapper {
         @apply rounded-tl-md;
         @apply flex;
         @apply flex-col;
         @apply flex-1;
         @apply justify-between;
+        @apply absolute;
+        @apply top-0;
+        @apply bottom-0;
+        @apply right-0;
+        @apply left-0;
     }
 
     .users-container {
+        flex: 1 1 100%;
+
+        @apply overflow-hidden;
+        @apply overflow-y-auto;
         @apply my-4;
+    }
+
+    .controls {
+        flex: 1 0 auto;
     }
 
     .toggle-row {
@@ -283,6 +277,10 @@
         @apply justify-between;
         @apply mx-auto;
         @apply py-1;
+    }
+
+    .toggle-row button {
+        @apply text-base;
     }
 
     .toggle {

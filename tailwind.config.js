@@ -22,7 +22,13 @@ module.exports = {
             center: true,
         },
         fontFamily: {
-            sans: ['"Noto Sans"', "Helvetica", "Arial", "sans-serif"],
+            sans: [
+                '"Noto Sans"',
+                '"Noto Sans SC"',
+                "Helvetica",
+                "Arial",
+                "sans-serif",
+            ],
             secondary: ["Poppins", "Verdana", "Geneva", "Tahoma", "sans-serif"],
         },
         extend: {
@@ -51,6 +57,9 @@ module.exports = {
                     verylight: "rgb(235, 240, 245)",
                     //lightest: "#f9fafc",
                     lightest: "rgb(239, 248, 246)",
+                },
+                danger: {
+                    DEFAULT: "#d23b41",
                 },
             },
         },

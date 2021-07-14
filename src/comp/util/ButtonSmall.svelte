@@ -24,14 +24,20 @@
 </script>
 
 <script lang="ts">
+    import type { ReferenceAction } from "svelte-popperjs"
+
     export let variant: Variant = "FILLED"
     export let color: Color = "PRIMARY"
     export let tag: "a" | "button" = "a"
+    export let target: string | undefined = undefined
     export let href: string = ""
     export let type: string = "button"
     export let disabled: boolean = false
     $: computedClasses = CLASSES[variant][color]
     export let className: string = ""
+    export let popperRef: ReferenceAction | undefined = undefined
+    function noop(_node: HTMLElement) {}
+    $: popperRefOrNoop = popperRef || noop
 </script>
 
 {#if tag === "button"}
@@ -40,6 +46,7 @@
             class={`${computedClasses} ${className}`}
             {type}
             disabled={disabled ? true : undefined}
+            use:popperRefOrNoop
             on:click
         >
             <slot />
@@ -49,6 +56,7 @@
             class={`${computedClasses} ${className}`}
             {type}
             disabled={disabled ? true : undefined}
+            use:popperRefOrNoop
             on:click|preventDefault
         >
             <slot />
@@ -58,6 +66,7 @@
     <a
         class={`${computedClasses} ${className}`}
         {href}
+        {target}
         disabled={disabled ? true : undefined}
         on:click
     >

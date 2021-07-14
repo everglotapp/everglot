@@ -44,10 +44,14 @@ declare module "*.ftl" {
     export = value
 }
 
-declare module "svelte-feather-icons"
 declare module "svelte-emoji-selector"
 declare module "@nubolab-ffwd/svelte-fluent"
-
+declare module "roarr" {
+    import type roarr from "@types/roarr"
+    const Roarr: typeof roarr
+    export = { Roarr }
+    export default { Roarr }
+}
 // From https://raw.githubusercontent.com/icebob/fakerator/master/fakerator.d.ts
 // Should be distributed with the npm package but is not.
 declare module "fakerator" {

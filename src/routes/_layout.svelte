@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
+    import { goto } from "@sapper/app"
     import { v4 as uuidv4 } from "uuid"
 
     import { setupUrql } from "./_helpers/urql"
@@ -14,6 +15,9 @@
     import WebrtcProvider from "../comp/util/WebrtcProvider.svelte"
     import ChatProvider from "../comp/util/ChatProvider.svelte"
     import { showChatSidebarDrawer } from "../stores/chat"
+    import { showSwitchCallModal } from "../stores/call"
+    import { MOBILE_APP_USER_AGENTS } from "../constants"
+    import { userAgentIsMobileApp } from "../stores"
 
     setupUrql()
 
@@ -33,6 +37,30 @@
     onMount(() => {
         // TODO: is this really necessary?
         segment = window.location.pathname.split("/")[1]
+
+        window.addEventListener(
+            "everglotGoto",
+            (event: CustomEvent<{ path: string }>) => {
+                if (!event || !event.detail || !event.detail.path) {
+                    return
+                }
+                const { path } = event.detail
+                if (typeof path !== "string" || !path.length) {
+                    return
+                }
+                goto(path)
+            }
+        )
+
+        if (
+            typeof navigator !== "undefined" &&
+            navigator &&
+            navigator.userAgent
+        ) {
+            $userAgentIsMobileApp = (
+                MOBILE_APP_USER_AGENTS as readonly string[]
+            ).includes(navigator.userAgent)
+        }
     })
 
     const timeout = 150
@@ -47,9 +75,8 @@
             requestPolicy: "cache-and-network",
             transitionId, // This forces a re-execution by changing the object contents.
         }
-        if (segment === "chat") {
-            $showChatSidebarDrawer = false
-        }
+        $showChatSidebarDrawer = false
+        $showSwitchCallModal = false
     }
 </script>
 

@@ -69,7 +69,7 @@
         color: initial;
 
         @apply text-base;
-        @apply py-6;
+        @apply py-4;
         @apply px-3;
     }
 

@@ -5,7 +5,6 @@
         onMount,
         onDestroy,
     } from "svelte"
-    import { fade } from "svelte/transition"
     import { Localized, Overlay } from "@nubolab-ffwd/svelte-fluent"
     import { XIcon } from "svelte-feather-icons"
     import ButtonSmall from "../../util/ButtonSmall.svelte"
@@ -78,7 +77,7 @@
 </script>
 
 <div
-    class="flex flex-row mt-1 mb-2 mx-4 md:my-4 max-h-12 px-2 justify-between items-center"
+    class="flex flex-row mt-1 mb-2 sm:mx-4 md:my-4 max-h-12 justify-between items-center"
 >
     <Headline4
         ><Localized id="chat-side-panel-activity-would-you-rather" /></Headline4

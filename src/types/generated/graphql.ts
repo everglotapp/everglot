@@ -9218,6 +9218,28 @@ export enum UsersOrderBy {
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
+export type AdminEmailsFcmTokensQueryVariables = Exact<{
+  in: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type AdminEmailsFcmTokensQuery = (
+  { __typename?: 'Query' }
+  & { users?: Maybe<(
+    { __typename?: 'UsersConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'User' }
+      & { userDevices: (
+        { __typename?: 'UserDevicesConnection' }
+        & { nodes: Array<Maybe<(
+          { __typename?: 'UserDevice' }
+          & Pick<UserDevice, 'fcmToken'>
+        )>> }
+      ) }
+    )>> }
+  )> }
+);
+
 export type AllGroupUuidsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -9543,7 +9565,8 @@ export type GroupLanguageByUuidQuery = (
 );
 
 export type GroupMessageNotificationQueryVariables = Exact<{
-  uuid: Scalars['UUID'];
+  groupUuid: Scalars['UUID'];
+  senderUuid: Scalars['UUID'];
 }>;
 
 
@@ -9551,7 +9574,7 @@ export type GroupMessageNotificationQuery = (
   { __typename?: 'Query' }
   & { groupByUuid?: Maybe<(
     { __typename?: 'Group' }
-    & Pick<Group, 'groupName'>
+    & Pick<Group, 'groupName' | 'uuid'>
     & { groupUsers: (
       { __typename?: 'GroupUsersConnection' }
       & { nodes: Array<Maybe<(
@@ -9568,7 +9591,16 @@ export type GroupMessageNotificationQuery = (
           ) }
         )> }
       )>> }
-    ) }
+    ), language?: Maybe<(
+      { __typename?: 'Language' }
+      & Pick<Language, 'alpha2'>
+    )>, languageSkillLevel?: Maybe<(
+      { __typename?: 'LanguageSkillLevel' }
+      & Pick<LanguageSkillLevel, 'name'>
+    )> }
+  )>, userByUuid?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'username'>
   )> }
 );
 
@@ -9796,6 +9828,19 @@ export type UserUuidByIdQuery = (
 );
 
 
+export const AdminEmailsFcmTokens = gql`
+    query AdminEmailsFcmTokens($in: [String!]!) {
+  users(filter: {email: {in: $in}}) {
+    nodes {
+      userDevices {
+        nodes {
+          fcmToken
+        }
+      }
+    }
+  }
+}
+    `;
 export const AllGroupUuids = gql`
     query AllGroupUuids {
   groups {
@@ -10034,8 +10079,8 @@ export const GroupLanguageByUuid = gql`
 }
     `;
 export const GroupMessageNotification = gql`
-    query GroupMessageNotification($uuid: UUID!) {
-  groupByUuid(uuid: $uuid) {
+    query GroupMessageNotification($groupUuid: UUID!, $senderUuid: UUID!) {
+  groupByUuid(uuid: $groupUuid) {
     groupUsers {
       nodes {
         user {
@@ -10049,6 +10094,16 @@ export const GroupMessageNotification = gql`
       }
     }
     groupName
+    uuid
+    language {
+      alpha2
+    }
+    languageSkillLevel {
+      name
+    }
+  }
+  userByUuid(uuid: $senderUuid) {
+    username
   }
 }
     `;

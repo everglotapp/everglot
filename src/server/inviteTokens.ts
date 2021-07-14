@@ -4,6 +4,8 @@ import { db } from "./db"
 
 import type { User, InviteToken, Maybe } from "../types/generated/graphql"
 
+const chlog = log.child({ namespace: "inviteTokens" })
+
 export async function createToken({
     userId,
     token,
@@ -25,9 +27,9 @@ export async function createToken({
     })
     const success = res?.rowCount === 1
     if (!res || !success) {
-        log.child({ userId, token, rowCount: res?.rowCount }).error(
-            `Token insertion failed`
-        )
+        chlog
+            .child({ userId, token, rowCount: res?.rowCount })
+            .error(`Token insertion failed`)
         return null
     }
     const tokenId = res.rows[0].id
@@ -46,14 +48,16 @@ export async function getTokenIdByToken(
     })
     let success = res?.rowCount === 1
     if (!res || !success) {
-        log.child({ token, rowCount: res?.rowCount }).debug(
-            `Could not find any invite_tokens record for the given token`
-        )
+        chlog
+            .child({ token, rowCount: res?.rowCount })
+            .debug(
+                `Could not find any invite_tokens record for the given token`
+            )
         return null
     }
     const tokenId = res.rows[0].id
-    log.child({ token, tokenId }).trace(
-        `Found an invite_tokens record for the given token`
-    )
+    chlog
+        .child({ token, tokenId })
+        .trace(`Found an invite_tokens record for the given token`)
     return tokenId || null
 }

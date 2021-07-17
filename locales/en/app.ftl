@@ -155,16 +155,8 @@ signup-form-username-helper = The others will see you under this name.
 signup-form-learning-label = What language(s) are you interested in ({ $max } max)?*
 signup-form-learning-helper = Please only choose languages that you really want to learn or are already learning.
 signup-form-difficult-msg =
-    <p data-l10n-name="difficult">
-        Everglot can be quite difficult for
-        beginners and elementary level
-        learners.
-    </p>
-    <p data-l10n-name="no-problem">
-        You can still continue. Please be
-        aware that in the beginning it could
-        be hard for you to follow along.
-    </p>
+    <p data-l10n-name="difficult">Everglot can be quite difficult for beginners and elementary level learners.</p>
+    <p data-l10n-name="no-problem">You can still continue. Please be aware that in the beginning it could be hard for you to follow along.</p>
 signup-form-not-supported-msg =
     <p data-l10n-name="sorry">
         Sorry, { $learnCount ->

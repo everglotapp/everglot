@@ -123,12 +123,8 @@ signup-form-username-helper = 您将会以此用户名示人。
 signup-form-learning-label = 你对哪个语言感兴趣？（最多{ $max }个）?*
 signup-form-learning-helper = 请选择你想学的或者已经在学的语言。
 signup-form-difficult-msg =
-    <p data-l10n-name="difficult">
-    { -brand-name }并不适用于初学者。
-    </p>
-    <p data-l10n-name="no-problem">
-    您可以继续注册，但开始可能会有点困难。
-    </p>
+    <p data-l10n-name="difficult">{ -brand-name }并不适用于初学者。</p>
+    <p data-l10n-name="no-problem">您可以继续注册，但开始可能会有点困难。</p>
 signup-form-not-supported-msg =
     <p data-l10n-name="sorry">不好意思，{ $learnCount ->
        *[other] 我们还不支持{ $lang1 }{ $lang2 }

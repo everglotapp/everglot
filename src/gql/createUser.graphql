@@ -6,6 +6,7 @@ mutation CreateUser(
     $uuid: UUID!
     $avatarUrl: String!
     $locale: Int
+    $emailUnsubscribeToken: String!
 ) {
     createUser(
         input: {
@@ -17,6 +18,7 @@ mutation CreateUser(
                 uuid: $uuid
                 avatarUrl: $avatarUrl
                 locale: $locale
+                emailUnsubscribeToken: $emailUnsubscribeToken
             }
         }
     ) {

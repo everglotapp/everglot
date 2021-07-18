@@ -21,6 +21,7 @@ import type {
 import type { Pool } from "pg"
 import { AuthMethod, Gender } from "../../users"
 import { SESSION_COOKIE_NAME } from "../../server/middlewares/session"
+import { generateEmailUnsubscribeToken } from "../../helpers/tokens"
 
 const BASE_URL = "http://everglot-app:3000"
 
@@ -37,6 +38,7 @@ export type TestUser = {
     passwordHash: User["passwordHash"]
     locale: User["locale"]
     signedUpWithTokenId: User["signedUpWithTokenId"]
+    emailUnsubscribeToken: User["emailUnsubscribeToken"]
 }
 
 export type TestLanguage = Pick<Language, "alpha2" | "id">
@@ -55,6 +57,7 @@ export async function createUser(): Promise<TestUser> {
         avatarUrl: fakeUser.avatar,
         locale: null,
         signedUpWithTokenId: null,
+        emailUnsubscribeToken: await generateEmailUnsubscribeToken(),
     }
 
     const res = await performQuery<CreateUserMutation>(
@@ -67,6 +70,7 @@ export async function createUser(): Promise<TestUser> {
             $avatarUrl: String!
             $locale: Int
             $signedUpWithTokenId: Int
+            $emailUnsubscribeToken: String!
         ) {
             createUser(
                 input: {
@@ -79,6 +83,7 @@ export async function createUser(): Promise<TestUser> {
                         avatarUrl: $avatarUrl
                         locale: $locale
                         signedUpWithTokenId: $signedUpWithTokenId
+                        emailUnsubscribeToken: $emailUnsubscribeToken
                     }
                 }
             ) {

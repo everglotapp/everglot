@@ -9433,6 +9433,7 @@ export type CreateUserMutationVariables = Exact<{
   uuid: Scalars['UUID'];
   avatarUrl: Scalars['String'];
   locale?: Maybe<Scalars['Int']>;
+  emailUnsubscribeToken: Scalars['String'];
 }>;
 
 
@@ -10010,9 +10011,9 @@ export const CreateMessagePreview = gql`
 }
     `;
 export const CreateUser = gql`
-    mutation CreateUser($email: String!, $gender: String!, $passwordHash: String!, $username: String!, $uuid: UUID!, $avatarUrl: String!, $locale: Int) {
+    mutation CreateUser($email: String!, $gender: String!, $passwordHash: String!, $username: String!, $uuid: UUID!, $avatarUrl: String!, $locale: Int, $emailUnsubscribeToken: String!) {
   createUser(
-    input: {user: {email: $email, gender: $gender, passwordHash: $passwordHash, username: $username, uuid: $uuid, avatarUrl: $avatarUrl, locale: $locale}}
+    input: {user: {email: $email, gender: $gender, passwordHash: $passwordHash, username: $username, uuid: $uuid, avatarUrl: $avatarUrl, locale: $locale, emailUnsubscribeToken: $emailUnsubscribeToken}}
   ) {
     user {
       id

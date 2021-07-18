@@ -224,6 +224,8 @@
         }
         submitting = false
     }
+
+    // notSupportedLearning = Array of the languages that don't support games yet but are picked by the user
 </script>
 
 <Localized id="signup-browser-window-title" let:text>
@@ -388,12 +390,15 @@
                                     <Overlay
                                         id="signup-form-not-supported-msg"
                                         args={{
-                                            learnCount: learnOther.length,
-                                            lang1: learnOther[0]
-                                                ? learnOther[0].label || ""
+                                            learnCount:
+                                                notSupportedLearning.length,
+                                            lang1: notSupportedLearning[0]
+                                                ? notSupportedLearning[0]
+                                                      .label || ""
                                                 : "",
-                                            lang2: learnOther[1]
-                                                ? learnOther[1].label || ""
+                                            lang2: notSupportedLearning[1]
+                                                ? notSupportedLearning[1]
+                                                      .label || ""
                                                 : "",
                                         }}
                                     >

@@ -22,14 +22,16 @@
         <Localized id="signup-success-msg" />
     </p>
 
-    <div class="max-w-xs mx-auto mb-4 md:mb-4">
-        <ButtonLarge
-            type="submit"
-            className="w-full justify-center"
-            href="/global"
-            ><Localized id="signup-success-explore" />
-        </ButtonLarge>
-    </div>
+    {#if false}
+        <div class="max-w-xs mx-auto mb-4 md:mb-4">
+            <ButtonLarge
+                type="submit"
+                className="w-full justify-center"
+                href="/global"
+                ><Localized id="signup-success-explore" />
+            </ButtonLarge>
+        </div>
+    {/if}
 
     {#if typeof navigator !== "undefined" && navigator && navigator.userAgent && ![IOS_WEBVIEW_USER_AGENT, ANDROID_WEBVIEW_USER_AGENT].includes(navigator.userAgent)}
         <div class="max-w-sm mx-auto mb-1">

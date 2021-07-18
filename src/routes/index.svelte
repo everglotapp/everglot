@@ -19,7 +19,7 @@
 
     $: if ($userHasCompletedProfile) {
         clearRedirectTimeout()
-        goto("/global", { replaceState: true, noscroll: false })
+        goto("/signup/success", { replaceState: true, noscroll: false })
     }
 
     onMount(() => {

@@ -3,7 +3,10 @@ import { db } from "../server/db"
 import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import { createToken, getTokenIdByToken } from "../server/inviteTokens"
 import { ensureJson, serverError } from "../helpers"
-import { generateInviteToken } from "../helpers/tokens"
+import {
+    generateInviteToken,
+    generateEmailUnsubscribeToken,
+} from "../helpers/tokens"
 import {
     GOOGLE_WEB_SIGNIN_CLIENT_ID,
     GOOGLE_SIGNIN_AUDIENCE,
@@ -208,6 +211,15 @@ export async function post(req: Request, res: Response, _next: () => void) {
         throw new Error(`Unknown auth method ${authMethod}`)
     }
 
+    const emailUnsubscribeToken = await generateEmailUnsubscribeToken()
+    if (!emailUnsubscribeToken) {
+        log.child({ emailUnsubscribeToken }).error(
+            `Email unsubscribe token generation failed`
+        )
+        serverError(res)
+        return
+    }
+
     const uuid = uuidv4()
     const queryResult = await db?.query({
         text: `INSERT INTO app_public.users (
@@ -218,7 +230,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 google_id,
                 avatar_url,
                 locale,
-                signed_up_with_token_id
+                signed_up_with_token_id,
+                email_unsubscribe_token
             )
             VALUES (
                 $1,
@@ -233,7 +246,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     WHERE alpha2 = $7
                     LIMIT 1
                 ),
-                $8
+                $8,
+                $9
             )
             ON CONFLICT (email)
                 DO NOTHING
@@ -247,6 +261,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             avatarUrl,
             locale,
             inviteTokenId,
+            emailUnsubscribeToken,
         ],
     })
     const userId = queryResult?.rows[0]?.id

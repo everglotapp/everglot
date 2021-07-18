@@ -40,7 +40,8 @@ describe("login route", () => {
             method: "POST",
             redirect: "manual",
         })
-        expect(res.status).toBe(404)
+        expect(res.status).toBe(302)
+        expect(res.headers.get("location")).toBe(getAppUrl("/login"))
     })
 
     test("GET succeeds when passing the right token", async () => {
@@ -57,12 +58,12 @@ describe("login route", () => {
         )
     })
 
-    test("POST fails without a correct token", async () => {
+    test("GET fails without a correct token", async () => {
         const res = await fetch(`/email/unsubscribe?token=${INVALID_TOKEN}`, {
             method: "GET",
             redirect: "manual",
         })
-        expect(res.status).toBe(422)
+        expect(res.status).toBe(302)
         expect(res.headers.get("location")).toBe(
             getAppUrl("/email/unsubscribe/failure")
         )

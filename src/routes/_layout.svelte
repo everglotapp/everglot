@@ -81,8 +81,8 @@
 </script>
 
 <LocaleProvider {segment}>
-    <WebrtcProvider>
-        <ChatProvider>
+    <ChatProvider>
+        <WebrtcProvider>
             <div id="app" class:noscroll class:with-main-nav={showMainNav}>
                 {#if showMainNav}
                     <MainNav {segment} />
@@ -100,8 +100,8 @@
                     {/key}
                 </main>
             </div>
-        </ChatProvider>
-    </WebrtcProvider>
+        </WebrtcProvider>
+    </ChatProvider>
 </LocaleProvider>
 
 <style>

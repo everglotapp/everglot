@@ -96,7 +96,7 @@
             try {
                 // Subscribe to a remote user.
                 await client.subscribe(user, mediaType)
-            } catch (_e) {
+            } catch {
                 return
             }
 
@@ -118,7 +118,7 @@
             }
             try {
                 await client.unsubscribe(user, mediaType)
-            } catch (_e) {}
+            } catch {}
         })
 
         const rtcToken = await getAgoraToken(roomId)
@@ -154,7 +154,7 @@
             $joining = false
             try {
                 await client!.leave()
-            } catch (_e) {
+            } catch {
                 return false
             }
             return false
@@ -185,12 +185,16 @@
             }
         }
         if ($outgoing) {
-            await client.unpublish([$outgoing])
-            $outgoing.stop()
-            $outgoing.close()
-            $outgoing = null
+            try {
+                await client.unpublish([$outgoing])
+            } catch {}
         }
-        await client.leave()
+        $outgoing?.stop()
+        $outgoing?.close()
+        $outgoing = null
+        try {
+            await client.leave()
+        } catch {}
         $joinedRoom = null
         return unsubscribedFromAllRemoteUsers
     }

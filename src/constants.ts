@@ -19,7 +19,16 @@ export const GOOGLE_SIGNIN_AUDIENCE = [
 ]
 export const AGORA_APP_ID = "38aefcc1e5254b578fb65665fe227ed5"
 
-export const SUPPORTED_LOCALES = ["en", "de", "zh"] as const
+export const SUPPORTED_LOCALES = [
+    "en",
+    "de",
+    "zh",
+    "it",
+    "es",
+    // "ja",
+    // "ko",
+    "fr",
+] as const
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
 
 export const HANGMAN_LOCALES = ["en", "de"] as const

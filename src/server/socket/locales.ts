@@ -5,6 +5,9 @@ import log from "../../logger"
 import en from "../../../locales/en/bot.ftl"
 import de from "../../../locales/de/bot.ftl"
 import zh from "../../../locales/zh-CN/bot.ftl"
+import es from "../../../locales/es/bot.ftl"
+import fr from "../../../locales/fr/bot.ftl"
+import it from "../../../locales/it/bot.ftl"
 
 import {
     SUPPORTED_LOCALES,
@@ -47,13 +50,13 @@ const RESOURCES: Record<SupportedLocale, FluentResource> = {
     en,
     de,
     zh,
+    es,
+    fr,
+    it,
 }
 
-const BUNDLES: Record<
-    SupportedLocale,
-    FluentBundle | undefined
-> = SUPPORTED_LOCALES.reduce(
-    (map, locale: SupportedLocale) => {
+const BUNDLES: Record<SupportedLocale, FluentBundle | undefined> =
+    SUPPORTED_LOCALES.reduce((map, locale: SupportedLocale) => {
         const bundle = new FluentBundle(locale, {
             useIsolating: ENABLE_FLUENT_BIDIRECTIONAL_SUPPORT,
         })
@@ -70,6 +73,4 @@ const BUNDLES: Record<
             ...map,
             [locale]: bundle,
         }
-    },
-    { en: undefined, de: undefined, zh: undefined }
-)
+    }, Object.fromEntries(Object.keys(RESOURCES).map((locale) => [locale])))

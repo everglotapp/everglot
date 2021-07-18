@@ -6,6 +6,9 @@
     import en from "../../../locales/en/app.ftl"
     import de from "../../../locales/de/app.ftl"
     import zh from "../../../locales/zh-CN/app.ftl"
+    import es from "../../../locales/es/app.ftl"
+    import fr from "../../../locales/fr/app.ftl"
+    import it from "../../../locales/it/app.ftl"
 
     import { currentGroupLocale } from "../../stores/locales"
 
@@ -21,6 +24,9 @@
         de,
         en,
         zh,
+        es,
+        fr,
+        it,
     }
 
     function* generateBundles(userLocales: readonly string[]) {

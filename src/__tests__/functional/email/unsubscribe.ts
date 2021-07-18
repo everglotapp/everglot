@@ -1,4 +1,3 @@
-import { AuthMethod } from "../../../users"
 import {
     fetch,
     truncateAllTables,
@@ -36,16 +35,19 @@ describe("login route", () => {
         await truncateAllTables(db)
     })
 
-    test("GET not found", async () => {
-        const res = await fetch("/email/unsubscribe")
+    test("POST fails", async () => {
+        const res = await fetch(`/email/unsubscribe`, {
+            method: "POST",
+            redirect: "manual",
+        })
         expect(res.status).toBe(404)
     })
 
-    test("POST succeeds when passing the right token", async () => {
+    test("GET succeeds when passing the right token", async () => {
         const res = await fetch(
             `/email/unsubscribe?token=${exampleUser?.emailUnsubscribeToken}`,
             {
-                method: "POST",
+                method: "GET",
                 redirect: "manual",
             }
         )
@@ -56,12 +58,8 @@ describe("login route", () => {
     })
 
     test("POST fails without a correct token", async () => {
-        const body = JSON.stringify({
-            email: exampleUser!.email,
-        })
         const res = await fetch(`/email/unsubscribe?token=${INVALID_TOKEN}`, {
-            method: "POST",
-            body,
+            method: "GET",
             redirect: "manual",
         })
         expect(res.status).toBe(422)

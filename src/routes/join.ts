@@ -170,7 +170,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     email,
                     reason: validators[reason as InvalidEmailReason]!.reason,
                     emailValidation,
-                }).info("User provided an invalid email")
+                }).debug("User provided an invalid email")
                 invalidEmailMsg = {
                     smtp: "It looks like the email address you provided does not exist.",
                     regex: "That email address looks wrong to us.",
@@ -182,7 +182,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 log.child({
                     email,
                     emailValidation,
-                }).info("User provided an invalid email")
+                }).debug("User provided an invalid email")
             }
             res.status(422).json({
                 success: false,

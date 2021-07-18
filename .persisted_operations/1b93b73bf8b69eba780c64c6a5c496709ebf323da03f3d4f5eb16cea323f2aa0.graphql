@@ -1,0 +1,12 @@
+mutation UnsubscribeUserEmailNotifications($token: String!, $lastActiveAt: Datetime!) {
+  updateUserByEmailUnsubscribeToken(input: {patch: {emailNotificationsEnabled: false, lastActiveAt: $lastActiveAt}, emailUnsubscribeToken: $token}) {
+    clientMutationId
+    user {
+      email
+      uuid
+      username
+      __typename
+    }
+    __typename
+  }
+}

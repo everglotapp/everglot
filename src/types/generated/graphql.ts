@@ -9733,6 +9733,7 @@ export type RegisterUserActivityMutation = (
 
 export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
   token: Scalars['String'];
+  lastActiveAt: Scalars['Datetime'];
 }>;
 
 
@@ -10228,9 +10229,9 @@ export const RegisterUserActivity = gql`
 }
     `;
 export const UnsubscribeUserEmailNotifications = gql`
-    mutation UnsubscribeUserEmailNotifications($token: String!) {
+    mutation UnsubscribeUserEmailNotifications($token: String!, $lastActiveAt: Datetime!) {
   updateUserByEmailUnsubscribeToken(
-    input: {patch: {emailNotificationsEnabled: false}, emailUnsubscribeToken: $token}
+    input: {patch: {emailNotificationsEnabled: false, lastActiveAt: $lastActiveAt}, emailUnsubscribeToken: $token}
   ) {
     clientMutationId
     user {

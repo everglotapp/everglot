@@ -15,10 +15,16 @@ export async function unsubscribeUserEmailNotifications(
     | null
 > {
     const res = await performQuery<UnsubscribeUserEmailNotificationsMutation>(
-        `mutation UnsubscribeUserEmailNotifications($token: String!) {
+        `mutation UnsubscribeUserEmailNotifications(
+            $token: String!
+            $lastActiveAt: Datetime!
+        ) {
             updateUserByEmailUnsubscribeToken(
                 input: {
-                    patch: { emailNotificationsEnabled: false }
+                    patch: {
+                        emailNotificationsEnabled: false
+                        lastActiveAt: $lastActiveAt
+                    }
                     emailUnsubscribeToken: $token
                 }
             ) {
@@ -30,7 +36,7 @@ export async function unsubscribeUserEmailNotifications(
                 }
             }
         }`,
-        { token }
+        { token, lastActiveAt: new Date().toISOString() }
     )
     if (res.errors || !res.data) {
         return null

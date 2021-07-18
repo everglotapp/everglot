@@ -159,21 +159,19 @@ signup-form-difficult-msg =
     <p data-l10n-name="no-problem">You can still continue. Please be aware that in the beginning it could be hard for you to follow along.</p>
 signup-form-not-supported-msg =
     <p data-l10n-name="sorry">
-        Sorry, { $learnCount ->
+        Note that { $learnCount ->
         [one] { $lang1 } is
        *[other] { $lang1 } and { $lang2 } are
-    } not supported, yet.
+    } not fully supported, yet. Some features are still under development.
     </p>
     <p data-l10n-name="no-worries">
-        Don't worry, we will place you on a
-        waiting list for { $learnCount ->
+        It may take a while, but we will still find you { $learnCount ->
         [one] a { $lang1 } study group
        *[other] { $lang1 } and { $lang2 } study groups
     } and notify you as soon as { $learnCount ->
         [one] it's
        *[other] they're
-    }
-        ready.
+    } ready.
     </p>
 signup-form-teaching-label = What language(s) could you help others out with ({ $max } max)?*
 signup-form-teaching-helper =

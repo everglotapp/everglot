@@ -4,9 +4,10 @@ import log from "../logger"
 
 export const DATABASE_SCHEMA = "app_public"
 export const DATABASE_ROLE_SERVER = "evg_server"
-// export const DATABASE_ROLE_CLIENT = "evg_client"
+export const DATABASE_ROLE_CLIENT = "evg_client"
+// Change these for testing only (e.g. the client one if graphiql queries fail):
 // export const DATABASE_ROLE_SERVER = "everglot_app_user"
-export const DATABASE_ROLE_CLIENT = "everglot_app_user"
+// export const DATABASE_ROLE_CLIENT = "everglot_app_user"
 
 export let db: Pool | undefined
 

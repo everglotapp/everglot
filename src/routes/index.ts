@@ -22,7 +22,7 @@ export async function get(req: Request, res: Response, _next: () => void) {
                 return
             }
         }
-        res.redirect("/global")
+        res.redirect("/signup/success")
         return
     }
     res.redirect("/signup")

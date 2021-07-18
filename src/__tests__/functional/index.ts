@@ -85,6 +85,7 @@ describe("index route", () => {
             redirect: "manual",
         })
         expect(res.status).toBe(302)
-        expect(res.headers.get("location")).toBe(getAppUrl("/global"))
+        // expect(res.headers.get("location")).toBe(getAppUrl("/global"))
+        expect(res.headers.get("location")).toBe(getAppUrl("/signup/success"))
     })
 })

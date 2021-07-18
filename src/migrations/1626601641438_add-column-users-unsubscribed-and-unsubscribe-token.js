@@ -14,6 +14,7 @@ exports.up = async (pgm) => {
             email_unsubscribe_token: {
                 type: "text",
                 notNull: false,
+                unique: true,
             },
         }
     )
@@ -27,10 +28,10 @@ exports.up = async (pgm) => {
 
 exports.down = (pgm) => {
     pgm.sql(
-        `GRANT INSERT(email_notifications_enabled, email_unsubscribe_token) ON app_public.users TO evg_server`
+        `REVOKE INSERT(email_notifications_enabled, email_unsubscribe_token) ON app_public.users FROM evg_server`
     )
     pgm.sql(
-        `GRANT UPDATE(email_notifications_enabled, email_unsubscribe_token) ON app_public.users TO evg_server`
+        `REVOKE UPDATE(email_notifications_enabled, email_unsubscribe_token) ON app_public.users FROM evg_server`
     )
     pgm.dropColumns({ schema: "app_public", name: "users" }, [
         "email_notifications_enabled",

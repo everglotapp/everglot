@@ -179,6 +179,15 @@ declare module '*/registerUserActivity.graphql' {
 }
     
 
+declare module '*/unsubscribeUserEmailNotifications.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UnsubscribeUserEmailNotifications: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/updateUserAvatarUrl.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

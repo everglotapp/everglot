@@ -732,6 +732,7 @@ type Query implements Node {
   user(id: Int!): User
   userByEmail(email: String!): User
   userByUuid(uuid: UUID!): User
+  userByEmailUnsubscribeToken(emailUnsubscribeToken: String!): User
   germanWord(id: Int!): GermanWord
   germanWordByUuid(uuid: UUID!): GermanWord
   englishWord(id: Int!): EnglishWord
@@ -7555,6 +7556,14 @@ type Mutation {
     input: UpdateUserByUuidInput!
   ): UpdateUserPayload
 
+  """Updates a single `User` using a unique key and a patch."""
+  updateUserByEmailUnsubscribeToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserByEmailUnsubscribeTokenInput!
+  ): UpdateUserPayload
+
   """
   Updates a single `GermanWord` using its globally unique id and a patch.
   """
@@ -8041,6 +8050,14 @@ type Mutation {
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
     input: DeleteUserByUuidInput!
+  ): DeleteUserPayload
+
+  """Deletes a single `User` using a unique key."""
+  deleteUserByEmailUnsubscribeToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserByEmailUnsubscribeTokenInput!
   ): DeleteUserPayload
 
   """Deletes a single `GermanWord` using its globally unique id."""
@@ -10509,6 +10526,21 @@ input UpdateUserByUuidInput {
   uuid: UUID!
 }
 
+"""All input for the `updateUserByEmailUnsubscribeToken` mutation."""
+input UpdateUserByEmailUnsubscribeTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `User` being updated.
+  """
+  patch: UserPatch!
+  emailUnsubscribeToken: String!
+}
+
 """The output of our update `GermanWord` mutation."""
 type UpdateGermanWordPayload {
   """
@@ -11902,6 +11934,16 @@ input DeleteUserByUuidInput {
   """
   clientMutationId: String
   uuid: UUID!
+}
+
+"""All input for the `deleteUserByEmailUnsubscribeToken` mutation."""
+input DeleteUserByEmailUnsubscribeTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  emailUnsubscribeToken: String!
 }
 
 """The output of our delete `GermanWord` mutation."""

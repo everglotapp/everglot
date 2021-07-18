@@ -1,0 +1,15 @@
+mutation UnsubscribeUserEmailNotifications($token: String!) {
+    updateUserByEmailUnsubscribeToken(
+        input: {
+            patch: { emailNotificationsEnabled: false }
+            emailUnsubscribeToken: $token
+        }
+    ) {
+        clientMutationId
+        user {
+            email
+            uuid
+            username
+        }
+    }
+}

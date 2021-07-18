@@ -732,6 +732,7 @@ type Query implements Node {
   user(id: Int!): User
   userByEmail(email: String!): User
   userByUuid(uuid: UUID!): User
+  userByEmailUnsubscribeToken(emailUnsubscribeToken: String!): User
   germanWord(id: Int!): GermanWord
   germanWordByUuid(uuid: UUID!): GermanWord
   englishWord(id: Int!): EnglishWord
@@ -1038,6 +1039,8 @@ type User implements Node {
   locale: Int
   googleId: String
   signedUpWithTokenId: Int
+  emailNotificationsEnabled: Boolean!
+  emailUnsubscribeToken: String
 
   """Reads a single `Language` that is related to this `User`."""
   languageByLocale: Language
@@ -1887,6 +1890,10 @@ enum UsersOrderBy {
   GOOGLE_ID_DESC
   SIGNED_UP_WITH_TOKEN_ID_ASC
   SIGNED_UP_WITH_TOKEN_ID_DESC
+  EMAIL_NOTIFICATIONS_ENABLED_ASC
+  EMAIL_NOTIFICATIONS_ENABLED_DESC
+  EMAIL_UNSUBSCRIBE_TOKEN_ASC
+  EMAIL_UNSUBSCRIBE_TOKEN_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
 }
@@ -1936,6 +1943,14 @@ input UserCondition {
 
   """Checks for equality with the object’s `signedUpWithTokenId` field."""
   signedUpWithTokenId: Int
+
+  """
+  Checks for equality with the object’s `emailNotificationsEnabled` field.
+  """
+  emailNotificationsEnabled: Boolean
+
+  """Checks for equality with the object’s `emailUnsubscribeToken` field."""
+  emailUnsubscribeToken: String
 }
 
 """
@@ -1983,6 +1998,12 @@ input UserFilter {
 
   """Filter by the object’s `signedUpWithTokenId` field."""
   signedUpWithTokenId: IntFilter
+
+  """Filter by the object’s `emailNotificationsEnabled` field."""
+  emailNotificationsEnabled: BooleanFilter
+
+  """Filter by the object’s `emailUnsubscribeToken` field."""
+  emailUnsubscribeToken: StringFilter
 
   """Checks for all expressions in this list."""
   and: [UserFilter!]
@@ -2250,6 +2271,48 @@ input UUIDFilter {
 
   """Greater than or equal to the specified value."""
   greaterThanOrEqualTo: UUID
+}
+
+"""
+A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
+"""
+input BooleanFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Boolean
+
+  """Not equal to the specified value."""
+  notEqualTo: Boolean
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Boolean
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Boolean
+
+  """Included in the specified list."""
+  in: [Boolean!]
+
+  """Not included in the specified list."""
+  notIn: [Boolean!]
+
+  """Less than the specified value."""
+  lessThan: Boolean
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Boolean
+
+  """Greater than the specified value."""
+  greaterThan: Boolean
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Boolean
 }
 
 """A connection to a list of `UserLanguage` values."""
@@ -2859,48 +2922,6 @@ input UserLanguageFilter {
 
   """Negates the expression."""
   not: UserLanguageFilter
-}
-
-"""
-A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
-"""
-input BooleanFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Boolean
-
-  """Not equal to the specified value."""
-  notEqualTo: Boolean
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Boolean
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Boolean
-
-  """Included in the specified list."""
-  in: [Boolean!]
-
-  """Not included in the specified list."""
-  notIn: [Boolean!]
-
-  """Less than the specified value."""
-  lessThan: Boolean
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Boolean
-
-  """Greater than the specified value."""
-  greaterThan: Boolean
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Boolean
 }
 
 """A connection to a list of `Group` values."""
@@ -7535,6 +7556,14 @@ type Mutation {
     input: UpdateUserByUuidInput!
   ): UpdateUserPayload
 
+  """Updates a single `User` using a unique key and a patch."""
+  updateUserByEmailUnsubscribeToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserByEmailUnsubscribeTokenInput!
+  ): UpdateUserPayload
+
   """
   Updates a single `GermanWord` using its globally unique id and a patch.
   """
@@ -8021,6 +8050,14 @@ type Mutation {
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
     input: DeleteUserByUuidInput!
+  ): DeleteUserPayload
+
+  """Deletes a single `User` using a unique key."""
+  deleteUserByEmailUnsubscribeToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserByEmailUnsubscribeTokenInput!
   ): DeleteUserPayload
 
   """Deletes a single `GermanWord` using its globally unique id."""
@@ -8911,6 +8948,8 @@ input UserInput {
   locale: Int
   googleId: String
   signedUpWithTokenId: Int
+  emailNotificationsEnabled: Boolean
+  emailUnsubscribeToken: String
 }
 
 """The output of our create `GermanWord` mutation."""
@@ -10438,6 +10477,8 @@ input UserPatch {
   locale: Int
   googleId: String
   signedUpWithTokenId: Int
+  emailNotificationsEnabled: Boolean
+  emailUnsubscribeToken: String
 }
 
 """All input for the `updateUser` mutation."""
@@ -10483,6 +10524,21 @@ input UpdateUserByUuidInput {
   """
   patch: UserPatch!
   uuid: UUID!
+}
+
+"""All input for the `updateUserByEmailUnsubscribeToken` mutation."""
+input UpdateUserByEmailUnsubscribeTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `User` being updated.
+  """
+  patch: UserPatch!
+  emailUnsubscribeToken: String!
 }
 
 """The output of our update `GermanWord` mutation."""
@@ -11878,6 +11934,16 @@ input DeleteUserByUuidInput {
   """
   clientMutationId: String
   uuid: UUID!
+}
+
+"""All input for the `deleteUserByEmailUnsubscribeToken` mutation."""
+input DeleteUserByEmailUnsubscribeTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  emailUnsubscribeToken: String!
 }
 
 """The output of our delete `GermanWord` mutation."""

@@ -11,7 +11,7 @@ import uploads from "./middlewares/uploads"
 import log from "../logger"
 import { registerUserActivity } from "./users"
 
-import type { Express } from "express"
+import type { Express, Request } from "express"
 import type { Pool } from "pg"
 
 const { NODE_ENV } = process.env
@@ -40,7 +40,7 @@ export default function configureExpress(app: Express, pool: Pool): Express {
     app.use(session(pool))
 
     app.use((req, res, next) => {
-        if (pathIsProtected(req.path) && !req.session.user_id) {
+        if (pathIsProtected(req) && !req.session.user_id) {
             chlog.debug(`Unauthorized access to path "${req.path}"`)
             // TODO: Add parameter with request path to redirect to after login
             res.redirect("/login")
@@ -72,7 +72,7 @@ export default function configureExpress(app: Express, pool: Pool): Express {
     return app
 }
 
-function pathIsProtected(path: string): boolean {
+function pathIsProtected(req: Request): boolean {
     const UNPROTECTED_ROUTES = [
         "/join",
         "/join/",
@@ -84,11 +84,17 @@ function pathIsProtected(path: string): boolean {
         "/manifest.json",
         "/placeholder",
     ]
-    if (UNPROTECTED_ROUTES.includes(path)) {
+    if (UNPROTECTED_ROUTES.includes(req.path)) {
         return false
     }
-    if (path.startsWith("/client/")) {
+    if (req.path.startsWith("/client/")) {
         // static files
+        return false
+    }
+    if (
+        req.path.startsWith("/email/unsubscribe") &&
+        req.method.toLowerCase() === "get"
+    ) {
         return false
     }
     // if (dev && path === "/graphql") {

@@ -2019,6 +2019,16 @@ export type DeleteUserByEmailInput = {
   email: Scalars['String'];
 };
 
+/** All input for the `deleteUserByEmailUnsubscribeToken` mutation. */
+export type DeleteUserByEmailUnsubscribeTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  emailUnsubscribeToken: Scalars['String'];
+};
+
 /** All input for the `deleteUserByNodeId` mutation. */
 export type DeleteUserByNodeIdInput = {
   /**
@@ -4972,6 +4982,8 @@ export type Mutation = {
   updateUserByEmail?: Maybe<UpdateUserPayload>;
   /** Updates a single `User` using a unique key and a patch. */
   updateUserByUuid?: Maybe<UpdateUserPayload>;
+  /** Updates a single `User` using a unique key and a patch. */
+  updateUserByEmailUnsubscribeToken?: Maybe<UpdateUserPayload>;
   /** Updates a single `GermanWord` using its globally unique id and a patch. */
   updateGermanWordByNodeId?: Maybe<UpdateGermanWordPayload>;
   /** Updates a single `GermanWord` using a unique key and a patch. */
@@ -5088,6 +5100,8 @@ export type Mutation = {
   deleteUserByEmail?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
   deleteUserByUuid?: Maybe<DeleteUserPayload>;
+  /** Deletes a single `User` using a unique key. */
+  deleteUserByEmailUnsubscribeToken?: Maybe<DeleteUserPayload>;
   /** Deletes a single `GermanWord` using its globally unique id. */
   deleteGermanWordByNodeId?: Maybe<DeleteGermanWordPayload>;
   /** Deletes a single `GermanWord` using a unique key. */
@@ -5502,6 +5516,12 @@ export type MutationUpdateUserByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserByEmailUnsubscribeTokenArgs = {
+  input: UpdateUserByEmailUnsubscribeTokenInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGermanWordByNodeIdArgs = {
   input: UpdateGermanWordByNodeIdInput;
 };
@@ -5850,6 +5870,12 @@ export type MutationDeleteUserByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserByEmailUnsubscribeTokenArgs = {
+  input: DeleteUserByEmailUnsubscribeTokenInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGermanWordByNodeIdArgs = {
   input: DeleteGermanWordByNodeIdInput;
 };
@@ -6049,6 +6075,7 @@ export type Query = Node & {
   user?: Maybe<User>;
   userByEmail?: Maybe<User>;
   userByUuid?: Maybe<User>;
+  userByEmailUnsubscribeToken?: Maybe<User>;
   germanWord?: Maybe<GermanWord>;
   germanWordByUuid?: Maybe<GermanWord>;
   englishWord?: Maybe<EnglishWord>;
@@ -6541,6 +6568,12 @@ export type QueryUserByEmailArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryUserByUuidArgs = {
   uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserByEmailUnsubscribeTokenArgs = {
+  emailUnsubscribeToken: Scalars['String'];
 };
 
 
@@ -7899,6 +7932,18 @@ export type UpdateUserByEmailInput = {
   email: Scalars['String'];
 };
 
+/** All input for the `updateUserByEmailUnsubscribeToken` mutation. */
+export type UpdateUserByEmailUnsubscribeTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `User` being updated. */
+  patch: UserPatch;
+  emailUnsubscribeToken: Scalars['String'];
+};
+
 /** All input for the `updateUserByNodeId` mutation. */
 export type UpdateUserByNodeIdInput = {
   /**
@@ -8153,6 +8198,8 @@ export type User = Node & {
   locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
+  emailNotificationsEnabled: Scalars['Boolean'];
+  emailUnsubscribeToken?: Maybe<Scalars['String']>;
   /** Reads a single `Language` that is related to this `User`. */
   languageByLocale?: Maybe<Language>;
   /** Reads a single `InviteToken` that is related to this `User`. */
@@ -8399,6 +8446,10 @@ export type UserCondition = {
   googleId?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `signedUpWithTokenId` field. */
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `emailNotificationsEnabled` field. */
+  emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `emailUnsubscribeToken` field. */
+  emailUnsubscribeToken?: Maybe<Scalars['String']>;
 };
 
 export type UserDevice = Node & {
@@ -8538,6 +8589,10 @@ export type UserFilter = {
   googleId?: Maybe<StringFilter>;
   /** Filter by the object’s `signedUpWithTokenId` field. */
   signedUpWithTokenId?: Maybe<IntFilter>;
+  /** Filter by the object’s `emailNotificationsEnabled` field. */
+  emailNotificationsEnabled?: Maybe<BooleanFilter>;
+  /** Filter by the object’s `emailUnsubscribeToken` field. */
+  emailUnsubscribeToken?: Maybe<StringFilter>;
   /** Checks for all expressions in this list. */
   and?: Maybe<Array<UserFilter>>;
   /** Checks for any expressions in this list. */
@@ -8673,6 +8728,8 @@ export type UserInput = {
   locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
+  emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
+  emailUnsubscribeToken?: Maybe<Scalars['String']>;
 };
 
 export type UserLanguage = Node & {
@@ -8959,6 +9016,8 @@ export type UserPatch = {
   locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
+  emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
+  emailUnsubscribeToken?: Maybe<Scalars['String']>;
 };
 
 export type UserSession = Node & {
@@ -9214,6 +9273,10 @@ export enum UsersOrderBy {
   GoogleIdDesc = 'GOOGLE_ID_DESC',
   SignedUpWithTokenIdAsc = 'SIGNED_UP_WITH_TOKEN_ID_ASC',
   SignedUpWithTokenIdDesc = 'SIGNED_UP_WITH_TOKEN_ID_DESC',
+  EmailNotificationsEnabledAsc = 'EMAIL_NOTIFICATIONS_ENABLED_ASC',
+  EmailNotificationsEnabledDesc = 'EMAIL_NOTIFICATIONS_ENABLED_DESC',
+  EmailUnsubscribeTokenAsc = 'EMAIL_UNSUBSCRIBE_TOKEN_ASC',
+  EmailUnsubscribeTokenDesc = 'EMAIL_UNSUBSCRIBE_TOKEN_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
@@ -9370,6 +9433,7 @@ export type CreateUserMutationVariables = Exact<{
   uuid: Scalars['UUID'];
   avatarUrl: Scalars['String'];
   locale?: Maybe<Scalars['Int']>;
+  emailUnsubscribeToken: Scalars['String'];
 }>;
 
 
@@ -9667,6 +9731,24 @@ export type RegisterUserActivityMutation = (
   )> }
 );
 
+export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
+  token: Scalars['String'];
+  lastActiveAt: Scalars['Datetime'];
+}>;
+
+
+export type UnsubscribeUserEmailNotificationsMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserByEmailUnsubscribeToken?: Maybe<(
+    { __typename?: 'UpdateUserPayload' }
+    & Pick<UpdateUserPayload, 'clientMutationId'>
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'email' | 'uuid' | 'username'>
+    )> }
+  )> }
+);
+
 export type UpdateUserAvatarUrlMutationVariables = Exact<{
   avatarUrl: Scalars['String'];
   id: Scalars['Int'];
@@ -9930,9 +10012,9 @@ export const CreateMessagePreview = gql`
 }
     `;
 export const CreateUser = gql`
-    mutation CreateUser($email: String!, $gender: String!, $passwordHash: String!, $username: String!, $uuid: UUID!, $avatarUrl: String!, $locale: Int) {
+    mutation CreateUser($email: String!, $gender: String!, $passwordHash: String!, $username: String!, $uuid: UUID!, $avatarUrl: String!, $locale: Int, $emailUnsubscribeToken: String!) {
   createUser(
-    input: {user: {email: $email, gender: $gender, passwordHash: $passwordHash, username: $username, uuid: $uuid, avatarUrl: $avatarUrl, locale: $locale}}
+    input: {user: {email: $email, gender: $gender, passwordHash: $passwordHash, username: $username, uuid: $uuid, avatarUrl: $avatarUrl, locale: $locale, emailUnsubscribeToken: $emailUnsubscribeToken}}
   ) {
     user {
       id
@@ -10143,6 +10225,20 @@ export const RegisterUserActivity = gql`
     mutation RegisterUserActivity($userId: Int!) {
   registerUserActivity(input: {userId: $userId}) {
     datetime
+  }
+}
+    `;
+export const UnsubscribeUserEmailNotifications = gql`
+    mutation UnsubscribeUserEmailNotifications($token: String!, $lastActiveAt: Datetime!) {
+  updateUserByEmailUnsubscribeToken(
+    input: {patch: {emailNotificationsEnabled: false, lastActiveAt: $lastActiveAt}, emailUnsubscribeToken: $token}
+  ) {
+    clientMutationId
+    user {
+      email
+      uuid
+      username
+    }
   }
 }
     `;

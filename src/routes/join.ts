@@ -4,6 +4,10 @@ import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import { createToken, getTokenIdByToken } from "../server/inviteTokens"
 import { ensureJson, serverError } from "../helpers"
 import {
+    generateInviteToken,
+    generateEmailUnsubscribeToken,
+} from "../helpers/tokens"
+import {
     GOOGLE_WEB_SIGNIN_CLIENT_ID,
     GOOGLE_SIGNIN_AUDIENCE,
 } from "../constants"
@@ -11,8 +15,6 @@ import {
 import log from "../logger"
 import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
-
-import UIDGenerator from "uid-generator"
 
 import validate from "deep-email-validator"
 import { OAuth2Client } from "google-auth-library"
@@ -168,7 +170,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     email,
                     reason: validators[reason as InvalidEmailReason]!.reason,
                     emailValidation,
-                }).info("User provided an invalid email")
+                }).debug("User provided an invalid email")
                 invalidEmailMsg = {
                     smtp: "It looks like the email address you provided does not exist.",
                     regex: "That email address looks wrong to us.",
@@ -180,7 +182,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 log.child({
                     email,
                     emailValidation,
-                }).info("User provided an invalid email")
+                }).debug("User provided an invalid email")
             }
             res.status(422).json({
                 success: false,
@@ -209,6 +211,15 @@ export async function post(req: Request, res: Response, _next: () => void) {
         throw new Error(`Unknown auth method ${authMethod}`)
     }
 
+    const emailUnsubscribeToken = await generateEmailUnsubscribeToken()
+    if (!emailUnsubscribeToken) {
+        log.child({ emailUnsubscribeToken }).error(
+            `Email unsubscribe token generation failed`
+        )
+        serverError(res)
+        return
+    }
+
     const uuid = uuidv4()
     const queryResult = await db?.query({
         text: `INSERT INTO app_public.users (
@@ -219,7 +230,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 google_id,
                 avatar_url,
                 locale,
-                signed_up_with_token_id
+                signed_up_with_token_id,
+                email_unsubscribe_token
             )
             VALUES (
                 $1,
@@ -234,7 +246,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     WHERE alpha2 = $7
                     LIMIT 1
                 ),
-                $8
+                $8,
+                $9
             )
             ON CONFLICT (email)
                 DO NOTHING
@@ -248,6 +261,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             avatarUrl,
             locale,
             inviteTokenId,
+            emailUnsubscribeToken,
         ],
     })
     const userId = queryResult?.rows[0]?.id
@@ -269,8 +283,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    const uidgen = new UIDGenerator(256, UIDGenerator.BASE58)
-    const newInviteToken = await uidgen.generate().catch(() => null)
+    const newInviteToken = await generateInviteToken()
     if (!newInviteToken) {
         log.child({ newInviteToken }).error(`Invite token generation failed`)
         serverError(res)

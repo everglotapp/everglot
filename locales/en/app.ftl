@@ -231,6 +231,14 @@ profile-language-native-hint = (Native)
 profile-groups = My Groups
 profile-avatar-upload-failed = Your avatar could not be changed successfully. Please try again.
 
+## Email notifications unsubscription successful
+email-unsubscribe-success-headline = Success!
+email-unsubscribe-success-description = You will no longer receive email notifications.
+
+## Email notifications unsubscription unsuccessful
+email-unsubscribe-failure-link-invalid = The link that got you here is no longer valid.
+email-unsubscribe-failure-contact-us = Please contact us if you think this is a mistake.
+
 ## Locales
 
 locale-en = English

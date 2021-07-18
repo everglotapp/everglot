@@ -59,6 +59,12 @@ chat-side-panel-activity-guess-character-feedback-guess-correct = ¡{ $username 
 chat-side-panel-activity-guess-character-feedback-guess-wrong = ¡{ $username } ha adivinado «{ $guess }» que es falso!
 chat-side-panel-activity-guess-character-feedback-own-guess-correct = «{ $guess }» es correcto, ¡muy bien!
 chat-side-panel-activity-guess-character-feedback-own-guess-wrong = «{ $guess }» no es correcto, ¡atención!
+chat-side-panel-activity-would-you-rather-timer =
+    El sondeo terminará en { $seconds ->
+        [one] { $seconds } segundo
+       *[other] { $seconds } segundos
+    }.
+chat-side-panel-activity-would-you-rather-next-question = Haz otra pregunta
 chat-side-panel-activity-random-question-next-question = Haz otra pregunta
 chat-side-panel-activity-random-question-discuss = Discutan en su grupo.
 chat-submit-form-send = Mandar
@@ -69,6 +75,12 @@ chat-submit-form-input = { "" }
 chat-activity-text-input = { "" }
     .placeholder = Adivina aquí …
 chat-submit-form-voice = Audio
+chat-submit-form-voice-mute = Desactivar micrófono
+chat-submit-form-voice-unmute = Reactivar micrófono
+chat-submit-form-chat = Chat
+chat-message-username-unknown = Se desconoce
+chat-message-show-less = Mostrar menos
+chat-message-show-more = Mostrar más
 chat-message-username-bot = Ebo
 
 ## Main Navigation
@@ -99,6 +111,8 @@ invite-modal-close = Cerrar
 
 ## Login page
 
+login-browser-window-title = Acceso – { -brand-name }
+login-title = Accede a { -brand-name }
 login-form-email = Correo electrónico
 login-form-password = Contraseña
 login-form-submit = Iniciar sesión
@@ -121,13 +135,18 @@ signup-browser-window-title = Inscripción – { -brand-name }
 
 ## User Bio component
 
+user-bio-languages-title = Idiomas
+user-bio-error = Error
 
 ## Global page
 
+global-sidebar-language = Idioma
 
 ## Profile page
 
 profile-email = Correo electrónico
+profile-languages = Mis idiomas
+profile-language-native-hint = (Lengua materna)
 
 ## Locales
 

@@ -8153,6 +8153,8 @@ export type User = Node & {
   locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
+  emailNotificationsEnabled: Scalars['Boolean'];
+  emailUnsubscribeToken?: Maybe<Scalars['String']>;
   /** Reads a single `Language` that is related to this `User`. */
   languageByLocale?: Maybe<Language>;
   /** Reads a single `InviteToken` that is related to this `User`. */
@@ -8399,6 +8401,10 @@ export type UserCondition = {
   googleId?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `signedUpWithTokenId` field. */
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `emailNotificationsEnabled` field. */
+  emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `emailUnsubscribeToken` field. */
+  emailUnsubscribeToken?: Maybe<Scalars['String']>;
 };
 
 export type UserDevice = Node & {
@@ -8538,6 +8544,10 @@ export type UserFilter = {
   googleId?: Maybe<StringFilter>;
   /** Filter by the object’s `signedUpWithTokenId` field. */
   signedUpWithTokenId?: Maybe<IntFilter>;
+  /** Filter by the object’s `emailNotificationsEnabled` field. */
+  emailNotificationsEnabled?: Maybe<BooleanFilter>;
+  /** Filter by the object’s `emailUnsubscribeToken` field. */
+  emailUnsubscribeToken?: Maybe<StringFilter>;
   /** Checks for all expressions in this list. */
   and?: Maybe<Array<UserFilter>>;
   /** Checks for any expressions in this list. */
@@ -8673,6 +8683,8 @@ export type UserInput = {
   locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
+  emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
+  emailUnsubscribeToken?: Maybe<Scalars['String']>;
 };
 
 export type UserLanguage = Node & {
@@ -8959,6 +8971,8 @@ export type UserPatch = {
   locale?: Maybe<Scalars['Int']>;
   googleId?: Maybe<Scalars['String']>;
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
+  emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
+  emailUnsubscribeToken?: Maybe<Scalars['String']>;
 };
 
 export type UserSession = Node & {
@@ -9214,6 +9228,10 @@ export enum UsersOrderBy {
   GoogleIdDesc = 'GOOGLE_ID_DESC',
   SignedUpWithTokenIdAsc = 'SIGNED_UP_WITH_TOKEN_ID_ASC',
   SignedUpWithTokenIdDesc = 'SIGNED_UP_WITH_TOKEN_ID_DESC',
+  EmailNotificationsEnabledAsc = 'EMAIL_NOTIFICATIONS_ENABLED_ASC',
+  EmailNotificationsEnabledDesc = 'EMAIL_NOTIFICATIONS_ENABLED_DESC',
+  EmailUnsubscribeTokenAsc = 'EMAIL_UNSUBSCRIBE_TOKEN_ASC',
+  EmailUnsubscribeTokenDesc = 'EMAIL_UNSUBSCRIBE_TOKEN_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }

@@ -3,6 +3,7 @@ import { db } from "../server/db"
 import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import { createToken, getTokenIdByToken } from "../server/inviteTokens"
 import { ensureJson, serverError } from "../helpers"
+import { generateInviteToken } from "../helpers/tokens"
 import {
     GOOGLE_WEB_SIGNIN_CLIENT_ID,
     GOOGLE_SIGNIN_AUDIENCE,
@@ -11,8 +12,6 @@ import {
 import log from "../logger"
 import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
-
-import UIDGenerator from "uid-generator"
 
 import validate from "deep-email-validator"
 import { OAuth2Client } from "google-auth-library"
@@ -269,8 +268,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    const uidgen = new UIDGenerator(256, UIDGenerator.BASE58)
-    const newInviteToken = await uidgen.generate().catch(() => null)
+    const newInviteToken = await generateInviteToken()
     if (!newInviteToken) {
         log.child({ newInviteToken }).error(`Invite token generation failed`)
         serverError(res)

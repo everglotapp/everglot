@@ -170,10 +170,13 @@
                                 type="submit"
                                 variant="TEXT"
                                 className="w-full justify-center mb-2"
-                                >Upload Avatar</ButtonLarge
+                                ><Localized id="Upload Avatar" /></ButtonLarge
                             >
                             <p class="text-gray-bitdark text-sm">
-                                Avatars must be smaller than 5 MB in size.
+                                <Localized
+                                    id="profile-avatar-max-size"
+                                    args={{ maxSize: "5 MB" }}
+                                />
                             </p>
                         </div>
                     </form>

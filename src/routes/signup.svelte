@@ -29,6 +29,8 @@
     import PageTitle from "../comp/typography/PageTitle.svelte"
 
     import { ArrowRightIcon, ClockIcon } from "svelte-feather-icons"
+    import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
+    const { translate } = fluentStores()!
 
     query(languageCodeMappings)
     query(currentUserStore)
@@ -46,28 +48,11 @@
         $username = $currentUser.username || $username
         if ($currentUser.languageByLocale) {
             const { alpha2 } = $currentUser.languageByLocale
-            if (teach.hasOwnProperty(alpha2)) {
-                teach = { ...teach, [alpha2]: true }
-            } else {
-                let foundItem = items.find((item) => item.value === alpha2)
-                if (foundItem) {
-                    teachOther = [...teachOther, foundItem]
-                }
+            let foundItem = items.find((item) => item.value === alpha2)
+            if (foundItem) {
+                teachOther = [...teachOther, foundItem]
             }
         }
-    }
-
-    const PRIORITIZED_LANGUAGES = ["en", "de", "zh"] as const
-    type PrioritizedLanguage = typeof PRIORITIZED_LANGUAGES[number]
-    let teach: Record<PrioritizedLanguage, boolean> = {
-        de: false,
-        en: false,
-        zh: false,
-    }
-    let learn: Record<PrioritizedLanguage, boolean> = {
-        de: false,
-        en: false,
-        zh: false,
     }
 
     let errorMessage: string | null = null
@@ -81,15 +66,10 @@
     }
     type LanguageItem = { value: string; label: string }
     let items: LanguageItem[] = []
-    $: items = languages
-        .filter(
-            ({ alpha2 }) =>
-                !(PRIORITIZED_LANGUAGES as readonly string[]).includes(alpha2)
-        )
-        .map(({ alpha2, englishName }) => ({
-            value: alpha2,
-            label: englishName,
-        }))
+    $: items = languages.map(({ alpha2, englishName }) => ({
+        value: alpha2,
+        label: englishName,
+    }))
 
     let learnOther: LanguageItem[] = []
     let teachOther: LanguageItem[] = []
@@ -101,39 +81,24 @@
         ...Object.fromEntries(items.map((item) => [item.value, ""])),
     }
 
-    $: totalTeaching =
-        Object.values(teach)
-            .map(Number)
-            .reduce((n, i) => n + i) + teachOther.length
-    $: totalLearning =
-        Object.values(learn)
-            .map(Number)
-            .reduce((n, i) => n + i) + learnOther.length
+    $: totalTeaching = teachOther.length
+    $: totalLearning = learnOther.length
 
-    $: learningCodes = [
-        ...Object.keys(learn).filter(
-            (code) => learn[code as PrioritizedLanguage]
-        ),
-        ...learnOther.map((item) => item.value),
-    ]
+    $: learningCodes = learnOther.map((item) => item.value)
 
     $: learnable =
         totalLearning >= MAX_LEARNING
             ? []
             : items.filter((item) => {
                   const lang = item.value
-                  return Object.keys(learn).includes(lang)
-                      ? !learn[lang as keyof typeof learn]
-                      : !teachOther.find(({ value }) => value === lang)
+                  return !teachOther.find(({ value }) => value === lang)
               })
     $: teachable =
         totalTeaching >= MAX_TEACHING
             ? []
             : items.filter((item) => {
                   const lang = item.value
-                  return Object.keys(teach).includes(lang)
-                      ? !teach[lang as keyof typeof teach]
-                      : !learnOther.find(({ value }) => value === lang)
+                  return !learnOther.find(({ value }) => value === lang)
               })
 
     function handleSelectLearnOther(event: CustomEvent<LanguageItem[] | null>) {
@@ -141,26 +106,6 @@
     }
     function handleSelectTeachOther(event: CustomEvent<LanguageItem[] | null>) {
         teachOther = [...(event.detail || [])]
-    }
-
-    function toggleLearn(lang: keyof typeof teach & keyof typeof learn) {
-        learn = {
-            ...learn,
-            [lang]: !learn[lang],
-        }
-        if (learn[lang]) {
-            teach = { ...teach, [lang]: false }
-        }
-    }
-
-    function toggleTeach(lang: keyof typeof teach & keyof typeof learn) {
-        teach = {
-            ...teach,
-            [lang]: !teach[lang],
-        }
-        if (teach[lang]) {
-            learn = { ...learn, [lang]: false }
-        }
     }
 
     let gender: Gender | null = null
@@ -185,12 +130,7 @@
         }
         submitting = true
         errorMessage = null
-        const teachingCodes = [
-            ...Object.keys(teach).filter(
-                (code) => teach[code as PrioritizedLanguage]
-            ),
-            ...teachOther.map((item) => item.value),
-        ]
+        const teachingCodes = teachOther.map((item) => item.value)
         const response = await fetch("/signup", {
             method: "post",
             headers: {
@@ -234,7 +174,7 @@
     <div />
 {:else if $languageCodeMappings.error}
     <p class="container max-w-2xl px-4 py-8 md:py-8">
-        Something went wrong.
+        <Localized id="signup-form-error-loading-language-codes" />
         <ErrorMessage>{$languageCodeMappings.error.message}</ErrorMessage>
     </p>
 {:else}
@@ -259,11 +199,14 @@
                         type="text"
                         name="username"
                         id="username"
-                        placeholder="Username …"
+                        placeholder={$translate(
+                            "signup-form-username-placeholder"
+                        )}
                         required
                         minlength={MIN_USERNAME_LENGTH}
                         pattern={`.{${MIN_USERNAME_LENGTH},}`}
                         title={`${MIN_USERNAME_LENGTH} characters minimum`}
+                        class="w-full max-w-sm"
                         bind:value={$username}
                     />
                 </div>
@@ -279,43 +222,24 @@
                     <Localized id="signup-form-learning-helper" />
                 </p>
                 <div class="form-control">
-                    <ButtonSmall
-                        tag="button"
-                        className="mr-1 mb-1"
-                        variant={learn.de ? "FILLED" : "OUTLINED"}
-                        disabled={teach.de ||
-                            (!learn.de && totalLearning >= MAX_LEARNING)}
-                        on:click={() => toggleLearn("de")}>German</ButtonSmall
-                    >
-                    <ButtonSmall
-                        tag="button"
-                        className="mr-1 mb-1"
-                        variant={learn.en ? "FILLED" : "OUTLINED"}
-                        disabled={teach.en ||
-                            (!learn.en && totalLearning >= MAX_LEARNING)}
-                        on:click={() => toggleLearn("en")}>English</ButtonSmall
-                    >
-                    <ButtonSmall
-                        tag="button"
-                        className="mr-1 mb-1"
-                        variant={learn.zh ? "FILLED" : "OUTLINED"}
-                        disabled={teach.zh ||
-                            (!learn.zh && totalLearning >= MAX_LEARNING)}
-                        on:click={() => toggleLearn("zh")}>Chinese</ButtonSmall
-                    >
                     <GroupSelect
                         items={learnable}
                         selected={learnOther.length ? learnOther : null}
                         hideInput={totalLearning >= MAX_LEARNING}
-                        disabled={Object.values(learn).filter(Boolean).length >=
-                            MAX_LEARNING}
                         on:select={handleSelectLearnOther}
+                        placeholder={$translate(
+                            "signup-form-learning-placeholder"
+                        )}
                     />
                 </div>
             </fieldset>
             {#if learningCodes.length}
                 <fieldset class="mt-1 mb-3">
-                    <legend>Your level in …</legend>
+                    <legend
+                        ><Localized
+                            id="signup-form-learning-levels-legend"
+                        /></legend
+                    >
                     {#each learningCodes as code}
                         <div class="level flex items-center py-1">
                             <label for={`level_${code}`}>
@@ -330,26 +254,44 @@
                                     id={`level_${code}`}
                                     bind:value={learningLevels[code]}
                                     required
-                                    placeholder="Your level …"
+                                    placeholder={$translate(
+                                        "signup-form-learning-levels-select-placeholder"
+                                    )}
                                 >
-                                    <option value="">Please select …</option>
+                                    <option value=""
+                                        ><Localized
+                                            id="signup-form-learning-levels-select-empty"
+                                        /></option
+                                    >
                                     <option value={CefrLevel.A1}
-                                        >A1 – Beginner</option
+                                        ><Localized
+                                            id="signup-form-learning-levels-select-a1"
+                                        /></option
                                     >
                                     <option value={CefrLevel.A2}
-                                        >A2 – Elementary</option
+                                        ><Localized
+                                            id="signup-form-learning-levels-select-a2"
+                                        /></option
                                     >
                                     <option value={CefrLevel.B1}
-                                        >B1 – Intermediate</option
+                                        ><Localized
+                                            id="signup-form-learning-levels-select-b1"
+                                        /></option
                                     >
                                     <option value={CefrLevel.B2}
-                                        >B2 – Upper intermediate</option
+                                        ><Localized
+                                            id="signup-form-learning-levels-select-b2"
+                                        /></option
                                     >
                                     <option value={CefrLevel.C1}
-                                        >C1 – Advanced</option
+                                        ><Localized
+                                            id="signup-form-learning-levels-select-c1"
+                                        /></option
                                     >
                                     <option value={CefrLevel.C2}
-                                        >C2 – Proficient</option
+                                        ><Localized
+                                            id="signup-form-learning-levels-select-c2"
+                                        /></option
                                     >
                                 </select>
                             </div>
@@ -417,37 +359,14 @@
                     <Localized id="signup-form-teaching-helper" />
                 </p>
                 <div class="form-control">
-                    <ButtonSmall
-                        tag="button"
-                        className="mr-1"
-                        variant={teach.de ? "FILLED" : "OUTLINED"}
-                        disabled={learn.de ||
-                            (!teach.de && totalTeaching >= MAX_TEACHING)}
-                        on:click={() => toggleTeach("de")}>German</ButtonSmall
-                    >
-                    <ButtonSmall
-                        tag="button"
-                        className="mr-1"
-                        variant={teach.en ? "FILLED" : "OUTLINED"}
-                        disabled={learn.en ||
-                            (!teach.en && totalTeaching >= MAX_TEACHING)}
-                        on:click={() => toggleTeach("en")}>English</ButtonSmall
-                    >
-                    <ButtonSmall
-                        tag="button"
-                        className="mr-1"
-                        variant={teach.zh ? "FILLED" : "OUTLINED"}
-                        disabled={learn.zh ||
-                            (!teach.zh && totalTeaching >= MAX_TEACHING)}
-                        on:click={() => toggleTeach("zh")}>Chinese</ButtonSmall
-                    >
                     <GroupSelect
                         items={teachable}
                         selected={teachOther.length ? teachOther : null}
                         hideInput={totalTeaching >= MAX_TEACHING}
-                        disabled={Object.values(teach).filter(Boolean).length >=
-                            MAX_TEACHING}
                         on:select={handleSelectTeachOther}
+                        placeholder={$translate(
+                            "signup-form-teaching-placeholder"
+                        )}
                     />
                 </div>
             </fieldset>
@@ -532,6 +451,7 @@
         @apply font-normal !important;
         @apply text-base !important;
         @apply m-0 !important;
+        @apply mr-2 !important;
     }
 
     .level select {

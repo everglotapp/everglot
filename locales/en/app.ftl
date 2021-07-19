@@ -152,8 +152,20 @@ signup-browser-window-title = Sign Up – { -brand-name }
 signup-title = Tell us a little bit about yourself
 signup-form-username-label = Pick a username*
 signup-form-username-helper = The others will see you under this name.
+signup-form-username-placeholder = Username …
 signup-form-learning-label = What language(s) are you interested in ({ $max } max)?*
 signup-form-learning-helper = Please only choose languages that you really want to learn or are already learning.
+signup-form-learning-placeholder = Search language …
+signup-form-teaching-placeholder = Search language …
+signup-form-learning-levels-legend = Your level in …
+signup-form-learning-levels-select-placeholder = Your level …
+signup-form-learning-levels-select-empty = Please select …
+signup-form-learning-levels-select-a1 = A1 – Beginner
+signup-form-learning-levels-select-a2 = A2 – Elementary
+signup-form-learning-levels-select-b1 = B1 – Intermediate
+signup-form-learning-levels-select-b2 = B2 – Upper intermediate
+signup-form-learning-levels-select-c1 = C1 – Advanced
+signup-form-learning-levels-select-c2 = C2 – Proficient
 signup-form-difficult-msg =
     <p data-l10n-name="difficult">Everglot can be quite difficult for beginners and elementary level learners.</p>
     <p data-l10n-name="no-problem">You can still continue. Please be aware that in the beginning it could be hard for you to follow along.</p>
@@ -185,6 +197,7 @@ signup-form-gender-female = Female
 signup-form-gender-male = Male
 signup-form-gender-other = Other
 signup-form-submit = Next
+signup-form-error-loading-language-codes = Something went wrong.
 
 ## User Bio component
 

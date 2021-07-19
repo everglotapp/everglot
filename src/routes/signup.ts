@@ -20,7 +20,7 @@ export async function get(req: Request, res: Response, next: () => void) {
         return
     }
     if (await userHasCompletedProfile(req.session.user_id)) {
-        res.redirect("/global")
+        res.redirect("/")
         return
     }
     next()

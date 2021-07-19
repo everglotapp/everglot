@@ -17,7 +17,7 @@
 </script>
 
 <div
-    class="wrapper inline-flex relative w-32"
+    class="wrapper inline-flex relative"
     class:hideInput
     class:hasItems={selected !== null && selected.length > 0}
 >
@@ -50,8 +50,9 @@
         --placeholderColor: theme("colors.gray.bitdark");
         --itemColor: theme("colors.primary.DEFAULT");
         --multiItemBorderRadius: theme("borderRadius.lg");
-        --multiItemMargin: 0 0.25rem 0 0;
+        --multiItemMargin: 0.25rem 0.25rem 0.25rem 0;
         --itemHoverBG: theme("colors.primary.lightest");
+        --itemHoverColor: theme("colors.primary.DEFAULT");
         --itemIsActiveBG: theme("colors.primary.DEFAULT");
         --itemActiveBackground: theme("colors.primary.DEFAULT");
         --inputPadding: theme("padding.2") theme("padding.2");
@@ -69,7 +70,6 @@
     .wrapper :global(.selectContainer) {
         row-gap: 4px;
 
-        @apply flex-nowrap;
         @apply pr-10;
     }
 
@@ -81,6 +81,8 @@
     .wrapper :global(.selectContainer input) {
         @apply cursor-text;
         @apply font-secondary;
+
+        min-width: 152px;
     }
 
     .wrapper :global(.selectContainer.disabled),
@@ -95,6 +97,12 @@
 
     .wrapper.hideInput :global(.selectContainer .multiSelectItem + input) {
         max-width: 1.5rem;
+        min-width: inherit;
+    }
+
+    .wrapper.hideInput
+        :global(.selectContainer .multiSelectItem + .multiSelectItem + input) {
+        display: none;
     }
 
     .wrapper:not(.hideInput)

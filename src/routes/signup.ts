@@ -20,7 +20,7 @@ export async function get(req: Request, res: Response, next: () => void) {
         return
     }
     if (await userHasCompletedProfile(req.session.user_id)) {
-        res.redirect("/global")
+        res.redirect("/")
         return
     }
     next()
@@ -43,7 +43,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             ? req.body.gender
             : null
 
-    if (!req.body.hasOwnProperty("learn")) {
+    if (!req.body.hasOwnProperty("learning")) {
         res.status(422).json({
             success: false,
             message:
@@ -72,10 +72,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
 
     if (
-        !req.body.hasOwnProperty("teach") ||
-        !Array.isArray(req.body.teach) ||
-        !req.body.teach.length ||
-        req.body.teach.length > MAX_TEACHING
+        !req.body.hasOwnProperty("teaching") ||
+        !Array.isArray(req.body.teaching) ||
+        !req.body.teaching.length ||
+        req.body.teaching.length > MAX_TEACHING
     ) {
         res.status(422).json({
             success: false,
@@ -86,10 +86,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
 
     if (
-        !req.body.hasOwnProperty("learn") ||
-        !Array.isArray(req.body.learn) ||
-        !req.body.learn.length ||
-        req.body.learn.length > MAX_LEARNING
+        !req.body.hasOwnProperty("learning") ||
+        !Array.isArray(req.body.learning) ||
+        !req.body.learning.length ||
+        req.body.learning.length > MAX_LEARNING
     ) {
         res.status(422).json({
             success: false,
@@ -101,9 +101,9 @@ export async function post(req: Request, res: Response, _next: () => void) {
     if (
         !req.body.hasOwnProperty("cefrLevels") ||
         typeof req.body.cefrLevels !== "object" ||
-        Object.keys(req.body.cefrLevels).length !== req.body.learn.length ||
+        Object.keys(req.body.cefrLevels).length !== req.body.learning.length ||
         Object.keys(req.body.cefrLevels).some(
-            (code) => !req.body.learn.includes(code)
+            (code) => !req.body.learning.includes(code)
         )
     ) {
         res.status(422).json({
@@ -136,8 +136,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     `Failed to update username and gender of user ${userId}`
                 )
             }
-            const { teach, learn, cefrLevels } = req.body
-            for (const code of teach) {
+            const { teaching, learning, cefrLevels } = req.body
+            for (const code of teaching) {
                 if (
                     (
                         await client.query({
@@ -151,11 +151,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     )
                 }
             }
-            for (const code of learn) {
+            for (const code of learning) {
                 if (!cefrLevels.hasOwnProperty(code)) {
                     throw new Error(`cefrLevels doesn't have property ${code}`)
                 }
-                if (teach.includes(code)) {
+                if (teaching.includes(code)) {
                     throw new Error(
                         `User claimed to learn the language with code "${code}" which they already speak natively.`
                     )

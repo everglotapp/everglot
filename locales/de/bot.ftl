@@ -11,3 +11,4 @@ would-you-rather-answer-picked = @{ $username } hat „{ $answer }“ gewählt!
 would-you-rather-started = @{ $username } hat eine Würdest-Du-Lieber-Umfrage gestartet: { $question }
 would-you-rather-ended = @{ $username } hat die Würdest-Du-Lieber-Umfrage beendet.
 random-question-started = @{ $username } möchte, dass ich eine Frage stelle: { $question }
+random-question-ended = @{ $username } möchte die Diskussion zur Frage beenden.

@@ -104,7 +104,10 @@ main-nav-invite-friends = Freunde einladen
 main-nav-logout = Abmelden
 main-nav-go-to-call = Zum Anruf gehen
 main-nav-privacy = Datenschutz
+main-nav-download-app-ios = iOS-App
+main-nav-download-app-android = Android-App
 main-nav-feedback = Feedback geben
+main-nav-continue = Weiter
 
 ## Signup successful page
 
@@ -115,6 +118,8 @@ signup-success-msg =
     Sobald wir für dich eine Gruppe gefunden haben, schicken wir dir eine Mail.
     In der Zwischenzeit kannst du die Plattform schon mal erkunden.
 signup-success-explore = Globale Kanäle erkunden
+signup-success-download-app-ios = Everglot für iOS herunterladen
+signup-success-download-app-android = Everglot für Android herunterladen
 
 ## Invite Modal
 
@@ -214,8 +219,25 @@ profile-language-native-hint = (Muttersprache)
 profile-groups = Meine Gruppen
 profile-avatar-upload-failed = Dein Avatar konnte nicht erfolgreich geändert werden. Probiere es noch einmal.
 
+## Email notifications unsubscription successful
+
+email-unsubscribe-success-headline = Alles klar!
+email-unsubscribe-success-description = Du erhältst nun keine Email-Benachrichtigungen mehr.
+
+## Email notifications unsubscription unsuccessful
+
+email-unsubscribe-failure-link-invalid = Der Link, der dich hierhergeführt hat, ist nicht mehr gültig.
+email-unsubscribe-failure-contact-us = Bitte kontaktiere uns, wenn du hierin einen Fehler vermutest.
+
 ## Locales
 
 locale-en = Englisch
 locale-de = Deutsch
 locale-zh = Chinesisch
+locale-es = Spanisch
+locale-it = Italienisch
+locale-fr = Französisch
+locale-ko = Koreanisch
+locale-ja = Japanisch
+locale-ru = Russisch
+locale-ar = Arabisch

@@ -30,6 +30,7 @@
 
     import { ArrowRightIcon, ClockIcon } from "svelte-feather-icons"
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
+    import { SUPPORTED_LOCALES } from "../constants"
     const { translate } = fluentStores()!
 
     query(languageCodeMappings)
@@ -66,23 +67,35 @@
     }
     type LanguageItem = { value: string; label: string }
     let items: LanguageItem[] = []
-    $: items = languages.map(({ alpha2, englishName }) => ({
-        value: alpha2,
-        label: englishName,
-    }))
+    $: items = languages
+        .sort((a, b) =>
+            (SUPPORTED_LOCALES as readonly string[]).includes(
+                b.alpha2.toLowerCase()
+            ) &&
+            !(SUPPORTED_LOCALES as readonly string[]).includes(
+                a.alpha2.toLowerCase()
+            )
+                ? 1
+                : a.alpha2.localeCompare(b.alpha2)
+        )
+        .map(({ alpha2, englishName }) => ({
+            value: alpha2,
+            label: englishName,
+        }))
 
     let learning: LanguageItem[] = []
     let teaching: LanguageItem[] = []
 
-    let learningLevels: Record<string, CefrLevel | ""> = {
-        en: "",
-        de: "",
-        zh: "",
-        ...Object.fromEntries(items.map((item) => [item.value, ""])),
-    }
+    let learningLevels: Record<string, CefrLevel | ""> = Object.fromEntries(
+        items.map((item) => [item.value, ""])
+    )
 
     $: totalTeaching = teaching.length
     $: totalLearning = learning.length
+
+    $: notSupportedLearning = learning.filter(({ value }) =>
+        (SUPPORTED_LOCALES as readonly string[]).includes(value)
+    )
 
     $: learningCodes = learning.map((item) => item.value)
 
@@ -318,7 +331,7 @@
                             </div>
                         </div>
                     {/if}
-                    {#if learning.length}
+                    {#if notSupportedLearning.length}
                         <div
                             class="warning-learn-other"
                             in:scale={{ duration: 150, delay: 150 }}
@@ -330,12 +343,15 @@
                                     <Overlay
                                         id="signup-form-not-supported-msg"
                                         args={{
-                                            learnCount: learning.length,
-                                            lang1: learning[0]
-                                                ? learning[0].label || ""
+                                            learnCount:
+                                                notSupportedLearning.length,
+                                            lang1: notSupportedLearning[0]
+                                                ? notSupportedLearning[0]
+                                                      .label || ""
                                                 : "",
-                                            lang2: learning[1]
-                                                ? learning[1].label || ""
+                                            lang2: notSupportedLearning[1]
+                                                ? notSupportedLearning[1]
+                                                      .label || ""
                                                 : "",
                                         }}
                                     >

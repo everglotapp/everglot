@@ -25,9 +25,9 @@ export const SUPPORTED_LOCALES = [
     "zh",
     "it",
     "es",
+    "fr",
     // "ja",
     // "ko",
-    "fr",
 ] as const
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
 

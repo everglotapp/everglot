@@ -50,7 +50,7 @@
             const { alpha2 } = $currentUser.languageByLocale
             let foundItem = items.find((item) => item.value === alpha2)
             if (foundItem) {
-                teachOther = [...teachOther, foundItem]
+                teaching = [...teaching, foundItem]
             }
         }
     }
@@ -71,8 +71,8 @@
         label: englishName,
     }))
 
-    let learnOther: LanguageItem[] = []
-    let teachOther: LanguageItem[] = []
+    let learning: LanguageItem[] = []
+    let teaching: LanguageItem[] = []
 
     let learningLevels: Record<string, CefrLevel | ""> = {
         en: "",
@@ -81,31 +81,31 @@
         ...Object.fromEntries(items.map((item) => [item.value, ""])),
     }
 
-    $: totalTeaching = teachOther.length
-    $: totalLearning = learnOther.length
+    $: totalTeaching = teaching.length
+    $: totalLearning = learning.length
 
-    $: learningCodes = learnOther.map((item) => item.value)
+    $: learningCodes = learning.map((item) => item.value)
 
     $: learnable =
         totalLearning >= MAX_LEARNING
             ? []
             : items.filter((item) => {
                   const lang = item.value
-                  return !teachOther.find(({ value }) => value === lang)
+                  return !teaching.find(({ value }) => value === lang)
               })
     $: teachable =
         totalTeaching >= MAX_TEACHING
             ? []
             : items.filter((item) => {
                   const lang = item.value
-                  return !learnOther.find(({ value }) => value === lang)
+                  return !learning.find(({ value }) => value === lang)
               })
 
-    function handleSelectLearnOther(event: CustomEvent<LanguageItem[] | null>) {
-        learnOther = [...(event.detail || [])]
+    function handleSelectLearning(event: CustomEvent<LanguageItem[] | null>) {
+        learning = [...(event.detail || [])]
     }
-    function handleSelectTeachOther(event: CustomEvent<LanguageItem[] | null>) {
-        teachOther = [...(event.detail || [])]
+    function handleSelectTeaching(event: CustomEvent<LanguageItem[] | null>) {
+        teaching = [...(event.detail || [])]
     }
 
     let gender: Gender | null = null
@@ -130,7 +130,7 @@
         }
         submitting = true
         errorMessage = null
-        const teachingCodes = teachOther.map((item) => item.value)
+        const teachingCodes = teaching.map((item) => item.value)
         const response = await fetch("/signup", {
             method: "post",
             headers: {
@@ -140,8 +140,8 @@
             body: JSON.stringify({
                 username: $username,
                 gender,
-                teach: teachingCodes,
-                learn: learningCodes,
+                teaching: teachingCodes,
+                learning: learningCodes,
                 cefrLevels: Object.entries(learningLevels).reduce(
                     (levels, [code, level]) =>
                         learningCodes.includes(code)
@@ -224,9 +224,9 @@
                 <div class="form-control">
                     <GroupSelect
                         items={learnable}
-                        selected={learnOther.length ? learnOther : null}
+                        selected={learning.length ? learning : null}
                         hideInput={totalLearning >= MAX_LEARNING}
-                        on:select={handleSelectLearnOther}
+                        on:select={handleSelectLearning}
                         placeholder={$translate(
                             "signup-form-learning-placeholder"
                         )}
@@ -318,7 +318,7 @@
                             </div>
                         </div>
                     {/if}
-                    {#if learnOther.length}
+                    {#if learning.length}
                         <div
                             class="warning-learn-other"
                             in:scale={{ duration: 150, delay: 150 }}
@@ -330,12 +330,12 @@
                                     <Overlay
                                         id="signup-form-not-supported-msg"
                                         args={{
-                                            learnCount: learnOther.length,
-                                            lang1: learnOther[0]
-                                                ? learnOther[0].label || ""
+                                            learnCount: learning.length,
+                                            lang1: learning[0]
+                                                ? learning[0].label || ""
                                                 : "",
-                                            lang2: learnOther[1]
-                                                ? learnOther[1].label || ""
+                                            lang2: learning[1]
+                                                ? learning[1].label || ""
                                                 : "",
                                         }}
                                     >
@@ -361,9 +361,9 @@
                 <div class="form-control">
                     <GroupSelect
                         items={teachable}
-                        selected={teachOther.length ? teachOther : null}
+                        selected={teaching.length ? teaching : null}
                         hideInput={totalTeaching >= MAX_TEACHING}
-                        on:select={handleSelectTeachOther}
+                        on:select={handleSelectTeaching}
                         placeholder={$translate(
                             "signup-form-teaching-placeholder"
                         )}

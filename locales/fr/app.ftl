@@ -112,7 +112,7 @@ main-nav-continue = Continuer
 ## Signup successful page
 
 signup-success-browser-window-title = Success – { -brand-name }
-signup-success-title = Success!
+signup-success-title = Succès!
 signup-success-msg = Merci pour être entre les premiers qui veulent essayer notre prototype! Nous t'associerons à un groupe étudiant mais cela dure peut-être un peu de temps. Dès que le process sera complété nous t'envoyerons une notification via app ou par E-Mail.
 signup-success-explore = Explorer canal global
 signup-success-download-app-ios = Télécharger Everglot pour iOS
@@ -226,8 +226,22 @@ profile-language-native-hint = (Langue maternelle)
 profile-groups = Mes groupes
 profile-avatar-upload-failed = Ton avatar ne pouvait pas être changé avec succès. Essayes encore, s'il te plait.
 
+## Email notifications unsubscription successful
+
+email-unsubscribe-success-headline = Succès!
+
+## Email notifications unsubscription unsuccessful
+
+
 ## Locales
 
 locale-en = Anglais
 locale-de = Allemand
 locale-zh = Chinois
+locale-es = Espagnol
+locale-it = Italien
+locale-fr = Français
+locale-ko = Coréen
+locale-ja = Japonais
+locale-ru = Russe
+locale-ar = Arabe

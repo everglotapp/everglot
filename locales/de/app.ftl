@@ -155,8 +155,20 @@ signup-browser-window-title = Fast fertig – { -brand-name }
 signup-title = Erzähl uns ein wenig von dir
 signup-form-username-label = Wähle einen Nutzernamen*
 signup-form-username-helper = Die anderen werden dich unter diesem Namen sehen.
+signup-form-username-placeholder = Benutzername …
 signup-form-learning-label = Für welche Sprachen interessiert du dich (bis zu { $max })?*
 signup-form-learning-helper = Bitte wähle nur Sprachen, die du wirklich lernen möchtest oder bereits lernst.
+signup-form-learning-placeholder = Sprache suchen …
+signup-form-teaching-placeholder = Sprache suchen …
+signup-form-learning-levels-legend = Dein Niveau in …
+signup-form-learning-levels-select-placeholder = Dein Niveau in …
+signup-form-learning-levels-select-empty = Wähle ein Niveau …
+signup-form-learning-levels-select-a1 = A1 – Einstieg
+signup-form-learning-levels-select-a2 = A2 – Grundlagen
+signup-form-learning-levels-select-b1 = B1 – Mittelstufe
+signup-form-learning-levels-select-b2 = B2 – Gute Mittelstufe
+signup-form-learning-levels-select-c1 = C1 – Fortgeschrittene Kenntnisse
+signup-form-learning-levels-select-c2 = C2 – Exzellente Kenntnisse
 signup-form-difficult-msg =
     <p data-l10n-name="difficult">
     Everglot kann für Anfänger auf den Stufen A1 und A2 ganz schön anstrengend sein.
@@ -183,6 +195,7 @@ signup-form-gender-female = Weiblich
 signup-form-gender-male = Männlich
 signup-form-gender-other = Divers
 signup-form-submit = Weiter
+signup-form-error-loading-language-codes = Etwas ist schiefgelaufen.
 
 ## User Bio component
 

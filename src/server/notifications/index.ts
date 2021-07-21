@@ -1,7 +1,8 @@
 import { performQuery } from "../gql"
 import log from "../../logger"
 
-import type {
+import {
+    CreateUserDevice,
     CreateUserDeviceMutation,
     CreateUserDeviceMutationVariables,
 } from "../../types/generated/graphql"
@@ -12,22 +13,9 @@ export async function createUserDevice(
     userDevice: CreateUserDeviceMutationVariables
 ): Promise<CreateUserDeviceMutation["createUserDevice"] | null> {
     const res = await performQuery<CreateUserDeviceMutation>(
-        `mutation CreateUserDevice($userId: Int!, $fcmToken: String) {
-            createUserDevice(
-                input: { userDevice: { userId: $userId, fcmToken: $fcmToken } }
-            ) {
-                userDevice {
-                    uuid
-                    fcmToken
-                    id
-                }
-            }
-        }`,
+        CreateUserDevice.loc!.source,
         { ...userDevice }
     )
-    if (!res.data) {
-        return null
-    }
     chlog.child({ userDevice }).debug("Successfully created user device")
-    return res.data?.createUserDevice
+    return res.data?.createUserDevice || null
 }

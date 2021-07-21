@@ -1,7 +1,8 @@
 import { performQuery } from "../gql"
 import log from "../../logger"
 
-import type {
+import {
+    UnsubscribeUserEmailNotifications,
     UnsubscribeUserEmailNotificationsMutation,
     UnsubscribeUserEmailNotificationsMutationVariables,
 } from "../../types/generated/graphql"
@@ -15,27 +16,7 @@ export async function unsubscribeUserEmailNotifications(
     | null
 > {
     const res = await performQuery<UnsubscribeUserEmailNotificationsMutation>(
-        `mutation UnsubscribeUserEmailNotifications(
-            $token: String!
-            $lastActiveAt: Datetime!
-        ) {
-            updateUserByEmailUnsubscribeToken(
-                input: {
-                    patch: {
-                        emailNotificationsEnabled: false
-                        lastActiveAt: $lastActiveAt
-                    }
-                    emailUnsubscribeToken: $token
-                }
-            ) {
-                clientMutationId
-                user {
-                    email
-                    uuid
-                    username
-                }
-            }
-        }`,
+        UnsubscribeUserEmailNotifications.loc!.source,
         { token, lastActiveAt: new Date().toISOString() }
     )
     if (res.errors || !res.data) {

@@ -291,6 +291,74 @@ type Query implements Node {
     filter: MessageFilter
   ): MessagesConnection
 
+  """Reads and enables pagination through a set of `NotificationChannel`."""
+  notificationChannels(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `NotificationChannel`."""
+    orderBy: [NotificationChannelsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationChannelCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationChannelFilter
+  ): NotificationChannelsConnection
+
+  """Reads and enables pagination through a set of `Notification`."""
+  notifications(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection
+
   """Reads and enables pagination through a set of `GermanRandomQuestion`."""
   germanRandomQuestions(
     """Only read the first `n` values of the set."""
@@ -718,6 +786,11 @@ type Query implements Node {
   messagePreviewByUuid(uuid: UUID!): MessagePreview
   message(id: Int!): Message
   messageByUuid(uuid: UUID!): Message
+  notificationChannel(id: Int!): NotificationChannel
+  notificationChannelByUuid(uuid: UUID!): NotificationChannel
+  notificationChannelByName(name: String!): NotificationChannel
+  notification(id: Int!): Notification
+  notificationByUuid(uuid: UUID!): Notification
   germanRandomQuestion(id: Int!): GermanRandomQuestion
   germanRandomQuestionByUuid(uuid: UUID!): GermanRandomQuestion
   englishRandomQuestion(id: Int!): EnglishRandomQuestion
@@ -862,6 +935,22 @@ type Query implements Node {
     """The globally unique `ID` to be used in selecting a single `Message`."""
     nodeId: ID!
   ): Message
+
+  """Reads a single `NotificationChannel` using its globally unique `ID`."""
+  notificationChannelByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `NotificationChannel`.
+    """
+    nodeId: ID!
+  ): NotificationChannel
+
+  """Reads a single `Notification` using its globally unique `ID`."""
+  notificationByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `Notification`.
+    """
+    nodeId: ID!
+  ): Notification
 
   """Reads a single `GermanRandomQuestion` using its globally unique `ID`."""
   germanRandomQuestionByNodeId(
@@ -1252,6 +1341,40 @@ type User implements Node {
     filter: UserDeviceFilter
   ): UserDevicesConnection!
 
+  """Reads and enables pagination through a set of `Notification`."""
+  notifications(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
+
   """Reads and enables pagination through a set of `Language`."""
   languagesByUserLanguageUserIdAndLanguageId(
     """Only read the first `n` values of the set."""
@@ -1557,6 +1680,40 @@ type User implements Node {
     """
     filter: MessageFilter
   ): UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `NotificationChannel`."""
+  notificationChannelsByNotificationUserIdAndChannelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `NotificationChannel`."""
+    orderBy: [NotificationChannelsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationChannelCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationChannelFilter
+  ): UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyConnection!
 }
 
 """
@@ -6303,6 +6460,298 @@ input UserDeviceFilter {
   not: UserDeviceFilter
 }
 
+"""A connection to a list of `Notification` values."""
+type NotificationsConnection {
+  """A list of `Notification` objects."""
+  nodes: [Notification]!
+
+  """
+  A list of edges which contains the `Notification` and cursor to aid in pagination.
+  """
+  edges: [NotificationsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Notification` you could get from the connection."""
+  totalCount: Int!
+}
+
+type Notification implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  userId: Int!
+  channelId: Int!
+  params: JSON
+  sentAt: Datetime
+  expiresAt: Datetime
+  readAt: Datetime
+  createdAt: Datetime!
+
+  """Reads a single `User` that is related to this `Notification`."""
+  user: User
+
+  """
+  Reads a single `NotificationChannel` that is related to this `Notification`.
+  """
+  channel: NotificationChannel
+}
+
+"""
+A JavaScript object encoded in the JSON format as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type NotificationChannel implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  name: String
+  createdAt: Datetime!
+
+  """Reads and enables pagination through a set of `Notification`."""
+  notificationsByChannelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByNotificationChannelIdAndUserId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyConnection!
+}
+
+"""Methods to use when ordering `Notification`."""
+enum NotificationsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  CHANNEL_ID_ASC
+  CHANNEL_ID_DESC
+  PARAMS_ASC
+  PARAMS_DESC
+  SENT_AT_ASC
+  SENT_AT_DESC
+  EXPIRES_AT_ASC
+  EXPIRES_AT_DESC
+  READ_AT_ASC
+  READ_AT_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Notification` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input NotificationCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `channelId` field."""
+  channelId: Int
+
+  """Checks for equality with the object’s `params` field."""
+  params: JSON
+
+  """Checks for equality with the object’s `sentAt` field."""
+  sentAt: Datetime
+
+  """Checks for equality with the object’s `expiresAt` field."""
+  expiresAt: Datetime
+
+  """Checks for equality with the object’s `readAt` field."""
+  readAt: Datetime
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `Notification` object types. All fields are combined with a logical ‘and.’
+"""
+input NotificationFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `channelId` field."""
+  channelId: IntFilter
+
+  """Filter by the object’s `sentAt` field."""
+  sentAt: DatetimeFilter
+
+  """Filter by the object’s `expiresAt` field."""
+  expiresAt: DatetimeFilter
+
+  """Filter by the object’s `readAt` field."""
+  readAt: DatetimeFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [NotificationFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [NotificationFilter!]
+
+  """Negates the expression."""
+  not: NotificationFilter
+}
+
+"""
+A connection to a list of `User` values, with data from `Notification`.
+"""
+type NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Notification`, and the cursor to aid in pagination.
+  """
+  edges: [NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Notification`."""
+type NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Notification`."""
+  notifications(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
+}
+
+"""A `Notification` edge in the connection."""
+type NotificationsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Notification` at the end of the edge."""
+  node: Notification
+}
+
 """
 A connection to a list of `Language` values, with data from `UserLanguage`.
 """
@@ -6851,6 +7300,131 @@ type UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyEdge {
   ): MessagesConnection!
 }
 
+"""
+A connection to a list of `NotificationChannel` values, with data from `Notification`.
+"""
+type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyConnection {
+  """A list of `NotificationChannel` objects."""
+  nodes: [NotificationChannel]!
+
+  """
+  A list of edges which contains the `NotificationChannel`, info from the `Notification`, and the cursor to aid in pagination.
+  """
+  edges: [UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `NotificationChannel` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `NotificationChannel` edge in the connection, with data from `Notification`.
+"""
+type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `NotificationChannel` at the end of the edge."""
+  node: NotificationChannel
+
+  """Reads and enables pagination through a set of `Notification`."""
+  notificationsByChannelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
+}
+
+"""Methods to use when ordering `NotificationChannel`."""
+enum NotificationChannelsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  NAME_ASC
+  NAME_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `NotificationChannel` object types. All fields
+are tested for equality and combined with a logical ‘and.’
+"""
+input NotificationChannelCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `NotificationChannel` object types. All fields are combined with a logical ‘and.’
+"""
+input NotificationChannelFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [NotificationChannelFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [NotificationChannelFilter!]
+
+  """Negates the expression."""
+  not: NotificationChannelFilter
+}
+
 """A `GroupUser` edge in the connection."""
 type GroupUsersEdge {
   """A cursor for use in pagination."""
@@ -6914,6 +7488,34 @@ type LanguagesEdge {
   node: Language
 }
 
+"""A connection to a list of `NotificationChannel` values."""
+type NotificationChannelsConnection {
+  """A list of `NotificationChannel` objects."""
+  nodes: [NotificationChannel]!
+
+  """
+  A list of edges which contains the `NotificationChannel` and cursor to aid in pagination.
+  """
+  edges: [NotificationChannelsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `NotificationChannel` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""A `NotificationChannel` edge in the connection."""
+type NotificationChannelsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `NotificationChannel` at the end of the edge."""
+  node: NotificationChannel
+}
+
 """A connection to a list of `UserSession` values."""
 type UserSessionsConnection {
   """A list of `UserSession` objects."""
@@ -6941,11 +7543,6 @@ type UserSession implements Node {
   expire: Datetime!
   createdAt: Datetime!
 }
-
-"""
-A JavaScript object encoded in the JSON format as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON
 
 """A `UserSession` edge in the connection."""
 type UserSessionsEdge {
@@ -7079,6 +7676,22 @@ type Mutation {
     """
     input: CreateMessageInput!
   ): CreateMessagePayload
+
+  """Creates a single `NotificationChannel`."""
+  createNotificationChannel(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateNotificationChannelInput!
+  ): CreateNotificationChannelPayload
+
+  """Creates a single `Notification`."""
+  createNotification(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateNotificationInput!
+  ): CreateNotificationPayload
 
   """Creates a single `GermanRandomQuestion`."""
   createGermanRandomQuestion(
@@ -7363,6 +7976,66 @@ type Mutation {
     """
     input: UpdateMessageByUuidInput!
   ): UpdateMessagePayload
+
+  """
+  Updates a single `NotificationChannel` using its globally unique id and a patch.
+  """
+  updateNotificationChannelByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNotificationChannelByNodeIdInput!
+  ): UpdateNotificationChannelPayload
+
+  """Updates a single `NotificationChannel` using a unique key and a patch."""
+  updateNotificationChannel(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNotificationChannelInput!
+  ): UpdateNotificationChannelPayload
+
+  """Updates a single `NotificationChannel` using a unique key and a patch."""
+  updateNotificationChannelByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNotificationChannelByUuidInput!
+  ): UpdateNotificationChannelPayload
+
+  """Updates a single `NotificationChannel` using a unique key and a patch."""
+  updateNotificationChannelByName(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNotificationChannelByNameInput!
+  ): UpdateNotificationChannelPayload
+
+  """
+  Updates a single `Notification` using its globally unique id and a patch.
+  """
+  updateNotificationByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNotificationByNodeIdInput!
+  ): UpdateNotificationPayload
+
+  """Updates a single `Notification` using a unique key and a patch."""
+  updateNotification(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNotificationInput!
+  ): UpdateNotificationPayload
+
+  """Updates a single `Notification` using a unique key and a patch."""
+  updateNotificationByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNotificationByUuidInput!
+  ): UpdateNotificationPayload
 
   """
   Updates a single `GermanRandomQuestion` using its globally unique id and a patch.
@@ -7883,6 +8556,62 @@ type Mutation {
     """
     input: DeleteMessageByUuidInput!
   ): DeleteMessagePayload
+
+  """Deletes a single `NotificationChannel` using its globally unique id."""
+  deleteNotificationChannelByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNotificationChannelByNodeIdInput!
+  ): DeleteNotificationChannelPayload
+
+  """Deletes a single `NotificationChannel` using a unique key."""
+  deleteNotificationChannel(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNotificationChannelInput!
+  ): DeleteNotificationChannelPayload
+
+  """Deletes a single `NotificationChannel` using a unique key."""
+  deleteNotificationChannelByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNotificationChannelByUuidInput!
+  ): DeleteNotificationChannelPayload
+
+  """Deletes a single `NotificationChannel` using a unique key."""
+  deleteNotificationChannelByName(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNotificationChannelByNameInput!
+  ): DeleteNotificationChannelPayload
+
+  """Deletes a single `Notification` using its globally unique id."""
+  deleteNotificationByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNotificationByNodeIdInput!
+  ): DeleteNotificationPayload
+
+  """Deletes a single `Notification` using a unique key."""
+  deleteNotification(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNotificationInput!
+  ): DeleteNotificationPayload
+
+  """Deletes a single `Notification` using a unique key."""
+  deleteNotificationByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNotificationByUuidInput!
+  ): DeleteNotificationPayload
 
   """Deletes a single `GermanRandomQuestion` using its globally unique id."""
   deleteGermanRandomQuestionByNodeId(
@@ -8595,6 +9324,105 @@ input MessageInput {
   recipientGroupId: Int
   body: String!
   parentMessageId: Int
+  createdAt: Datetime
+}
+
+"""The output of our create `NotificationChannel` mutation."""
+type CreateNotificationChannelPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `NotificationChannel` that was created by this mutation."""
+  notificationChannel: NotificationChannel
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `NotificationChannel`. May be used by Relay 1."""
+  notificationChannelEdge(
+    """The method to use when ordering `NotificationChannel`."""
+    orderBy: [NotificationChannelsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NotificationChannelsEdge
+}
+
+"""All input for the create `NotificationChannel` mutation."""
+input CreateNotificationChannelInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `NotificationChannel` to be created by this mutation."""
+  notificationChannel: NotificationChannelInput!
+}
+
+"""An input for mutations affecting `NotificationChannel`"""
+input NotificationChannelInput {
+  id: Int
+  uuid: UUID
+  name: String
+  createdAt: Datetime
+}
+
+"""The output of our create `Notification` mutation."""
+type CreateNotificationPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Notification` that was created by this mutation."""
+  notification: Notification
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `Notification`."""
+  user: User
+
+  """
+  Reads a single `NotificationChannel` that is related to this `Notification`.
+  """
+  channel: NotificationChannel
+
+  """An edge for our `Notification`. May be used by Relay 1."""
+  notificationEdge(
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NotificationsEdge
+}
+
+"""All input for the create `Notification` mutation."""
+input CreateNotificationInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Notification` to be created by this mutation."""
+  notification: NotificationInput!
+}
+
+"""An input for mutations affecting `Notification`"""
+input NotificationInput {
+  id: Int
+  uuid: UUID
+  userId: Int!
+  channelId: Int!
+  params: JSON
+  sentAt: Datetime
+  expiresAt: Datetime
+  readAt: Datetime
   createdAt: Datetime
 }
 
@@ -9898,6 +10726,198 @@ input UpdateMessageByUuidInput {
   An object where the defined keys will be set on the `Message` being updated.
   """
   patch: MessagePatch!
+  uuid: UUID!
+}
+
+"""The output of our update `NotificationChannel` mutation."""
+type UpdateNotificationChannelPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `NotificationChannel` that was updated by this mutation."""
+  notificationChannel: NotificationChannel
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `NotificationChannel`. May be used by Relay 1."""
+  notificationChannelEdge(
+    """The method to use when ordering `NotificationChannel`."""
+    orderBy: [NotificationChannelsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NotificationChannelsEdge
+}
+
+"""All input for the `updateNotificationChannelByNodeId` mutation."""
+input UpdateNotificationChannelByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `NotificationChannel` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `NotificationChannel` being updated.
+  """
+  patch: NotificationChannelPatch!
+}
+
+"""
+Represents an update to a `NotificationChannel`. Fields that are set will be updated.
+"""
+input NotificationChannelPatch {
+  id: Int
+  uuid: UUID
+  name: String
+  createdAt: Datetime
+}
+
+"""All input for the `updateNotificationChannel` mutation."""
+input UpdateNotificationChannelInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `NotificationChannel` being updated.
+  """
+  patch: NotificationChannelPatch!
+  id: Int!
+}
+
+"""All input for the `updateNotificationChannelByUuid` mutation."""
+input UpdateNotificationChannelByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `NotificationChannel` being updated.
+  """
+  patch: NotificationChannelPatch!
+  uuid: UUID!
+}
+
+"""All input for the `updateNotificationChannelByName` mutation."""
+input UpdateNotificationChannelByNameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `NotificationChannel` being updated.
+  """
+  patch: NotificationChannelPatch!
+  name: String!
+}
+
+"""The output of our update `Notification` mutation."""
+type UpdateNotificationPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Notification` that was updated by this mutation."""
+  notification: Notification
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `Notification`."""
+  user: User
+
+  """
+  Reads a single `NotificationChannel` that is related to this `Notification`.
+  """
+  channel: NotificationChannel
+
+  """An edge for our `Notification`. May be used by Relay 1."""
+  notificationEdge(
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NotificationsEdge
+}
+
+"""All input for the `updateNotificationByNodeId` mutation."""
+input UpdateNotificationByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Notification` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Notification` being updated.
+  """
+  patch: NotificationPatch!
+}
+
+"""
+Represents an update to a `Notification`. Fields that are set will be updated.
+"""
+input NotificationPatch {
+  id: Int
+  uuid: UUID
+  userId: Int
+  channelId: Int
+  params: JSON
+  sentAt: Datetime
+  expiresAt: Datetime
+  readAt: Datetime
+  createdAt: Datetime
+}
+
+"""All input for the `updateNotification` mutation."""
+input UpdateNotificationInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Notification` being updated.
+  """
+  patch: NotificationPatch!
+  id: Int!
+}
+
+"""All input for the `updateNotificationByUuid` mutation."""
+input UpdateNotificationByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Notification` being updated.
+  """
+  patch: NotificationPatch!
   uuid: UUID!
 }
 
@@ -11487,6 +12507,140 @@ input DeleteMessageInput {
 
 """All input for the `deleteMessageByUuid` mutation."""
 input DeleteMessageByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `NotificationChannel` mutation."""
+type DeleteNotificationChannelPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `NotificationChannel` that was deleted by this mutation."""
+  notificationChannel: NotificationChannel
+  deletedNotificationChannelNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `NotificationChannel`. May be used by Relay 1."""
+  notificationChannelEdge(
+    """The method to use when ordering `NotificationChannel`."""
+    orderBy: [NotificationChannelsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NotificationChannelsEdge
+}
+
+"""All input for the `deleteNotificationChannelByNodeId` mutation."""
+input DeleteNotificationChannelByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `NotificationChannel` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteNotificationChannel` mutation."""
+input DeleteNotificationChannelInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deleteNotificationChannelByUuid` mutation."""
+input DeleteNotificationChannelByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""All input for the `deleteNotificationChannelByName` mutation."""
+input DeleteNotificationChannelByNameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  name: String!
+}
+
+"""The output of our delete `Notification` mutation."""
+type DeleteNotificationPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Notification` that was deleted by this mutation."""
+  notification: Notification
+  deletedNotificationNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `Notification`."""
+  user: User
+
+  """
+  Reads a single `NotificationChannel` that is related to this `Notification`.
+  """
+  channel: NotificationChannel
+
+  """An edge for our `Notification`. May be used by Relay 1."""
+  notificationEdge(
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NotificationsEdge
+}
+
+"""All input for the `deleteNotificationByNodeId` mutation."""
+input DeleteNotificationByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Notification` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteNotification` mutation."""
+input DeleteNotificationInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deleteNotificationByUuid` mutation."""
+input DeleteNotificationByUuidInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.

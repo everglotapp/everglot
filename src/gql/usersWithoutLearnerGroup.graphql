@@ -1,0 +1,7 @@
+query UsersWithoutLearnerGroup($lid: Int!, $lsklid: Int!, $learnerSize: Int!) {
+    usersWithoutLearnerGroup(lid: $lid, lsklid: $lsklid, first: $learnerSize) {
+        nodes {
+            id
+        }
+    }
+}

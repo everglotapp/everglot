@@ -38,6 +38,7 @@ export async function performQuery<TData = { [key: string]: any }>(
             if (!schema) {
                 throw new Error("GraphQL schema is empty")
             }
+
             return await graphql(
                 schema,
                 query,

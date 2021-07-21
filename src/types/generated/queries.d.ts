@@ -44,6 +44,15 @@ declare module '*/createGroup.graphql' {
 }
     
 
+declare module '*/createGroupUser.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateGroupUser: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createMessage.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -246,6 +255,24 @@ declare module '*/userUuidById.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const UserUuidById: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/usersWithoutLearnerGroup.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UsersWithoutLearnerGroup: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/usersWithoutNativeGroup.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UsersWithoutNativeGroup: DocumentNode;
 
   export default defaultDocument;
 }

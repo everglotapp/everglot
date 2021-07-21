@@ -10286,6 +10286,24 @@ export type CreateGroupMutation = (
   )> }
 );
 
+export type CreateGroupUserMutationVariables = Exact<{
+  userType: UserType;
+  userId: Scalars['Int'];
+  groupId: Scalars['Int'];
+}>;
+
+
+export type CreateGroupUserMutation = (
+  { __typename?: 'Mutation' }
+  & { createGroupUser?: Maybe<(
+    { __typename?: 'CreateGroupUserPayload' }
+    & { groupUser?: Maybe<(
+      { __typename?: 'GroupUser' }
+      & Pick<GroupUser, 'id'>
+    )> }
+  )> }
+);
+
 export type CreateMessageMutationVariables = Exact<{
   parentMessageId?: Maybe<Scalars['Int']>;
   recipientGroupId?: Maybe<Scalars['Int']>;
@@ -10813,6 +10831,41 @@ export type UserUuidByIdQuery = (
   )> }
 );
 
+export type UsersWithoutLearnerGroupQueryVariables = Exact<{
+  lid: Scalars['Int'];
+  lsklid: Scalars['Int'];
+  learnerSize: Scalars['Int'];
+}>;
+
+
+export type UsersWithoutLearnerGroupQuery = (
+  { __typename?: 'Query' }
+  & { usersWithoutLearnerGroup?: Maybe<(
+    { __typename?: 'UsersConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )>> }
+  )> }
+);
+
+export type UsersWithoutNativeGroupQueryVariables = Exact<{
+  lid: Scalars['Int'];
+  nativeSize: Scalars['Int'];
+}>;
+
+
+export type UsersWithoutNativeGroupQuery = (
+  { __typename?: 'Query' }
+  & { usersWithoutNativeGroup?: Maybe<(
+    { __typename?: 'UsersConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )>> }
+  )> }
+);
+
 
 export const AdminEmailsFcmTokens = gql`
     query AdminEmailsFcmTokens($in: [String!]!) {
@@ -10884,6 +10937,17 @@ export const CreateGroup = gql`
     group {
       id
       uuid
+    }
+  }
+}
+    `;
+export const CreateGroupUser = gql`
+    mutation CreateGroupUser($userType: UserType!, $userId: Int!, $groupId: Int!) {
+  createGroupUser(
+    input: {groupUser: {userType: $userType, userId: $userId, groupId: $groupId}}
+  ) {
+    groupUser {
+      id
     }
   }
 }
@@ -11259,6 +11323,24 @@ export const UserUuidById = gql`
     query UserUuidById($id: Int!) {
   user(id: $id) {
     uuid
+  }
+}
+    `;
+export const UsersWithoutLearnerGroup = gql`
+    query UsersWithoutLearnerGroup($lid: Int!, $lsklid: Int!, $learnerSize: Int!) {
+  usersWithoutLearnerGroup(lid: $lid, lsklid: $lsklid, first: $learnerSize) {
+    nodes {
+      id
+    }
+  }
+}
+    `;
+export const UsersWithoutNativeGroup = gql`
+    query UsersWithoutNativeGroup($lid: Int!, $nativeSize: Int!) {
+  usersWithoutNativeGroup(lid: $lid, first: $nativeSize) {
+    nodes {
+      id
+    }
   }
 }
     `;

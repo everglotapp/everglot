@@ -170,7 +170,7 @@ async function sendNextEmailNotification() {
 }
 
 function getSendinblueTransactionalEmailsApiInstance() {
-    if (!SENDINBLUE_API_KEY) {
+    if (!SENDINBLUE_API_KEY || !SENDINBLUE_API_KEY.length) {
         chlog
             .child({ SENDINBLUE_API_KEY })
             .error("Empty API key for Sendinblue transactional emails API")

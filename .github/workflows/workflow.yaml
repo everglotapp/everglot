@@ -19,6 +19,7 @@ jobs:
                   echo "POSTGRES_DB=everglot_app_db" >> .env
                   echo "SESSION_COOKIE_VALIDATION_SECRETS=[\"MySecretCookieValidationSecret123\"]" >> .env
                   echo "AGORA_APP_CERTIFICATE=whatever" >> .env
+                  echo "SENDINBLUE_API_KEY=whatever" >> .env
             - name: "Setup server-side Firebase credentials file"
               run: |
                   echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON_BASE64 }}" | base64 -d > src/firebaseServiceAccount.json

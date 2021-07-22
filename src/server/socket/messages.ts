@@ -39,7 +39,6 @@ import {
 import { getCurrentUser } from "./users"
 import { getGroupIdByUuid, getGroupLanguageByUuid } from "../groups"
 import { notifyMessageRecipients } from "../notifications/messages"
-import { enqueueEmailNotification } from "../notifications/email"
 
 export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     socket.on("chatMessage", async (msg) => {
@@ -81,18 +80,6 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
             chlog.child({ message }).error("User text message creation failed")
             return
         }
-
-        enqueueEmailNotification(
-            chatUser.user.id,
-            null,
-            null,
-            new Date(Date.now() + 1000 * 30),
-            {
-                version: 1,
-                textContent: `You sent: ${msg}`,
-                subject: "You sent a new message",
-            }
-        )
 
         const group = await getGroupLanguageByUuid(groupUuid)
         if (!group || !group.groupByUuid?.language?.alpha2) {

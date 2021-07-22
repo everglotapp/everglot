@@ -35,6 +35,11 @@ exports.up = (pgm) => {
                 notNull: false,
                 default: pgm.func("current_timestamp"),
             },
+            withheld_until: {
+                type: "timestamp with time zone",
+                notNull: false,
+                default: pgm.func("current_timestamp"),
+            },
             expires_at: {
                 type: "timestamp with time zone",
                 notNull: false,
@@ -73,18 +78,19 @@ exports.up = (pgm) => {
         { schema: "app_public", name: "notifications" },
         "channel_id"
     )
-    pgm.sql(
-        `GRANT UPDATE(expires_at, read_at)
-        ON app_public.notifications
-        TO evg_server`
+    pgm.createPolicy(
+        { schema: "app_public", name: "notifications" },
+        "update_server",
+        {
+            command: "UPDATE",
+            role: "evg_server",
+            using: `true`,
+        }
     )
     pgm.sql(
-        `GRANT INSERT(uuid, channel_id, user_id, params, sent_at, expires_at, read_at)
+        `GRANT UPDATE(expires_at, withheld_until, read_at, sent_at)
         ON app_public.notifications
         TO evg_server`
-    )
-    pgm.sql(
-        `GRANT USAGE, SELECT ON SEQUENCE app_public.notifications_id_seq TO evg_server`
     )
     pgm.createPolicy(
         { schema: "app_public", name: "notifications" },
@@ -95,24 +101,24 @@ exports.up = (pgm) => {
             check: `true`,
         }
     )
-    pgm.createPolicy(
-        { schema: "app_public", name: "notifications" },
-        "update_server",
-        {
-            command: "UPDATE",
-            role: "evg_server",
-            check: `true`,
-        }
+    pgm.sql(
+        `GRANT INSERT(uuid, channel_id, user_id, params, sent_at, expires_at, read_at, withheld_until)
+        ON app_public.notifications
+        TO evg_server`
+    )
+    pgm.sql(
+        `GRANT USAGE, SELECT ON SEQUENCE app_public.notifications_id_seq TO evg_server`
     )
 }
 
 exports.down = (pgm) => {
-    pgm.dropPolicy(
-        { schema: "app_public", name: "notifications" },
-        "update_server",
-        {
-            ifExists: false,
-        }
+    pgm.sql(
+        `REVOKE USAGE, SELECT ON SEQUENCE app_public.notifications_id_seq FROM evg_server`
+    )
+    pgm.sql(
+        `REVOKE INSERT(uuid, channel_id, user_id, params, sent_at, expires_at, read_at, withheld_until)
+        ON app_public.notifications
+        FROM evg_server`
     )
     pgm.dropPolicy(
         { schema: "app_public", name: "notifications" },
@@ -122,17 +128,16 @@ exports.down = (pgm) => {
         }
     )
     pgm.sql(
-        `REVOKE USAGE, SELECT ON SEQUENCE app_public.notifications_id_seq FROM evg_server`
-    )
-    pgm.sql(
-        `REVOKE INSERT(uuid, channel_id, user_id, params, sent_at, expires_at, read_at)
+        `REVOKE UPDATE(expires_at, read_at, sent_at, withheld_until)
         ON app_public.notifications
         FROM evg_server`
     )
-    pgm.sql(
-        `REVOKE UPDATE(expires_at, read_at)
-        ON app_public.notifications
-        FROM evg_server`
+    pgm.dropPolicy(
+        { schema: "app_public", name: "notifications" },
+        "update_server",
+        {
+            ifExists: false,
+        }
     )
     pgm.dropIndex({ schema: "app_public", name: "notifications" }, "channel_id")
     pgm.dropIndex({ schema: "app_public", name: "notifications" }, "user_id")

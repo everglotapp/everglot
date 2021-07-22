@@ -188,6 +188,15 @@ declare module '*/adminEmailsFcmTokens.graphql' {
 }
     
 
+declare module '*/createNotification.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateNotification: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createUserDevice.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -201,6 +210,33 @@ declare module '*/groupMessageNotification.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const GroupMessageNotification: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/markNotificationAsSent.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const MarkNotificationAsSent: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/notificationChannelByName.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const NotificationChannelByName: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/outstandingEmailNotifications.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const OutstandingEmailNotifications: DocumentNode;
 
   export default defaultDocument;
 }

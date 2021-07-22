@@ -25,6 +25,7 @@ import {
     UserType,
 } from "../types/generated/graphql"
 import type { Group, User } from "../types/generated/graphql"
+import { enqueueEmailNotification } from "./notifications/email"
 
 const chlog = log.child({ namespace: "groups" })
 
@@ -184,6 +185,7 @@ export async function createAndAssignGroup(
     }
 }
 
+const GROUP_ASSIGNMENT_SENDINBLUE_EMAIL_TEMPLATE_ID = 10
 async function formGroup(
     languageId: number,
     languageSkillLevelId: number
@@ -225,6 +227,24 @@ async function formGroup(
             languageSkillLevelId
         )
         chlog.child({ group }).debug("Formed group")
+        const groupUserIds = [...learnerIds, ...nativeIds]
+        for (const userId of groupUserIds) {
+            if (true) {
+                continue
+            }
+            // TODO: actually enqueue email notifications here
+            const WITHHOLD_FOR_SECONDS = 3 * 60
+            enqueueEmailNotification(
+                userId,
+                null,
+                null,
+                new Date(Date.now() + WITHHOLD_FOR_SECONDS * 1000),
+                {
+                    templateId: GROUP_ASSIGNMENT_SENDINBLUE_EMAIL_TEMPLATE_ID,
+                    version: 1,
+                }
+            )
+        }
         return group?.id || null
     } else {
         chlog

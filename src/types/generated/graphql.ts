@@ -6312,6 +6312,7 @@ export type Notification = Node & {
   channelId: Scalars['Int'];
   params?: Maybe<Scalars['JSON']>;
   sentAt?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: Maybe<Scalars['Datetime']>;
   expiresAt?: Maybe<Scalars['Datetime']>;
   readAt?: Maybe<Scalars['Datetime']>;
   createdAt: Scalars['Datetime'];
@@ -6499,6 +6500,8 @@ export type NotificationCondition = {
   params?: Maybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `sentAt` field. */
   sentAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `withheldUntil` field. */
+  withheldUntil?: Maybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `expiresAt` field. */
   expiresAt?: Maybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `readAt` field. */
@@ -6519,6 +6522,8 @@ export type NotificationFilter = {
   channelId?: Maybe<IntFilter>;
   /** Filter by the object’s `sentAt` field. */
   sentAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `withheldUntil` field. */
+  withheldUntil?: Maybe<DatetimeFilter>;
   /** Filter by the object’s `expiresAt` field. */
   expiresAt?: Maybe<DatetimeFilter>;
   /** Filter by the object’s `readAt` field. */
@@ -6541,6 +6546,7 @@ export type NotificationInput = {
   channelId: Scalars['Int'];
   params?: Maybe<Scalars['JSON']>;
   sentAt?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: Maybe<Scalars['Datetime']>;
   expiresAt?: Maybe<Scalars['Datetime']>;
   readAt?: Maybe<Scalars['Datetime']>;
   createdAt?: Maybe<Scalars['Datetime']>;
@@ -6554,6 +6560,7 @@ export type NotificationPatch = {
   channelId?: Maybe<Scalars['Int']>;
   params?: Maybe<Scalars['JSON']>;
   sentAt?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: Maybe<Scalars['Datetime']>;
   expiresAt?: Maybe<Scalars['Datetime']>;
   readAt?: Maybe<Scalars['Datetime']>;
   createdAt?: Maybe<Scalars['Datetime']>;
@@ -6596,6 +6603,8 @@ export enum NotificationsOrderBy {
   ParamsDesc = 'PARAMS_DESC',
   SentAtAsc = 'SENT_AT_ASC',
   SentAtDesc = 'SENT_AT_DESC',
+  WithheldUntilAsc = 'WITHHELD_UNTIL_ASC',
+  WithheldUntilDesc = 'WITHHELD_UNTIL_DESC',
   ExpiresAtAsc = 'EXPIRES_AT_ASC',
   ExpiresAtDesc = 'EXPIRES_AT_DESC',
   ReadAtAsc = 'READ_AT_ASC',
@@ -10639,6 +10648,28 @@ export type AdminEmailsFcmTokensQuery = (
   )> }
 );
 
+export type CreateNotificationMutationVariables = Exact<{
+  channelId: Scalars['Int'];
+  userId: Scalars['Int'];
+  sentAt?: Maybe<Scalars['Datetime']>;
+  params?: Maybe<Scalars['JSON']>;
+  expiresAt?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: Maybe<Scalars['Datetime']>;
+}>;
+
+
+export type CreateNotificationMutation = (
+  { __typename?: 'Mutation' }
+  & { createNotification?: Maybe<(
+    { __typename?: 'CreateNotificationPayload' }
+    & Pick<CreateNotificationPayload, 'clientMutationId'>
+    & { notification?: Maybe<(
+      { __typename?: 'Notification' }
+      & Pick<Notification, 'createdAt' | 'expiresAt' | 'withheldUntil' | 'id'>
+    )> }
+  )> }
+);
+
 export type CreateUserDeviceMutationVariables = Exact<{
   userId: Scalars['Int'];
   fcmToken?: Maybe<Scalars['String']>;
@@ -10693,6 +10724,57 @@ export type GroupMessageNotificationQuery = (
   )>, userByUuid?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'username'>
+  )> }
+);
+
+export type MarkNotificationAsSentMutationVariables = Exact<{
+  id: Scalars['Int'];
+  sentAt?: Maybe<Scalars['Datetime']>;
+}>;
+
+
+export type MarkNotificationAsSentMutation = (
+  { __typename?: 'Mutation' }
+  & { updateNotification?: Maybe<(
+    { __typename?: 'UpdateNotificationPayload' }
+    & { notification?: Maybe<(
+      { __typename?: 'Notification' }
+      & Pick<Notification, 'id' | 'sentAt'>
+    )> }
+  )> }
+);
+
+export type NotificationChannelByNameQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type NotificationChannelByNameQuery = (
+  { __typename?: 'Query' }
+  & { notificationChannelByName?: Maybe<(
+    { __typename?: 'NotificationChannel' }
+    & Pick<NotificationChannel, 'id'>
+  )> }
+);
+
+export type OutstandingEmailNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OutstandingEmailNotificationsQuery = (
+  { __typename?: 'Query' }
+  & { notificationChannelByName?: Maybe<(
+    { __typename?: 'NotificationChannel' }
+    & { notificationsByChannelId: (
+      { __typename?: 'NotificationsConnection' }
+      & { nodes: Array<Maybe<(
+        { __typename?: 'Notification' }
+        & Pick<Notification, 'id' | 'params' | 'expiresAt' | 'withheldUntil'>
+        & { user?: Maybe<(
+          { __typename?: 'User' }
+          & Pick<User, 'email' | 'emailNotificationsEnabled' | 'username' | 'unconfirmedEmail'>
+        )> }
+      )>> }
+    ) }
   )> }
 );
 
@@ -11185,6 +11267,21 @@ export const AdminEmailsFcmTokens = gql`
   }
 }
     `;
+export const CreateNotification = gql`
+    mutation CreateNotification($channelId: Int!, $userId: Int!, $sentAt: Datetime, $params: JSON, $expiresAt: Datetime, $withheldUntil: Datetime) {
+  createNotification(
+    input: {notification: {userId: $userId, channelId: $channelId, params: $params, sentAt: $sentAt, expiresAt: $expiresAt, withheldUntil: $withheldUntil}}
+  ) {
+    clientMutationId
+    notification {
+      createdAt
+      expiresAt
+      withheldUntil
+      id
+    }
+  }
+}
+    `;
 export const CreateUserDevice = gql`
     mutation CreateUserDevice($userId: Int!, $fcmToken: String) {
   createUserDevice(input: {userDevice: {userId: $userId, fcmToken: $fcmToken}}) {
@@ -11222,6 +11319,46 @@ export const GroupMessageNotification = gql`
   }
   userByUuid(uuid: $senderUuid) {
     username
+  }
+}
+    `;
+export const MarkNotificationAsSent = gql`
+    mutation MarkNotificationAsSent($id: Int!, $sentAt: Datetime) {
+  updateNotification(input: {patch: {sentAt: $sentAt}, id: $id}) {
+    notification {
+      id
+      sentAt
+    }
+  }
+}
+    `;
+export const NotificationChannelByName = gql`
+    query NotificationChannelByName($name: String!) {
+  notificationChannelByName(name: $name) {
+    id
+  }
+}
+    `;
+export const OutstandingEmailNotifications = gql`
+    query OutstandingEmailNotifications {
+  notificationChannelByName(name: "Email") {
+    notificationsByChannelId(
+      orderBy: CREATED_AT_ASC
+      filter: {sentAt: {isNull: true}}
+    ) {
+      nodes {
+        id
+        user {
+          email
+          emailNotificationsEnabled
+          username
+          unconfirmedEmail
+        }
+        params
+        expiresAt
+        withheldUntil
+      }
+    }
   }
 }
     `;

@@ -32946,6 +32946,18 @@
             "deprecationReason": null
           },
           {
+            "name": "withheldUntil",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Datetime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "expiresAt",
             "description": null,
             "args": [],
@@ -34165,6 +34177,18 @@
             "deprecationReason": null
           },
           {
+            "name": "withheldUntil",
+            "description": "Checks for equality with the object’s `withheldUntil` field.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Datetime",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "expiresAt",
             "description": "Checks for equality with the object’s `expiresAt` field.",
             "type": {
@@ -34262,6 +34286,18 @@
           {
             "name": "sentAt",
             "description": "Filter by the object’s `sentAt` field.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "DatetimeFilter",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "withheldUntil",
+            "description": "Filter by the object’s `withheldUntil` field.",
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "DatetimeFilter",
@@ -34451,6 +34487,18 @@
             "deprecationReason": null
           },
           {
+            "name": "withheldUntil",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Datetime",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "expiresAt",
             "description": null,
             "type": {
@@ -34559,6 +34607,18 @@
           },
           {
             "name": "sentAt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Datetime",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "withheldUntil",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -34814,6 +34874,18 @@
           },
           {
             "name": "SENT_AT_DESC",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WITHHELD_UNTIL_ASC",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WITHHELD_UNTIL_DESC",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

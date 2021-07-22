@@ -8,7 +8,7 @@ const chlog = log.child({
 })
 
 import type { Request, Response } from "express"
-import { createUserDevice } from "../../../../server/notifications"
+import { createUserDevice } from "../../../../server/notifications/fcm"
 
 async function fcmTokenValid(token: string): Promise<boolean> {
     try {

@@ -6,6 +6,7 @@ import chat from "./socket"
 import gql from "./gql"
 import { connectToDatabase, disconnectFromDatabase } from "./db"
 import type { Pool } from "pg"
+import notifications from "./notifications"
 
 const { HOST = "127.0.0.1", PORT = 3000, RETRY = 5 } = process.env
 
@@ -111,9 +112,13 @@ export async function start() {
 
     /** Start Socket.IO (WebSocket) chat server. */
     chat.start(httpServer, db)
+
+    notifications.listen()
 }
 
 export async function stop() {
+    notifications.stop()
+
     if (httpServer) {
         httpServer.close()
     }

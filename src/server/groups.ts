@@ -5,15 +5,29 @@ import log from "../logger"
 import { performQuery } from "./gql"
 
 import {
+    AllGroupUuids,
     AllGroupUuidsQuery,
+    CreateGroup,
     CreateGroupMutation,
+    CreateGroupUser,
+    CreateGroupUserMutation,
+    GroupIdByUuid,
     GroupIdByUuidQuery,
+    GroupLanguageByUuid,
     GroupLanguageByUuidQuery,
+    UserIsInGroup,
     UserIsInGroupQuery,
     UserLanguageInfoQuery,
+    UsersWithoutLearnerGroup,
+    UsersWithoutLearnerGroupQuery,
+    UsersWithoutNativeGroup,
+    UsersWithoutNativeGroupQuery,
     UserType,
 } from "../types/generated/graphql"
-import type { Group, GroupUser, User } from "../types/generated/graphql"
+import type { Group, User } from "../types/generated/graphql"
+import { enqueueEmailNotification } from "./notifications/email"
+
+const chlog = log.child({ namespace: "groups" })
 
 export const GROUP_LEARNER_SIZE = 4
 export const GROUP_NATIVE_SIZE = 2
@@ -26,29 +40,7 @@ async function createGroup(
     uuid: string
 ): Promise<Group["id"] | null> {
     const res = await performQuery<CreateGroupMutation>(
-        `mutation CreateGroup(
-            $global: Boolean!
-            $groupName: String!
-            $languageId: Int!
-            $languageSkillLevelId: Int!
-            $uuid: UUID!
-        ) {
-            createGroup(
-                input: {
-                    group: {
-                        global: $global
-                        groupName: $groupName
-                        languageId: $languageId
-                        languageSkillLevelId: $languageSkillLevelId
-                        uuid: $uuid
-                    }
-                }
-            ) {
-                group {
-                    id
-                }
-            }
-        }`,
+        CreateGroup.loc!.source,
         {
             global,
             groupName,
@@ -64,17 +56,9 @@ async function getUsersWithoutLearnerGroup(
     languageId: number,
     languageSkillLevelId: number,
     learnerSize: number
-): Promise<number[] | null> {
-    const res = await performQuery<{
-        usersWithoutLearnerGroup: { nodes: { id: number }[] }
-    }>(
-        `query UsersWithoutLearnerGroup ($lid: Int!, $lsklid: Int!, $learnerSize: Int!) {
-      usersWithoutLearnerGroup(lid: $lid, lsklid: $lsklid, first: $learnerSize) {
-        nodes {
-          id
-        }
-      }
-    }`,
+) {
+    const res = await performQuery<UsersWithoutLearnerGroupQuery>(
+        UsersWithoutLearnerGroup.loc!.source,
         {
             lid: languageId,
             lsklid: languageSkillLevelId,
@@ -90,28 +74,20 @@ async function getUsersWithoutLearnerGroup(
     //     },
     //     res.data?.usersWithoutLearnerGroup.nodes.map((node) => node.id)
     // )
-    if (!res.data) {
-        return null
-    }
 
-    // console.log(res.data)
-    return res.data.usersWithoutLearnerGroup.nodes.map((node) => node.id)
+    return (
+        res.data?.usersWithoutLearnerGroup?.nodes
+            .filter(Boolean)
+            .map((node) => node!.id) || null
+    )
 }
 
 async function getUsersWithoutNativeGroup(
     languageId: number,
     nativeSize: number
 ): Promise<number[] | null> {
-    const res = await performQuery<{
-        usersWithoutNativeGroup: { nodes: { id: number }[] }
-    }>(
-        `query UsersWithoutNativeGroup ($lid: Int!, $nativeSize: Int!) {
-      usersWithoutNativeGroup(lid: $lid, first: $nativeSize) {
-        nodes {
-          id
-        }
-      }
-    }`,
+    const res = await performQuery<UsersWithoutNativeGroupQuery>(
+        UsersWithoutNativeGroup.loc!.source,
         { lid: languageId, nativeSize: nativeSize }
     )
     // console.log(
@@ -119,10 +95,11 @@ async function getUsersWithoutNativeGroup(
     //     { lid: languageId, nativeSize: nativeSize },
     //     res.data?.usersWithoutNativeGroup.nodes.map((node) => node.id)
     // )
-    if (!res.data) {
-        return null
-    }
-    return res.data.usersWithoutNativeGroup.nodes.map((node) => node.id)
+    return (
+        res.data?.usersWithoutNativeGroup?.nodes
+            .filter(Boolean)
+            .map((node) => node!.id) || null
+    )
 }
 
 async function addUserToGroup(
@@ -130,30 +107,14 @@ async function addUserToGroup(
     groupId: number,
     userType: UserType
 ): Promise<number | null> {
-    const res = await performQuery<{
-        createGroupUser: { groupUser: { id: GroupUser["id"] } }
-    }>(
-        `mutation MyMutation($userType: UserType!, $userId: Int!, $groupId: Int!) {
-      createGroupUser(
-        input: {
-            groupUser: {
-                userType: $userType,
-                userId: $userId,
-                groupId: $groupId
-            }
-        }
-      ) {
-        groupUser {
-          id
-        }
-      }
-    }`,
+    const res = await performQuery<CreateGroupUserMutation>(
+        CreateGroupUser.loc!.source,
         { userId, groupId, userType }
     )
     if (!res.data) {
         return null
     }
-    return res.data?.createGroupUser.groupUser.id
+    return res.data?.createGroupUser?.groupUser?.id || null
 }
 
 export async function createAndAssignGroup(
@@ -192,21 +153,25 @@ export async function createAndAssignGroup(
     }
     for (const learner of learnerIds) {
         if (!(await addUserToGroup(learner, groupId, UserType.Learner))) {
-            log.child({
-                learner,
-                groupId,
-                type: UserType.Learner,
-            }).error("User Group membership creation failed")
+            chlog
+                .child({
+                    learner,
+                    groupId,
+                    type: UserType.Learner,
+                })
+                .error("User Group membership creation failed")
             return null
         }
     }
     for (const native of nativeIds) {
         if (!(await addUserToGroup(native, groupId, UserType.Native))) {
-            log.child({
-                native,
-                groupId,
-                type: UserType.Native,
-            }).error("User Group membership creation failed")
+            chlog
+                .child({
+                    native,
+                    groupId,
+                    type: UserType.Native,
+                })
+                .error("User Group membership creation failed")
             return null
         }
     }
@@ -220,6 +185,7 @@ export async function createAndAssignGroup(
     }
 }
 
+const GROUP_ASSIGNMENT_SENDINBLUE_EMAIL_TEMPLATE_ID = 10
 async function formGroup(
     languageId: number,
     languageSkillLevelId: number
@@ -230,10 +196,12 @@ async function formGroup(
         GROUP_LEARNER_SIZE
     )
     if (!learnerIds) {
-        log.child({
-            languageId,
-            languageSkillLevelId,
-        }).trace("No one trying to learn this language at this skill level")
+        chlog
+            .child({
+                languageId,
+                languageSkillLevelId,
+            })
+            .trace("No one trying to learn this language at this skill level")
         return null
     }
     const nativeIds = await getUsersWithoutNativeGroup(
@@ -241,9 +209,11 @@ async function formGroup(
         GROUP_NATIVE_SIZE
     )
     if (!nativeIds) {
-        log.child({
-            languageId,
-        }).trace("No one able to teach this language")
+        chlog
+            .child({
+                languageId,
+            })
+            .trace("No one able to teach this language")
         return null
     }
     if (
@@ -256,13 +226,33 @@ async function formGroup(
             languageId,
             languageSkillLevelId
         )
-        log.child({ group }).debug("Formed group")
+        chlog.child({ group }).debug("Formed group")
+        const groupUserIds = [...learnerIds, ...nativeIds]
+        for (const userId of groupUserIds) {
+            if (true) {
+                continue
+            }
+            // TODO: actually enqueue email notifications here
+            const WITHHOLD_FOR_SECONDS = 3 * 60
+            enqueueEmailNotification(
+                userId,
+                null,
+                null,
+                new Date(Date.now() + WITHHOLD_FOR_SECONDS * 1000),
+                {
+                    templateId: GROUP_ASSIGNMENT_SENDINBLUE_EMAIL_TEMPLATE_ID,
+                    version: 1,
+                }
+            )
+        }
         return group?.id || null
     } else {
-        log.child({
-            learnerIds,
-            nativeIds,
-        }).trace("Not enough learners or native speakers")
+        chlog
+            .child({
+                learnerIds,
+                nativeIds,
+            })
+            .trace("Not enough learners or native speakers")
     }
     return null
 }
@@ -297,9 +287,11 @@ async function getUserLanguageInfo(
     }
     const nodes = res.data.user.userLanguages.nodes
     if (!nodes.every((node) => node)) {
-        log.child({
-            userLanguages: res.data.user.userLanguages.nodes,
-        }).error("Invalid user language")
+        chlog
+            .child({
+                userLanguages: res.data.user.userLanguages.nodes,
+            })
+            .error("Invalid user language")
         return null
     }
     return nodes.map((node) => node!)
@@ -315,9 +307,9 @@ export async function tryFormingGroupsWithUser(
 ): Promise<Group["id"][]> {
     const userLanguageInfo = await getUserLanguageInfo(userId)
     if (!userLanguageInfo) {
-        log.child({ userId, userLanguageInfo }).error(
-            "Empty user language info"
-        )
+        chlog
+            .child({ userId, userLanguageInfo })
+            .error("Empty user language info")
         return []
     }
     const groupIds = []
@@ -361,11 +353,7 @@ export async function tryFormingGroupsWithUser(
 
 export async function getGroupIdByUuid(uuid: string): Promise<number | null> {
     const res = await performQuery<GroupIdByUuidQuery>(
-        `query GroupIdByUuid($uuid: UUID!) {
-            groupByUuid(uuid: $uuid) {
-                id
-            }
-        }`,
+        GroupIdByUuid.loc!.source,
         { uuid }
     )
     // console.log(res.data?.user.userLanguages.nodes)
@@ -380,13 +368,7 @@ export async function userIsInGroup(
     groupUuid: string
 ): Promise<boolean | null> {
     const res = await performQuery<UserIsInGroupQuery>(
-        `query UserIsInGroup($userId: Int!, $groupUuid: UUID!) {
-            groupByUuid(uuid: $groupUuid) {
-                groupUsers(condition: { userId: $userId }) {
-                    totalCount
-                }
-            }
-        }`,
+        UserIsInGroup.loc!.source,
         { userId, groupUuid }
     )
     if (
@@ -401,13 +383,7 @@ export async function userIsInGroup(
 
 export async function getAllGroupUuids(): Promise<string[] | null> {
     const res = await performQuery<AllGroupUuidsQuery>(
-        `query AllGroupUuids {
-            groups {
-                nodes {
-                    uuid
-                }
-            }
-        }`,
+        AllGroupUuids.loc!.source,
         {}
     )
     if (!res.data) {
@@ -420,15 +396,10 @@ export async function getGroupLanguageByUuid(
     uuid: string
 ): Promise<GroupLanguageByUuidQuery | null> {
     const res = await performQuery<GroupLanguageByUuidQuery>(
-        `query GroupLanguageByUuid($uuid: UUID!) {
-            groupByUuid(uuid: $uuid) {
-                language {
-                    alpha2
-                }
-            }
-        }`,
+        GroupLanguageByUuid.loc!.source,
         { uuid }
     )
+
     if (!res.data?.groupByUuid) {
         return null
     }

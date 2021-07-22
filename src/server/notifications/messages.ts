@@ -2,7 +2,10 @@ import { performQuery } from "../gql"
 import { getApp } from "../firebase"
 import log from "../../logger"
 
-import type { GroupMessageNotificationQuery } from "../../types/generated/graphql"
+import {
+    GroupMessageNotification,
+    GroupMessageNotificationQuery,
+} from "../../types/generated/graphql"
 import type { ChatMessage } from "../../types/chat"
 
 const chlog = log.child({ namespace: "notifications" })
@@ -15,7 +18,10 @@ export async function notifyMessageRecipients(
         // do not notify for bot messages
         return
     }
-    const notification = new GroupMessageNotification(chatMessage, groupUuid)
+    const notification = new GroupMessageNotificationBuilder(
+        chatMessage,
+        groupUuid
+    )
     if (!(await notification.canBeSent())) {
         chlog
             .child({ notification })
@@ -47,7 +53,7 @@ export async function notifyMessageRecipients(
     getApp().messaging().sendMulticast(multicastMessage)
 }
 
-class GroupMessageNotification {
+class GroupMessageNotificationBuilder {
     message: ChatMessage
     groupUuid: string
     queryResult: GroupMessageNotificationQuery | null | undefined
@@ -128,34 +134,7 @@ class GroupMessageNotification {
             return
         }
         const res = await performQuery<GroupMessageNotificationQuery>(
-            `query GroupMessageNotification($groupUuid: UUID!, $senderUuid: UUID!) {
-                groupByUuid(uuid: $groupUuid) {
-                    groupUsers {
-                        nodes {
-                            user {
-                                uuid
-                                userDevices {
-                                    nodes {
-                                        fcmToken
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    groupName
-                    uuid
-                    language {
-                        alpha2
-                    }
-                    languageSkillLevel {
-                        name
-                    }
-                }
-                userByUuid(uuid: $senderUuid) {
-                    username
-                }
-            }
-            `,
+            GroupMessageNotification.loc!.source,
             { groupUuid: this.groupUuid, senderUuid: this.message.userUuid }
         )
         if (!res.data?.groupByUuid) {

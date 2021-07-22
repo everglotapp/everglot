@@ -954,6 +954,76 @@ export type CreateMessagePreviewPayloadMessagePreviewEdgeArgs = {
   orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
 };
 
+/** All input for the create `NotificationChannel` mutation. */
+export type CreateNotificationChannelInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `NotificationChannel` to be created by this mutation. */
+  notificationChannel: NotificationChannelInput;
+};
+
+/** The output of our create `NotificationChannel` mutation. */
+export type CreateNotificationChannelPayload = {
+  __typename?: 'CreateNotificationChannelPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `NotificationChannel` that was created by this mutation. */
+  notificationChannel?: Maybe<NotificationChannel>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** An edge for our `NotificationChannel`. May be used by Relay 1. */
+  notificationChannelEdge?: Maybe<NotificationChannelsEdge>;
+};
+
+
+/** The output of our create `NotificationChannel` mutation. */
+export type CreateNotificationChannelPayloadNotificationChannelEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+};
+
+/** All input for the create `Notification` mutation. */
+export type CreateNotificationInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Notification` to be created by this mutation. */
+  notification: NotificationInput;
+};
+
+/** The output of our create `Notification` mutation. */
+export type CreateNotificationPayload = {
+  __typename?: 'CreateNotificationPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Notification` that was created by this mutation. */
+  notification?: Maybe<Notification>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Notification`. */
+  user?: Maybe<User>;
+  /** Reads a single `NotificationChannel` that is related to this `Notification`. */
+  channel?: Maybe<NotificationChannel>;
+  /** An edge for our `Notification`. May be used by Relay 1. */
+  notificationEdge?: Maybe<NotificationsEdge>;
+};
+
+
+/** The output of our create `Notification` mutation. */
+export type CreateNotificationPayloadNotificationEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+};
+
 /** All input for the create `UserDevice` mutation. */
 export type CreateUserDeviceInput = {
   /**
@@ -2007,6 +2077,128 @@ export type DeleteMessagePreviewPayload = {
 /** The output of our delete `MessagePreview` mutation. */
 export type DeleteMessagePreviewPayloadMessagePreviewEdgeArgs = {
   orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
+};
+
+/** All input for the `deleteNotificationByNodeId` mutation. */
+export type DeleteNotificationByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Notification` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteNotificationByUuid` mutation. */
+export type DeleteNotificationByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteNotificationChannelByName` mutation. */
+export type DeleteNotificationChannelByNameInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
+/** All input for the `deleteNotificationChannelByNodeId` mutation. */
+export type DeleteNotificationChannelByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `NotificationChannel` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteNotificationChannelByUuid` mutation. */
+export type DeleteNotificationChannelByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteNotificationChannel` mutation. */
+export type DeleteNotificationChannelInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `NotificationChannel` mutation. */
+export type DeleteNotificationChannelPayload = {
+  __typename?: 'DeleteNotificationChannelPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `NotificationChannel` that was deleted by this mutation. */
+  notificationChannel?: Maybe<NotificationChannel>;
+  deletedNotificationChannelNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** An edge for our `NotificationChannel`. May be used by Relay 1. */
+  notificationChannelEdge?: Maybe<NotificationChannelsEdge>;
+};
+
+
+/** The output of our delete `NotificationChannel` mutation. */
+export type DeleteNotificationChannelPayloadNotificationChannelEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+};
+
+/** All input for the `deleteNotification` mutation. */
+export type DeleteNotificationInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `Notification` mutation. */
+export type DeleteNotificationPayload = {
+  __typename?: 'DeleteNotificationPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Notification` that was deleted by this mutation. */
+  notification?: Maybe<Notification>;
+  deletedNotificationNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Notification`. */
+  user?: Maybe<User>;
+  /** Reads a single `NotificationChannel` that is related to this `Notification`. */
+  channel?: Maybe<NotificationChannel>;
+  /** An edge for our `Notification`. May be used by Relay 1. */
+  notificationEdge?: Maybe<NotificationsEdge>;
+};
+
+
+/** The output of our delete `Notification` mutation. */
+export type DeleteNotificationPayloadNotificationEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
 };
 
 /** All input for the `deleteUserByEmail` mutation. */
@@ -4872,6 +5064,10 @@ export type Mutation = {
   createMessagePreview?: Maybe<CreateMessagePreviewPayload>;
   /** Creates a single `Message`. */
   createMessage?: Maybe<CreateMessagePayload>;
+  /** Creates a single `NotificationChannel`. */
+  createNotificationChannel?: Maybe<CreateNotificationChannelPayload>;
+  /** Creates a single `Notification`. */
+  createNotification?: Maybe<CreateNotificationPayload>;
   /** Creates a single `GermanRandomQuestion`. */
   createGermanRandomQuestion?: Maybe<CreateGermanRandomQuestionPayload>;
   /** Creates a single `EnglishRandomQuestion`. */
@@ -4940,6 +5136,20 @@ export type Mutation = {
   updateMessage?: Maybe<UpdateMessagePayload>;
   /** Updates a single `Message` using a unique key and a patch. */
   updateMessageByUuid?: Maybe<UpdateMessagePayload>;
+  /** Updates a single `NotificationChannel` using its globally unique id and a patch. */
+  updateNotificationChannelByNodeId?: Maybe<UpdateNotificationChannelPayload>;
+  /** Updates a single `NotificationChannel` using a unique key and a patch. */
+  updateNotificationChannel?: Maybe<UpdateNotificationChannelPayload>;
+  /** Updates a single `NotificationChannel` using a unique key and a patch. */
+  updateNotificationChannelByUuid?: Maybe<UpdateNotificationChannelPayload>;
+  /** Updates a single `NotificationChannel` using a unique key and a patch. */
+  updateNotificationChannelByName?: Maybe<UpdateNotificationChannelPayload>;
+  /** Updates a single `Notification` using its globally unique id and a patch. */
+  updateNotificationByNodeId?: Maybe<UpdateNotificationPayload>;
+  /** Updates a single `Notification` using a unique key and a patch. */
+  updateNotification?: Maybe<UpdateNotificationPayload>;
+  /** Updates a single `Notification` using a unique key and a patch. */
+  updateNotificationByUuid?: Maybe<UpdateNotificationPayload>;
   /** Updates a single `GermanRandomQuestion` using its globally unique id and a patch. */
   updateGermanRandomQuestionByNodeId?: Maybe<UpdateGermanRandomQuestionPayload>;
   /** Updates a single `GermanRandomQuestion` using a unique key and a patch. */
@@ -5058,6 +5268,20 @@ export type Mutation = {
   deleteMessage?: Maybe<DeleteMessagePayload>;
   /** Deletes a single `Message` using a unique key. */
   deleteMessageByUuid?: Maybe<DeleteMessagePayload>;
+  /** Deletes a single `NotificationChannel` using its globally unique id. */
+  deleteNotificationChannelByNodeId?: Maybe<DeleteNotificationChannelPayload>;
+  /** Deletes a single `NotificationChannel` using a unique key. */
+  deleteNotificationChannel?: Maybe<DeleteNotificationChannelPayload>;
+  /** Deletes a single `NotificationChannel` using a unique key. */
+  deleteNotificationChannelByUuid?: Maybe<DeleteNotificationChannelPayload>;
+  /** Deletes a single `NotificationChannel` using a unique key. */
+  deleteNotificationChannelByName?: Maybe<DeleteNotificationChannelPayload>;
+  /** Deletes a single `Notification` using its globally unique id. */
+  deleteNotificationByNodeId?: Maybe<DeleteNotificationPayload>;
+  /** Deletes a single `Notification` using a unique key. */
+  deleteNotification?: Maybe<DeleteNotificationPayload>;
+  /** Deletes a single `Notification` using a unique key. */
+  deleteNotificationByUuid?: Maybe<DeleteNotificationPayload>;
   /** Deletes a single `GermanRandomQuestion` using its globally unique id. */
   deleteGermanRandomQuestionByNodeId?: Maybe<DeleteGermanRandomQuestionPayload>;
   /** Deletes a single `GermanRandomQuestion` using a unique key. */
@@ -5182,6 +5406,18 @@ export type MutationCreateMessagePreviewArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateMessageArgs = {
   input: CreateMessageInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateNotificationChannelArgs = {
+  input: CreateNotificationChannelInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateNotificationArgs = {
+  input: CreateNotificationInput;
 };
 
 
@@ -5386,6 +5622,48 @@ export type MutationUpdateMessageArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateMessageByUuidArgs = {
   input: UpdateMessageByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationChannelByNodeIdArgs = {
+  input: UpdateNotificationChannelByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationChannelArgs = {
+  input: UpdateNotificationChannelInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationChannelByUuidArgs = {
+  input: UpdateNotificationChannelByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationChannelByNameArgs = {
+  input: UpdateNotificationChannelByNameInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationByNodeIdArgs = {
+  input: UpdateNotificationByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationArgs = {
+  input: UpdateNotificationInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationByUuidArgs = {
+  input: UpdateNotificationByUuidInput;
 };
 
 
@@ -5744,6 +6022,48 @@ export type MutationDeleteMessageByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationChannelByNodeIdArgs = {
+  input: DeleteNotificationChannelByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationChannelArgs = {
+  input: DeleteNotificationChannelInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationChannelByUuidArgs = {
+  input: DeleteNotificationChannelByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationChannelByNameArgs = {
+  input: DeleteNotificationChannelByNameInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationByNodeIdArgs = {
+  input: DeleteNotificationByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationArgs = {
+  input: DeleteNotificationInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationByUuidArgs = {
+  input: DeleteNotificationByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGermanRandomQuestionByNodeIdArgs = {
   input: DeleteGermanRandomQuestionByNodeIdInput;
 };
@@ -5982,6 +6302,319 @@ export type Node = {
   nodeId: Scalars['ID'];
 };
 
+export type Notification = Node & {
+  __typename?: 'Notification';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  userId: Scalars['Int'];
+  channelId: Scalars['Int'];
+  params?: Maybe<Scalars['JSON']>;
+  sentAt?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: Maybe<Scalars['Datetime']>;
+  expiresAt?: Maybe<Scalars['Datetime']>;
+  readAt?: Maybe<Scalars['Datetime']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `User` that is related to this `Notification`. */
+  user?: Maybe<User>;
+  /** Reads a single `NotificationChannel` that is related to this `Notification`. */
+  channel?: Maybe<NotificationChannel>;
+};
+
+export type NotificationChannel = Node & {
+  __typename?: 'NotificationChannel';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  name?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByChannelId: NotificationsConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByNotificationChannelIdAndUserId: NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyConnection;
+};
+
+
+export type NotificationChannelNotificationsByChannelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
+};
+
+
+export type NotificationChannelUsersByNotificationChannelIdAndUserIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+/**
+ * A condition to be used against `NotificationChannel` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type NotificationChannelCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `name` field. */
+  name?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `NotificationChannel` object types. All fields are combined with a logical ‘and.’ */
+export type NotificationChannelFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `name` field. */
+  name?: Maybe<StringFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<NotificationChannelFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<NotificationChannelFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<NotificationChannelFilter>;
+};
+
+/** An input for mutations affecting `NotificationChannel` */
+export type NotificationChannelInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  name?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `NotificationChannel`. Fields that are set will be updated. */
+export type NotificationChannelPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  name?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `User` values, with data from `Notification`. */
+export type NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyConnection = {
+  __typename?: 'NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Notification`, and the cursor to aid in pagination. */
+  edges: Array<NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Notification`. */
+export type NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyEdge = {
+  __typename?: 'NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notifications: NotificationsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Notification`. */
+export type NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyEdgeNotificationsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
+};
+
+/** A connection to a list of `NotificationChannel` values. */
+export type NotificationChannelsConnection = {
+  __typename?: 'NotificationChannelsConnection';
+  /** A list of `NotificationChannel` objects. */
+  nodes: Array<Maybe<NotificationChannel>>;
+  /** A list of edges which contains the `NotificationChannel` and cursor to aid in pagination. */
+  edges: Array<NotificationChannelsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `NotificationChannel` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `NotificationChannel` edge in the connection. */
+export type NotificationChannelsEdge = {
+  __typename?: 'NotificationChannelsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `NotificationChannel` at the end of the edge. */
+  node?: Maybe<NotificationChannel>;
+};
+
+/** Methods to use when ordering `NotificationChannel`. */
+export enum NotificationChannelsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  NameAsc = 'NAME_ASC',
+  NameDesc = 'NAME_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/**
+ * A condition to be used against `Notification` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type NotificationCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `channelId` field. */
+  channelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `params` field. */
+  params?: Maybe<Scalars['JSON']>;
+  /** Checks for equality with the object’s `sentAt` field. */
+  sentAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `withheldUntil` field. */
+  withheldUntil?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `expiresAt` field. */
+  expiresAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `readAt` field. */
+  readAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `Notification` object types. All fields are combined with a logical ‘and.’ */
+export type NotificationFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `channelId` field. */
+  channelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `sentAt` field. */
+  sentAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `withheldUntil` field. */
+  withheldUntil?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `expiresAt` field. */
+  expiresAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `readAt` field. */
+  readAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<NotificationFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<NotificationFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<NotificationFilter>;
+};
+
+/** An input for mutations affecting `Notification` */
+export type NotificationInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  userId: Scalars['Int'];
+  channelId: Scalars['Int'];
+  params?: Maybe<Scalars['JSON']>;
+  sentAt?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: Maybe<Scalars['Datetime']>;
+  expiresAt?: Maybe<Scalars['Datetime']>;
+  readAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `Notification`. Fields that are set will be updated. */
+export type NotificationPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  userId?: Maybe<Scalars['Int']>;
+  channelId?: Maybe<Scalars['Int']>;
+  params?: Maybe<Scalars['JSON']>;
+  sentAt?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: Maybe<Scalars['Datetime']>;
+  expiresAt?: Maybe<Scalars['Datetime']>;
+  readAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `Notification` values. */
+export type NotificationsConnection = {
+  __typename?: 'NotificationsConnection';
+  /** A list of `Notification` objects. */
+  nodes: Array<Maybe<Notification>>;
+  /** A list of edges which contains the `Notification` and cursor to aid in pagination. */
+  edges: Array<NotificationsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Notification` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Notification` edge in the connection. */
+export type NotificationsEdge = {
+  __typename?: 'NotificationsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Notification` at the end of the edge. */
+  node?: Maybe<Notification>;
+};
+
+/** Methods to use when ordering `Notification`. */
+export enum NotificationsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+  ChannelIdAsc = 'CHANNEL_ID_ASC',
+  ChannelIdDesc = 'CHANNEL_ID_DESC',
+  ParamsAsc = 'PARAMS_ASC',
+  ParamsDesc = 'PARAMS_DESC',
+  SentAtAsc = 'SENT_AT_ASC',
+  SentAtDesc = 'SENT_AT_DESC',
+  WithheldUntilAsc = 'WITHHELD_UNTIL_ASC',
+  WithheldUntilDesc = 'WITHHELD_UNTIL_DESC',
+  ExpiresAtAsc = 'EXPIRES_AT_ASC',
+  ExpiresAtDesc = 'EXPIRES_AT_DESC',
+  ReadAtAsc = 'READ_AT_ASC',
+  ReadAtDesc = 'READ_AT_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
 /** Information about pagination in a connection. */
 export type PageInfo = {
   __typename?: 'PageInfo';
@@ -6023,6 +6656,10 @@ export type Query = Node & {
   messagePreviews?: Maybe<MessagePreviewsConnection>;
   /** Reads and enables pagination through a set of `Message`. */
   messages?: Maybe<MessagesConnection>;
+  /** Reads and enables pagination through a set of `NotificationChannel`. */
+  notificationChannels?: Maybe<NotificationChannelsConnection>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notifications?: Maybe<NotificationsConnection>;
   /** Reads and enables pagination through a set of `GermanRandomQuestion`. */
   germanRandomQuestions?: Maybe<GermanRandomQuestionsConnection>;
   /** Reads and enables pagination through a set of `EnglishRandomQuestion`. */
@@ -6061,6 +6698,11 @@ export type Query = Node & {
   messagePreviewByUuid?: Maybe<MessagePreview>;
   message?: Maybe<Message>;
   messageByUuid?: Maybe<Message>;
+  notificationChannel?: Maybe<NotificationChannel>;
+  notificationChannelByUuid?: Maybe<NotificationChannel>;
+  notificationChannelByName?: Maybe<NotificationChannel>;
+  notification?: Maybe<Notification>;
+  notificationByUuid?: Maybe<Notification>;
   germanRandomQuestion?: Maybe<GermanRandomQuestion>;
   germanRandomQuestionByUuid?: Maybe<GermanRandomQuestion>;
   englishRandomQuestion?: Maybe<EnglishRandomQuestion>;
@@ -6110,6 +6752,10 @@ export type Query = Node & {
   messagePreviewByNodeId?: Maybe<MessagePreview>;
   /** Reads a single `Message` using its globally unique `ID`. */
   messageByNodeId?: Maybe<Message>;
+  /** Reads a single `NotificationChannel` using its globally unique `ID`. */
+  notificationChannelByNodeId?: Maybe<NotificationChannel>;
+  /** Reads a single `Notification` using its globally unique `ID`. */
+  notificationByNodeId?: Maybe<Notification>;
   /** Reads a single `GermanRandomQuestion` using its globally unique `ID`. */
   germanRandomQuestionByNodeId?: Maybe<GermanRandomQuestion>;
   /** Reads a single `EnglishRandomQuestion` using its globally unique `ID`. */
@@ -6244,6 +6890,32 @@ export type QueryMessagesArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationChannelsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  condition?: Maybe<NotificationChannelCondition>;
+  filter?: Maybe<NotificationChannelFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
 };
 
 
@@ -6488,6 +7160,36 @@ export type QueryMessageByUuidArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryNotificationChannelArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationChannelByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationChannelByNameArgs = {
+  name: Scalars['String'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryGermanRandomQuestionArgs = {
   id: Scalars['Int'];
 };
@@ -6718,6 +7420,18 @@ export type QueryMessagePreviewByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryMessageByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationChannelByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
 
@@ -7920,6 +8634,140 @@ export type UpdateMessagePreviewPayloadMessagePreviewEdgeArgs = {
   orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
 };
 
+/** All input for the `updateNotificationByNodeId` mutation. */
+export type UpdateNotificationByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Notification` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `Notification` being updated. */
+  patch: NotificationPatch;
+};
+
+/** All input for the `updateNotificationByUuid` mutation. */
+export type UpdateNotificationByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Notification` being updated. */
+  patch: NotificationPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateNotificationChannelByName` mutation. */
+export type UpdateNotificationChannelByNameInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `NotificationChannel` being updated. */
+  patch: NotificationChannelPatch;
+  name: Scalars['String'];
+};
+
+/** All input for the `updateNotificationChannelByNodeId` mutation. */
+export type UpdateNotificationChannelByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `NotificationChannel` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `NotificationChannel` being updated. */
+  patch: NotificationChannelPatch;
+};
+
+/** All input for the `updateNotificationChannelByUuid` mutation. */
+export type UpdateNotificationChannelByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `NotificationChannel` being updated. */
+  patch: NotificationChannelPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateNotificationChannel` mutation. */
+export type UpdateNotificationChannelInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `NotificationChannel` being updated. */
+  patch: NotificationChannelPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `NotificationChannel` mutation. */
+export type UpdateNotificationChannelPayload = {
+  __typename?: 'UpdateNotificationChannelPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `NotificationChannel` that was updated by this mutation. */
+  notificationChannel?: Maybe<NotificationChannel>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** An edge for our `NotificationChannel`. May be used by Relay 1. */
+  notificationChannelEdge?: Maybe<NotificationChannelsEdge>;
+};
+
+
+/** The output of our update `NotificationChannel` mutation. */
+export type UpdateNotificationChannelPayloadNotificationChannelEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+};
+
+/** All input for the `updateNotification` mutation. */
+export type UpdateNotificationInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Notification` being updated. */
+  patch: NotificationPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `Notification` mutation. */
+export type UpdateNotificationPayload = {
+  __typename?: 'UpdateNotificationPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Notification` that was updated by this mutation. */
+  notification?: Maybe<Notification>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Notification`. */
+  user?: Maybe<User>;
+  /** Reads a single `NotificationChannel` that is related to this `Notification`. */
+  channel?: Maybe<NotificationChannel>;
+  /** An edge for our `Notification`. May be used by Relay 1. */
+  notificationEdge?: Maybe<NotificationsEdge>;
+};
+
+
+/** The output of our update `Notification` mutation. */
+export type UpdateNotificationPayloadNotificationEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+};
+
 /** All input for the `updateUserByEmail` mutation. */
 export type UpdateUserByEmailInput = {
   /**
@@ -8216,6 +9064,8 @@ export type User = Node & {
   inviteTokens: InviteTokensConnection;
   /** Reads and enables pagination through a set of `UserDevice`. */
   userDevices: UserDevicesConnection;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notifications: NotificationsConnection;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByUserLanguageUserIdAndLanguageId: UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
@@ -8234,6 +9084,8 @@ export type User = Node & {
   groupsByMessageRecipientIdAndRecipientGroupId: UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Message`. */
   messagesByMessageRecipientIdAndParentMessageId: UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `NotificationChannel`. */
+  notificationChannelsByNotificationUserIdAndChannelId: UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyConnection;
 };
 
 
@@ -8306,6 +9158,18 @@ export type UserUserDevicesArgs = {
   orderBy?: Maybe<Array<UserDevicesOrderBy>>;
   condition?: Maybe<UserDeviceCondition>;
   filter?: Maybe<UserDeviceFilter>;
+};
+
+
+export type UserNotificationsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
 };
 
 
@@ -8414,6 +9278,18 @@ export type UserMessagesByMessageRecipientIdAndParentMessageIdArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+
+export type UserNotificationChannelsByNotificationUserIdAndChannelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  condition?: Maybe<NotificationChannelCondition>;
+  filter?: Maybe<NotificationChannelFilter>;
 };
 
 /** A condition to be used against `User` object types. All fields are tested for equality and combined with a logical ‘and.’ */
@@ -9000,6 +9876,43 @@ export type UserMessagesByMessageSenderIdAndParentMessageIdManyToManyEdgeMessage
   filter?: Maybe<MessageFilter>;
 };
 
+/** A connection to a list of `NotificationChannel` values, with data from `Notification`. */
+export type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyConnection = {
+  __typename?: 'UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyConnection';
+  /** A list of `NotificationChannel` objects. */
+  nodes: Array<Maybe<NotificationChannel>>;
+  /** A list of edges which contains the `NotificationChannel`, info from the `Notification`, and the cursor to aid in pagination. */
+  edges: Array<UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `NotificationChannel` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `NotificationChannel` edge in the connection, with data from `Notification`. */
+export type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdge = {
+  __typename?: 'UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `NotificationChannel` at the end of the edge. */
+  node?: Maybe<NotificationChannel>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByChannelId: NotificationsConnection;
+};
+
+
+/** A `NotificationChannel` edge in the connection, with data from `Notification`. */
+export type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdgeNotificationsByChannelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
+};
+
 /** Represents an update to a `User`. Fields that are set will be updated. */
 export type UserPatch = {
   id?: Maybe<Scalars['Int']>;
@@ -9281,74 +10194,6 @@ export enum UsersOrderBy {
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
-export type AdminEmailsFcmTokensQueryVariables = Exact<{
-  in: Array<Scalars['String']> | Scalars['String'];
-}>;
-
-
-export type AdminEmailsFcmTokensQuery = (
-  { __typename?: 'Query' }
-  & { users?: Maybe<(
-    { __typename?: 'UsersConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'User' }
-      & { userDevices: (
-        { __typename?: 'UserDevicesConnection' }
-        & { nodes: Array<Maybe<(
-          { __typename?: 'UserDevice' }
-          & Pick<UserDevice, 'fcmToken'>
-        )>> }
-      ) }
-    )>> }
-  )> }
-);
-
-export type AllGroupUuidsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type AllGroupUuidsQuery = (
-  { __typename?: 'Query' }
-  & { groups?: Maybe<(
-    { __typename?: 'GroupsConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'Group' }
-      & Pick<Group, 'uuid'>
-    )>> }
-  )> }
-);
-
-export type AllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type AllGroupsQuery = (
-  { __typename?: 'Query' }
-  & { groups?: Maybe<(
-    { __typename?: 'GroupsConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'Group' }
-      & Pick<Group, 'uuid' | 'groupName' | 'global'>
-      & { language?: Maybe<(
-        { __typename?: 'Language' }
-        & Pick<Language, 'alpha2' | 'englishName'>
-      )>, languageSkillLevel?: Maybe<(
-        { __typename?: 'LanguageSkillLevel' }
-        & Pick<LanguageSkillLevel, 'name' | 'nodeId'>
-      )>, groupUsers: (
-        { __typename?: 'GroupUsersConnection' }
-        & Pick<GroupUsersConnection, 'totalCount'>
-        & { nodes: Array<Maybe<(
-          { __typename?: 'GroupUser' }
-          & Pick<GroupUser, 'joinedOn'>
-          & { user?: Maybe<(
-            { __typename?: 'User' }
-            & Pick<User, 'avatarUrl' | 'username' | 'uuid'>
-          )> }
-        )>> }
-      ) }
-    )>> }
-  )> }
-);
-
 export type ChatUserQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -9359,26 +10204,6 @@ export type ChatUserQuery = (
   & { user?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'uuid' | 'avatarUrl'>
-  )> }
-);
-
-export type CreateGroupMutationVariables = Exact<{
-  global: Scalars['Boolean'];
-  groupName: Scalars['String'];
-  languageId: Scalars['Int'];
-  languageSkillLevelId: Scalars['Int'];
-  uuid: Scalars['UUID'];
-}>;
-
-
-export type CreateGroupMutation = (
-  { __typename?: 'Mutation' }
-  & { createGroup?: Maybe<(
-    { __typename?: 'CreateGroupPayload' }
-    & { group?: Maybe<(
-      { __typename?: 'Group' }
-      & Pick<Group, 'id' | 'uuid'>
-    )> }
   )> }
 );
 
@@ -9422,89 +10247,6 @@ export type CreateMessagePreviewMutation = (
       { __typename?: 'MessagePreview' }
       & Pick<MessagePreview, 'id'>
     )> }
-  )> }
-);
-
-export type CreateUserMutationVariables = Exact<{
-  email: Scalars['String'];
-  gender: Scalars['String'];
-  passwordHash: Scalars['String'];
-  username: Scalars['String'];
-  uuid: Scalars['UUID'];
-  avatarUrl: Scalars['String'];
-  locale?: Maybe<Scalars['Int']>;
-  emailUnsubscribeToken: Scalars['String'];
-}>;
-
-
-export type CreateUserMutation = (
-  { __typename?: 'Mutation' }
-  & { createUser?: Maybe<(
-    { __typename?: 'CreateUserPayload' }
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id'>
-    )> }
-  )> }
-);
-
-export type CreateUserDeviceMutationVariables = Exact<{
-  userId: Scalars['Int'];
-  fcmToken?: Maybe<Scalars['String']>;
-}>;
-
-
-export type CreateUserDeviceMutation = (
-  { __typename?: 'Mutation' }
-  & { createUserDevice?: Maybe<(
-    { __typename?: 'CreateUserDevicePayload' }
-    & { userDevice?: Maybe<(
-      { __typename?: 'UserDevice' }
-      & Pick<UserDevice, 'uuid' | 'fcmToken' | 'id'>
-    )> }
-  )> }
-);
-
-export type CreateUserLanguageMutationVariables = Exact<{
-  languageId: Scalars['Int'];
-  languageSkillLevelId?: Maybe<Scalars['Int']>;
-  native: Scalars['Boolean'];
-  userId: Scalars['Int'];
-}>;
-
-
-export type CreateUserLanguageMutation = (
-  { __typename?: 'Mutation' }
-  & { createUserLanguage?: Maybe<(
-    { __typename?: 'CreateUserLanguagePayload' }
-    & { userLanguage?: Maybe<(
-      { __typename?: 'UserLanguage' }
-      & Pick<UserLanguage, 'id'>
-    )> }
-  )> }
-);
-
-export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type CurrentUserQuery = (
-  { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid' | 'avatarUrl'>
-    & { userLanguages: (
-      { __typename?: 'UserLanguagesConnection' }
-      & Pick<UserLanguagesConnection, 'totalCount'>
-    ), languageByLocale?: Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'alpha2'>
-    )>, inviteTokens: (
-      { __typename?: 'InviteTokensConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'InviteToken' }
-        & Pick<InviteToken, 'inviteToken'>
-      )>> }
-    ) }
   )> }
 );
 
@@ -9598,6 +10340,235 @@ export type GroupChatMessagesQuery = (
   )> }
 );
 
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid' | 'avatarUrl'>
+    & { userLanguages: (
+      { __typename?: 'UserLanguagesConnection' }
+      & Pick<UserLanguagesConnection, 'totalCount'>
+    ), languageByLocale?: Maybe<(
+      { __typename?: 'Language' }
+      & Pick<Language, 'alpha2'>
+    )>, inviteTokens: (
+      { __typename?: 'InviteTokensConnection' }
+      & { nodes: Array<Maybe<(
+        { __typename?: 'InviteToken' }
+        & Pick<InviteToken, 'inviteToken'>
+      )>> }
+    ) }
+  )> }
+);
+
+export type RegisterUserActivityMutationVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type RegisterUserActivityMutation = (
+  { __typename?: 'Mutation' }
+  & { registerUserActivity?: Maybe<(
+    { __typename?: 'RegisterUserActivityPayload' }
+    & Pick<RegisterUserActivityPayload, 'datetime'>
+  )> }
+);
+
+export type CreateGroupUserMutationVariables = Exact<{
+  userType: UserType;
+  userId: Scalars['Int'];
+  groupId: Scalars['Int'];
+}>;
+
+
+export type CreateGroupUserMutation = (
+  { __typename?: 'Mutation' }
+  & { createGroupUser?: Maybe<(
+    { __typename?: 'CreateGroupUserPayload' }
+    & { groupUser?: Maybe<(
+      { __typename?: 'GroupUser' }
+      & Pick<GroupUser, 'id'>
+    )> }
+  )> }
+);
+
+export type JoinGlobalGroupMutationVariables = Exact<{
+  groupUuid: Scalars['UUID'];
+}>;
+
+
+export type JoinGlobalGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { joinGlobalGroup?: Maybe<(
+    { __typename?: 'JoinGlobalGroupPayload' }
+    & { groupUser?: Maybe<(
+      { __typename?: 'GroupUser' }
+      & Pick<GroupUser, 'nodeId'>
+      & { group?: Maybe<(
+        { __typename?: 'Group' }
+        & Pick<Group, 'uuid'>
+      )>, user?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'uuid'>
+      )> }
+    )> }
+  )> }
+);
+
+export type UserGroupMembershipsQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserGroupMembershipsQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & { groupUsers: (
+      { __typename?: 'GroupUsersConnection' }
+      & { edges: Array<(
+        { __typename?: 'GroupUsersEdge' }
+        & { node?: Maybe<(
+          { __typename?: 'GroupUser' }
+          & Pick<GroupUser, 'userType'>
+          & { group?: Maybe<(
+            { __typename?: 'Group' }
+            & Pick<Group, 'global' | 'uuid' | 'groupName'>
+            & { language?: Maybe<(
+              { __typename?: 'Language' }
+              & Pick<Language, 'alpha2'>
+            )>, languageSkillLevel?: Maybe<(
+              { __typename?: 'LanguageSkillLevel' }
+              & Pick<LanguageSkillLevel, 'name'>
+            )> }
+          )> }
+        )> }
+      )> }
+    ) }
+  )> }
+);
+
+export type UserIsInGroupQueryVariables = Exact<{
+  userId: Scalars['Int'];
+  groupUuid: Scalars['UUID'];
+}>;
+
+
+export type UserIsInGroupQuery = (
+  { __typename?: 'Query' }
+  & { groupByUuid?: Maybe<(
+    { __typename?: 'Group' }
+    & { groupUsers: (
+      { __typename?: 'GroupUsersConnection' }
+      & Pick<GroupUsersConnection, 'totalCount'>
+    ) }
+  )> }
+);
+
+export type UsersWithoutLearnerGroupQueryVariables = Exact<{
+  lid: Scalars['Int'];
+  lsklid: Scalars['Int'];
+  learnerSize: Scalars['Int'];
+}>;
+
+
+export type UsersWithoutLearnerGroupQuery = (
+  { __typename?: 'Query' }
+  & { usersWithoutLearnerGroup?: Maybe<(
+    { __typename?: 'UsersConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )>> }
+  )> }
+);
+
+export type UsersWithoutNativeGroupQueryVariables = Exact<{
+  lid: Scalars['Int'];
+  nativeSize: Scalars['Int'];
+}>;
+
+
+export type UsersWithoutNativeGroupQuery = (
+  { __typename?: 'Query' }
+  & { usersWithoutNativeGroup?: Maybe<(
+    { __typename?: 'UsersConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )>> }
+  )> }
+);
+
+export type AllGroupUuidsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllGroupUuidsQuery = (
+  { __typename?: 'Query' }
+  & { groups?: Maybe<(
+    { __typename?: 'GroupsConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'Group' }
+      & Pick<Group, 'uuid'>
+    )>> }
+  )> }
+);
+
+export type AllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllGroupsQuery = (
+  { __typename?: 'Query' }
+  & { groups?: Maybe<(
+    { __typename?: 'GroupsConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'Group' }
+      & Pick<Group, 'uuid' | 'groupName' | 'global'>
+      & { language?: Maybe<(
+        { __typename?: 'Language' }
+        & Pick<Language, 'alpha2' | 'englishName'>
+      )>, languageSkillLevel?: Maybe<(
+        { __typename?: 'LanguageSkillLevel' }
+        & Pick<LanguageSkillLevel, 'name' | 'nodeId'>
+      )>, groupUsers: (
+        { __typename?: 'GroupUsersConnection' }
+        & Pick<GroupUsersConnection, 'totalCount'>
+        & { nodes: Array<Maybe<(
+          { __typename?: 'GroupUser' }
+          & Pick<GroupUser, 'joinedOn'>
+          & { user?: Maybe<(
+            { __typename?: 'User' }
+            & Pick<User, 'avatarUrl' | 'username' | 'uuid'>
+          )> }
+        )>> }
+      ) }
+    )>> }
+  )> }
+);
+
+export type CreateGroupMutationVariables = Exact<{
+  global: Scalars['Boolean'];
+  groupName: Scalars['String'];
+  languageId: Scalars['Int'];
+  languageSkillLevelId: Scalars['Int'];
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type CreateGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { createGroup?: Maybe<(
+    { __typename?: 'CreateGroupPayload' }
+    & { group?: Maybe<(
+      { __typename?: 'Group' }
+      & Pick<Group, 'id' | 'uuid'>
+    )> }
+  )> }
+);
+
 export type GroupIdByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
 }>;
@@ -9624,6 +10595,94 @@ export type GroupLanguageByUuidQuery = (
     & { language?: Maybe<(
       { __typename?: 'Language' }
       & Pick<Language, 'alpha2'>
+    )> }
+  )> }
+);
+
+export type LanguageCodeMappingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LanguageCodeMappingsQuery = (
+  { __typename?: 'Query' }
+  & { languages?: Maybe<(
+    { __typename?: 'LanguagesConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'Language' }
+      & Pick<Language, 'alpha2' | 'englishName'>
+    )>> }
+  )> }
+);
+
+export type LanguageIdByAlpha2QueryVariables = Exact<{
+  alpha2: Scalars['String'];
+}>;
+
+
+export type LanguageIdByAlpha2Query = (
+  { __typename?: 'Query' }
+  & { languageByAlpha2?: Maybe<(
+    { __typename?: 'Language' }
+    & Pick<Language, 'id'>
+  )> }
+);
+
+export type AdminEmailsFcmTokensQueryVariables = Exact<{
+  in: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type AdminEmailsFcmTokensQuery = (
+  { __typename?: 'Query' }
+  & { users?: Maybe<(
+    { __typename?: 'UsersConnection' }
+    & { nodes: Array<Maybe<(
+      { __typename?: 'User' }
+      & { userDevices: (
+        { __typename?: 'UserDevicesConnection' }
+        & { nodes: Array<Maybe<(
+          { __typename?: 'UserDevice' }
+          & Pick<UserDevice, 'fcmToken'>
+        )>> }
+      ) }
+    )>> }
+  )> }
+);
+
+export type CreateNotificationMutationVariables = Exact<{
+  channelId: Scalars['Int'];
+  userId: Scalars['Int'];
+  sentAt?: Maybe<Scalars['Datetime']>;
+  params?: Maybe<Scalars['JSON']>;
+  expiresAt?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: Maybe<Scalars['Datetime']>;
+}>;
+
+
+export type CreateNotificationMutation = (
+  { __typename?: 'Mutation' }
+  & { createNotification?: Maybe<(
+    { __typename?: 'CreateNotificationPayload' }
+    & Pick<CreateNotificationPayload, 'clientMutationId'>
+    & { notification?: Maybe<(
+      { __typename?: 'Notification' }
+      & Pick<Notification, 'createdAt' | 'expiresAt' | 'withheldUntil' | 'id'>
+    )> }
+  )> }
+);
+
+export type CreateUserDeviceMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  fcmToken?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CreateUserDeviceMutation = (
+  { __typename?: 'Mutation' }
+  & { createUserDevice?: Maybe<(
+    { __typename?: 'CreateUserDevicePayload' }
+    & { userDevice?: Maybe<(
+      { __typename?: 'UserDevice' }
+      & Pick<UserDevice, 'uuid' | 'fcmToken' | 'id'>
     )> }
   )> }
 );
@@ -9668,66 +10727,54 @@ export type GroupMessageNotificationQuery = (
   )> }
 );
 
-export type JoinGlobalGroupMutationVariables = Exact<{
-  groupUuid: Scalars['UUID'];
+export type MarkNotificationAsSentMutationVariables = Exact<{
+  id: Scalars['Int'];
+  sentAt?: Maybe<Scalars['Datetime']>;
 }>;
 
 
-export type JoinGlobalGroupMutation = (
+export type MarkNotificationAsSentMutation = (
   { __typename?: 'Mutation' }
-  & { joinGlobalGroup?: Maybe<(
-    { __typename?: 'JoinGlobalGroupPayload' }
-    & { groupUser?: Maybe<(
-      { __typename?: 'GroupUser' }
-      & Pick<GroupUser, 'nodeId'>
-      & { group?: Maybe<(
-        { __typename?: 'Group' }
-        & Pick<Group, 'uuid'>
-      )>, user?: Maybe<(
-        { __typename?: 'User' }
-        & Pick<User, 'uuid'>
-      )> }
+  & { updateNotification?: Maybe<(
+    { __typename?: 'UpdateNotificationPayload' }
+    & { notification?: Maybe<(
+      { __typename?: 'Notification' }
+      & Pick<Notification, 'id' | 'sentAt'>
     )> }
   )> }
 );
 
-export type LanguageCodeMappingsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type LanguageCodeMappingsQuery = (
-  { __typename?: 'Query' }
-  & { languages?: Maybe<(
-    { __typename?: 'LanguagesConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'alpha2' | 'englishName'>
-    )>> }
-  )> }
-);
-
-export type LanguageIdByAlpha2QueryVariables = Exact<{
-  alpha2: Scalars['String'];
+export type NotificationChannelByNameQueryVariables = Exact<{
+  name: Scalars['String'];
 }>;
 
 
-export type LanguageIdByAlpha2Query = (
+export type NotificationChannelByNameQuery = (
   { __typename?: 'Query' }
-  & { languageByAlpha2?: Maybe<(
-    { __typename?: 'Language' }
-    & Pick<Language, 'id'>
+  & { notificationChannelByName?: Maybe<(
+    { __typename?: 'NotificationChannel' }
+    & Pick<NotificationChannel, 'id'>
   )> }
 );
 
-export type RegisterUserActivityMutationVariables = Exact<{
-  userId: Scalars['Int'];
-}>;
+export type OutstandingEmailNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RegisterUserActivityMutation = (
-  { __typename?: 'Mutation' }
-  & { registerUserActivity?: Maybe<(
-    { __typename?: 'RegisterUserActivityPayload' }
-    & Pick<RegisterUserActivityPayload, 'datetime'>
+export type OutstandingEmailNotificationsQuery = (
+  { __typename?: 'Query' }
+  & { notificationChannelByName?: Maybe<(
+    { __typename?: 'NotificationChannel' }
+    & { notificationsByChannelId: (
+      { __typename?: 'NotificationsConnection' }
+      & { nodes: Array<Maybe<(
+        { __typename?: 'Notification' }
+        & Pick<Notification, 'id' | 'params' | 'expiresAt' | 'withheldUntil'>
+        & { user?: Maybe<(
+          { __typename?: 'User' }
+          & Pick<User, 'email' | 'emailNotificationsEnabled' | 'username' | 'unconfirmedEmail'>
+        )> }
+      )>> }
+    ) }
   )> }
 );
 
@@ -9749,6 +10796,48 @@ export type UnsubscribeUserEmailNotificationsMutation = (
   )> }
 );
 
+export type CreateUserMutationVariables = Exact<{
+  email: Scalars['String'];
+  gender: Scalars['String'];
+  passwordHash: Scalars['String'];
+  username: Scalars['String'];
+  uuid: Scalars['UUID'];
+  avatarUrl: Scalars['String'];
+  locale?: Maybe<Scalars['Int']>;
+  emailUnsubscribeToken: Scalars['String'];
+}>;
+
+
+export type CreateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { createUser?: Maybe<(
+    { __typename?: 'CreateUserPayload' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )> }
+  )> }
+);
+
+export type CreateUserLanguageMutationVariables = Exact<{
+  languageId: Scalars['Int'];
+  languageSkillLevelId?: Maybe<Scalars['Int']>;
+  native: Scalars['Boolean'];
+  userId: Scalars['Int'];
+}>;
+
+
+export type CreateUserLanguageMutation = (
+  { __typename?: 'Mutation' }
+  & { createUserLanguage?: Maybe<(
+    { __typename?: 'CreateUserLanguagePayload' }
+    & { userLanguage?: Maybe<(
+      { __typename?: 'UserLanguage' }
+      & Pick<UserLanguage, 'id'>
+    )> }
+  )> }
+);
+
 export type UpdateUserAvatarUrlMutationVariables = Exact<{
   avatarUrl: Scalars['String'];
   id: Scalars['Int'];
@@ -9766,39 +10855,6 @@ export type UpdateUserAvatarUrlMutation = (
   )> }
 );
 
-export type UserGroupMembershipsQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type UserGroupMembershipsQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & { groupUsers: (
-      { __typename?: 'GroupUsersConnection' }
-      & { edges: Array<(
-        { __typename?: 'GroupUsersEdge' }
-        & { node?: Maybe<(
-          { __typename?: 'GroupUser' }
-          & Pick<GroupUser, 'userType'>
-          & { group?: Maybe<(
-            { __typename?: 'Group' }
-            & Pick<Group, 'global' | 'uuid' | 'groupName'>
-            & { language?: Maybe<(
-              { __typename?: 'Language' }
-              & Pick<Language, 'alpha2'>
-            )>, languageSkillLevel?: Maybe<(
-              { __typename?: 'LanguageSkillLevel' }
-              & Pick<LanguageSkillLevel, 'name'>
-            )> }
-          )> }
-        )> }
-      )> }
-    ) }
-  )> }
-);
-
 export type UserHasCompletedProfileQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -9812,23 +10868,6 @@ export type UserHasCompletedProfileQuery = (
     & { userLanguages: (
       { __typename?: 'UserLanguagesConnection' }
       & Pick<UserLanguagesConnection, 'totalCount'>
-    ) }
-  )> }
-);
-
-export type UserIsInGroupQueryVariables = Exact<{
-  userId: Scalars['Int'];
-  groupUuid: Scalars['UUID'];
-}>;
-
-
-export type UserIsInGroupQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & { groupUsers: (
-      { __typename?: 'GroupUsersConnection' }
-      & Pick<GroupUsersConnection, 'totalCount'>
     ) }
   )> }
 );
@@ -9910,58 +10949,6 @@ export type UserUuidByIdQuery = (
 );
 
 
-export const AdminEmailsFcmTokens = gql`
-    query AdminEmailsFcmTokens($in: [String!]!) {
-  users(filter: {email: {in: $in}}) {
-    nodes {
-      userDevices {
-        nodes {
-          fcmToken
-        }
-      }
-    }
-  }
-}
-    `;
-export const AllGroupUuids = gql`
-    query AllGroupUuids {
-  groups {
-    nodes {
-      uuid
-    }
-  }
-}
-    `;
-export const AllGroups = gql`
-    query AllGroups {
-  groups {
-    nodes {
-      uuid
-      groupName
-      global
-      language {
-        alpha2
-        englishName
-      }
-      languageSkillLevel {
-        name
-        nodeId
-      }
-      groupUsers {
-        totalCount
-        nodes {
-          user {
-            avatarUrl
-            username
-            uuid
-          }
-          joinedOn
-        }
-      }
-    }
-  }
-}
-    `;
 export const ChatUser = gql`
     query ChatUser($id: Int!) {
   user(id: $id) {
@@ -9969,18 +10956,6 @@ export const ChatUser = gql`
     username
     uuid
     avatarUrl
-  }
-}
-    `;
-export const CreateGroup = gql`
-    mutation CreateGroup($global: Boolean!, $groupName: String!, $languageId: Int!, $languageSkillLevelId: Int!, $uuid: UUID!) {
-  createGroup(
-    input: {group: {global: $global, groupName: $groupName, languageId: $languageId, languageSkillLevelId: $languageSkillLevelId, uuid: $uuid}}
-  ) {
-    group {
-      id
-      uuid
-    }
   }
 }
     `;
@@ -10007,62 +10982,6 @@ export const CreateMessagePreview = gql`
   ) {
     messagePreview {
       id
-    }
-  }
-}
-    `;
-export const CreateUser = gql`
-    mutation CreateUser($email: String!, $gender: String!, $passwordHash: String!, $username: String!, $uuid: UUID!, $avatarUrl: String!, $locale: Int, $emailUnsubscribeToken: String!) {
-  createUser(
-    input: {user: {email: $email, gender: $gender, passwordHash: $passwordHash, username: $username, uuid: $uuid, avatarUrl: $avatarUrl, locale: $locale, emailUnsubscribeToken: $emailUnsubscribeToken}}
-  ) {
-    user {
-      id
-    }
-  }
-}
-    `;
-export const CreateUserDevice = gql`
-    mutation CreateUserDevice($userId: Int!, $fcmToken: String) {
-  createUserDevice(input: {userDevice: {userId: $userId, fcmToken: $fcmToken}}) {
-    userDevice {
-      uuid
-      fcmToken
-      id
-    }
-  }
-}
-    `;
-export const CreateUserLanguage = gql`
-    mutation CreateUserLanguage($languageId: Int!, $languageSkillLevelId: Int, $native: Boolean!, $userId: Int!) {
-  createUserLanguage(
-    input: {userLanguage: {languageId: $languageId, languageSkillLevelId: $languageSkillLevelId, native: $native, userId: $userId}}
-  ) {
-    userLanguage {
-      id
-    }
-  }
-}
-    `;
-export const CurrentUser = gql`
-    query CurrentUser {
-  currentUser {
-    bio
-    email
-    gender
-    username
-    uuid
-    avatarUrl
-    userLanguages {
-      totalCount
-    }
-    languageByLocale {
-      alpha2
-    }
-    inviteTokens {
-      nodes {
-        inviteToken
-      }
     }
   }
 }
@@ -10143,6 +11062,164 @@ export const GroupChatMessages = gql`
   }
 }
     `;
+export const CurrentUser = gql`
+    query CurrentUser {
+  currentUser {
+    bio
+    email
+    gender
+    username
+    uuid
+    avatarUrl
+    userLanguages {
+      totalCount
+    }
+    languageByLocale {
+      alpha2
+    }
+    inviteTokens {
+      nodes {
+        inviteToken
+      }
+    }
+  }
+}
+    `;
+export const RegisterUserActivity = gql`
+    mutation RegisterUserActivity($userId: Int!) {
+  registerUserActivity(input: {userId: $userId}) {
+    datetime
+  }
+}
+    `;
+export const CreateGroupUser = gql`
+    mutation CreateGroupUser($userType: UserType!, $userId: Int!, $groupId: Int!) {
+  createGroupUser(
+    input: {groupUser: {userType: $userType, userId: $userId, groupId: $groupId}}
+  ) {
+    groupUser {
+      id
+    }
+  }
+}
+    `;
+export const JoinGlobalGroup = gql`
+    mutation JoinGlobalGroup($groupUuid: UUID!) {
+  joinGlobalGroup(input: {groupUuid: $groupUuid}) {
+    groupUser {
+      group {
+        uuid
+      }
+      user {
+        uuid
+      }
+      nodeId
+    }
+  }
+}
+    `;
+export const UserGroupMemberships = gql`
+    query UserGroupMemberships($id: Int!) {
+  user(id: $id) {
+    groupUsers {
+      edges {
+        node {
+          group {
+            global
+            uuid
+            groupName
+            language {
+              alpha2
+            }
+            languageSkillLevel {
+              name
+            }
+          }
+          userType
+        }
+      }
+    }
+  }
+}
+    `;
+export const UserIsInGroup = gql`
+    query UserIsInGroup($userId: Int!, $groupUuid: UUID!) {
+  groupByUuid(uuid: $groupUuid) {
+    groupUsers(condition: {userId: $userId}) {
+      totalCount
+    }
+  }
+}
+    `;
+export const UsersWithoutLearnerGroup = gql`
+    query UsersWithoutLearnerGroup($lid: Int!, $lsklid: Int!, $learnerSize: Int!) {
+  usersWithoutLearnerGroup(lid: $lid, lsklid: $lsklid, first: $learnerSize) {
+    nodes {
+      id
+    }
+  }
+}
+    `;
+export const UsersWithoutNativeGroup = gql`
+    query UsersWithoutNativeGroup($lid: Int!, $nativeSize: Int!) {
+  usersWithoutNativeGroup(lid: $lid, first: $nativeSize) {
+    nodes {
+      id
+    }
+  }
+}
+    `;
+export const AllGroupUuids = gql`
+    query AllGroupUuids {
+  groups {
+    nodes {
+      uuid
+    }
+  }
+}
+    `;
+export const AllGroups = gql`
+    query AllGroups {
+  groups {
+    nodes {
+      uuid
+      groupName
+      global
+      language {
+        alpha2
+        englishName
+      }
+      languageSkillLevel {
+        name
+        nodeId
+      }
+      groupUsers {
+        totalCount
+        nodes {
+          user {
+            avatarUrl
+            username
+            uuid
+          }
+          joinedOn
+        }
+      }
+    }
+  }
+}
+    `;
+export const CreateGroup = gql`
+    mutation CreateGroup($global: Boolean!, $groupName: String!, $languageId: Int!, $languageSkillLevelId: Int!, $uuid: UUID!) {
+  createGroup(
+    input: {group: {global: $global, groupName: $groupName, languageId: $languageId, languageSkillLevelId: $languageSkillLevelId, uuid: $uuid}}
+  ) {
+    group {
+      id
+      uuid
+    }
+  }
+}
+    `;
 export const GroupIdByUuid = gql`
     query GroupIdByUuid($uuid: UUID!) {
   groupByUuid(uuid: $uuid) {
@@ -10157,6 +11234,62 @@ export const GroupLanguageByUuid = gql`
       alpha2
     }
     uuid
+  }
+}
+    `;
+export const LanguageCodeMappings = gql`
+    query LanguageCodeMappings {
+  languages {
+    nodes {
+      alpha2
+      englishName
+    }
+  }
+}
+    `;
+export const LanguageIdByAlpha2 = gql`
+    query LanguageIdByAlpha2($alpha2: String!) {
+  languageByAlpha2(alpha2: $alpha2) {
+    id
+  }
+}
+    `;
+export const AdminEmailsFcmTokens = gql`
+    query AdminEmailsFcmTokens($in: [String!]!) {
+  users(filter: {email: {in: $in}}) {
+    nodes {
+      userDevices {
+        nodes {
+          fcmToken
+        }
+      }
+    }
+  }
+}
+    `;
+export const CreateNotification = gql`
+    mutation CreateNotification($channelId: Int!, $userId: Int!, $sentAt: Datetime, $params: JSON, $expiresAt: Datetime, $withheldUntil: Datetime) {
+  createNotification(
+    input: {notification: {userId: $userId, channelId: $channelId, params: $params, sentAt: $sentAt, expiresAt: $expiresAt, withheldUntil: $withheldUntil}}
+  ) {
+    clientMutationId
+    notification {
+      createdAt
+      expiresAt
+      withheldUntil
+      id
+    }
+  }
+}
+    `;
+export const CreateUserDevice = gql`
+    mutation CreateUserDevice($userId: Int!, $fcmToken: String) {
+  createUserDevice(input: {userDevice: {userId: $userId, fcmToken: $fcmToken}}) {
+    userDevice {
+      uuid
+      fcmToken
+      id
+    }
   }
 }
     `;
@@ -10189,42 +11322,43 @@ export const GroupMessageNotification = gql`
   }
 }
     `;
-export const JoinGlobalGroup = gql`
-    mutation JoinGlobalGroup($groupUuid: UUID!) {
-  joinGlobalGroup(input: {groupUuid: $groupUuid}) {
-    groupUser {
-      group {
-        uuid
-      }
-      user {
-        uuid
-      }
-      nodeId
+export const MarkNotificationAsSent = gql`
+    mutation MarkNotificationAsSent($id: Int!, $sentAt: Datetime) {
+  updateNotification(input: {patch: {sentAt: $sentAt}, id: $id}) {
+    notification {
+      id
+      sentAt
     }
   }
 }
     `;
-export const LanguageCodeMappings = gql`
-    query LanguageCodeMappings {
-  languages {
-    nodes {
-      alpha2
-      englishName
-    }
-  }
-}
-    `;
-export const LanguageIdByAlpha2 = gql`
-    query LanguageIdByAlpha2($alpha2: String!) {
-  languageByAlpha2(alpha2: $alpha2) {
+export const NotificationChannelByName = gql`
+    query NotificationChannelByName($name: String!) {
+  notificationChannelByName(name: $name) {
     id
   }
 }
     `;
-export const RegisterUserActivity = gql`
-    mutation RegisterUserActivity($userId: Int!) {
-  registerUserActivity(input: {userId: $userId}) {
-    datetime
+export const OutstandingEmailNotifications = gql`
+    query OutstandingEmailNotifications {
+  notificationChannelByName(name: "Email") {
+    notificationsByChannelId(
+      orderBy: CREATED_AT_ASC
+      filter: {sentAt: {isNull: true}}
+    ) {
+      nodes {
+        id
+        user {
+          email
+          emailNotificationsEnabled
+          username
+          unconfirmedEmail
+        }
+        params
+        expiresAt
+        withheldUntil
+      }
+    }
   }
 }
     `;
@@ -10242,6 +11376,28 @@ export const UnsubscribeUserEmailNotifications = gql`
   }
 }
     `;
+export const CreateUser = gql`
+    mutation CreateUser($email: String!, $gender: String!, $passwordHash: String!, $username: String!, $uuid: UUID!, $avatarUrl: String!, $locale: Int, $emailUnsubscribeToken: String!) {
+  createUser(
+    input: {user: {email: $email, gender: $gender, passwordHash: $passwordHash, username: $username, uuid: $uuid, avatarUrl: $avatarUrl, locale: $locale, emailUnsubscribeToken: $emailUnsubscribeToken}}
+  ) {
+    user {
+      id
+    }
+  }
+}
+    `;
+export const CreateUserLanguage = gql`
+    mutation CreateUserLanguage($languageId: Int!, $languageSkillLevelId: Int, $native: Boolean!, $userId: Int!) {
+  createUserLanguage(
+    input: {userLanguage: {languageId: $languageId, languageSkillLevelId: $languageSkillLevelId, native: $native, userId: $userId}}
+  ) {
+    userLanguage {
+      id
+    }
+  }
+}
+    `;
 export const UpdateUserAvatarUrl = gql`
     mutation UpdateUserAvatarUrl($avatarUrl: String!, $id: Int!) {
   updateUser(input: {patch: {avatarUrl: $avatarUrl}, id: $id}) {
@@ -10251,44 +11407,11 @@ export const UpdateUserAvatarUrl = gql`
   }
 }
     `;
-export const UserGroupMemberships = gql`
-    query UserGroupMemberships($id: Int!) {
-  user(id: $id) {
-    groupUsers {
-      edges {
-        node {
-          group {
-            global
-            uuid
-            groupName
-            language {
-              alpha2
-            }
-            languageSkillLevel {
-              name
-            }
-          }
-          userType
-        }
-      }
-    }
-  }
-}
-    `;
 export const UserHasCompletedProfile = gql`
     query UserHasCompletedProfile($id: Int!) {
   user(id: $id) {
     username
     userLanguages {
-      totalCount
-    }
-  }
-}
-    `;
-export const UserIsInGroup = gql`
-    query UserIsInGroup($userId: Int!, $groupUuid: UUID!) {
-  groupByUuid(uuid: $groupUuid) {
-    groupUsers(condition: {userId: $userId}) {
       totalCount
     }
   }

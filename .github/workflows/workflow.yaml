@@ -19,6 +19,7 @@ jobs:
                   echo "POSTGRES_DB=everglot_app_db" >> .env
                   echo "SESSION_COOKIE_VALIDATION_SECRETS=[\"MySecretCookieValidationSecret123\"]" >> .env
                   echo "AGORA_APP_CERTIFICATE=whatever" >> .env
+                  echo "SENDINBLUE_API_KEY=whatever" >> .env
             - name: "Setup server-side Firebase credentials file"
               run: |
                   echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON_BASE64 }}" | base64 -d > src/firebaseServiceAccount.json
@@ -96,6 +97,12 @@ jobs:
 
             - name: Inject Admin Emails from Github Secrets
               run: kubectl create secret generic adminemails --from-literal=admin-emails='${{ secrets.ADMIN_EMAILS }}'
+
+            - name: Delete Sendinblue API Key from Kubernetes Secrets if existed
+              run: kubectl delete secret sendinblueapikey --ignore-not-found
+
+            - name: Inject Sendinblue API Key from Github Secrets
+              run: kubectl create secret generic sendinblueapikey --from-literal=sendinblue-api-key='${{ secrets.SENDINBLUE_API_KEY }}'
 
             - name: Deploy Config to DigitalOcean Kubernetes
               run: kubectl apply -f $GITHUB_WORKSPACE/k8s-setup/everglot/service-deployment.yml

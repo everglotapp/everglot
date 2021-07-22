@@ -1,0 +1,9 @@
+mutation CreateGroupUser($userType: UserType!, $userId: Int!, $groupId: Int!) {
+  createGroupUser(input: {groupUser: {userType: $userType, userId: $userId, groupId: $groupId}}) {
+    groupUser {
+      id
+      __typename
+    }
+    __typename
+  }
+}

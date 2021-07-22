@@ -1,0 +1,8 @@
+mutation MarkNotificationAsSent($id: Int!, $sentAt: Datetime) {
+    updateNotification(input: { patch: { sentAt: $sentAt }, id: $id }) {
+        notification {
+            id
+            sentAt
+        }
+    }
+}

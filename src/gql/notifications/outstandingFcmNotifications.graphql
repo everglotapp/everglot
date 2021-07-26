@@ -1,0 +1,38 @@
+query OutstandingFcmNotifications {
+    notificationChannelByName(name: "Firebase Cloud Messaging") {
+        notificationsByChannelId(
+            orderBy: CREATED_AT_ASC
+            filter: { sentAt: { isNull: true } }
+        ) {
+            nodes {
+                id
+                recipient {
+                    userDevices {
+                        nodes {
+                            fcmToken
+                        }
+                    }
+                    uuid
+                }
+                params
+                expiresAt
+                withheldUntil
+                recipientGroup {
+                    uuid
+                    groupUsers {
+                        nodes {
+                            user {
+                                userDevices {
+                                    nodes {
+                                        fcmToken
+                                    }
+                                }
+                                uuid
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -12,44 +12,28 @@ import {
 import { performQuery } from "../gql"
 
 import log from "../../logger"
+import type { NotificationParams } from "./params"
 
 const EMAIL_NOTIFICATION_CHANNEL_NAME = "Email"
 const FCM_NOTIFICATION_CHANNEL_NAME = "Firebase Cloud Messaging"
 
 const chlog = log.child({ namespace: "notifications-utils" })
 
-export interface TemplateEmailParams extends CommonEmailParams {
-    templateId?: number
-    templateParams?: object
+type NotificationUserRecipient = {
+    groupId: null
+    userId: number
 }
-
-export interface ManualTextEmailParams extends ManualEmailParams {
-    textContent?: string
+type NotificationGroupRecipient = {
+    groupId: number
+    userId: null
 }
-
-export interface ManualHtmlEmailParams extends ManualEmailParams {
-    htmlContent?: string
-}
-
-interface ManualEmailParams extends CommonEmailParams {
-    subject?: string
-}
-
-interface CommonEmailParams {
-    from?: { email: string; name: string }
-}
-
-export type EmailParams =
-    | TemplateEmailParams
-    | ManualTextEmailParams
-    | ManualHtmlEmailParams
-
-export type NotificationParams = { version: number } & EmailParams
+export type NotificationRecipient =
+    | NotificationUserRecipient
+    | NotificationGroupRecipient
 
 export async function enqueueNotification(
     channelId: number,
-    userId: number,
-    sentAt: Date | null,
+    recipient: NotificationRecipient,
     expiresAt: Date | null,
     withheldUntil: Date | null,
     params: NotificationParams | null
@@ -58,9 +42,10 @@ export async function enqueueNotification(
         CreateNotification.loc!.source,
         {
             channelId,
-            userId,
+            recipientId: recipient.userId,
+            recipientGroupId: recipient.groupId,
             params: JSON.stringify(params),
-            sentAt: sentAt?.toISOString() || null,
+            sentAt: null,
             expiresAt: expiresAt?.toISOString() || null,
             withheldUntil: withheldUntil?.toISOString() || null,
         } as CreateNotificationMutationVariables

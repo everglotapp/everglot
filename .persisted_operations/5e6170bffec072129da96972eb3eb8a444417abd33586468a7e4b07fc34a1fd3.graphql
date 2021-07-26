@@ -3,7 +3,7 @@ query OutstandingEmailNotifications {
     notificationsByChannelId(orderBy: CREATED_AT_ASC, filter: {sentAt: {isNull: true}}) {
       nodes {
         id
-        user {
+        recipient {
           email
           emailNotificationsEnabled
           username

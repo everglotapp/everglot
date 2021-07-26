@@ -1011,9 +1011,11 @@ export type CreateNotificationPayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   /** Reads a single `User` that is related to this `Notification`. */
-  user?: Maybe<User>;
+  recipient?: Maybe<User>;
   /** Reads a single `NotificationChannel` that is related to this `Notification`. */
   channel?: Maybe<NotificationChannel>;
+  /** Reads a single `Group` that is related to this `Notification`. */
+  recipientGroup?: Maybe<Group>;
   /** An edge for our `Notification`. May be used by Relay 1. */
   notificationEdge?: Maybe<NotificationsEdge>;
 };
@@ -2188,9 +2190,11 @@ export type DeleteNotificationPayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   /** Reads a single `User` that is related to this `Notification`. */
-  user?: Maybe<User>;
+  recipient?: Maybe<User>;
   /** Reads a single `NotificationChannel` that is related to this `Notification`. */
   channel?: Maybe<NotificationChannel>;
+  /** Reads a single `Group` that is related to this `Notification`. */
+  recipientGroup?: Maybe<Group>;
   /** An edge for our `Notification`. May be used by Relay 1. */
   notificationEdge?: Maybe<NotificationsEdge>;
 };
@@ -3186,6 +3190,8 @@ export type Group = Node & {
   groupUsers: GroupUsersConnection;
   /** Reads and enables pagination through a set of `Message`. */
   messagesByRecipientGroupId: MessagesConnection;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByRecipientGroupId: NotificationsConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByGroupUserGroupIdAndUserId: GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
@@ -3194,6 +3200,10 @@ export type Group = Node & {
   usersByMessageRecipientGroupIdAndRecipientId: GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Message`. */
   messagesByMessageRecipientGroupIdAndParentMessageId: GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByNotificationRecipientGroupIdAndRecipientId: GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `NotificationChannel`. */
+  notificationChannelsByNotificationRecipientGroupIdAndChannelId: GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyConnection;
 };
 
 
@@ -3218,6 +3228,18 @@ export type GroupMessagesByRecipientGroupIdArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+
+export type GroupNotificationsByRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
 };
 
 
@@ -3266,6 +3288,30 @@ export type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+
+export type GroupUsersByNotificationRecipientGroupIdAndRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  condition?: Maybe<NotificationChannelCondition>;
+  filter?: Maybe<NotificationChannelFilter>;
 };
 
 /** A condition to be used against `Group` object types. All fields are tested for equality and combined with a logical ‘and.’ */
@@ -3356,6 +3402,43 @@ export type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEd
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `NotificationChannel` values, with data from `Notification`. */
+export type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyConnection = {
+  __typename?: 'GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyConnection';
+  /** A list of `NotificationChannel` objects. */
+  nodes: Array<Maybe<NotificationChannel>>;
+  /** A list of edges which contains the `NotificationChannel`, info from the `Notification`, and the cursor to aid in pagination. */
+  edges: Array<GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `NotificationChannel` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `NotificationChannel` edge in the connection, with data from `Notification`. */
+export type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdge = {
+  __typename?: 'GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `NotificationChannel` at the end of the edge. */
+  node?: Maybe<NotificationChannel>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByChannelId: NotificationsConnection;
+};
+
+
+/** A `NotificationChannel` edge in the connection, with data from `Notification`. */
+export type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdgeNotificationsByChannelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
 };
 
 /** Represents an update to a `Group`. Fields that are set will be updated. */
@@ -3555,6 +3638,43 @@ export type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdgeMessages
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `User` values, with data from `Notification`. */
+export type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyConnection = {
+  __typename?: 'GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Notification`, and the cursor to aid in pagination. */
+  edges: Array<GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Notification`. */
+export type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge = {
+  __typename?: 'GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByRecipientId: NotificationsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Notification`. */
+export type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdgeNotificationsByRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
 };
 
 /** A connection to a list of `GroupUser` values. */
@@ -6308,7 +6428,7 @@ export type Notification = Node & {
   nodeId: Scalars['ID'];
   id: Scalars['Int'];
   uuid: Scalars['UUID'];
-  userId: Scalars['Int'];
+  recipientId?: Maybe<Scalars['Int']>;
   channelId: Scalars['Int'];
   params?: Maybe<Scalars['JSON']>;
   sentAt?: Maybe<Scalars['Datetime']>;
@@ -6316,10 +6436,13 @@ export type Notification = Node & {
   expiresAt?: Maybe<Scalars['Datetime']>;
   readAt?: Maybe<Scalars['Datetime']>;
   createdAt: Scalars['Datetime'];
+  recipientGroupId?: Maybe<Scalars['Int']>;
   /** Reads a single `User` that is related to this `Notification`. */
-  user?: Maybe<User>;
+  recipient?: Maybe<User>;
   /** Reads a single `NotificationChannel` that is related to this `Notification`. */
   channel?: Maybe<NotificationChannel>;
+  /** Reads a single `Group` that is related to this `Notification`. */
+  recipientGroup?: Maybe<Group>;
 };
 
 export type NotificationChannel = Node & {
@@ -6333,7 +6456,9 @@ export type NotificationChannel = Node & {
   /** Reads and enables pagination through a set of `Notification`. */
   notificationsByChannelId: NotificationsConnection;
   /** Reads and enables pagination through a set of `User`. */
-  usersByNotificationChannelIdAndUserId: NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyConnection;
+  usersByNotificationChannelIdAndRecipientId: NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Group`. */
+  groupsByNotificationChannelIdAndRecipientGroupId: NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyConnection;
 };
 
 
@@ -6349,7 +6474,7 @@ export type NotificationChannelNotificationsByChannelIdArgs = {
 };
 
 
-export type NotificationChannelUsersByNotificationChannelIdAndUserIdArgs = {
+export type NotificationChannelUsersByNotificationChannelIdAndRecipientIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -6358,6 +6483,18 @@ export type NotificationChannelUsersByNotificationChannelIdAndUserIdArgs = {
   orderBy?: Maybe<Array<UsersOrderBy>>;
   condition?: Maybe<UserCondition>;
   filter?: Maybe<UserFilter>;
+};
+
+
+export type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
 };
 
 /**
@@ -6393,6 +6530,43 @@ export type NotificationChannelFilter = {
   not?: Maybe<NotificationChannelFilter>;
 };
 
+/** A connection to a list of `Group` values, with data from `Notification`. */
+export type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyConnection = {
+  __typename?: 'NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyConnection';
+  /** A list of `Group` objects. */
+  nodes: Array<Maybe<Group>>;
+  /** A list of edges which contains the `Group`, info from the `Notification`, and the cursor to aid in pagination. */
+  edges: Array<NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Group` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Group` edge in the connection, with data from `Notification`. */
+export type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyEdge = {
+  __typename?: 'NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Group` at the end of the edge. */
+  node?: Maybe<Group>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByRecipientGroupId: NotificationsConnection;
+};
+
+
+/** A `Group` edge in the connection, with data from `Notification`. */
+export type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyEdgeNotificationsByRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
+};
+
 /** An input for mutations affecting `NotificationChannel` */
 export type NotificationChannelInput = {
   id?: Maybe<Scalars['Int']>;
@@ -6410,12 +6584,12 @@ export type NotificationChannelPatch = {
 };
 
 /** A connection to a list of `User` values, with data from `Notification`. */
-export type NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyConnection = {
-  __typename?: 'NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyConnection';
+export type NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyConnection = {
+  __typename?: 'NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyConnection';
   /** A list of `User` objects. */
   nodes: Array<Maybe<User>>;
   /** A list of edges which contains the `User`, info from the `Notification`, and the cursor to aid in pagination. */
-  edges: Array<NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyEdge>;
+  edges: Array<NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyEdge>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `User` you could get from the connection. */
@@ -6423,19 +6597,19 @@ export type NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyCo
 };
 
 /** A `User` edge in the connection, with data from `Notification`. */
-export type NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyEdge = {
-  __typename?: 'NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyEdge';
+export type NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyEdge = {
+  __typename?: 'NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyEdge';
   /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `User` at the end of the edge. */
   node?: Maybe<User>;
   /** Reads and enables pagination through a set of `Notification`. */
-  notifications: NotificationsConnection;
+  notificationsByRecipientId: NotificationsConnection;
 };
 
 
 /** A `User` edge in the connection, with data from `Notification`. */
-export type NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyEdgeNotificationsArgs = {
+export type NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyEdgeNotificationsByRecipientIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -6492,8 +6666,8 @@ export type NotificationCondition = {
   id?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
   uuid?: Maybe<Scalars['UUID']>;
-  /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `recipientId` field. */
+  recipientId?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `channelId` field. */
   channelId?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `params` field. */
@@ -6508,6 +6682,8 @@ export type NotificationCondition = {
   readAt?: Maybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `createdAt` field. */
   createdAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `recipientGroupId` field. */
+  recipientGroupId?: Maybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `Notification` object types. All fields are combined with a logical ‘and.’ */
@@ -6516,8 +6692,8 @@ export type NotificationFilter = {
   id?: Maybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
   uuid?: Maybe<UuidFilter>;
-  /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `recipientId` field. */
+  recipientId?: Maybe<IntFilter>;
   /** Filter by the object’s `channelId` field. */
   channelId?: Maybe<IntFilter>;
   /** Filter by the object’s `sentAt` field. */
@@ -6530,6 +6706,8 @@ export type NotificationFilter = {
   readAt?: Maybe<DatetimeFilter>;
   /** Filter by the object’s `createdAt` field. */
   createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `recipientGroupId` field. */
+  recipientGroupId?: Maybe<IntFilter>;
   /** Checks for all expressions in this list. */
   and?: Maybe<Array<NotificationFilter>>;
   /** Checks for any expressions in this list. */
@@ -6542,7 +6720,7 @@ export type NotificationFilter = {
 export type NotificationInput = {
   id?: Maybe<Scalars['Int']>;
   uuid?: Maybe<Scalars['UUID']>;
-  userId: Scalars['Int'];
+  recipientId?: Maybe<Scalars['Int']>;
   channelId: Scalars['Int'];
   params?: Maybe<Scalars['JSON']>;
   sentAt?: Maybe<Scalars['Datetime']>;
@@ -6550,13 +6728,14 @@ export type NotificationInput = {
   expiresAt?: Maybe<Scalars['Datetime']>;
   readAt?: Maybe<Scalars['Datetime']>;
   createdAt?: Maybe<Scalars['Datetime']>;
+  recipientGroupId?: Maybe<Scalars['Int']>;
 };
 
 /** Represents an update to a `Notification`. Fields that are set will be updated. */
 export type NotificationPatch = {
   id?: Maybe<Scalars['Int']>;
   uuid?: Maybe<Scalars['UUID']>;
-  userId?: Maybe<Scalars['Int']>;
+  recipientId?: Maybe<Scalars['Int']>;
   channelId?: Maybe<Scalars['Int']>;
   params?: Maybe<Scalars['JSON']>;
   sentAt?: Maybe<Scalars['Datetime']>;
@@ -6564,6 +6743,7 @@ export type NotificationPatch = {
   expiresAt?: Maybe<Scalars['Datetime']>;
   readAt?: Maybe<Scalars['Datetime']>;
   createdAt?: Maybe<Scalars['Datetime']>;
+  recipientGroupId?: Maybe<Scalars['Int']>;
 };
 
 /** A connection to a list of `Notification` values. */
@@ -6595,8 +6775,8 @@ export enum NotificationsOrderBy {
   IdDesc = 'ID_DESC',
   UuidAsc = 'UUID_ASC',
   UuidDesc = 'UUID_DESC',
-  UserIdAsc = 'USER_ID_ASC',
-  UserIdDesc = 'USER_ID_DESC',
+  RecipientIdAsc = 'RECIPIENT_ID_ASC',
+  RecipientIdDesc = 'RECIPIENT_ID_DESC',
   ChannelIdAsc = 'CHANNEL_ID_ASC',
   ChannelIdDesc = 'CHANNEL_ID_DESC',
   ParamsAsc = 'PARAMS_ASC',
@@ -6611,6 +6791,8 @@ export enum NotificationsOrderBy {
   ReadAtDesc = 'READ_AT_DESC',
   CreatedAtAsc = 'CREATED_AT_ASC',
   CreatedAtDesc = 'CREATED_AT_DESC',
+  RecipientGroupIdAsc = 'RECIPIENT_GROUP_ID_ASC',
+  RecipientGroupIdDesc = 'RECIPIENT_GROUP_ID_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
@@ -8755,9 +8937,11 @@ export type UpdateNotificationPayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   /** Reads a single `User` that is related to this `Notification`. */
-  user?: Maybe<User>;
+  recipient?: Maybe<User>;
   /** Reads a single `NotificationChannel` that is related to this `Notification`. */
   channel?: Maybe<NotificationChannel>;
+  /** Reads a single `Group` that is related to this `Notification`. */
+  recipientGroup?: Maybe<Group>;
   /** An edge for our `Notification`. May be used by Relay 1. */
   notificationEdge?: Maybe<NotificationsEdge>;
 };
@@ -9065,7 +9249,7 @@ export type User = Node & {
   /** Reads and enables pagination through a set of `UserDevice`. */
   userDevices: UserDevicesConnection;
   /** Reads and enables pagination through a set of `Notification`. */
-  notifications: NotificationsConnection;
+  notificationsByRecipientId: NotificationsConnection;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByUserLanguageUserIdAndLanguageId: UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
@@ -9085,7 +9269,9 @@ export type User = Node & {
   /** Reads and enables pagination through a set of `Message`. */
   messagesByMessageRecipientIdAndParentMessageId: UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyConnection;
   /** Reads and enables pagination through a set of `NotificationChannel`. */
-  notificationChannelsByNotificationUserIdAndChannelId: UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyConnection;
+  notificationChannelsByNotificationRecipientIdAndChannelId: UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Group`. */
+  groupsByNotificationRecipientIdAndRecipientGroupId: UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyConnection;
 };
 
 
@@ -9161,7 +9347,7 @@ export type UserUserDevicesArgs = {
 };
 
 
-export type UserNotificationsArgs = {
+export type UserNotificationsByRecipientIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -9281,7 +9467,7 @@ export type UserMessagesByMessageRecipientIdAndParentMessageIdArgs = {
 };
 
 
-export type UserNotificationChannelsByNotificationUserIdAndChannelIdArgs = {
+export type UserNotificationChannelsByNotificationRecipientIdAndChannelIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -9290,6 +9476,18 @@ export type UserNotificationChannelsByNotificationUserIdAndChannelIdArgs = {
   orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
   condition?: Maybe<NotificationChannelCondition>;
   filter?: Maybe<NotificationChannelFilter>;
+};
+
+
+export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
 };
 
 /** A condition to be used against `User` object types. All fields are tested for equality and combined with a logical ‘and.’ */
@@ -9588,6 +9786,43 @@ export type UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyEdgeMessages
   filter?: Maybe<MessageFilter>;
 };
 
+/** A connection to a list of `Group` values, with data from `Notification`. */
+export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyConnection = {
+  __typename?: 'UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyConnection';
+  /** A list of `Group` objects. */
+  nodes: Array<Maybe<Group>>;
+  /** A list of edges which contains the `Group`, info from the `Notification`, and the cursor to aid in pagination. */
+  edges: Array<UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Group` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Group` edge in the connection, with data from `Notification`. */
+export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdge = {
+  __typename?: 'UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Group` at the end of the edge. */
+  node?: Maybe<Group>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByRecipientGroupId: NotificationsConnection;
+};
+
+
+/** A `Group` edge in the connection, with data from `Notification`. */
+export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdgeNotificationsByRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
+};
+
 /** An input for mutations affecting `User` */
 export type UserInput = {
   id?: Maybe<Scalars['Int']>;
@@ -9877,12 +10112,12 @@ export type UserMessagesByMessageSenderIdAndParentMessageIdManyToManyEdgeMessage
 };
 
 /** A connection to a list of `NotificationChannel` values, with data from `Notification`. */
-export type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyConnection = {
-  __typename?: 'UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyConnection';
+export type UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyConnection = {
+  __typename?: 'UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyConnection';
   /** A list of `NotificationChannel` objects. */
   nodes: Array<Maybe<NotificationChannel>>;
   /** A list of edges which contains the `NotificationChannel`, info from the `Notification`, and the cursor to aid in pagination. */
-  edges: Array<UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdge>;
+  edges: Array<UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyEdge>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `NotificationChannel` you could get from the connection. */
@@ -9890,8 +10125,8 @@ export type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyCo
 };
 
 /** A `NotificationChannel` edge in the connection, with data from `Notification`. */
-export type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdge = {
-  __typename?: 'UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdge';
+export type UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyEdge = {
+  __typename?: 'UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyEdge';
   /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `NotificationChannel` at the end of the edge. */
@@ -9902,7 +10137,7 @@ export type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEd
 
 
 /** A `NotificationChannel` edge in the connection, with data from `Notification`. */
-export type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdgeNotificationsByChannelIdArgs = {
+export type UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyEdgeNotificationsByChannelIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -10650,7 +10885,8 @@ export type AdminEmailsFcmTokensQuery = (
 
 export type CreateNotificationMutationVariables = Exact<{
   channelId: Scalars['Int'];
-  userId: Scalars['Int'];
+  recipientId?: Maybe<Scalars['Int']>;
+  recipientGroupId?: Maybe<Scalars['Int']>;
   sentAt?: Maybe<Scalars['Datetime']>;
   params?: Maybe<Scalars['JSON']>;
   expiresAt?: Maybe<Scalars['Datetime']>;
@@ -10769,9 +11005,57 @@ export type OutstandingEmailNotificationsQuery = (
       & { nodes: Array<Maybe<(
         { __typename?: 'Notification' }
         & Pick<Notification, 'id' | 'params' | 'expiresAt' | 'withheldUntil'>
-        & { user?: Maybe<(
+        & { recipient?: Maybe<(
           { __typename?: 'User' }
           & Pick<User, 'email' | 'emailNotificationsEnabled' | 'username' | 'unconfirmedEmail'>
+        )> }
+      )>> }
+    ) }
+  )> }
+);
+
+export type OutstandingFcmNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OutstandingFcmNotificationsQuery = (
+  { __typename?: 'Query' }
+  & { notificationChannelByName?: Maybe<(
+    { __typename?: 'NotificationChannel' }
+    & { notificationsByChannelId: (
+      { __typename?: 'NotificationsConnection' }
+      & { nodes: Array<Maybe<(
+        { __typename?: 'Notification' }
+        & Pick<Notification, 'id' | 'params' | 'expiresAt' | 'withheldUntil'>
+        & { recipient?: Maybe<(
+          { __typename?: 'User' }
+          & Pick<User, 'uuid'>
+          & { userDevices: (
+            { __typename?: 'UserDevicesConnection' }
+            & { nodes: Array<Maybe<(
+              { __typename?: 'UserDevice' }
+              & Pick<UserDevice, 'fcmToken'>
+            )>> }
+          ) }
+        )>, recipientGroup?: Maybe<(
+          { __typename?: 'Group' }
+          & Pick<Group, 'uuid'>
+          & { groupUsers: (
+            { __typename?: 'GroupUsersConnection' }
+            & { nodes: Array<Maybe<(
+              { __typename?: 'GroupUser' }
+              & { user?: Maybe<(
+                { __typename?: 'User' }
+                & Pick<User, 'uuid'>
+                & { userDevices: (
+                  { __typename?: 'UserDevicesConnection' }
+                  & { nodes: Array<Maybe<(
+                    { __typename?: 'UserDevice' }
+                    & Pick<UserDevice, 'fcmToken'>
+                  )>> }
+                ) }
+              )> }
+            )>> }
+          ) }
         )> }
       )>> }
     ) }
@@ -11268,9 +11552,9 @@ export const AdminEmailsFcmTokens = gql`
 }
     `;
 export const CreateNotification = gql`
-    mutation CreateNotification($channelId: Int!, $userId: Int!, $sentAt: Datetime, $params: JSON, $expiresAt: Datetime, $withheldUntil: Datetime) {
+    mutation CreateNotification($channelId: Int!, $recipientId: Int, $recipientGroupId: Int, $sentAt: Datetime, $params: JSON, $expiresAt: Datetime, $withheldUntil: Datetime) {
   createNotification(
-    input: {notification: {userId: $userId, channelId: $channelId, params: $params, sentAt: $sentAt, expiresAt: $expiresAt, withheldUntil: $withheldUntil}}
+    input: {notification: {channelId: $channelId, recipientId: $recipientId, recipientGroupId: $recipientGroupId, params: $params, sentAt: $sentAt, expiresAt: $expiresAt, withheldUntil: $withheldUntil}}
   ) {
     clientMutationId
     notification {
@@ -11348,7 +11632,7 @@ export const OutstandingEmailNotifications = gql`
     ) {
       nodes {
         id
-        user {
+        recipient {
           email
           emailNotificationsEnabled
           username
@@ -11357,6 +11641,46 @@ export const OutstandingEmailNotifications = gql`
         params
         expiresAt
         withheldUntil
+      }
+    }
+  }
+}
+    `;
+export const OutstandingFcmNotifications = gql`
+    query OutstandingFcmNotifications {
+  notificationChannelByName(name: "Firebase Cloud Messaging") {
+    notificationsByChannelId(
+      orderBy: CREATED_AT_ASC
+      filter: {sentAt: {isNull: true}}
+    ) {
+      nodes {
+        id
+        recipient {
+          userDevices {
+            nodes {
+              fcmToken
+            }
+          }
+          uuid
+        }
+        params
+        expiresAt
+        withheldUntil
+        recipientGroup {
+          uuid
+          groupUsers {
+            nodes {
+              user {
+                userDevices {
+                  nodes {
+                    fcmToken
+                  }
+                }
+                uuid
+              }
+            }
+          }
+        }
       }
     }
   }

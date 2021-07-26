@@ -1,6 +1,7 @@
 mutation CreateNotification(
     $channelId: Int!
-    $userId: Int!
+    $recipientId: Int
+    $recipientGroupId: Int
     $sentAt: Datetime
     $params: JSON
     $expiresAt: Datetime
@@ -9,8 +10,9 @@ mutation CreateNotification(
     createNotification(
         input: {
             notification: {
-                userId: $userId
                 channelId: $channelId
+                recipientId: $recipientId
+                recipientGroupId: $recipientGroupId
                 params: $params
                 sentAt: $sentAt
                 expiresAt: $expiresAt

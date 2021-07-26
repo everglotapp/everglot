@@ -14,20 +14,22 @@ import {
 import {
     enqueueNotification,
     getEmailNotificationChannelId,
-    ManualHtmlEmailParams,
-    ManualTextEmailParams,
     markNotificationAsJustSent,
-    NotificationParams,
-    TemplateEmailParams,
 } from "./utils"
-import type { EmailParams } from "./utils"
+import type { NotificationParamsV1 } from "./params"
+import type {
+    EmailParamsV1,
+    ManualHtmlEmailParamsV1,
+    ManualTextEmailParamsV1,
+    TemplateEmailParamsV1,
+} from "./params/v1"
 
 const chlog = log.child({ namespace: "notifications-email" })
 
 let handleNotifications = false
 let notificationHandler: NodeJS.Timeout | undefined
 
-const NOTIFICATION_DELAY_SECONDS = 5000
+const NOTIFICATION_DELAY_MS = 5000
 
 const DEFAULT_EMAIL_FROM = {
     name: "Ebo from Everglot",
@@ -48,7 +50,7 @@ function sendNextEmailNotificationAfterDelay() {
     }
     notificationHandler = setTimeout(
         sendNextEmailNotification,
-        NOTIFICATION_DELAY_SECONDS
+        NOTIFICATION_DELAY_MS
     )
 }
 
@@ -78,7 +80,7 @@ async function sendNextEmailNotification() {
         return
     }
     const params = notification.params
-        ? (JSON.parse(notification.params) as EmailParams)
+        ? (JSON.parse(notification.params) as EmailParamsV1)
         : null
     if (!params) {
         chlog
@@ -89,8 +91,8 @@ async function sendNextEmailNotification() {
         sendNextEmailNotificationAfterDelay()
         return
     }
-    const user = notification.user
-    if (!user) {
+    const { recipient } = notification
+    if (!recipient) {
         chlog
             .child({ notification })
             .debug("Not sending email, user required for To address")
@@ -98,7 +100,7 @@ async function sendNextEmailNotification() {
         return
     }
     const from = params!.from || DEFAULT_EMAIL_FROM
-    const to = user.email
+    const to = recipient.email
     const baseEmail = {
         sender: from,
         replyTo: from,
@@ -108,20 +110,20 @@ async function sendNextEmailNotification() {
     if (params.hasOwnProperty("templateId")) {
         email = {
             ...baseEmail,
-            templateId: (params as TemplateEmailParams).templateId,
-            params: (params as TemplateEmailParams).templateParams,
+            templateId: (params as TemplateEmailParamsV1).templateId,
+            params: (params as TemplateEmailParamsV1).templateParams,
         }
     } else if (params.hasOwnProperty("textContent")) {
         email = {
             ...baseEmail,
-            subject: (params as ManualTextEmailParams).subject,
-            textContent: (params as ManualTextEmailParams).textContent,
+            subject: (params as ManualTextEmailParamsV1).subject,
+            textContent: (params as ManualTextEmailParamsV1).textContent,
         }
     } else if (params.hasOwnProperty("htmlContent")) {
         email = {
             ...baseEmail,
-            subject: (params as ManualHtmlEmailParams).subject,
-            htmlContent: (params as ManualHtmlEmailParams).htmlContent,
+            subject: (params as ManualHtmlEmailParamsV1).subject,
+            htmlContent: (params as ManualHtmlEmailParamsV1).htmlContent,
         }
     } else {
         chlog
@@ -149,21 +151,22 @@ async function sendNextEmailNotification() {
             const markedAsSent = await markNotificationAsJustSent(
                 notification.id
             )
-            if (markedAsSent) {
-                sendNextEmailNotificationAfterDelay()
-            } else {
+            if (!markedAsSent) {
                 chlog
                     .child({ email, notification, markedAsSent })
                     .error(
                         "After successfully sending an email could not mark its corresponding notification as sent, aborting email notification listener"
                     )
                 stop()
+                return
             }
+            sendNextEmailNotificationAfterDelay()
         },
         function (error) {
             chlog
                 .child({ email, notification, error })
                 .warn("Failed to send an email")
+            // We need to abort here to prevent the same email from being sent repeatedly.
             sendNextEmailNotificationAfterDelay()
         }
     )
@@ -226,10 +229,9 @@ async function getNextOutstandingEmailNotification() {
 
 export async function enqueueEmailNotification(
     userId: number,
-    sentAt: Date | null,
     expiresAt: Date | null,
     withheldUntil: Date | null,
-    params: NotificationParams | null
+    params: NotificationParamsV1 | null
 ) {
     const channelId = await getEmailNotificationChannelId()
     if (!channelId) {
@@ -237,8 +239,7 @@ export async function enqueueEmailNotification(
     }
     return enqueueNotification(
         channelId,
-        userId,
-        sentAt,
+        { userId, groupId: null },
         expiresAt,
         withheldUntil,
         params

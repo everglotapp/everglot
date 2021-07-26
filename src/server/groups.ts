@@ -237,7 +237,6 @@ async function formGroup(
             enqueueEmailNotification(
                 userId,
                 null,
-                null,
                 new Date(Date.now() + WITHHOLD_FOR_SECONDS * 1000),
                 {
                     templateId: GROUP_ASSIGNMENT_SENDINBLUE_EMAIL_TEMPLATE_ID,

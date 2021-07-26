@@ -6,7 +6,7 @@ query OutstandingEmailNotifications {
         ) {
             nodes {
                 id
-                user {
+                recipient {
                     email
                     emailNotificationsEnabled
                     username

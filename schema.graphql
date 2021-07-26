@@ -1342,7 +1342,7 @@ type User implements Node {
   ): UserDevicesConnection!
 
   """Reads and enables pagination through a set of `Notification`."""
-  notifications(
+  notificationsByRecipientId(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -1682,7 +1682,7 @@ type User implements Node {
   ): UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyConnection!
 
   """Reads and enables pagination through a set of `NotificationChannel`."""
-  notificationChannelsByNotificationUserIdAndChannelId(
+  notificationChannelsByNotificationRecipientIdAndChannelId(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -1713,7 +1713,41 @@ type User implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: NotificationChannelFilter
-  ): UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyConnection!
+  ): UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Group`."""
+  groupsByNotificationRecipientIdAndRecipientGroupId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupFilter
+  ): UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyConnection!
 }
 
 """
@@ -3185,6 +3219,40 @@ type Group implements Node {
     filter: MessageFilter
   ): MessagesConnection!
 
+  """Reads and enables pagination through a set of `Notification`."""
+  notificationsByRecipientGroupId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
+
   """Reads and enables pagination through a set of `User`."""
   usersByGroupUserGroupIdAndUserId(
     """Only read the first `n` values of the set."""
@@ -3320,6 +3388,74 @@ type Group implements Node {
     """
     filter: MessageFilter
   ): GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByNotificationRecipientGroupIdAndRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `NotificationChannel`."""
+  notificationChannelsByNotificationRecipientGroupIdAndChannelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `NotificationChannel`."""
+    orderBy: [NotificationChannelsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationChannelCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationChannelFilter
+  ): GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyConnection!
 }
 
 """Methods to use when ordering `GroupUser`."""
@@ -4135,6 +4271,415 @@ type MessagesEdge {
   node: Message
 }
 
+"""A connection to a list of `Notification` values."""
+type NotificationsConnection {
+  """A list of `Notification` objects."""
+  nodes: [Notification]!
+
+  """
+  A list of edges which contains the `Notification` and cursor to aid in pagination.
+  """
+  edges: [NotificationsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Notification` you could get from the connection."""
+  totalCount: Int!
+}
+
+type Notification implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  recipientId: Int
+  channelId: Int!
+  params: JSON
+  sentAt: Datetime
+  withheldUntil: Datetime
+  expiresAt: Datetime
+  readAt: Datetime
+  createdAt: Datetime!
+  recipientGroupId: Int
+
+  """Reads a single `User` that is related to this `Notification`."""
+  recipient: User
+
+  """
+  Reads a single `NotificationChannel` that is related to this `Notification`.
+  """
+  channel: NotificationChannel
+
+  """Reads a single `Group` that is related to this `Notification`."""
+  recipientGroup: Group
+}
+
+"""
+A JavaScript object encoded in the JSON format as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type NotificationChannel implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  name: String
+  createdAt: Datetime!
+
+  """Reads and enables pagination through a set of `Notification`."""
+  notificationsByChannelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByNotificationChannelIdAndRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Group`."""
+  groupsByNotificationChannelIdAndRecipientGroupId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GroupCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GroupFilter
+  ): NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyConnection!
+}
+
+"""Methods to use when ordering `Notification`."""
+enum NotificationsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  RECIPIENT_ID_ASC
+  RECIPIENT_ID_DESC
+  CHANNEL_ID_ASC
+  CHANNEL_ID_DESC
+  PARAMS_ASC
+  PARAMS_DESC
+  SENT_AT_ASC
+  SENT_AT_DESC
+  WITHHELD_UNTIL_ASC
+  WITHHELD_UNTIL_DESC
+  EXPIRES_AT_ASC
+  EXPIRES_AT_DESC
+  READ_AT_ASC
+  READ_AT_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  RECIPIENT_GROUP_ID_ASC
+  RECIPIENT_GROUP_ID_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Notification` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input NotificationCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `recipientId` field."""
+  recipientId: Int
+
+  """Checks for equality with the object’s `channelId` field."""
+  channelId: Int
+
+  """Checks for equality with the object’s `params` field."""
+  params: JSON
+
+  """Checks for equality with the object’s `sentAt` field."""
+  sentAt: Datetime
+
+  """Checks for equality with the object’s `withheldUntil` field."""
+  withheldUntil: Datetime
+
+  """Checks for equality with the object’s `expiresAt` field."""
+  expiresAt: Datetime
+
+  """Checks for equality with the object’s `readAt` field."""
+  readAt: Datetime
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+
+  """Checks for equality with the object’s `recipientGroupId` field."""
+  recipientGroupId: Int
+}
+
+"""
+A filter to be used against `Notification` object types. All fields are combined with a logical ‘and.’
+"""
+input NotificationFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `recipientId` field."""
+  recipientId: IntFilter
+
+  """Filter by the object’s `channelId` field."""
+  channelId: IntFilter
+
+  """Filter by the object’s `sentAt` field."""
+  sentAt: DatetimeFilter
+
+  """Filter by the object’s `withheldUntil` field."""
+  withheldUntil: DatetimeFilter
+
+  """Filter by the object’s `expiresAt` field."""
+  expiresAt: DatetimeFilter
+
+  """Filter by the object’s `readAt` field."""
+  readAt: DatetimeFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Filter by the object’s `recipientGroupId` field."""
+  recipientGroupId: IntFilter
+
+  """Checks for all expressions in this list."""
+  and: [NotificationFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [NotificationFilter!]
+
+  """Negates the expression."""
+  not: NotificationFilter
+}
+
+"""
+A connection to a list of `User` values, with data from `Notification`.
+"""
+type NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Notification`, and the cursor to aid in pagination.
+  """
+  edges: [NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Notification`."""
+type NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Notification`."""
+  notificationsByRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
+}
+
+"""
+A connection to a list of `Group` values, with data from `Notification`.
+"""
+type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyConnection {
+  """A list of `Group` objects."""
+  nodes: [Group]!
+
+  """
+  A list of edges which contains the `Group`, info from the `Notification`, and the cursor to aid in pagination.
+  """
+  edges: [NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Group` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Group` edge in the connection, with data from `Notification`."""
+type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Group` at the end of the edge."""
+  node: Group
+
+  """Reads and enables pagination through a set of `Notification`."""
+  notificationsByRecipientGroupId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
+}
+
+"""A `Notification` edge in the connection."""
+type NotificationsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Notification` at the end of the edge."""
+  node: Notification
+}
+
 """A connection to a list of `User` values, with data from `GroupUser`."""
 type GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection {
   """A list of `User` objects."""
@@ -4373,6 +4918,193 @@ type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEdge {
     """
     filter: MessageFilter
   ): MessagesConnection!
+}
+
+"""
+A connection to a list of `User` values, with data from `Notification`.
+"""
+type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Notification`, and the cursor to aid in pagination.
+  """
+  edges: [GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Notification`."""
+type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Notification`."""
+  notificationsByRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
+}
+
+"""
+A connection to a list of `NotificationChannel` values, with data from `Notification`.
+"""
+type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyConnection {
+  """A list of `NotificationChannel` objects."""
+  nodes: [NotificationChannel]!
+
+  """
+  A list of edges which contains the `NotificationChannel`, info from the `Notification`, and the cursor to aid in pagination.
+  """
+  edges: [GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `NotificationChannel` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `NotificationChannel` edge in the connection, with data from `Notification`.
+"""
+type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `NotificationChannel` at the end of the edge."""
+  node: NotificationChannel
+
+  """Reads and enables pagination through a set of `Notification`."""
+  notificationsByChannelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
+}
+
+"""Methods to use when ordering `NotificationChannel`."""
+enum NotificationChannelsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  NAME_ASC
+  NAME_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `NotificationChannel` object types. All fields
+are tested for equality and combined with a logical ‘and.’
+"""
+input NotificationChannelCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `NotificationChannel` object types. All fields are combined with a logical ‘and.’
+"""
+input NotificationChannelFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [NotificationChannelFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [NotificationChannelFilter!]
+
+  """Negates the expression."""
+  not: NotificationChannelFilter
 }
 
 """A `Group` edge in the connection."""
@@ -6460,307 +7192,6 @@ input UserDeviceFilter {
   not: UserDeviceFilter
 }
 
-"""A connection to a list of `Notification` values."""
-type NotificationsConnection {
-  """A list of `Notification` objects."""
-  nodes: [Notification]!
-
-  """
-  A list of edges which contains the `Notification` and cursor to aid in pagination.
-  """
-  edges: [NotificationsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Notification` you could get from the connection."""
-  totalCount: Int!
-}
-
-type Notification implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  userId: Int!
-  channelId: Int!
-  params: JSON
-  sentAt: Datetime
-  withheldUntil: Datetime
-  expiresAt: Datetime
-  readAt: Datetime
-  createdAt: Datetime!
-
-  """Reads a single `User` that is related to this `Notification`."""
-  user: User
-
-  """
-  Reads a single `NotificationChannel` that is related to this `Notification`.
-  """
-  channel: NotificationChannel
-}
-
-"""
-A JavaScript object encoded in the JSON format as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON
-
-type NotificationChannel implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  name: String
-  createdAt: Datetime!
-
-  """Reads and enables pagination through a set of `Notification`."""
-  notificationsByChannelId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Notification`."""
-    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: NotificationCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: NotificationFilter
-  ): NotificationsConnection!
-
-  """Reads and enables pagination through a set of `User`."""
-  usersByNotificationChannelIdAndUserId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `User`."""
-    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: UserCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: UserFilter
-  ): NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyConnection!
-}
-
-"""Methods to use when ordering `Notification`."""
-enum NotificationsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  USER_ID_ASC
-  USER_ID_DESC
-  CHANNEL_ID_ASC
-  CHANNEL_ID_DESC
-  PARAMS_ASC
-  PARAMS_DESC
-  SENT_AT_ASC
-  SENT_AT_DESC
-  WITHHELD_UNTIL_ASC
-  WITHHELD_UNTIL_DESC
-  EXPIRES_AT_ASC
-  EXPIRES_AT_DESC
-  READ_AT_ASC
-  READ_AT_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `Notification` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input NotificationCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `userId` field."""
-  userId: Int
-
-  """Checks for equality with the object’s `channelId` field."""
-  channelId: Int
-
-  """Checks for equality with the object’s `params` field."""
-  params: JSON
-
-  """Checks for equality with the object’s `sentAt` field."""
-  sentAt: Datetime
-
-  """Checks for equality with the object’s `withheldUntil` field."""
-  withheldUntil: Datetime
-
-  """Checks for equality with the object’s `expiresAt` field."""
-  expiresAt: Datetime
-
-  """Checks for equality with the object’s `readAt` field."""
-  readAt: Datetime
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `Notification` object types. All fields are combined with a logical ‘and.’
-"""
-input NotificationFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `userId` field."""
-  userId: IntFilter
-
-  """Filter by the object’s `channelId` field."""
-  channelId: IntFilter
-
-  """Filter by the object’s `sentAt` field."""
-  sentAt: DatetimeFilter
-
-  """Filter by the object’s `withheldUntil` field."""
-  withheldUntil: DatetimeFilter
-
-  """Filter by the object’s `expiresAt` field."""
-  expiresAt: DatetimeFilter
-
-  """Filter by the object’s `readAt` field."""
-  readAt: DatetimeFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [NotificationFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [NotificationFilter!]
-
-  """Negates the expression."""
-  not: NotificationFilter
-}
-
-"""
-A connection to a list of `User` values, with data from `Notification`.
-"""
-type NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyConnection {
-  """A list of `User` objects."""
-  nodes: [User]!
-
-  """
-  A list of edges which contains the `User`, info from the `Notification`, and the cursor to aid in pagination.
-  """
-  edges: [NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `User` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `User` edge in the connection, with data from `Notification`."""
-type NotificationChannelUsersByNotificationChannelIdAndUserIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `User` at the end of the edge."""
-  node: User
-
-  """Reads and enables pagination through a set of `Notification`."""
-  notifications(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Notification`."""
-    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: NotificationCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: NotificationFilter
-  ): NotificationsConnection!
-}
-
-"""A `Notification` edge in the connection."""
-type NotificationsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Notification` at the end of the edge."""
-  node: Notification
-}
-
 """
 A connection to a list of `Language` values, with data from `UserLanguage`.
 """
@@ -7312,14 +7743,14 @@ type UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyEdge {
 """
 A connection to a list of `NotificationChannel` values, with data from `Notification`.
 """
-type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyConnection {
+type UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyConnection {
   """A list of `NotificationChannel` objects."""
   nodes: [NotificationChannel]!
 
   """
   A list of edges which contains the `NotificationChannel`, info from the `Notification`, and the cursor to aid in pagination.
   """
-  edges: [UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdge!]!
+  edges: [UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyEdge!]!
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
@@ -7333,7 +7764,7 @@ type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyConnectio
 """
 A `NotificationChannel` edge in the connection, with data from `Notification`.
 """
-type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdge {
+type UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyEdge {
   """A cursor for use in pagination."""
   cursor: Cursor
 
@@ -7375,63 +7806,66 @@ type UserNotificationChannelsByNotificationUserIdAndChannelIdManyToManyEdge {
   ): NotificationsConnection!
 }
 
-"""Methods to use when ordering `NotificationChannel`."""
-enum NotificationChannelsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  NAME_ASC
-  NAME_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
+"""
+A connection to a list of `Group` values, with data from `Notification`.
+"""
+type UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyConnection {
+  """A list of `Group` objects."""
+  nodes: [Group]!
+
+  """
+  A list of edges which contains the `Group`, info from the `Notification`, and the cursor to aid in pagination.
+  """
+  edges: [UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Group` you could get from the connection."""
+  totalCount: Int!
 }
 
-"""
-A condition to be used against `NotificationChannel` object types. All fields
-are tested for equality and combined with a logical ‘and.’
-"""
-input NotificationChannelCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
+"""A `Group` edge in the connection, with data from `Notification`."""
+type UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
 
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
+  """The `Group` at the end of the edge."""
+  node: Group
 
-  """Checks for equality with the object’s `name` field."""
-  name: String
+  """Reads and enables pagination through a set of `Notification`."""
+  notificationsByRecipientGroupId(
+    """Only read the first `n` values of the set."""
+    first: Int
 
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
+    """Only read the last `n` values of the set."""
+    last: Int
 
-"""
-A filter to be used against `NotificationChannel` object types. All fields are combined with a logical ‘and.’
-"""
-input NotificationChannelFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
 
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
 
-  """Filter by the object’s `name` field."""
-  name: StringFilter
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
 
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
 
-  """Checks for all expressions in this list."""
-  and: [NotificationChannelFilter!]
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
 
-  """Checks for any expressions in this list."""
-  or: [NotificationChannelFilter!]
-
-  """Negates the expression."""
-  not: NotificationChannelFilter
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
 }
 
 """A `GroupUser` edge in the connection."""
@@ -9396,12 +9830,15 @@ type CreateNotificationPayload {
   query: Query
 
   """Reads a single `User` that is related to this `Notification`."""
-  user: User
+  recipient: User
 
   """
   Reads a single `NotificationChannel` that is related to this `Notification`.
   """
   channel: NotificationChannel
+
+  """Reads a single `Group` that is related to this `Notification`."""
+  recipientGroup: Group
 
   """An edge for our `Notification`. May be used by Relay 1."""
   notificationEdge(
@@ -9426,7 +9863,7 @@ input CreateNotificationInput {
 input NotificationInput {
   id: Int
   uuid: UUID
-  userId: Int!
+  recipientId: Int
   channelId: Int!
   params: JSON
   sentAt: Datetime
@@ -9434,6 +9871,7 @@ input NotificationInput {
   expiresAt: Datetime
   readAt: Datetime
   createdAt: Datetime
+  recipientGroupId: Int
 }
 
 """The output of our create `GermanRandomQuestion` mutation."""
@@ -10853,12 +11291,15 @@ type UpdateNotificationPayload {
   query: Query
 
   """Reads a single `User` that is related to this `Notification`."""
-  user: User
+  recipient: User
 
   """
   Reads a single `NotificationChannel` that is related to this `Notification`.
   """
   channel: NotificationChannel
+
+  """Reads a single `Group` that is related to this `Notification`."""
+  recipientGroup: Group
 
   """An edge for our `Notification`. May be used by Relay 1."""
   notificationEdge(
@@ -10892,7 +11333,7 @@ Represents an update to a `Notification`. Fields that are set will be updated.
 input NotificationPatch {
   id: Int
   uuid: UUID
-  userId: Int
+  recipientId: Int
   channelId: Int
   params: JSON
   sentAt: Datetime
@@ -10900,6 +11341,7 @@ input NotificationPatch {
   expiresAt: Datetime
   readAt: Datetime
   createdAt: Datetime
+  recipientGroupId: Int
 }
 
 """All input for the `updateNotification` mutation."""
@@ -12612,12 +13054,15 @@ type DeleteNotificationPayload {
   query: Query
 
   """Reads a single `User` that is related to this `Notification`."""
-  user: User
+  recipient: User
 
   """
   Reads a single `NotificationChannel` that is related to this `Notification`.
   """
   channel: NotificationChannel
+
+  """Reads a single `Group` that is related to this `Notification`."""
+  recipientGroup: Group
 
   """An edge for our `Notification`. May be used by Relay 1."""
   notificationEdge(

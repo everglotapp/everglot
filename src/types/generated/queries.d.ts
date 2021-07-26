@@ -242,6 +242,15 @@ declare module '*/outstandingEmailNotifications.graphql' {
 }
     
 
+declare module '*/outstandingFcmNotifications.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const OutstandingFcmNotifications: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/unsubscribeUserEmailNotifications.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

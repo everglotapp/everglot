@@ -30,6 +30,9 @@ export const SUPPORTED_LOCALES = [
     // "ko",
 ] as const
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
+export const LOCALE_TO_ARRAY_MAP = Object.fromEntries(
+    SUPPORTED_LOCALES.map((locale) => [locale, [] as any[]])
+) as Record<SupportedLocale, any[]>
 
 export const HANGMAN_LOCALES = ["en", "de"] as const
 export type HangmanLocale = typeof HANGMAN_LOCALES[number]

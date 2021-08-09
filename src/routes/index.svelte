@@ -320,11 +320,6 @@
     }
 
     let newReplyBody: Record<string, string> = {}
-    let newReplyInput: Record<string, HTMLDivElement> = {}
-    let replyingTo: string | null = null
-    $: if (replyingTo && newReplyInput[replyingTo]) {
-        newReplyInput[replyingTo].focus()
-    }
 </script>
 
 <div class="container max-w-3xl mb-2 pt-8 pb-4 px-2">
@@ -496,7 +491,6 @@
                         <div
                             contenteditable
                             bind:textContent={newReplyBody[post.uuid]}
-                            bind:this={newReplyInput[post.uuid]}
                             placeholder="Reply"
                             class="border border-gray-bitlight rounded-lg py-1 pl-2 pr-13"
                             style="min-width: min(48vw, 417px);"
@@ -519,18 +513,11 @@
                     tag="button"
                     variant={showReplies[post.uuid] ? "TEXT" : "OUTLINED"}
                     color={showReplies[post.uuid] ? "SECONDARY" : "PRIMARY"}
-                    on:click={() => {
-                        if (!post) return
-                        showReplies[post.uuid] =
+                    on:click={() =>
+                        (showReplies[post.uuid] =
                             typeof showReplies[post.uuid] === "undefined"
                                 ? true
-                                : !showReplies[post.uuid]
-                        if (showReplies[post.uuid]) {
-                            replyingTo = post.uuid
-                        } else if (replyingTo === post.uuid) {
-                            replyingTo = null
-                        }
-                    }}
+                                : !showReplies[post.uuid])}
                     >{#if showReplies[post.uuid]}
                         <XIcon size="16" /><span>Close</span>
                     {:else}<MessageCircleIcon

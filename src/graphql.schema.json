@@ -37526,7 +37526,7 @@
             "deprecationReason": null
           },
           {
-            "name": "postsByParentPostId",
+            "name": "replies",
             "description": "Reads and enables pagination through a set of `Post`.",
             "args": [
               {
@@ -37647,7 +37647,7 @@
             "deprecationReason": null
           },
           {
-            "name": "postLikes",
+            "name": "likes",
             "description": "Reads and enables pagination through a set of `PostLike`.",
             "args": [
               {
@@ -59716,7 +59716,7 @@
             "deprecationReason": null
           },
           {
-            "name": "postsByParentPostId",
+            "name": "replies",
             "description": "Reads and enables pagination through a set of `Post`.",
             "args": [
               {
@@ -59959,7 +59959,7 @@
             "deprecationReason": null
           },
           {
-            "name": "postLikes",
+            "name": "likes",
             "description": "Reads and enables pagination through a set of `PostLike`.",
             "args": [
               {

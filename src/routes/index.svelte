@@ -85,7 +85,7 @@
         }
         uuid: string
         createdAt: Date
-        postLikes: {
+        likes: {
             totalCount: number
             nodes: { user: { uuid: string } }[]
         }
@@ -96,15 +96,7 @@
     }
 
     $: posts = $allPosts
-        ? $allPosts
-              .map((post) => ({
-                  ...post,
-                  replies: {
-                      totalCount: 0,
-                      posts: [],
-                  },
-              }))
-              .filter((post) => !post.parentPost)
+        ? $allPosts.filter((post) => post && !post.parentPost)
         : []
 
     async function handleLike(post: Post) {
@@ -318,9 +310,9 @@
 
     function doesUserLike(post: Post) {
         return (
-            post.postLikes &&
-            post.postLikes.nodes &&
-            post.postLikes.nodes.some(
+            post.likes &&
+            post.likes.nodes &&
+            post.likes.nodes.some(
                 (node) =>
                     node && node.user && $currentUserUuid === node.user.uuid
             )
@@ -535,7 +527,7 @@
                         >Reply&nbsp;</span
                     >--><span
                             class="text-sm text-gray-bitdark font-bold select-none rounded-lg"
-                            >{post.postsByParentPostId?.totalCount || 0}</span
+                            >{post.replies?.totalCount || 0}</span
                         >{/if}</ButtonSmall
                 >
                 <ButtonSmall
@@ -547,19 +539,19 @@
                     <HeartIcon size="18" />
                     <span
                         class="text-sm font-bold text-gray-bitdark select-none"
-                        >{post.postLikes ? post.postLikes.totalCount : 0}</span
+                        >{post.likes ? post.likes.totalCount : 0}</span
                     >
                 </ButtonSmall>
             </div>
             {#if showReplies[post.uuid]}
                 <div
                     class="origin-top-right"
-                    class:pb-4={post.postsByParentPostId?.totalCount &&
-                        post.postsByParentPostId?.totalCount > 0}
+                    class:pb-4={post.replies?.totalCount &&
+                        post.replies?.totalCount > 0}
                     in:fade={{ duration: 200 }}
                     out:scale={{ duration: 150 }}
                 >
-                    {#each post.postsByParentPostId?.nodes as reply (reply.uuid)}
+                    {#each post.replies?.nodes as reply (reply.uuid)}
                         <div
                             class="flex flex-row ml-8 pl-4 pt-4 border-l-2 border-gray-verylight"
                             in:scale|local={{ duration: 200 }}

@@ -7101,9 +7101,9 @@ export type Post = Node & {
   /** Reads a single `Post` that is related to this `Post`. */
   parentPost?: Maybe<Post>;
   /** Reads and enables pagination through a set of `Post`. */
-  postsByParentPostId: PostsConnection;
+  replies: PostsConnection;
   /** Reads and enables pagination through a set of `PostLike`. */
-  postLikes: PostLikesConnection;
+  likes: PostLikesConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByPostParentPostIdAndAuthorId: PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
@@ -7111,7 +7111,7 @@ export type Post = Node & {
 };
 
 
-export type PostPostsByParentPostIdArgs = {
+export type PostRepliesArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -7123,7 +7123,7 @@ export type PostPostsByParentPostIdArgs = {
 };
 
 
-export type PostPostLikesArgs = {
+export type PostLikesArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -11047,12 +11047,12 @@ export type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdge = {
   /** The `Post` at the end of the edge. */
   node?: Maybe<Post>;
   /** Reads and enables pagination through a set of `Post`. */
-  postsByParentPostId: PostsConnection;
+  replies: PostsConnection;
 };
 
 
 /** A `Post` edge in the connection, with data from `Post`. */
-export type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdgePostsByParentPostIdArgs = {
+export type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdgeRepliesArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -11084,12 +11084,12 @@ export type UserPostsByPostLikeUserIdAndPostIdManyToManyEdge = {
   /** The `Post` at the end of the edge. */
   node?: Maybe<Post>;
   /** Reads and enables pagination through a set of `PostLike`. */
-  postLikes: PostLikesConnection;
+  likes: PostLikesConnection;
 };
 
 
 /** A `Post` edge in the connection, with data from `PostLike`. */
-export type UserPostsByPostLikeUserIdAndPostIdManyToManyEdgePostLikesArgs = {
+export type UserPostsByPostLikeUserIdAndPostIdManyToManyEdgeLikesArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -11420,7 +11420,7 @@ export type RegisterUserActivityMutation = { __typename?: 'Mutation', registerUs
 export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, postLikes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, postsByParentPostId: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, postLikes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }> }>> } }>> }> };
+export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }> }>> } }>> }> };
 
 export type CreatePostMutationVariables = Exact<{
   authorId: Scalars['Int'];
@@ -11840,7 +11840,7 @@ export const AllPosts = gql`
         avatarUrl
       }
       body
-      postLikes {
+      likes {
         totalCount
         nodes {
           user {
@@ -11851,7 +11851,7 @@ export const AllPosts = gql`
       parentPost {
         uuid
       }
-      postsByParentPostId(orderBy: CREATED_AT_ASC) {
+      replies(orderBy: CREATED_AT_ASC) {
         totalCount
         nodes {
           uuid
@@ -11863,7 +11863,7 @@ export const AllPosts = gql`
             avatarUrl
           }
           body
-          postLikes {
+          likes {
             totalCount
             nodes {
               user {

@@ -34,6 +34,10 @@ exports.up = (pgm) => {
             },
         }
     )
+    pgm.sql(`
+        COMMENT ON CONSTRAINT posts_parent_post_id_fkey on app_public.posts is
+        E'@parentPostId postsByParentPostId\n@foreignFieldName replies\nPosts replying to this post.';
+    `)
     pgm.alterTable(
         { schema: "app_public", name: "posts" },
         {

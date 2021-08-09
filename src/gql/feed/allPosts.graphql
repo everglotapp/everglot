@@ -10,7 +10,7 @@ query AllPosts {
                 avatarUrl
             }
             body
-            postLikes {
+            likes {
                 totalCount
                 nodes {
                     user {
@@ -21,7 +21,7 @@ query AllPosts {
             parentPost {
                 uuid
             }
-            postsByParentPostId(orderBy: CREATED_AT_ASC) {
+            replies(orderBy: CREATED_AT_ASC) {
                 totalCount
                 nodes {
                     uuid
@@ -33,7 +33,7 @@ query AllPosts {
                         avatarUrl
                     }
                     body
-                    postLikes {
+                    likes {
                         totalCount
                         nodes {
                             user {

@@ -11,7 +11,7 @@ query AllPosts {
         __typename
       }
       body
-      postLikes {
+      likes {
         totalCount
         nodes {
           user {
@@ -26,7 +26,7 @@ query AllPosts {
         uuid
         __typename
       }
-      postsByParentPostId(orderBy: CREATED_AT_ASC) {
+      replies(orderBy: CREATED_AT_ASC) {
         totalCount
         nodes {
           uuid
@@ -39,7 +39,7 @@ query AllPosts {
             __typename
           }
           body
-          postLikes {
+          likes {
             totalCount
             nodes {
               user {

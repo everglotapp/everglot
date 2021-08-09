@@ -7447,7 +7447,7 @@ type Post implements Node {
   parentPost: Post
 
   """Reads and enables pagination through a set of `Post`."""
-  postsByParentPostId(
+  replies(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -7481,7 +7481,7 @@ type Post implements Node {
   ): PostsConnection!
 
   """Reads and enables pagination through a set of `PostLike`."""
-  postLikes(
+  likes(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -8590,7 +8590,7 @@ type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdge {
   node: Post
 
   """Reads and enables pagination through a set of `Post`."""
-  postsByParentPostId(
+  replies(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -8650,7 +8650,7 @@ type UserPostsByPostLikeUserIdAndPostIdManyToManyEdge {
   node: Post
 
   """Reads and enables pagination through a set of `PostLike`."""
-  postLikes(
+  likes(
     """Only read the first `n` values of the set."""
     first: Int
 

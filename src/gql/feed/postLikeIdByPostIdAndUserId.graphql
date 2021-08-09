@@ -1,0 +1,9 @@
+query PostLikeIdByPostIdAndUserId($postId: Int!, $userId: Int!) {
+    postLikes(condition: { postId: $postId, userId: $userId }) {
+        nodes {
+            id
+            nodeId
+        }
+        totalCount
+    }
+}

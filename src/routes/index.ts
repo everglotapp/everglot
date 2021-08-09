@@ -1,4 +1,4 @@
-import { userHasCompletedProfile, userGroupMemberships } from "../server/users"
+import { userHasCompletedProfile } from "../server/users"
 
 import type { Request, Response } from "express"
 
@@ -8,20 +8,7 @@ export async function get(req: Request, res: Response, next: () => void) {
         return
     }
     if (await userHasCompletedProfile(userId)) {
-        const memberships = await userGroupMemberships(userId)
-        if (memberships) {
-            const firstPrivateGroupMembership = memberships.find(
-                (membership) =>
-                    membership.node?.group &&
-                    membership.node.group.global === false
-            )
-            if (firstPrivateGroupMembership) {
-                const firstPrivateGroup =
-                    firstPrivateGroupMembership.node!.group!
-                res.redirect(`/chat?group=${firstPrivateGroup.uuid}`)
-                return
-            }
-        }
+        // render feed
         next()
         return
     }

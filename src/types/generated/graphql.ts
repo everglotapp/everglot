@@ -1026,6 +1026,80 @@ export type CreateNotificationPayloadNotificationEdgeArgs = {
   orderBy?: Maybe<Array<NotificationsOrderBy>>;
 };
 
+/** All input for the create `Post` mutation. */
+export type CreatePostInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Post` to be created by this mutation. */
+  post: PostInput;
+};
+
+/** All input for the create `PostLike` mutation. */
+export type CreatePostLikeInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostLike` to be created by this mutation. */
+  postLike: PostLikeInput;
+};
+
+/** The output of our create `PostLike` mutation. */
+export type CreatePostLikePayload = {
+  __typename?: 'CreatePostLikePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostLike` that was created by this mutation. */
+  postLike?: Maybe<PostLike>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostLike`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostLike`. */
+  post?: Maybe<Post>;
+  /** An edge for our `PostLike`. May be used by Relay 1. */
+  postLikeEdge?: Maybe<PostLikesEdge>;
+};
+
+
+/** The output of our create `PostLike` mutation. */
+export type CreatePostLikePayloadPostLikeEdgeArgs = {
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+};
+
+/** The output of our create `Post` mutation. */
+export type CreatePostPayload = {
+  __typename?: 'CreatePostPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Post` that was created by this mutation. */
+  post?: Maybe<Post>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Post`. */
+  author?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `Post`. */
+  parentPost?: Maybe<Post>;
+  /** An edge for our `Post`. May be used by Relay 1. */
+  postEdge?: Maybe<PostsEdge>;
+};
+
+
+/** The output of our create `Post` mutation. */
+export type CreatePostPayloadPostEdgeArgs = {
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+};
+
 /** All input for the create `UserDevice` mutation. */
 export type CreateUserDeviceInput = {
   /**
@@ -2203,6 +2277,112 @@ export type DeleteNotificationPayload = {
 /** The output of our delete `Notification` mutation. */
 export type DeleteNotificationPayloadNotificationEdgeArgs = {
   orderBy?: Maybe<Array<NotificationsOrderBy>>;
+};
+
+/** All input for the `deletePostByNodeId` mutation. */
+export type DeletePostByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Post` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deletePostByUuid` mutation. */
+export type DeletePostByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deletePost` mutation. */
+export type DeletePostInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** All input for the `deletePostLikeByNodeId` mutation. */
+export type DeletePostLikeByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `PostLike` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deletePostLike` mutation. */
+export type DeletePostLikeInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `PostLike` mutation. */
+export type DeletePostLikePayload = {
+  __typename?: 'DeletePostLikePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostLike` that was deleted by this mutation. */
+  postLike?: Maybe<PostLike>;
+  deletedPostLikeNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostLike`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostLike`. */
+  post?: Maybe<Post>;
+  /** An edge for our `PostLike`. May be used by Relay 1. */
+  postLikeEdge?: Maybe<PostLikesEdge>;
+};
+
+
+/** The output of our delete `PostLike` mutation. */
+export type DeletePostLikePayloadPostLikeEdgeArgs = {
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+};
+
+/** The output of our delete `Post` mutation. */
+export type DeletePostPayload = {
+  __typename?: 'DeletePostPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Post` that was deleted by this mutation. */
+  post?: Maybe<Post>;
+  deletedPostNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Post`. */
+  author?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `Post`. */
+  parentPost?: Maybe<Post>;
+  /** An edge for our `Post`. May be used by Relay 1. */
+  postEdge?: Maybe<PostsEdge>;
+};
+
+
+/** The output of our delete `Post` mutation. */
+export type DeletePostPayloadPostEdgeArgs = {
+  orderBy?: Maybe<Array<PostsOrderBy>>;
 };
 
 /** All input for the `deleteUserByEmail` mutation. */
@@ -5188,6 +5368,10 @@ export type Mutation = {
   createNotificationChannel?: Maybe<CreateNotificationChannelPayload>;
   /** Creates a single `Notification`. */
   createNotification?: Maybe<CreateNotificationPayload>;
+  /** Creates a single `PostLike`. */
+  createPostLike?: Maybe<CreatePostLikePayload>;
+  /** Creates a single `Post`. */
+  createPost?: Maybe<CreatePostPayload>;
   /** Creates a single `GermanRandomQuestion`. */
   createGermanRandomQuestion?: Maybe<CreateGermanRandomQuestionPayload>;
   /** Creates a single `EnglishRandomQuestion`. */
@@ -5270,6 +5454,16 @@ export type Mutation = {
   updateNotification?: Maybe<UpdateNotificationPayload>;
   /** Updates a single `Notification` using a unique key and a patch. */
   updateNotificationByUuid?: Maybe<UpdateNotificationPayload>;
+  /** Updates a single `PostLike` using its globally unique id and a patch. */
+  updatePostLikeByNodeId?: Maybe<UpdatePostLikePayload>;
+  /** Updates a single `PostLike` using a unique key and a patch. */
+  updatePostLike?: Maybe<UpdatePostLikePayload>;
+  /** Updates a single `Post` using its globally unique id and a patch. */
+  updatePostByNodeId?: Maybe<UpdatePostPayload>;
+  /** Updates a single `Post` using a unique key and a patch. */
+  updatePost?: Maybe<UpdatePostPayload>;
+  /** Updates a single `Post` using a unique key and a patch. */
+  updatePostByUuid?: Maybe<UpdatePostPayload>;
   /** Updates a single `GermanRandomQuestion` using its globally unique id and a patch. */
   updateGermanRandomQuestionByNodeId?: Maybe<UpdateGermanRandomQuestionPayload>;
   /** Updates a single `GermanRandomQuestion` using a unique key and a patch. */
@@ -5402,6 +5596,16 @@ export type Mutation = {
   deleteNotification?: Maybe<DeleteNotificationPayload>;
   /** Deletes a single `Notification` using a unique key. */
   deleteNotificationByUuid?: Maybe<DeleteNotificationPayload>;
+  /** Deletes a single `PostLike` using its globally unique id. */
+  deletePostLikeByNodeId?: Maybe<DeletePostLikePayload>;
+  /** Deletes a single `PostLike` using a unique key. */
+  deletePostLike?: Maybe<DeletePostLikePayload>;
+  /** Deletes a single `Post` using its globally unique id. */
+  deletePostByNodeId?: Maybe<DeletePostPayload>;
+  /** Deletes a single `Post` using a unique key. */
+  deletePost?: Maybe<DeletePostPayload>;
+  /** Deletes a single `Post` using a unique key. */
+  deletePostByUuid?: Maybe<DeletePostPayload>;
   /** Deletes a single `GermanRandomQuestion` using its globally unique id. */
   deleteGermanRandomQuestionByNodeId?: Maybe<DeleteGermanRandomQuestionPayload>;
   /** Deletes a single `GermanRandomQuestion` using a unique key. */
@@ -5538,6 +5742,18 @@ export type MutationCreateNotificationChannelArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateNotificationArgs = {
   input: CreateNotificationInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreatePostLikeArgs = {
+  input: CreatePostLikeInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreatePostArgs = {
+  input: CreatePostInput;
 };
 
 
@@ -5784,6 +6000,36 @@ export type MutationUpdateNotificationArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateNotificationByUuidArgs = {
   input: UpdateNotificationByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostLikeByNodeIdArgs = {
+  input: UpdatePostLikeByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostLikeArgs = {
+  input: UpdatePostLikeInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostByNodeIdArgs = {
+  input: UpdatePostByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostArgs = {
+  input: UpdatePostInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostByUuidArgs = {
+  input: UpdatePostByUuidInput;
 };
 
 
@@ -6180,6 +6426,36 @@ export type MutationDeleteNotificationArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteNotificationByUuidArgs = {
   input: DeleteNotificationByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostLikeByNodeIdArgs = {
+  input: DeletePostLikeByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostLikeArgs = {
+  input: DeletePostLikeInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostByNodeIdArgs = {
+  input: DeletePostByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostArgs = {
+  input: DeletePostInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostByUuidArgs = {
+  input: DeletePostByUuidInput;
 };
 
 
@@ -6810,6 +7086,351 @@ export type PageInfo = {
   endCursor?: Maybe<Scalars['Cursor']>;
 };
 
+export type Post = Node & {
+  __typename?: 'Post';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  authorId?: Maybe<Scalars['Int']>;
+  body: Scalars['String'];
+  parentPostId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `User` that is related to this `Post`. */
+  author?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `Post`. */
+  parentPost?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByParentPostId: PostsConnection;
+  /** Reads and enables pagination through a set of `PostLike`. */
+  postLikes: PostLikesConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostParentPostIdAndAuthorId: PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostLikePostIdAndUserId: PostUsersByPostLikePostIdAndUserIdManyToManyConnection;
+};
+
+
+export type PostPostsByParentPostIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type PostPostLikesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  condition?: Maybe<PostLikeCondition>;
+  filter?: Maybe<PostLikeFilter>;
+};
+
+
+export type PostUsersByPostParentPostIdAndAuthorIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type PostUsersByPostLikePostIdAndUserIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+/** A condition to be used against `Post` object types. All fields are tested for equality and combined with a logical ‘and.’ */
+export type PostCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `authorId` field. */
+  authorId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `body` field. */
+  body?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `parentPostId` field. */
+  parentPostId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `Post` object types. All fields are combined with a logical ‘and.’ */
+export type PostFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `authorId` field. */
+  authorId?: Maybe<IntFilter>;
+  /** Filter by the object’s `body` field. */
+  body?: Maybe<StringFilter>;
+  /** Filter by the object’s `parentPostId` field. */
+  parentPostId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<PostFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<PostFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<PostFilter>;
+};
+
+/** An input for mutations affecting `Post` */
+export type PostInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  authorId?: Maybe<Scalars['Int']>;
+  body: Scalars['String'];
+  parentPostId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+export type PostLike = Node & {
+  __typename?: 'PostLike';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  userId?: Maybe<Scalars['Int']>;
+  postId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `User` that is related to this `PostLike`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostLike`. */
+  post?: Maybe<Post>;
+};
+
+/**
+ * A condition to be used against `PostLike` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
+export type PostLikeCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `postId` field. */
+  postId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `PostLike` object types. All fields are combined with a logical ‘and.’ */
+export type PostLikeFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `postId` field. */
+  postId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<PostLikeFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<PostLikeFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<PostLikeFilter>;
+};
+
+/** An input for mutations affecting `PostLike` */
+export type PostLikeInput = {
+  id?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+  postId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `PostLike`. Fields that are set will be updated. */
+export type PostLikePatch = {
+  id?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+  postId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `PostLike` values. */
+export type PostLikesConnection = {
+  __typename?: 'PostLikesConnection';
+  /** A list of `PostLike` objects. */
+  nodes: Array<Maybe<PostLike>>;
+  /** A list of edges which contains the `PostLike` and cursor to aid in pagination. */
+  edges: Array<PostLikesEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `PostLike` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `PostLike` edge in the connection. */
+export type PostLikesEdge = {
+  __typename?: 'PostLikesEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `PostLike` at the end of the edge. */
+  node?: Maybe<PostLike>;
+};
+
+/** Methods to use when ordering `PostLike`. */
+export enum PostLikesOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+  PostIdAsc = 'POST_ID_ASC',
+  PostIdDesc = 'POST_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/** Represents an update to a `Post`. Fields that are set will be updated. */
+export type PostPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  authorId?: Maybe<Scalars['Int']>;
+  body?: Maybe<Scalars['String']>;
+  parentPostId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `User` values, with data from `PostLike`. */
+export type PostUsersByPostLikePostIdAndUserIdManyToManyConnection = {
+  __typename?: 'PostUsersByPostLikePostIdAndUserIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `PostLike`, and the cursor to aid in pagination. */
+  edges: Array<PostUsersByPostLikePostIdAndUserIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `PostLike`. */
+export type PostUsersByPostLikePostIdAndUserIdManyToManyEdge = {
+  __typename?: 'PostUsersByPostLikePostIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `PostLike`. */
+  postLikes: PostLikesConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `PostLike`. */
+export type PostUsersByPostLikePostIdAndUserIdManyToManyEdgePostLikesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  condition?: Maybe<PostLikeCondition>;
+  filter?: Maybe<PostLikeFilter>;
+};
+
+/** A connection to a list of `User` values, with data from `Post`. */
+export type PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection = {
+  __typename?: 'PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Post`. */
+export type PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge = {
+  __typename?: 'PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Post`. */
+  authoredPosts: PostsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Post`. */
+export type PostUsersByPostParentPostIdAndAuthorIdManyToManyEdgeAuthoredPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+/** A connection to a list of `Post` values. */
+export type PostsConnection = {
+  __typename?: 'PostsConnection';
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** A list of edges which contains the `Post` and cursor to aid in pagination. */
+  edges: Array<PostsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection. */
+export type PostsEdge = {
+  __typename?: 'PostsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+};
+
+/** Methods to use when ordering `Post`. */
+export enum PostsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  AuthorIdAsc = 'AUTHOR_ID_ASC',
+  AuthorIdDesc = 'AUTHOR_ID_DESC',
+  BodyAsc = 'BODY_ASC',
+  BodyDesc = 'BODY_DESC',
+  ParentPostIdAsc = 'PARENT_POST_ID_ASC',
+  ParentPostIdDesc = 'PARENT_POST_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
 /** The root query type which gives access points into the data universe. */
 export type Query = Node & {
   __typename?: 'Query';
@@ -6842,6 +7463,10 @@ export type Query = Node & {
   notificationChannels?: Maybe<NotificationChannelsConnection>;
   /** Reads and enables pagination through a set of `Notification`. */
   notifications?: Maybe<NotificationsConnection>;
+  /** Reads and enables pagination through a set of `PostLike`. */
+  postLikes?: Maybe<PostLikesConnection>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts?: Maybe<PostsConnection>;
   /** Reads and enables pagination through a set of `GermanRandomQuestion`. */
   germanRandomQuestions?: Maybe<GermanRandomQuestionsConnection>;
   /** Reads and enables pagination through a set of `EnglishRandomQuestion`. */
@@ -6885,6 +7510,9 @@ export type Query = Node & {
   notificationChannelByName?: Maybe<NotificationChannel>;
   notification?: Maybe<Notification>;
   notificationByUuid?: Maybe<Notification>;
+  postLike?: Maybe<PostLike>;
+  post?: Maybe<Post>;
+  postByUuid?: Maybe<Post>;
   germanRandomQuestion?: Maybe<GermanRandomQuestion>;
   germanRandomQuestionByUuid?: Maybe<GermanRandomQuestion>;
   englishRandomQuestion?: Maybe<EnglishRandomQuestion>;
@@ -6938,6 +7566,10 @@ export type Query = Node & {
   notificationChannelByNodeId?: Maybe<NotificationChannel>;
   /** Reads a single `Notification` using its globally unique `ID`. */
   notificationByNodeId?: Maybe<Notification>;
+  /** Reads a single `PostLike` using its globally unique `ID`. */
+  postLikeByNodeId?: Maybe<PostLike>;
+  /** Reads a single `Post` using its globally unique `ID`. */
+  postByNodeId?: Maybe<Post>;
   /** Reads a single `GermanRandomQuestion` using its globally unique `ID`. */
   germanRandomQuestionByNodeId?: Maybe<GermanRandomQuestion>;
   /** Reads a single `EnglishRandomQuestion` using its globally unique `ID`. */
@@ -7098,6 +7730,32 @@ export type QueryNotificationsArgs = {
   orderBy?: Maybe<Array<NotificationsOrderBy>>;
   condition?: Maybe<NotificationCondition>;
   filter?: Maybe<NotificationFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostLikesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  condition?: Maybe<PostLikeCondition>;
+  filter?: Maybe<PostLikeFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
 };
 
 
@@ -7372,6 +8030,24 @@ export type QueryNotificationByUuidArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryPostLikeArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryGermanRandomQuestionArgs = {
   id: Scalars['Int'];
 };
@@ -7614,6 +8290,18 @@ export type QueryNotificationChannelByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryNotificationByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostLikeByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
 
@@ -8952,6 +9640,120 @@ export type UpdateNotificationPayloadNotificationEdgeArgs = {
   orderBy?: Maybe<Array<NotificationsOrderBy>>;
 };
 
+/** All input for the `updatePostByNodeId` mutation. */
+export type UpdatePostByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Post` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `Post` being updated. */
+  patch: PostPatch;
+};
+
+/** All input for the `updatePostByUuid` mutation. */
+export type UpdatePostByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Post` being updated. */
+  patch: PostPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updatePost` mutation. */
+export type UpdatePostInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Post` being updated. */
+  patch: PostPatch;
+  id: Scalars['Int'];
+};
+
+/** All input for the `updatePostLikeByNodeId` mutation. */
+export type UpdatePostLikeByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `PostLike` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `PostLike` being updated. */
+  patch: PostLikePatch;
+};
+
+/** All input for the `updatePostLike` mutation. */
+export type UpdatePostLikeInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `PostLike` being updated. */
+  patch: PostLikePatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `PostLike` mutation. */
+export type UpdatePostLikePayload = {
+  __typename?: 'UpdatePostLikePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostLike` that was updated by this mutation. */
+  postLike?: Maybe<PostLike>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostLike`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostLike`. */
+  post?: Maybe<Post>;
+  /** An edge for our `PostLike`. May be used by Relay 1. */
+  postLikeEdge?: Maybe<PostLikesEdge>;
+};
+
+
+/** The output of our update `PostLike` mutation. */
+export type UpdatePostLikePayloadPostLikeEdgeArgs = {
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+};
+
+/** The output of our update `Post` mutation. */
+export type UpdatePostPayload = {
+  __typename?: 'UpdatePostPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Post` that was updated by this mutation. */
+  post?: Maybe<Post>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Post`. */
+  author?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `Post`. */
+  parentPost?: Maybe<Post>;
+  /** An edge for our `Post`. May be used by Relay 1. */
+  postEdge?: Maybe<PostsEdge>;
+};
+
+
+/** The output of our update `Post` mutation. */
+export type UpdatePostPayloadPostEdgeArgs = {
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+};
+
 /** All input for the `updateUserByEmail` mutation. */
 export type UpdateUserByEmailInput = {
   /**
@@ -9250,6 +10052,10 @@ export type User = Node & {
   userDevices: UserDevicesConnection;
   /** Reads and enables pagination through a set of `Notification`. */
   notificationsByRecipientId: NotificationsConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  authoredPosts: PostsConnection;
+  /** Reads and enables pagination through a set of `PostLike`. */
+  postLikes: PostLikesConnection;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByUserLanguageUserIdAndLanguageId: UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
@@ -9272,6 +10078,10 @@ export type User = Node & {
   notificationChannelsByNotificationRecipientIdAndChannelId: UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Group`. */
   groupsByNotificationRecipientIdAndRecipientGroupId: UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByPostAuthorIdAndParentPostId: UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByPostLikeUserIdAndPostId: UserPostsByPostLikeUserIdAndPostIdManyToManyConnection;
 };
 
 
@@ -9356,6 +10166,30 @@ export type UserNotificationsByRecipientIdArgs = {
   orderBy?: Maybe<Array<NotificationsOrderBy>>;
   condition?: Maybe<NotificationCondition>;
   filter?: Maybe<NotificationFilter>;
+};
+
+
+export type UserAuthoredPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type UserPostLikesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  condition?: Maybe<PostLikeCondition>;
+  filter?: Maybe<PostLikeFilter>;
 };
 
 
@@ -9488,6 +10322,30 @@ export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdArgs = {
   orderBy?: Maybe<Array<GroupsOrderBy>>;
   condition?: Maybe<GroupCondition>;
   filter?: Maybe<GroupFilter>;
+};
+
+
+export type UserPostsByPostAuthorIdAndParentPostIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type UserPostsByPostLikeUserIdAndPostIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
 };
 
 /** A condition to be used against `User` object types. All fields are tested for equality and combined with a logical ‘and.’ */
@@ -10168,6 +11026,80 @@ export type UserPatch = {
   emailUnsubscribeToken?: Maybe<Scalars['String']>;
 };
 
+/** A connection to a list of `Post` values, with data from `Post`. */
+export type UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection = {
+  __typename?: 'UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection';
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** A list of edges which contains the `Post`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<UserPostsByPostAuthorIdAndParentPostIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection, with data from `Post`. */
+export type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdge = {
+  __typename?: 'UserPostsByPostAuthorIdAndParentPostIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByParentPostId: PostsConnection;
+};
+
+
+/** A `Post` edge in the connection, with data from `Post`. */
+export type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdgePostsByParentPostIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+/** A connection to a list of `Post` values, with data from `PostLike`. */
+export type UserPostsByPostLikeUserIdAndPostIdManyToManyConnection = {
+  __typename?: 'UserPostsByPostLikeUserIdAndPostIdManyToManyConnection';
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** A list of edges which contains the `Post`, info from the `PostLike`, and the cursor to aid in pagination. */
+  edges: Array<UserPostsByPostLikeUserIdAndPostIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection, with data from `PostLike`. */
+export type UserPostsByPostLikeUserIdAndPostIdManyToManyEdge = {
+  __typename?: 'UserPostsByPostLikeUserIdAndPostIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `PostLike`. */
+  postLikes: PostLikesConnection;
+};
+
+
+/** A `Post` edge in the connection, with data from `PostLike`. */
+export type UserPostsByPostLikeUserIdAndPostIdManyToManyEdgePostLikesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  condition?: Maybe<PostLikeCondition>;
+  filter?: Maybe<PostLikeFilter>;
+};
+
 export type UserSession = Node & {
   __typename?: 'UserSession';
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
@@ -10434,13 +11366,7 @@ export type ChatUserQueryVariables = Exact<{
 }>;
 
 
-export type ChatUserQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'uuid' | 'avatarUrl'>
-  )> }
-);
+export type ChatUserQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', id: number, username?: Maybe<string>, uuid: any, avatarUrl?: Maybe<string> }> };
 
 export type CreateMessageMutationVariables = Exact<{
   parentMessageId?: Maybe<Scalars['Int']>;
@@ -10452,19 +11378,7 @@ export type CreateMessageMutationVariables = Exact<{
 }>;
 
 
-export type CreateMessageMutation = (
-  { __typename?: 'Mutation' }
-  & { createMessage?: Maybe<(
-    { __typename?: 'CreateMessagePayload' }
-    & { sender?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'uuid'>
-    )>, message?: Maybe<(
-      { __typename?: 'Message' }
-      & Pick<Message, 'id' | 'uuid' | 'createdAt'>
-    )> }
-  )> }
-);
+export type CreateMessageMutation = { __typename?: 'Mutation', createMessage?: Maybe<{ __typename?: 'CreateMessagePayload', sender?: Maybe<{ __typename?: 'User', uuid: any }>, message?: Maybe<{ __typename?: 'Message', id: number, uuid: any, createdAt: any }> }> };
 
 export type CreateMessagePreviewMutationVariables = Exact<{
   messageId: Scalars['Int'];
@@ -10474,70 +11388,14 @@ export type CreateMessagePreviewMutationVariables = Exact<{
 }>;
 
 
-export type CreateMessagePreviewMutation = (
-  { __typename?: 'Mutation' }
-  & { createMessagePreview?: Maybe<(
-    { __typename?: 'CreateMessagePreviewPayload' }
-    & { messagePreview?: Maybe<(
-      { __typename?: 'MessagePreview' }
-      & Pick<MessagePreview, 'id'>
-    )> }
-  )> }
-);
+export type CreateMessagePreviewMutation = { __typename?: 'Mutation', createMessagePreview?: Maybe<{ __typename?: 'CreateMessagePreviewPayload', messagePreview?: Maybe<{ __typename?: 'MessagePreview', id: number }> }> };
 
 export type GroupChatQueryVariables = Exact<{
   groupUuid: Scalars['UUID'];
 }>;
 
 
-export type GroupChatQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & Pick<Group, 'groupName' | 'uuid'>
-    & { language?: Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'englishName'>
-    )>, languageSkillLevel?: Maybe<(
-      { __typename?: 'LanguageSkillLevel' }
-      & Pick<LanguageSkillLevel, 'name' | 'nodeId'>
-    )>, usersByGroupUserGroupIdAndUserId: (
-      { __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'User' }
-        & Pick<User, 'bio' | 'avatarUrl' | 'uuid' | 'username' | 'lastActiveAt'>
-        & { userLanguages: (
-          { __typename?: 'UserLanguagesConnection' }
-          & { nodes: Array<Maybe<(
-            { __typename?: 'UserLanguage' }
-            & Pick<UserLanguage, 'nodeId'>
-            & { language?: Maybe<(
-              { __typename?: 'Language' }
-              & Pick<Language, 'englishName'>
-            )> }
-          )>> }
-        ), groupUsers: (
-          { __typename?: 'GroupUsersConnection' }
-          & { nodes: Array<Maybe<(
-            { __typename?: 'GroupUser' }
-            & Pick<GroupUser, 'userType' | 'nodeId'>
-            & { group?: Maybe<(
-              { __typename?: 'Group' }
-              & Pick<Group, 'uuid'>
-              & { language?: Maybe<(
-                { __typename?: 'Language' }
-                & Pick<Language, 'englishName'>
-              )>, languageSkillLevel?: Maybe<(
-                { __typename?: 'LanguageSkillLevel' }
-                & Pick<LanguageSkillLevel, 'name'>
-              )> }
-            )> }
-          )>> }
-        ) }
-      )>> }
-    ) }
-  )> }
-);
+export type GroupChatQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', groupName?: Maybe<string>, uuid: any, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string>, nodeId: string }>, usersByGroupUserGroupIdAndUserId: { __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection', nodes: Array<Maybe<{ __typename?: 'User', bio: string, avatarUrl?: Maybe<string>, uuid: any, username?: Maybe<string>, lastActiveAt: any, userLanguages: { __typename?: 'UserLanguagesConnection', nodes: Array<Maybe<{ __typename?: 'UserLanguage', nodeId: string, language?: Maybe<{ __typename?: 'Language', englishName: string }> }>> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', userType: UserType, nodeId: string, group?: Maybe<{ __typename?: 'Group', uuid: any, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }> }>> } }>> } }> };
 
 export type GroupChatMessagesQueryVariables = Exact<{
   groupUuid: Scalars['UUID'];
@@ -10545,72 +11403,63 @@ export type GroupChatMessagesQueryVariables = Exact<{
 }>;
 
 
-export type GroupChatMessagesQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & { messagesByRecipientGroupId: (
-      { __typename?: 'MessagesConnection' }
-      & { edges: Array<(
-        { __typename?: 'MessagesEdge' }
-        & { node?: Maybe<(
-          { __typename?: 'Message' }
-          & Pick<Message, 'body' | 'createdAt' | 'uuid'>
-          & { sender?: Maybe<(
-            { __typename?: 'User' }
-            & Pick<User, 'uuid'>
-          )>, messagePreviews: (
-            { __typename?: 'MessagePreviewsConnection' }
-            & { nodes: Array<Maybe<(
-              { __typename?: 'MessagePreview' }
-              & Pick<MessagePreview, 'uuid' | 'filename' | 'extension'>
-            )>> }
-          ) }
-        )> }
-      )>, pageInfo: (
-        { __typename?: 'PageInfo' }
-        & Pick<PageInfo, 'startCursor' | 'hasPreviousPage'>
-      ) }
-    ) }
-  )> }
-);
+export type GroupChatMessagesQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', messagesByRecipientGroupId: { __typename?: 'MessagesConnection', edges: Array<{ __typename?: 'MessagesEdge', node?: Maybe<{ __typename?: 'Message', body: string, createdAt: any, uuid: any, sender?: Maybe<{ __typename?: 'User', uuid: any }>, messagePreviews: { __typename?: 'MessagePreviewsConnection', nodes: Array<Maybe<{ __typename?: 'MessagePreview', uuid: any, filename: string, extension?: Maybe<string> }>> } }> }>, pageInfo: { __typename?: 'PageInfo', startCursor?: Maybe<any>, hasPreviousPage: boolean } } }> };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = (
-  { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid' | 'avatarUrl'>
-    & { userLanguages: (
-      { __typename?: 'UserLanguagesConnection' }
-      & Pick<UserLanguagesConnection, 'totalCount'>
-    ), languageByLocale?: Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'alpha2'>
-    )>, inviteTokens: (
-      { __typename?: 'InviteTokensConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'InviteToken' }
-        & Pick<InviteToken, 'inviteToken'>
-      )>> }
-    ) }
-  )> }
-);
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: Maybe<{ __typename?: 'User', bio: string, email: string, gender?: Maybe<string>, username?: Maybe<string>, uuid: any, avatarUrl?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number }, languageByLocale?: Maybe<{ __typename?: 'Language', alpha2: string }>, inviteTokens: { __typename?: 'InviteTokensConnection', nodes: Array<Maybe<{ __typename?: 'InviteToken', inviteToken: string }>> } }> };
 
 export type RegisterUserActivityMutationVariables = Exact<{
   userId: Scalars['Int'];
 }>;
 
 
-export type RegisterUserActivityMutation = (
-  { __typename?: 'Mutation' }
-  & { registerUserActivity?: Maybe<(
-    { __typename?: 'RegisterUserActivityPayload' }
-    & Pick<RegisterUserActivityPayload, 'datetime'>
-  )> }
-);
+export type RegisterUserActivityMutation = { __typename?: 'Mutation', registerUserActivity?: Maybe<{ __typename?: 'RegisterUserActivityPayload', datetime?: Maybe<any> }> };
+
+export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, postLikes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, postsByParentPostId: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, postLikes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }> }>> } }>> }> };
+
+export type CreatePostMutationVariables = Exact<{
+  authorId: Scalars['Int'];
+  body: Scalars['String'];
+  parentPostId?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'Mutation', createPost?: Maybe<{ __typename?: 'CreatePostPayload', clientMutationId?: Maybe<string>, post?: Maybe<{ __typename?: 'Post', body: string, createdAt: any, uuid: any, nodeId: string }> }> };
+
+export type CreatePostLikeMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  postId: Scalars['Int'];
+}>;
+
+
+export type CreatePostLikeMutation = { __typename?: 'Mutation', createPostLike?: Maybe<{ __typename?: 'CreatePostLikePayload', postLike?: Maybe<{ __typename?: 'PostLike', postId?: Maybe<number>, userId?: Maybe<number>, nodeId: string, createdAt: any }> }> };
+
+export type DeletePostLikeMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeletePostLikeMutation = { __typename?: 'Mutation', deletePostLike?: Maybe<{ __typename?: 'DeletePostLikePayload', postLike?: Maybe<{ __typename?: 'PostLike', postId?: Maybe<number>, userId?: Maybe<number>, nodeId: string, createdAt: any }> }> };
+
+export type PostIdByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type PostIdByUuidQuery = { __typename?: 'Query', postByUuid?: Maybe<{ __typename?: 'Post', id: number, nodeId: string }> };
+
+export type PostLikeIdByPostIdAndUserIdQueryVariables = Exact<{
+  postId: Scalars['Int'];
+  userId: Scalars['Int'];
+}>;
+
+
+export type PostLikeIdByPostIdAndUserIdQuery = { __typename?: 'Query', postLikes?: Maybe<{ __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', id: number, nodeId: string }>> }> };
 
 export type CreateGroupUserMutationVariables = Exact<{
   userType: UserType;
@@ -10619,72 +11468,21 @@ export type CreateGroupUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateGroupUserMutation = (
-  { __typename?: 'Mutation' }
-  & { createGroupUser?: Maybe<(
-    { __typename?: 'CreateGroupUserPayload' }
-    & { groupUser?: Maybe<(
-      { __typename?: 'GroupUser' }
-      & Pick<GroupUser, 'id'>
-    )> }
-  )> }
-);
+export type CreateGroupUserMutation = { __typename?: 'Mutation', createGroupUser?: Maybe<{ __typename?: 'CreateGroupUserPayload', groupUser?: Maybe<{ __typename?: 'GroupUser', id: number }> }> };
 
 export type JoinGlobalGroupMutationVariables = Exact<{
   groupUuid: Scalars['UUID'];
 }>;
 
 
-export type JoinGlobalGroupMutation = (
-  { __typename?: 'Mutation' }
-  & { joinGlobalGroup?: Maybe<(
-    { __typename?: 'JoinGlobalGroupPayload' }
-    & { groupUser?: Maybe<(
-      { __typename?: 'GroupUser' }
-      & Pick<GroupUser, 'nodeId'>
-      & { group?: Maybe<(
-        { __typename?: 'Group' }
-        & Pick<Group, 'uuid'>
-      )>, user?: Maybe<(
-        { __typename?: 'User' }
-        & Pick<User, 'uuid'>
-      )> }
-    )> }
-  )> }
-);
+export type JoinGlobalGroupMutation = { __typename?: 'Mutation', joinGlobalGroup?: Maybe<{ __typename?: 'JoinGlobalGroupPayload', groupUser?: Maybe<{ __typename?: 'GroupUser', nodeId: string, group?: Maybe<{ __typename?: 'Group', uuid: any }>, user?: Maybe<{ __typename?: 'User', uuid: any }> }> }> };
 
 export type UserGroupMembershipsQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserGroupMembershipsQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & { groupUsers: (
-      { __typename?: 'GroupUsersConnection' }
-      & { edges: Array<(
-        { __typename?: 'GroupUsersEdge' }
-        & { node?: Maybe<(
-          { __typename?: 'GroupUser' }
-          & Pick<GroupUser, 'userType'>
-          & { group?: Maybe<(
-            { __typename?: 'Group' }
-            & Pick<Group, 'global' | 'uuid' | 'groupName'>
-            & { language?: Maybe<(
-              { __typename?: 'Language' }
-              & Pick<Language, 'alpha2'>
-            )>, languageSkillLevel?: Maybe<(
-              { __typename?: 'LanguageSkillLevel' }
-              & Pick<LanguageSkillLevel, 'name'>
-            )> }
-          )> }
-        )> }
-      )> }
-    ) }
-  )> }
-);
+export type UserGroupMembershipsQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', groupUsers: { __typename?: 'GroupUsersConnection', edges: Array<{ __typename?: 'GroupUsersEdge', node?: Maybe<{ __typename?: 'GroupUser', userType: UserType, group?: Maybe<{ __typename?: 'Group', global: boolean, uuid: any, groupName?: Maybe<string>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }> }> }> } }> };
 
 export type UserIsInGroupQueryVariables = Exact<{
   userId: Scalars['Int'];
@@ -10692,16 +11490,7 @@ export type UserIsInGroupQueryVariables = Exact<{
 }>;
 
 
-export type UserIsInGroupQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & { groupUsers: (
-      { __typename?: 'GroupUsersConnection' }
-      & Pick<GroupUsersConnection, 'totalCount'>
-    ) }
-  )> }
-);
+export type UserIsInGroupQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', groupUsers: { __typename?: 'GroupUsersConnection', totalCount: number } }> };
 
 export type UsersWithoutLearnerGroupQueryVariables = Exact<{
   lid: Scalars['Int'];
@@ -10710,16 +11499,7 @@ export type UsersWithoutLearnerGroupQueryVariables = Exact<{
 }>;
 
 
-export type UsersWithoutLearnerGroupQuery = (
-  { __typename?: 'Query' }
-  & { usersWithoutLearnerGroup?: Maybe<(
-    { __typename?: 'UsersConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id'>
-    )>> }
-  )> }
-);
+export type UsersWithoutLearnerGroupQuery = { __typename?: 'Query', usersWithoutLearnerGroup?: Maybe<{ __typename?: 'UsersConnection', nodes: Array<Maybe<{ __typename?: 'User', id: number }>> }> };
 
 export type UsersWithoutNativeGroupQueryVariables = Exact<{
   lid: Scalars['Int'];
@@ -10727,62 +11507,17 @@ export type UsersWithoutNativeGroupQueryVariables = Exact<{
 }>;
 
 
-export type UsersWithoutNativeGroupQuery = (
-  { __typename?: 'Query' }
-  & { usersWithoutNativeGroup?: Maybe<(
-    { __typename?: 'UsersConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id'>
-    )>> }
-  )> }
-);
+export type UsersWithoutNativeGroupQuery = { __typename?: 'Query', usersWithoutNativeGroup?: Maybe<{ __typename?: 'UsersConnection', nodes: Array<Maybe<{ __typename?: 'User', id: number }>> }> };
 
 export type AllGroupUuidsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllGroupUuidsQuery = (
-  { __typename?: 'Query' }
-  & { groups?: Maybe<(
-    { __typename?: 'GroupsConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'Group' }
-      & Pick<Group, 'uuid'>
-    )>> }
-  )> }
-);
+export type AllGroupUuidsQuery = { __typename?: 'Query', groups?: Maybe<{ __typename?: 'GroupsConnection', nodes: Array<Maybe<{ __typename?: 'Group', uuid: any }>> }> };
 
 export type AllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllGroupsQuery = (
-  { __typename?: 'Query' }
-  & { groups?: Maybe<(
-    { __typename?: 'GroupsConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'Group' }
-      & Pick<Group, 'uuid' | 'groupName' | 'global'>
-      & { language?: Maybe<(
-        { __typename?: 'Language' }
-        & Pick<Language, 'alpha2' | 'englishName'>
-      )>, languageSkillLevel?: Maybe<(
-        { __typename?: 'LanguageSkillLevel' }
-        & Pick<LanguageSkillLevel, 'name' | 'nodeId'>
-      )>, groupUsers: (
-        { __typename?: 'GroupUsersConnection' }
-        & Pick<GroupUsersConnection, 'totalCount'>
-        & { nodes: Array<Maybe<(
-          { __typename?: 'GroupUser' }
-          & Pick<GroupUser, 'joinedOn'>
-          & { user?: Maybe<(
-            { __typename?: 'User' }
-            & Pick<User, 'avatarUrl' | 'username' | 'uuid'>
-          )> }
-        )>> }
-      ) }
-    )>> }
-  )> }
-);
+export type AllGroupsQuery = { __typename?: 'Query', groups?: Maybe<{ __typename?: 'GroupsConnection', nodes: Array<Maybe<{ __typename?: 'Group', uuid: any, groupName?: Maybe<string>, global: boolean, language?: Maybe<{ __typename?: 'Language', alpha2: string, englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string>, nodeId: string }>, groupUsers: { __typename?: 'GroupUsersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'GroupUser', joinedOn: any, user?: Maybe<{ __typename?: 'User', avatarUrl?: Maybe<string>, username?: Maybe<string>, uuid: any }> }>> } }>> }> };
 
 export type CreateGroupMutationVariables = Exact<{
   global: Scalars['Boolean'];
@@ -10793,95 +11528,40 @@ export type CreateGroupMutationVariables = Exact<{
 }>;
 
 
-export type CreateGroupMutation = (
-  { __typename?: 'Mutation' }
-  & { createGroup?: Maybe<(
-    { __typename?: 'CreateGroupPayload' }
-    & { group?: Maybe<(
-      { __typename?: 'Group' }
-      & Pick<Group, 'id' | 'uuid'>
-    )> }
-  )> }
-);
+export type CreateGroupMutation = { __typename?: 'Mutation', createGroup?: Maybe<{ __typename?: 'CreateGroupPayload', group?: Maybe<{ __typename?: 'Group', id: number, uuid: any }> }> };
 
 export type GroupIdByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
 }>;
 
 
-export type GroupIdByUuidQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & Pick<Group, 'id'>
-  )> }
-);
+export type GroupIdByUuidQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', id: number }> };
 
 export type GroupLanguageByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
 }>;
 
 
-export type GroupLanguageByUuidQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & Pick<Group, 'uuid'>
-    & { language?: Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'alpha2'>
-    )> }
-  )> }
-);
+export type GroupLanguageByUuidQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', uuid: any, language?: Maybe<{ __typename?: 'Language', alpha2: string }> }> };
 
 export type LanguageCodeMappingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LanguageCodeMappingsQuery = (
-  { __typename?: 'Query' }
-  & { languages?: Maybe<(
-    { __typename?: 'LanguagesConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'alpha2' | 'englishName'>
-    )>> }
-  )> }
-);
+export type LanguageCodeMappingsQuery = { __typename?: 'Query', languages?: Maybe<{ __typename?: 'LanguagesConnection', nodes: Array<Maybe<{ __typename?: 'Language', alpha2: string, englishName: string }>> }> };
 
 export type LanguageIdByAlpha2QueryVariables = Exact<{
   alpha2: Scalars['String'];
 }>;
 
 
-export type LanguageIdByAlpha2Query = (
-  { __typename?: 'Query' }
-  & { languageByAlpha2?: Maybe<(
-    { __typename?: 'Language' }
-    & Pick<Language, 'id'>
-  )> }
-);
+export type LanguageIdByAlpha2Query = { __typename?: 'Query', languageByAlpha2?: Maybe<{ __typename?: 'Language', id: number }> };
 
 export type AdminEmailsFcmTokensQueryVariables = Exact<{
   in: Array<Scalars['String']> | Scalars['String'];
 }>;
 
 
-export type AdminEmailsFcmTokensQuery = (
-  { __typename?: 'Query' }
-  & { users?: Maybe<(
-    { __typename?: 'UsersConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'User' }
-      & { userDevices: (
-        { __typename?: 'UserDevicesConnection' }
-        & { nodes: Array<Maybe<(
-          { __typename?: 'UserDevice' }
-          & Pick<UserDevice, 'fcmToken'>
-        )>> }
-      ) }
-    )>> }
-  )> }
-);
+export type AdminEmailsFcmTokensQuery = { __typename?: 'Query', users?: Maybe<{ __typename?: 'UsersConnection', nodes: Array<Maybe<{ __typename?: 'User', userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }>> }> };
 
 export type CreateNotificationMutationVariables = Exact<{
   channelId: Scalars['Int'];
@@ -10894,17 +11574,7 @@ export type CreateNotificationMutationVariables = Exact<{
 }>;
 
 
-export type CreateNotificationMutation = (
-  { __typename?: 'Mutation' }
-  & { createNotification?: Maybe<(
-    { __typename?: 'CreateNotificationPayload' }
-    & Pick<CreateNotificationPayload, 'clientMutationId'>
-    & { notification?: Maybe<(
-      { __typename?: 'Notification' }
-      & Pick<Notification, 'createdAt' | 'expiresAt' | 'withheldUntil' | 'id'>
-    )> }
-  )> }
-);
+export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification?: Maybe<{ __typename?: 'CreateNotificationPayload', clientMutationId?: Maybe<string>, notification?: Maybe<{ __typename?: 'Notification', createdAt: any, expiresAt?: Maybe<any>, withheldUntil?: Maybe<any>, id: number }> }> };
 
 export type CreateUserDeviceMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -10912,16 +11582,7 @@ export type CreateUserDeviceMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserDeviceMutation = (
-  { __typename?: 'Mutation' }
-  & { createUserDevice?: Maybe<(
-    { __typename?: 'CreateUserDevicePayload' }
-    & { userDevice?: Maybe<(
-      { __typename?: 'UserDevice' }
-      & Pick<UserDevice, 'uuid' | 'fcmToken' | 'id'>
-    )> }
-  )> }
-);
+export type CreateUserDeviceMutation = { __typename?: 'Mutation', createUserDevice?: Maybe<{ __typename?: 'CreateUserDevicePayload', userDevice?: Maybe<{ __typename?: 'UserDevice', uuid: any, fcmToken?: Maybe<string>, id: number }> }> };
 
 export type GroupMessageNotificationQueryVariables = Exact<{
   groupUuid: Scalars['UUID'];
@@ -10929,39 +11590,7 @@ export type GroupMessageNotificationQueryVariables = Exact<{
 }>;
 
 
-export type GroupMessageNotificationQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & Pick<Group, 'groupName' | 'uuid'>
-    & { groupUsers: (
-      { __typename?: 'GroupUsersConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'GroupUser' }
-        & { user?: Maybe<(
-          { __typename?: 'User' }
-          & Pick<User, 'uuid'>
-          & { userDevices: (
-            { __typename?: 'UserDevicesConnection' }
-            & { nodes: Array<Maybe<(
-              { __typename?: 'UserDevice' }
-              & Pick<UserDevice, 'fcmToken'>
-            )>> }
-          ) }
-        )> }
-      )>> }
-    ), language?: Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'alpha2'>
-    )>, languageSkillLevel?: Maybe<(
-      { __typename?: 'LanguageSkillLevel' }
-      & Pick<LanguageSkillLevel, 'name'>
-    )> }
-  )>, userByUuid?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'username'>
-  )> }
-);
+export type GroupMessageNotificationQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', groupName?: Maybe<string>, uuid: any, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', user?: Maybe<{ __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>, userByUuid?: Maybe<{ __typename?: 'User', username?: Maybe<string> }> };
 
 export type MarkNotificationAsSentMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -10969,98 +11598,24 @@ export type MarkNotificationAsSentMutationVariables = Exact<{
 }>;
 
 
-export type MarkNotificationAsSentMutation = (
-  { __typename?: 'Mutation' }
-  & { updateNotification?: Maybe<(
-    { __typename?: 'UpdateNotificationPayload' }
-    & { notification?: Maybe<(
-      { __typename?: 'Notification' }
-      & Pick<Notification, 'id' | 'sentAt'>
-    )> }
-  )> }
-);
+export type MarkNotificationAsSentMutation = { __typename?: 'Mutation', updateNotification?: Maybe<{ __typename?: 'UpdateNotificationPayload', notification?: Maybe<{ __typename?: 'Notification', id: number, sentAt?: Maybe<any> }> }> };
 
 export type NotificationChannelByNameQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
 
 
-export type NotificationChannelByNameQuery = (
-  { __typename?: 'Query' }
-  & { notificationChannelByName?: Maybe<(
-    { __typename?: 'NotificationChannel' }
-    & Pick<NotificationChannel, 'id'>
-  )> }
-);
+export type NotificationChannelByNameQuery = { __typename?: 'Query', notificationChannelByName?: Maybe<{ __typename?: 'NotificationChannel', id: number }> };
 
 export type OutstandingEmailNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OutstandingEmailNotificationsQuery = (
-  { __typename?: 'Query' }
-  & { notificationChannelByName?: Maybe<(
-    { __typename?: 'NotificationChannel' }
-    & { notificationsByChannelId: (
-      { __typename?: 'NotificationsConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'Notification' }
-        & Pick<Notification, 'id' | 'params' | 'expiresAt' | 'withheldUntil'>
-        & { recipient?: Maybe<(
-          { __typename?: 'User' }
-          & Pick<User, 'email' | 'emailNotificationsEnabled' | 'username' | 'unconfirmedEmail'>
-        )> }
-      )>> }
-    ) }
-  )> }
-);
+export type OutstandingEmailNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: Maybe<{ __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<Maybe<{ __typename?: 'Notification', id: number, params?: Maybe<any>, expiresAt?: Maybe<any>, withheldUntil?: Maybe<any>, recipient?: Maybe<{ __typename?: 'User', email: string, emailNotificationsEnabled: boolean, username?: Maybe<string>, unconfirmedEmail?: Maybe<string> }> }>> } }> };
 
 export type OutstandingFcmNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OutstandingFcmNotificationsQuery = (
-  { __typename?: 'Query' }
-  & { notificationChannelByName?: Maybe<(
-    { __typename?: 'NotificationChannel' }
-    & { notificationsByChannelId: (
-      { __typename?: 'NotificationsConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'Notification' }
-        & Pick<Notification, 'id' | 'params' | 'expiresAt' | 'withheldUntil'>
-        & { recipient?: Maybe<(
-          { __typename?: 'User' }
-          & Pick<User, 'uuid'>
-          & { userDevices: (
-            { __typename?: 'UserDevicesConnection' }
-            & { nodes: Array<Maybe<(
-              { __typename?: 'UserDevice' }
-              & Pick<UserDevice, 'fcmToken'>
-            )>> }
-          ) }
-        )>, recipientGroup?: Maybe<(
-          { __typename?: 'Group' }
-          & Pick<Group, 'uuid'>
-          & { groupUsers: (
-            { __typename?: 'GroupUsersConnection' }
-            & { nodes: Array<Maybe<(
-              { __typename?: 'GroupUser' }
-              & { user?: Maybe<(
-                { __typename?: 'User' }
-                & Pick<User, 'uuid'>
-                & { userDevices: (
-                  { __typename?: 'UserDevicesConnection' }
-                  & { nodes: Array<Maybe<(
-                    { __typename?: 'UserDevice' }
-                    & Pick<UserDevice, 'fcmToken'>
-                  )>> }
-                ) }
-              )> }
-            )>> }
-          ) }
-        )> }
-      )>> }
-    ) }
-  )> }
-);
+export type OutstandingFcmNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: Maybe<{ __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<Maybe<{ __typename?: 'Notification', id: number, params?: Maybe<any>, expiresAt?: Maybe<any>, withheldUntil?: Maybe<any>, recipient?: Maybe<{ __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }>, recipientGroup?: Maybe<{ __typename?: 'Group', uuid: any, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', user?: Maybe<{ __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }> }>> } }> }>> } }> };
 
 export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
   token: Scalars['String'];
@@ -11068,17 +11623,7 @@ export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
 }>;
 
 
-export type UnsubscribeUserEmailNotificationsMutation = (
-  { __typename?: 'Mutation' }
-  & { updateUserByEmailUnsubscribeToken?: Maybe<(
-    { __typename?: 'UpdateUserPayload' }
-    & Pick<UpdateUserPayload, 'clientMutationId'>
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'email' | 'uuid' | 'username'>
-    )> }
-  )> }
-);
+export type UnsubscribeUserEmailNotificationsMutation = { __typename?: 'Mutation', updateUserByEmailUnsubscribeToken?: Maybe<{ __typename?: 'UpdateUserPayload', clientMutationId?: Maybe<string>, user?: Maybe<{ __typename?: 'User', email: string, uuid: any, username?: Maybe<string> }> }> };
 
 export type CreateUserMutationVariables = Exact<{
   email: Scalars['String'];
@@ -11092,16 +11637,7 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = (
-  { __typename?: 'Mutation' }
-  & { createUser?: Maybe<(
-    { __typename?: 'CreateUserPayload' }
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id'>
-    )> }
-  )> }
-);
+export type CreateUserMutation = { __typename?: 'Mutation', createUser?: Maybe<{ __typename?: 'CreateUserPayload', user?: Maybe<{ __typename?: 'User', id: number }> }> };
 
 export type CreateUserLanguageMutationVariables = Exact<{
   languageId: Scalars['Int'];
@@ -11111,16 +11647,7 @@ export type CreateUserLanguageMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserLanguageMutation = (
-  { __typename?: 'Mutation' }
-  & { createUserLanguage?: Maybe<(
-    { __typename?: 'CreateUserLanguagePayload' }
-    & { userLanguage?: Maybe<(
-      { __typename?: 'UserLanguage' }
-      & Pick<UserLanguage, 'id'>
-    )> }
-  )> }
-);
+export type CreateUserLanguageMutation = { __typename?: 'Mutation', createUserLanguage?: Maybe<{ __typename?: 'CreateUserLanguagePayload', userLanguage?: Maybe<{ __typename?: 'UserLanguage', id: number }> }> };
 
 export type UpdateUserAvatarUrlMutationVariables = Exact<{
   avatarUrl: Scalars['String'];
@@ -11128,109 +11655,33 @@ export type UpdateUserAvatarUrlMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserAvatarUrlMutation = (
-  { __typename?: 'Mutation' }
-  & { updateUser?: Maybe<(
-    { __typename?: 'UpdateUserPayload' }
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'avatarUrl'>
-    )> }
-  )> }
-);
+export type UpdateUserAvatarUrlMutation = { __typename?: 'Mutation', updateUser?: Maybe<{ __typename?: 'UpdateUserPayload', user?: Maybe<{ __typename?: 'User', avatarUrl?: Maybe<string> }> }> };
 
 export type UserHasCompletedProfileQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserHasCompletedProfileQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'username'>
-    & { userLanguages: (
-      { __typename?: 'UserLanguagesConnection' }
-      & Pick<UserLanguagesConnection, 'totalCount'>
-    ) }
-  )> }
-);
+export type UserHasCompletedProfileQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', username?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number } }> };
 
 export type UserLanguageInfoQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserLanguageInfoQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'uuid'>
-    & { userLanguages: (
-      { __typename?: 'UserLanguagesConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'UserLanguage' }
-        & Pick<UserLanguage, 'nodeId' | 'languageId' | 'languageSkillLevelId' | 'native'>
-      )>> }
-    ) }
-  )> }
-);
+export type UserLanguageInfoQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', id: number, uuid: any, userLanguages: { __typename?: 'UserLanguagesConnection', nodes: Array<Maybe<{ __typename?: 'UserLanguage', nodeId: string, languageId: number, languageSkillLevelId?: Maybe<number>, native: boolean }>> } }> };
 
 export type UserProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserProfileQuery = (
-  { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'avatarUrl' | 'uuid'>
-    & { userLanguages: (
-      { __typename?: 'UserLanguagesConnection' }
-      & Pick<UserLanguagesConnection, 'totalCount'>
-      & { nodes: Array<Maybe<(
-        { __typename?: 'UserLanguage' }
-        & Pick<UserLanguage, 'native'>
-        & { language?: Maybe<(
-          { __typename?: 'Language' }
-          & Pick<Language, 'englishName'>
-        )>, languageSkillLevel?: Maybe<(
-          { __typename?: 'LanguageSkillLevel' }
-          & Pick<LanguageSkillLevel, 'name'>
-        )> }
-      )>> }
-    ), groupUsers: (
-      { __typename?: 'GroupUsersConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'GroupUser' }
-        & Pick<GroupUser, 'nodeId' | 'userType' | 'joinedOn'>
-        & { group?: Maybe<(
-          { __typename?: 'Group' }
-          & Pick<Group, 'uuid' | 'groupName'>
-          & { language?: Maybe<(
-            { __typename?: 'Language' }
-            & Pick<Language, 'englishName'>
-          )>, languageSkillLevel?: Maybe<(
-            { __typename?: 'LanguageSkillLevel' }
-            & Pick<LanguageSkillLevel, 'name'>
-          )> }
-        )> }
-      )>> }
-    ) }
-  )> }
-);
+export type UserProfileQuery = { __typename?: 'Query', currentUser?: Maybe<{ __typename?: 'User', bio: string, email: string, gender?: Maybe<string>, username?: Maybe<string>, avatarUrl?: Maybe<string>, uuid: any, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'UserLanguage', native: boolean, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', nodeId: string, userType: UserType, joinedOn: any, group?: Maybe<{ __typename?: 'Group', uuid: any, groupName?: Maybe<string>, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }> }>> } }> };
 
 export type UserUuidByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserUuidByIdQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'uuid'>
-  )> }
-);
+export type UserUuidByIdQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', uuid: any }> };
 
 
 export const ChatUser = gql`
@@ -11373,6 +11824,117 @@ export const RegisterUserActivity = gql`
     mutation RegisterUserActivity($userId: Int!) {
   registerUserActivity(input: {userId: $userId}) {
     datetime
+  }
+}
+    `;
+export const AllPosts = gql`
+    query AllPosts {
+  posts(orderBy: CREATED_AT_DESC) {
+    nodes {
+      uuid
+      nodeId
+      createdAt
+      author {
+        uuid
+        username
+        avatarUrl
+      }
+      body
+      postLikes {
+        totalCount
+        nodes {
+          user {
+            uuid
+          }
+        }
+      }
+      parentPost {
+        uuid
+      }
+      postsByParentPostId(orderBy: CREATED_AT_ASC) {
+        totalCount
+        nodes {
+          uuid
+          nodeId
+          createdAt
+          author {
+            uuid
+            username
+            avatarUrl
+          }
+          body
+          postLikes {
+            totalCount
+            nodes {
+              user {
+                uuid
+              }
+            }
+          }
+          parentPost {
+            uuid
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export const CreatePost = gql`
+    mutation CreatePost($authorId: Int!, $body: String!, $parentPostId: Int) {
+  createPost(
+    input: {post: {authorId: $authorId, parentPostId: $parentPostId, body: $body}}
+  ) {
+    clientMutationId
+    post {
+      body
+      createdAt
+      uuid
+      nodeId
+    }
+  }
+}
+    `;
+export const CreatePostLike = gql`
+    mutation CreatePostLike($userId: Int!, $postId: Int!) {
+  createPostLike(input: {postLike: {postId: $postId, userId: $userId}}) {
+    postLike {
+      postId
+      userId
+      nodeId
+      createdAt
+    }
+  }
+}
+    `;
+export const DeletePostLike = gql`
+    mutation DeletePostLike($id: Int!) {
+  deletePostLike(input: {id: $id}) {
+    postLike {
+      postId
+      userId
+      nodeId
+      createdAt
+    }
+  }
+}
+    `;
+export const PostIdByUuid = gql`
+    query PostIdByUuid($uuid: UUID!) {
+  postByUuid(uuid: $uuid) {
+    id
+    nodeId
+  }
+}
+    `;
+export const PostLikeIdByPostIdAndUserId = gql`
+    query PostLikeIdByPostIdAndUserId($postId: Int!, $userId: Int!) {
+  postLikes(condition: {postId: $postId, userId: $userId}) {
+    nodes {
+      id
+      nodeId
+    }
+    totalCount
   }
 }
     `;

@@ -1,0 +1,65 @@
+query AllPosts {
+  posts(orderBy: CREATED_AT_DESC) {
+    nodes {
+      uuid
+      nodeId
+      createdAt
+      author {
+        uuid
+        username
+        avatarUrl
+        __typename
+      }
+      body
+      postLikes {
+        totalCount
+        nodes {
+          user {
+            uuid
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      parentPost {
+        uuid
+        __typename
+      }
+      postsByParentPostId(orderBy: CREATED_AT_ASC) {
+        totalCount
+        nodes {
+          uuid
+          nodeId
+          createdAt
+          author {
+            uuid
+            username
+            avatarUrl
+            __typename
+          }
+          body
+          postLikes {
+            totalCount
+            nodes {
+              user {
+                uuid
+                __typename
+              }
+              __typename
+            }
+            __typename
+          }
+          parentPost {
+            uuid
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

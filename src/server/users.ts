@@ -27,6 +27,7 @@ export async function registerUserActivity(
         vars
     )
     if (!res.data) {
+        chlog.child({ res }).error("Failed to register user activity")
         return null
     }
     return res.data?.registerUserActivity?.datetime || null

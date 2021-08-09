@@ -1,0 +1,10 @@
+mutation CreatePostLike($userId: Int!, $postId: Int!) {
+    createPostLike(input: { postLike: { postId: $postId, userId: $userId } }) {
+        postLike {
+            postId
+            userId
+            nodeId
+            createdAt
+        }
+    }
+}

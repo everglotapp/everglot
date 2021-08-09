@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte"
-    import { scale } from "svelte/transition"
+    import { scale, fade } from "svelte/transition"
     import { goto } from "@sapper/app"
     import Time, { svelteTime } from "svelte-time"
     import {
@@ -293,15 +293,9 @@
         }
     }
     function formatPostBodyForCreate(body: string): string {
-        const formatted = body
-            .replace(/\<br\>/g, "")
-            .replace(/\<br\/\>/g, "")
-            .replace(/\<br \/\>/g, "")
-            .replace(/\<div\>(.*?)\<\/div\>/g, function (_a, b) {
-                return b + "\n"
-            })
-        console.log({ body, formatted })
-        return formatted
+        return body
+            .replace(/\<br(\ | \/)?\>/g, "")
+            .replace(/\<div\>(.*?)\<\/div\>/g, (_match, p1) => `${p1}\n`)
     }
     async function handleReply(parentUuid: string) {
         const res = await createPost(newReplyBody[parentUuid], parentUuid)
@@ -558,35 +552,46 @@
                 </ButtonSmall>
             </div>
             {#if showReplies[post.uuid]}
-                {#each post.postsByParentPostId?.nodes as reply (reply.uuid)}
-                    <div
-                        class="flex flex-row ml-8 pl-4 pt-4 border-l-2 border-gray-verylight"
-                    >
-                        <div class="pr-4">
-                            <Avatar
-                                username={reply.author.username}
-                                url={reply.author.avatarUrl}
-                                size={36}
-                            />
-                        </div>
-                        <div class="w-full">
-                            <div class="mb-1 flex items-center justify-between">
-                                <span class="text-gray-bitdark font-bold"
-                                    >{reply.author.username}</span
-                                >
-                                <time
-                                    use:svelteTime={{
-                                        timestamp: reply.createdAt,
-                                        format: "DD-MM-YYYY h:mm A",
-                                    }}
-                                    title={reply.createdAt.toLocaleString()}
-                                    class="text-sm text-gray-bitdark"
+                <div
+                    class="origin-top-right"
+                    class:pb-4={post.postsByParentPostId?.totalCount &&
+                        post.postsByParentPostId?.totalCount > 0}
+                    in:fade={{ duration: 200 }}
+                    out:scale={{ duration: 150 }}
+                >
+                    {#each post.postsByParentPostId?.nodes as reply (reply.uuid)}
+                        <div
+                            class="flex flex-row ml-8 pl-4 pt-4 border-l-2 border-gray-verylight"
+                            in:scale|local={{ duration: 200 }}
+                        >
+                            <div class="pr-4">
+                                <Avatar
+                                    username={reply.author.username}
+                                    url={reply.author.avatarUrl}
+                                    size={36}
                                 />
                             </div>
-                            <div>{reply.body}</div>
+                            <div class="w-full">
+                                <div
+                                    class="mb-1 flex items-center justify-between"
+                                >
+                                    <span class="text-gray-bitdark font-bold"
+                                        >{reply.author.username}</span
+                                    >
+                                    <time
+                                        use:svelteTime={{
+                                            timestamp: reply.createdAt,
+                                            format: "DD-MM-YYYY h:mm A",
+                                        }}
+                                        title={reply.createdAt.toLocaleString()}
+                                        class="text-sm text-gray-bitdark"
+                                    />
+                                </div>
+                                <div>{reply.body}</div>
+                            </div>
                         </div>
-                    </div>
-                {/each}
+                    {/each}
+                </div>
             {/if}
         </div>
     {/each}

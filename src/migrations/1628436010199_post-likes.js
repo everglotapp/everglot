@@ -26,7 +26,7 @@ exports.up = (pgm) => {
     )
     pgm.sql(`
         COMMENT ON CONSTRAINT post_likes_post_id_fkey on app_public.post_likes is
-        E'@postId postLikessByPostId\n@foreignFieldName likes\nPost that is being liked.';
+        E'@postId postLikesByPostId\n@foreignFieldName likes\nPost that is being liked.';
     `)
     pgm.alterTable(
         { schema: "app_public", name: "post_likes" },

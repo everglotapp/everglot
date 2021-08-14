@@ -10,12 +10,12 @@ exports.up = (pgm) => {
             user_id: {
                 type: "integer",
                 references: { schema: "app_public", name: "users" },
-                notNull: false,
+                notNull: true,
             },
             post_id: {
                 type: "integer",
                 references: { schema: "app_public", name: "posts" },
-                notNull: false,
+                notNull: true,
             },
             created_at: {
                 type: "timestamp with time zone",

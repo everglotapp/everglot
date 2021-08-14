@@ -17,6 +17,7 @@
     import type { AllPostsQuery } from "../../types/generated/graphql"
     import { createPost } from "../../routes/_helpers/posts"
     import { allPostsStore } from "../../stores/feed"
+    import { USER_UPLOADED_RECORDINGS_BASE_PATH } from "../../constants"
 
     query(currentUserStore)
 
@@ -28,6 +29,7 @@
     export let author: NonNullable<PostNode["author"]>
     export let likes: PostNode["likes"]
     export let replies: PostNode["replies"]
+    export let recordings: PostNode["recordings"]
 
     $: replyNodes = replies.nodes.filter(Boolean).map((reply) => reply!)
 
@@ -141,6 +143,20 @@
                     {bodyPart}<br />
                 {/each}
             </div>
+            {#if recordings.totalCount && recordings.nodes[0]}
+                <div>
+                    <audio
+                        src={`${USER_UPLOADED_RECORDINGS_BASE_PATH}/${
+                            recordings.nodes[0].filename
+                        }${
+                            recordings.nodes[0].extension
+                                ? "." + recordings.nodes[0].extension
+                                : ""
+                        }`}
+                        controls
+                    />
+                </div>
+            {/if}
         </div>
     </div>
     <div class="flex flex-row pt-1 justify-end items-center">

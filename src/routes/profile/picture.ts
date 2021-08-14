@@ -8,6 +8,11 @@ import { USER_AVATARS_BASE_PATH } from "../../constants"
 
 export async function post(req: Request, res: Response, _next: () => void) {
     jsonResponse(res)
+    const { user_id: userId } = req.session
+    if (!userId) {
+        res.redirect("/")
+        return
+    }
     // save to user record
     if (!req.file) {
         res.status(422).json({
@@ -19,8 +24,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
     log.child({ file: req.file }).debug("Parsed avatar file")
 
     const avatarUrl = `${USER_AVATARS_BASE_PATH}/${req.file.filename}`
-    if (!updateUserAvatarUrl({ avatarUrl, id: req.session.user_id! })) {
-        log.child({ avatarUrl, userId: req.session.user_id }).error(
+    if (!updateUserAvatarUrl({ avatarUrl, id: userId })) {
+        log.child({ avatarUrl, userId }).error(
             "Failed to save stored avatar to database"
         )
         // TODO: Remove file
@@ -28,9 +33,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    log.child({ avatarUrl, userId: req.session.user_id }).debug(
-        "Successfully saved new avatar"
-    )
+    log.child({ avatarUrl, userId }).debug("Successfully saved new avatar")
     // TODO: Remove old avatar
     res.status(200).json({
         success: true,

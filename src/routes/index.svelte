@@ -19,7 +19,7 @@
 
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import Post from "../comp/feed/Post.svelte"
-    import { createPost } from "./_helpers/posts"
+    import { createPost, createPostRecording } from "./_helpers/posts"
 
     query(allPostsStore)
     query(currentUserStore)
@@ -210,15 +210,34 @@
             const response = await res.json()
             if (response.success) {
                 newPostBody = ""
-                $allPostsStore.context = {
-                    ...$allPostsStore.context,
-                    paused: true,
-                }
-                $allPostsStore.context = {
-                    ...$allPostsStore.context,
-                    paused: false,
+                refreshPosts()
+                if (recordedBlob) {
+                    const res2 = await createPostRecording(
+                        response.meta.post.uuid,
+                        recordedBlob
+                    )
+                    // TODO: only reset this upon successful upload?
+                    // TODO: give user feedback on failure
+                    recordedChunks = []
+                    if (res2.status === 200) {
+                        const response2 = await res2.json()
+                        if (response2.success) {
+                            refreshPosts()
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    const refreshPosts = () => {
+        $allPostsStore.context = {
+            ...$allPostsStore.context,
+            paused: true,
+        }
+        $allPostsStore.context = {
+            ...$allPostsStore.context,
+            paused: false,
         }
     }
 </script>
@@ -351,6 +370,7 @@
                     author={post.author}
                     likes={post.likes}
                     replies={post.replies}
+                    recordings={post.recordings}
                     createdAt={post.createdAt}
                 />
             </div>

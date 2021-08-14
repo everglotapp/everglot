@@ -14,8 +14,14 @@ import {
     DeletePostLike,
     PostLikeIdByPostIdAndUserIdQuery,
     PostLikeIdByPostIdAndUserId,
+    CreatePostRecordingMutationVariables,
+    CreatePostRecordingMutation,
 } from "../types/generated/graphql"
-import { CreatePost, CreatePostLike } from "../types/generated/graphql"
+import {
+    CreatePost,
+    CreatePostLike,
+    CreatePostRecording,
+} from "../types/generated/graphql"
 
 const chlog = log.child({ namespace: "posts" })
 
@@ -94,4 +100,23 @@ export async function getPostLikeIdByPostIdAndUserId(
     return res.data?.postLikes?.totalCount === 1
         ? res.data.postLikes.nodes[0]!.id
         : null
+}
+
+export async function createPostRecording(
+    vars: CreatePostRecordingMutationVariables
+): Promise<
+    | NonNullable<
+          CreatePostRecordingMutation["createPostRecording"]
+      >["postRecording"]
+    | null
+> {
+    const res = await performQuery<CreatePostRecordingMutation>(
+        CreatePostRecording.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        chlog.child({ res }).error("Failed to create post recording")
+        return null
+    }
+    return res.data?.createPostRecording?.postRecording || null
 }

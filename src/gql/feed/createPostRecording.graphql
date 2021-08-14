@@ -1,0 +1,25 @@
+mutation CreatePostRecording(
+    $userId: Int!
+    $postId: Int!
+    $filename: String!
+    $extension: String = ""
+) {
+    createPostRecording(
+        input: {
+            postRecording: {
+                userId: $userId
+                postId: $postId
+                filename: $filename
+                extension: $extension
+            }
+        }
+    ) {
+        postRecording {
+            createdAt
+            extension
+            filename
+            uuid
+            nodeId
+        }
+    }
+}

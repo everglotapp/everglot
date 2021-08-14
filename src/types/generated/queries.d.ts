@@ -89,6 +89,15 @@ declare module '*/createPostLike.graphql' {
 }
     
 
+declare module '*/createPostRecording.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostRecording: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/deletePostLike.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

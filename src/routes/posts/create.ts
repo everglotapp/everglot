@@ -52,6 +52,12 @@ export async function post(req: Request, res: Response, _next: () => void) {
         chlog.child({ post }).debug("User successfully created post")
         res.json({
             success: true,
+            meta: {
+                post: {
+                    uuid: post.uuid,
+                    nodeId: post.nodeId,
+                },
+            },
         })
     } else {
         res.json({

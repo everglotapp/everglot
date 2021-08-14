@@ -46,6 +46,17 @@ query AllPosts {
                     }
                 }
             }
+            recordings {
+                totalCount
+                nodes {
+                    filename
+                    extension
+                    uuid
+                    user {
+                        uuid
+                    }
+                }
+            }
         }
     }
 }

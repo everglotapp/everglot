@@ -58,6 +58,20 @@ query AllPosts {
         }
         __typename
       }
+      recordings {
+        totalCount
+        nodes {
+          filename
+          extension
+          uuid
+          user {
+            uuid
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
       __typename
     }
     __typename

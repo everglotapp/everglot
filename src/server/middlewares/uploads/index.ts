@@ -27,18 +27,18 @@ export async function uploadsMiddleware(
     res: Response,
     next: () => void
 ) {
-    if (req.method !== "POST") {
-        next()
-        return
-    }
-    const { user_id: userId } = req.session
-    if (!userId) {
-        chlog.child({ userId }).error("userId unexpectedly falsy")
-        throw new Error(
-            "No user ID set for protected route. Are we really protected?"
-        )
-    }
     if (req.path === "/profile/picture") {
+        if (req.method !== "POST") {
+            next()
+            return
+        }
+        const { user_id: userId } = req.session
+        if (!userId) {
+            chlog.child({ userId }).error("userId unexpectedly falsy")
+            throw new Error(
+                "No user ID set for protected route. Are we really protected?"
+            )
+        }
         avatars.single(USER_UPLOAD_AVATAR_FILE_FORM_FIELD)(req, res, next)
         return
     }
@@ -47,6 +47,17 @@ export async function uploadsMiddleware(
         req.path.startsWith(POSTS_PREFIX) &&
         req.path.endsWith("/recordings/create")
     ) {
+        if (req.method !== "POST") {
+            next()
+            return
+        }
+        const { user_id: userId } = req.session
+        if (!userId) {
+            chlog.child({ userId }).error("userId unexpectedly falsy")
+            throw new Error(
+                "No user ID set for protected route. Are we really protected?"
+            )
+        }
         const matches = req.path
             .substr(POSTS_PREFIX.length, UUID_V4_LENGTH)
             .match(UUID_V4_REGEX)

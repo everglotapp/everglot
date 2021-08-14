@@ -12353,7 +12353,7 @@ export const RegisterUserActivity = gql`
     `;
 export const AllPosts = gql`
     query AllPosts {
-  posts(orderBy: CREATED_AT_DESC) {
+  posts(orderBy: CREATED_AT_DESC, condition: {parentPostId: null}) {
     nodes {
       uuid
       nodeId
@@ -12375,7 +12375,7 @@ export const AllPosts = gql`
       parentPost {
         uuid
       }
-      replies(orderBy: CREATED_AT_ASC) {
+      replies(orderBy: CREATED_AT_ASC, filter: {not: {parentPostId: {isNull: true}}}) {
         totalCount
         nodes {
           uuid
@@ -12386,7 +12386,6 @@ export const AllPosts = gql`
             username
             avatarUrl
           }
-          body
           likes {
             totalCount
             nodes {
@@ -12395,6 +12394,7 @@ export const AllPosts = gql`
               }
             }
           }
+          body
           parentPost {
             uuid
           }

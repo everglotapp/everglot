@@ -144,7 +144,7 @@
                 {/each}
             </div>
             {#if recordings.totalCount && recordings.nodes[0]}
-                <div>
+                <div class="pt-2">
                     <audio
                         src={`${USER_UPLOADED_RECORDINGS_BASE_PATH}/${
                             recordings.nodes[0].filename
@@ -154,6 +154,7 @@
                                 : ""
                         }`}
                         controls
+                        class="rounded-lg"
                     />
                 </div>
             {/if}

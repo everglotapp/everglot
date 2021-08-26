@@ -62,6 +62,69 @@ declare module '*/registerUserActivity.graphql' {
 }
     
 
+declare module '*/allPosts.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const AllPosts: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createPost.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePost: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createPostLike.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostLike: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createPostRecording.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostRecording: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/deletePostLike.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const DeletePostLike: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/postIdByUuid.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const PostIdByUuid: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/postLikeIdByPostIdAndUserId.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const PostLikeIdByPostIdAndUserId: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createGroupUser.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

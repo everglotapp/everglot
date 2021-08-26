@@ -359,6 +359,108 @@ type Query implements Node {
     filter: NotificationFilter
   ): NotificationsConnection
 
+  """Reads and enables pagination through a set of `PostLike`."""
+  postLikes(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostLike`."""
+    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostLikeCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostLikeFilter
+  ): PostLikesConnection
+
+  """Reads and enables pagination through a set of `PostRecording`."""
+  postRecordings(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostRecording`."""
+    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostRecordingCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostRecordingFilter
+  ): PostRecordingsConnection
+
+  """Reads and enables pagination through a set of `Post`."""
+  posts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection
+
   """Reads and enables pagination through a set of `GermanRandomQuestion`."""
   germanRandomQuestions(
     """Only read the first `n` values of the set."""
@@ -791,6 +893,11 @@ type Query implements Node {
   notificationChannelByName(name: String!): NotificationChannel
   notification(id: Int!): Notification
   notificationByUuid(uuid: UUID!): Notification
+  postLike(id: Int!): PostLike
+  postRecording(id: Int!): PostRecording
+  postRecordingByUuid(uuid: UUID!): PostRecording
+  post(id: Int!): Post
+  postByUuid(uuid: UUID!): Post
   germanRandomQuestion(id: Int!): GermanRandomQuestion
   germanRandomQuestionByUuid(uuid: UUID!): GermanRandomQuestion
   englishRandomQuestion(id: Int!): EnglishRandomQuestion
@@ -951,6 +1058,26 @@ type Query implements Node {
     """
     nodeId: ID!
   ): Notification
+
+  """Reads a single `PostLike` using its globally unique `ID`."""
+  postLikeByNodeId(
+    """The globally unique `ID` to be used in selecting a single `PostLike`."""
+    nodeId: ID!
+  ): PostLike
+
+  """Reads a single `PostRecording` using its globally unique `ID`."""
+  postRecordingByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `PostRecording`.
+    """
+    nodeId: ID!
+  ): PostRecording
+
+  """Reads a single `Post` using its globally unique `ID`."""
+  postByNodeId(
+    """The globally unique `ID` to be used in selecting a single `Post`."""
+    nodeId: ID!
+  ): Post
 
   """Reads a single `GermanRandomQuestion` using its globally unique `ID`."""
   germanRandomQuestionByNodeId(
@@ -1375,6 +1502,108 @@ type User implements Node {
     filter: NotificationFilter
   ): NotificationsConnection!
 
+  """Reads and enables pagination through a set of `Post`."""
+  authoredPosts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+
+  """Reads and enables pagination through a set of `PostLike`."""
+  postLikes(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostLike`."""
+    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostLikeCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostLikeFilter
+  ): PostLikesConnection!
+
+  """Reads and enables pagination through a set of `PostRecording`."""
+  postRecordings(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostRecording`."""
+    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostRecordingCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostRecordingFilter
+  ): PostRecordingsConnection!
+
   """Reads and enables pagination through a set of `Language`."""
   languagesByUserLanguageUserIdAndLanguageId(
     """Only read the first `n` values of the set."""
@@ -1748,6 +1977,108 @@ type User implements Node {
     """
     filter: GroupFilter
   ): UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Post`."""
+  postsByPostAuthorIdAndParentPostId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Post`."""
+  postsByPostLikeUserIdAndPostId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): UserPostsByPostLikeUserIdAndPostIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Post`."""
+  postsByPostRecordingUserIdAndPostId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): UserPostsByPostRecordingUserIdAndPostIdManyToManyConnection!
 }
 
 """
@@ -7192,6 +7523,746 @@ input UserDeviceFilter {
   not: UserDeviceFilter
 }
 
+"""A connection to a list of `Post` values."""
+type PostsConnection {
+  """A list of `Post` objects."""
+  nodes: [Post]!
+
+  """
+  A list of edges which contains the `Post` and cursor to aid in pagination.
+  """
+  edges: [PostsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Post` you could get from the connection."""
+  totalCount: Int!
+}
+
+type Post implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  authorId: Int
+  body: String!
+  parentPostId: Int
+  createdAt: Datetime!
+
+  """Reads a single `User` that is related to this `Post`."""
+  author: User
+
+  """Reads a single `Post` that is related to this `Post`."""
+  parentPost: Post
+
+  """Reads and enables pagination through a set of `Post`."""
+  replies(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+
+  """Reads and enables pagination through a set of `PostLike`."""
+  likes(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostLike`."""
+    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostLikeCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostLikeFilter
+  ): PostLikesConnection!
+
+  """Reads and enables pagination through a set of `PostRecording`."""
+  recordings(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostRecording`."""
+    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostRecordingCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostRecordingFilter
+  ): PostRecordingsConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByPostParentPostIdAndAuthorId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByPostLikePostIdAndUserId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): PostUsersByPostLikePostIdAndUserIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByPostRecordingPostIdAndUserId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection!
+}
+
+"""Methods to use when ordering `Post`."""
+enum PostsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  AUTHOR_ID_ASC
+  AUTHOR_ID_DESC
+  BODY_ASC
+  BODY_DESC
+  PARENT_POST_ID_ASC
+  PARENT_POST_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Post` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input PostCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `authorId` field."""
+  authorId: Int
+
+  """Checks for equality with the object’s `body` field."""
+  body: String
+
+  """Checks for equality with the object’s `parentPostId` field."""
+  parentPostId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `Post` object types. All fields are combined with a logical ‘and.’
+"""
+input PostFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `authorId` field."""
+  authorId: IntFilter
+
+  """Filter by the object’s `body` field."""
+  body: StringFilter
+
+  """Filter by the object’s `parentPostId` field."""
+  parentPostId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [PostFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PostFilter!]
+
+  """Negates the expression."""
+  not: PostFilter
+}
+
+"""A connection to a list of `PostLike` values."""
+type PostLikesConnection {
+  """A list of `PostLike` objects."""
+  nodes: [PostLike]!
+
+  """
+  A list of edges which contains the `PostLike` and cursor to aid in pagination.
+  """
+  edges: [PostLikesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `PostLike` you could get from the connection."""
+  totalCount: Int!
+}
+
+type PostLike implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  userId: Int!
+  postId: Int!
+  createdAt: Datetime!
+
+  """Reads a single `User` that is related to this `PostLike`."""
+  user: User
+
+  """Reads a single `Post` that is related to this `PostLike`."""
+  post: Post
+}
+
+"""A `PostLike` edge in the connection."""
+type PostLikesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PostLike` at the end of the edge."""
+  node: PostLike
+}
+
+"""Methods to use when ordering `PostLike`."""
+enum PostLikesOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  POST_ID_ASC
+  POST_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `PostLike` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input PostLikeCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `postId` field."""
+  postId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `PostLike` object types. All fields are combined with a logical ‘and.’
+"""
+input PostLikeFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `postId` field."""
+  postId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [PostLikeFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PostLikeFilter!]
+
+  """Negates the expression."""
+  not: PostLikeFilter
+}
+
+"""A connection to a list of `PostRecording` values."""
+type PostRecordingsConnection {
+  """A list of `PostRecording` objects."""
+  nodes: [PostRecording]!
+
+  """
+  A list of edges which contains the `PostRecording` and cursor to aid in pagination.
+  """
+  edges: [PostRecordingsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `PostRecording` you could get from the connection."""
+  totalCount: Int!
+}
+
+type PostRecording implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  userId: Int!
+  postId: Int!
+
+  """Basename without extension"""
+  filename: String!
+
+  """Extension without leading dot"""
+  extension: String
+  createdAt: Datetime!
+
+  """Reads a single `User` that is related to this `PostRecording`."""
+  user: User
+
+  """Reads a single `Post` that is related to this `PostRecording`."""
+  post: Post
+}
+
+"""A `PostRecording` edge in the connection."""
+type PostRecordingsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PostRecording` at the end of the edge."""
+  node: PostRecording
+}
+
+"""Methods to use when ordering `PostRecording`."""
+enum PostRecordingsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  POST_ID_ASC
+  POST_ID_DESC
+  FILENAME_ASC
+  FILENAME_DESC
+  EXTENSION_ASC
+  EXTENSION_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `PostRecording` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input PostRecordingCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `postId` field."""
+  postId: Int
+
+  """Checks for equality with the object’s `filename` field."""
+  filename: String
+
+  """Checks for equality with the object’s `extension` field."""
+  extension: String
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `PostRecording` object types. All fields are combined with a logical ‘and.’
+"""
+input PostRecordingFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `postId` field."""
+  postId: IntFilter
+
+  """Filter by the object’s `filename` field."""
+  filename: StringFilter
+
+  """Filter by the object’s `extension` field."""
+  extension: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [PostRecordingFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PostRecordingFilter!]
+
+  """Negates the expression."""
+  not: PostRecordingFilter
+}
+
+"""A connection to a list of `User` values, with data from `Post`."""
+type PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Post`."""
+type PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Post`."""
+  authoredPosts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""A connection to a list of `User` values, with data from `PostLike`."""
+type PostUsersByPostLikePostIdAndUserIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `PostLike`, and the cursor to aid in pagination.
+  """
+  edges: [PostUsersByPostLikePostIdAndUserIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `PostLike`."""
+type PostUsersByPostLikePostIdAndUserIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `PostLike`."""
+  postLikes(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostLike`."""
+    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostLikeCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostLikeFilter
+  ): PostLikesConnection!
+}
+
+"""
+A connection to a list of `User` values, with data from `PostRecording`.
+"""
+type PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `PostRecording`, and the cursor to aid in pagination.
+  """
+  edges: [PostUsersByPostRecordingPostIdAndUserIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `PostRecording`."""
+type PostUsersByPostRecordingPostIdAndUserIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `PostRecording`."""
+  postRecordings(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostRecording`."""
+    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostRecordingCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostRecordingFilter
+  ): PostRecordingsConnection!
+}
+
+"""A `Post` edge in the connection."""
+type PostsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Post` at the end of the edge."""
+  node: Post
+}
+
 """
 A connection to a list of `Language` values, with data from `UserLanguage`.
 """
@@ -7868,6 +8939,188 @@ type UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdge {
   ): NotificationsConnection!
 }
 
+"""A connection to a list of `Post` values, with data from `Post`."""
+type UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection {
+  """A list of `Post` objects."""
+  nodes: [Post]!
+
+  """
+  A list of edges which contains the `Post`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [UserPostsByPostAuthorIdAndParentPostIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Post` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Post` edge in the connection, with data from `Post`."""
+type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Post` at the end of the edge."""
+  node: Post
+
+  """Reads and enables pagination through a set of `Post`."""
+  replies(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""A connection to a list of `Post` values, with data from `PostLike`."""
+type UserPostsByPostLikeUserIdAndPostIdManyToManyConnection {
+  """A list of `Post` objects."""
+  nodes: [Post]!
+
+  """
+  A list of edges which contains the `Post`, info from the `PostLike`, and the cursor to aid in pagination.
+  """
+  edges: [UserPostsByPostLikeUserIdAndPostIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Post` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Post` edge in the connection, with data from `PostLike`."""
+type UserPostsByPostLikeUserIdAndPostIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Post` at the end of the edge."""
+  node: Post
+
+  """Reads and enables pagination through a set of `PostLike`."""
+  likes(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostLike`."""
+    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostLikeCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostLikeFilter
+  ): PostLikesConnection!
+}
+
+"""
+A connection to a list of `Post` values, with data from `PostRecording`.
+"""
+type UserPostsByPostRecordingUserIdAndPostIdManyToManyConnection {
+  """A list of `Post` objects."""
+  nodes: [Post]!
+
+  """
+  A list of edges which contains the `Post`, info from the `PostRecording`, and the cursor to aid in pagination.
+  """
+  edges: [UserPostsByPostRecordingUserIdAndPostIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Post` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Post` edge in the connection, with data from `PostRecording`."""
+type UserPostsByPostRecordingUserIdAndPostIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Post` at the end of the edge."""
+  node: Post
+
+  """Reads and enables pagination through a set of `PostRecording`."""
+  recordings(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostRecording`."""
+    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostRecordingCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostRecordingFilter
+  ): PostRecordingsConnection!
+}
+
 """A `GroupUser` edge in the connection."""
 type GroupUsersEdge {
   """A cursor for use in pagination."""
@@ -8135,6 +9388,30 @@ type Mutation {
     """
     input: CreateNotificationInput!
   ): CreateNotificationPayload
+
+  """Creates a single `PostLike`."""
+  createPostLike(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePostLikeInput!
+  ): CreatePostLikePayload
+
+  """Creates a single `PostRecording`."""
+  createPostRecording(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePostRecordingInput!
+  ): CreatePostRecordingPayload
+
+  """Creates a single `Post`."""
+  createPost(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePostInput!
+  ): CreatePostPayload
 
   """Creates a single `GermanRandomQuestion`."""
   createGermanRandomQuestion(
@@ -8479,6 +9756,72 @@ type Mutation {
     """
     input: UpdateNotificationByUuidInput!
   ): UpdateNotificationPayload
+
+  """Updates a single `PostLike` using its globally unique id and a patch."""
+  updatePostLikeByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostLikeByNodeIdInput!
+  ): UpdatePostLikePayload
+
+  """Updates a single `PostLike` using a unique key and a patch."""
+  updatePostLike(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostLikeInput!
+  ): UpdatePostLikePayload
+
+  """
+  Updates a single `PostRecording` using its globally unique id and a patch.
+  """
+  updatePostRecordingByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostRecordingByNodeIdInput!
+  ): UpdatePostRecordingPayload
+
+  """Updates a single `PostRecording` using a unique key and a patch."""
+  updatePostRecording(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostRecordingInput!
+  ): UpdatePostRecordingPayload
+
+  """Updates a single `PostRecording` using a unique key and a patch."""
+  updatePostRecordingByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostRecordingByUuidInput!
+  ): UpdatePostRecordingPayload
+
+  """Updates a single `Post` using its globally unique id and a patch."""
+  updatePostByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostByNodeIdInput!
+  ): UpdatePostPayload
+
+  """Updates a single `Post` using a unique key and a patch."""
+  updatePost(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostInput!
+  ): UpdatePostPayload
+
+  """Updates a single `Post` using a unique key and a patch."""
+  updatePostByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostByUuidInput!
+  ): UpdatePostPayload
 
   """
   Updates a single `GermanRandomQuestion` using its globally unique id and a patch.
@@ -9055,6 +10398,70 @@ type Mutation {
     """
     input: DeleteNotificationByUuidInput!
   ): DeleteNotificationPayload
+
+  """Deletes a single `PostLike` using its globally unique id."""
+  deletePostLikeByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostLikeByNodeIdInput!
+  ): DeletePostLikePayload
+
+  """Deletes a single `PostLike` using a unique key."""
+  deletePostLike(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostLikeInput!
+  ): DeletePostLikePayload
+
+  """Deletes a single `PostRecording` using its globally unique id."""
+  deletePostRecordingByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostRecordingByNodeIdInput!
+  ): DeletePostRecordingPayload
+
+  """Deletes a single `PostRecording` using a unique key."""
+  deletePostRecording(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostRecordingInput!
+  ): DeletePostRecordingPayload
+
+  """Deletes a single `PostRecording` using a unique key."""
+  deletePostRecordingByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostRecordingByUuidInput!
+  ): DeletePostRecordingPayload
+
+  """Deletes a single `Post` using its globally unique id."""
+  deletePostByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostByNodeIdInput!
+  ): DeletePostPayload
+
+  """Deletes a single `Post` using a unique key."""
+  deletePost(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostInput!
+  ): DeletePostPayload
+
+  """Deletes a single `Post` using a unique key."""
+  deletePostByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostByUuidInput!
+  ): DeletePostPayload
 
   """Deletes a single `GermanRandomQuestion` using its globally unique id."""
   deleteGermanRandomQuestionByNodeId(
@@ -9872,6 +11279,162 @@ input NotificationInput {
   readAt: Datetime
   createdAt: Datetime
   recipientGroupId: Int
+}
+
+"""The output of our create `PostLike` mutation."""
+type CreatePostLikePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostLike` that was created by this mutation."""
+  postLike: PostLike
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `PostLike`."""
+  user: User
+
+  """Reads a single `Post` that is related to this `PostLike`."""
+  post: Post
+
+  """An edge for our `PostLike`. May be used by Relay 1."""
+  postLikeEdge(
+    """The method to use when ordering `PostLike`."""
+    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostLikesEdge
+}
+
+"""All input for the create `PostLike` mutation."""
+input CreatePostLikeInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PostLike` to be created by this mutation."""
+  postLike: PostLikeInput!
+}
+
+"""An input for mutations affecting `PostLike`"""
+input PostLikeInput {
+  id: Int
+  userId: Int!
+  postId: Int!
+  createdAt: Datetime
+}
+
+"""The output of our create `PostRecording` mutation."""
+type CreatePostRecordingPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostRecording` that was created by this mutation."""
+  postRecording: PostRecording
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `PostRecording`."""
+  user: User
+
+  """Reads a single `Post` that is related to this `PostRecording`."""
+  post: Post
+
+  """An edge for our `PostRecording`. May be used by Relay 1."""
+  postRecordingEdge(
+    """The method to use when ordering `PostRecording`."""
+    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostRecordingsEdge
+}
+
+"""All input for the create `PostRecording` mutation."""
+input CreatePostRecordingInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PostRecording` to be created by this mutation."""
+  postRecording: PostRecordingInput!
+}
+
+"""An input for mutations affecting `PostRecording`"""
+input PostRecordingInput {
+  id: Int
+  uuid: UUID
+  userId: Int!
+  postId: Int!
+
+  """Basename without extension"""
+  filename: String!
+
+  """Extension without leading dot"""
+  extension: String
+  createdAt: Datetime
+}
+
+"""The output of our create `Post` mutation."""
+type CreatePostPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Post` that was created by this mutation."""
+  post: Post
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `Post`."""
+  author: User
+
+  """Reads a single `Post` that is related to this `Post`."""
+  parentPost: Post
+
+  """An edge for our `Post`. May be used by Relay 1."""
+  postEdge(
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostsEdge
+}
+
+"""All input for the create `Post` mutation."""
+input CreatePostInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Post` to be created by this mutation."""
+  post: PostInput!
+}
+
+"""An input for mutations affecting `Post`"""
+input PostInput {
+  id: Int
+  uuid: UUID
+  authorId: Int
+  body: String!
+  parentPostId: Int
+  createdAt: Datetime
 }
 
 """The output of our create `GermanRandomQuestion` mutation."""
@@ -11371,6 +12934,262 @@ input UpdateNotificationByUuidInput {
   An object where the defined keys will be set on the `Notification` being updated.
   """
   patch: NotificationPatch!
+  uuid: UUID!
+}
+
+"""The output of our update `PostLike` mutation."""
+type UpdatePostLikePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostLike` that was updated by this mutation."""
+  postLike: PostLike
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `PostLike`."""
+  user: User
+
+  """Reads a single `Post` that is related to this `PostLike`."""
+  post: Post
+
+  """An edge for our `PostLike`. May be used by Relay 1."""
+  postLikeEdge(
+    """The method to use when ordering `PostLike`."""
+    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostLikesEdge
+}
+
+"""All input for the `updatePostLikeByNodeId` mutation."""
+input UpdatePostLikeByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PostLike` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `PostLike` being updated.
+  """
+  patch: PostLikePatch!
+}
+
+"""
+Represents an update to a `PostLike`. Fields that are set will be updated.
+"""
+input PostLikePatch {
+  id: Int
+  userId: Int
+  postId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updatePostLike` mutation."""
+input UpdatePostLikeInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `PostLike` being updated.
+  """
+  patch: PostLikePatch!
+  id: Int!
+}
+
+"""The output of our update `PostRecording` mutation."""
+type UpdatePostRecordingPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostRecording` that was updated by this mutation."""
+  postRecording: PostRecording
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `PostRecording`."""
+  user: User
+
+  """Reads a single `Post` that is related to this `PostRecording`."""
+  post: Post
+
+  """An edge for our `PostRecording`. May be used by Relay 1."""
+  postRecordingEdge(
+    """The method to use when ordering `PostRecording`."""
+    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostRecordingsEdge
+}
+
+"""All input for the `updatePostRecordingByNodeId` mutation."""
+input UpdatePostRecordingByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PostRecording` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `PostRecording` being updated.
+  """
+  patch: PostRecordingPatch!
+}
+
+"""
+Represents an update to a `PostRecording`. Fields that are set will be updated.
+"""
+input PostRecordingPatch {
+  id: Int
+  uuid: UUID
+  userId: Int
+  postId: Int
+
+  """Basename without extension"""
+  filename: String
+
+  """Extension without leading dot"""
+  extension: String
+  createdAt: Datetime
+}
+
+"""All input for the `updatePostRecording` mutation."""
+input UpdatePostRecordingInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `PostRecording` being updated.
+  """
+  patch: PostRecordingPatch!
+  id: Int!
+}
+
+"""All input for the `updatePostRecordingByUuid` mutation."""
+input UpdatePostRecordingByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `PostRecording` being updated.
+  """
+  patch: PostRecordingPatch!
+  uuid: UUID!
+}
+
+"""The output of our update `Post` mutation."""
+type UpdatePostPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Post` that was updated by this mutation."""
+  post: Post
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `Post`."""
+  author: User
+
+  """Reads a single `Post` that is related to this `Post`."""
+  parentPost: Post
+
+  """An edge for our `Post`. May be used by Relay 1."""
+  postEdge(
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostsEdge
+}
+
+"""All input for the `updatePostByNodeId` mutation."""
+input UpdatePostByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Post` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Post` being updated.
+  """
+  patch: PostPatch!
+}
+
+"""Represents an update to a `Post`. Fields that are set will be updated."""
+input PostPatch {
+  id: Int
+  uuid: UUID
+  authorId: Int
+  body: String
+  parentPostId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updatePost` mutation."""
+input UpdatePostInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Post` being updated.
+  """
+  patch: PostPatch!
+  id: Int!
+}
+
+"""All input for the `updatePostByUuid` mutation."""
+input UpdatePostByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Post` being updated.
+  """
+  patch: PostPatch!
   uuid: UUID!
 }
 
@@ -13097,6 +14916,188 @@ input DeleteNotificationInput {
 
 """All input for the `deleteNotificationByUuid` mutation."""
 input DeleteNotificationByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `PostLike` mutation."""
+type DeletePostLikePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostLike` that was deleted by this mutation."""
+  postLike: PostLike
+  deletedPostLikeNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `PostLike`."""
+  user: User
+
+  """Reads a single `Post` that is related to this `PostLike`."""
+  post: Post
+
+  """An edge for our `PostLike`. May be used by Relay 1."""
+  postLikeEdge(
+    """The method to use when ordering `PostLike`."""
+    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostLikesEdge
+}
+
+"""All input for the `deletePostLikeByNodeId` mutation."""
+input DeletePostLikeByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PostLike` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deletePostLike` mutation."""
+input DeletePostLikeInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""The output of our delete `PostRecording` mutation."""
+type DeletePostRecordingPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostRecording` that was deleted by this mutation."""
+  postRecording: PostRecording
+  deletedPostRecordingNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `PostRecording`."""
+  user: User
+
+  """Reads a single `Post` that is related to this `PostRecording`."""
+  post: Post
+
+  """An edge for our `PostRecording`. May be used by Relay 1."""
+  postRecordingEdge(
+    """The method to use when ordering `PostRecording`."""
+    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostRecordingsEdge
+}
+
+"""All input for the `deletePostRecordingByNodeId` mutation."""
+input DeletePostRecordingByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PostRecording` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deletePostRecording` mutation."""
+input DeletePostRecordingInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deletePostRecordingByUuid` mutation."""
+input DeletePostRecordingByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `Post` mutation."""
+type DeletePostPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Post` that was deleted by this mutation."""
+  post: Post
+  deletedPostNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `Post`."""
+  author: User
+
+  """Reads a single `Post` that is related to this `Post`."""
+  parentPost: Post
+
+  """An edge for our `Post`. May be used by Relay 1."""
+  postEdge(
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostsEdge
+}
+
+"""All input for the `deletePostByNodeId` mutation."""
+input DeletePostByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Post` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deletePost` mutation."""
+input DeletePostInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deletePostByUuid` mutation."""
+input DeletePostByUuidInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.

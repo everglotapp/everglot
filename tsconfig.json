@@ -9,7 +9,13 @@
     "typeRoots": ["src/types/", "src/types/generated", "node_modules/@types/"],
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "types": ["node", "jest", "express", "gapi.auth2"]
+    "types": [
+      "node",
+      "jest",
+      "express",
+      "gapi.auth2",
+      "dom-mediacapture-record"
+    ]
   },
   "include": ["src/**/*", "src/*", "src/node_modules/**/*"],
   "exclude": ["node_modules/*", "__sapper__/*", "static/*"]

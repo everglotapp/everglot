@@ -1,0 +1,10 @@
+mutation DeletePostLike($id: Int!) {
+    deletePostLike(input: { id: $id }) {
+        postLike {
+            postId
+            userId
+            nodeId
+            createdAt
+        }
+    }
+}

@@ -16,7 +16,10 @@
     import { Gender } from "../users"
     import Avatar from "../comp/users/Avatar.svelte"
     import { currentUserStore } from "../stores/currentUser"
-    import { ANDROID_WEBVIEW_USER_AGENT } from "../constants"
+    import {
+        ANDROID_WEBVIEW_USER_AGENT,
+        USER_UPLOAD_AVATAR_FILE_FORM_FIELD,
+    } from "../constants"
 
     const userProfileStore = operationStore<UserProfileQuery>(UserProfile)
     query(userProfileStore)
@@ -160,7 +163,7 @@
                         <div>
                             <input
                                 type="file"
-                                name="avatar"
+                                name={USER_UPLOAD_AVATAR_FILE_FORM_FIELD}
                                 accept="image/png,image/jpeg"
                                 required
                                 class="mb-2"

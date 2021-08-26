@@ -20,16 +20,13 @@
         groupIsForLanguage,
     } from "../stores/groups"
     import type { GroupNode } from "../stores/groups"
-    import { SUPPORTED_LOCALES } from "../constants"
+    import { LOCALE_TO_ARRAY_MAP, SUPPORTED_LOCALES } from "../constants"
     import type { SupportedLocale } from "../constants"
 
     query(allGroupsStore)
 
-    let groups: Record<SupportedLocale, GroupNode[]> = {
-        en: [],
-        de: [],
-        zh: [],
-    }
+    let groups: Record<SupportedLocale, GroupNode[]> = LOCALE_TO_ARRAY_MAP
+
     $: if (!$allGroupsStore.fetching && !$allGroupsStore.error) {
         groups = SUPPORTED_LOCALES.reduce(
             (map, lang) => ({
@@ -38,11 +35,7 @@
                     groupIsForLanguage(group, lang)
                 ),
             }),
-            {
-                en: [],
-                de: [],
-                zh: [],
-            }
+            LOCALE_TO_ARRAY_MAP
         )
     }
 

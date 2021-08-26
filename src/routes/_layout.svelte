@@ -150,5 +150,6 @@
     .main-inner {
         display: flex;
         height: 100%;
+        flex-flow: column;
     }
 </style>

@@ -2,11 +2,14 @@
  * Source: https://stackoverflow.com/a/68236494
  */
 export function getSupportedMimeTypes(...mediaTypes: string[]) {
+    if (!window.MediaRecorder) {
+        return []
+    }
     if (!mediaTypes.length) {
         mediaTypes.push(...["video", "audio"])
     }
     // const FILE_EXTENSIONS = ["webm", "ogg", "mp4", "x-matroska"]
-    const FILE_EXTENSIONS = ["webm", "ogg"]
+    const FILE_EXTENSIONS = ["webm", "ogg", "mp4"]
     const CODECS = [
         "vp9",
         "vp9.0",

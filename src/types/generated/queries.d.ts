@@ -359,6 +359,15 @@ declare module '*/userHasCompletedProfile.graphql' {
 }
     
 
+declare module '*/userIdByEmail.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserIdByEmail: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/userLanguageInfo.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

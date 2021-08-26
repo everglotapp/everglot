@@ -11156,6 +11156,13 @@ export type UserHasCompletedProfileQuery = (
   )> }
 );
 
+export type UserIdByEmailQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type UserIdByEmailQuery = { __typename?: 'Query', userByEmail?: Maybe<{ __typename?: 'User', id: number }> };
+
 export type UserLanguageInfoQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -11738,6 +11745,13 @@ export const UserHasCompletedProfile = gql`
     userLanguages {
       totalCount
     }
+  }
+}
+    `;
+export const UserIdByEmail = gql`
+    query UserIdByEmail($email: String!) {
+  userByEmail(email: $email) {
+    id
   }
 }
     `;

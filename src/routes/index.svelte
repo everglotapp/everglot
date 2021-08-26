@@ -105,6 +105,12 @@
         let stream
 
         try {
+            if (!navigator.mediaDevices) {
+                throw new Error("No support for mediaDevices")
+            }
+            if (!window.MediaRecorder) {
+                throw new Error("No support for MediaRecorder")
+            }
             stream = await navigator.mediaDevices.getUserMedia({
                 audio: true,
                 video: false,
@@ -146,6 +152,7 @@
             mediaRecorder.start()
         } catch (e) {
             console.error(e)
+            return
         }
         if (event.target) {
             ;(<HTMLButtonElement>event.target).blur()

@@ -97,6 +97,7 @@ chat-message-username-bot = Ebo
 
 ## Main Navigation
 
+main-nav-feed = Squeeks
 main-nav-global = Global
 main-nav-groups = Groups
 main-nav-profile = Profile

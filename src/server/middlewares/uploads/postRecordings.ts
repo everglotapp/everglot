@@ -27,7 +27,7 @@ const postRecordingsStorage = multer.diskStorage({
                 .error(
                     "User tried to upload a post recording with non-accepted content type"
                 )
-            cb(new Error("Only Ogg bitstream recordings are accepted"), "")
+            cb(new Error("Only audio recordings are accepted"), "")
             return
         }
         cb(null, USER_UPLOADED_RECORDINGS_DIRECTORY)

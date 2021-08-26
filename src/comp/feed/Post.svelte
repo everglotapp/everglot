@@ -155,6 +155,7 @@
                         }`}
                         controls
                         class="rounded-lg"
+                        style="max-width: 100%"
                     />
                 </div>
             {/if}

@@ -20,6 +20,7 @@
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import Post from "../comp/feed/Post.svelte"
     import { createPost, createPostRecording } from "./_helpers/posts"
+    import { getSupportedMimeTypes } from "./_helpers/posts/recording"
 
     query(allPostsStore)
     query(currentUserStore)
@@ -53,7 +54,13 @@
         clearRedirectTimeout()
     }
 
+    let preferredMimeType: string | null = null
     onMount(() => {
+        const supportedMimeTypes = getSupportedMimeTypes("audio")
+        if (supportedMimeTypes.length) {
+            preferredMimeType = supportedMimeTypes[0]
+        }
+
         if ($currentUserStore.stale) {
             if (redirectTimeout === null) {
                 redirectTimeout = window.setTimeout(() => {
@@ -82,12 +89,15 @@
 
     let recording: boolean = false
     let recordingStarted: number | null = null
+
     let recordedChunks: BlobPart[] = []
     $: recordedBlob =
-        !recordedChunks.length || typeof Blob === "undefined"
+        !recordedChunks.length ||
+        typeof Blob === "undefined" ||
+        !preferredMimeType
             ? null
             : new Blob(recordedChunks, {
-                  type: "audio/ogg; codecs=opus",
+                  type: preferredMimeType,
               })
     let mediaRecorder: MediaRecorder | undefined
     let stopRecordingAfterReceivingData: boolean = false
@@ -100,7 +110,12 @@
                 video: false,
             })
 
-            const options = { mimeType: "audio/ogg; codecs=opus" }
+            if (!preferredMimeType) {
+                throw new Error(
+                    "No MIME types are supported for recording audio"
+                )
+            }
+            const options = { mimeType: preferredMimeType }
             mediaRecorder = new MediaRecorder(stream, options)
 
             mediaRecorder.ondataavailable = function handleRecordDataAvailable(
@@ -129,7 +144,9 @@
             }
 
             mediaRecorder.start()
-        } catch {}
+        } catch (e) {
+            console.error(e)
+        }
         if (event.target) {
             ;(<HTMLButtonElement>event.target).blur()
         }
@@ -354,6 +371,7 @@
                         src={audioUrl}
                         bind:this={audioElement}
                         class="mb-2 ml-1 rounded-lg"
+                        style="max-width: 100%"
                     />
                 {/if}
             </div>

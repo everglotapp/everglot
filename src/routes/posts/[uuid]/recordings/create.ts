@@ -1,4 +1,5 @@
 import { validate as uuidValidate } from "uuid"
+import ffmpeg from "fluent-ffmpeg"
 
 import { serverError } from "../../../../helpers"
 
@@ -7,10 +8,27 @@ import log from "../../../../logger"
 import type { Request, Response } from "express"
 import { getPostIdByUuid, createPostRecording } from "../../../../server/posts"
 import path from "path"
+import { unlink } from "fs"
 
 const chlog = log.child({
     namespace: "posts-recordings-create",
 })
+
+async function convertToM4a(
+    parsedPath: path.ParsedPath
+): Promise<string | null> {
+    const { name, dir, base } = parsedPath
+    const inputPath = `${dir}/${base}`
+    const outputPath = `${dir}/${name}.m4a`
+    return new Promise((resolve, _reject) => {
+        ffmpeg()
+            .input(inputPath)
+            .output(outputPath)
+            .on("end", () => resolve(outputPath))
+            .on("error", () => resolve(null))
+            .run()
+    })
+}
 
 export async function post(req: Request, res: Response, next: () => void) {
     const { user_id: userId } = req.session
@@ -42,10 +60,34 @@ export async function post(req: Request, res: Response, next: () => void) {
     }
     log.child({ file, postId, userId }).debug("Parsed post recording file")
 
-    const parsedPath = path.parse(file.path)
+    let parsedPath = path.parse(file.path)
+
+    const oldExtension = parsedPath.ext.startsWith(".")
+        ? parsedPath.ext.substring(1)
+        : parsedPath.ext
+    if (oldExtension !== "m4a") {
+        const newPath = await convertToM4a(parsedPath)
+        unlink(file.path, (err) => {
+            if (err) {
+                chlog
+                    .child({ inputFile: file.path })
+                    .error(`Error deleting input file: ${err.message}`)
+            }
+            chlog
+                .child({ inputFile: file.path })
+                .debug(`Successfully deleted input file`)
+        })
+        if (!newPath) {
+            serverError(res)
+            return
+        }
+        parsedPath = path.parse(newPath)
+    }
+
     const { name, ext } = parsedPath
     const filename = name
     const extension = ext.startsWith(".") ? ext.substring(1) : ext
+
     const postRecording = await createPostRecording({
         filename,
         extension,
@@ -56,7 +98,21 @@ export async function post(req: Request, res: Response, next: () => void) {
         log.child({ parsedPath, postId, userId }).error(
             "Failed to save stored recording to database"
         )
-        // TODO: Remove file
+        const fileToDeletePath = `${parsedPath.dir}/${parsedPath.base}`
+        unlink(fileToDeletePath, (err) => {
+            if (err) {
+                chlog
+                    .child({ fileToDeletePath, parsedPath, postId, userId })
+                    .error(
+                        `Error deleting file for a post recording that we failed to record in the database: ${err.message}`
+                    )
+            }
+            chlog
+                .child({ fileToDeletePath, parsedPath, postId, userId })
+                .debug(
+                    `Successfully deleted input file for a post recording that we failed to record in the database`
+                )
+        })
         serverError(res)
         return
     }

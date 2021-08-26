@@ -117,7 +117,7 @@ export async function post(req: Request, res: Response, next: () => void) {
         return
     }
 
-    log.child({ parsedPath, postId, userId }).debug(
+    log.child({ parsedPath, postId, userId, postRecording }).debug(
         "Successfully saved new post recording"
     )
     res.status(200).json({

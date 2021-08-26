@@ -12195,6 +12195,13 @@ export type UserIdByEmailQueryVariables = Exact<{
 
 export type UserIdByEmailQuery = { __typename?: 'Query', userByEmail?: Maybe<{ __typename?: 'User', id: number }> };
 
+export type UserIdByEmailQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type UserIdByEmailQuery = { __typename?: 'Query', userByEmail?: Maybe<{ __typename?: 'User', id: number }> };
+
 export type UserLanguageInfoQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;

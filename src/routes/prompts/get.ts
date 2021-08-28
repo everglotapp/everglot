@@ -56,10 +56,17 @@ export async function get(req: Request, res: Response, _next: () => void) {
             return
         }
     }
-    promptsShownByUser[req.session.user_id!] = [
-        ...previouslyShownToUser,
-        { uuid: prompt.uuid, shownAt: new Date() },
-    ]
+    const existingEntry = (promptsShownByUser[req.session.user_id!] || []).find(
+        (entry) => entry.uuid === prompt!.uuid
+    )
+    if (existingEntry) {
+        existingEntry.shownAt = new Date()
+    } else {
+        promptsShownByUser[req.session.user_id!] = [
+            ...previouslyShownToUser,
+            { uuid: prompt.uuid, shownAt: new Date() },
+        ]
+    }
     res.json({
         success: true,
         data: {

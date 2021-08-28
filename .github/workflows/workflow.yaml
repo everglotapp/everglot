@@ -74,7 +74,8 @@ jobs:
             - name: Save DigitalOcean kubeconfig with short-lived credentials
               run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-1-20-2-do-0-ams3-1612982708095
 
-            - name: Create or update Kubernetes Secrets |
+            - name: Create or update Kubernetes Secrets
+              run: |
                   kubectl delete secret postgres --ignore-not-found
                   kubectl create secret generic postgres --from-literal=postgres-password='${{ secrets.PGPASSWORD }}'
                   kubectl delete secret session --ignore-not-found

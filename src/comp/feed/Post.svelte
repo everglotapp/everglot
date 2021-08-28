@@ -124,7 +124,7 @@
     in:scale={{ duration: 200 }}
 >
     <div class="flex flex-row">
-        <div class="pr-4">
+        <div class="pr-3 sm:pr-4">
             <Avatar username={author.username} url={author.avatarUrl} />
         </div>
         <div class="w-full">
@@ -249,7 +249,7 @@
                     class="flex flex-row ml-8 pl-4 pt-4 border-l-2 border-gray-verylight"
                     in:scale|local={{ duration: 200 }}
                 >
-                    <div class="pr-3">
+                    <div class="pr-3 sm:pr-4">
                         <Avatar
                             username={reply.author.username}
                             url={reply.author.avatarUrl}

@@ -148,7 +148,7 @@
     $: shownPrompt = pickedLocale ? prompt[pickedLocale] : null
 </script>
 
-<div class="container max-w-xl pt-4 px-2">
+<div class="container max-w-2xl pt-4 px-2">
     <div
         class="flex flex-row items-center justify-between w-full flex-nowrap mb-2"
     >
@@ -234,7 +234,7 @@
     shownPromptUuid={shownPrompt ? shownPrompt.uuid : null}
     locale={pickedLocale || null}
 />
-<div class="container max-w-2xl py-2 px-3 gap-y-1">
+<div class="container max-w-2xl py-2 px-3 sm:px-0 gap-y-1">
     {#each posts as post (post.uuid)}
         {#if post.author}
             <div class="post">

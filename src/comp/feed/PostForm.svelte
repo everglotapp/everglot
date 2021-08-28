@@ -238,7 +238,7 @@
     })
 </script>
 
-<div class="container max-w-xl mb-2 pb-4 px-2">
+<div class="container max-w-2xl mb-2 pb-4 px-2">
     <div class="flex flex-col items-end justify-center w-full flex-wrap">
         <div
             class="body-input w-full overflow-hidden overflow-ellipsis py-2 px-4 mb-2 border border-gray-light bg-gray-lightest rounded-lg"

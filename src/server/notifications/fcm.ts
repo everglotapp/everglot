@@ -66,7 +66,7 @@ async function sendNextFcmNotification() {
     if (!handleNotifications) {
         return
     }
-    chlog.trace("Checking for email notification to be sent")
+    chlog.trace("Checking for FCM notification to be sent")
     const notification = await getNextOutstandingFcmNotification()
     if (!notification) {
         sendNextFcmNotificationAfterDelay()

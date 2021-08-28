@@ -55,8 +55,8 @@ module.exports = {
                     bitlight: "#c0ccda",
                     light: "#e0e6ed",
                     verylight: "rgb(235, 240, 245)",
-                    //lightest: "#f9fafc",
-                    lightest: "rgb(239, 248, 246)",
+                    lightest: "#f9fafc",
+                    // lightest: "rgb(239, 248, 246)",
                 },
                 danger: {
                     DEFAULT: "#d23b41",

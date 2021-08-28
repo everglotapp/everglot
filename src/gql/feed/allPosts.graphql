@@ -47,6 +47,14 @@ query AllPosts {
                     parentPost {
                         uuid
                     }
+                    language {
+                        alpha2
+                    }
+                    prompt {
+                        content
+                        uuid
+                        type
+                    }
                 }
             }
             recordings {
@@ -59,6 +67,14 @@ query AllPosts {
                         uuid
                     }
                 }
+            }
+            language {
+                alpha2
+            }
+            prompt {
+                content
+                uuid
+                type
             }
         }
     }

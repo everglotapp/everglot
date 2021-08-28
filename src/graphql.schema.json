@@ -45661,6 +45661,18 @@
             "deprecationReason": null
           },
           {
+            "name": "content",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "usersByPostPromptIdAndAuthorId",
             "description": "Reads and enables pagination through a set of `User`.",
             "args": [
@@ -46262,6 +46274,18 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "DatetimeFilter",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "content",
+            "description": "Filter by the object’s `content` field.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
               "ofType": null
             },
             "defaultValue": null,

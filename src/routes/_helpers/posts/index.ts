@@ -1,6 +1,12 @@
 import { USER_CREATE_POST_RECORDING_FILE_FORM_FIELD } from "../../../constants"
+import type { SupportedLocale } from "../../../constants"
 
-export async function createPost(body: string, parentPostUuid: string | null) {
+export async function createPost(
+    body: string,
+    locale: SupportedLocale,
+    parentPostUuid: string | null,
+    promptUuid: string | null
+) {
     return await fetch("/posts/create", {
         method: "post",
         headers: {
@@ -9,7 +15,9 @@ export async function createPost(body: string, parentPostUuid: string | null) {
         },
         body: JSON.stringify({
             body: formatPostBodyForCreate(body),
+            locale,
             parentPostUuid,
+            promptUuid,
         }),
     })
 }

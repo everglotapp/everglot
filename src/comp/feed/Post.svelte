@@ -6,6 +6,7 @@
         MessageCircleIcon,
         XIcon,
         SendIcon,
+        ZapIcon,
     } from "svelte-feather-icons"
     import { query } from "@urql/svelte"
 
@@ -15,8 +16,10 @@
     import { currentUserStore, currentUserUuid } from "../../stores/currentUser"
 
     import type { AllPostsQuery } from "../../types/generated/graphql"
+    import { PromptType } from "../../types/generated/graphql"
     import { createPost } from "../../routes/_helpers/posts"
     import { allPostsStore } from "../../stores/feed"
+    import type { SupportedLocale } from "../../constants"
     import { USER_UPLOADED_RECORDINGS_BASE_PATH } from "../../constants"
 
     query(currentUserStore)
@@ -30,6 +33,8 @@
     export let likes: PostNode["likes"]
     export let replies: PostNode["replies"]
     export let recordings: PostNode["recordings"]
+    export let prompt: PostNode["prompt"]
+    export let language: PostNode["language"]
 
     $: replyNodes = replies.nodes.filter(Boolean).map((reply) => reply!)
 
@@ -44,7 +49,12 @@
         if (!newReplyBody) {
             return
         }
-        const res = await createPost(newReplyBody, uuid)
+        const res = await createPost(
+            newReplyBody,
+            language.alpha2 as SupportedLocale,
+            uuid,
+            null
+        )
         if (res.status === 200) {
             const response = await res.json()
             if (response.success) {
@@ -138,6 +148,20 @@
                     class="text-sm text-gray-bitdark"
                 />
             </div>
+            {#if prompt}
+                <div
+                    class="text-gray font-bold text-sm flex flex-wrap items-center mb-1"
+                >
+                    {#if prompt.type === PromptType.Word}
+                        <ZapIcon size="18" class="mr-1" /><span
+                            >Make a sentence with "{prompt.content}"</span
+                        >
+                    {:else if prompt.type === PromptType.Question}
+                        <ZapIcon size="18" class="mr-1" />
+                        <span>{prompt.content}</span>
+                    {/if}
+                </div>
+            {/if}
             <div>
                 {#each (body || "").split("\n") as bodyPart}
                     {bodyPart}<br />

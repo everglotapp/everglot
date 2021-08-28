@@ -9,7 +9,7 @@ import { performQuery } from "../../server/gql"
 
 import log from "../../logger"
 
-import type {
+import {
     Language,
     User,
     UserLanguage,
@@ -17,6 +17,8 @@ import type {
     CreateUserLanguageMutation,
     LanguageIdByAlpha2Query,
     Maybe,
+    LanguageIdByAlpha2,
+    CreateUserLanguage,
 } from "../../types/generated/graphql"
 import type { Pool } from "pg"
 import { AuthMethod, Gender } from "../../users"
@@ -117,27 +119,7 @@ export async function createUserLanguage({
 }) {
     let userLanguage: Partial<UserLanguage> | null = null
     const res = await performQuery<CreateUserLanguageMutation>(
-        `mutation CreateUserLanguage(
-            $languageId: Int!
-            $languageSkillLevelId: Int
-            $native: Boolean!
-            $userId: Int!
-        ) {
-            createUserLanguage(
-                input: {
-                    userLanguage: {
-                        languageId: $languageId
-                        languageSkillLevelId: $languageSkillLevelId
-                        native: $native
-                        userId: $userId
-                    }
-                }
-            ) {
-                userLanguage {
-                    id
-                }
-            }
-        }`,
+        CreateUserLanguage.loc!.source,
         {
             languageId,
             languageSkillLevelId,
@@ -162,11 +144,7 @@ export async function createUserLanguage({
 
 export async function getLanguage({ alpha2 }: { alpha2: Language["alpha2"] }) {
     const res = await performQuery<LanguageIdByAlpha2Query>(
-        `query LanguageIdByAlpha2($alpha2: String!) {
-            languageByAlpha2(alpha2: $alpha2) {
-                id
-            }
-        }`,
+        LanguageIdByAlpha2.loc!.source,
         {
             alpha2,
         }

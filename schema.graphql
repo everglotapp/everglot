@@ -7085,6 +7085,7 @@ type Prompt implements Node {
     """
     filter: PostFilter
   ): PostsConnection!
+  content: String
 
   """Reads and enables pagination through a set of `User`."""
   usersByPostPromptIdAndAuthorId(
@@ -8161,6 +8162,9 @@ input PromptFilter {
 
   """Filter by the object’s `createdAt` field."""
   createdAt: DatetimeFilter
+
+  """Filter by the object’s `content` field."""
+  content: StringFilter
 
   """Checks for all expressions in this list."""
   and: [PromptFilter!]

@@ -8379,6 +8379,7 @@ export type Prompt = Node & {
   recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
   /** Reads and enables pagination through a set of `Post`. */
   posts: PostsConnection;
+  content?: Maybe<Scalars['String']>;
   /** Reads and enables pagination through a set of `User`. */
   usersByPostPromptIdAndAuthorId: PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Post`. */
@@ -8477,6 +8478,8 @@ export type PromptFilter = {
   contentZh?: Maybe<StringFilter>;
   /** Filter by the object’s `createdAt` field. */
   createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `content` field. */
+  content?: Maybe<StringFilter>;
   /** Checks for all expressions in this list. */
   and?: Maybe<Array<PromptFilter>>;
   /** Checks for any expressions in this list. */
@@ -13060,7 +13063,7 @@ export type RegisterUserActivityMutation = { __typename?: 'Mutation', registerUs
 export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> } }>> }> };
+export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }> };
 
 export type CreatePostMutationVariables = Exact<{
   authorId: Scalars['Int'];
@@ -13112,6 +13115,13 @@ export type PostLikeIdByPostIdAndUserIdQueryVariables = Exact<{
 
 
 export type PostLikeIdByPostIdAndUserIdQuery = { __typename?: 'Query', postLikes?: Maybe<{ __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', id: number, nodeId: string }>> }> };
+
+export type PromptIdByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type PromptIdByUuidQuery = { __typename?: 'Query', promptByUuid?: Maybe<{ __typename?: 'Prompt', id: number, nodeId: string }> };
 
 export type CreateGroupUserMutationVariables = Exact<{
   userType: UserType;
@@ -13533,6 +13543,14 @@ export const AllPosts = gql`
           parentPost {
             uuid
           }
+          language {
+            alpha2
+          }
+          prompt {
+            content
+            uuid
+            type
+          }
         }
       }
       recordings {
@@ -13545,6 +13563,14 @@ export const AllPosts = gql`
             uuid
           }
         }
+      }
+      language {
+        alpha2
+      }
+      prompt {
+        content
+        uuid
+        type
       }
     }
   }
@@ -13620,6 +13646,14 @@ export const PostLikeIdByPostIdAndUserId = gql`
       nodeId
     }
     totalCount
+  }
+}
+    `;
+export const PromptIdByUuid = gql`
+    query PromptIdByUuid($uuid: UUID!) {
+  promptByUuid(uuid: $uuid) {
+    id
+    nodeId
   }
 }
     `;

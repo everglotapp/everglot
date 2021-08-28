@@ -1,0 +1,6 @@
+query PromptIdByUuid($uuid: UUID!) {
+    promptByUuid(uuid: $uuid) {
+        id
+        nodeId
+    }
+}

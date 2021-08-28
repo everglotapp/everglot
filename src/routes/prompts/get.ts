@@ -71,6 +71,7 @@ export async function get(req: Request, res: Response, _next: () => void) {
         success: true,
         data: {
             prompt: {
+                uuid: prompt.uuid,
                 content: prompt[`content_${locale}`],
                 type: prompt.type,
             },

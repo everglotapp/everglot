@@ -54,6 +54,16 @@ query AllPosts {
             uuid
             __typename
           }
+          language {
+            alpha2
+            __typename
+          }
+          prompt {
+            content
+            uuid
+            type
+            __typename
+          }
           __typename
         }
         __typename
@@ -70,6 +80,16 @@ query AllPosts {
           }
           __typename
         }
+        __typename
+      }
+      language {
+        alpha2
+        __typename
+      }
+      prompt {
+        content
+        uuid
+        type
         __typename
       }
       __typename

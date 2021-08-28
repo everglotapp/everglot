@@ -7,6 +7,9 @@ const chlog = log.child({
 
 import type { Request, Response } from "express"
 import { createPost, getPostIdByUuid } from "../../server/posts"
+import { getLanguageIdByAlpha2 } from "../../server/locales"
+import { SUPPORTED_LOCALES } from "../../constants"
+import { getPromptIdByUuid } from "../../server/prompts"
 
 const MAX_BODY_LENGTH = 2048
 
@@ -34,20 +37,55 @@ export async function post(req: Request, res: Response, _next: () => void) {
         unprocessableEntity(res, "Body must not be empty")
         return
     }
+    const locale = req.body["locale"]
+    if (!locale || typeof locale !== "string") {
+        chlog.child({ userId, body, locale }).debug("Empty locale")
+        unprocessableEntity(res, "Locale must not be empty")
+        return
+    }
+    if (!(SUPPORTED_LOCALES as readonly string[]).includes(locale)) {
+        chlog.child({ userId, body, locale }).debug("Unsupported locale")
+        unprocessableEntity(res, "Locale is not supported")
+        return
+    }
+    const languageId = await getLanguageIdByAlpha2(locale)
+    if (!languageId) {
+        chlog.child({ userId, body, locale }).debug("Unknown locale")
+        unprocessableEntity(res, "Locale is not supported")
+        return
+    }
     let parentPostId: number | null = null
     const parentPostUuid = req.body["parentPostUuid"]
     if (parentPostUuid && typeof parentPostUuid === "string") {
         const postId = await getPostIdByUuid(req.body["parentPostUuid"])
         if (!postId) {
             chlog
-                .child({ userId, body, parentPostUuid })
+                .child({ userId, body, locale, parentPostUuid })
                 .debug("Did not find parent post by UUID")
             unprocessableEntity(res, "Did not find parent post")
             return
         }
         parentPostId = postId
     }
-    const post = await createPost({ authorId: userId, body, parentPostId })
+    let promptId: number | null = null
+    const promptUuid = req.body["promptUuid"]
+    if (promptUuid && typeof promptUuid === "string") {
+        promptId = await getPromptIdByUuid(req.body["promptUuid"])
+        if (!promptId) {
+            chlog
+                .child({ userId, body, locale, promptUuid })
+                .debug("Did not find prompt by UUID")
+            unprocessableEntity(res, "Did not find prompt")
+            return
+        }
+    }
+    const post = await createPost({
+        authorId: userId,
+        languageId,
+        body,
+        parentPostId,
+        promptId,
+    })
     if (post) {
         chlog.child({ post }).debug("User successfully created post")
         res.json({

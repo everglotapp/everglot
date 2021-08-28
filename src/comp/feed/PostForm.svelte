@@ -241,11 +241,10 @@
 <div class="container max-w-xl mb-2 pb-4 px-2">
     <div class="flex flex-col items-end justify-center w-full flex-wrap">
         <div
-            class="w-full overflow-hidden overflow-ellipsis py-2 px-4 mb-2 border border-gray-light bg-gray-lightest rounded-lg"
+            class="body-input w-full overflow-hidden overflow-ellipsis py-2 px-4 mb-2 border border-gray-light bg-gray-lightest rounded-lg"
             contenteditable
             aria-multiline
             role="textbox"
-            style="word-wrap: anywhere; overflow-wrap: anywhere; white-space: break-spaces;"
             placeholder="Squeek your mind …"
             aria-placeholder="Squeek your mind …"
             bind:innerHTML={newPostBody}
@@ -359,6 +358,13 @@
 </div>
 
 <style>
+    .body-input {
+        word-wrap: anywhere;
+        overflow-wrap: anywhere;
+        white-space: break-spaces;
+        min-height: 6rem;
+    }
+
     :global(.recording) {
         @apply px-2 !important;
     }

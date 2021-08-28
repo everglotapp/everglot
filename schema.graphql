@@ -461,6 +461,40 @@ type Query implements Node {
     filter: PostFilter
   ): PostsConnection
 
+  """Reads and enables pagination through a set of `Prompt`."""
+  prompts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Prompt`."""
+    orderBy: [PromptsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PromptCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PromptFilter
+  ): PromptsConnection
+
   """Reads and enables pagination through a set of `GermanRandomQuestion`."""
   germanRandomQuestions(
     """Only read the first `n` values of the set."""
@@ -898,6 +932,8 @@ type Query implements Node {
   postRecordingByUuid(uuid: UUID!): PostRecording
   post(id: Int!): Post
   postByUuid(uuid: UUID!): Post
+  prompt(id: Int!): Prompt
+  promptByUuid(uuid: UUID!): Prompt
   germanRandomQuestion(id: Int!): GermanRandomQuestion
   germanRandomQuestionByUuid(uuid: UUID!): GermanRandomQuestion
   englishRandomQuestion(id: Int!): EnglishRandomQuestion
@@ -1078,6 +1114,12 @@ type Query implements Node {
     """The globally unique `ID` to be used in selecting a single `Post`."""
     nodeId: ID!
   ): Post
+
+  """Reads a single `Prompt` using its globally unique `ID`."""
+  promptByNodeId(
+    """The globally unique `ID` to be used in selecting a single `Prompt`."""
+    nodeId: ID!
+  ): Prompt
 
   """Reads a single `GermanRandomQuestion` using its globally unique `ID`."""
   germanRandomQuestionByNodeId(
@@ -2012,6 +2054,74 @@ type User implements Node {
     filter: PostFilter
   ): UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection!
 
+  """Reads and enables pagination through a set of `Language`."""
+  languagesByPostAuthorIdAndLanguageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Language`."""
+    orderBy: [LanguagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: LanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: LanguageFilter
+  ): UserLanguagesByPostAuthorIdAndLanguageIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Prompt`."""
+  promptsByPostAuthorIdAndPromptId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Prompt`."""
+    orderBy: [PromptsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PromptCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PromptFilter
+  ): UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection!
+
   """Reads and enables pagination through a set of `Post`."""
   postsByPostLikeUserIdAndPostId(
     """Only read the first `n` values of the set."""
@@ -2200,6 +2310,74 @@ type Language implements Node {
     filter: GroupFilter
   ): GroupsConnection!
 
+  """Reads and enables pagination through a set of `Post`."""
+  posts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+
+  """Reads and enables pagination through a set of `Prompt`."""
+  prompts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Prompt`."""
+    orderBy: [PromptsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PromptCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PromptFilter
+  ): PromptsConnection!
+
   """Reads and enables pagination through a set of `InviteToken`."""
   inviteTokensByUserLocaleAndSignedUpWithTokenId(
     """Only read the first `n` values of the set."""
@@ -2335,6 +2513,142 @@ type Language implements Node {
     """
     filter: LanguageSkillLevelFilter
   ): LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByPostLanguageIdAndAuthorId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): LanguageUsersByPostLanguageIdAndAuthorIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Post`."""
+  postsByPostLanguageIdAndParentPostId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): LanguagePostsByPostLanguageIdAndParentPostIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Prompt`."""
+  promptsByPostLanguageIdAndPromptId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Prompt`."""
+    orderBy: [PromptsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PromptCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PromptFilter
+  ): LanguagePromptsByPostLanguageIdAndPromptIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `LanguageSkillLevel`."""
+  languageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `LanguageSkillLevel`."""
+    orderBy: [LanguageSkillLevelsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: LanguageSkillLevelCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: LanguageSkillLevelFilter
+  ): LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyConnection!
 }
 
 """A connection to a list of `User` values."""
@@ -3268,6 +3582,40 @@ type LanguageSkillLevel implements Node {
     filter: ChineseGuessCharacterQuestionFilter
   ): ChineseGuessCharacterQuestionsConnection!
 
+  """Reads and enables pagination through a set of `Prompt`."""
+  promptsByRecommendedSkillLevelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Prompt`."""
+    orderBy: [PromptsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PromptCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PromptFilter
+  ): PromptsConnection!
+
   """Reads and enables pagination through a set of `User`."""
   usersByUserLanguageLanguageSkillLevelIdAndUserId(
     """Only read the first `n` values of the set."""
@@ -3369,6 +3717,40 @@ type LanguageSkillLevel implements Node {
     """
     filter: LanguageFilter
   ): LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Language`."""
+  languagesByPromptRecommendedSkillLevelIdAndLanguageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Language`."""
+    orderBy: [LanguagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: LanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: LanguageFilter
+  ): LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyConnection!
 }
 
 """Methods to use when ordering `UserLanguage`."""
@@ -6632,6 +7014,1526 @@ input ChineseGuessCharacterQuestionFilter {
   not: ChineseGuessCharacterQuestionFilter
 }
 
+"""A connection to a list of `Prompt` values."""
+type PromptsConnection {
+  """A list of `Prompt` objects."""
+  nodes: [Prompt]!
+
+  """
+  A list of edges which contains the `Prompt` and cursor to aid in pagination.
+  """
+  edges: [PromptsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Prompt` you could get from the connection."""
+  totalCount: Int!
+}
+
+type Prompt implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  languageId: Int!
+  recommendedSkillLevelId: Int
+  type: PromptType!
+  contentEn: String
+  contentDe: String
+  contentZh: String
+  createdAt: Datetime!
+
+  """Reads a single `Language` that is related to this `Prompt`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Prompt`."""
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """Reads and enables pagination through a set of `Post`."""
+  posts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByPostPromptIdAndAuthorId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Post`."""
+  postsByPostPromptIdAndParentPostId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PromptPostsByPostPromptIdAndParentPostIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Language`."""
+  languagesByPostPromptIdAndLanguageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Language`."""
+    orderBy: [LanguagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: LanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: LanguageFilter
+  ): PromptLanguagesByPostPromptIdAndLanguageIdManyToManyConnection!
+}
+
+enum PromptType {
+  QUESTION
+  WORD
+}
+
+"""A connection to a list of `Post` values."""
+type PostsConnection {
+  """A list of `Post` objects."""
+  nodes: [Post]!
+
+  """
+  A list of edges which contains the `Post` and cursor to aid in pagination.
+  """
+  edges: [PostsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Post` you could get from the connection."""
+  totalCount: Int!
+}
+
+type Post implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  authorId: Int
+  body: String!
+  parentPostId: Int
+  createdAt: Datetime!
+  languageId: Int!
+  promptId: Int
+
+  """Reads a single `User` that is related to this `Post`."""
+  author: User
+
+  """Reads a single `Post` that is related to this `Post`."""
+  parentPost: Post
+
+  """Reads a single `Language` that is related to this `Post`."""
+  language: Language
+
+  """Reads a single `Prompt` that is related to this `Post`."""
+  prompt: Prompt
+
+  """Reads and enables pagination through a set of `Post`."""
+  replies(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+
+  """Reads and enables pagination through a set of `PostLike`."""
+  likes(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostLike`."""
+    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostLikeCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostLikeFilter
+  ): PostLikesConnection!
+
+  """Reads and enables pagination through a set of `PostRecording`."""
+  recordings(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostRecording`."""
+    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostRecordingCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostRecordingFilter
+  ): PostRecordingsConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByPostParentPostIdAndAuthorId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Language`."""
+  languagesByPostParentPostIdAndLanguageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Language`."""
+    orderBy: [LanguagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: LanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: LanguageFilter
+  ): PostLanguagesByPostParentPostIdAndLanguageIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Prompt`."""
+  promptsByPostParentPostIdAndPromptId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Prompt`."""
+    orderBy: [PromptsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PromptCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PromptFilter
+  ): PostPromptsByPostParentPostIdAndPromptIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByPostLikePostIdAndUserId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): PostUsersByPostLikePostIdAndUserIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByPostRecordingPostIdAndUserId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection!
+}
+
+"""Methods to use when ordering `Post`."""
+enum PostsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  AUTHOR_ID_ASC
+  AUTHOR_ID_DESC
+  BODY_ASC
+  BODY_DESC
+  PARENT_POST_ID_ASC
+  PARENT_POST_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  LANGUAGE_ID_ASC
+  LANGUAGE_ID_DESC
+  PROMPT_ID_ASC
+  PROMPT_ID_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Post` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input PostCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `authorId` field."""
+  authorId: Int
+
+  """Checks for equality with the object’s `body` field."""
+  body: String
+
+  """Checks for equality with the object’s `parentPostId` field."""
+  parentPostId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+
+  """Checks for equality with the object’s `languageId` field."""
+  languageId: Int
+
+  """Checks for equality with the object’s `promptId` field."""
+  promptId: Int
+}
+
+"""
+A filter to be used against `Post` object types. All fields are combined with a logical ‘and.’
+"""
+input PostFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `authorId` field."""
+  authorId: IntFilter
+
+  """Filter by the object’s `body` field."""
+  body: StringFilter
+
+  """Filter by the object’s `parentPostId` field."""
+  parentPostId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Filter by the object’s `languageId` field."""
+  languageId: IntFilter
+
+  """Filter by the object’s `promptId` field."""
+  promptId: IntFilter
+
+  """Checks for all expressions in this list."""
+  and: [PostFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PostFilter!]
+
+  """Negates the expression."""
+  not: PostFilter
+}
+
+"""A connection to a list of `PostLike` values."""
+type PostLikesConnection {
+  """A list of `PostLike` objects."""
+  nodes: [PostLike]!
+
+  """
+  A list of edges which contains the `PostLike` and cursor to aid in pagination.
+  """
+  edges: [PostLikesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `PostLike` you could get from the connection."""
+  totalCount: Int!
+}
+
+type PostLike implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  userId: Int!
+  postId: Int!
+  createdAt: Datetime!
+
+  """Reads a single `User` that is related to this `PostLike`."""
+  user: User
+
+  """Reads a single `Post` that is related to this `PostLike`."""
+  post: Post
+}
+
+"""A `PostLike` edge in the connection."""
+type PostLikesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PostLike` at the end of the edge."""
+  node: PostLike
+}
+
+"""Methods to use when ordering `PostLike`."""
+enum PostLikesOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  POST_ID_ASC
+  POST_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `PostLike` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input PostLikeCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `postId` field."""
+  postId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `PostLike` object types. All fields are combined with a logical ‘and.’
+"""
+input PostLikeFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `postId` field."""
+  postId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [PostLikeFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PostLikeFilter!]
+
+  """Negates the expression."""
+  not: PostLikeFilter
+}
+
+"""A connection to a list of `PostRecording` values."""
+type PostRecordingsConnection {
+  """A list of `PostRecording` objects."""
+  nodes: [PostRecording]!
+
+  """
+  A list of edges which contains the `PostRecording` and cursor to aid in pagination.
+  """
+  edges: [PostRecordingsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `PostRecording` you could get from the connection."""
+  totalCount: Int!
+}
+
+type PostRecording implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  userId: Int!
+  postId: Int!
+
+  """Basename without extension"""
+  filename: String!
+
+  """Extension without leading dot"""
+  extension: String
+  createdAt: Datetime!
+
+  """Reads a single `User` that is related to this `PostRecording`."""
+  user: User
+
+  """Reads a single `Post` that is related to this `PostRecording`."""
+  post: Post
+}
+
+"""A `PostRecording` edge in the connection."""
+type PostRecordingsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PostRecording` at the end of the edge."""
+  node: PostRecording
+}
+
+"""Methods to use when ordering `PostRecording`."""
+enum PostRecordingsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  POST_ID_ASC
+  POST_ID_DESC
+  FILENAME_ASC
+  FILENAME_DESC
+  EXTENSION_ASC
+  EXTENSION_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `PostRecording` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input PostRecordingCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `postId` field."""
+  postId: Int
+
+  """Checks for equality with the object’s `filename` field."""
+  filename: String
+
+  """Checks for equality with the object’s `extension` field."""
+  extension: String
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `PostRecording` object types. All fields are combined with a logical ‘and.’
+"""
+input PostRecordingFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `postId` field."""
+  postId: IntFilter
+
+  """Filter by the object’s `filename` field."""
+  filename: StringFilter
+
+  """Filter by the object’s `extension` field."""
+  extension: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [PostRecordingFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PostRecordingFilter!]
+
+  """Negates the expression."""
+  not: PostRecordingFilter
+}
+
+"""A connection to a list of `User` values, with data from `Post`."""
+type PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Post`."""
+type PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Post`."""
+  authoredPosts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""A connection to a list of `Language` values, with data from `Post`."""
+type PostLanguagesByPostParentPostIdAndLanguageIdManyToManyConnection {
+  """A list of `Language` objects."""
+  nodes: [Language]!
+
+  """
+  A list of edges which contains the `Language`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Language` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Language` edge in the connection, with data from `Post`."""
+type PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Language` at the end of the edge."""
+  node: Language
+
+  """Reads and enables pagination through a set of `Post`."""
+  posts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""Methods to use when ordering `Language`."""
+enum LanguagesOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  ALPHA2_ASC
+  ALPHA2_DESC
+  ENGLISH_NAME_ASC
+  ENGLISH_NAME_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Language` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input LanguageCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `alpha2` field."""
+  alpha2: String
+
+  """Checks for equality with the object’s `englishName` field."""
+  englishName: String
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `Language` object types. All fields are combined with a logical ‘and.’
+"""
+input LanguageFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `alpha2` field."""
+  alpha2: StringFilter
+
+  """Filter by the object’s `englishName` field."""
+  englishName: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [LanguageFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [LanguageFilter!]
+
+  """Negates the expression."""
+  not: LanguageFilter
+}
+
+"""A connection to a list of `Prompt` values, with data from `Post`."""
+type PostPromptsByPostParentPostIdAndPromptIdManyToManyConnection {
+  """A list of `Prompt` objects."""
+  nodes: [Prompt]!
+
+  """
+  A list of edges which contains the `Prompt`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [PostPromptsByPostParentPostIdAndPromptIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Prompt` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Prompt` edge in the connection, with data from `Post`."""
+type PostPromptsByPostParentPostIdAndPromptIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Prompt` at the end of the edge."""
+  node: Prompt
+
+  """Reads and enables pagination through a set of `Post`."""
+  posts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""Methods to use when ordering `Prompt`."""
+enum PromptsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  LANGUAGE_ID_ASC
+  LANGUAGE_ID_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  TYPE_ASC
+  TYPE_DESC
+  CONTENT_EN_ASC
+  CONTENT_EN_DESC
+  CONTENT_DE_ASC
+  CONTENT_DE_DESC
+  CONTENT_ZH_ASC
+  CONTENT_ZH_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Prompt` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input PromptCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `languageId` field."""
+  languageId: Int
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `type` field."""
+  type: PromptType
+
+  """Checks for equality with the object’s `contentEn` field."""
+  contentEn: String
+
+  """Checks for equality with the object’s `contentDe` field."""
+  contentDe: String
+
+  """Checks for equality with the object’s `contentZh` field."""
+  contentZh: String
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `Prompt` object types. All fields are combined with a logical ‘and.’
+"""
+input PromptFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `languageId` field."""
+  languageId: IntFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `type` field."""
+  type: PromptTypeFilter
+
+  """Filter by the object’s `contentEn` field."""
+  contentEn: StringFilter
+
+  """Filter by the object’s `contentDe` field."""
+  contentDe: StringFilter
+
+  """Filter by the object’s `contentZh` field."""
+  contentZh: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [PromptFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PromptFilter!]
+
+  """Negates the expression."""
+  not: PromptFilter
+}
+
+"""
+A filter to be used against PromptType fields. All fields are combined with a logical ‘and.’
+"""
+input PromptTypeFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: PromptType
+
+  """Not equal to the specified value."""
+  notEqualTo: PromptType
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: PromptType
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: PromptType
+
+  """Included in the specified list."""
+  in: [PromptType!]
+
+  """Not included in the specified list."""
+  notIn: [PromptType!]
+
+  """Less than the specified value."""
+  lessThan: PromptType
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: PromptType
+
+  """Greater than the specified value."""
+  greaterThan: PromptType
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: PromptType
+}
+
+"""A connection to a list of `User` values, with data from `PostLike`."""
+type PostUsersByPostLikePostIdAndUserIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `PostLike`, and the cursor to aid in pagination.
+  """
+  edges: [PostUsersByPostLikePostIdAndUserIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `PostLike`."""
+type PostUsersByPostLikePostIdAndUserIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `PostLike`."""
+  postLikes(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostLike`."""
+    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostLikeCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostLikeFilter
+  ): PostLikesConnection!
+}
+
+"""
+A connection to a list of `User` values, with data from `PostRecording`.
+"""
+type PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `PostRecording`, and the cursor to aid in pagination.
+  """
+  edges: [PostUsersByPostRecordingPostIdAndUserIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `PostRecording`."""
+type PostUsersByPostRecordingPostIdAndUserIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `PostRecording`."""
+  postRecordings(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostRecording`."""
+    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostRecordingCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostRecordingFilter
+  ): PostRecordingsConnection!
+}
+
+"""A `Post` edge in the connection."""
+type PostsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Post` at the end of the edge."""
+  node: Post
+}
+
+"""A connection to a list of `User` values, with data from `Post`."""
+type PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Post`."""
+type PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Post`."""
+  authoredPosts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""A connection to a list of `Post` values, with data from `Post`."""
+type PromptPostsByPostPromptIdAndParentPostIdManyToManyConnection {
+  """A list of `Post` objects."""
+  nodes: [Post]!
+
+  """
+  A list of edges which contains the `Post`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Post` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Post` edge in the connection, with data from `Post`."""
+type PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Post` at the end of the edge."""
+  node: Post
+
+  """Reads and enables pagination through a set of `Post`."""
+  replies(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""A connection to a list of `Language` values, with data from `Post`."""
+type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyConnection {
+  """A list of `Language` objects."""
+  nodes: [Language]!
+
+  """
+  A list of edges which contains the `Language`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Language` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Language` edge in the connection, with data from `Post`."""
+type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Language` at the end of the edge."""
+  node: Language
+
+  """Reads and enables pagination through a set of `Post`."""
+  posts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""A `Prompt` edge in the connection."""
+type PromptsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Prompt` at the end of the edge."""
+  node: Prompt
+}
+
 """
 A connection to a list of `User` values, with data from `UserLanguage`.
 """
@@ -6756,65 +8658,6 @@ type LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdM
   ): UserLanguagesConnection!
 }
 
-"""Methods to use when ordering `Language`."""
-enum LanguagesOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  ALPHA2_ASC
-  ALPHA2_DESC
-  ENGLISH_NAME_ASC
-  ENGLISH_NAME_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `Language` object types. All fields are tested
-for equality and combined with a logical ‘and.’
-"""
-input LanguageCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `alpha2` field."""
-  alpha2: String
-
-  """Checks for equality with the object’s `englishName` field."""
-  englishName: String
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `Language` object types. All fields are combined with a logical ‘and.’
-"""
-input LanguageFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `alpha2` field."""
-  alpha2: StringFilter
-
-  """Filter by the object’s `englishName` field."""
-  englishName: StringFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [LanguageFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [LanguageFilter!]
-
-  """Negates the expression."""
-  not: LanguageFilter
-}
-
 """A connection to a list of `Language` values, with data from `Group`."""
 type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToManyConnection {
   """A list of `Language` objects."""
@@ -6873,6 +8716,66 @@ type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToMa
     """
     filter: GroupFilter
   ): GroupsConnection!
+}
+
+"""A connection to a list of `Language` values, with data from `Prompt`."""
+type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyConnection {
+  """A list of `Language` objects."""
+  nodes: [Language]!
+
+  """
+  A list of edges which contains the `Language`, info from the `Prompt`, and the cursor to aid in pagination.
+  """
+  edges: [LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Language` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Language` edge in the connection, with data from `Prompt`."""
+type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Language` at the end of the edge."""
+  node: Language
+
+  """Reads and enables pagination through a set of `Prompt`."""
+  prompts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Prompt`."""
+    orderBy: [PromptsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PromptCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PromptFilter
+  ): PromptsConnection!
 }
 
 """A `UserLanguage` edge in the connection."""
@@ -7389,6 +9292,252 @@ type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdManyToMa
   ): GroupsConnection!
 }
 
+"""A connection to a list of `User` values, with data from `Post`."""
+type LanguageUsersByPostLanguageIdAndAuthorIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [LanguageUsersByPostLanguageIdAndAuthorIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Post`."""
+type LanguageUsersByPostLanguageIdAndAuthorIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Post`."""
+  authoredPosts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""A connection to a list of `Post` values, with data from `Post`."""
+type LanguagePostsByPostLanguageIdAndParentPostIdManyToManyConnection {
+  """A list of `Post` objects."""
+  nodes: [Post]!
+
+  """
+  A list of edges which contains the `Post`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [LanguagePostsByPostLanguageIdAndParentPostIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Post` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Post` edge in the connection, with data from `Post`."""
+type LanguagePostsByPostLanguageIdAndParentPostIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Post` at the end of the edge."""
+  node: Post
+
+  """Reads and enables pagination through a set of `Post`."""
+  replies(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""A connection to a list of `Prompt` values, with data from `Post`."""
+type LanguagePromptsByPostLanguageIdAndPromptIdManyToManyConnection {
+  """A list of `Prompt` objects."""
+  nodes: [Prompt]!
+
+  """
+  A list of edges which contains the `Prompt`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [LanguagePromptsByPostLanguageIdAndPromptIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Prompt` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Prompt` edge in the connection, with data from `Post`."""
+type LanguagePromptsByPostLanguageIdAndPromptIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Prompt` at the end of the edge."""
+  node: Prompt
+
+  """Reads and enables pagination through a set of `Post`."""
+  posts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""
+A connection to a list of `LanguageSkillLevel` values, with data from `Prompt`.
+"""
+type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyConnection {
+  """A list of `LanguageSkillLevel` objects."""
+  nodes: [LanguageSkillLevel]!
+
+  """
+  A list of edges which contains the `LanguageSkillLevel`, info from the `Prompt`, and the cursor to aid in pagination.
+  """
+  edges: [LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `LanguageSkillLevel` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `LanguageSkillLevel` edge in the connection, with data from `Prompt`.
+"""
+type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `LanguageSkillLevel` at the end of the edge."""
+  node: LanguageSkillLevel
+
+  """Reads and enables pagination through a set of `Prompt`."""
+  promptsByRecommendedSkillLevelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Prompt`."""
+    orderBy: [PromptsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PromptCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PromptFilter
+  ): PromptsConnection!
+}
+
 """A connection to a list of `InviteToken` values."""
 type InviteTokensConnection {
   """A list of `InviteToken` objects."""
@@ -7521,746 +9670,6 @@ input UserDeviceFilter {
 
   """Negates the expression."""
   not: UserDeviceFilter
-}
-
-"""A connection to a list of `Post` values."""
-type PostsConnection {
-  """A list of `Post` objects."""
-  nodes: [Post]!
-
-  """
-  A list of edges which contains the `Post` and cursor to aid in pagination.
-  """
-  edges: [PostsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Post` you could get from the connection."""
-  totalCount: Int!
-}
-
-type Post implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  authorId: Int
-  body: String!
-  parentPostId: Int
-  createdAt: Datetime!
-
-  """Reads a single `User` that is related to this `Post`."""
-  author: User
-
-  """Reads a single `Post` that is related to this `Post`."""
-  parentPost: Post
-
-  """Reads and enables pagination through a set of `Post`."""
-  replies(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Post`."""
-    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PostCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PostFilter
-  ): PostsConnection!
-
-  """Reads and enables pagination through a set of `PostLike`."""
-  likes(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `PostLike`."""
-    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PostLikeCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PostLikeFilter
-  ): PostLikesConnection!
-
-  """Reads and enables pagination through a set of `PostRecording`."""
-  recordings(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `PostRecording`."""
-    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PostRecordingCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PostRecordingFilter
-  ): PostRecordingsConnection!
-
-  """Reads and enables pagination through a set of `User`."""
-  usersByPostParentPostIdAndAuthorId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `User`."""
-    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: UserCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: UserFilter
-  ): PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection!
-
-  """Reads and enables pagination through a set of `User`."""
-  usersByPostLikePostIdAndUserId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `User`."""
-    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: UserCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: UserFilter
-  ): PostUsersByPostLikePostIdAndUserIdManyToManyConnection!
-
-  """Reads and enables pagination through a set of `User`."""
-  usersByPostRecordingPostIdAndUserId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `User`."""
-    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: UserCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: UserFilter
-  ): PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection!
-}
-
-"""Methods to use when ordering `Post`."""
-enum PostsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  AUTHOR_ID_ASC
-  AUTHOR_ID_DESC
-  BODY_ASC
-  BODY_DESC
-  PARENT_POST_ID_ASC
-  PARENT_POST_ID_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `Post` object types. All fields are tested for equality and combined with a logical ‘and.’
-"""
-input PostCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `authorId` field."""
-  authorId: Int
-
-  """Checks for equality with the object’s `body` field."""
-  body: String
-
-  """Checks for equality with the object’s `parentPostId` field."""
-  parentPostId: Int
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `Post` object types. All fields are combined with a logical ‘and.’
-"""
-input PostFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `authorId` field."""
-  authorId: IntFilter
-
-  """Filter by the object’s `body` field."""
-  body: StringFilter
-
-  """Filter by the object’s `parentPostId` field."""
-  parentPostId: IntFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [PostFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [PostFilter!]
-
-  """Negates the expression."""
-  not: PostFilter
-}
-
-"""A connection to a list of `PostLike` values."""
-type PostLikesConnection {
-  """A list of `PostLike` objects."""
-  nodes: [PostLike]!
-
-  """
-  A list of edges which contains the `PostLike` and cursor to aid in pagination.
-  """
-  edges: [PostLikesEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `PostLike` you could get from the connection."""
-  totalCount: Int!
-}
-
-type PostLike implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  userId: Int!
-  postId: Int!
-  createdAt: Datetime!
-
-  """Reads a single `User` that is related to this `PostLike`."""
-  user: User
-
-  """Reads a single `Post` that is related to this `PostLike`."""
-  post: Post
-}
-
-"""A `PostLike` edge in the connection."""
-type PostLikesEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `PostLike` at the end of the edge."""
-  node: PostLike
-}
-
-"""Methods to use when ordering `PostLike`."""
-enum PostLikesOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  USER_ID_ASC
-  USER_ID_DESC
-  POST_ID_ASC
-  POST_ID_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `PostLike` object types. All fields are tested
-for equality and combined with a logical ‘and.’
-"""
-input PostLikeCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `userId` field."""
-  userId: Int
-
-  """Checks for equality with the object’s `postId` field."""
-  postId: Int
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `PostLike` object types. All fields are combined with a logical ‘and.’
-"""
-input PostLikeFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `userId` field."""
-  userId: IntFilter
-
-  """Filter by the object’s `postId` field."""
-  postId: IntFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [PostLikeFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [PostLikeFilter!]
-
-  """Negates the expression."""
-  not: PostLikeFilter
-}
-
-"""A connection to a list of `PostRecording` values."""
-type PostRecordingsConnection {
-  """A list of `PostRecording` objects."""
-  nodes: [PostRecording]!
-
-  """
-  A list of edges which contains the `PostRecording` and cursor to aid in pagination.
-  """
-  edges: [PostRecordingsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `PostRecording` you could get from the connection."""
-  totalCount: Int!
-}
-
-type PostRecording implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  userId: Int!
-  postId: Int!
-
-  """Basename without extension"""
-  filename: String!
-
-  """Extension without leading dot"""
-  extension: String
-  createdAt: Datetime!
-
-  """Reads a single `User` that is related to this `PostRecording`."""
-  user: User
-
-  """Reads a single `Post` that is related to this `PostRecording`."""
-  post: Post
-}
-
-"""A `PostRecording` edge in the connection."""
-type PostRecordingsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `PostRecording` at the end of the edge."""
-  node: PostRecording
-}
-
-"""Methods to use when ordering `PostRecording`."""
-enum PostRecordingsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  USER_ID_ASC
-  USER_ID_DESC
-  POST_ID_ASC
-  POST_ID_DESC
-  FILENAME_ASC
-  FILENAME_DESC
-  EXTENSION_ASC
-  EXTENSION_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `PostRecording` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input PostRecordingCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `userId` field."""
-  userId: Int
-
-  """Checks for equality with the object’s `postId` field."""
-  postId: Int
-
-  """Checks for equality with the object’s `filename` field."""
-  filename: String
-
-  """Checks for equality with the object’s `extension` field."""
-  extension: String
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `PostRecording` object types. All fields are combined with a logical ‘and.’
-"""
-input PostRecordingFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `userId` field."""
-  userId: IntFilter
-
-  """Filter by the object’s `postId` field."""
-  postId: IntFilter
-
-  """Filter by the object’s `filename` field."""
-  filename: StringFilter
-
-  """Filter by the object’s `extension` field."""
-  extension: StringFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [PostRecordingFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [PostRecordingFilter!]
-
-  """Negates the expression."""
-  not: PostRecordingFilter
-}
-
-"""A connection to a list of `User` values, with data from `Post`."""
-type PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection {
-  """A list of `User` objects."""
-  nodes: [User]!
-
-  """
-  A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination.
-  """
-  edges: [PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `User` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `User` edge in the connection, with data from `Post`."""
-type PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `User` at the end of the edge."""
-  node: User
-
-  """Reads and enables pagination through a set of `Post`."""
-  authoredPosts(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Post`."""
-    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PostCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PostFilter
-  ): PostsConnection!
-}
-
-"""A connection to a list of `User` values, with data from `PostLike`."""
-type PostUsersByPostLikePostIdAndUserIdManyToManyConnection {
-  """A list of `User` objects."""
-  nodes: [User]!
-
-  """
-  A list of edges which contains the `User`, info from the `PostLike`, and the cursor to aid in pagination.
-  """
-  edges: [PostUsersByPostLikePostIdAndUserIdManyToManyEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `User` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `User` edge in the connection, with data from `PostLike`."""
-type PostUsersByPostLikePostIdAndUserIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `User` at the end of the edge."""
-  node: User
-
-  """Reads and enables pagination through a set of `PostLike`."""
-  postLikes(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `PostLike`."""
-    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PostLikeCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PostLikeFilter
-  ): PostLikesConnection!
-}
-
-"""
-A connection to a list of `User` values, with data from `PostRecording`.
-"""
-type PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection {
-  """A list of `User` objects."""
-  nodes: [User]!
-
-  """
-  A list of edges which contains the `User`, info from the `PostRecording`, and the cursor to aid in pagination.
-  """
-  edges: [PostUsersByPostRecordingPostIdAndUserIdManyToManyEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `User` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `User` edge in the connection, with data from `PostRecording`."""
-type PostUsersByPostRecordingPostIdAndUserIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `User` at the end of the edge."""
-  node: User
-
-  """Reads and enables pagination through a set of `PostRecording`."""
-  postRecordings(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `PostRecording`."""
-    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PostRecordingCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PostRecordingFilter
-  ): PostRecordingsConnection!
-}
-
-"""A `Post` edge in the connection."""
-type PostsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Post` at the end of the edge."""
-  node: Post
 }
 
 """
@@ -8999,6 +10408,126 @@ type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdge {
   ): PostsConnection!
 }
 
+"""A connection to a list of `Language` values, with data from `Post`."""
+type UserLanguagesByPostAuthorIdAndLanguageIdManyToManyConnection {
+  """A list of `Language` objects."""
+  nodes: [Language]!
+
+  """
+  A list of edges which contains the `Language`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [UserLanguagesByPostAuthorIdAndLanguageIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Language` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Language` edge in the connection, with data from `Post`."""
+type UserLanguagesByPostAuthorIdAndLanguageIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Language` at the end of the edge."""
+  node: Language
+
+  """Reads and enables pagination through a set of `Post`."""
+  posts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""A connection to a list of `Prompt` values, with data from `Post`."""
+type UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection {
+  """A list of `Prompt` objects."""
+  nodes: [Prompt]!
+
+  """
+  A list of edges which contains the `Prompt`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [UserPromptsByPostAuthorIdAndPromptIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Prompt` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Prompt` edge in the connection, with data from `Post`."""
+type UserPromptsByPostAuthorIdAndPromptIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Prompt` at the end of the edge."""
+  node: Prompt
+
+  """Reads and enables pagination through a set of `Post`."""
+  posts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
 """A connection to a list of `Post` values, with data from `PostLike`."""
 type UserPostsByPostLikeUserIdAndPostIdManyToManyConnection {
   """A list of `Post` objects."""
@@ -9413,6 +10942,14 @@ type Mutation {
     input: CreatePostInput!
   ): CreatePostPayload
 
+  """Creates a single `Prompt`."""
+  createPrompt(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePromptInput!
+  ): CreatePromptPayload
+
   """Creates a single `GermanRandomQuestion`."""
   createGermanRandomQuestion(
     """
@@ -9822,6 +11359,30 @@ type Mutation {
     """
     input: UpdatePostByUuidInput!
   ): UpdatePostPayload
+
+  """Updates a single `Prompt` using its globally unique id and a patch."""
+  updatePromptByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePromptByNodeIdInput!
+  ): UpdatePromptPayload
+
+  """Updates a single `Prompt` using a unique key and a patch."""
+  updatePrompt(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePromptInput!
+  ): UpdatePromptPayload
+
+  """Updates a single `Prompt` using a unique key and a patch."""
+  updatePromptByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePromptByUuidInput!
+  ): UpdatePromptPayload
 
   """
   Updates a single `GermanRandomQuestion` using its globally unique id and a patch.
@@ -10462,6 +12023,30 @@ type Mutation {
     """
     input: DeletePostByUuidInput!
   ): DeletePostPayload
+
+  """Deletes a single `Prompt` using its globally unique id."""
+  deletePromptByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePromptByNodeIdInput!
+  ): DeletePromptPayload
+
+  """Deletes a single `Prompt` using a unique key."""
+  deletePrompt(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePromptInput!
+  ): DeletePromptPayload
+
+  """Deletes a single `Prompt` using a unique key."""
+  deletePromptByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePromptByUuidInput!
+  ): DeletePromptPayload
 
   """Deletes a single `GermanRandomQuestion` using its globally unique id."""
   deleteGermanRandomQuestionByNodeId(
@@ -11408,6 +12993,12 @@ type CreatePostPayload {
   """Reads a single `Post` that is related to this `Post`."""
   parentPost: Post
 
+  """Reads a single `Language` that is related to this `Post`."""
+  language: Language
+
+  """Reads a single `Prompt` that is related to this `Post`."""
+  prompt: Prompt
+
   """An edge for our `Post`. May be used by Relay 1."""
   postEdge(
     """The method to use when ordering `Post`."""
@@ -11434,6 +13025,62 @@ input PostInput {
   authorId: Int
   body: String!
   parentPostId: Int
+  createdAt: Datetime
+  languageId: Int!
+  promptId: Int
+}
+
+"""The output of our create `Prompt` mutation."""
+type CreatePromptPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Prompt` that was created by this mutation."""
+  prompt: Prompt
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Language` that is related to this `Prompt`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Prompt`."""
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `Prompt`. May be used by Relay 1."""
+  promptEdge(
+    """The method to use when ordering `Prompt`."""
+    orderBy: [PromptsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PromptsEdge
+}
+
+"""All input for the create `Prompt` mutation."""
+input CreatePromptInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Prompt` to be created by this mutation."""
+  prompt: PromptInput!
+}
+
+"""An input for mutations affecting `Prompt`"""
+input PromptInput {
+  id: Int
+  uuid: UUID
+  languageId: Int!
+  recommendedSkillLevelId: Int
+  type: PromptType!
+  contentEn: String
+  contentDe: String
+  contentZh: String
   createdAt: Datetime
 }
 
@@ -13127,6 +14774,12 @@ type UpdatePostPayload {
   """Reads a single `Post` that is related to this `Post`."""
   parentPost: Post
 
+  """Reads a single `Language` that is related to this `Post`."""
+  language: Language
+
+  """Reads a single `Prompt` that is related to this `Post`."""
+  prompt: Prompt
+
   """An edge for our `Post`. May be used by Relay 1."""
   postEdge(
     """The method to use when ordering `Post`."""
@@ -13161,6 +14814,8 @@ input PostPatch {
   body: String
   parentPostId: Int
   createdAt: Datetime
+  languageId: Int
+  promptId: Int
 }
 
 """All input for the `updatePost` mutation."""
@@ -13190,6 +14845,99 @@ input UpdatePostByUuidInput {
   An object where the defined keys will be set on the `Post` being updated.
   """
   patch: PostPatch!
+  uuid: UUID!
+}
+
+"""The output of our update `Prompt` mutation."""
+type UpdatePromptPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Prompt` that was updated by this mutation."""
+  prompt: Prompt
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Language` that is related to this `Prompt`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Prompt`."""
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `Prompt`. May be used by Relay 1."""
+  promptEdge(
+    """The method to use when ordering `Prompt`."""
+    orderBy: [PromptsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PromptsEdge
+}
+
+"""All input for the `updatePromptByNodeId` mutation."""
+input UpdatePromptByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Prompt` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Prompt` being updated.
+  """
+  patch: PromptPatch!
+}
+
+"""
+Represents an update to a `Prompt`. Fields that are set will be updated.
+"""
+input PromptPatch {
+  id: Int
+  uuid: UUID
+  languageId: Int
+  recommendedSkillLevelId: Int
+  type: PromptType
+  contentEn: String
+  contentDe: String
+  contentZh: String
+  createdAt: Datetime
+}
+
+"""All input for the `updatePrompt` mutation."""
+input UpdatePromptInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Prompt` being updated.
+  """
+  patch: PromptPatch!
+  id: Int!
+}
+
+"""All input for the `updatePromptByUuid` mutation."""
+input UpdatePromptByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Prompt` being updated.
+  """
+  patch: PromptPatch!
   uuid: UUID!
 }
 
@@ -15065,6 +16813,12 @@ type DeletePostPayload {
   """Reads a single `Post` that is related to this `Post`."""
   parentPost: Post
 
+  """Reads a single `Language` that is related to this `Post`."""
+  language: Language
+
+  """Reads a single `Prompt` that is related to this `Post`."""
+  prompt: Prompt
+
   """An edge for our `Post`. May be used by Relay 1."""
   postEdge(
     """The method to use when ordering `Post`."""
@@ -15098,6 +16852,70 @@ input DeletePostInput {
 
 """All input for the `deletePostByUuid` mutation."""
 input DeletePostByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `Prompt` mutation."""
+type DeletePromptPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Prompt` that was deleted by this mutation."""
+  prompt: Prompt
+  deletedPromptNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Language` that is related to this `Prompt`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Prompt`."""
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `Prompt`. May be used by Relay 1."""
+  promptEdge(
+    """The method to use when ordering `Prompt`."""
+    orderBy: [PromptsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PromptsEdge
+}
+
+"""All input for the `deletePromptByNodeId` mutation."""
+input DeletePromptByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Prompt` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deletePrompt` mutation."""
+input DeletePromptInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deletePromptByUuid` mutation."""
+input DeletePromptByUuidInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.

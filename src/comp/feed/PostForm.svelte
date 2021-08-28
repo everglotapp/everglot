@@ -14,6 +14,7 @@
         ChevronDownIcon,
         ChevronUpIcon,
     } from "svelte-feather-icons"
+    import { query } from "@urql/svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import {
         createPost,
@@ -21,6 +22,13 @@
     } from "../../routes/_helpers/posts"
     import { getSupportedMimeTypes } from "../../routes/_helpers/posts/recording"
     import { allPostsStore } from "../../stores/feed"
+    import { PromptType } from "../../types/generated/graphql"
+    import type { Language } from "../../types/generated/graphql"
+    import { languageCodeMappings } from "../../stores"
+    import { SUPPORTED_LOCALES, PROMPT_LOCALES } from "../../constants"
+    import type { SupportedLocale } from "../../constants"
+
+    query(languageCodeMappings)
 
     let recording: boolean = false
     let recordingStarted: number | null = null
@@ -30,14 +38,38 @@
 
     let languagePicker: HTMLSelectElement | undefined
     let languagePickerFocused: boolean = false
+    let pickedLocale: SupportedLocale | undefined = "en"
+    $: pickedLanguage = pickedLocale
+        ? languages.find((language) => language.alpha2 === pickedLocale)
+        : null
 
-    enum PromptType {
-        Question,
-        Word,
+    $: promptsSupportedForPickedLocale = (
+        PROMPT_LOCALES as readonly string[]
+    ).includes(pickedLocale as string)
+
+    let languages: Pick<Language, "englishName" | "alpha2">[] = []
+    $: if (!$languageCodeMappings.fetching && $languageCodeMappings.data) {
+        languages =
+            $languageCodeMappings.data?.languages?.nodes
+                .filter(Boolean)
+                .map((node) => node!) || []
     }
+    type LanguageItem = { value: string; label: string }
+    let items: LanguageItem[] = []
+    $: items = languages
+        .filter((language) =>
+            (SUPPORTED_LOCALES as readonly string[]).includes(
+                language.alpha2.toLowerCase()
+            )
+        )
+        .map(({ alpha2, englishName }) => ({
+            value: alpha2,
+            label: englishName,
+        }))
+
     interface Prompt {
         type: PromptType
-        value: string
+        content: string
     }
     let prompt: Prompt | null = null
 
@@ -255,14 +287,30 @@
         }
     }
 
-    function handleShuffle() {
-        prompt = [
-            { type: PromptType.Word, value: "Kühlschrank" },
-            {
-                type: PromptType.Question,
-                value: "Was planst du für das Wochenende?",
+    async function handleShuffle() {
+        if (
+            !pickedLocale ||
+            !(PROMPT_LOCALES as readonly string[]).includes(
+                pickedLocale as string
+            )
+        ) {
+            return
+        }
+        const response = await fetch(`/prompts/get?locale=${pickedLocale}`, {
+            method: "get",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
             },
-        ][Math.round(Math.random())]
+        })
+        const res = await response.json()
+        if (!res.hasOwnProperty("success")) {
+            return
+        }
+        if (res.success !== true || !res.data) {
+            return
+        }
+        prompt = res.data.prompt
     }
 </script>
 
@@ -270,26 +318,32 @@
     <div
         class="flex flex-row items-center justify-between w-full flex-nowrap mb-2"
     >
-        <ButtonSmall
-            className="items-center"
-            tag="button"
-            variant="OUTLINED"
-            on:click={handleShuffle}
-            ><span class="hidden sm:inline"
-                >{prompt ? "Shuffle Prompts" : "Prompt me"}</span
-            ><span class="inline sm:hidden"
-                >{prompt ? "Shuffle" : "Prompt me"}</span
-            ><ShuffleIcon size="18" class="ml-2" /></ButtonSmall
-        >
+        <div>
+            {#if promptsSupportedForPickedLocale}
+                <ButtonSmall
+                    className="items-center"
+                    tag="button"
+                    variant="OUTLINED"
+                    on:click={handleShuffle}
+                    ><span class="hidden sm:inline"
+                        >{prompt ? "Shuffle Prompts" : "Prompt me"}</span
+                    ><span class="inline sm:hidden"
+                        >{prompt ? "Shuffle" : "Prompt me"}</span
+                    ><ShuffleIcon size="18" class="ml-2" /></ButtonSmall
+                >
+            {/if}
+        </div>
         <div class="language-select-wrapper">
             <select
                 class="language-select rounded-lg"
                 on:focus={() => (languagePickerFocused = true)}
                 on:blur={() => (languagePickerFocused = false)}
                 bind:this={languagePicker}
+                bind:value={pickedLocale}
             >
-                <option value="DE">Deutsch</option>
-                <option value="FR">Französisch</option>
+                {#each items as item}
+                    <option value={item.value}>{item.label}</option>
+                {/each}
             </select>
             <ButtonSmall
                 on:click={() =>
@@ -299,7 +353,13 @@
                 color="SECONDARY"
                 className="language-button flex items-center text-gray-bitdark font-secondary font-bold relative"
             >
-                <span class="overflow-hidden overflow-ellipsis">Deutsch</span>
+                <span class="overflow-hidden overflow-ellipsis"
+                    >{pickedLocale
+                        ? pickedLanguage
+                            ? pickedLanguage.englishName
+                            : pickedLocale.toUpperCase()
+                        : "Pick …"}</span
+                >
                 <div class="pl-5 flex items-center">
                     <ChevronDownIcon size="18" />
                 </div>
@@ -310,11 +370,11 @@
         <div class="pt-8 pb-4 px-4 font-secondary relative">
             {#if prompt.type === PromptType.Question}
                 <div class="font-bold text-2xl text-center">
-                    {prompt.value}
+                    {prompt.content}
                 </div>
             {:else if prompt.type === PromptType.Word}
                 <div class="font-bold text-4xl text-center mb-2">
-                    {prompt.value}
+                    {prompt.content}
                 </div>
                 <div class="text-lg text-gray text-center">
                     Benutze dieses Wort in einem Satz.

@@ -1090,6 +1090,10 @@ export type CreatePostPayload = {
   author?: Maybe<User>;
   /** Reads a single `Post` that is related to this `Post`. */
   parentPost?: Maybe<Post>;
+  /** Reads a single `Language` that is related to this `Post`. */
+  language?: Maybe<Language>;
+  /** Reads a single `Prompt` that is related to this `Post`. */
+  prompt?: Maybe<Prompt>;
   /** An edge for our `Post`. May be used by Relay 1. */
   postEdge?: Maybe<PostsEdge>;
 };
@@ -1135,6 +1139,43 @@ export type CreatePostRecordingPayload = {
 /** The output of our create `PostRecording` mutation. */
 export type CreatePostRecordingPayloadPostRecordingEdgeArgs = {
   orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+};
+
+/** All input for the create `Prompt` mutation. */
+export type CreatePromptInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Prompt` to be created by this mutation. */
+  prompt: PromptInput;
+};
+
+/** The output of our create `Prompt` mutation. */
+export type CreatePromptPayload = {
+  __typename?: 'CreatePromptPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Prompt` that was created by this mutation. */
+  prompt?: Maybe<Prompt>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `Prompt`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Prompt`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `Prompt`. May be used by Relay 1. */
+  promptEdge?: Maybe<PromptsEdge>;
+};
+
+
+/** The output of our create `Prompt` mutation. */
+export type CreatePromptPayloadPromptEdgeArgs = {
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
 };
 
 /** All input for the create `UserDevice` mutation. */
@@ -2412,6 +2453,10 @@ export type DeletePostPayload = {
   author?: Maybe<User>;
   /** Reads a single `Post` that is related to this `Post`. */
   parentPost?: Maybe<Post>;
+  /** Reads a single `Language` that is related to this `Post`. */
+  language?: Maybe<Language>;
+  /** Reads a single `Prompt` that is related to this `Post`. */
+  prompt?: Maybe<Prompt>;
   /** An edge for our `Post`. May be used by Relay 1. */
   postEdge?: Maybe<PostsEdge>;
 };
@@ -2478,6 +2523,64 @@ export type DeletePostRecordingPayload = {
 /** The output of our delete `PostRecording` mutation. */
 export type DeletePostRecordingPayloadPostRecordingEdgeArgs = {
   orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+};
+
+/** All input for the `deletePromptByNodeId` mutation. */
+export type DeletePromptByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Prompt` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deletePromptByUuid` mutation. */
+export type DeletePromptByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deletePrompt` mutation. */
+export type DeletePromptInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `Prompt` mutation. */
+export type DeletePromptPayload = {
+  __typename?: 'DeletePromptPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Prompt` that was deleted by this mutation. */
+  prompt?: Maybe<Prompt>;
+  deletedPromptNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `Prompt`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Prompt`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `Prompt`. May be used by Relay 1. */
+  promptEdge?: Maybe<PromptsEdge>;
+};
+
+
+/** The output of our delete `Prompt` mutation. */
+export type DeletePromptPayloadPromptEdgeArgs = {
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
 };
 
 /** All input for the `deleteUserByEmail` mutation. */
@@ -4285,6 +4388,10 @@ export type Language = Node & {
   userLanguages: UserLanguagesConnection;
   /** Reads and enables pagination through a set of `Group`. */
   groups: GroupsConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  prompts: PromptsConnection;
   /** Reads and enables pagination through a set of `InviteToken`. */
   inviteTokensByUserLocaleAndSignedUpWithTokenId: LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
@@ -4293,6 +4400,14 @@ export type Language = Node & {
   languageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelId: LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyConnection;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
   languageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelId: LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostLanguageIdAndAuthorId: LanguageUsersByPostLanguageIdAndAuthorIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByPostLanguageIdAndParentPostId: LanguagePostsByPostLanguageIdAndParentPostIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  promptsByPostLanguageIdAndPromptId: LanguagePromptsByPostLanguageIdAndPromptIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
+  languageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelId: LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyConnection;
 };
 
 
@@ -4329,6 +4444,30 @@ export type LanguageGroupsArgs = {
   orderBy?: Maybe<Array<GroupsOrderBy>>;
   condition?: Maybe<GroupCondition>;
   filter?: Maybe<GroupFilter>;
+};
+
+
+export type LanguagePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type LanguagePromptsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
 };
 
 
@@ -4369,6 +4508,54 @@ export type LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillL
 
 
 export type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  condition?: Maybe<LanguageSkillLevelCondition>;
+  filter?: Maybe<LanguageSkillLevelFilter>;
+};
+
+
+export type LanguageUsersByPostLanguageIdAndAuthorIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type LanguagePostsByPostLanguageIdAndParentPostIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type LanguagePromptsByPostLanguageIdAndPromptIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
+};
+
+
+export type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -4495,6 +4682,43 @@ export type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdM
   filter?: Maybe<GroupFilter>;
 };
 
+/** A connection to a list of `LanguageSkillLevel` values, with data from `Prompt`. */
+export type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyConnection = {
+  __typename?: 'LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyConnection';
+  /** A list of `LanguageSkillLevel` objects. */
+  nodes: Array<Maybe<LanguageSkillLevel>>;
+  /** A list of edges which contains the `LanguageSkillLevel`, info from the `Prompt`, and the cursor to aid in pagination. */
+  edges: Array<LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `LanguageSkillLevel` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `LanguageSkillLevel` edge in the connection, with data from `Prompt`. */
+export type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyEdge = {
+  __typename?: 'LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `LanguageSkillLevel` at the end of the edge. */
+  node?: Maybe<LanguageSkillLevel>;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  promptsByRecommendedSkillLevelId: PromptsConnection;
+};
+
+
+/** A `LanguageSkillLevel` edge in the connection, with data from `Prompt`. */
+export type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyEdgePromptsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
+};
+
 /** A connection to a list of `LanguageSkillLevel` values, with data from `UserLanguage`. */
 export type LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyConnection = {
   __typename?: 'LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyConnection';
@@ -4541,6 +4765,80 @@ export type LanguagePatch = {
   createdAt?: Maybe<Scalars['Datetime']>;
 };
 
+/** A connection to a list of `Post` values, with data from `Post`. */
+export type LanguagePostsByPostLanguageIdAndParentPostIdManyToManyConnection = {
+  __typename?: 'LanguagePostsByPostLanguageIdAndParentPostIdManyToManyConnection';
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** A list of edges which contains the `Post`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<LanguagePostsByPostLanguageIdAndParentPostIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection, with data from `Post`. */
+export type LanguagePostsByPostLanguageIdAndParentPostIdManyToManyEdge = {
+  __typename?: 'LanguagePostsByPostLanguageIdAndParentPostIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `Post`. */
+  replies: PostsConnection;
+};
+
+
+/** A `Post` edge in the connection, with data from `Post`. */
+export type LanguagePostsByPostLanguageIdAndParentPostIdManyToManyEdgeRepliesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+/** A connection to a list of `Prompt` values, with data from `Post`. */
+export type LanguagePromptsByPostLanguageIdAndPromptIdManyToManyConnection = {
+  __typename?: 'LanguagePromptsByPostLanguageIdAndPromptIdManyToManyConnection';
+  /** A list of `Prompt` objects. */
+  nodes: Array<Maybe<Prompt>>;
+  /** A list of edges which contains the `Prompt`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<LanguagePromptsByPostLanguageIdAndPromptIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Prompt` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Prompt` edge in the connection, with data from `Post`. */
+export type LanguagePromptsByPostLanguageIdAndPromptIdManyToManyEdge = {
+  __typename?: 'LanguagePromptsByPostLanguageIdAndPromptIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Prompt` at the end of the edge. */
+  node?: Maybe<Prompt>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+};
+
+
+/** A `Prompt` edge in the connection, with data from `Post`. */
+export type LanguagePromptsByPostLanguageIdAndPromptIdManyToManyEdgePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
 export type LanguageSkillLevel = Node & {
   __typename?: 'LanguageSkillLevel';
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
@@ -4569,12 +4867,16 @@ export type LanguageSkillLevel = Node & {
   chineseWouldYouRatherQuestionsByRecommendedSkillLevelId: ChineseWouldYouRatherQuestionsConnection;
   /** Reads and enables pagination through a set of `ChineseGuessCharacterQuestion`. */
   chineseGuessCharacterQuestionsByRecommendedSkillLevelId: ChineseGuessCharacterQuestionsConnection;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  promptsByRecommendedSkillLevelId: PromptsConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByUserLanguageLanguageSkillLevelIdAndUserId: LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByUserLanguageLanguageSkillLevelIdAndLanguageId: LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByGroupLanguageSkillLevelIdAndLanguageId: LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Language`. */
+  languagesByPromptRecommendedSkillLevelIdAndLanguageId: LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyConnection;
 };
 
 
@@ -4710,6 +5012,18 @@ export type LanguageSkillLevelChineseGuessCharacterQuestionsByRecommendedSkillLe
 };
 
 
+export type LanguageSkillLevelPromptsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
+};
+
+
 export type LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
@@ -4735,6 +5049,18 @@ export type LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLang
 
 
 export type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
+};
+
+
+export type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -4811,6 +5137,43 @@ export type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdM
   orderBy?: Maybe<Array<GroupsOrderBy>>;
   condition?: Maybe<GroupCondition>;
   filter?: Maybe<GroupFilter>;
+};
+
+/** A connection to a list of `Language` values, with data from `Prompt`. */
+export type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyConnection = {
+  __typename?: 'LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyConnection';
+  /** A list of `Language` objects. */
+  nodes: Array<Maybe<Language>>;
+  /** A list of edges which contains the `Language`, info from the `Prompt`, and the cursor to aid in pagination. */
+  edges: Array<LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Language` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Language` edge in the connection, with data from `Prompt`. */
+export type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyEdge = {
+  __typename?: 'LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Language` at the end of the edge. */
+  node?: Maybe<Language>;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  prompts: PromptsConnection;
+};
+
+
+/** A `Language` edge in the connection, with data from `Prompt`. */
+export type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyEdgePromptsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
 };
 
 /** A connection to a list of `Language` values, with data from `UserLanguage`. */
@@ -4925,6 +5288,43 @@ export enum LanguageSkillLevelsOrderBy {
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
+
+/** A connection to a list of `User` values, with data from `Post`. */
+export type LanguageUsersByPostLanguageIdAndAuthorIdManyToManyConnection = {
+  __typename?: 'LanguageUsersByPostLanguageIdAndAuthorIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<LanguageUsersByPostLanguageIdAndAuthorIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Post`. */
+export type LanguageUsersByPostLanguageIdAndAuthorIdManyToManyEdge = {
+  __typename?: 'LanguageUsersByPostLanguageIdAndAuthorIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Post`. */
+  authoredPosts: PostsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Post`. */
+export type LanguageUsersByPostLanguageIdAndAuthorIdManyToManyEdgeAuthoredPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
 
 /** A connection to a list of `User` values, with data from `UserLanguage`. */
 export type LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyConnection = {
@@ -5469,6 +5869,8 @@ export type Mutation = {
   createPostRecording?: Maybe<CreatePostRecordingPayload>;
   /** Creates a single `Post`. */
   createPost?: Maybe<CreatePostPayload>;
+  /** Creates a single `Prompt`. */
+  createPrompt?: Maybe<CreatePromptPayload>;
   /** Creates a single `GermanRandomQuestion`. */
   createGermanRandomQuestion?: Maybe<CreateGermanRandomQuestionPayload>;
   /** Creates a single `EnglishRandomQuestion`. */
@@ -5567,6 +5969,12 @@ export type Mutation = {
   updatePost?: Maybe<UpdatePostPayload>;
   /** Updates a single `Post` using a unique key and a patch. */
   updatePostByUuid?: Maybe<UpdatePostPayload>;
+  /** Updates a single `Prompt` using its globally unique id and a patch. */
+  updatePromptByNodeId?: Maybe<UpdatePromptPayload>;
+  /** Updates a single `Prompt` using a unique key and a patch. */
+  updatePrompt?: Maybe<UpdatePromptPayload>;
+  /** Updates a single `Prompt` using a unique key and a patch. */
+  updatePromptByUuid?: Maybe<UpdatePromptPayload>;
   /** Updates a single `GermanRandomQuestion` using its globally unique id and a patch. */
   updateGermanRandomQuestionByNodeId?: Maybe<UpdateGermanRandomQuestionPayload>;
   /** Updates a single `GermanRandomQuestion` using a unique key and a patch. */
@@ -5715,6 +6123,12 @@ export type Mutation = {
   deletePost?: Maybe<DeletePostPayload>;
   /** Deletes a single `Post` using a unique key. */
   deletePostByUuid?: Maybe<DeletePostPayload>;
+  /** Deletes a single `Prompt` using its globally unique id. */
+  deletePromptByNodeId?: Maybe<DeletePromptPayload>;
+  /** Deletes a single `Prompt` using a unique key. */
+  deletePrompt?: Maybe<DeletePromptPayload>;
+  /** Deletes a single `Prompt` using a unique key. */
+  deletePromptByUuid?: Maybe<DeletePromptPayload>;
   /** Deletes a single `GermanRandomQuestion` using its globally unique id. */
   deleteGermanRandomQuestionByNodeId?: Maybe<DeleteGermanRandomQuestionPayload>;
   /** Deletes a single `GermanRandomQuestion` using a unique key. */
@@ -5869,6 +6283,12 @@ export type MutationCreatePostRecordingArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreatePostArgs = {
   input: CreatePostInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreatePromptArgs = {
+  input: CreatePromptInput;
 };
 
 
@@ -6163,6 +6583,24 @@ export type MutationUpdatePostArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdatePostByUuidArgs = {
   input: UpdatePostByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePromptByNodeIdArgs = {
+  input: UpdatePromptByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePromptArgs = {
+  input: UpdatePromptInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePromptByUuidArgs = {
+  input: UpdatePromptByUuidInput;
 };
 
 
@@ -6607,6 +7045,24 @@ export type MutationDeletePostArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeletePostByUuidArgs = {
   input: DeletePostByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePromptByNodeIdArgs = {
+  input: DeletePromptByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePromptArgs = {
+  input: DeletePromptInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePromptByUuidArgs = {
+  input: DeletePromptByUuidInput;
 };
 
 
@@ -7247,10 +7703,16 @@ export type Post = Node & {
   body: Scalars['String'];
   parentPostId?: Maybe<Scalars['Int']>;
   createdAt: Scalars['Datetime'];
+  languageId: Scalars['Int'];
+  promptId?: Maybe<Scalars['Int']>;
   /** Reads a single `User` that is related to this `Post`. */
   author?: Maybe<User>;
   /** Reads a single `Post` that is related to this `Post`. */
   parentPost?: Maybe<Post>;
+  /** Reads a single `Language` that is related to this `Post`. */
+  language?: Maybe<Language>;
+  /** Reads a single `Prompt` that is related to this `Post`. */
+  prompt?: Maybe<Prompt>;
   /** Reads and enables pagination through a set of `Post`. */
   replies: PostsConnection;
   /** Reads and enables pagination through a set of `PostLike`. */
@@ -7259,6 +7721,10 @@ export type Post = Node & {
   recordings: PostRecordingsConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByPostParentPostIdAndAuthorId: PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Language`. */
+  languagesByPostParentPostIdAndLanguageId: PostLanguagesByPostParentPostIdAndLanguageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  promptsByPostParentPostIdAndPromptId: PostPromptsByPostParentPostIdAndPromptIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByPostLikePostIdAndUserId: PostUsersByPostLikePostIdAndUserIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
@@ -7314,6 +7780,30 @@ export type PostUsersByPostParentPostIdAndAuthorIdArgs = {
 };
 
 
+export type PostLanguagesByPostParentPostIdAndLanguageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
+};
+
+
+export type PostPromptsByPostParentPostIdAndPromptIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
+};
+
+
 export type PostUsersByPostLikePostIdAndUserIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
@@ -7351,6 +7841,10 @@ export type PostCondition = {
   parentPostId?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `createdAt` field. */
   createdAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `languageId` field. */
+  languageId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `promptId` field. */
+  promptId?: Maybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `Post` object types. All fields are combined with a logical ‘and.’ */
@@ -7367,6 +7861,10 @@ export type PostFilter = {
   parentPostId?: Maybe<IntFilter>;
   /** Filter by the object’s `createdAt` field. */
   createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `languageId` field. */
+  languageId?: Maybe<IntFilter>;
+  /** Filter by the object’s `promptId` field. */
+  promptId?: Maybe<IntFilter>;
   /** Checks for all expressions in this list. */
   and?: Maybe<Array<PostFilter>>;
   /** Checks for any expressions in this list. */
@@ -7383,6 +7881,45 @@ export type PostInput = {
   body: Scalars['String'];
   parentPostId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
+  languageId: Scalars['Int'];
+  promptId?: Maybe<Scalars['Int']>;
+};
+
+/** A connection to a list of `Language` values, with data from `Post`. */
+export type PostLanguagesByPostParentPostIdAndLanguageIdManyToManyConnection = {
+  __typename?: 'PostLanguagesByPostParentPostIdAndLanguageIdManyToManyConnection';
+  /** A list of `Language` objects. */
+  nodes: Array<Maybe<Language>>;
+  /** A list of edges which contains the `Language`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Language` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Language` edge in the connection, with data from `Post`. */
+export type PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdge = {
+  __typename?: 'PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Language` at the end of the edge. */
+  node?: Maybe<Language>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+};
+
+
+/** A `Language` edge in the connection, with data from `Post`. */
+export type PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdgePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
 };
 
 export type PostLike = Node & {
@@ -7493,6 +8030,45 @@ export type PostPatch = {
   body?: Maybe<Scalars['String']>;
   parentPostId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Datetime']>;
+  languageId?: Maybe<Scalars['Int']>;
+  promptId?: Maybe<Scalars['Int']>;
+};
+
+/** A connection to a list of `Prompt` values, with data from `Post`. */
+export type PostPromptsByPostParentPostIdAndPromptIdManyToManyConnection = {
+  __typename?: 'PostPromptsByPostParentPostIdAndPromptIdManyToManyConnection';
+  /** A list of `Prompt` objects. */
+  nodes: Array<Maybe<Prompt>>;
+  /** A list of edges which contains the `Prompt`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<PostPromptsByPostParentPostIdAndPromptIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Prompt` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Prompt` edge in the connection, with data from `Post`. */
+export type PostPromptsByPostParentPostIdAndPromptIdManyToManyEdge = {
+  __typename?: 'PostPromptsByPostParentPostIdAndPromptIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Prompt` at the end of the edge. */
+  node?: Maybe<Prompt>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+};
+
+
+/** A `Prompt` edge in the connection, with data from `Post`. */
+export type PostPromptsByPostParentPostIdAndPromptIdManyToManyEdgePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
 };
 
 export type PostRecording = Node & {
@@ -7776,6 +8352,350 @@ export enum PostsOrderBy {
   ParentPostIdDesc = 'PARENT_POST_ID_DESC',
   CreatedAtAsc = 'CREATED_AT_ASC',
   CreatedAtDesc = 'CREATED_AT_DESC',
+  LanguageIdAsc = 'LANGUAGE_ID_ASC',
+  LanguageIdDesc = 'LANGUAGE_ID_DESC',
+  PromptIdAsc = 'PROMPT_ID_ASC',
+  PromptIdDesc = 'PROMPT_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+export type Prompt = Node & {
+  __typename?: 'Prompt';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  languageId: Scalars['Int'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  type: PromptType;
+  contentEn?: Maybe<Scalars['String']>;
+  contentDe?: Maybe<Scalars['String']>;
+  contentZh?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `Language` that is related to this `Prompt`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Prompt`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostPromptIdAndAuthorId: PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByPostPromptIdAndParentPostId: PromptPostsByPostPromptIdAndParentPostIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Language`. */
+  languagesByPostPromptIdAndLanguageId: PromptLanguagesByPostPromptIdAndLanguageIdManyToManyConnection;
+};
+
+
+export type PromptPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type PromptUsersByPostPromptIdAndAuthorIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type PromptPostsByPostPromptIdAndParentPostIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type PromptLanguagesByPostPromptIdAndLanguageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
+};
+
+/** A condition to be used against `Prompt` object types. All fields are tested for equality and combined with a logical ‘and.’ */
+export type PromptCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `languageId` field. */
+  languageId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `type` field. */
+  type?: Maybe<PromptType>;
+  /** Checks for equality with the object’s `contentEn` field. */
+  contentEn?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `contentDe` field. */
+  contentDe?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `contentZh` field. */
+  contentZh?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `Prompt` object types. All fields are combined with a logical ‘and.’ */
+export type PromptFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `languageId` field. */
+  languageId?: Maybe<IntFilter>;
+  /** Filter by the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `type` field. */
+  type?: Maybe<PromptTypeFilter>;
+  /** Filter by the object’s `contentEn` field. */
+  contentEn?: Maybe<StringFilter>;
+  /** Filter by the object’s `contentDe` field. */
+  contentDe?: Maybe<StringFilter>;
+  /** Filter by the object’s `contentZh` field. */
+  contentZh?: Maybe<StringFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<PromptFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<PromptFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<PromptFilter>;
+};
+
+/** An input for mutations affecting `Prompt` */
+export type PromptInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  languageId: Scalars['Int'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  type: PromptType;
+  contentEn?: Maybe<Scalars['String']>;
+  contentDe?: Maybe<Scalars['String']>;
+  contentZh?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `Language` values, with data from `Post`. */
+export type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyConnection = {
+  __typename?: 'PromptLanguagesByPostPromptIdAndLanguageIdManyToManyConnection';
+  /** A list of `Language` objects. */
+  nodes: Array<Maybe<Language>>;
+  /** A list of edges which contains the `Language`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Language` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Language` edge in the connection, with data from `Post`. */
+export type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge = {
+  __typename?: 'PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Language` at the end of the edge. */
+  node?: Maybe<Language>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+};
+
+
+/** A `Language` edge in the connection, with data from `Post`. */
+export type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdgePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+/** Represents an update to a `Prompt`. Fields that are set will be updated. */
+export type PromptPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  languageId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  type?: Maybe<PromptType>;
+  contentEn?: Maybe<Scalars['String']>;
+  contentDe?: Maybe<Scalars['String']>;
+  contentZh?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `Post` values, with data from `Post`. */
+export type PromptPostsByPostPromptIdAndParentPostIdManyToManyConnection = {
+  __typename?: 'PromptPostsByPostPromptIdAndParentPostIdManyToManyConnection';
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** A list of edges which contains the `Post`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection, with data from `Post`. */
+export type PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge = {
+  __typename?: 'PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `Post`. */
+  replies: PostsConnection;
+};
+
+
+/** A `Post` edge in the connection, with data from `Post`. */
+export type PromptPostsByPostPromptIdAndParentPostIdManyToManyEdgeRepliesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+export enum PromptType {
+  Question = 'QUESTION',
+  Word = 'WORD'
+}
+
+/** A filter to be used against PromptType fields. All fields are combined with a logical ‘and.’ */
+export type PromptTypeFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<PromptType>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<PromptType>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<PromptType>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<PromptType>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<PromptType>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<PromptType>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<PromptType>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<PromptType>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<PromptType>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<PromptType>;
+};
+
+/** A connection to a list of `User` values, with data from `Post`. */
+export type PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection = {
+  __typename?: 'PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Post`. */
+export type PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge = {
+  __typename?: 'PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Post`. */
+  authoredPosts: PostsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Post`. */
+export type PromptUsersByPostPromptIdAndAuthorIdManyToManyEdgeAuthoredPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+/** A connection to a list of `Prompt` values. */
+export type PromptsConnection = {
+  __typename?: 'PromptsConnection';
+  /** A list of `Prompt` objects. */
+  nodes: Array<Maybe<Prompt>>;
+  /** A list of edges which contains the `Prompt` and cursor to aid in pagination. */
+  edges: Array<PromptsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Prompt` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Prompt` edge in the connection. */
+export type PromptsEdge = {
+  __typename?: 'PromptsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Prompt` at the end of the edge. */
+  node?: Maybe<Prompt>;
+};
+
+/** Methods to use when ordering `Prompt`. */
+export enum PromptsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  LanguageIdAsc = 'LANGUAGE_ID_ASC',
+  LanguageIdDesc = 'LANGUAGE_ID_DESC',
+  RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
+  RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
+  TypeAsc = 'TYPE_ASC',
+  TypeDesc = 'TYPE_DESC',
+  ContentEnAsc = 'CONTENT_EN_ASC',
+  ContentEnDesc = 'CONTENT_EN_DESC',
+  ContentDeAsc = 'CONTENT_DE_ASC',
+  ContentDeDesc = 'CONTENT_DE_DESC',
+  ContentZhAsc = 'CONTENT_ZH_ASC',
+  ContentZhDesc = 'CONTENT_ZH_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
@@ -7818,6 +8738,8 @@ export type Query = Node & {
   postRecordings?: Maybe<PostRecordingsConnection>;
   /** Reads and enables pagination through a set of `Post`. */
   posts?: Maybe<PostsConnection>;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  prompts?: Maybe<PromptsConnection>;
   /** Reads and enables pagination through a set of `GermanRandomQuestion`. */
   germanRandomQuestions?: Maybe<GermanRandomQuestionsConnection>;
   /** Reads and enables pagination through a set of `EnglishRandomQuestion`. */
@@ -7866,6 +8788,8 @@ export type Query = Node & {
   postRecordingByUuid?: Maybe<PostRecording>;
   post?: Maybe<Post>;
   postByUuid?: Maybe<Post>;
+  prompt?: Maybe<Prompt>;
+  promptByUuid?: Maybe<Prompt>;
   germanRandomQuestion?: Maybe<GermanRandomQuestion>;
   germanRandomQuestionByUuid?: Maybe<GermanRandomQuestion>;
   englishRandomQuestion?: Maybe<EnglishRandomQuestion>;
@@ -7925,6 +8849,8 @@ export type Query = Node & {
   postRecordingByNodeId?: Maybe<PostRecording>;
   /** Reads a single `Post` using its globally unique `ID`. */
   postByNodeId?: Maybe<Post>;
+  /** Reads a single `Prompt` using its globally unique `ID`. */
+  promptByNodeId?: Maybe<Prompt>;
   /** Reads a single `GermanRandomQuestion` using its globally unique `ID`. */
   germanRandomQuestionByNodeId?: Maybe<GermanRandomQuestion>;
   /** Reads a single `EnglishRandomQuestion` using its globally unique `ID`. */
@@ -8124,6 +9050,19 @@ export type QueryPostsArgs = {
   orderBy?: Maybe<Array<PostsOrderBy>>;
   condition?: Maybe<PostCondition>;
   filter?: Maybe<PostFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPromptsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
 };
 
 
@@ -8428,6 +9367,18 @@ export type QueryPostByUuidArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryPromptArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPromptByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryGermanRandomQuestionArgs = {
   id: Scalars['Int'];
 };
@@ -8688,6 +9639,12 @@ export type QueryPostRecordingByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPostByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPromptByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
 
@@ -10130,6 +11087,10 @@ export type UpdatePostPayload = {
   author?: Maybe<User>;
   /** Reads a single `Post` that is related to this `Post`. */
   parentPost?: Maybe<Post>;
+  /** Reads a single `Language` that is related to this `Post`. */
+  language?: Maybe<Language>;
+  /** Reads a single `Prompt` that is related to this `Post`. */
+  prompt?: Maybe<Prompt>;
   /** An edge for our `Post`. May be used by Relay 1. */
   postEdge?: Maybe<PostsEdge>;
 };
@@ -10201,6 +11162,69 @@ export type UpdatePostRecordingPayload = {
 /** The output of our update `PostRecording` mutation. */
 export type UpdatePostRecordingPayloadPostRecordingEdgeArgs = {
   orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+};
+
+/** All input for the `updatePromptByNodeId` mutation. */
+export type UpdatePromptByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Prompt` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `Prompt` being updated. */
+  patch: PromptPatch;
+};
+
+/** All input for the `updatePromptByUuid` mutation. */
+export type UpdatePromptByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Prompt` being updated. */
+  patch: PromptPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updatePrompt` mutation. */
+export type UpdatePromptInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Prompt` being updated. */
+  patch: PromptPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `Prompt` mutation. */
+export type UpdatePromptPayload = {
+  __typename?: 'UpdatePromptPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Prompt` that was updated by this mutation. */
+  prompt?: Maybe<Prompt>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `Prompt`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Prompt`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `Prompt`. May be used by Relay 1. */
+  promptEdge?: Maybe<PromptsEdge>;
+};
+
+
+/** The output of our update `Prompt` mutation. */
+export type UpdatePromptPayloadPromptEdgeArgs = {
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
 };
 
 /** All input for the `updateUserByEmail` mutation. */
@@ -10531,6 +11555,10 @@ export type User = Node & {
   groupsByNotificationRecipientIdAndRecipientGroupId: UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Post`. */
   postsByPostAuthorIdAndParentPostId: UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Language`. */
+  languagesByPostAuthorIdAndLanguageId: UserLanguagesByPostAuthorIdAndLanguageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  promptsByPostAuthorIdAndPromptId: UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Post`. */
   postsByPostLikeUserIdAndPostId: UserPostsByPostLikeUserIdAndPostIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Post`. */
@@ -10799,6 +11827,30 @@ export type UserPostsByPostAuthorIdAndParentPostIdArgs = {
   orderBy?: Maybe<Array<PostsOrderBy>>;
   condition?: Maybe<PostCondition>;
   filter?: Maybe<PostFilter>;
+};
+
+
+export type UserLanguagesByPostAuthorIdAndLanguageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
+};
+
+
+export type UserPromptsByPostAuthorIdAndPromptIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
 };
 
 
@@ -11294,6 +12346,43 @@ export type UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdMa
   filter?: Maybe<UserLanguageFilter>;
 };
 
+/** A connection to a list of `Language` values, with data from `Post`. */
+export type UserLanguagesByPostAuthorIdAndLanguageIdManyToManyConnection = {
+  __typename?: 'UserLanguagesByPostAuthorIdAndLanguageIdManyToManyConnection';
+  /** A list of `Language` objects. */
+  nodes: Array<Maybe<Language>>;
+  /** A list of edges which contains the `Language`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<UserLanguagesByPostAuthorIdAndLanguageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Language` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Language` edge in the connection, with data from `Post`. */
+export type UserLanguagesByPostAuthorIdAndLanguageIdManyToManyEdge = {
+  __typename?: 'UserLanguagesByPostAuthorIdAndLanguageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Language` at the end of the edge. */
+  node?: Maybe<Language>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+};
+
+
+/** A `Language` edge in the connection, with data from `Post`. */
+export type UserLanguagesByPostAuthorIdAndLanguageIdManyToManyEdgePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
 /** A connection to a list of `Language` values, with data from `UserLanguage`. */
 export type UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection = {
   __typename?: 'UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection';
@@ -11612,6 +12701,43 @@ export type UserPostsByPostRecordingUserIdAndPostIdManyToManyEdgeRecordingsArgs 
   orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
   condition?: Maybe<PostRecordingCondition>;
   filter?: Maybe<PostRecordingFilter>;
+};
+
+/** A connection to a list of `Prompt` values, with data from `Post`. */
+export type UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection = {
+  __typename?: 'UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection';
+  /** A list of `Prompt` objects. */
+  nodes: Array<Maybe<Prompt>>;
+  /** A list of edges which contains the `Prompt`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<UserPromptsByPostAuthorIdAndPromptIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Prompt` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Prompt` edge in the connection, with data from `Post`. */
+export type UserPromptsByPostAuthorIdAndPromptIdManyToManyEdge = {
+  __typename?: 'UserPromptsByPostAuthorIdAndPromptIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Prompt` at the end of the edge. */
+  node?: Maybe<Prompt>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+};
+
+
+/** A `Prompt` edge in the connection, with data from `Post`. */
+export type UserPromptsByPostAuthorIdAndPromptIdManyToManyEdgePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
 };
 
 export type UserSession = Node & {
@@ -11940,6 +13066,8 @@ export type CreatePostMutationVariables = Exact<{
   authorId: Scalars['Int'];
   body: Scalars['String'];
   parentPostId?: Maybe<Scalars['Int']>;
+  languageId: Scalars['Int'];
+  promptId?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -12423,9 +13551,9 @@ export const AllPosts = gql`
 }
     `;
 export const CreatePost = gql`
-    mutation CreatePost($authorId: Int!, $body: String!, $parentPostId: Int) {
+    mutation CreatePost($authorId: Int!, $body: String!, $parentPostId: Int, $languageId: Int!, $promptId: Int) {
   createPost(
-    input: {post: {authorId: $authorId, parentPostId: $parentPostId, body: $body}}
+    input: {post: {authorId: $authorId, parentPostId: $parentPostId, body: $body, languageId: $languageId, promptId: $promptId}}
   ) {
     clientMutationId
     post {

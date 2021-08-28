@@ -102,6 +102,11 @@
     $: posts = $allPosts
         ? $allPosts
               .filter((post) => post && !post.parentPost)
+              .filter((post) =>
+                  pickedLocale
+                      ? post!.language && post!.language.alpha2 === pickedLocale
+                      : true
+              )
               .map((post) => post!)
         : []
 

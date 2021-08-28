@@ -15,7 +15,7 @@ type PromptLocale = typeof PROMPT_LOCALES[number]
 const RECENTLY_SHOWN_SECONDS = 30
 const promptsShownByUser: Record<number, { uuid: string; shownAt: Date }[]> = {}
 
-export async function get(req: Request, res: Response, next: () => void) {
+export async function get(req: Request, res: Response, _next: () => void) {
     const locale = req.query["locale"]
     if (
         !locale ||
@@ -24,23 +24,37 @@ export async function get(req: Request, res: Response, next: () => void) {
     ) {
         chlog.child({ locale }).debug("Invalid locale")
         res.status(404).json({ success: false, data: null })
-        next()
         return
     }
     const previouslyShownToUser = promptsShownByUser[req.session.user_id!] || []
-    const uuidsToExclude = previouslyShownToUser
+    let uuidsToExclude = previouslyShownToUser
         .filter(
             (entry) =>
                 Date.now() - entry.shownAt.getTime() <=
                 RECENTLY_SHOWN_SECONDS * 1000
         )
         .map((entry) => entry.uuid)
-    const prompt = await getRandomPrompt(locale as PromptLocale, uuidsToExclude)
+    let prompt = await getRandomPrompt(locale as PromptLocale, uuidsToExclude)
     if (!prompt) {
-        chlog.child({ locale }).debug("Could not find prompt for locale")
-        res.status(404).json({ success: false, data: null })
-        next()
-        return
+        chlog
+            .child({ locale, uuidsToExclude })
+            .warn(
+                "Could not find prompt for locale, we should add more prompts"
+            )
+        const lastShownEntry = previouslyShownToUser.sort(
+            (a, b) => b.shownAt.getTime() - a.shownAt.getTime()
+        )[0]
+        uuidsToExclude = lastShownEntry ? [lastShownEntry.uuid] : []
+        prompt = await getRandomPrompt(locale as PromptLocale, uuidsToExclude)
+        if (!prompt) {
+            chlog
+                .child({ locale })
+                .error(
+                    "Finally could not find prompt for locale, are there no prompts for this locale?"
+                )
+            res.status(404).json({ success: false, data: null })
+            return
+        }
     }
     promptsShownByUser[req.session.user_id!] = [
         ...previouslyShownToUser,

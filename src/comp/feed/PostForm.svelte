@@ -1,5 +1,6 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte"
+    import { scale } from "svelte/transition"
     import Time from "svelte-time"
     import {
         MicIcon,
@@ -71,7 +72,9 @@
         type: PromptType
         content: string
     }
-    let prompt: Prompt | null = null
+    let prompt: Record<SupportedLocale, Prompt | null> = Object.fromEntries(
+        SUPPORTED_LOCALES.map((locale) => [locale, null])
+    ) as Record<SupportedLocale, null>
 
     let recordedChunks: BlobPart[] = []
     $: recordedBlob =
@@ -310,8 +313,10 @@
         if (res.success !== true || !res.data) {
             return
         }
-        prompt = res.data.prompt
+        prompt[pickedLocale] = res.data.prompt
     }
+
+    $: shownPrompt = pickedLocale ? prompt[pickedLocale] : null
 </script>
 
 <div class="container max-w-xl mb-2 pt-8 pb-4 px-2">
@@ -326,9 +331,9 @@
                     variant="OUTLINED"
                     on:click={handleShuffle}
                     ><span class="hidden sm:inline"
-                        >{prompt ? "Shuffle Prompts" : "Prompt me"}</span
+                        >{shownPrompt ? "Shuffle Prompts" : "Prompt me"}</span
                     ><span class="inline sm:hidden"
-                        >{prompt ? "Shuffle" : "Prompt me"}</span
+                        >{shownPrompt ? "Shuffle" : "Prompt me"}</span
                     ><ShuffleIcon size="18" class="ml-2" /></ButtonSmall
                 >
             {/if}
@@ -366,15 +371,19 @@
             </ButtonSmall>
         </div>
     </div>
-    {#if prompt}
-        <div class="pt-8 pb-4 px-4 font-secondary relative">
-            {#if prompt.type === PromptType.Question}
+    {#if pickedLocale && shownPrompt && promptsSupportedForPickedLocale}
+        <div
+            class="pt-8 pb-4 px-4 font-secondary relative"
+            in:scale={{ duration: 200 }}
+            out:scale={{ duration: 200 }}
+        >
+            {#if shownPrompt.type === PromptType.Question}
                 <div class="font-bold text-2xl text-center">
-                    {prompt.content}
+                    {shownPrompt.content}
                 </div>
-            {:else if prompt.type === PromptType.Word}
+            {:else if shownPrompt.type === PromptType.Word}
                 <div class="font-bold text-4xl text-center mb-2">
-                    {prompt.content}
+                    {shownPrompt.content}
                 </div>
                 <div class="text-lg text-gray text-center">
                     Benutze dieses Wort in einem Satz.
@@ -383,10 +392,10 @@
             <ButtonSmall
                 tag="button"
                 variant="TEXT"
-                on:click={() => (prompt = null)}
+                on:click={() => (prompt[pickedLocale] = null)}
                 className="close-prompt-button"
             >
-                <XCircleIcon size="32" />
+                <XCircleIcon size="32" strokeWidth={1} />
             </ButtonSmall>
         </div>
     {/if}
@@ -549,7 +558,7 @@
         background-repeat: no-repeat;
         background-position-x: calc(100% - 0.5rem);
         background-position-y: 0.5rem;
-        padding: 0 2.15rem 0 0;
+        padding: 0 2.15rem 0 0.5rem;
         border: 0 none;
     }
 

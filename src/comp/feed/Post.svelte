@@ -118,7 +118,7 @@
 </script>
 
 <div
-    class="feed-item py-3 sm:py-4 sm:px-3 gap-y-1"
+    class="root py-3 sm:py-4 sm:px-3 gap-y-1"
     class:liked={liked || tmpLiked}
     class:not-liked={!liked || tmpUnliked}
     in:scale={{ duration: 200 }}
@@ -162,7 +162,7 @@
                     {/if}
                 </div>
             {/if}
-            <div>
+            <div class="body">
                 {#each (body || "").split("\n") as bodyPart}
                     {bodyPart}<br />
                 {/each}
@@ -213,7 +213,9 @@
             {/if}
         </div>
         <ButtonSmall
-            className="reply-button items-center justify-center recording ml-0 mr-1"
+            className={`reply-button items-center justify-center recording ml-0 mr-1${
+                showReplies ? " close" : ""
+            }`}
             tag="button"
             variant={showReplies ? "TEXT" : "OUTLINED"}
             color={showReplies ? "SECONDARY" : "PRIMARY"}
@@ -279,6 +281,11 @@
 </div>
 
 <style>
+    .body {
+        @apply overflow-hidden;
+        @apply overflow-ellipsis;
+    }
+
     :global(.reply-button) {
         min-width: 50px;
     }
@@ -286,6 +293,14 @@
     :global(.reply-button svg) {
         @apply text-gray-bitdark;
         @apply mr-2;
+    }
+
+    :global(.reply-button.close) {
+        @apply text-sm;
+    }
+
+    :global(.reply-button.close svg) {
+        @apply mr-1;
     }
 
     .liked :global(.like-button) {

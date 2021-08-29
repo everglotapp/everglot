@@ -7,6 +7,8 @@
         LogOutIcon,
         CheckCircleIcon,
         AlertCircleIcon,
+        CopyIcon,
+        XIcon,
     } from "svelte-feather-icons"
     import { query } from "@urql/svelte"
 
@@ -682,11 +684,18 @@
                     on:click={() => (showInviteModal = false)}
                     variant="TEXT"
                     color="PRIMARY"
-                    className="mr-1"
-                    ><Localized id="invite-modal-close" /></ButtonSmall
+                    className="mr-1 flex items-center"
+                    ><XIcon size="18" class="mr-2" /><Localized
+                        id="invite-modal-close"
+                    /></ButtonSmall
                 >
-                <ButtonSmall tag="button" on:click={handleCopyClipboard}
-                    ><Localized id="invite-modal-copy" /></ButtonSmall
+                <ButtonSmall
+                    tag="button"
+                    on:click={handleCopyClipboard}
+                    className="flex items-center"
+                    ><CopyIcon size="24" class="mr-2" /><Localized
+                        id="invite-modal-copy"
+                    /></ButtonSmall
                 >
             </div>
             {#if copiedInviteLink !== null}
@@ -708,14 +717,14 @@
                                     id="invite-modal-copy-success"
                                 /></span
                             >
-                            <CheckCircleIcon size="24" strokeWidth="3" />
+                            <CheckCircleIcon size="24" strokeWidth={3} />
                         {:else}
                             <span class="mr-2 font-bold"
                                 ><Localized
                                     id="invite-modal-copy-failed"
                                 /></span
                             >
-                            <AlertCircleIcon size="24" strokeWidth="3" />
+                            <AlertCircleIcon size="24" strokeWidth={3} />
                         {/if}
                     </div>
                 </div>

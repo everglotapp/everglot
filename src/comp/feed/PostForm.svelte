@@ -10,17 +10,22 @@
         PauseIcon,
         TrashIcon,
     } from "svelte-feather-icons"
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import {
         createPost,
         createPostRecording,
     } from "../../routes/_helpers/posts"
     import { getSupportedMimeTypes } from "../../routes/_helpers/posts/recording"
-    import { allPostsStore } from "../../stores/feed"
     import type { SupportedLocale } from "../../constants"
 
     export let shownPromptUuid: string | null
     export let locale: SupportedLocale | null
+    export let handleSuccess: () => void = () => {}
+    export let handleFailure: () => void = () => {}
+
+    const { translate } = fluentStores()!
 
     let recording: boolean = false
     let recordingStarted: number | null = null
@@ -191,7 +196,7 @@
             const response = await res.json()
             if (response.success) {
                 newPostBody = ""
-                refreshPosts()
+                handleSuccess()
                 if (recordedBlob) {
                     const res2 = await createPostRecording(
                         response.meta.post.uuid,
@@ -203,22 +208,19 @@
                     if (res2.status === 200) {
                         const response2 = await res2.json()
                         if (response2.success) {
-                            refreshPosts()
+                            handleSuccess()
+                        } else {
+                            handleFailure()
                         }
+                    } else {
+                        handleFailure()
                     }
                 }
+            } else {
+                handleFailure()
             }
-        }
-    }
-
-    const refreshPosts = () => {
-        $allPostsStore.context = {
-            ...$allPostsStore.context,
-            paused: true,
-        }
-        $allPostsStore.context = {
-            ...$allPostsStore.context,
-            paused: false,
+        } else {
+            handleFailure()
         }
     }
 
@@ -236,6 +238,10 @@
         clearUpdateRecordingDurationInterval()
         clearUpdateAudioTimingsInterval()
     })
+
+    $: bodyInputPlaceholder = $translate(
+        "index-post-form-body-input-placeholder"
+    )
 </script>
 
 <div class="container max-w-2xl mb-2 pb-4 px-2">
@@ -245,8 +251,8 @@
             contenteditable
             aria-multiline
             role="textbox"
-            placeholder="Squeek your mind …"
-            aria-placeholder="Squeek your mind …"
+            placeholder={bodyInputPlaceholder}
+            aria-placeholder={bodyInputPlaceholder}
             bind:innerHTML={newPostBody}
         />
         <div>
@@ -263,10 +269,9 @@
                     >{#if recording}<CheckIcon
                             size="18"
                             strokeWidth={3}
-                        />{:else}<MicIcon
-                            size="18"
-                            class="mr-2"
-                        />Record{/if}</ButtonSmall
+                        />{:else}<MicIcon size="18" class="mr-2" /><Localized
+                            id="index-post-form-record-button"
+                        />{/if}</ButtonSmall
                 >
                 {#if recording}
                     <ButtonSmall
@@ -281,7 +286,9 @@
                     className="items-center"
                     tag="button"
                     on:click={() => handlePost()}
-                    ><SendIcon size="18" class="mr-2" />Post</ButtonSmall
+                    ><SendIcon size="18" class="mr-2" /><Localized
+                        id="index-post-form-post-button"
+                    /></ButtonSmall
                 >
                 {#if recording}
                     <div

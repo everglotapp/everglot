@@ -1,44 +1,8 @@
 
-declare module '*/adminEmailsFcmTokens.graphql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const AdminEmailsFcmTokens: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
-declare module '*/allGroupUuids.graphql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const AllGroupUuids: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
-declare module '*/allGroups.graphql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const AllGroups: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
 declare module '*/chatUser.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const ChatUser: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
-declare module '*/createGroup.graphql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const CreateGroup: DocumentNode;
 
   export default defaultDocument;
 }
@@ -62,28 +26,19 @@ declare module '*/createMessagePreview.graphql' {
 }
     
 
-declare module '*/createUser.graphql' {
+declare module '*/groupChat.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const CreateUser: DocumentNode;
+  export const GroupChat: DocumentNode;
 
   export default defaultDocument;
 }
     
 
-declare module '*/createUserDevice.graphql' {
+declare module '*/groupChatMessages.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const CreateUserDevice: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
-declare module '*/createUserLanguage.graphql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const CreateUserLanguage: DocumentNode;
+  export const GroupChatMessages: DocumentNode;
 
   export default defaultDocument;
 }
@@ -98,19 +53,163 @@ declare module '*/currentUser.graphql' {
 }
     
 
-declare module '*/groupChat.graphql' {
+declare module '*/registerUserActivity.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const GroupChat: DocumentNode;
+  export const RegisterUserActivity: DocumentNode;
 
   export default defaultDocument;
 }
     
 
-declare module '*/groupChatMessages.graphql' {
+declare module '*/allPosts.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const GroupChatMessages: DocumentNode;
+  export const AllPosts: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createPost.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePost: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createPostLike.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostLike: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createPostRecording.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostRecording: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/deletePostLike.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const DeletePostLike: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/postIdByUuid.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const PostIdByUuid: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/postLikeIdByPostIdAndUserId.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const PostLikeIdByPostIdAndUserId: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/promptIdByUuid.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const PromptIdByUuid: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createGroupUser.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateGroupUser: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/joinGlobalGroup.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const JoinGlobalGroup: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userGroupMemberships.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserGroupMemberships: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userIsInGroup.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserIsInGroup: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/usersWithoutLearnerGroup.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UsersWithoutLearnerGroup: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/usersWithoutNativeGroup.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UsersWithoutNativeGroup: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/allGroupUuids.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const AllGroupUuids: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/allGroups.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const AllGroups: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createGroup.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateGroup: DocumentNode;
 
   export default defaultDocument;
 }
@@ -134,24 +233,6 @@ declare module '*/groupLanguageByUuid.graphql' {
 }
     
 
-declare module '*/groupMessageNotification.graphql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const GroupMessageNotification: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
-declare module '*/joinGlobalGroup.graphql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const JoinGlobalGroup: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
 declare module '*/languageCodeMappings.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -170,10 +251,73 @@ declare module '*/languageIdByAlpha2.graphql' {
 }
     
 
-declare module '*/registerUserActivity.graphql' {
+declare module '*/adminEmailsFcmTokens.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const RegisterUserActivity: DocumentNode;
+  export const AdminEmailsFcmTokens: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createNotification.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateNotification: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createUserDevice.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateUserDevice: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/groupMessageNotification.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const GroupMessageNotification: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/markNotificationAsSent.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const MarkNotificationAsSent: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/notificationChannelByName.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const NotificationChannelByName: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/outstandingEmailNotifications.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const OutstandingEmailNotifications: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/outstandingFcmNotifications.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const OutstandingFcmNotifications: DocumentNode;
 
   export default defaultDocument;
 }
@@ -188,19 +332,28 @@ declare module '*/unsubscribeUserEmailNotifications.graphql' {
 }
     
 
-declare module '*/updateUserAvatarUrl.graphql' {
+declare module '*/createUser.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const UpdateUserAvatarUrl: DocumentNode;
+  export const CreateUser: DocumentNode;
 
   export default defaultDocument;
 }
     
 
-declare module '*/userGroupMemberships.graphql' {
+declare module '*/createUserLanguage.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const UserGroupMemberships: DocumentNode;
+  export const CreateUserLanguage: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/updateUserAvatarUrl.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UpdateUserAvatarUrl: DocumentNode;
 
   export default defaultDocument;
 }
@@ -215,10 +368,10 @@ declare module '*/userHasCompletedProfile.graphql' {
 }
     
 
-declare module '*/userIsInGroup.graphql' {
+declare module '*/userIdByEmail.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const UserIsInGroup: DocumentNode;
+  export const UserIdByEmail: DocumentNode;
 
   export default defaultDocument;
 }

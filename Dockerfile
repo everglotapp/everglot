@@ -12,6 +12,7 @@ RUN set -eux \
         git \
         wait4ports \
         moreutils \
+        ffmpeg \
         --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 # Pass NODE_ENV as a build arg to change the NPM dependencies.

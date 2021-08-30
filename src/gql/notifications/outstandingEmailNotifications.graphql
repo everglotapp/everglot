@@ -1,0 +1,21 @@
+query OutstandingEmailNotifications {
+    notificationChannelByName(name: "Email") {
+        notificationsByChannelId(
+            orderBy: CREATED_AT_ASC
+            filter: { sentAt: { isNull: true } }
+        ) {
+            nodes {
+                id
+                recipient {
+                    email
+                    emailNotificationsEnabled
+                    username
+                    unconfirmedEmail
+                }
+                params
+                expiresAt
+                withheldUntil
+            }
+        }
+    }
+}

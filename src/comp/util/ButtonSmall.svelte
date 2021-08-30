@@ -36,6 +36,7 @@
     $: computedClasses = CLASSES[variant][color]
     export let className: string = ""
     export let popperRef: ReferenceAction | undefined = undefined
+    export let ariaHidden: boolean = false
     function noop(_node: HTMLElement) {}
     $: popperRefOrNoop = popperRef || noop
 </script>
@@ -46,6 +47,7 @@
             class={`${computedClasses} ${className}`}
             {type}
             disabled={disabled ? true : undefined}
+            aria-hidden={ariaHidden}
             use:popperRefOrNoop
             on:click
         >
@@ -57,6 +59,7 @@
             {type}
             disabled={disabled ? true : undefined}
             use:popperRefOrNoop
+            aria-hidden={ariaHidden}
             on:click|preventDefault
         >
             <slot />
@@ -68,6 +71,7 @@
         {href}
         {target}
         disabled={disabled ? true : undefined}
+        aria-hidden={ariaHidden}
         on:click
     >
         <slot />

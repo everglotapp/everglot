@@ -1,0 +1,6 @@
+query NotificationChannelByName($name: String!) {
+  notificationChannelByName(name: $name) {
+    id
+    __typename
+  }
+}

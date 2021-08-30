@@ -4,7 +4,7 @@ import log from "../logger"
 
 const chlog = log.child({ namespace: "users" })
 
-import type {
+import {
     RegisterUserActivityMutation,
     RegisterUserActivityMutationVariables,
     UpdateUserAvatarUrlMutation,
@@ -13,20 +13,24 @@ import type {
     UserUuidByIdQuery,
     UserHasCompletedProfileQuery,
     UserGroupMembershipsQuery,
+    UserIdByEmailQuery,
+    UserIdByEmail,
+    UserGroupMemberships,
+    UserHasCompletedProfile,
+    UserUuidById,
+    UpdateUserAvatarUrl,
+    RegisterUserActivity,
 } from "../types/generated/graphql"
 
 export async function registerUserActivity(
     vars: RegisterUserActivityMutationVariables
 ): Promise<User["lastActiveAt"] | null> {
     const res = await performQuery<RegisterUserActivityMutation>(
-        `mutation RegisterUserActivity($userId: Int!) {
-            registerUserActivity(input: { userId: $userId }) {
-                datetime
-            }
-        }`,
+        RegisterUserActivity.loc!.source,
         vars
     )
     if (!res.data) {
+        chlog.child({ res }).error("Failed to register user activity")
         return null
     }
     return res.data?.registerUserActivity?.datetime || null
@@ -36,13 +40,7 @@ export async function updateUserAvatarUrl(
     vars: UpdateUserAvatarUrlMutationVariables
 ): Promise<boolean> {
     const res = await performQuery<UpdateUserAvatarUrlMutation>(
-        `mutation UpdateUserAvatarUrl($avatarUrl: String!, $id: Int!) {
-            updateUser(input: { patch: { avatarUrl: $avatarUrl }, id: $id }) {
-                user {
-                    avatarUrl
-                }
-            }
-        }`,
+        UpdateUserAvatarUrl.loc!.source,
         vars
     )
     if (!res.data || !res.data.updateUser || res.errors) {
@@ -54,11 +52,7 @@ export async function updateUserAvatarUrl(
 
 export async function getUserUuidById(id: User["id"]): Promise<string | null> {
     const res = await performQuery<UserUuidByIdQuery>(
-        `query UserUuidById($id: Int!) {
-            user(id: $id) {
-                uuid
-            }
-        }`,
+        UserUuidById.loc!.source,
         { id }
     )
     if (!res.data) {
@@ -71,15 +65,7 @@ export async function userHasCompletedProfile(
     userId: number
 ): Promise<boolean> {
     const queryResult = await performQuery<UserHasCompletedProfileQuery>(
-        `query UserHasCompletedProfile($id: Int!) {
-            user(id: $id) {
-                username
-                userLanguages {
-                    totalCount
-                }
-            }
-        }
-        `,
+        UserHasCompletedProfile.loc!.source,
         { id: userId }
     )
     if (queryResult.data && queryResult.data.user) {
@@ -95,32 +81,24 @@ export async function userHasCompletedProfile(
 
 export async function userGroupMemberships(userId: number) {
     const queryResult = await performQuery<UserGroupMembershipsQuery>(
-        `query UserGroupMemberships($id: Int!) {
-            user(id: $id) {
-                groupUsers {
-                    edges {
-                        node {
-                            group {
-                                global
-                                uuid
-                                groupName
-                                language {
-                                    alpha2
-                                }
-                                languageSkillLevel {
-                                    name
-                                }
-                            }
-                            userType
-                        }
-                    }
-                }
-            }
-        }`,
+        UserGroupMemberships.loc!.source,
         { id: userId }
     )
     if (queryResult.data && queryResult.data.user?.groupUsers.edges) {
         return queryResult.data.user.groupUsers.edges
     }
     return null
+}
+
+export async function getUserIdByEmail(
+    email: User["email"]
+): Promise<number | null> {
+    const res = await performQuery<UserIdByEmailQuery>(
+        UserIdByEmail.loc!.source,
+        { email }
+    )
+    if (!res.data) {
+        return null
+    }
+    return res.data.userByEmail?.id || null
 }

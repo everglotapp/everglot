@@ -1,0 +1,7 @@
+query UsersWithoutNativeGroup($lid: Int!, $nativeSize: Int!) {
+    usersWithoutNativeGroup(lid: $lid, first: $nativeSize) {
+        nodes {
+            id
+        }
+    }
+}

@@ -1,0 +1,13 @@
+mutation CreateNotification($channelId: Int!, $recipientId: Int, $recipientGroupId: Int, $sentAt: Datetime, $params: JSON, $expiresAt: Datetime, $withheldUntil: Datetime) {
+  createNotification(input: {notification: {channelId: $channelId, recipientId: $recipientId, recipientGroupId: $recipientGroupId, params: $params, sentAt: $sentAt, expiresAt: $expiresAt, withheldUntil: $withheldUntil}}) {
+    clientMutationId
+    notification {
+      createdAt
+      expiresAt
+      withheldUntil
+      id
+      __typename
+    }
+    __typename
+  }
+}

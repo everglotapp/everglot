@@ -111,6 +111,10 @@
         left: 0;
         right: 0;
         bottom: 0;
+
+        @screen md {
+            font-size: 18px;
+        }
     }
 
     main {
@@ -150,5 +154,6 @@
     .main-inner {
         display: flex;
         height: 100%;
+        flex-flow: column;
     }
 </style>

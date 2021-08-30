@@ -1,11 +1,19 @@
 import { performQuery } from "../gql"
-import { getApp } from "../firebase"
 import log from "../../logger"
 
-import type { GroupMessageNotificationQuery } from "../../types/generated/graphql"
+import {
+    GroupMessageNotification,
+    GroupMessageNotificationQuery,
+} from "../../types/generated/graphql"
 import type { ChatMessage } from "../../types/chat"
+import type { FcmParamsV1 } from "./params/v1"
+import { enqueueFcmNotification } from "./fcm"
+import { getGroupIdByUuid } from "../groups"
+import { NotificationParamsVersion } from "./params"
 
 const chlog = log.child({ namespace: "notifications" })
+
+const GROUP_MESSAGE_PUSH_NOTIFICATION_EXPIRY_MS = 1000 * 60 * 15 // 15 minutes
 
 export async function notifyMessageRecipients(
     chatMessage: ChatMessage,
@@ -15,7 +23,19 @@ export async function notifyMessageRecipients(
         // do not notify for bot messages
         return
     }
-    const notification = new GroupMessageNotification(chatMessage, groupUuid)
+    const groupId = await getGroupIdByUuid(groupUuid)
+    if (!groupId) {
+        chlog
+            .child({ groupUuid })
+            .error(
+                "Failed to get group ID by UUID for group message FCM notification"
+            )
+        return
+    }
+    const notification = new GroupMessageNotificationBuilder(
+        chatMessage,
+        groupUuid
+    )
     if (!(await notification.canBeSent())) {
         chlog
             .child({ notification })
@@ -24,30 +44,42 @@ export async function notifyMessageRecipients(
             )
         return
     }
-    const tokens = notification.fcmTokens
-    if (!tokens.length) {
-        chlog
-            .child({ notification })
-            .trace(
-                "Group message notification could not be sent because there are no relevant FCM tokens to send to"
-            )
-        return
-    }
-    const multicastMessage = {
-        tokens,
+    const messageParams = {
         notification: {
             title: notification.title,
             body: notification.body,
         },
         data: notification.data,
     }
-    chlog
-        .child({ multicastMessage })
-        .debug("Dispatching group message notification")
-    getApp().messaging().sendMulticast(multicastMessage)
+    const params: FcmParamsV1 = {
+        message: messageParams,
+        excludeUserUuids: [chatMessage.userUuid],
+    }
+    chlog.child({ params }).trace("Enqueuing group message notification")
+    const expiresAt = new Date(
+        Date.now() + GROUP_MESSAGE_PUSH_NOTIFICATION_EXPIRY_MS
+    )
+    const result = await enqueueFcmNotification(
+        { userId: null, groupId },
+        expiresAt,
+        null,
+        {
+            version: NotificationParamsVersion.V1,
+            ...params,
+        }
+    )
+    if (result) {
+        chlog
+            .child({ params })
+            .debug("Successfully enqueued group message notification")
+    } else {
+        chlog
+            .child({ params })
+            .error("Failed to enqueue group message notification")
+    }
 }
 
-class GroupMessageNotification {
+class GroupMessageNotificationBuilder {
     message: ChatMessage
     groupUuid: string
     queryResult: GroupMessageNotificationQuery | null | undefined
@@ -94,31 +126,6 @@ class GroupMessageNotification {
         }
     }
 
-    get fcmTokens(): string[] {
-        if (!this.queryResult) {
-            return []
-        }
-        const groupUserNodes =
-            this.queryResult.groupByUuid?.groupUsers.nodes || []
-        return groupUserNodes.reduce((tokenArr, groupUserNode) => {
-            if (
-                !groupUserNode ||
-                !groupUserNode.user ||
-                // do not notify the message's sender
-                groupUserNode.user.uuid === this.message.userUuid
-            ) {
-                return tokenArr
-            }
-            const userDeviceNodes = groupUserNode.user.userDevices.nodes
-            return [
-                ...tokenArr,
-                ...(userDeviceNodes
-                    .filter((device) => device && device.fcmToken !== null)
-                    .map((device) => device!.fcmToken!) || []),
-            ]
-        }, [])
-    }
-
     async init() {
         if (!this.message.userUuid) {
             // do not notify for bot messages
@@ -128,34 +135,7 @@ class GroupMessageNotification {
             return
         }
         const res = await performQuery<GroupMessageNotificationQuery>(
-            `query GroupMessageNotification($groupUuid: UUID!, $senderUuid: UUID!) {
-                groupByUuid(uuid: $groupUuid) {
-                    groupUsers {
-                        nodes {
-                            user {
-                                uuid
-                                userDevices {
-                                    nodes {
-                                        fcmToken
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    groupName
-                    uuid
-                    language {
-                        alpha2
-                    }
-                    languageSkillLevel {
-                        name
-                    }
-                }
-                userByUuid(uuid: $senderUuid) {
-                    username
-                }
-            }
-            `,
+            GroupMessageNotification.loc!.source,
             { groupUuid: this.groupUuid, senderUuid: this.message.userUuid }
         )
         if (!res.data?.groupByUuid) {

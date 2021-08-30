@@ -954,6 +954,230 @@ export type CreateMessagePreviewPayloadMessagePreviewEdgeArgs = {
   orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
 };
 
+/** All input for the create `NotificationChannel` mutation. */
+export type CreateNotificationChannelInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `NotificationChannel` to be created by this mutation. */
+  notificationChannel: NotificationChannelInput;
+};
+
+/** The output of our create `NotificationChannel` mutation. */
+export type CreateNotificationChannelPayload = {
+  __typename?: 'CreateNotificationChannelPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `NotificationChannel` that was created by this mutation. */
+  notificationChannel?: Maybe<NotificationChannel>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** An edge for our `NotificationChannel`. May be used by Relay 1. */
+  notificationChannelEdge?: Maybe<NotificationChannelsEdge>;
+};
+
+
+/** The output of our create `NotificationChannel` mutation. */
+export type CreateNotificationChannelPayloadNotificationChannelEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+};
+
+/** All input for the create `Notification` mutation. */
+export type CreateNotificationInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Notification` to be created by this mutation. */
+  notification: NotificationInput;
+};
+
+/** The output of our create `Notification` mutation. */
+export type CreateNotificationPayload = {
+  __typename?: 'CreateNotificationPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Notification` that was created by this mutation. */
+  notification?: Maybe<Notification>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Notification`. */
+  recipient?: Maybe<User>;
+  /** Reads a single `NotificationChannel` that is related to this `Notification`. */
+  channel?: Maybe<NotificationChannel>;
+  /** Reads a single `Group` that is related to this `Notification`. */
+  recipientGroup?: Maybe<Group>;
+  /** An edge for our `Notification`. May be used by Relay 1. */
+  notificationEdge?: Maybe<NotificationsEdge>;
+};
+
+
+/** The output of our create `Notification` mutation. */
+export type CreateNotificationPayloadNotificationEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+};
+
+/** All input for the create `Post` mutation. */
+export type CreatePostInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Post` to be created by this mutation. */
+  post: PostInput;
+};
+
+/** All input for the create `PostLike` mutation. */
+export type CreatePostLikeInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostLike` to be created by this mutation. */
+  postLike: PostLikeInput;
+};
+
+/** The output of our create `PostLike` mutation. */
+export type CreatePostLikePayload = {
+  __typename?: 'CreatePostLikePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostLike` that was created by this mutation. */
+  postLike?: Maybe<PostLike>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostLike`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostLike`. */
+  post?: Maybe<Post>;
+  /** An edge for our `PostLike`. May be used by Relay 1. */
+  postLikeEdge?: Maybe<PostLikesEdge>;
+};
+
+
+/** The output of our create `PostLike` mutation. */
+export type CreatePostLikePayloadPostLikeEdgeArgs = {
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+};
+
+/** The output of our create `Post` mutation. */
+export type CreatePostPayload = {
+  __typename?: 'CreatePostPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Post` that was created by this mutation. */
+  post?: Maybe<Post>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Post`. */
+  author?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `Post`. */
+  parentPost?: Maybe<Post>;
+  /** Reads a single `Language` that is related to this `Post`. */
+  language?: Maybe<Language>;
+  /** Reads a single `Prompt` that is related to this `Post`. */
+  prompt?: Maybe<Prompt>;
+  /** An edge for our `Post`. May be used by Relay 1. */
+  postEdge?: Maybe<PostsEdge>;
+};
+
+
+/** The output of our create `Post` mutation. */
+export type CreatePostPayloadPostEdgeArgs = {
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+};
+
+/** All input for the create `PostRecording` mutation. */
+export type CreatePostRecordingInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostRecording` to be created by this mutation. */
+  postRecording: PostRecordingInput;
+};
+
+/** The output of our create `PostRecording` mutation. */
+export type CreatePostRecordingPayload = {
+  __typename?: 'CreatePostRecordingPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostRecording` that was created by this mutation. */
+  postRecording?: Maybe<PostRecording>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostRecording`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostRecording`. */
+  post?: Maybe<Post>;
+  /** An edge for our `PostRecording`. May be used by Relay 1. */
+  postRecordingEdge?: Maybe<PostRecordingsEdge>;
+};
+
+
+/** The output of our create `PostRecording` mutation. */
+export type CreatePostRecordingPayloadPostRecordingEdgeArgs = {
+  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+};
+
+/** All input for the create `Prompt` mutation. */
+export type CreatePromptInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Prompt` to be created by this mutation. */
+  prompt: PromptInput;
+};
+
+/** The output of our create `Prompt` mutation. */
+export type CreatePromptPayload = {
+  __typename?: 'CreatePromptPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Prompt` that was created by this mutation. */
+  prompt?: Maybe<Prompt>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `Prompt`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Prompt`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `Prompt`. May be used by Relay 1. */
+  promptEdge?: Maybe<PromptsEdge>;
+};
+
+
+/** The output of our create `Prompt` mutation. */
+export type CreatePromptPayloadPromptEdgeArgs = {
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+};
+
 /** All input for the create `UserDevice` mutation. */
 export type CreateUserDeviceInput = {
   /**
@@ -2009,6 +2233,356 @@ export type DeleteMessagePreviewPayloadMessagePreviewEdgeArgs = {
   orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
 };
 
+/** All input for the `deleteNotificationByNodeId` mutation. */
+export type DeleteNotificationByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Notification` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteNotificationByUuid` mutation. */
+export type DeleteNotificationByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteNotificationChannelByName` mutation. */
+export type DeleteNotificationChannelByNameInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
+/** All input for the `deleteNotificationChannelByNodeId` mutation. */
+export type DeleteNotificationChannelByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `NotificationChannel` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteNotificationChannelByUuid` mutation. */
+export type DeleteNotificationChannelByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deleteNotificationChannel` mutation. */
+export type DeleteNotificationChannelInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `NotificationChannel` mutation. */
+export type DeleteNotificationChannelPayload = {
+  __typename?: 'DeleteNotificationChannelPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `NotificationChannel` that was deleted by this mutation. */
+  notificationChannel?: Maybe<NotificationChannel>;
+  deletedNotificationChannelNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** An edge for our `NotificationChannel`. May be used by Relay 1. */
+  notificationChannelEdge?: Maybe<NotificationChannelsEdge>;
+};
+
+
+/** The output of our delete `NotificationChannel` mutation. */
+export type DeleteNotificationChannelPayloadNotificationChannelEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+};
+
+/** All input for the `deleteNotification` mutation. */
+export type DeleteNotificationInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `Notification` mutation. */
+export type DeleteNotificationPayload = {
+  __typename?: 'DeleteNotificationPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Notification` that was deleted by this mutation. */
+  notification?: Maybe<Notification>;
+  deletedNotificationNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Notification`. */
+  recipient?: Maybe<User>;
+  /** Reads a single `NotificationChannel` that is related to this `Notification`. */
+  channel?: Maybe<NotificationChannel>;
+  /** Reads a single `Group` that is related to this `Notification`. */
+  recipientGroup?: Maybe<Group>;
+  /** An edge for our `Notification`. May be used by Relay 1. */
+  notificationEdge?: Maybe<NotificationsEdge>;
+};
+
+
+/** The output of our delete `Notification` mutation. */
+export type DeleteNotificationPayloadNotificationEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+};
+
+/** All input for the `deletePostByNodeId` mutation. */
+export type DeletePostByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Post` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deletePostByUuid` mutation. */
+export type DeletePostByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deletePost` mutation. */
+export type DeletePostInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** All input for the `deletePostLikeByNodeId` mutation. */
+export type DeletePostLikeByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `PostLike` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deletePostLike` mutation. */
+export type DeletePostLikeInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `PostLike` mutation. */
+export type DeletePostLikePayload = {
+  __typename?: 'DeletePostLikePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostLike` that was deleted by this mutation. */
+  postLike?: Maybe<PostLike>;
+  deletedPostLikeNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostLike`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostLike`. */
+  post?: Maybe<Post>;
+  /** An edge for our `PostLike`. May be used by Relay 1. */
+  postLikeEdge?: Maybe<PostLikesEdge>;
+};
+
+
+/** The output of our delete `PostLike` mutation. */
+export type DeletePostLikePayloadPostLikeEdgeArgs = {
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+};
+
+/** The output of our delete `Post` mutation. */
+export type DeletePostPayload = {
+  __typename?: 'DeletePostPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Post` that was deleted by this mutation. */
+  post?: Maybe<Post>;
+  deletedPostNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Post`. */
+  author?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `Post`. */
+  parentPost?: Maybe<Post>;
+  /** Reads a single `Language` that is related to this `Post`. */
+  language?: Maybe<Language>;
+  /** Reads a single `Prompt` that is related to this `Post`. */
+  prompt?: Maybe<Prompt>;
+  /** An edge for our `Post`. May be used by Relay 1. */
+  postEdge?: Maybe<PostsEdge>;
+};
+
+
+/** The output of our delete `Post` mutation. */
+export type DeletePostPayloadPostEdgeArgs = {
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+};
+
+/** All input for the `deletePostRecordingByNodeId` mutation. */
+export type DeletePostRecordingByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `PostRecording` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deletePostRecordingByUuid` mutation. */
+export type DeletePostRecordingByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deletePostRecording` mutation. */
+export type DeletePostRecordingInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `PostRecording` mutation. */
+export type DeletePostRecordingPayload = {
+  __typename?: 'DeletePostRecordingPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostRecording` that was deleted by this mutation. */
+  postRecording?: Maybe<PostRecording>;
+  deletedPostRecordingNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostRecording`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostRecording`. */
+  post?: Maybe<Post>;
+  /** An edge for our `PostRecording`. May be used by Relay 1. */
+  postRecordingEdge?: Maybe<PostRecordingsEdge>;
+};
+
+
+/** The output of our delete `PostRecording` mutation. */
+export type DeletePostRecordingPayloadPostRecordingEdgeArgs = {
+  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+};
+
+/** All input for the `deletePromptByNodeId` mutation. */
+export type DeletePromptByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Prompt` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deletePromptByUuid` mutation. */
+export type DeletePromptByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deletePrompt` mutation. */
+export type DeletePromptInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `Prompt` mutation. */
+export type DeletePromptPayload = {
+  __typename?: 'DeletePromptPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Prompt` that was deleted by this mutation. */
+  prompt?: Maybe<Prompt>;
+  deletedPromptNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `Prompt`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Prompt`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `Prompt`. May be used by Relay 1. */
+  promptEdge?: Maybe<PromptsEdge>;
+};
+
+
+/** The output of our delete `Prompt` mutation. */
+export type DeletePromptPayloadPromptEdgeArgs = {
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+};
+
 /** All input for the `deleteUserByEmail` mutation. */
 export type DeleteUserByEmailInput = {
   /**
@@ -2994,6 +3568,8 @@ export type Group = Node & {
   groupUsers: GroupUsersConnection;
   /** Reads and enables pagination through a set of `Message`. */
   messagesByRecipientGroupId: MessagesConnection;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByRecipientGroupId: NotificationsConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByGroupUserGroupIdAndUserId: GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
@@ -3002,6 +3578,10 @@ export type Group = Node & {
   usersByMessageRecipientGroupIdAndRecipientId: GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Message`. */
   messagesByMessageRecipientGroupIdAndParentMessageId: GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByNotificationRecipientGroupIdAndRecipientId: GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `NotificationChannel`. */
+  notificationChannelsByNotificationRecipientGroupIdAndChannelId: GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyConnection;
 };
 
 
@@ -3026,6 +3606,18 @@ export type GroupMessagesByRecipientGroupIdArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+
+export type GroupNotificationsByRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
 };
 
 
@@ -3074,6 +3666,30 @@ export type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+
+export type GroupUsersByNotificationRecipientGroupIdAndRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  condition?: Maybe<NotificationChannelCondition>;
+  filter?: Maybe<NotificationChannelFilter>;
 };
 
 /** A condition to be used against `Group` object types. All fields are tested for equality and combined with a logical ‘and.’ */
@@ -3164,6 +3780,43 @@ export type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEd
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `NotificationChannel` values, with data from `Notification`. */
+export type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyConnection = {
+  __typename?: 'GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyConnection';
+  /** A list of `NotificationChannel` objects. */
+  nodes: Array<Maybe<NotificationChannel>>;
+  /** A list of edges which contains the `NotificationChannel`, info from the `Notification`, and the cursor to aid in pagination. */
+  edges: Array<GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `NotificationChannel` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `NotificationChannel` edge in the connection, with data from `Notification`. */
+export type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdge = {
+  __typename?: 'GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `NotificationChannel` at the end of the edge. */
+  node?: Maybe<NotificationChannel>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByChannelId: NotificationsConnection;
+};
+
+
+/** A `NotificationChannel` edge in the connection, with data from `Notification`. */
+export type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdgeNotificationsByChannelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
 };
 
 /** Represents an update to a `Group`. Fields that are set will be updated. */
@@ -3363,6 +4016,43 @@ export type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdgeMessages
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+/** A connection to a list of `User` values, with data from `Notification`. */
+export type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyConnection = {
+  __typename?: 'GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Notification`, and the cursor to aid in pagination. */
+  edges: Array<GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Notification`. */
+export type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge = {
+  __typename?: 'GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByRecipientId: NotificationsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Notification`. */
+export type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdgeNotificationsByRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
 };
 
 /** A connection to a list of `GroupUser` values. */
@@ -3698,6 +4388,10 @@ export type Language = Node & {
   userLanguages: UserLanguagesConnection;
   /** Reads and enables pagination through a set of `Group`. */
   groups: GroupsConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  prompts: PromptsConnection;
   /** Reads and enables pagination through a set of `InviteToken`. */
   inviteTokensByUserLocaleAndSignedUpWithTokenId: LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
@@ -3706,6 +4400,14 @@ export type Language = Node & {
   languageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelId: LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyConnection;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
   languageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelId: LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostLanguageIdAndAuthorId: LanguageUsersByPostLanguageIdAndAuthorIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByPostLanguageIdAndParentPostId: LanguagePostsByPostLanguageIdAndParentPostIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  promptsByPostLanguageIdAndPromptId: LanguagePromptsByPostLanguageIdAndPromptIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
+  languageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelId: LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyConnection;
 };
 
 
@@ -3742,6 +4444,30 @@ export type LanguageGroupsArgs = {
   orderBy?: Maybe<Array<GroupsOrderBy>>;
   condition?: Maybe<GroupCondition>;
   filter?: Maybe<GroupFilter>;
+};
+
+
+export type LanguagePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type LanguagePromptsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
 };
 
 
@@ -3782,6 +4508,54 @@ export type LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillL
 
 
 export type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  condition?: Maybe<LanguageSkillLevelCondition>;
+  filter?: Maybe<LanguageSkillLevelFilter>;
+};
+
+
+export type LanguageUsersByPostLanguageIdAndAuthorIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type LanguagePostsByPostLanguageIdAndParentPostIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type LanguagePromptsByPostLanguageIdAndPromptIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
+};
+
+
+export type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -3908,6 +4682,43 @@ export type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdM
   filter?: Maybe<GroupFilter>;
 };
 
+/** A connection to a list of `LanguageSkillLevel` values, with data from `Prompt`. */
+export type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyConnection = {
+  __typename?: 'LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyConnection';
+  /** A list of `LanguageSkillLevel` objects. */
+  nodes: Array<Maybe<LanguageSkillLevel>>;
+  /** A list of edges which contains the `LanguageSkillLevel`, info from the `Prompt`, and the cursor to aid in pagination. */
+  edges: Array<LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `LanguageSkillLevel` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `LanguageSkillLevel` edge in the connection, with data from `Prompt`. */
+export type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyEdge = {
+  __typename?: 'LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `LanguageSkillLevel` at the end of the edge. */
+  node?: Maybe<LanguageSkillLevel>;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  promptsByRecommendedSkillLevelId: PromptsConnection;
+};
+
+
+/** A `LanguageSkillLevel` edge in the connection, with data from `Prompt`. */
+export type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyEdgePromptsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
+};
+
 /** A connection to a list of `LanguageSkillLevel` values, with data from `UserLanguage`. */
 export type LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyConnection = {
   __typename?: 'LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyConnection';
@@ -3954,6 +4765,80 @@ export type LanguagePatch = {
   createdAt?: Maybe<Scalars['Datetime']>;
 };
 
+/** A connection to a list of `Post` values, with data from `Post`. */
+export type LanguagePostsByPostLanguageIdAndParentPostIdManyToManyConnection = {
+  __typename?: 'LanguagePostsByPostLanguageIdAndParentPostIdManyToManyConnection';
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** A list of edges which contains the `Post`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<LanguagePostsByPostLanguageIdAndParentPostIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection, with data from `Post`. */
+export type LanguagePostsByPostLanguageIdAndParentPostIdManyToManyEdge = {
+  __typename?: 'LanguagePostsByPostLanguageIdAndParentPostIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `Post`. */
+  replies: PostsConnection;
+};
+
+
+/** A `Post` edge in the connection, with data from `Post`. */
+export type LanguagePostsByPostLanguageIdAndParentPostIdManyToManyEdgeRepliesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+/** A connection to a list of `Prompt` values, with data from `Post`. */
+export type LanguagePromptsByPostLanguageIdAndPromptIdManyToManyConnection = {
+  __typename?: 'LanguagePromptsByPostLanguageIdAndPromptIdManyToManyConnection';
+  /** A list of `Prompt` objects. */
+  nodes: Array<Maybe<Prompt>>;
+  /** A list of edges which contains the `Prompt`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<LanguagePromptsByPostLanguageIdAndPromptIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Prompt` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Prompt` edge in the connection, with data from `Post`. */
+export type LanguagePromptsByPostLanguageIdAndPromptIdManyToManyEdge = {
+  __typename?: 'LanguagePromptsByPostLanguageIdAndPromptIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Prompt` at the end of the edge. */
+  node?: Maybe<Prompt>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+};
+
+
+/** A `Prompt` edge in the connection, with data from `Post`. */
+export type LanguagePromptsByPostLanguageIdAndPromptIdManyToManyEdgePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
 export type LanguageSkillLevel = Node & {
   __typename?: 'LanguageSkillLevel';
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
@@ -3982,12 +4867,16 @@ export type LanguageSkillLevel = Node & {
   chineseWouldYouRatherQuestionsByRecommendedSkillLevelId: ChineseWouldYouRatherQuestionsConnection;
   /** Reads and enables pagination through a set of `ChineseGuessCharacterQuestion`. */
   chineseGuessCharacterQuestionsByRecommendedSkillLevelId: ChineseGuessCharacterQuestionsConnection;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  promptsByRecommendedSkillLevelId: PromptsConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByUserLanguageLanguageSkillLevelIdAndUserId: LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByUserLanguageLanguageSkillLevelIdAndLanguageId: LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByGroupLanguageSkillLevelIdAndLanguageId: LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Language`. */
+  languagesByPromptRecommendedSkillLevelIdAndLanguageId: LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyConnection;
 };
 
 
@@ -4123,6 +5012,18 @@ export type LanguageSkillLevelChineseGuessCharacterQuestionsByRecommendedSkillLe
 };
 
 
+export type LanguageSkillLevelPromptsByRecommendedSkillLevelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
+};
+
+
 export type LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
@@ -4148,6 +5049,18 @@ export type LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLang
 
 
 export type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
+};
+
+
+export type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -4224,6 +5137,43 @@ export type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdM
   orderBy?: Maybe<Array<GroupsOrderBy>>;
   condition?: Maybe<GroupCondition>;
   filter?: Maybe<GroupFilter>;
+};
+
+/** A connection to a list of `Language` values, with data from `Prompt`. */
+export type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyConnection = {
+  __typename?: 'LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyConnection';
+  /** A list of `Language` objects. */
+  nodes: Array<Maybe<Language>>;
+  /** A list of edges which contains the `Language`, info from the `Prompt`, and the cursor to aid in pagination. */
+  edges: Array<LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Language` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Language` edge in the connection, with data from `Prompt`. */
+export type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyEdge = {
+  __typename?: 'LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Language` at the end of the edge. */
+  node?: Maybe<Language>;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  prompts: PromptsConnection;
+};
+
+
+/** A `Language` edge in the connection, with data from `Prompt`. */
+export type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyEdgePromptsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
 };
 
 /** A connection to a list of `Language` values, with data from `UserLanguage`. */
@@ -4338,6 +5288,43 @@ export enum LanguageSkillLevelsOrderBy {
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
+
+/** A connection to a list of `User` values, with data from `Post`. */
+export type LanguageUsersByPostLanguageIdAndAuthorIdManyToManyConnection = {
+  __typename?: 'LanguageUsersByPostLanguageIdAndAuthorIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<LanguageUsersByPostLanguageIdAndAuthorIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Post`. */
+export type LanguageUsersByPostLanguageIdAndAuthorIdManyToManyEdge = {
+  __typename?: 'LanguageUsersByPostLanguageIdAndAuthorIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Post`. */
+  authoredPosts: PostsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Post`. */
+export type LanguageUsersByPostLanguageIdAndAuthorIdManyToManyEdgeAuthoredPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
 
 /** A connection to a list of `User` values, with data from `UserLanguage`. */
 export type LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyConnection = {
@@ -4872,6 +5859,18 @@ export type Mutation = {
   createMessagePreview?: Maybe<CreateMessagePreviewPayload>;
   /** Creates a single `Message`. */
   createMessage?: Maybe<CreateMessagePayload>;
+  /** Creates a single `NotificationChannel`. */
+  createNotificationChannel?: Maybe<CreateNotificationChannelPayload>;
+  /** Creates a single `Notification`. */
+  createNotification?: Maybe<CreateNotificationPayload>;
+  /** Creates a single `PostLike`. */
+  createPostLike?: Maybe<CreatePostLikePayload>;
+  /** Creates a single `PostRecording`. */
+  createPostRecording?: Maybe<CreatePostRecordingPayload>;
+  /** Creates a single `Post`. */
+  createPost?: Maybe<CreatePostPayload>;
+  /** Creates a single `Prompt`. */
+  createPrompt?: Maybe<CreatePromptPayload>;
   /** Creates a single `GermanRandomQuestion`. */
   createGermanRandomQuestion?: Maybe<CreateGermanRandomQuestionPayload>;
   /** Creates a single `EnglishRandomQuestion`. */
@@ -4940,6 +5939,42 @@ export type Mutation = {
   updateMessage?: Maybe<UpdateMessagePayload>;
   /** Updates a single `Message` using a unique key and a patch. */
   updateMessageByUuid?: Maybe<UpdateMessagePayload>;
+  /** Updates a single `NotificationChannel` using its globally unique id and a patch. */
+  updateNotificationChannelByNodeId?: Maybe<UpdateNotificationChannelPayload>;
+  /** Updates a single `NotificationChannel` using a unique key and a patch. */
+  updateNotificationChannel?: Maybe<UpdateNotificationChannelPayload>;
+  /** Updates a single `NotificationChannel` using a unique key and a patch. */
+  updateNotificationChannelByUuid?: Maybe<UpdateNotificationChannelPayload>;
+  /** Updates a single `NotificationChannel` using a unique key and a patch. */
+  updateNotificationChannelByName?: Maybe<UpdateNotificationChannelPayload>;
+  /** Updates a single `Notification` using its globally unique id and a patch. */
+  updateNotificationByNodeId?: Maybe<UpdateNotificationPayload>;
+  /** Updates a single `Notification` using a unique key and a patch. */
+  updateNotification?: Maybe<UpdateNotificationPayload>;
+  /** Updates a single `Notification` using a unique key and a patch. */
+  updateNotificationByUuid?: Maybe<UpdateNotificationPayload>;
+  /** Updates a single `PostLike` using its globally unique id and a patch. */
+  updatePostLikeByNodeId?: Maybe<UpdatePostLikePayload>;
+  /** Updates a single `PostLike` using a unique key and a patch. */
+  updatePostLike?: Maybe<UpdatePostLikePayload>;
+  /** Updates a single `PostRecording` using its globally unique id and a patch. */
+  updatePostRecordingByNodeId?: Maybe<UpdatePostRecordingPayload>;
+  /** Updates a single `PostRecording` using a unique key and a patch. */
+  updatePostRecording?: Maybe<UpdatePostRecordingPayload>;
+  /** Updates a single `PostRecording` using a unique key and a patch. */
+  updatePostRecordingByUuid?: Maybe<UpdatePostRecordingPayload>;
+  /** Updates a single `Post` using its globally unique id and a patch. */
+  updatePostByNodeId?: Maybe<UpdatePostPayload>;
+  /** Updates a single `Post` using a unique key and a patch. */
+  updatePost?: Maybe<UpdatePostPayload>;
+  /** Updates a single `Post` using a unique key and a patch. */
+  updatePostByUuid?: Maybe<UpdatePostPayload>;
+  /** Updates a single `Prompt` using its globally unique id and a patch. */
+  updatePromptByNodeId?: Maybe<UpdatePromptPayload>;
+  /** Updates a single `Prompt` using a unique key and a patch. */
+  updatePrompt?: Maybe<UpdatePromptPayload>;
+  /** Updates a single `Prompt` using a unique key and a patch. */
+  updatePromptByUuid?: Maybe<UpdatePromptPayload>;
   /** Updates a single `GermanRandomQuestion` using its globally unique id and a patch. */
   updateGermanRandomQuestionByNodeId?: Maybe<UpdateGermanRandomQuestionPayload>;
   /** Updates a single `GermanRandomQuestion` using a unique key and a patch. */
@@ -5058,6 +6093,42 @@ export type Mutation = {
   deleteMessage?: Maybe<DeleteMessagePayload>;
   /** Deletes a single `Message` using a unique key. */
   deleteMessageByUuid?: Maybe<DeleteMessagePayload>;
+  /** Deletes a single `NotificationChannel` using its globally unique id. */
+  deleteNotificationChannelByNodeId?: Maybe<DeleteNotificationChannelPayload>;
+  /** Deletes a single `NotificationChannel` using a unique key. */
+  deleteNotificationChannel?: Maybe<DeleteNotificationChannelPayload>;
+  /** Deletes a single `NotificationChannel` using a unique key. */
+  deleteNotificationChannelByUuid?: Maybe<DeleteNotificationChannelPayload>;
+  /** Deletes a single `NotificationChannel` using a unique key. */
+  deleteNotificationChannelByName?: Maybe<DeleteNotificationChannelPayload>;
+  /** Deletes a single `Notification` using its globally unique id. */
+  deleteNotificationByNodeId?: Maybe<DeleteNotificationPayload>;
+  /** Deletes a single `Notification` using a unique key. */
+  deleteNotification?: Maybe<DeleteNotificationPayload>;
+  /** Deletes a single `Notification` using a unique key. */
+  deleteNotificationByUuid?: Maybe<DeleteNotificationPayload>;
+  /** Deletes a single `PostLike` using its globally unique id. */
+  deletePostLikeByNodeId?: Maybe<DeletePostLikePayload>;
+  /** Deletes a single `PostLike` using a unique key. */
+  deletePostLike?: Maybe<DeletePostLikePayload>;
+  /** Deletes a single `PostRecording` using its globally unique id. */
+  deletePostRecordingByNodeId?: Maybe<DeletePostRecordingPayload>;
+  /** Deletes a single `PostRecording` using a unique key. */
+  deletePostRecording?: Maybe<DeletePostRecordingPayload>;
+  /** Deletes a single `PostRecording` using a unique key. */
+  deletePostRecordingByUuid?: Maybe<DeletePostRecordingPayload>;
+  /** Deletes a single `Post` using its globally unique id. */
+  deletePostByNodeId?: Maybe<DeletePostPayload>;
+  /** Deletes a single `Post` using a unique key. */
+  deletePost?: Maybe<DeletePostPayload>;
+  /** Deletes a single `Post` using a unique key. */
+  deletePostByUuid?: Maybe<DeletePostPayload>;
+  /** Deletes a single `Prompt` using its globally unique id. */
+  deletePromptByNodeId?: Maybe<DeletePromptPayload>;
+  /** Deletes a single `Prompt` using a unique key. */
+  deletePrompt?: Maybe<DeletePromptPayload>;
+  /** Deletes a single `Prompt` using a unique key. */
+  deletePromptByUuid?: Maybe<DeletePromptPayload>;
   /** Deletes a single `GermanRandomQuestion` using its globally unique id. */
   deleteGermanRandomQuestionByNodeId?: Maybe<DeleteGermanRandomQuestionPayload>;
   /** Deletes a single `GermanRandomQuestion` using a unique key. */
@@ -5182,6 +6253,42 @@ export type MutationCreateMessagePreviewArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateMessageArgs = {
   input: CreateMessageInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateNotificationChannelArgs = {
+  input: CreateNotificationChannelInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateNotificationArgs = {
+  input: CreateNotificationInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreatePostLikeArgs = {
+  input: CreatePostLikeInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreatePostRecordingArgs = {
+  input: CreatePostRecordingInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreatePostArgs = {
+  input: CreatePostInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreatePromptArgs = {
+  input: CreatePromptInput;
 };
 
 
@@ -5386,6 +6493,114 @@ export type MutationUpdateMessageArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateMessageByUuidArgs = {
   input: UpdateMessageByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationChannelByNodeIdArgs = {
+  input: UpdateNotificationChannelByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationChannelArgs = {
+  input: UpdateNotificationChannelInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationChannelByUuidArgs = {
+  input: UpdateNotificationChannelByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationChannelByNameArgs = {
+  input: UpdateNotificationChannelByNameInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationByNodeIdArgs = {
+  input: UpdateNotificationByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationArgs = {
+  input: UpdateNotificationInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateNotificationByUuidArgs = {
+  input: UpdateNotificationByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostLikeByNodeIdArgs = {
+  input: UpdatePostLikeByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostLikeArgs = {
+  input: UpdatePostLikeInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostRecordingByNodeIdArgs = {
+  input: UpdatePostRecordingByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostRecordingArgs = {
+  input: UpdatePostRecordingInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostRecordingByUuidArgs = {
+  input: UpdatePostRecordingByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostByNodeIdArgs = {
+  input: UpdatePostByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostArgs = {
+  input: UpdatePostInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostByUuidArgs = {
+  input: UpdatePostByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePromptByNodeIdArgs = {
+  input: UpdatePromptByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePromptArgs = {
+  input: UpdatePromptInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePromptByUuidArgs = {
+  input: UpdatePromptByUuidInput;
 };
 
 
@@ -5744,6 +6959,114 @@ export type MutationDeleteMessageByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationChannelByNodeIdArgs = {
+  input: DeleteNotificationChannelByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationChannelArgs = {
+  input: DeleteNotificationChannelInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationChannelByUuidArgs = {
+  input: DeleteNotificationChannelByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationChannelByNameArgs = {
+  input: DeleteNotificationChannelByNameInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationByNodeIdArgs = {
+  input: DeleteNotificationByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationArgs = {
+  input: DeleteNotificationInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteNotificationByUuidArgs = {
+  input: DeleteNotificationByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostLikeByNodeIdArgs = {
+  input: DeletePostLikeByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostLikeArgs = {
+  input: DeletePostLikeInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostRecordingByNodeIdArgs = {
+  input: DeletePostRecordingByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostRecordingArgs = {
+  input: DeletePostRecordingInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostRecordingByUuidArgs = {
+  input: DeletePostRecordingByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostByNodeIdArgs = {
+  input: DeletePostByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostArgs = {
+  input: DeletePostInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostByUuidArgs = {
+  input: DeletePostByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePromptByNodeIdArgs = {
+  input: DeletePromptByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePromptArgs = {
+  input: DeletePromptInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePromptByUuidArgs = {
+  input: DeletePromptByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGermanRandomQuestionByNodeIdArgs = {
   input: DeleteGermanRandomQuestionByNodeIdInput;
 };
@@ -5982,6 +7305,381 @@ export type Node = {
   nodeId: Scalars['ID'];
 };
 
+export type Notification = Node & {
+  __typename?: 'Notification';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  recipientId?: Maybe<Scalars['Int']>;
+  channelId: Scalars['Int'];
+  params?: Maybe<Scalars['JSON']>;
+  sentAt?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: Maybe<Scalars['Datetime']>;
+  expiresAt?: Maybe<Scalars['Datetime']>;
+  readAt?: Maybe<Scalars['Datetime']>;
+  createdAt: Scalars['Datetime'];
+  recipientGroupId?: Maybe<Scalars['Int']>;
+  /** Reads a single `User` that is related to this `Notification`. */
+  recipient?: Maybe<User>;
+  /** Reads a single `NotificationChannel` that is related to this `Notification`. */
+  channel?: Maybe<NotificationChannel>;
+  /** Reads a single `Group` that is related to this `Notification`. */
+  recipientGroup?: Maybe<Group>;
+};
+
+export type NotificationChannel = Node & {
+  __typename?: 'NotificationChannel';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  name?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByChannelId: NotificationsConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByNotificationChannelIdAndRecipientId: NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Group`. */
+  groupsByNotificationChannelIdAndRecipientGroupId: NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyConnection;
+};
+
+
+export type NotificationChannelNotificationsByChannelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
+};
+
+
+export type NotificationChannelUsersByNotificationChannelIdAndRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
+};
+
+/**
+ * A condition to be used against `NotificationChannel` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type NotificationChannelCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `name` field. */
+  name?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `NotificationChannel` object types. All fields are combined with a logical ‘and.’ */
+export type NotificationChannelFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `name` field. */
+  name?: Maybe<StringFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<NotificationChannelFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<NotificationChannelFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<NotificationChannelFilter>;
+};
+
+/** A connection to a list of `Group` values, with data from `Notification`. */
+export type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyConnection = {
+  __typename?: 'NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyConnection';
+  /** A list of `Group` objects. */
+  nodes: Array<Maybe<Group>>;
+  /** A list of edges which contains the `Group`, info from the `Notification`, and the cursor to aid in pagination. */
+  edges: Array<NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Group` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Group` edge in the connection, with data from `Notification`. */
+export type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyEdge = {
+  __typename?: 'NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Group` at the end of the edge. */
+  node?: Maybe<Group>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByRecipientGroupId: NotificationsConnection;
+};
+
+
+/** A `Group` edge in the connection, with data from `Notification`. */
+export type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyEdgeNotificationsByRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
+};
+
+/** An input for mutations affecting `NotificationChannel` */
+export type NotificationChannelInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  name?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `NotificationChannel`. Fields that are set will be updated. */
+export type NotificationChannelPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  name?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `User` values, with data from `Notification`. */
+export type NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyConnection = {
+  __typename?: 'NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Notification`, and the cursor to aid in pagination. */
+  edges: Array<NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Notification`. */
+export type NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyEdge = {
+  __typename?: 'NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByRecipientId: NotificationsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Notification`. */
+export type NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyEdgeNotificationsByRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
+};
+
+/** A connection to a list of `NotificationChannel` values. */
+export type NotificationChannelsConnection = {
+  __typename?: 'NotificationChannelsConnection';
+  /** A list of `NotificationChannel` objects. */
+  nodes: Array<Maybe<NotificationChannel>>;
+  /** A list of edges which contains the `NotificationChannel` and cursor to aid in pagination. */
+  edges: Array<NotificationChannelsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `NotificationChannel` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `NotificationChannel` edge in the connection. */
+export type NotificationChannelsEdge = {
+  __typename?: 'NotificationChannelsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `NotificationChannel` at the end of the edge. */
+  node?: Maybe<NotificationChannel>;
+};
+
+/** Methods to use when ordering `NotificationChannel`. */
+export enum NotificationChannelsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  NameAsc = 'NAME_ASC',
+  NameDesc = 'NAME_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/**
+ * A condition to be used against `Notification` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type NotificationCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `recipientId` field. */
+  recipientId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `channelId` field. */
+  channelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `params` field. */
+  params?: Maybe<Scalars['JSON']>;
+  /** Checks for equality with the object’s `sentAt` field. */
+  sentAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `withheldUntil` field. */
+  withheldUntil?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `expiresAt` field. */
+  expiresAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `readAt` field. */
+  readAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `recipientGroupId` field. */
+  recipientGroupId?: Maybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `Notification` object types. All fields are combined with a logical ‘and.’ */
+export type NotificationFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `recipientId` field. */
+  recipientId?: Maybe<IntFilter>;
+  /** Filter by the object’s `channelId` field. */
+  channelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `sentAt` field. */
+  sentAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `withheldUntil` field. */
+  withheldUntil?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `expiresAt` field. */
+  expiresAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `readAt` field. */
+  readAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `recipientGroupId` field. */
+  recipientGroupId?: Maybe<IntFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<NotificationFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<NotificationFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<NotificationFilter>;
+};
+
+/** An input for mutations affecting `Notification` */
+export type NotificationInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  recipientId?: Maybe<Scalars['Int']>;
+  channelId: Scalars['Int'];
+  params?: Maybe<Scalars['JSON']>;
+  sentAt?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: Maybe<Scalars['Datetime']>;
+  expiresAt?: Maybe<Scalars['Datetime']>;
+  readAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+  recipientGroupId?: Maybe<Scalars['Int']>;
+};
+
+/** Represents an update to a `Notification`. Fields that are set will be updated. */
+export type NotificationPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  recipientId?: Maybe<Scalars['Int']>;
+  channelId?: Maybe<Scalars['Int']>;
+  params?: Maybe<Scalars['JSON']>;
+  sentAt?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: Maybe<Scalars['Datetime']>;
+  expiresAt?: Maybe<Scalars['Datetime']>;
+  readAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+  recipientGroupId?: Maybe<Scalars['Int']>;
+};
+
+/** A connection to a list of `Notification` values. */
+export type NotificationsConnection = {
+  __typename?: 'NotificationsConnection';
+  /** A list of `Notification` objects. */
+  nodes: Array<Maybe<Notification>>;
+  /** A list of edges which contains the `Notification` and cursor to aid in pagination. */
+  edges: Array<NotificationsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Notification` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Notification` edge in the connection. */
+export type NotificationsEdge = {
+  __typename?: 'NotificationsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Notification` at the end of the edge. */
+  node?: Maybe<Notification>;
+};
+
+/** Methods to use when ordering `Notification`. */
+export enum NotificationsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  RecipientIdAsc = 'RECIPIENT_ID_ASC',
+  RecipientIdDesc = 'RECIPIENT_ID_DESC',
+  ChannelIdAsc = 'CHANNEL_ID_ASC',
+  ChannelIdDesc = 'CHANNEL_ID_DESC',
+  ParamsAsc = 'PARAMS_ASC',
+  ParamsDesc = 'PARAMS_DESC',
+  SentAtAsc = 'SENT_AT_ASC',
+  SentAtDesc = 'SENT_AT_DESC',
+  WithheldUntilAsc = 'WITHHELD_UNTIL_ASC',
+  WithheldUntilDesc = 'WITHHELD_UNTIL_DESC',
+  ExpiresAtAsc = 'EXPIRES_AT_ASC',
+  ExpiresAtDesc = 'EXPIRES_AT_DESC',
+  ReadAtAsc = 'READ_AT_ASC',
+  ReadAtDesc = 'READ_AT_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  RecipientGroupIdAsc = 'RECIPIENT_GROUP_ID_ASC',
+  RecipientGroupIdDesc = 'RECIPIENT_GROUP_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
 /** Information about pagination in a connection. */
 export type PageInfo = {
   __typename?: 'PageInfo';
@@ -5994,6 +7692,1016 @@ export type PageInfo = {
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['Cursor']>;
 };
+
+export type Post = Node & {
+  __typename?: 'Post';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  authorId?: Maybe<Scalars['Int']>;
+  body: Scalars['String'];
+  parentPostId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['Datetime'];
+  languageId: Scalars['Int'];
+  promptId?: Maybe<Scalars['Int']>;
+  /** Reads a single `User` that is related to this `Post`. */
+  author?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `Post`. */
+  parentPost?: Maybe<Post>;
+  /** Reads a single `Language` that is related to this `Post`. */
+  language?: Maybe<Language>;
+  /** Reads a single `Prompt` that is related to this `Post`. */
+  prompt?: Maybe<Prompt>;
+  /** Reads and enables pagination through a set of `Post`. */
+  replies: PostsConnection;
+  /** Reads and enables pagination through a set of `PostLike`. */
+  likes: PostLikesConnection;
+  /** Reads and enables pagination through a set of `PostRecording`. */
+  recordings: PostRecordingsConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostParentPostIdAndAuthorId: PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Language`. */
+  languagesByPostParentPostIdAndLanguageId: PostLanguagesByPostParentPostIdAndLanguageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  promptsByPostParentPostIdAndPromptId: PostPromptsByPostParentPostIdAndPromptIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostLikePostIdAndUserId: PostUsersByPostLikePostIdAndUserIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostRecordingPostIdAndUserId: PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection;
+};
+
+
+export type PostRepliesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type PostLikesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  condition?: Maybe<PostLikeCondition>;
+  filter?: Maybe<PostLikeFilter>;
+};
+
+
+export type PostRecordingsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  condition?: Maybe<PostRecordingCondition>;
+  filter?: Maybe<PostRecordingFilter>;
+};
+
+
+export type PostUsersByPostParentPostIdAndAuthorIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type PostLanguagesByPostParentPostIdAndLanguageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
+};
+
+
+export type PostPromptsByPostParentPostIdAndPromptIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
+};
+
+
+export type PostUsersByPostLikePostIdAndUserIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type PostUsersByPostRecordingPostIdAndUserIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+/** A condition to be used against `Post` object types. All fields are tested for equality and combined with a logical ‘and.’ */
+export type PostCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `authorId` field. */
+  authorId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `body` field. */
+  body?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `parentPostId` field. */
+  parentPostId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `languageId` field. */
+  languageId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `promptId` field. */
+  promptId?: Maybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `Post` object types. All fields are combined with a logical ‘and.’ */
+export type PostFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `authorId` field. */
+  authorId?: Maybe<IntFilter>;
+  /** Filter by the object’s `body` field. */
+  body?: Maybe<StringFilter>;
+  /** Filter by the object’s `parentPostId` field. */
+  parentPostId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `languageId` field. */
+  languageId?: Maybe<IntFilter>;
+  /** Filter by the object’s `promptId` field. */
+  promptId?: Maybe<IntFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<PostFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<PostFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<PostFilter>;
+};
+
+/** An input for mutations affecting `Post` */
+export type PostInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  authorId?: Maybe<Scalars['Int']>;
+  body: Scalars['String'];
+  parentPostId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+  languageId: Scalars['Int'];
+  promptId?: Maybe<Scalars['Int']>;
+};
+
+/** A connection to a list of `Language` values, with data from `Post`. */
+export type PostLanguagesByPostParentPostIdAndLanguageIdManyToManyConnection = {
+  __typename?: 'PostLanguagesByPostParentPostIdAndLanguageIdManyToManyConnection';
+  /** A list of `Language` objects. */
+  nodes: Array<Maybe<Language>>;
+  /** A list of edges which contains the `Language`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Language` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Language` edge in the connection, with data from `Post`. */
+export type PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdge = {
+  __typename?: 'PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Language` at the end of the edge. */
+  node?: Maybe<Language>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+};
+
+
+/** A `Language` edge in the connection, with data from `Post`. */
+export type PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdgePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+export type PostLike = Node & {
+  __typename?: 'PostLike';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  userId: Scalars['Int'];
+  postId: Scalars['Int'];
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `User` that is related to this `PostLike`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostLike`. */
+  post?: Maybe<Post>;
+};
+
+/**
+ * A condition to be used against `PostLike` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
+export type PostLikeCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `postId` field. */
+  postId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `PostLike` object types. All fields are combined with a logical ‘and.’ */
+export type PostLikeFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `postId` field. */
+  postId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<PostLikeFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<PostLikeFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<PostLikeFilter>;
+};
+
+/** An input for mutations affecting `PostLike` */
+export type PostLikeInput = {
+  id?: Maybe<Scalars['Int']>;
+  userId: Scalars['Int'];
+  postId: Scalars['Int'];
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `PostLike`. Fields that are set will be updated. */
+export type PostLikePatch = {
+  id?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+  postId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `PostLike` values. */
+export type PostLikesConnection = {
+  __typename?: 'PostLikesConnection';
+  /** A list of `PostLike` objects. */
+  nodes: Array<Maybe<PostLike>>;
+  /** A list of edges which contains the `PostLike` and cursor to aid in pagination. */
+  edges: Array<PostLikesEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `PostLike` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `PostLike` edge in the connection. */
+export type PostLikesEdge = {
+  __typename?: 'PostLikesEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `PostLike` at the end of the edge. */
+  node?: Maybe<PostLike>;
+};
+
+/** Methods to use when ordering `PostLike`. */
+export enum PostLikesOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+  PostIdAsc = 'POST_ID_ASC',
+  PostIdDesc = 'POST_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/** Represents an update to a `Post`. Fields that are set will be updated. */
+export type PostPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  authorId?: Maybe<Scalars['Int']>;
+  body?: Maybe<Scalars['String']>;
+  parentPostId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+  languageId?: Maybe<Scalars['Int']>;
+  promptId?: Maybe<Scalars['Int']>;
+};
+
+/** A connection to a list of `Prompt` values, with data from `Post`. */
+export type PostPromptsByPostParentPostIdAndPromptIdManyToManyConnection = {
+  __typename?: 'PostPromptsByPostParentPostIdAndPromptIdManyToManyConnection';
+  /** A list of `Prompt` objects. */
+  nodes: Array<Maybe<Prompt>>;
+  /** A list of edges which contains the `Prompt`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<PostPromptsByPostParentPostIdAndPromptIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Prompt` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Prompt` edge in the connection, with data from `Post`. */
+export type PostPromptsByPostParentPostIdAndPromptIdManyToManyEdge = {
+  __typename?: 'PostPromptsByPostParentPostIdAndPromptIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Prompt` at the end of the edge. */
+  node?: Maybe<Prompt>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+};
+
+
+/** A `Prompt` edge in the connection, with data from `Post`. */
+export type PostPromptsByPostParentPostIdAndPromptIdManyToManyEdgePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+export type PostRecording = Node & {
+  __typename?: 'PostRecording';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  userId: Scalars['Int'];
+  postId: Scalars['Int'];
+  /** Basename without extension */
+  filename: Scalars['String'];
+  /** Extension without leading dot */
+  extension?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `User` that is related to this `PostRecording`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostRecording`. */
+  post?: Maybe<Post>;
+};
+
+/**
+ * A condition to be used against `PostRecording` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type PostRecordingCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `postId` field. */
+  postId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `filename` field. */
+  filename?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `extension` field. */
+  extension?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `PostRecording` object types. All fields are combined with a logical ‘and.’ */
+export type PostRecordingFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `postId` field. */
+  postId?: Maybe<IntFilter>;
+  /** Filter by the object’s `filename` field. */
+  filename?: Maybe<StringFilter>;
+  /** Filter by the object’s `extension` field. */
+  extension?: Maybe<StringFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<PostRecordingFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<PostRecordingFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<PostRecordingFilter>;
+};
+
+/** An input for mutations affecting `PostRecording` */
+export type PostRecordingInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  userId: Scalars['Int'];
+  postId: Scalars['Int'];
+  /** Basename without extension */
+  filename: Scalars['String'];
+  /** Extension without leading dot */
+  extension?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `PostRecording`. Fields that are set will be updated. */
+export type PostRecordingPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  userId?: Maybe<Scalars['Int']>;
+  postId?: Maybe<Scalars['Int']>;
+  /** Basename without extension */
+  filename?: Maybe<Scalars['String']>;
+  /** Extension without leading dot */
+  extension?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `PostRecording` values. */
+export type PostRecordingsConnection = {
+  __typename?: 'PostRecordingsConnection';
+  /** A list of `PostRecording` objects. */
+  nodes: Array<Maybe<PostRecording>>;
+  /** A list of edges which contains the `PostRecording` and cursor to aid in pagination. */
+  edges: Array<PostRecordingsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `PostRecording` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `PostRecording` edge in the connection. */
+export type PostRecordingsEdge = {
+  __typename?: 'PostRecordingsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `PostRecording` at the end of the edge. */
+  node?: Maybe<PostRecording>;
+};
+
+/** Methods to use when ordering `PostRecording`. */
+export enum PostRecordingsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+  PostIdAsc = 'POST_ID_ASC',
+  PostIdDesc = 'POST_ID_DESC',
+  FilenameAsc = 'FILENAME_ASC',
+  FilenameDesc = 'FILENAME_DESC',
+  ExtensionAsc = 'EXTENSION_ASC',
+  ExtensionDesc = 'EXTENSION_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+/** A connection to a list of `User` values, with data from `PostLike`. */
+export type PostUsersByPostLikePostIdAndUserIdManyToManyConnection = {
+  __typename?: 'PostUsersByPostLikePostIdAndUserIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `PostLike`, and the cursor to aid in pagination. */
+  edges: Array<PostUsersByPostLikePostIdAndUserIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `PostLike`. */
+export type PostUsersByPostLikePostIdAndUserIdManyToManyEdge = {
+  __typename?: 'PostUsersByPostLikePostIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `PostLike`. */
+  postLikes: PostLikesConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `PostLike`. */
+export type PostUsersByPostLikePostIdAndUserIdManyToManyEdgePostLikesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  condition?: Maybe<PostLikeCondition>;
+  filter?: Maybe<PostLikeFilter>;
+};
+
+/** A connection to a list of `User` values, with data from `Post`. */
+export type PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection = {
+  __typename?: 'PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Post`. */
+export type PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge = {
+  __typename?: 'PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Post`. */
+  authoredPosts: PostsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Post`. */
+export type PostUsersByPostParentPostIdAndAuthorIdManyToManyEdgeAuthoredPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+/** A connection to a list of `User` values, with data from `PostRecording`. */
+export type PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection = {
+  __typename?: 'PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `PostRecording`, and the cursor to aid in pagination. */
+  edges: Array<PostUsersByPostRecordingPostIdAndUserIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `PostRecording`. */
+export type PostUsersByPostRecordingPostIdAndUserIdManyToManyEdge = {
+  __typename?: 'PostUsersByPostRecordingPostIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `PostRecording`. */
+  postRecordings: PostRecordingsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `PostRecording`. */
+export type PostUsersByPostRecordingPostIdAndUserIdManyToManyEdgePostRecordingsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  condition?: Maybe<PostRecordingCondition>;
+  filter?: Maybe<PostRecordingFilter>;
+};
+
+/** A connection to a list of `Post` values. */
+export type PostsConnection = {
+  __typename?: 'PostsConnection';
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** A list of edges which contains the `Post` and cursor to aid in pagination. */
+  edges: Array<PostsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection. */
+export type PostsEdge = {
+  __typename?: 'PostsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+};
+
+/** Methods to use when ordering `Post`. */
+export enum PostsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  AuthorIdAsc = 'AUTHOR_ID_ASC',
+  AuthorIdDesc = 'AUTHOR_ID_DESC',
+  BodyAsc = 'BODY_ASC',
+  BodyDesc = 'BODY_DESC',
+  ParentPostIdAsc = 'PARENT_POST_ID_ASC',
+  ParentPostIdDesc = 'PARENT_POST_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  LanguageIdAsc = 'LANGUAGE_ID_ASC',
+  LanguageIdDesc = 'LANGUAGE_ID_DESC',
+  PromptIdAsc = 'PROMPT_ID_ASC',
+  PromptIdDesc = 'PROMPT_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
+export type Prompt = Node & {
+  __typename?: 'Prompt';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  uuid: Scalars['UUID'];
+  languageId: Scalars['Int'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  type: PromptType;
+  contentEn?: Maybe<Scalars['String']>;
+  contentDe?: Maybe<Scalars['String']>;
+  contentZh?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `Language` that is related to this `Prompt`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Prompt`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+  content?: Maybe<Scalars['String']>;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostPromptIdAndAuthorId: PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByPostPromptIdAndParentPostId: PromptPostsByPostPromptIdAndParentPostIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Language`. */
+  languagesByPostPromptIdAndLanguageId: PromptLanguagesByPostPromptIdAndLanguageIdManyToManyConnection;
+};
+
+
+export type PromptPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type PromptUsersByPostPromptIdAndAuthorIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type PromptPostsByPostPromptIdAndParentPostIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type PromptLanguagesByPostPromptIdAndLanguageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
+};
+
+/** A condition to be used against `Prompt` object types. All fields are tested for equality and combined with a logical ‘and.’ */
+export type PromptCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `languageId` field. */
+  languageId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `type` field. */
+  type?: Maybe<PromptType>;
+  /** Checks for equality with the object’s `contentEn` field. */
+  contentEn?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `contentDe` field. */
+  contentDe?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `contentZh` field. */
+  contentZh?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `Prompt` object types. All fields are combined with a logical ‘and.’ */
+export type PromptFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+  /** Filter by the object’s `languageId` field. */
+  languageId?: Maybe<IntFilter>;
+  /** Filter by the object’s `recommendedSkillLevelId` field. */
+  recommendedSkillLevelId?: Maybe<IntFilter>;
+  /** Filter by the object’s `type` field. */
+  type?: Maybe<PromptTypeFilter>;
+  /** Filter by the object’s `contentEn` field. */
+  contentEn?: Maybe<StringFilter>;
+  /** Filter by the object’s `contentDe` field. */
+  contentDe?: Maybe<StringFilter>;
+  /** Filter by the object’s `contentZh` field. */
+  contentZh?: Maybe<StringFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `content` field. */
+  content?: Maybe<StringFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<PromptFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<PromptFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<PromptFilter>;
+};
+
+/** An input for mutations affecting `Prompt` */
+export type PromptInput = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  languageId: Scalars['Int'];
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  type: PromptType;
+  contentEn?: Maybe<Scalars['String']>;
+  contentDe?: Maybe<Scalars['String']>;
+  contentZh?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `Language` values, with data from `Post`. */
+export type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyConnection = {
+  __typename?: 'PromptLanguagesByPostPromptIdAndLanguageIdManyToManyConnection';
+  /** A list of `Language` objects. */
+  nodes: Array<Maybe<Language>>;
+  /** A list of edges which contains the `Language`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Language` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Language` edge in the connection, with data from `Post`. */
+export type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge = {
+  __typename?: 'PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Language` at the end of the edge. */
+  node?: Maybe<Language>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+};
+
+
+/** A `Language` edge in the connection, with data from `Post`. */
+export type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdgePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+/** Represents an update to a `Prompt`. Fields that are set will be updated. */
+export type PromptPatch = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  languageId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  type?: Maybe<PromptType>;
+  contentEn?: Maybe<Scalars['String']>;
+  contentDe?: Maybe<Scalars['String']>;
+  contentZh?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `Post` values, with data from `Post`. */
+export type PromptPostsByPostPromptIdAndParentPostIdManyToManyConnection = {
+  __typename?: 'PromptPostsByPostPromptIdAndParentPostIdManyToManyConnection';
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** A list of edges which contains the `Post`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection, with data from `Post`. */
+export type PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge = {
+  __typename?: 'PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `Post`. */
+  replies: PostsConnection;
+};
+
+
+/** A `Post` edge in the connection, with data from `Post`. */
+export type PromptPostsByPostPromptIdAndParentPostIdManyToManyEdgeRepliesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+export enum PromptType {
+  Question = 'QUESTION',
+  Word = 'WORD'
+}
+
+/** A filter to be used against PromptType fields. All fields are combined with a logical ‘and.’ */
+export type PromptTypeFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<PromptType>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<PromptType>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<PromptType>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<PromptType>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<PromptType>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<PromptType>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<PromptType>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<PromptType>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<PromptType>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<PromptType>;
+};
+
+/** A connection to a list of `User` values, with data from `Post`. */
+export type PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection = {
+  __typename?: 'PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `Post`. */
+export type PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge = {
+  __typename?: 'PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `Post`. */
+  authoredPosts: PostsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `Post`. */
+export type PromptUsersByPostPromptIdAndAuthorIdManyToManyEdgeAuthoredPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+/** A connection to a list of `Prompt` values. */
+export type PromptsConnection = {
+  __typename?: 'PromptsConnection';
+  /** A list of `Prompt` objects. */
+  nodes: Array<Maybe<Prompt>>;
+  /** A list of edges which contains the `Prompt` and cursor to aid in pagination. */
+  edges: Array<PromptsEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Prompt` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Prompt` edge in the connection. */
+export type PromptsEdge = {
+  __typename?: 'PromptsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Prompt` at the end of the edge. */
+  node?: Maybe<Prompt>;
+};
+
+/** Methods to use when ordering `Prompt`. */
+export enum PromptsOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC',
+  LanguageIdAsc = 'LANGUAGE_ID_ASC',
+  LanguageIdDesc = 'LANGUAGE_ID_DESC',
+  RecommendedSkillLevelIdAsc = 'RECOMMENDED_SKILL_LEVEL_ID_ASC',
+  RecommendedSkillLevelIdDesc = 'RECOMMENDED_SKILL_LEVEL_ID_DESC',
+  TypeAsc = 'TYPE_ASC',
+  TypeDesc = 'TYPE_DESC',
+  ContentEnAsc = 'CONTENT_EN_ASC',
+  ContentEnDesc = 'CONTENT_EN_DESC',
+  ContentDeAsc = 'CONTENT_DE_ASC',
+  ContentDeDesc = 'CONTENT_DE_DESC',
+  ContentZhAsc = 'CONTENT_ZH_ASC',
+  ContentZhDesc = 'CONTENT_ZH_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
 
 /** The root query type which gives access points into the data universe. */
 export type Query = Node & {
@@ -6023,6 +8731,18 @@ export type Query = Node & {
   messagePreviews?: Maybe<MessagePreviewsConnection>;
   /** Reads and enables pagination through a set of `Message`. */
   messages?: Maybe<MessagesConnection>;
+  /** Reads and enables pagination through a set of `NotificationChannel`. */
+  notificationChannels?: Maybe<NotificationChannelsConnection>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notifications?: Maybe<NotificationsConnection>;
+  /** Reads and enables pagination through a set of `PostLike`. */
+  postLikes?: Maybe<PostLikesConnection>;
+  /** Reads and enables pagination through a set of `PostRecording`. */
+  postRecordings?: Maybe<PostRecordingsConnection>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts?: Maybe<PostsConnection>;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  prompts?: Maybe<PromptsConnection>;
   /** Reads and enables pagination through a set of `GermanRandomQuestion`. */
   germanRandomQuestions?: Maybe<GermanRandomQuestionsConnection>;
   /** Reads and enables pagination through a set of `EnglishRandomQuestion`. */
@@ -6061,6 +8781,18 @@ export type Query = Node & {
   messagePreviewByUuid?: Maybe<MessagePreview>;
   message?: Maybe<Message>;
   messageByUuid?: Maybe<Message>;
+  notificationChannel?: Maybe<NotificationChannel>;
+  notificationChannelByUuid?: Maybe<NotificationChannel>;
+  notificationChannelByName?: Maybe<NotificationChannel>;
+  notification?: Maybe<Notification>;
+  notificationByUuid?: Maybe<Notification>;
+  postLike?: Maybe<PostLike>;
+  postRecording?: Maybe<PostRecording>;
+  postRecordingByUuid?: Maybe<PostRecording>;
+  post?: Maybe<Post>;
+  postByUuid?: Maybe<Post>;
+  prompt?: Maybe<Prompt>;
+  promptByUuid?: Maybe<Prompt>;
   germanRandomQuestion?: Maybe<GermanRandomQuestion>;
   germanRandomQuestionByUuid?: Maybe<GermanRandomQuestion>;
   englishRandomQuestion?: Maybe<EnglishRandomQuestion>;
@@ -6110,6 +8842,18 @@ export type Query = Node & {
   messagePreviewByNodeId?: Maybe<MessagePreview>;
   /** Reads a single `Message` using its globally unique `ID`. */
   messageByNodeId?: Maybe<Message>;
+  /** Reads a single `NotificationChannel` using its globally unique `ID`. */
+  notificationChannelByNodeId?: Maybe<NotificationChannel>;
+  /** Reads a single `Notification` using its globally unique `ID`. */
+  notificationByNodeId?: Maybe<Notification>;
+  /** Reads a single `PostLike` using its globally unique `ID`. */
+  postLikeByNodeId?: Maybe<PostLike>;
+  /** Reads a single `PostRecording` using its globally unique `ID`. */
+  postRecordingByNodeId?: Maybe<PostRecording>;
+  /** Reads a single `Post` using its globally unique `ID`. */
+  postByNodeId?: Maybe<Post>;
+  /** Reads a single `Prompt` using its globally unique `ID`. */
+  promptByNodeId?: Maybe<Prompt>;
   /** Reads a single `GermanRandomQuestion` using its globally unique `ID`. */
   germanRandomQuestionByNodeId?: Maybe<GermanRandomQuestion>;
   /** Reads a single `EnglishRandomQuestion` using its globally unique `ID`. */
@@ -6244,6 +8988,84 @@ export type QueryMessagesArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationChannelsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  condition?: Maybe<NotificationChannelCondition>;
+  filter?: Maybe<NotificationChannelFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostLikesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  condition?: Maybe<PostLikeCondition>;
+  filter?: Maybe<PostLikeFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostRecordingsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  condition?: Maybe<PostRecordingCondition>;
+  filter?: Maybe<PostRecordingFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPromptsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
 };
 
 
@@ -6488,6 +9310,78 @@ export type QueryMessageByUuidArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryNotificationChannelArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationChannelByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationChannelByNameArgs = {
+  name: Scalars['String'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostLikeArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostRecordingArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostRecordingByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPromptArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPromptByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryGermanRandomQuestionArgs = {
   id: Scalars['Int'];
 };
@@ -6718,6 +9612,42 @@ export type QueryMessagePreviewByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryMessageByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationChannelByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryNotificationByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostLikeByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostRecordingByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPromptByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
 
@@ -7920,6 +10850,386 @@ export type UpdateMessagePreviewPayloadMessagePreviewEdgeArgs = {
   orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
 };
 
+/** All input for the `updateNotificationByNodeId` mutation. */
+export type UpdateNotificationByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Notification` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `Notification` being updated. */
+  patch: NotificationPatch;
+};
+
+/** All input for the `updateNotificationByUuid` mutation. */
+export type UpdateNotificationByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Notification` being updated. */
+  patch: NotificationPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateNotificationChannelByName` mutation. */
+export type UpdateNotificationChannelByNameInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `NotificationChannel` being updated. */
+  patch: NotificationChannelPatch;
+  name: Scalars['String'];
+};
+
+/** All input for the `updateNotificationChannelByNodeId` mutation. */
+export type UpdateNotificationChannelByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `NotificationChannel` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `NotificationChannel` being updated. */
+  patch: NotificationChannelPatch;
+};
+
+/** All input for the `updateNotificationChannelByUuid` mutation. */
+export type UpdateNotificationChannelByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `NotificationChannel` being updated. */
+  patch: NotificationChannelPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updateNotificationChannel` mutation. */
+export type UpdateNotificationChannelInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `NotificationChannel` being updated. */
+  patch: NotificationChannelPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `NotificationChannel` mutation. */
+export type UpdateNotificationChannelPayload = {
+  __typename?: 'UpdateNotificationChannelPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `NotificationChannel` that was updated by this mutation. */
+  notificationChannel?: Maybe<NotificationChannel>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** An edge for our `NotificationChannel`. May be used by Relay 1. */
+  notificationChannelEdge?: Maybe<NotificationChannelsEdge>;
+};
+
+
+/** The output of our update `NotificationChannel` mutation. */
+export type UpdateNotificationChannelPayloadNotificationChannelEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+};
+
+/** All input for the `updateNotification` mutation. */
+export type UpdateNotificationInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Notification` being updated. */
+  patch: NotificationPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `Notification` mutation. */
+export type UpdateNotificationPayload = {
+  __typename?: 'UpdateNotificationPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Notification` that was updated by this mutation. */
+  notification?: Maybe<Notification>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Notification`. */
+  recipient?: Maybe<User>;
+  /** Reads a single `NotificationChannel` that is related to this `Notification`. */
+  channel?: Maybe<NotificationChannel>;
+  /** Reads a single `Group` that is related to this `Notification`. */
+  recipientGroup?: Maybe<Group>;
+  /** An edge for our `Notification`. May be used by Relay 1. */
+  notificationEdge?: Maybe<NotificationsEdge>;
+};
+
+
+/** The output of our update `Notification` mutation. */
+export type UpdateNotificationPayloadNotificationEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+};
+
+/** All input for the `updatePostByNodeId` mutation. */
+export type UpdatePostByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Post` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `Post` being updated. */
+  patch: PostPatch;
+};
+
+/** All input for the `updatePostByUuid` mutation. */
+export type UpdatePostByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Post` being updated. */
+  patch: PostPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updatePost` mutation. */
+export type UpdatePostInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Post` being updated. */
+  patch: PostPatch;
+  id: Scalars['Int'];
+};
+
+/** All input for the `updatePostLikeByNodeId` mutation. */
+export type UpdatePostLikeByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `PostLike` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `PostLike` being updated. */
+  patch: PostLikePatch;
+};
+
+/** All input for the `updatePostLike` mutation. */
+export type UpdatePostLikeInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `PostLike` being updated. */
+  patch: PostLikePatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `PostLike` mutation. */
+export type UpdatePostLikePayload = {
+  __typename?: 'UpdatePostLikePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostLike` that was updated by this mutation. */
+  postLike?: Maybe<PostLike>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostLike`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostLike`. */
+  post?: Maybe<Post>;
+  /** An edge for our `PostLike`. May be used by Relay 1. */
+  postLikeEdge?: Maybe<PostLikesEdge>;
+};
+
+
+/** The output of our update `PostLike` mutation. */
+export type UpdatePostLikePayloadPostLikeEdgeArgs = {
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+};
+
+/** The output of our update `Post` mutation. */
+export type UpdatePostPayload = {
+  __typename?: 'UpdatePostPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Post` that was updated by this mutation. */
+  post?: Maybe<Post>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Post`. */
+  author?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `Post`. */
+  parentPost?: Maybe<Post>;
+  /** Reads a single `Language` that is related to this `Post`. */
+  language?: Maybe<Language>;
+  /** Reads a single `Prompt` that is related to this `Post`. */
+  prompt?: Maybe<Prompt>;
+  /** An edge for our `Post`. May be used by Relay 1. */
+  postEdge?: Maybe<PostsEdge>;
+};
+
+
+/** The output of our update `Post` mutation. */
+export type UpdatePostPayloadPostEdgeArgs = {
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+};
+
+/** All input for the `updatePostRecordingByNodeId` mutation. */
+export type UpdatePostRecordingByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `PostRecording` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `PostRecording` being updated. */
+  patch: PostRecordingPatch;
+};
+
+/** All input for the `updatePostRecordingByUuid` mutation. */
+export type UpdatePostRecordingByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `PostRecording` being updated. */
+  patch: PostRecordingPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updatePostRecording` mutation. */
+export type UpdatePostRecordingInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `PostRecording` being updated. */
+  patch: PostRecordingPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `PostRecording` mutation. */
+export type UpdatePostRecordingPayload = {
+  __typename?: 'UpdatePostRecordingPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostRecording` that was updated by this mutation. */
+  postRecording?: Maybe<PostRecording>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostRecording`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostRecording`. */
+  post?: Maybe<Post>;
+  /** An edge for our `PostRecording`. May be used by Relay 1. */
+  postRecordingEdge?: Maybe<PostRecordingsEdge>;
+};
+
+
+/** The output of our update `PostRecording` mutation. */
+export type UpdatePostRecordingPayloadPostRecordingEdgeArgs = {
+  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+};
+
+/** All input for the `updatePromptByNodeId` mutation. */
+export type UpdatePromptByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Prompt` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `Prompt` being updated. */
+  patch: PromptPatch;
+};
+
+/** All input for the `updatePromptByUuid` mutation. */
+export type UpdatePromptByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Prompt` being updated. */
+  patch: PromptPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updatePrompt` mutation. */
+export type UpdatePromptInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Prompt` being updated. */
+  patch: PromptPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `Prompt` mutation. */
+export type UpdatePromptPayload = {
+  __typename?: 'UpdatePromptPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Prompt` that was updated by this mutation. */
+  prompt?: Maybe<Prompt>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `Prompt`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Prompt`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `Prompt`. May be used by Relay 1. */
+  promptEdge?: Maybe<PromptsEdge>;
+};
+
+
+/** The output of our update `Prompt` mutation. */
+export type UpdatePromptPayloadPromptEdgeArgs = {
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+};
+
 /** All input for the `updateUserByEmail` mutation. */
 export type UpdateUserByEmailInput = {
   /**
@@ -8216,6 +11526,14 @@ export type User = Node & {
   inviteTokens: InviteTokensConnection;
   /** Reads and enables pagination through a set of `UserDevice`. */
   userDevices: UserDevicesConnection;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByRecipientId: NotificationsConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  authoredPosts: PostsConnection;
+  /** Reads and enables pagination through a set of `PostLike`. */
+  postLikes: PostLikesConnection;
+  /** Reads and enables pagination through a set of `PostRecording`. */
+  postRecordings: PostRecordingsConnection;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByUserLanguageUserIdAndLanguageId: UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
@@ -8234,6 +11552,20 @@ export type User = Node & {
   groupsByMessageRecipientIdAndRecipientGroupId: UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Message`. */
   messagesByMessageRecipientIdAndParentMessageId: UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `NotificationChannel`. */
+  notificationChannelsByNotificationRecipientIdAndChannelId: UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Group`. */
+  groupsByNotificationRecipientIdAndRecipientGroupId: UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByPostAuthorIdAndParentPostId: UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Language`. */
+  languagesByPostAuthorIdAndLanguageId: UserLanguagesByPostAuthorIdAndLanguageIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Prompt`. */
+  promptsByPostAuthorIdAndPromptId: UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByPostLikeUserIdAndPostId: UserPostsByPostLikeUserIdAndPostIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByPostRecordingUserIdAndPostId: UserPostsByPostRecordingUserIdAndPostIdManyToManyConnection;
 };
 
 
@@ -8306,6 +11638,54 @@ export type UserUserDevicesArgs = {
   orderBy?: Maybe<Array<UserDevicesOrderBy>>;
   condition?: Maybe<UserDeviceCondition>;
   filter?: Maybe<UserDeviceFilter>;
+};
+
+
+export type UserNotificationsByRecipientIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
+};
+
+
+export type UserAuthoredPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type UserPostLikesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  condition?: Maybe<PostLikeCondition>;
+  filter?: Maybe<PostLikeFilter>;
+};
+
+
+export type UserPostRecordingsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  condition?: Maybe<PostRecordingCondition>;
+  filter?: Maybe<PostRecordingFilter>;
 };
 
 
@@ -8414,6 +11794,90 @@ export type UserMessagesByMessageRecipientIdAndParentMessageIdArgs = {
   orderBy?: Maybe<Array<MessagesOrderBy>>;
   condition?: Maybe<MessageCondition>;
   filter?: Maybe<MessageFilter>;
+};
+
+
+export type UserNotificationChannelsByNotificationRecipientIdAndChannelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  condition?: Maybe<NotificationChannelCondition>;
+  filter?: Maybe<NotificationChannelFilter>;
+};
+
+
+export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  condition?: Maybe<GroupCondition>;
+  filter?: Maybe<GroupFilter>;
+};
+
+
+export type UserPostsByPostAuthorIdAndParentPostIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type UserLanguagesByPostAuthorIdAndLanguageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  condition?: Maybe<LanguageCondition>;
+  filter?: Maybe<LanguageFilter>;
+};
+
+
+export type UserPromptsByPostAuthorIdAndPromptIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  condition?: Maybe<PromptCondition>;
+  filter?: Maybe<PromptFilter>;
+};
+
+
+export type UserPostsByPostLikeUserIdAndPostIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type UserPostsByPostRecordingUserIdAndPostIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
 };
 
 /** A condition to be used against `User` object types. All fields are tested for equality and combined with a logical ‘and.’ */
@@ -8712,6 +12176,43 @@ export type UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyEdgeMessages
   filter?: Maybe<MessageFilter>;
 };
 
+/** A connection to a list of `Group` values, with data from `Notification`. */
+export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyConnection = {
+  __typename?: 'UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyConnection';
+  /** A list of `Group` objects. */
+  nodes: Array<Maybe<Group>>;
+  /** A list of edges which contains the `Group`, info from the `Notification`, and the cursor to aid in pagination. */
+  edges: Array<UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Group` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Group` edge in the connection, with data from `Notification`. */
+export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdge = {
+  __typename?: 'UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Group` at the end of the edge. */
+  node?: Maybe<Group>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByRecipientGroupId: NotificationsConnection;
+};
+
+
+/** A `Group` edge in the connection, with data from `Notification`. */
+export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdgeNotificationsByRecipientGroupIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
+};
+
 /** An input for mutations affecting `User` */
 export type UserInput = {
   id?: Maybe<Scalars['Int']>;
@@ -8846,6 +12347,43 @@ export type UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdMa
   orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
   condition?: Maybe<UserLanguageCondition>;
   filter?: Maybe<UserLanguageFilter>;
+};
+
+/** A connection to a list of `Language` values, with data from `Post`. */
+export type UserLanguagesByPostAuthorIdAndLanguageIdManyToManyConnection = {
+  __typename?: 'UserLanguagesByPostAuthorIdAndLanguageIdManyToManyConnection';
+  /** A list of `Language` objects. */
+  nodes: Array<Maybe<Language>>;
+  /** A list of edges which contains the `Language`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<UserLanguagesByPostAuthorIdAndLanguageIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Language` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Language` edge in the connection, with data from `Post`. */
+export type UserLanguagesByPostAuthorIdAndLanguageIdManyToManyEdge = {
+  __typename?: 'UserLanguagesByPostAuthorIdAndLanguageIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Language` at the end of the edge. */
+  node?: Maybe<Language>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+};
+
+
+/** A `Language` edge in the connection, with data from `Post`. */
+export type UserLanguagesByPostAuthorIdAndLanguageIdManyToManyEdgePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
 };
 
 /** A connection to a list of `Language` values, with data from `UserLanguage`. */
@@ -9000,6 +12538,43 @@ export type UserMessagesByMessageSenderIdAndParentMessageIdManyToManyEdgeMessage
   filter?: Maybe<MessageFilter>;
 };
 
+/** A connection to a list of `NotificationChannel` values, with data from `Notification`. */
+export type UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyConnection = {
+  __typename?: 'UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyConnection';
+  /** A list of `NotificationChannel` objects. */
+  nodes: Array<Maybe<NotificationChannel>>;
+  /** A list of edges which contains the `NotificationChannel`, info from the `Notification`, and the cursor to aid in pagination. */
+  edges: Array<UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `NotificationChannel` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `NotificationChannel` edge in the connection, with data from `Notification`. */
+export type UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyEdge = {
+  __typename?: 'UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `NotificationChannel` at the end of the edge. */
+  node?: Maybe<NotificationChannel>;
+  /** Reads and enables pagination through a set of `Notification`. */
+  notificationsByChannelId: NotificationsConnection;
+};
+
+
+/** A `NotificationChannel` edge in the connection, with data from `Notification`. */
+export type UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyEdgeNotificationsByChannelIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  condition?: Maybe<NotificationCondition>;
+  filter?: Maybe<NotificationFilter>;
+};
+
 /** Represents an update to a `User`. Fields that are set will be updated. */
 export type UserPatch = {
   id?: Maybe<Scalars['Int']>;
@@ -9018,6 +12593,154 @@ export type UserPatch = {
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
   emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
   emailUnsubscribeToken?: Maybe<Scalars['String']>;
+};
+
+/** A connection to a list of `Post` values, with data from `Post`. */
+export type UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection = {
+  __typename?: 'UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection';
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** A list of edges which contains the `Post`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<UserPostsByPostAuthorIdAndParentPostIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection, with data from `Post`. */
+export type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdge = {
+  __typename?: 'UserPostsByPostAuthorIdAndParentPostIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `Post`. */
+  replies: PostsConnection;
+};
+
+
+/** A `Post` edge in the connection, with data from `Post`. */
+export type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdgeRepliesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+};
+
+/** A connection to a list of `Post` values, with data from `PostLike`. */
+export type UserPostsByPostLikeUserIdAndPostIdManyToManyConnection = {
+  __typename?: 'UserPostsByPostLikeUserIdAndPostIdManyToManyConnection';
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** A list of edges which contains the `Post`, info from the `PostLike`, and the cursor to aid in pagination. */
+  edges: Array<UserPostsByPostLikeUserIdAndPostIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection, with data from `PostLike`. */
+export type UserPostsByPostLikeUserIdAndPostIdManyToManyEdge = {
+  __typename?: 'UserPostsByPostLikeUserIdAndPostIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `PostLike`. */
+  likes: PostLikesConnection;
+};
+
+
+/** A `Post` edge in the connection, with data from `PostLike`. */
+export type UserPostsByPostLikeUserIdAndPostIdManyToManyEdgeLikesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  condition?: Maybe<PostLikeCondition>;
+  filter?: Maybe<PostLikeFilter>;
+};
+
+/** A connection to a list of `Post` values, with data from `PostRecording`. */
+export type UserPostsByPostRecordingUserIdAndPostIdManyToManyConnection = {
+  __typename?: 'UserPostsByPostRecordingUserIdAndPostIdManyToManyConnection';
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** A list of edges which contains the `Post`, info from the `PostRecording`, and the cursor to aid in pagination. */
+  edges: Array<UserPostsByPostRecordingUserIdAndPostIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection, with data from `PostRecording`. */
+export type UserPostsByPostRecordingUserIdAndPostIdManyToManyEdge = {
+  __typename?: 'UserPostsByPostRecordingUserIdAndPostIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `PostRecording`. */
+  recordings: PostRecordingsConnection;
+};
+
+
+/** A `Post` edge in the connection, with data from `PostRecording`. */
+export type UserPostsByPostRecordingUserIdAndPostIdManyToManyEdgeRecordingsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  condition?: Maybe<PostRecordingCondition>;
+  filter?: Maybe<PostRecordingFilter>;
+};
+
+/** A connection to a list of `Prompt` values, with data from `Post`. */
+export type UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection = {
+  __typename?: 'UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection';
+  /** A list of `Prompt` objects. */
+  nodes: Array<Maybe<Prompt>>;
+  /** A list of edges which contains the `Prompt`, info from the `Post`, and the cursor to aid in pagination. */
+  edges: Array<UserPromptsByPostAuthorIdAndPromptIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Prompt` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Prompt` edge in the connection, with data from `Post`. */
+export type UserPromptsByPostAuthorIdAndPromptIdManyToManyEdge = {
+  __typename?: 'UserPromptsByPostAuthorIdAndPromptIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Prompt` at the end of the edge. */
+  node?: Maybe<Prompt>;
+  /** Reads and enables pagination through a set of `Post`. */
+  posts: PostsConnection;
+};
+
+
+/** A `Prompt` edge in the connection, with data from `Post`. */
+export type UserPromptsByPostAuthorIdAndPromptIdManyToManyEdgePostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
 };
 
 export type UserSession = Node & {
@@ -9281,106 +13004,12 @@ export enum UsersOrderBy {
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
-export type AdminEmailsFcmTokensQueryVariables = Exact<{
-  in: Array<Scalars['String']> | Scalars['String'];
-}>;
-
-
-export type AdminEmailsFcmTokensQuery = (
-  { __typename?: 'Query' }
-  & { users?: Maybe<(
-    { __typename?: 'UsersConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'User' }
-      & { userDevices: (
-        { __typename?: 'UserDevicesConnection' }
-        & { nodes: Array<Maybe<(
-          { __typename?: 'UserDevice' }
-          & Pick<UserDevice, 'fcmToken'>
-        )>> }
-      ) }
-    )>> }
-  )> }
-);
-
-export type AllGroupUuidsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type AllGroupUuidsQuery = (
-  { __typename?: 'Query' }
-  & { groups?: Maybe<(
-    { __typename?: 'GroupsConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'Group' }
-      & Pick<Group, 'uuid'>
-    )>> }
-  )> }
-);
-
-export type AllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type AllGroupsQuery = (
-  { __typename?: 'Query' }
-  & { groups?: Maybe<(
-    { __typename?: 'GroupsConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'Group' }
-      & Pick<Group, 'uuid' | 'groupName' | 'global'>
-      & { language?: Maybe<(
-        { __typename?: 'Language' }
-        & Pick<Language, 'alpha2' | 'englishName'>
-      )>, languageSkillLevel?: Maybe<(
-        { __typename?: 'LanguageSkillLevel' }
-        & Pick<LanguageSkillLevel, 'name' | 'nodeId'>
-      )>, groupUsers: (
-        { __typename?: 'GroupUsersConnection' }
-        & Pick<GroupUsersConnection, 'totalCount'>
-        & { nodes: Array<Maybe<(
-          { __typename?: 'GroupUser' }
-          & Pick<GroupUser, 'joinedOn'>
-          & { user?: Maybe<(
-            { __typename?: 'User' }
-            & Pick<User, 'avatarUrl' | 'username' | 'uuid'>
-          )> }
-        )>> }
-      ) }
-    )>> }
-  )> }
-);
-
 export type ChatUserQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type ChatUserQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'uuid' | 'avatarUrl'>
-  )> }
-);
-
-export type CreateGroupMutationVariables = Exact<{
-  global: Scalars['Boolean'];
-  groupName: Scalars['String'];
-  languageId: Scalars['Int'];
-  languageSkillLevelId: Scalars['Int'];
-  uuid: Scalars['UUID'];
-}>;
-
-
-export type CreateGroupMutation = (
-  { __typename?: 'Mutation' }
-  & { createGroup?: Maybe<(
-    { __typename?: 'CreateGroupPayload' }
-    & { group?: Maybe<(
-      { __typename?: 'Group' }
-      & Pick<Group, 'id' | 'uuid'>
-    )> }
-  )> }
-);
+export type ChatUserQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', id: number, username?: Maybe<string>, uuid: any, avatarUrl?: Maybe<string> }> };
 
 export type CreateMessageMutationVariables = Exact<{
   parentMessageId?: Maybe<Scalars['Int']>;
@@ -9392,19 +13021,7 @@ export type CreateMessageMutationVariables = Exact<{
 }>;
 
 
-export type CreateMessageMutation = (
-  { __typename?: 'Mutation' }
-  & { createMessage?: Maybe<(
-    { __typename?: 'CreateMessagePayload' }
-    & { sender?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'uuid'>
-    )>, message?: Maybe<(
-      { __typename?: 'Message' }
-      & Pick<Message, 'id' | 'uuid' | 'createdAt'>
-    )> }
-  )> }
-);
+export type CreateMessageMutation = { __typename?: 'Mutation', createMessage?: Maybe<{ __typename?: 'CreateMessagePayload', sender?: Maybe<{ __typename?: 'User', uuid: any }>, message?: Maybe<{ __typename?: 'Message', id: number, uuid: any, createdAt: any }> }> };
 
 export type CreateMessagePreviewMutationVariables = Exact<{
   messageId: Scalars['Int'];
@@ -9414,16 +13031,261 @@ export type CreateMessagePreviewMutationVariables = Exact<{
 }>;
 
 
-export type CreateMessagePreviewMutation = (
-  { __typename?: 'Mutation' }
-  & { createMessagePreview?: Maybe<(
-    { __typename?: 'CreateMessagePreviewPayload' }
-    & { messagePreview?: Maybe<(
-      { __typename?: 'MessagePreview' }
-      & Pick<MessagePreview, 'id'>
-    )> }
-  )> }
-);
+export type CreateMessagePreviewMutation = { __typename?: 'Mutation', createMessagePreview?: Maybe<{ __typename?: 'CreateMessagePreviewPayload', messagePreview?: Maybe<{ __typename?: 'MessagePreview', id: number }> }> };
+
+export type GroupChatQueryVariables = Exact<{
+  groupUuid: Scalars['UUID'];
+}>;
+
+
+export type GroupChatQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', groupName?: Maybe<string>, uuid: any, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string>, nodeId: string }>, usersByGroupUserGroupIdAndUserId: { __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection', nodes: Array<Maybe<{ __typename?: 'User', bio: string, avatarUrl?: Maybe<string>, uuid: any, username?: Maybe<string>, lastActiveAt: any, userLanguages: { __typename?: 'UserLanguagesConnection', nodes: Array<Maybe<{ __typename?: 'UserLanguage', nodeId: string, language?: Maybe<{ __typename?: 'Language', englishName: string }> }>> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', userType: UserType, nodeId: string, group?: Maybe<{ __typename?: 'Group', uuid: any, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }> }>> } }>> } }> };
+
+export type GroupChatMessagesQueryVariables = Exact<{
+  groupUuid: Scalars['UUID'];
+  before?: Maybe<Scalars['Cursor']>;
+}>;
+
+
+export type GroupChatMessagesQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', messagesByRecipientGroupId: { __typename?: 'MessagesConnection', edges: Array<{ __typename?: 'MessagesEdge', node?: Maybe<{ __typename?: 'Message', body: string, createdAt: any, uuid: any, sender?: Maybe<{ __typename?: 'User', uuid: any }>, messagePreviews: { __typename?: 'MessagePreviewsConnection', nodes: Array<Maybe<{ __typename?: 'MessagePreview', uuid: any, filename: string, extension?: Maybe<string> }>> } }> }>, pageInfo: { __typename?: 'PageInfo', startCursor?: Maybe<any>, hasPreviousPage: boolean } } }> };
+
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: Maybe<{ __typename?: 'User', bio: string, email: string, gender?: Maybe<string>, username?: Maybe<string>, uuid: any, avatarUrl?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number }, languageByLocale?: Maybe<{ __typename?: 'Language', alpha2: string }>, inviteTokens: { __typename?: 'InviteTokensConnection', nodes: Array<Maybe<{ __typename?: 'InviteToken', inviteToken: string }>> } }> };
+
+export type RegisterUserActivityMutationVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type RegisterUserActivityMutation = { __typename?: 'Mutation', registerUserActivity?: Maybe<{ __typename?: 'RegisterUserActivityPayload', datetime?: Maybe<any> }> };
+
+export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }> };
+
+export type CreatePostMutationVariables = Exact<{
+  authorId: Scalars['Int'];
+  body: Scalars['String'];
+  parentPostId?: Maybe<Scalars['Int']>;
+  languageId: Scalars['Int'];
+  promptId?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'Mutation', createPost?: Maybe<{ __typename?: 'CreatePostPayload', clientMutationId?: Maybe<string>, post?: Maybe<{ __typename?: 'Post', body: string, createdAt: any, uuid: any, nodeId: string }> }> };
+
+export type CreatePostLikeMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  postId: Scalars['Int'];
+}>;
+
+
+export type CreatePostLikeMutation = { __typename?: 'Mutation', createPostLike?: Maybe<{ __typename?: 'CreatePostLikePayload', postLike?: Maybe<{ __typename?: 'PostLike', postId: number, userId: number, nodeId: string, createdAt: any }> }> };
+
+export type CreatePostRecordingMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  postId: Scalars['Int'];
+  filename: Scalars['String'];
+  extension?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CreatePostRecordingMutation = { __typename?: 'Mutation', createPostRecording?: Maybe<{ __typename?: 'CreatePostRecordingPayload', postRecording?: Maybe<{ __typename?: 'PostRecording', createdAt: any, extension?: Maybe<string>, filename: string, uuid: any, nodeId: string }> }> };
+
+export type DeletePostLikeMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeletePostLikeMutation = { __typename?: 'Mutation', deletePostLike?: Maybe<{ __typename?: 'DeletePostLikePayload', postLike?: Maybe<{ __typename?: 'PostLike', postId: number, userId: number, nodeId: string, createdAt: any }> }> };
+
+export type PostIdByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type PostIdByUuidQuery = { __typename?: 'Query', postByUuid?: Maybe<{ __typename?: 'Post', id: number, nodeId: string }> };
+
+export type PostLikeIdByPostIdAndUserIdQueryVariables = Exact<{
+  postId: Scalars['Int'];
+  userId: Scalars['Int'];
+}>;
+
+
+export type PostLikeIdByPostIdAndUserIdQuery = { __typename?: 'Query', postLikes?: Maybe<{ __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', id: number, nodeId: string }>> }> };
+
+export type PromptIdByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type PromptIdByUuidQuery = { __typename?: 'Query', promptByUuid?: Maybe<{ __typename?: 'Prompt', id: number, nodeId: string }> };
+
+export type CreateGroupUserMutationVariables = Exact<{
+  userType: UserType;
+  userId: Scalars['Int'];
+  groupId: Scalars['Int'];
+}>;
+
+
+export type CreateGroupUserMutation = { __typename?: 'Mutation', createGroupUser?: Maybe<{ __typename?: 'CreateGroupUserPayload', groupUser?: Maybe<{ __typename?: 'GroupUser', id: number }> }> };
+
+export type JoinGlobalGroupMutationVariables = Exact<{
+  groupUuid: Scalars['UUID'];
+}>;
+
+
+export type JoinGlobalGroupMutation = { __typename?: 'Mutation', joinGlobalGroup?: Maybe<{ __typename?: 'JoinGlobalGroupPayload', groupUser?: Maybe<{ __typename?: 'GroupUser', nodeId: string, group?: Maybe<{ __typename?: 'Group', uuid: any }>, user?: Maybe<{ __typename?: 'User', uuid: any }> }> }> };
+
+export type UserGroupMembershipsQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserGroupMembershipsQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', groupUsers: { __typename?: 'GroupUsersConnection', edges: Array<{ __typename?: 'GroupUsersEdge', node?: Maybe<{ __typename?: 'GroupUser', userType: UserType, group?: Maybe<{ __typename?: 'Group', global: boolean, uuid: any, groupName?: Maybe<string>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }> }> }> } }> };
+
+export type UserIsInGroupQueryVariables = Exact<{
+  userId: Scalars['Int'];
+  groupUuid: Scalars['UUID'];
+}>;
+
+
+export type UserIsInGroupQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', groupUsers: { __typename?: 'GroupUsersConnection', totalCount: number } }> };
+
+export type UsersWithoutLearnerGroupQueryVariables = Exact<{
+  lid: Scalars['Int'];
+  lsklid: Scalars['Int'];
+  learnerSize: Scalars['Int'];
+}>;
+
+
+export type UsersWithoutLearnerGroupQuery = { __typename?: 'Query', usersWithoutLearnerGroup?: Maybe<{ __typename?: 'UsersConnection', nodes: Array<Maybe<{ __typename?: 'User', id: number }>> }> };
+
+export type UsersWithoutNativeGroupQueryVariables = Exact<{
+  lid: Scalars['Int'];
+  nativeSize: Scalars['Int'];
+}>;
+
+
+export type UsersWithoutNativeGroupQuery = { __typename?: 'Query', usersWithoutNativeGroup?: Maybe<{ __typename?: 'UsersConnection', nodes: Array<Maybe<{ __typename?: 'User', id: number }>> }> };
+
+export type AllGroupUuidsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllGroupUuidsQuery = { __typename?: 'Query', groups?: Maybe<{ __typename?: 'GroupsConnection', nodes: Array<Maybe<{ __typename?: 'Group', uuid: any }>> }> };
+
+export type AllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllGroupsQuery = { __typename?: 'Query', groups?: Maybe<{ __typename?: 'GroupsConnection', nodes: Array<Maybe<{ __typename?: 'Group', uuid: any, groupName?: Maybe<string>, global: boolean, language?: Maybe<{ __typename?: 'Language', alpha2: string, englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string>, nodeId: string }>, groupUsers: { __typename?: 'GroupUsersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'GroupUser', joinedOn: any, user?: Maybe<{ __typename?: 'User', avatarUrl?: Maybe<string>, username?: Maybe<string>, uuid: any }> }>> } }>> }> };
+
+export type CreateGroupMutationVariables = Exact<{
+  global: Scalars['Boolean'];
+  groupName: Scalars['String'];
+  languageId: Scalars['Int'];
+  languageSkillLevelId: Scalars['Int'];
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type CreateGroupMutation = { __typename?: 'Mutation', createGroup?: Maybe<{ __typename?: 'CreateGroupPayload', group?: Maybe<{ __typename?: 'Group', id: number, uuid: any }> }> };
+
+export type GroupIdByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type GroupIdByUuidQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', id: number }> };
+
+export type GroupLanguageByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type GroupLanguageByUuidQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', uuid: any, language?: Maybe<{ __typename?: 'Language', alpha2: string }> }> };
+
+export type LanguageCodeMappingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LanguageCodeMappingsQuery = { __typename?: 'Query', languages?: Maybe<{ __typename?: 'LanguagesConnection', nodes: Array<Maybe<{ __typename?: 'Language', alpha2: string, englishName: string }>> }> };
+
+export type LanguageIdByAlpha2QueryVariables = Exact<{
+  alpha2: Scalars['String'];
+}>;
+
+
+export type LanguageIdByAlpha2Query = { __typename?: 'Query', languageByAlpha2?: Maybe<{ __typename?: 'Language', id: number }> };
+
+export type AdminEmailsFcmTokensQueryVariables = Exact<{
+  in: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type AdminEmailsFcmTokensQuery = { __typename?: 'Query', users?: Maybe<{ __typename?: 'UsersConnection', nodes: Array<Maybe<{ __typename?: 'User', userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }>> }> };
+
+export type CreateNotificationMutationVariables = Exact<{
+  channelId: Scalars['Int'];
+  recipientId?: Maybe<Scalars['Int']>;
+  recipientGroupId?: Maybe<Scalars['Int']>;
+  sentAt?: Maybe<Scalars['Datetime']>;
+  params?: Maybe<Scalars['JSON']>;
+  expiresAt?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: Maybe<Scalars['Datetime']>;
+}>;
+
+
+export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification?: Maybe<{ __typename?: 'CreateNotificationPayload', clientMutationId?: Maybe<string>, notification?: Maybe<{ __typename?: 'Notification', createdAt: any, expiresAt?: Maybe<any>, withheldUntil?: Maybe<any>, id: number }> }> };
+
+export type CreateUserDeviceMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  fcmToken?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CreateUserDeviceMutation = { __typename?: 'Mutation', createUserDevice?: Maybe<{ __typename?: 'CreateUserDevicePayload', userDevice?: Maybe<{ __typename?: 'UserDevice', uuid: any, fcmToken?: Maybe<string>, id: number }> }> };
+
+export type GroupMessageNotificationQueryVariables = Exact<{
+  groupUuid: Scalars['UUID'];
+  senderUuid: Scalars['UUID'];
+}>;
+
+
+export type GroupMessageNotificationQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', groupName?: Maybe<string>, uuid: any, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', user?: Maybe<{ __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>, userByUuid?: Maybe<{ __typename?: 'User', username?: Maybe<string> }> };
+
+export type MarkNotificationAsSentMutationVariables = Exact<{
+  id: Scalars['Int'];
+  sentAt?: Maybe<Scalars['Datetime']>;
+}>;
+
+
+export type MarkNotificationAsSentMutation = { __typename?: 'Mutation', updateNotification?: Maybe<{ __typename?: 'UpdateNotificationPayload', notification?: Maybe<{ __typename?: 'Notification', id: number, sentAt?: Maybe<any> }> }> };
+
+export type NotificationChannelByNameQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type NotificationChannelByNameQuery = { __typename?: 'Query', notificationChannelByName?: Maybe<{ __typename?: 'NotificationChannel', id: number }> };
+
+export type OutstandingEmailNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OutstandingEmailNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: Maybe<{ __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<Maybe<{ __typename?: 'Notification', id: number, params?: Maybe<any>, expiresAt?: Maybe<any>, withheldUntil?: Maybe<any>, recipient?: Maybe<{ __typename?: 'User', email: string, emailNotificationsEnabled: boolean, username?: Maybe<string>, unconfirmedEmail?: Maybe<string> }> }>> } }> };
+
+export type OutstandingFcmNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OutstandingFcmNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: Maybe<{ __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<Maybe<{ __typename?: 'Notification', id: number, params?: Maybe<any>, expiresAt?: Maybe<any>, withheldUntil?: Maybe<any>, recipient?: Maybe<{ __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }>, recipientGroup?: Maybe<{ __typename?: 'Group', uuid: any, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', user?: Maybe<{ __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }> }>> } }> }>> } }> };
+
+export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
+  token: Scalars['String'];
+  lastActiveAt: Scalars['Datetime'];
+}>;
+
+
+export type UnsubscribeUserEmailNotificationsMutation = { __typename?: 'Mutation', updateUserByEmailUnsubscribeToken?: Maybe<{ __typename?: 'UpdateUserPayload', clientMutationId?: Maybe<string>, user?: Maybe<{ __typename?: 'User', email: string, uuid: any, username?: Maybe<string> }> }> };
 
 export type CreateUserMutationVariables = Exact<{
   email: Scalars['String'];
@@ -9437,33 +13299,7 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = (
-  { __typename?: 'Mutation' }
-  & { createUser?: Maybe<(
-    { __typename?: 'CreateUserPayload' }
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id'>
-    )> }
-  )> }
-);
-
-export type CreateUserDeviceMutationVariables = Exact<{
-  userId: Scalars['Int'];
-  fcmToken?: Maybe<Scalars['String']>;
-}>;
-
-
-export type CreateUserDeviceMutation = (
-  { __typename?: 'Mutation' }
-  & { createUserDevice?: Maybe<(
-    { __typename?: 'CreateUserDevicePayload' }
-    & { userDevice?: Maybe<(
-      { __typename?: 'UserDevice' }
-      & Pick<UserDevice, 'uuid' | 'fcmToken' | 'id'>
-    )> }
-  )> }
-);
+export type CreateUserMutation = { __typename?: 'Mutation', createUser?: Maybe<{ __typename?: 'CreateUserPayload', user?: Maybe<{ __typename?: 'User', id: number }> }> };
 
 export type CreateUserLanguageMutationVariables = Exact<{
   languageId: Scalars['Int'];
@@ -9473,281 +13309,7 @@ export type CreateUserLanguageMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserLanguageMutation = (
-  { __typename?: 'Mutation' }
-  & { createUserLanguage?: Maybe<(
-    { __typename?: 'CreateUserLanguagePayload' }
-    & { userLanguage?: Maybe<(
-      { __typename?: 'UserLanguage' }
-      & Pick<UserLanguage, 'id'>
-    )> }
-  )> }
-);
-
-export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type CurrentUserQuery = (
-  { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'uuid' | 'avatarUrl'>
-    & { userLanguages: (
-      { __typename?: 'UserLanguagesConnection' }
-      & Pick<UserLanguagesConnection, 'totalCount'>
-    ), languageByLocale?: Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'alpha2'>
-    )>, inviteTokens: (
-      { __typename?: 'InviteTokensConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'InviteToken' }
-        & Pick<InviteToken, 'inviteToken'>
-      )>> }
-    ) }
-  )> }
-);
-
-export type GroupChatQueryVariables = Exact<{
-  groupUuid: Scalars['UUID'];
-}>;
-
-
-export type GroupChatQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & Pick<Group, 'groupName' | 'uuid'>
-    & { language?: Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'englishName'>
-    )>, languageSkillLevel?: Maybe<(
-      { __typename?: 'LanguageSkillLevel' }
-      & Pick<LanguageSkillLevel, 'name' | 'nodeId'>
-    )>, usersByGroupUserGroupIdAndUserId: (
-      { __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'User' }
-        & Pick<User, 'bio' | 'avatarUrl' | 'uuid' | 'username' | 'lastActiveAt'>
-        & { userLanguages: (
-          { __typename?: 'UserLanguagesConnection' }
-          & { nodes: Array<Maybe<(
-            { __typename?: 'UserLanguage' }
-            & Pick<UserLanguage, 'nodeId'>
-            & { language?: Maybe<(
-              { __typename?: 'Language' }
-              & Pick<Language, 'englishName'>
-            )> }
-          )>> }
-        ), groupUsers: (
-          { __typename?: 'GroupUsersConnection' }
-          & { nodes: Array<Maybe<(
-            { __typename?: 'GroupUser' }
-            & Pick<GroupUser, 'userType' | 'nodeId'>
-            & { group?: Maybe<(
-              { __typename?: 'Group' }
-              & Pick<Group, 'uuid'>
-              & { language?: Maybe<(
-                { __typename?: 'Language' }
-                & Pick<Language, 'englishName'>
-              )>, languageSkillLevel?: Maybe<(
-                { __typename?: 'LanguageSkillLevel' }
-                & Pick<LanguageSkillLevel, 'name'>
-              )> }
-            )> }
-          )>> }
-        ) }
-      )>> }
-    ) }
-  )> }
-);
-
-export type GroupChatMessagesQueryVariables = Exact<{
-  groupUuid: Scalars['UUID'];
-  before?: Maybe<Scalars['Cursor']>;
-}>;
-
-
-export type GroupChatMessagesQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & { messagesByRecipientGroupId: (
-      { __typename?: 'MessagesConnection' }
-      & { edges: Array<(
-        { __typename?: 'MessagesEdge' }
-        & { node?: Maybe<(
-          { __typename?: 'Message' }
-          & Pick<Message, 'body' | 'createdAt' | 'uuid'>
-          & { sender?: Maybe<(
-            { __typename?: 'User' }
-            & Pick<User, 'uuid'>
-          )>, messagePreviews: (
-            { __typename?: 'MessagePreviewsConnection' }
-            & { nodes: Array<Maybe<(
-              { __typename?: 'MessagePreview' }
-              & Pick<MessagePreview, 'uuid' | 'filename' | 'extension'>
-            )>> }
-          ) }
-        )> }
-      )>, pageInfo: (
-        { __typename?: 'PageInfo' }
-        & Pick<PageInfo, 'startCursor' | 'hasPreviousPage'>
-      ) }
-    ) }
-  )> }
-);
-
-export type GroupIdByUuidQueryVariables = Exact<{
-  uuid: Scalars['UUID'];
-}>;
-
-
-export type GroupIdByUuidQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & Pick<Group, 'id'>
-  )> }
-);
-
-export type GroupLanguageByUuidQueryVariables = Exact<{
-  uuid: Scalars['UUID'];
-}>;
-
-
-export type GroupLanguageByUuidQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & Pick<Group, 'uuid'>
-    & { language?: Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'alpha2'>
-    )> }
-  )> }
-);
-
-export type GroupMessageNotificationQueryVariables = Exact<{
-  groupUuid: Scalars['UUID'];
-  senderUuid: Scalars['UUID'];
-}>;
-
-
-export type GroupMessageNotificationQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & Pick<Group, 'groupName' | 'uuid'>
-    & { groupUsers: (
-      { __typename?: 'GroupUsersConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'GroupUser' }
-        & { user?: Maybe<(
-          { __typename?: 'User' }
-          & Pick<User, 'uuid'>
-          & { userDevices: (
-            { __typename?: 'UserDevicesConnection' }
-            & { nodes: Array<Maybe<(
-              { __typename?: 'UserDevice' }
-              & Pick<UserDevice, 'fcmToken'>
-            )>> }
-          ) }
-        )> }
-      )>> }
-    ), language?: Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'alpha2'>
-    )>, languageSkillLevel?: Maybe<(
-      { __typename?: 'LanguageSkillLevel' }
-      & Pick<LanguageSkillLevel, 'name'>
-    )> }
-  )>, userByUuid?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'username'>
-  )> }
-);
-
-export type JoinGlobalGroupMutationVariables = Exact<{
-  groupUuid: Scalars['UUID'];
-}>;
-
-
-export type JoinGlobalGroupMutation = (
-  { __typename?: 'Mutation' }
-  & { joinGlobalGroup?: Maybe<(
-    { __typename?: 'JoinGlobalGroupPayload' }
-    & { groupUser?: Maybe<(
-      { __typename?: 'GroupUser' }
-      & Pick<GroupUser, 'nodeId'>
-      & { group?: Maybe<(
-        { __typename?: 'Group' }
-        & Pick<Group, 'uuid'>
-      )>, user?: Maybe<(
-        { __typename?: 'User' }
-        & Pick<User, 'uuid'>
-      )> }
-    )> }
-  )> }
-);
-
-export type LanguageCodeMappingsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type LanguageCodeMappingsQuery = (
-  { __typename?: 'Query' }
-  & { languages?: Maybe<(
-    { __typename?: 'LanguagesConnection' }
-    & { nodes: Array<Maybe<(
-      { __typename?: 'Language' }
-      & Pick<Language, 'alpha2' | 'englishName'>
-    )>> }
-  )> }
-);
-
-export type LanguageIdByAlpha2QueryVariables = Exact<{
-  alpha2: Scalars['String'];
-}>;
-
-
-export type LanguageIdByAlpha2Query = (
-  { __typename?: 'Query' }
-  & { languageByAlpha2?: Maybe<(
-    { __typename?: 'Language' }
-    & Pick<Language, 'id'>
-  )> }
-);
-
-export type RegisterUserActivityMutationVariables = Exact<{
-  userId: Scalars['Int'];
-}>;
-
-
-export type RegisterUserActivityMutation = (
-  { __typename?: 'Mutation' }
-  & { registerUserActivity?: Maybe<(
-    { __typename?: 'RegisterUserActivityPayload' }
-    & Pick<RegisterUserActivityPayload, 'datetime'>
-  )> }
-);
-
-export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
-  token: Scalars['String'];
-  lastActiveAt: Scalars['Datetime'];
-}>;
-
-
-export type UnsubscribeUserEmailNotificationsMutation = (
-  { __typename?: 'Mutation' }
-  & { updateUserByEmailUnsubscribeToken?: Maybe<(
-    { __typename?: 'UpdateUserPayload' }
-    & Pick<UpdateUserPayload, 'clientMutationId'>
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'email' | 'uuid' | 'username'>
-    )> }
-  )> }
-);
+export type CreateUserLanguageMutation = { __typename?: 'Mutation', createUserLanguage?: Maybe<{ __typename?: 'CreateUserLanguagePayload', userLanguage?: Maybe<{ __typename?: 'UserLanguage', id: number }> }> };
 
 export type UpdateUserAvatarUrlMutationVariables = Exact<{
   avatarUrl: Scalars['String'];
@@ -9755,213 +13317,42 @@ export type UpdateUserAvatarUrlMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserAvatarUrlMutation = (
-  { __typename?: 'Mutation' }
-  & { updateUser?: Maybe<(
-    { __typename?: 'UpdateUserPayload' }
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'avatarUrl'>
-    )> }
-  )> }
-);
-
-export type UserGroupMembershipsQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type UserGroupMembershipsQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & { groupUsers: (
-      { __typename?: 'GroupUsersConnection' }
-      & { edges: Array<(
-        { __typename?: 'GroupUsersEdge' }
-        & { node?: Maybe<(
-          { __typename?: 'GroupUser' }
-          & Pick<GroupUser, 'userType'>
-          & { group?: Maybe<(
-            { __typename?: 'Group' }
-            & Pick<Group, 'global' | 'uuid' | 'groupName'>
-            & { language?: Maybe<(
-              { __typename?: 'Language' }
-              & Pick<Language, 'alpha2'>
-            )>, languageSkillLevel?: Maybe<(
-              { __typename?: 'LanguageSkillLevel' }
-              & Pick<LanguageSkillLevel, 'name'>
-            )> }
-          )> }
-        )> }
-      )> }
-    ) }
-  )> }
-);
+export type UpdateUserAvatarUrlMutation = { __typename?: 'Mutation', updateUser?: Maybe<{ __typename?: 'UpdateUserPayload', user?: Maybe<{ __typename?: 'User', avatarUrl?: Maybe<string> }> }> };
 
 export type UserHasCompletedProfileQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserHasCompletedProfileQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'username'>
-    & { userLanguages: (
-      { __typename?: 'UserLanguagesConnection' }
-      & Pick<UserLanguagesConnection, 'totalCount'>
-    ) }
-  )> }
-);
+export type UserHasCompletedProfileQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', username?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number } }> };
 
-export type UserIsInGroupQueryVariables = Exact<{
-  userId: Scalars['Int'];
-  groupUuid: Scalars['UUID'];
+export type UserIdByEmailQueryVariables = Exact<{
+  email: Scalars['String'];
 }>;
 
 
-export type UserIsInGroupQuery = (
-  { __typename?: 'Query' }
-  & { groupByUuid?: Maybe<(
-    { __typename?: 'Group' }
-    & { groupUsers: (
-      { __typename?: 'GroupUsersConnection' }
-      & Pick<GroupUsersConnection, 'totalCount'>
-    ) }
-  )> }
-);
+export type UserIdByEmailQuery = { __typename?: 'Query', userByEmail?: Maybe<{ __typename?: 'User', id: number }> };
 
 export type UserLanguageInfoQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserLanguageInfoQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'uuid'>
-    & { userLanguages: (
-      { __typename?: 'UserLanguagesConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'UserLanguage' }
-        & Pick<UserLanguage, 'nodeId' | 'languageId' | 'languageSkillLevelId' | 'native'>
-      )>> }
-    ) }
-  )> }
-);
+export type UserLanguageInfoQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', id: number, uuid: any, userLanguages: { __typename?: 'UserLanguagesConnection', nodes: Array<Maybe<{ __typename?: 'UserLanguage', nodeId: string, languageId: number, languageSkillLevelId?: Maybe<number>, native: boolean }>> } }> };
 
 export type UserProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserProfileQuery = (
-  { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'bio' | 'email' | 'gender' | 'username' | 'avatarUrl' | 'uuid'>
-    & { userLanguages: (
-      { __typename?: 'UserLanguagesConnection' }
-      & Pick<UserLanguagesConnection, 'totalCount'>
-      & { nodes: Array<Maybe<(
-        { __typename?: 'UserLanguage' }
-        & Pick<UserLanguage, 'native'>
-        & { language?: Maybe<(
-          { __typename?: 'Language' }
-          & Pick<Language, 'englishName'>
-        )>, languageSkillLevel?: Maybe<(
-          { __typename?: 'LanguageSkillLevel' }
-          & Pick<LanguageSkillLevel, 'name'>
-        )> }
-      )>> }
-    ), groupUsers: (
-      { __typename?: 'GroupUsersConnection' }
-      & { nodes: Array<Maybe<(
-        { __typename?: 'GroupUser' }
-        & Pick<GroupUser, 'nodeId' | 'userType' | 'joinedOn'>
-        & { group?: Maybe<(
-          { __typename?: 'Group' }
-          & Pick<Group, 'uuid' | 'groupName'>
-          & { language?: Maybe<(
-            { __typename?: 'Language' }
-            & Pick<Language, 'englishName'>
-          )>, languageSkillLevel?: Maybe<(
-            { __typename?: 'LanguageSkillLevel' }
-            & Pick<LanguageSkillLevel, 'name'>
-          )> }
-        )> }
-      )>> }
-    ) }
-  )> }
-);
+export type UserProfileQuery = { __typename?: 'Query', currentUser?: Maybe<{ __typename?: 'User', bio: string, email: string, gender?: Maybe<string>, username?: Maybe<string>, avatarUrl?: Maybe<string>, uuid: any, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'UserLanguage', native: boolean, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', nodeId: string, userType: UserType, joinedOn: any, group?: Maybe<{ __typename?: 'Group', uuid: any, groupName?: Maybe<string>, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }> }>> } }> };
 
 export type UserUuidByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserUuidByIdQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'uuid'>
-  )> }
-);
+export type UserUuidByIdQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', uuid: any }> };
 
 
-export const AdminEmailsFcmTokens = gql`
-    query AdminEmailsFcmTokens($in: [String!]!) {
-  users(filter: {email: {in: $in}}) {
-    nodes {
-      userDevices {
-        nodes {
-          fcmToken
-        }
-      }
-    }
-  }
-}
-    `;
-export const AllGroupUuids = gql`
-    query AllGroupUuids {
-  groups {
-    nodes {
-      uuid
-    }
-  }
-}
-    `;
-export const AllGroups = gql`
-    query AllGroups {
-  groups {
-    nodes {
-      uuid
-      groupName
-      global
-      language {
-        alpha2
-        englishName
-      }
-      languageSkillLevel {
-        name
-        nodeId
-      }
-      groupUsers {
-        totalCount
-        nodes {
-          user {
-            avatarUrl
-            username
-            uuid
-          }
-          joinedOn
-        }
-      }
-    }
-  }
-}
-    `;
 export const ChatUser = gql`
     query ChatUser($id: Int!) {
   user(id: $id) {
@@ -9969,18 +13360,6 @@ export const ChatUser = gql`
     username
     uuid
     avatarUrl
-  }
-}
-    `;
-export const CreateGroup = gql`
-    mutation CreateGroup($global: Boolean!, $groupName: String!, $languageId: Int!, $languageSkillLevelId: Int!, $uuid: UUID!) {
-  createGroup(
-    input: {group: {global: $global, groupName: $groupName, languageId: $languageId, languageSkillLevelId: $languageSkillLevelId, uuid: $uuid}}
-  ) {
-    group {
-      id
-      uuid
-    }
   }
 }
     `;
@@ -10007,62 +13386,6 @@ export const CreateMessagePreview = gql`
   ) {
     messagePreview {
       id
-    }
-  }
-}
-    `;
-export const CreateUser = gql`
-    mutation CreateUser($email: String!, $gender: String!, $passwordHash: String!, $username: String!, $uuid: UUID!, $avatarUrl: String!, $locale: Int, $emailUnsubscribeToken: String!) {
-  createUser(
-    input: {user: {email: $email, gender: $gender, passwordHash: $passwordHash, username: $username, uuid: $uuid, avatarUrl: $avatarUrl, locale: $locale, emailUnsubscribeToken: $emailUnsubscribeToken}}
-  ) {
-    user {
-      id
-    }
-  }
-}
-    `;
-export const CreateUserDevice = gql`
-    mutation CreateUserDevice($userId: Int!, $fcmToken: String) {
-  createUserDevice(input: {userDevice: {userId: $userId, fcmToken: $fcmToken}}) {
-    userDevice {
-      uuid
-      fcmToken
-      id
-    }
-  }
-}
-    `;
-export const CreateUserLanguage = gql`
-    mutation CreateUserLanguage($languageId: Int!, $languageSkillLevelId: Int, $native: Boolean!, $userId: Int!) {
-  createUserLanguage(
-    input: {userLanguage: {languageId: $languageId, languageSkillLevelId: $languageSkillLevelId, native: $native, userId: $userId}}
-  ) {
-    userLanguage {
-      id
-    }
-  }
-}
-    `;
-export const CurrentUser = gql`
-    query CurrentUser {
-  currentUser {
-    bio
-    email
-    gender
-    username
-    uuid
-    avatarUrl
-    userLanguages {
-      totalCount
-    }
-    languageByLocale {
-      alpha2
-    }
-    inviteTokens {
-      nodes {
-        inviteToken
-      }
     }
   }
 }
@@ -10143,6 +13466,325 @@ export const GroupChatMessages = gql`
   }
 }
     `;
+export const CurrentUser = gql`
+    query CurrentUser {
+  currentUser {
+    bio
+    email
+    gender
+    username
+    uuid
+    avatarUrl
+    userLanguages {
+      totalCount
+    }
+    languageByLocale {
+      alpha2
+    }
+    inviteTokens {
+      nodes {
+        inviteToken
+      }
+    }
+  }
+}
+    `;
+export const RegisterUserActivity = gql`
+    mutation RegisterUserActivity($userId: Int!) {
+  registerUserActivity(input: {userId: $userId}) {
+    datetime
+  }
+}
+    `;
+export const AllPosts = gql`
+    query AllPosts {
+  posts(orderBy: CREATED_AT_DESC, condition: {parentPostId: null}) {
+    nodes {
+      uuid
+      nodeId
+      createdAt
+      author {
+        uuid
+        username
+        avatarUrl
+      }
+      body
+      likes {
+        totalCount
+        nodes {
+          user {
+            uuid
+          }
+        }
+      }
+      parentPost {
+        uuid
+      }
+      replies(orderBy: CREATED_AT_ASC, filter: {not: {parentPostId: {isNull: true}}}) {
+        totalCount
+        nodes {
+          uuid
+          nodeId
+          createdAt
+          author {
+            uuid
+            username
+            avatarUrl
+          }
+          likes {
+            totalCount
+            nodes {
+              user {
+                uuid
+              }
+            }
+          }
+          body
+          parentPost {
+            uuid
+          }
+          language {
+            alpha2
+          }
+          prompt {
+            content
+            uuid
+            type
+          }
+        }
+      }
+      recordings {
+        totalCount
+        nodes {
+          filename
+          extension
+          uuid
+          user {
+            uuid
+          }
+        }
+      }
+      language {
+        alpha2
+      }
+      prompt {
+        content
+        uuid
+        type
+      }
+    }
+  }
+}
+    `;
+export const CreatePost = gql`
+    mutation CreatePost($authorId: Int!, $body: String!, $parentPostId: Int, $languageId: Int!, $promptId: Int) {
+  createPost(
+    input: {post: {authorId: $authorId, parentPostId: $parentPostId, body: $body, languageId: $languageId, promptId: $promptId}}
+  ) {
+    clientMutationId
+    post {
+      body
+      createdAt
+      uuid
+      nodeId
+    }
+  }
+}
+    `;
+export const CreatePostLike = gql`
+    mutation CreatePostLike($userId: Int!, $postId: Int!) {
+  createPostLike(input: {postLike: {postId: $postId, userId: $userId}}) {
+    postLike {
+      postId
+      userId
+      nodeId
+      createdAt
+    }
+  }
+}
+    `;
+export const CreatePostRecording = gql`
+    mutation CreatePostRecording($userId: Int!, $postId: Int!, $filename: String!, $extension: String = "") {
+  createPostRecording(
+    input: {postRecording: {userId: $userId, postId: $postId, filename: $filename, extension: $extension}}
+  ) {
+    postRecording {
+      createdAt
+      extension
+      filename
+      uuid
+      nodeId
+    }
+  }
+}
+    `;
+export const DeletePostLike = gql`
+    mutation DeletePostLike($id: Int!) {
+  deletePostLike(input: {id: $id}) {
+    postLike {
+      postId
+      userId
+      nodeId
+      createdAt
+    }
+  }
+}
+    `;
+export const PostIdByUuid = gql`
+    query PostIdByUuid($uuid: UUID!) {
+  postByUuid(uuid: $uuid) {
+    id
+    nodeId
+  }
+}
+    `;
+export const PostLikeIdByPostIdAndUserId = gql`
+    query PostLikeIdByPostIdAndUserId($postId: Int!, $userId: Int!) {
+  postLikes(condition: {postId: $postId, userId: $userId}) {
+    nodes {
+      id
+      nodeId
+    }
+    totalCount
+  }
+}
+    `;
+export const PromptIdByUuid = gql`
+    query PromptIdByUuid($uuid: UUID!) {
+  promptByUuid(uuid: $uuid) {
+    id
+    nodeId
+  }
+}
+    `;
+export const CreateGroupUser = gql`
+    mutation CreateGroupUser($userType: UserType!, $userId: Int!, $groupId: Int!) {
+  createGroupUser(
+    input: {groupUser: {userType: $userType, userId: $userId, groupId: $groupId}}
+  ) {
+    groupUser {
+      id
+    }
+  }
+}
+    `;
+export const JoinGlobalGroup = gql`
+    mutation JoinGlobalGroup($groupUuid: UUID!) {
+  joinGlobalGroup(input: {groupUuid: $groupUuid}) {
+    groupUser {
+      group {
+        uuid
+      }
+      user {
+        uuid
+      }
+      nodeId
+    }
+  }
+}
+    `;
+export const UserGroupMemberships = gql`
+    query UserGroupMemberships($id: Int!) {
+  user(id: $id) {
+    groupUsers {
+      edges {
+        node {
+          group {
+            global
+            uuid
+            groupName
+            language {
+              alpha2
+            }
+            languageSkillLevel {
+              name
+            }
+          }
+          userType
+        }
+      }
+    }
+  }
+}
+    `;
+export const UserIsInGroup = gql`
+    query UserIsInGroup($userId: Int!, $groupUuid: UUID!) {
+  groupByUuid(uuid: $groupUuid) {
+    groupUsers(condition: {userId: $userId}) {
+      totalCount
+    }
+  }
+}
+    `;
+export const UsersWithoutLearnerGroup = gql`
+    query UsersWithoutLearnerGroup($lid: Int!, $lsklid: Int!, $learnerSize: Int!) {
+  usersWithoutLearnerGroup(lid: $lid, lsklid: $lsklid, first: $learnerSize) {
+    nodes {
+      id
+    }
+  }
+}
+    `;
+export const UsersWithoutNativeGroup = gql`
+    query UsersWithoutNativeGroup($lid: Int!, $nativeSize: Int!) {
+  usersWithoutNativeGroup(lid: $lid, first: $nativeSize) {
+    nodes {
+      id
+    }
+  }
+}
+    `;
+export const AllGroupUuids = gql`
+    query AllGroupUuids {
+  groups {
+    nodes {
+      uuid
+    }
+  }
+}
+    `;
+export const AllGroups = gql`
+    query AllGroups {
+  groups {
+    nodes {
+      uuid
+      groupName
+      global
+      language {
+        alpha2
+        englishName
+      }
+      languageSkillLevel {
+        name
+        nodeId
+      }
+      groupUsers {
+        totalCount
+        nodes {
+          user {
+            avatarUrl
+            username
+            uuid
+          }
+          joinedOn
+        }
+      }
+    }
+  }
+}
+    `;
+export const CreateGroup = gql`
+    mutation CreateGroup($global: Boolean!, $groupName: String!, $languageId: Int!, $languageSkillLevelId: Int!, $uuid: UUID!) {
+  createGroup(
+    input: {group: {global: $global, groupName: $groupName, languageId: $languageId, languageSkillLevelId: $languageSkillLevelId, uuid: $uuid}}
+  ) {
+    group {
+      id
+      uuid
+    }
+  }
+}
+    `;
 export const GroupIdByUuid = gql`
     query GroupIdByUuid($uuid: UUID!) {
   groupByUuid(uuid: $uuid) {
@@ -10157,6 +13799,62 @@ export const GroupLanguageByUuid = gql`
       alpha2
     }
     uuid
+  }
+}
+    `;
+export const LanguageCodeMappings = gql`
+    query LanguageCodeMappings {
+  languages {
+    nodes {
+      alpha2
+      englishName
+    }
+  }
+}
+    `;
+export const LanguageIdByAlpha2 = gql`
+    query LanguageIdByAlpha2($alpha2: String!) {
+  languageByAlpha2(alpha2: $alpha2) {
+    id
+  }
+}
+    `;
+export const AdminEmailsFcmTokens = gql`
+    query AdminEmailsFcmTokens($in: [String!]!) {
+  users(filter: {email: {in: $in}}) {
+    nodes {
+      userDevices {
+        nodes {
+          fcmToken
+        }
+      }
+    }
+  }
+}
+    `;
+export const CreateNotification = gql`
+    mutation CreateNotification($channelId: Int!, $recipientId: Int, $recipientGroupId: Int, $sentAt: Datetime, $params: JSON, $expiresAt: Datetime, $withheldUntil: Datetime) {
+  createNotification(
+    input: {notification: {channelId: $channelId, recipientId: $recipientId, recipientGroupId: $recipientGroupId, params: $params, sentAt: $sentAt, expiresAt: $expiresAt, withheldUntil: $withheldUntil}}
+  ) {
+    clientMutationId
+    notification {
+      createdAt
+      expiresAt
+      withheldUntil
+      id
+    }
+  }
+}
+    `;
+export const CreateUserDevice = gql`
+    mutation CreateUserDevice($userId: Int!, $fcmToken: String) {
+  createUserDevice(input: {userDevice: {userId: $userId, fcmToken: $fcmToken}}) {
+    userDevice {
+      uuid
+      fcmToken
+      id
+    }
   }
 }
     `;
@@ -10189,42 +13887,83 @@ export const GroupMessageNotification = gql`
   }
 }
     `;
-export const JoinGlobalGroup = gql`
-    mutation JoinGlobalGroup($groupUuid: UUID!) {
-  joinGlobalGroup(input: {groupUuid: $groupUuid}) {
-    groupUser {
-      group {
-        uuid
-      }
-      user {
-        uuid
-      }
-      nodeId
+export const MarkNotificationAsSent = gql`
+    mutation MarkNotificationAsSent($id: Int!, $sentAt: Datetime) {
+  updateNotification(input: {patch: {sentAt: $sentAt}, id: $id}) {
+    notification {
+      id
+      sentAt
     }
   }
 }
     `;
-export const LanguageCodeMappings = gql`
-    query LanguageCodeMappings {
-  languages {
-    nodes {
-      alpha2
-      englishName
-    }
-  }
-}
-    `;
-export const LanguageIdByAlpha2 = gql`
-    query LanguageIdByAlpha2($alpha2: String!) {
-  languageByAlpha2(alpha2: $alpha2) {
+export const NotificationChannelByName = gql`
+    query NotificationChannelByName($name: String!) {
+  notificationChannelByName(name: $name) {
     id
   }
 }
     `;
-export const RegisterUserActivity = gql`
-    mutation RegisterUserActivity($userId: Int!) {
-  registerUserActivity(input: {userId: $userId}) {
-    datetime
+export const OutstandingEmailNotifications = gql`
+    query OutstandingEmailNotifications {
+  notificationChannelByName(name: "Email") {
+    notificationsByChannelId(
+      orderBy: CREATED_AT_ASC
+      filter: {sentAt: {isNull: true}}
+    ) {
+      nodes {
+        id
+        recipient {
+          email
+          emailNotificationsEnabled
+          username
+          unconfirmedEmail
+        }
+        params
+        expiresAt
+        withheldUntil
+      }
+    }
+  }
+}
+    `;
+export const OutstandingFcmNotifications = gql`
+    query OutstandingFcmNotifications {
+  notificationChannelByName(name: "Firebase Cloud Messaging") {
+    notificationsByChannelId(
+      orderBy: CREATED_AT_ASC
+      filter: {sentAt: {isNull: true}}
+    ) {
+      nodes {
+        id
+        recipient {
+          userDevices {
+            nodes {
+              fcmToken
+            }
+          }
+          uuid
+        }
+        params
+        expiresAt
+        withheldUntil
+        recipientGroup {
+          uuid
+          groupUsers {
+            nodes {
+              user {
+                userDevices {
+                  nodes {
+                    fcmToken
+                  }
+                }
+                uuid
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
     `;
@@ -10242,35 +13981,33 @@ export const UnsubscribeUserEmailNotifications = gql`
   }
 }
     `;
+export const CreateUser = gql`
+    mutation CreateUser($email: String!, $gender: String!, $passwordHash: String!, $username: String!, $uuid: UUID!, $avatarUrl: String!, $locale: Int, $emailUnsubscribeToken: String!) {
+  createUser(
+    input: {user: {email: $email, gender: $gender, passwordHash: $passwordHash, username: $username, uuid: $uuid, avatarUrl: $avatarUrl, locale: $locale, emailUnsubscribeToken: $emailUnsubscribeToken}}
+  ) {
+    user {
+      id
+    }
+  }
+}
+    `;
+export const CreateUserLanguage = gql`
+    mutation CreateUserLanguage($languageId: Int!, $languageSkillLevelId: Int, $native: Boolean!, $userId: Int!) {
+  createUserLanguage(
+    input: {userLanguage: {languageId: $languageId, languageSkillLevelId: $languageSkillLevelId, native: $native, userId: $userId}}
+  ) {
+    userLanguage {
+      id
+    }
+  }
+}
+    `;
 export const UpdateUserAvatarUrl = gql`
     mutation UpdateUserAvatarUrl($avatarUrl: String!, $id: Int!) {
   updateUser(input: {patch: {avatarUrl: $avatarUrl}, id: $id}) {
     user {
       avatarUrl
-    }
-  }
-}
-    `;
-export const UserGroupMemberships = gql`
-    query UserGroupMemberships($id: Int!) {
-  user(id: $id) {
-    groupUsers {
-      edges {
-        node {
-          group {
-            global
-            uuid
-            groupName
-            language {
-              alpha2
-            }
-            languageSkillLevel {
-              name
-            }
-          }
-          userType
-        }
-      }
     }
   }
 }
@@ -10285,12 +14022,10 @@ export const UserHasCompletedProfile = gql`
   }
 }
     `;
-export const UserIsInGroup = gql`
-    query UserIsInGroup($userId: Int!, $groupUuid: UUID!) {
-  groupByUuid(uuid: $groupUuid) {
-    groupUsers(condition: {userId: $userId}) {
-      totalCount
-    }
+export const UserIdByEmail = gql`
+    query UserIdByEmail($email: String!) {
+  userByEmail(email: $email) {
+    id
   }
 }
     `;

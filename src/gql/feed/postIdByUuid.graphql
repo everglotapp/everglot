@@ -1,0 +1,6 @@
+query PostIdByUuid($uuid: UUID!) {
+    postByUuid(uuid: $uuid) {
+        id
+        nodeId
+    }
+}

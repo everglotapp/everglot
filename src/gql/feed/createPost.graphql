@@ -1,0 +1,27 @@
+mutation CreatePost(
+    $authorId: Int!
+    $body: String!
+    $parentPostId: Int
+    $languageId: Int!
+    $promptId: Int
+) {
+    createPost(
+        input: {
+            post: {
+                authorId: $authorId
+                parentPostId: $parentPostId
+                body: $body
+                languageId: $languageId
+                promptId: $promptId
+            }
+        }
+    ) {
+        clientMutationId
+        post {
+            body
+            createdAt
+            uuid
+            nodeId
+        }
+    }
+}

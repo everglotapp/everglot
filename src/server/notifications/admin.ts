@@ -1,6 +1,9 @@
 import { getApp } from "../firebase"
 import log from "../../logger"
-import type { AdminEmailsFcmTokensQuery } from "../../types/generated/graphql"
+import {
+    AdminEmailsFcmTokens,
+    AdminEmailsFcmTokensQuery,
+} from "../../types/generated/graphql"
 import { performQuery } from "../gql"
 
 const chlog = log.child({ namespace: "admin-notifications" })
@@ -62,18 +65,7 @@ export async function getFcmTokensByEmails(
     emails: string[]
 ): Promise<string[] | null> {
     const res = await performQuery<AdminEmailsFcmTokensQuery>(
-        `query AdminEmailsFcmTokens($in: [String!]!) {
-            users(filter: { email: { in: $in } }) {
-                nodes {
-                    userDevices {
-                        nodes {
-                            fcmToken
-                        }
-                    }
-                }
-            }
-        }
-        `,
+        AdminEmailsFcmTokens.loc!.source,
         { in: emails }
     )
     if (!res.data || !res.data.users) {

@@ -19,6 +19,7 @@ jobs:
                   echo "POSTGRES_DB=everglot_app_db" >> .env
                   echo "SESSION_COOKIE_VALIDATION_SECRETS=[\"MySecretCookieValidationSecret123\"]" >> .env
                   echo "AGORA_APP_CERTIFICATE=whatever" >> .env
+                  echo "SENDINBLUE_API_KEY=whatever" >> .env
             - name: "Setup server-side Firebase credentials file"
               run: |
                   echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON_BASE64 }}" | base64 -d > src/firebaseServiceAccount.json
@@ -73,29 +74,22 @@ jobs:
             - name: Save DigitalOcean kubeconfig with short-lived credentials
               run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-1-20-2-do-0-ams3-1612982708095
 
-            - name: Delete Postgres Kubernetes Secrets if existed
-              run: kubectl delete secret postgres --ignore-not-found
-
-            - name: Inject Postgres Kubernetes Secrets from Github Secrets
-              run: kubectl create secret generic postgres --from-literal=postgres-password='${{ secrets.PGPASSWORD }}'
-
-            - name: Delete Session Secrets from Kubernetes Secrets if existed
-              run: kubectl delete secret session --ignore-not-found
-
-            - name: Inject Session Secrets from Github Secrets
-              run: kubectl create secret generic session --from-literal=session-cookie-validation-secrets='${{ secrets.SESSION_COOKIE_VALIDATION_SECRETS }}'
-
-            - name: Delete Agora Certificate from Kubernetes Secrets if existed
-              run: kubectl delete secret agora --ignore-not-found
-
-            - name: Inject Agora Certificate from Github Secrets
-              run: kubectl create secret generic agora --from-literal=agora-app-certificate='${{ secrets.AGORA_APP_CERTIFICATE }}'
-
-            - name: Delete Admin Emails from Kubernetes Secrets if existed
-              run: kubectl delete secret adminemails --ignore-not-found
-
-            - name: Inject Admin Emails from Github Secrets
-              run: kubectl create secret generic adminemails --from-literal=admin-emails='${{ secrets.ADMIN_EMAILS }}'
+            - name: Create or update Kubernetes Secrets
+              run: |
+                  kubectl delete secret postgres --ignore-not-found
+                  kubectl create secret generic postgres --from-literal=postgres-password='${{ secrets.PGPASSWORD }}'
+                  kubectl delete secret session --ignore-not-found
+                  kubectl create secret generic session --from-literal=session-cookie-validation-secrets='${{ secrets.SESSION_COOKIE_VALIDATION_SECRETS }}'
+                  kubectl delete secret agora --ignore-not-found
+                  kubectl create secret generic agora --from-literal=agora-app-certificate='${{ secrets.AGORA_APP_CERTIFICATE }}'
+                  kubectl delete secret adminemails --ignore-not-found
+                  kubectl create secret generic adminemails --from-literal=admin-emails='${{ secrets.ADMIN_EMAILS }}'
+                  kubectl delete secret sendinblueapikey --ignore-not-found
+                  kubectl create secret generic sendinblueapikey --from-literal=sendinblue-api-key='${{ secrets.SENDINBLUE_API_KEY }}'
+                  kubectl delete secret demouseremail --ignore-not-found
+                  kubectl create secret generic demouseremail --from-literal=demo-user-email='${{ secrets.DEMO_USER_EMAIL }}'
+                  kubectl delete secret demotoken --ignore-not-found
+                  kubectl create secret generic demotoken --from-literal=demo-token='${{ secrets.DEMO_TOKEN }}'
 
             - name: Deploy Config to DigitalOcean Kubernetes
               run: kubectl apply -f $GITHUB_WORKSPACE/k8s-setup/everglot/service-deployment.yml

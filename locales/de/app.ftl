@@ -230,7 +230,9 @@ profile-gender-unknown = unbekannt
 profile-languages = Meine Sprachen
 profile-language-native-hint = (Muttersprache)
 profile-groups = Meine Gruppen
+profile-upload-avatar = Avatar hochladen
 profile-avatar-upload-failed = Dein Avatar konnte nicht erfolgreich geändert werden. Probiere es noch einmal.
+profile-avatar-max-size = Avatare müssen kleiner als { $maxSize } sein.
 
 ## Email notifications unsubscription successful
 

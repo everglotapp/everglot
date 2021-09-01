@@ -10,6 +10,7 @@
         ChevronDownIcon,
         ChevronUpIcon,
     } from "svelte-feather-icons"
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
     import { userHasCompletedProfile } from "../stores"
     import { allPostsStore, allPosts } from "../stores/feed"
@@ -146,6 +147,27 @@
     }
 
     $: shownPrompt = pickedLocale ? prompt[pickedLocale] : null
+
+    function unsetPrompt() {
+        if (pickedLocale) {
+            prompt[pickedLocale] = null
+        }
+    }
+    const refreshPosts = () => {
+        $allPostsStore.context = {
+            ...$allPostsStore.context,
+            paused: true,
+        }
+        $allPostsStore.context = {
+            ...$allPostsStore.context,
+            paused: false,
+        }
+    }
+
+    function handlePostSuccess() {
+        refreshPosts()
+        unsetPrompt()
+    }
 </script>
 
 <div class="container max-w-2xl pt-4 px-2">
@@ -157,13 +179,29 @@
                 <ButtonSmall
                     className="items-center"
                     tag="button"
-                    variant="OUTLINED"
+                    variant={shownPrompt ? "OUTLINED" : "FILLED"}
                     on:click={handleShuffle}
                     ><ZapIcon size="24" class="mr-2" /><span
                         class="hidden sm:inline"
-                        >{shownPrompt ? "Shuffle Prompts" : "Prompt me"}</span
+                        >{#if shownPrompt}
+                            <Localized
+                                id="index-shuffle-prompts-button-prompt-shown"
+                            />
+                        {:else}
+                            <Localized
+                                id="index-shuffle-prompts-button-initial"
+                            />
+                        {/if}</span
                     ><span class="inline sm:hidden"
-                        >{shownPrompt ? "Shuffle" : "Prompt me"}</span
+                        >{#if shownPrompt}
+                            <Localized
+                                id="index-shuffle-prompts-button-prompt-shown-mobile"
+                            />
+                        {:else}
+                            <Localized
+                                id="index-shuffle-prompts-button-initial-mobile"
+                            />
+                        {/if}</span
                     ></ButtonSmall
                 >
             {/if}
@@ -177,7 +215,11 @@
                 bind:value={pickedLocale}
             >
                 {#each items as item}
-                    <option value={item.value}>{item.label}</option>
+                    <option value={item.value}
+                        ><Localized id={`locale-${item.value}`}
+                            >{item.label}</Localized
+                        ></option
+                    >
                 {/each}
             </select>
             <ButtonSmall
@@ -196,7 +238,11 @@
                         : "Pick …"}</span
                 >
                 <div class="pl-5 flex items-center">
-                    <ChevronDownIcon size="18" />
+                    {#if languagePickerFocused}
+                        <ChevronUpIcon size="18" />
+                    {:else}
+                        <ChevronDownIcon size="18" />
+                    {/if}
                 </div>
             </ButtonSmall>
         </div>
@@ -216,13 +262,13 @@
                     {shownPrompt.content}
                 </div>
                 <div class="text-lg text-gray text-center">
-                    Benutze dieses Wort in einem Satz.
+                    <Localized id="index-prompt-instruction-word" />
                 </div>
             {/if}
             <ButtonSmall
                 tag="button"
                 variant="TEXT"
-                on:click={() => (prompt[pickedLocale] = null)}
+                on:click={() => unsetPrompt()}
                 className="close-prompt-button"
             >
                 <XCircleIcon size="32" strokeWidth={1} />
@@ -233,6 +279,7 @@
 <PostForm
     shownPromptUuid={shownPrompt ? shownPrompt.uuid : null}
     locale={pickedLocale || null}
+    handleSuccess={handlePostSuccess}
 />
 <div class="container max-w-2xl py-2 px-3 sm:px-0 gap-y-1">
     {#each posts as post (post.uuid)}

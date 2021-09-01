@@ -111,7 +111,10 @@
         left: 0;
         right: 0;
         bottom: 0;
-        font-size: 18px;
+
+        @screen md {
+            font-size: 18px;
+        }
     }
 
     main {

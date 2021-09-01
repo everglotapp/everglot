@@ -101,7 +101,19 @@ async function getRandomPrompt(
             from app_public.languages
             where alpha2 = $1
         )
-        and not(uuid = any($2))
+        and not(p.uuid = any($2))
+        and p.type = (
+            select enumlabel
+            from pg_catalog.pg_enum e
+            inner join (
+                select oid
+                from pg_type
+                where typname = 'prompt_type'
+            ) t
+            ON t.oid = e.enumtypid
+            order by random()
+            limit 1
+        )::public.prompt_type
         order by random()
     ) wd limit 1
     `,

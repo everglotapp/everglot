@@ -5,6 +5,17 @@
 
 -brand-name = Everglot
 
+## Feed page
+
+index-shuffle-prompts-button-initial = Prompt Me
+index-shuffle-prompts-button-prompt-shown = Shuffle Prompts
+index-shuffle-prompts-button-initial-mobile = Prompt Me
+index-shuffle-prompts-button-prompt-shown-mobile = Shuffle
+index-prompt-instruction-word = Use this word in a sentence.
+index-post-form-record-button = Record
+index-post-form-post-button = Post
+index-post-form-body-input-placeholder = Squeek your mind …
+
 ## Chat page
 
 chat-browser-window-title = { -brand-name } – Learn Together.
@@ -32,7 +43,7 @@ chat-sidebar-switch-call-text = You are already in a call, do you want to switch
 chat-sidebar-switch-call-cancel = Cancel
 chat-sidebar-switch-call-confirm = Switch
 chat-side-panel-bubble = Welcome to the game center. Select a game to play with your study group.
-chat-side-panel-bubble-no-activity-available = Sorry, Everglot does not support games for { $language }, yet.
+chat-side-panel-bubble-no-activity-available = Sorry, { -brand-name } does not support games for { $language }, yet.
 chat-side-panel-menu-hangman = Play Hangman
 chat-side-panel-menu-would-you-rather = Play Would You Rather
 chat-side-panel-menu-random-question = Ask a Random Question
@@ -116,8 +127,8 @@ signup-success-browser-window-title = Success – { -brand-name }
 signup-success-title = Success!
 signup-success-msg = Thank you for being among the first to try out our prototype! Stand by while we sort you into a study group. This may take awhile.  We will notify you via app notifications or by email once this process is complete.
 signup-success-explore = Explore Global Channel
-signup-success-download-app-ios = Download Everglot for iOS
-signup-success-download-app-android = Download Everglot for Android
+signup-success-download-app-ios = Download { -brand-name } for iOS
+signup-success-download-app-android = Download { -brand-name } for Android
 
 ## Invite Modal
 
@@ -168,7 +179,7 @@ signup-form-learning-levels-select-b2 = B2 – Upper intermediate
 signup-form-learning-levels-select-c1 = C1 – Advanced
 signup-form-learning-levels-select-c2 = C2 – Proficient
 signup-form-difficult-msg =
-    <p data-l10n-name="difficult">Everglot can be quite difficult for beginners and elementary level learners.</p>
+    <p data-l10n-name="difficult">{ -brand-name } can be quite difficult for beginners and elementary level learners.</p>
     <p data-l10n-name="no-problem">You can still continue. Please be aware that in the beginning it could be hard for you to follow along.</p>
 signup-form-not-supported-msg =
     <p data-l10n-name="sorry">

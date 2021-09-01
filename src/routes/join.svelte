@@ -99,6 +99,8 @@
 
     let email = ""
     let password = ""
+
+    $: loginUrl = $inviteToken ? `/login?token=${$inviteToken}` : "/login"
 </script>
 
 <Localized id="join-browser-window-title" let:text>
@@ -164,7 +166,7 @@
             ><Localized id="join-form-google" />
         </GoogleAuthButton>
         <ButtonLarge
-            href="login"
+            href={loginUrl}
             variant="TEXT"
             className="w-full justify-center"
             ><Localized id="join-form-login" /></ButtonLarge

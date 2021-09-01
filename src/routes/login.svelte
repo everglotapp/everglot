@@ -12,6 +12,7 @@
     import GoogleAuthButton from "../comp/util/GoogleAuthButton.svelte"
 
     import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
+    import { inviteToken } from "../stores"
 
     let errorMessage: string | null = null
     let submitting = false
@@ -84,6 +85,11 @@
         if (signedOut === "1") {
             blockGoogleSignIn = true
         }
+        if ($inviteToken === null) {
+            $inviteToken = new URL(window.location.href).searchParams.get(
+                "token"
+            )
+        }
     })
 
     let email = ""
@@ -110,6 +116,8 @@
             errorMessage = res.message
         }
     }
+
+    $: joinUrl = $inviteToken ? `/join?token=${$inviteToken}` : "/join"
 </script>
 
 <Localized id="login-browser-window-title" let:text>
@@ -171,7 +179,7 @@
             ><Localized id="login-form-google" />
         </GoogleAuthButton>
         <ButtonLarge
-            href="join"
+            href={joinUrl}
             variant="OUTLINED"
             className="w-full justify-center"
             ><Localized id="login-form-signup" /></ButtonLarge

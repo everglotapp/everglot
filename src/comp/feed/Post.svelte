@@ -150,14 +150,14 @@
             </div>
             {#if prompt}
                 <div
-                    class="text-gray font-bold text-sm flex flex-wrap items-center mb-1"
+                    class="prompt-icon text-gray font-bold text-sm flex flex-nowrap items-center mb-1"
                 >
                     {#if prompt.type === PromptType.Word}
-                        <ZapIcon size="18" class="mr-1" /><span
+                        <ZapIcon size="18" class="mr-2" /><span
                             >Make a sentence with "{prompt.content}"</span
                         >
                     {:else if prompt.type === PromptType.Question}
-                        <ZapIcon size="18" class="mr-1" />
+                        <ZapIcon size="18" class="mr-2" />
                         <span>{prompt.content}</span>
                     {/if}
                 </div>
@@ -192,7 +192,7 @@
                     contenteditable
                     bind:textContent={newReplyBody}
                     placeholder="Reply"
-                    class="border border-gray-bitlight rounded-lg py-1 pl-2 pr-13 origin-right"
+                    class="border border-gray-bitlight rounded-lg py-1 pl-2 pr-12 origin-right"
                     style="min-width: min(48vw, 417px);"
                     in:scale={{ duration: 150 }}
                     out:scale={{ duration: 150 }}
@@ -284,6 +284,10 @@
     .body {
         @apply overflow-hidden;
         @apply overflow-ellipsis;
+    }
+
+    .prompt-icon :global(svg) {
+        min-width: 18px;
     }
 
     :global(.reply-button) {

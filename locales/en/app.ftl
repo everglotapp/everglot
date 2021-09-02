@@ -7,6 +7,7 @@
 
 ## Feed page
 
+index-browser-window-title = { -brand-name } – Learn Together.
 index-shuffle-prompts-button-initial = Prompt Me
 index-shuffle-prompts-button-prompt-shown = Shuffle Prompts
 index-shuffle-prompts-button-initial-mobile = Prompt Me

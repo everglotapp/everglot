@@ -166,7 +166,7 @@
                                 name={USER_UPLOAD_AVATAR_FILE_FORM_FIELD}
                                 accept="image/png,image/jpeg"
                                 required
-                                class="mb-2"
+                                class="mb-2 max-w-full"
                             />
                             <ButtonLarge
                                 tag="button"

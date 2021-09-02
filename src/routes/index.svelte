@@ -19,6 +19,7 @@
     import Post from "../comp/feed/Post.svelte"
     import PostForm from "../comp/feed/PostForm.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
+    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
 
     import { PromptType } from "../types/generated/graphql"
     import type { Language } from "../types/generated/graphql"
@@ -169,6 +170,10 @@
         unsetPrompt()
     }
 </script>
+
+<Localized id="index-browser-window-title" let:text>
+    <BrowserTitle title={text} />
+</Localized>
 
 <div class="container max-w-2xl pt-4 px-2">
     <div

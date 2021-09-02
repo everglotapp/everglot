@@ -1,7 +1,6 @@
 ## Bot
 
 welcome = Welcome to Everglot, @{ $username }!
-available-commands = Available commands: !hangman, !help
 user-joined = { $username } has joined the chat.
 hangman-started = @{ $username } has started a hangman game.
 hangman-ended = @{ $username } has ended the hangman game.

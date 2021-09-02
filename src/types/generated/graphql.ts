@@ -8373,6 +8373,13 @@ export type Prompt = Node & {
   contentDe?: Maybe<Scalars['String']>;
   contentZh?: Maybe<Scalars['String']>;
   createdAt: Scalars['Datetime'];
+  contentEs?: Maybe<Scalars['String']>;
+  contentFr?: Maybe<Scalars['String']>;
+  contentPt?: Maybe<Scalars['String']>;
+  contentRu?: Maybe<Scalars['String']>;
+  contentJa?: Maybe<Scalars['String']>;
+  contentKo?: Maybe<Scalars['String']>;
+  contentIt?: Maybe<Scalars['String']>;
   /** Reads a single `Language` that is related to this `Prompt`. */
   language?: Maybe<Language>;
   /** Reads a single `LanguageSkillLevel` that is related to this `Prompt`. */
@@ -8456,6 +8463,20 @@ export type PromptCondition = {
   contentZh?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `createdAt` field. */
   createdAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `contentEs` field. */
+  contentEs?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `contentFr` field. */
+  contentFr?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `contentPt` field. */
+  contentPt?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `contentRu` field. */
+  contentRu?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `contentJa` field. */
+  contentJa?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `contentKo` field. */
+  contentKo?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `contentIt` field. */
+  contentIt?: Maybe<Scalars['String']>;
 };
 
 /** A filter to be used against `Prompt` object types. All fields are combined with a logical ‘and.’ */
@@ -8478,6 +8499,20 @@ export type PromptFilter = {
   contentZh?: Maybe<StringFilter>;
   /** Filter by the object’s `createdAt` field. */
   createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `contentEs` field. */
+  contentEs?: Maybe<StringFilter>;
+  /** Filter by the object’s `contentFr` field. */
+  contentFr?: Maybe<StringFilter>;
+  /** Filter by the object’s `contentPt` field. */
+  contentPt?: Maybe<StringFilter>;
+  /** Filter by the object’s `contentRu` field. */
+  contentRu?: Maybe<StringFilter>;
+  /** Filter by the object’s `contentJa` field. */
+  contentJa?: Maybe<StringFilter>;
+  /** Filter by the object’s `contentKo` field. */
+  contentKo?: Maybe<StringFilter>;
+  /** Filter by the object’s `contentIt` field. */
+  contentIt?: Maybe<StringFilter>;
   /** Filter by the object’s `content` field. */
   content?: Maybe<StringFilter>;
   /** Checks for all expressions in this list. */
@@ -8499,6 +8534,13 @@ export type PromptInput = {
   contentDe?: Maybe<Scalars['String']>;
   contentZh?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['Datetime']>;
+  contentEs?: Maybe<Scalars['String']>;
+  contentFr?: Maybe<Scalars['String']>;
+  contentPt?: Maybe<Scalars['String']>;
+  contentRu?: Maybe<Scalars['String']>;
+  contentJa?: Maybe<Scalars['String']>;
+  contentKo?: Maybe<Scalars['String']>;
+  contentIt?: Maybe<Scalars['String']>;
 };
 
 /** A connection to a list of `Language` values, with data from `Post`. */
@@ -8549,6 +8591,13 @@ export type PromptPatch = {
   contentDe?: Maybe<Scalars['String']>;
   contentZh?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['Datetime']>;
+  contentEs?: Maybe<Scalars['String']>;
+  contentFr?: Maybe<Scalars['String']>;
+  contentPt?: Maybe<Scalars['String']>;
+  contentRu?: Maybe<Scalars['String']>;
+  contentJa?: Maybe<Scalars['String']>;
+  contentKo?: Maybe<Scalars['String']>;
+  contentIt?: Maybe<Scalars['String']>;
 };
 
 /** A connection to a list of `Post` values, with data from `Post`. */
@@ -8699,6 +8748,20 @@ export enum PromptsOrderBy {
   ContentZhDesc = 'CONTENT_ZH_DESC',
   CreatedAtAsc = 'CREATED_AT_ASC',
   CreatedAtDesc = 'CREATED_AT_DESC',
+  ContentEsAsc = 'CONTENT_ES_ASC',
+  ContentEsDesc = 'CONTENT_ES_DESC',
+  ContentFrAsc = 'CONTENT_FR_ASC',
+  ContentFrDesc = 'CONTENT_FR_DESC',
+  ContentPtAsc = 'CONTENT_PT_ASC',
+  ContentPtDesc = 'CONTENT_PT_DESC',
+  ContentRuAsc = 'CONTENT_RU_ASC',
+  ContentRuDesc = 'CONTENT_RU_DESC',
+  ContentJaAsc = 'CONTENT_JA_ASC',
+  ContentJaDesc = 'CONTENT_JA_DESC',
+  ContentKoAsc = 'CONTENT_KO_ASC',
+  ContentKoDesc = 'CONTENT_KO_DESC',
+  ContentItAsc = 'CONTENT_IT_ASC',
+  ContentItDesc = 'CONTENT_IT_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }

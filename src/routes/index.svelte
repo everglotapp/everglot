@@ -233,12 +233,12 @@
                 color="SECONDARY"
                 className="language-button flex items-center text-gray-bitdark font-secondary font-bold relative"
             >
-                <span class="overflow-hidden overflow-ellipsis"
-                    >{pickedLocale
-                        ? pickedLanguage
-                            ? pickedLanguage.englishName
-                            : pickedLocale.toUpperCase()
-                        : "Pick …"}</span
+                <span class="overflow-hidden overflow-ellipsis">
+                    {#if pickedLocale}
+                        <Localized id={`locale-${pickedLocale}`} />
+                    {:else}
+                        Pick …
+                    {/if}</span
                 >
                 <div class="pl-5 flex items-center">
                     {#if languagePickerFocused}

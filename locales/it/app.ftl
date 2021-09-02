@@ -198,8 +198,21 @@ profile-language-native-hint = (Madrelingua)
 profile-groups = I miei gruppi
 profile-avatar-upload-failed = Il tuo non s'è potuto cambiare. Prova di nuovo, per favore.
 
+## Email notifications unsubscription successful
+
+
+## Email notifications unsubscription unsuccessful
+
+
 ## Locales
 
 locale-en = Inglese
 locale-de = Tedesco
 locale-zh = Cinese
+locale-es = Spagnolo
+locale-it = Italiano
+locale-fr = Francese
+locale-ko = Coreano
+locale-ja = Giapponese
+locale-ru = Russo
+locale-ar = Arabo

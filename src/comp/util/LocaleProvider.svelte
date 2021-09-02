@@ -9,6 +9,10 @@
     import es from "../../../locales/es/app.ftl"
     import fr from "../../../locales/fr/app.ftl"
     import it from "../../../locales/it/app.ftl"
+    import ru from "../../../locales/ru/app.ftl"
+    import pt from "../../../locales/pt-PT/app.ftl"
+    // import ko from "../../../locales/ko/app.ftl"
+    import ja from "../../../locales/ja/app.ftl"
 
     import { currentGroupLocale } from "../../stores/locales"
 
@@ -27,6 +31,10 @@
         es,
         fr,
         it,
+        ru,
+        pt,
+        // ko,
+        ja,
     }
 
     function* generateBundles(userLocales: readonly string[]) {

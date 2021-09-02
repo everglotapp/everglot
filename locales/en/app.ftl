@@ -269,3 +269,4 @@ locale-ko = Korean
 locale-ja = Japanese
 locale-ru = Russian
 locale-ar = Arabic
+locale-pt = Portuguese

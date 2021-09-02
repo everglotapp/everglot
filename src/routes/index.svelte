@@ -221,9 +221,7 @@
             >
                 {#each items as item}
                     <option value={item.value}
-                        ><Localized id={`locale-${item.value}`}
-                            >{item.label}</Localized
-                        ></option
+                        ><Localized id={`locale-${item.value}`} /></option
                     >
                 {/each}
             </select>

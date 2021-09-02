@@ -26,8 +26,10 @@ export const SUPPORTED_LOCALES = [
     "it",
     "es",
     "fr",
-    // "ja",
+    "ja",
     // "ko",
+    "ru",
+    "pt",
 ] as const
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
 export const LOCALE_TO_ARRAY_MAP = Object.fromEntries(

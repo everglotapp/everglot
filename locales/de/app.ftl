@@ -256,3 +256,4 @@ locale-ko = Koreanisch
 locale-ja = Japanisch
 locale-ru = Russisch
 locale-ar = Arabisch
+locale-pt = Portugiesisch

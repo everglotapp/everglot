@@ -20910,7 +20910,7 @@ export const PromptIdByUuid = gql`
 export const UserByUsernamePosts = gql`
     query UserByUsernamePosts($username: String!) {
   userByUsername(username: $username) {
-    authoredPosts {
+    authoredPosts(orderBy: CREATED_AT_DESC, condition: {parentPostId: null}) {
       nodes {
         uuid
         nodeId

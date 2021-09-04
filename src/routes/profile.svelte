@@ -103,7 +103,7 @@
 </Localized>
 
 <div class="container gap-x-4 py-16 px-2 w-full max-w-sm md:max-w-xl">
-    {#if $userProfileStore.error}
+    {#if $currentUserProfileStore.error}
         <ErrorMessage>
             <Localized id="profile-error" />
         </ErrorMessage>

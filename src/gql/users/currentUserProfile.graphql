@@ -1,0 +1,40 @@
+query CurrentUserProfile {
+    currentUser {
+        bio
+        email
+        gender
+        username
+        avatarUrl
+        uuid
+        userLanguages {
+            totalCount
+            nodes {
+                language {
+                    englishName
+                }
+                languageSkillLevel {
+                    name
+                }
+                native
+            }
+        }
+        groupUsers {
+            nodes {
+                nodeId
+                group {
+                    uuid
+                    groupName
+                    language {
+                        englishName
+                    }
+                    languageSkillLevel {
+                        name
+                    }
+                }
+                userType
+                joinedOn
+            }
+        }
+        displayName
+    }
+}

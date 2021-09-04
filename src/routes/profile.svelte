@@ -11,8 +11,8 @@
     import PageTitle from "../comp/typography/PageTitle.svelte"
 
     import { query, operationStore } from "@urql/svelte"
-    import { UserProfile, UserType } from "../types/generated/graphql"
-    import type { UserProfileQuery } from "../types/generated/graphql"
+    import { CurrentUserProfile, UserType } from "../types/generated/graphql"
+    import type { CurrentUserProfileQuery } from "../types/generated/graphql"
     import { Gender } from "../users"
     import Avatar from "../comp/users/Avatar.svelte"
     import { currentUserStore } from "../stores/currentUser"
@@ -21,12 +21,13 @@
         USER_UPLOAD_AVATAR_FILE_FORM_FIELD,
     } from "../constants"
 
-    const userProfileStore = operationStore<UserProfileQuery>(UserProfile)
-    query(userProfileStore)
+    const currentUserProfileStore =
+        operationStore<CurrentUserProfileQuery>(CurrentUserProfile)
+    query(currentUserProfileStore)
 
     $: userProfile =
-        $userProfileStore.data && !$userProfileStore.error
-            ? $userProfileStore.data.currentUser
+        $currentUserProfileStore.data && !$currentUserProfileStore.error
+            ? $currentUserProfileStore.data.currentUser
             : null
     $: userLanguages =
         userProfile?.userLanguages?.nodes
@@ -53,11 +54,11 @@
             const res = await response.json()
             if (res && res.success) {
                 newAvatarUrl = res.meta.avatarUrl
-                $userProfileStore.context = {
+                $currentUserProfileStore.context = {
                     requestPolicy: "cache-and-network",
                     pause: true,
                 }
-                $userProfileStore.context = {
+                $currentUserProfileStore.context = {
                     requestPolicy: "cache-and-network",
                     pause: false,
                 }
@@ -79,6 +80,7 @@
 
     $: email = userProfile?.email
     $: username = userProfile?.username
+    $: displayName = userProfile?.displayName
     $: gender = userProfile?.gender
     $: avatarUrl = userProfile?.avatarUrl
 
@@ -145,7 +147,8 @@
                     >
                         <Avatar
                             username={username || ""}
-                            url={$userProfileStore.fetching && newAvatarUrl
+                            url={$currentUserProfileStore.fetching &&
+                            newAvatarUrl
                                 ? newAvatarUrl
                                 : avatarUrl || ""}
                             size={96}

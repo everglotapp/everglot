@@ -1322,8 +1322,6 @@ export type CreateUserSessionPayloadUserSessionEdgeArgs = {
   orderBy?: Maybe<Array<UserSessionsOrderBy>>;
 };
 
-
-
 /** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
 export type DatetimeFilter = {
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
@@ -2612,6 +2610,16 @@ export type DeleteUserByNodeIdInput = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `User` to be deleted. */
   nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteUserByUsername` mutation. */
+export type DeleteUserByUsernameInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  username: Scalars['String'];
 };
 
 /** All input for the `deleteUserByUuid` mutation. */
@@ -4337,7 +4345,6 @@ export enum InviteTokensOrderBy {
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
-
 /** All input for the `joinGlobalGroup` mutation. */
 export type JoinGlobalGroupInput = {
   /**
@@ -6014,6 +6021,8 @@ export type Mutation = {
   /** Updates a single `User` using a unique key and a patch. */
   updateUser?: Maybe<UpdateUserPayload>;
   /** Updates a single `User` using a unique key and a patch. */
+  updateUserByUsername?: Maybe<UpdateUserPayload>;
+  /** Updates a single `User` using a unique key and a patch. */
   updateUserByEmail?: Maybe<UpdateUserPayload>;
   /** Updates a single `User` using a unique key and a patch. */
   updateUserByUuid?: Maybe<UpdateUserPayload>;
@@ -6167,6 +6176,8 @@ export type Mutation = {
   deleteUserByNodeId?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
   deleteUser?: Maybe<DeleteUserPayload>;
+  /** Deletes a single `User` using a unique key. */
+  deleteUserByUsername?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
   deleteUserByEmail?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
@@ -6719,6 +6730,12 @@ export type MutationUpdateUserArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserByUsernameArgs = {
+  input: UpdateUserByUsernameInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateUserByEmailArgs = {
   input: UpdateUserByEmailInput;
 };
@@ -7177,6 +7194,12 @@ export type MutationDeleteUserByNodeIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserArgs = {
   input: DeleteUserInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserByUsernameArgs = {
+  input: DeleteUserByUsernameInput;
 };
 
 
@@ -8868,6 +8891,7 @@ export type Query = Node & {
   userLanguage?: Maybe<UserLanguage>;
   userSession?: Maybe<UserSession>;
   user?: Maybe<User>;
+  userByUsername?: Maybe<User>;
   userByEmail?: Maybe<User>;
   userByUuid?: Maybe<User>;
   userByEmailUnsubscribeToken?: Maybe<User>;
@@ -9517,6 +9541,12 @@ export type QueryUserArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryUserByUsernameArgs = {
+  username: Scalars['String'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryUserByEmailArgs = {
   email: Scalars['String'];
 };
@@ -9926,7 +9956,6 @@ export type StringListFilter = {
   /** Any array item is greater than or equal to the specified value. */
   anyGreaterThanOrEqualTo?: Maybe<Scalars['String']>;
 };
-
 
 /** A filter to be used against UUID fields. All fields are combined with a logical ‘and.’ */
 export type UuidFilter = {
@@ -11330,6 +11359,18 @@ export type UpdateUserByNodeIdInput = {
   patch: UserPatch;
 };
 
+/** All input for the `updateUserByUsername` mutation. */
+export type UpdateUserByUsernameInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `User` being updated. */
+  patch: UserPatch;
+  username: Scalars['String'];
+};
+
 /** All input for the `updateUserByUuid` mutation. */
 export type UpdateUserByUuidInput = {
   /**
@@ -11573,6 +11614,7 @@ export type User = Node & {
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
   emailNotificationsEnabled: Scalars['Boolean'];
   emailUnsubscribeToken?: Maybe<Scalars['String']>;
+  displayName?: Maybe<Scalars['String']>;
   /** Reads a single `Language` that is related to this `User`. */
   languageByLocale?: Maybe<Language>;
   /** Reads a single `InviteToken` that is related to this `User`. */
@@ -11977,6 +12019,8 @@ export type UserCondition = {
   emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `emailUnsubscribeToken` field. */
   emailUnsubscribeToken?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `displayName` field. */
+  displayName?: Maybe<Scalars['String']>;
 };
 
 export type UserDevice = Node & {
@@ -12120,6 +12164,8 @@ export type UserFilter = {
   emailNotificationsEnabled?: Maybe<BooleanFilter>;
   /** Filter by the object’s `emailUnsubscribeToken` field. */
   emailUnsubscribeToken?: Maybe<StringFilter>;
+  /** Filter by the object’s `displayName` field. */
+  displayName?: Maybe<StringFilter>;
   /** Checks for all expressions in this list. */
   and?: Maybe<Array<UserFilter>>;
   /** Checks for any expressions in this list. */
@@ -12294,6 +12340,7 @@ export type UserInput = {
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
   emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
   emailUnsubscribeToken?: Maybe<Scalars['String']>;
+  displayName?: Maybe<Scalars['String']>;
 };
 
 export type UserLanguage = Node & {
@@ -12656,6 +12703,7 @@ export type UserPatch = {
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
   emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
   emailUnsubscribeToken?: Maybe<Scalars['String']>;
+  displayName?: Maybe<Scalars['String']>;
 };
 
 /** A connection to a list of `Post` values, with data from `Post`. */
@@ -13063,6 +13111,8 @@ export enum UsersOrderBy {
   EmailNotificationsEnabledDesc = 'EMAIL_NOTIFICATIONS_ENABLED_DESC',
   EmailUnsubscribeTokenAsc = 'EMAIL_UNSUBSCRIBE_TOKEN_ASC',
   EmailUnsubscribeTokenDesc = 'EMAIL_UNSUBSCRIBE_TOKEN_DESC',
+  DisplayNameAsc = 'DISPLAY_NAME_ASC',
+  DisplayNameDesc = 'DISPLAY_NAME_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
@@ -13126,7 +13176,7 @@ export type RegisterUserActivityMutation = { __typename?: 'Mutation', registerUs
 export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }> };
+export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }> };
 
 export type CreatePostMutationVariables = Exact<{
   authorId: Scalars['Int'];
@@ -13374,6 +13424,11 @@ export type CreateUserLanguageMutationVariables = Exact<{
 
 export type CreateUserLanguageMutation = { __typename?: 'Mutation', createUserLanguage?: Maybe<{ __typename?: 'CreateUserLanguagePayload', userLanguage?: Maybe<{ __typename?: 'UserLanguage', id: number }> }> };
 
+export type CurrentUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserProfileQuery = { __typename?: 'Query', currentUser?: Maybe<{ __typename?: 'User', bio: string, email: string, gender?: Maybe<string>, username?: Maybe<string>, avatarUrl?: Maybe<string>, uuid: any, displayName?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'UserLanguage', native: boolean, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', nodeId: string, userType: UserType, joinedOn: any, group?: Maybe<{ __typename?: 'Group', uuid: any, groupName?: Maybe<string>, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }> }>> } }> };
+
 export type UpdateUserAvatarUrlMutationVariables = Exact<{
   avatarUrl: Scalars['String'];
   id: Scalars['Int'];
@@ -13403,10 +13458,12 @@ export type UserLanguageInfoQueryVariables = Exact<{
 
 export type UserLanguageInfoQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', id: number, uuid: any, userLanguages: { __typename?: 'UserLanguagesConnection', nodes: Array<Maybe<{ __typename?: 'UserLanguage', nodeId: string, languageId: number, languageSkillLevelId?: Maybe<number>, native: boolean }>> } }> };
 
-export type UserProfileQueryVariables = Exact<{ [key: string]: never; }>;
+export type UserProfileQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
 
 
-export type UserProfileQuery = { __typename?: 'Query', currentUser?: Maybe<{ __typename?: 'User', bio: string, email: string, gender?: Maybe<string>, username?: Maybe<string>, avatarUrl?: Maybe<string>, uuid: any, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'UserLanguage', native: boolean, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', nodeId: string, userType: UserType, joinedOn: any, group?: Maybe<{ __typename?: 'Group', uuid: any, groupName?: Maybe<string>, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }> }>> } }> };
+export type UserProfileQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', bio: string, gender?: Maybe<string>, username?: Maybe<string>, avatarUrl?: Maybe<string>, uuid: any, displayName?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'UserLanguage', native: boolean, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>> } }> };
 
 export type UserUuidByIdQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -13570,6 +13627,7 @@ export const AllPosts = gql`
         uuid
         username
         avatarUrl
+        displayName
       }
       body
       likes {
@@ -14066,6 +14124,48 @@ export const CreateUserLanguage = gql`
   }
 }
     `;
+export const CurrentUserProfile = gql`
+    query CurrentUserProfile {
+  currentUser {
+    bio
+    email
+    gender
+    username
+    avatarUrl
+    uuid
+    userLanguages {
+      totalCount
+      nodes {
+        language {
+          englishName
+        }
+        languageSkillLevel {
+          name
+        }
+        native
+      }
+    }
+    groupUsers {
+      nodes {
+        nodeId
+        group {
+          uuid
+          groupName
+          language {
+            englishName
+          }
+          languageSkillLevel {
+            name
+          }
+        }
+        userType
+        joinedOn
+      }
+    }
+    displayName
+  }
+}
+    `;
 export const UpdateUserAvatarUrl = gql`
     mutation UpdateUserAvatarUrl($avatarUrl: String!, $id: Int!) {
   updateUser(input: {patch: {avatarUrl: $avatarUrl}, id: $id}) {
@@ -14109,10 +14209,9 @@ export const UserLanguageInfo = gql`
 }
     `;
 export const UserProfile = gql`
-    query UserProfile {
-  currentUser {
+    query UserProfile($username: String!) {
+  userByUsername(username: $username) {
     bio
-    email
     gender
     username
     avatarUrl
@@ -14129,23 +14228,7 @@ export const UserProfile = gql`
         native
       }
     }
-    groupUsers {
-      nodes {
-        nodeId
-        group {
-          uuid
-          groupName
-          language {
-            englishName
-          }
-          languageSkillLevel {
-            name
-          }
-        }
-        userType
-        joinedOn
-      }
-    }
+    displayName
   }
 }
     `;

@@ -6,7 +6,7 @@
    "GroupChatMessages": "2d4c6b8946e5472d57eeb62047f0c700f497e831510e2b249892bf7d71d07c0e",
    "CurrentUser": "f07e93cce5e2f8b9a3f93411a2d4833afbeaeadcd89781d6acd41fee6bbb712e",
    "RegisterUserActivity": "210f3ff41111c4b7011d7e86cd6054cc29ff3244ca86f2a716be9df63b6f07d5",
-   "AllPosts": "cceaf376efed783f95ff54d8200765a406faf44fa1e7b42fe968c69df7398141",
+   "AllPosts": "9db49ba6a14ed10aaea1cbc3412f49b8acebb75a15cfb57a113a6bfd9e44a331",
    "CreatePost": "90d138fe81c63cfe74e12598f78227cdfbd09d271d16ae485b0dd4a38a4a40b4",
    "CreatePostLike": "a37c55470084d46a77a1a2feb005168e4b1d6a4941618822b392ac7956b6e29e",
    "CreatePostRecording": "ebf47e52ee0952064ee967521ef764edb7cc3f52e1be132f71c98e3d4d8060b6",
@@ -38,10 +38,11 @@
    "UnsubscribeUserEmailNotifications": "1b93b73bf8b69eba780c64c6a5c496709ebf323da03f3d4f5eb16cea323f2aa0",
    "CreateUser": "0929231df4d461feddc79e097159e7e8470c4730d38c4fe70dca27a5dfc46ba3",
    "CreateUserLanguage": "3a91182db592a0eadaa496cec213c2884354635b0ea5d2c3d940f3b7d76639cb",
+   "CurrentUserProfile": "c683ccdf51d73e3f14a465160aaffc59a37b7e0e043b2d86e92396c4f47d6348",
    "UpdateUserAvatarUrl": "5462ccf96eb3d1d0602963946d8f48734c6d1c5ddd6a31f1c8da088920be92f7",
    "UserHasCompletedProfile": "cd3ecbcb94dbe8bfaa3a058fe3250d2217988fc2b4e69e3d11ac2d04c5533024",
    "UserIdByEmail": "a608d762d28d2112046f058eadfd8ee987bc3fc036c5962ddd0bbffb60cb021a",
    "UserLanguageInfo": "065f2b2b82437127311f77907ef78c99f62bbb760c6e62d0cc3a24b121b43198",
-   "UserProfile": "79d4d79049f6ad07be0bd32bd708b5f8c318d76d2e15c9185d929d3a1ffccd41",
+   "UserProfile": "21f5747d0f584ef9156da87dc130ed21b26c976eb01c198ec1c1753c61b15ff2",
    "UserUuidById": "fc060ecae0283bbc43b600f0676d4d33c5d568aa50267fe2579fc63649075fcc"
 }

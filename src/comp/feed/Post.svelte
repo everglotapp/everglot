@@ -125,12 +125,16 @@
 >
     <div class="flex flex-row">
         <div class="pr-3 sm:pr-4">
-            <Avatar username={author.username} url={author.avatarUrl} />
+            <a href={`/u/${author.username}`}
+                ><Avatar username={author.username} url={author.avatarUrl} /></a
+            >
         </div>
         <div class="w-full">
             <div class="mb-1 flex items-center justify-between">
-                <span class="text-gray-bitdark font-bold"
-                    >{author.username}</span
+                <a href={`/u/${author.username}`}
+                    ><span class="text-gray-bitdark font-bold"
+                        >{author.displayName || author.username}</span
+                    ></a
                 >
                 <time
                     use:svelteTime={{
@@ -153,11 +157,11 @@
                     class="prompt-icon text-gray font-bold text-sm flex flex-nowrap items-center mb-1"
                 >
                     {#if prompt.type === PromptType.Word}
-                        <ZapIcon size="18" class="mr-2" /><span
+                        <ZapIcon size="18" class="mr-2 self-start" /><span
                             >Make a sentence with "{prompt.content}"</span
                         >
                     {:else if prompt.type === PromptType.Question}
-                        <ZapIcon size="18" class="mr-2" />
+                        <ZapIcon size="18" class="mr-2 self-start" />
                         <span>{prompt.content}</span>
                     {/if}
                 </div>

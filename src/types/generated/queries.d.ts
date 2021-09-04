@@ -350,6 +350,15 @@ declare module '*/createUserLanguage.graphql' {
 }
     
 
+declare module '*/currentUserProfile.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CurrentUserProfile: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/updateUserAvatarUrl.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

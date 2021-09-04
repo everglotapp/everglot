@@ -27,7 +27,7 @@ export const SUPPORTED_LOCALES = [
     "es",
     "fr",
     "ja",
-    // "ko",
+    "ko",
     "ru",
     "pt",
 ] as const
@@ -36,19 +36,60 @@ export const LOCALE_TO_ARRAY_MAP = Object.fromEntries(
     SUPPORTED_LOCALES.map((locale) => [locale, [] as any[]])
 ) as Record<SupportedLocale, any[]>
 
-export const HANGMAN_LOCALES = ["en", "de"] as const
+export const HANGMAN_LOCALES = [
+    "en",
+    "de",
+    // "it",
+    // "es",
+    // "fr",
+    // "ru",
+    // "pt",
+] as const
 export type HangmanLocale = typeof HANGMAN_LOCALES[number]
 
 export const GUESS_CHARACTER_LOCALES = ["zh"] as const
 export type GuessCharacterLocale = typeof GUESS_CHARACTER_LOCALES[number]
 
-export const WOULD_YOU_RATHER_LOCALES = ["en", "de", "zh"] as const
+export const WOULD_YOU_RATHER_LOCALES = [
+    "en",
+    "de",
+    "zh",
+    "it",
+    "es",
+    "fr",
+    "ja",
+    "ko",
+    "ru",
+    "pt",
+] as const
 export type WouldYouRatherLocale = typeof WOULD_YOU_RATHER_LOCALES[number]
 
-export const RANDOM_QUESTION_LOCALES = ["en", "de", "zh"] as const
+export const RANDOM_QUESTION_LOCALES = [
+    "en",
+    "de",
+    "zh",
+    "it",
+    "es",
+    "fr",
+    "ja",
+    "ko",
+    "ru",
+    "pt",
+] as const
 export type RandomQuestionLocale = typeof RANDOM_QUESTION_LOCALES[number]
 
-export const PROMPT_LOCALES = ["en", "de", "zh"] as const
+export const PROMPT_LOCALES = [
+    "en",
+    "de",
+    "zh",
+    "it",
+    "es",
+    "fr",
+    "ja",
+    "ko",
+    "ru",
+    "pt",
+] as const
 export type PromptLocale = typeof RANDOM_QUESTION_LOCALES[number]
 
 export const MESSAGE_PREVIEW_BASE_PATH = "/images/preview" as const

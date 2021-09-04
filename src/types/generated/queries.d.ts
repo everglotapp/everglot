@@ -134,6 +134,15 @@ declare module '*/promptIdByUuid.graphql' {
 }
     
 
+declare module '*/userByUsernamePosts.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserByUsernamePosts: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createGroupUser.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

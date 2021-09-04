@@ -229,6 +229,10 @@ global-group-members-count =
     }
 global-error = Error
 
+## Global profile page
+
+u-username-browser-window-title = { $username } - { -brand-name }
+
 ## Profile page
 
 profile-browser-window-title = My Profile – { -brand-name }

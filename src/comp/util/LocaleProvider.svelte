@@ -11,7 +11,7 @@
     import it from "../../../locales/it/app.ftl"
     import ru from "../../../locales/ru/app.ftl"
     import pt from "../../../locales/pt-PT/app.ftl"
-    // import ko from "../../../locales/ko/app.ftl"
+    import ko from "../../../locales/ko/app.ftl"
     import ja from "../../../locales/ja/app.ftl"
 
     import { currentGroupLocale } from "../../stores/locales"
@@ -33,7 +33,7 @@
         it,
         ru,
         pt,
-        // ko,
+        ko,
         ja,
     }
 

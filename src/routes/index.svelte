@@ -323,7 +323,7 @@
     .language-select-wrapper {
         @apply relative;
 
-        width: 8rem;
+        width: 9rem;
         height: 2.7rem;
     }
 

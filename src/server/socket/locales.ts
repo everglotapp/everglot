@@ -9,6 +9,7 @@ import es from "../../../locales/es/bot.ftl"
 import fr from "../../../locales/fr/bot.ftl"
 import it from "../../../locales/it/bot.ftl"
 import ja from "../../../locales/ja/bot.ftl"
+import ko from "../../../locales/ko/bot.ftl"
 import ru from "../../../locales/ru/bot.ftl"
 import pt from "../../../locales/pt-PT/bot.ftl"
 
@@ -57,6 +58,7 @@ const RESOURCES: Record<SupportedLocale, FluentResource> = {
     fr,
     it,
     ja,
+    ko,
     ru,
     pt,
 }

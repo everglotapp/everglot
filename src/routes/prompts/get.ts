@@ -1,5 +1,6 @@
 import { db } from "../../server/db"
 
+import { PROMPT_LOCALES } from "../../constants"
 import log from "../../logger"
 
 const chlog = log.child({
@@ -8,9 +9,7 @@ const chlog = log.child({
 
 import type { Request, Response } from "express"
 import type { PromptType } from "../../types/generated/graphql"
-
-const PROMPT_LOCALES = ["en", "de", "zh"] as const
-type PromptLocale = typeof PROMPT_LOCALES[number]
+import type { PromptLocale } from "../../constants"
 
 const RECENTLY_SHOWN_SECONDS = 30
 const promptsShownByUser: Record<number, { uuid: string; shownAt: Date }[]> = {}

@@ -1,0 +1,103 @@
+query UserByUsernamePosts($username: String!) {
+  userByUsername(username: $username) {
+    authoredPosts {
+      nodes {
+        uuid
+        nodeId
+        createdAt
+        author {
+          uuid
+          username
+          avatarUrl
+          displayName
+          __typename
+        }
+        body
+        likes {
+          totalCount
+          nodes {
+            user {
+              uuid
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        parentPost {
+          uuid
+          __typename
+        }
+        replies(orderBy: CREATED_AT_ASC, filter: {not: {parentPostId: {isNull: true}}}) {
+          totalCount
+          nodes {
+            uuid
+            nodeId
+            createdAt
+            author {
+              uuid
+              username
+              avatarUrl
+              __typename
+            }
+            likes {
+              totalCount
+              nodes {
+                user {
+                  uuid
+                  __typename
+                }
+                __typename
+              }
+              __typename
+            }
+            body
+            parentPost {
+              uuid
+              __typename
+            }
+            language {
+              alpha2
+              __typename
+            }
+            prompt {
+              content
+              uuid
+              type
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        recordings {
+          totalCount
+          nodes {
+            filename
+            extension
+            uuid
+            user {
+              uuid
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        language {
+          alpha2
+          __typename
+        }
+        prompt {
+          content
+          uuid
+          type
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

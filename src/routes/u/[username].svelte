@@ -7,6 +7,9 @@
 
     import BrowserTitle from "../../comp/layout/BrowserTitle.svelte"
     import Post from "../../comp/feed/Post.svelte"
+    import EscapeKeyListener from "../../comp/util/EscapeKeyListener.svelte"
+    import ClickAwayListener from "../../comp/util/ClickAwayListener.svelte"
+    import Modal from "../../comp/util/Modal.svelte"
 
     import { query, operationStore } from "@urql/svelte"
     import {
@@ -18,7 +21,10 @@
         UserByUsernamePostsQuery,
     } from "../../types/generated/graphql"
     import Avatar from "../../comp/users/Avatar.svelte"
-    import { ANDROID_WEBVIEW_USER_AGENT } from "../../constants"
+    import {
+        ANDROID_WEBVIEW_USER_AGENT,
+        ENLARGEN_PROFILE_PICTURE_BUTTON_ID,
+    } from "../../constants"
 
     const { page } = stores()
 
@@ -116,6 +122,31 @@
         Squeeks,
     }
     let tab: ProfileTab = ProfileTab.About
+
+    const AVATAR_SIZE = 160
+
+    const refreshPosts = () => {
+        $userPostsStore.context = {
+            ...$userPostsStore.context,
+            paused: true,
+        }
+        $userPostsStore.context = {
+            ...$userPostsStore.context,
+            paused: false,
+        }
+    }
+
+    function handlePostReplySuccess() {
+        refreshPosts()
+    }
+
+    function handlePostLikeSuccess() {
+        refreshPosts()
+    }
+
+    $: shownAvatarUrl =
+        $userProfileStore.fetching && newAvatarUrl ? newAvatarUrl : avatarUrl
+    let showLargeProfilePictureUrl: string | null = null
 </script>
 
 <svelte:head />
@@ -127,28 +158,37 @@
 <div class="flex container max-w-2xl font-secondary pt-4 sm:pt-8 items-center">
     {#key newAvatarUrl}
         <div
+            id={ENLARGEN_PROFILE_PICTURE_BUTTON_ID}
             in:scale|local={{ delay: 400, duration: 100 }}
-            class="mb-4 mr-8"
-            style="border-radius: 50%; width: 128px; height: 128px;"
+            class="mb-4 mr-8 cursor-pointer"
+            class:cursor-pointer={shownAvatarUrl != null}
+            style={`border-radius: 50%; width: ${AVATAR_SIZE}px; height: ${AVATAR_SIZE}px;`}
+            on:click={() => {
+                if (shownAvatarUrl != null) {
+                    showLargeProfilePictureUrl = shownAvatarUrl
+                }
+            }}
         >
             <Avatar
                 username={username || ""}
-                url={$userProfileStore.fetching && newAvatarUrl
-                    ? newAvatarUrl
-                    : avatarUrl || ""}
-                size={128}
+                url={shownAvatarUrl || ""}
+                size={AVATAR_SIZE}
             />
         </div>
     {/key}
     <div class="flex flex-wrap items-center">
         {#if displayName}
-            <span class="text-2xl font-primary font-bold"
-                >{displayName || ""}</span
-            >&nbsp;<span class="text-xl font-primary text-gray-bitdark"
-                >({username || ""})</span
+            <span
+                class="text-2xl font-primary font-bold overflow-hidden overflow-ellipsis mr-2"
+                title={displayName || ""}>{displayName || ""}</span
+            ><span
+                class="text-xl font-primary text-gray-bitdark overflow-hidden overflow-ellipsis"
+                title={username || ""}>({username || ""})</span
             >
         {:else}
-            <span class="text-2xl font-primary font-bold">{username || ""}</span
+            <span
+                class="text-2xl font-primary font-bold overflow-hidden overflow-ellipsis"
+                title={username || ""}>{username || ""}</span
             >
         {/if}
     </div>
@@ -167,7 +207,7 @@
 {#if tab === ProfileTab.About}
     <div class="flex flex-wrap-reverse container max-w-2xl">
         <div class="pt-8 pb-4 px-4">
-            <h3>Languages</h3>
+            <h2>Languages</h2>
             <ul>
                 {#each userLanguages as language}
                     <li class="font-bold text-gray-bitdark">
@@ -184,7 +224,7 @@
             </ul>
         </div>
         <div class="pt-8 pb-4 px-4">
-            <h3>About Me</h3>
+            <h2>About Me</h2>
             <p>
                 {#if bio && bio.length}{bio}{:else}<span
                         class="text-gray italic">(empty)</span
@@ -207,6 +247,9 @@
                         createdAt={post.createdAt}
                         prompt={post.prompt}
                         language={post.language}
+                        linkToAuthorProfile={false}
+                        on:replySuccess={handlePostReplySuccess}
+                        on:likeSuccess={handlePostLikeSuccess}
                     />
                 </div>
             {/if}
@@ -214,25 +257,52 @@
     </div>
 {/if}
 
+{#if showLargeProfilePictureUrl && typeof window !== "undefined"}
+    <EscapeKeyListener on:keydown={() => (showLargeProfilePictureUrl = null)} />
+    <ClickAwayListener
+        elementId={[
+            ENLARGEN_PROFILE_PICTURE_BUTTON_ID,
+            "large-profile-picture-view",
+        ]}
+        on:clickaway={() => (showLargeProfilePictureUrl = null)}
+    />
+    <Modal>
+        <div
+            class="grid place-items-center w-full h-full"
+            id="large-profile-picture-view"
+        >
+            <img
+                src={showLargeProfilePictureUrl}
+                alt="Enlargened profile"
+                role="presentation"
+                style="border-radius: 50%; max-width: 95vw; max-height: 90vh; box-shadow: 1px 1px 3px #393939, 1px 1px 9px #777; background: radial-gradient(circle at center, #fff 0, #fff 50%, #dcdcdc 100%);"
+            />
+        </div>
+    </Modal>
+{/if}
+
 <style>
     .tabs {
-        @apply border-gray-bitlight;
-        @apply border-b-2;
+        @apply border-gray-light;
+        @apply border-b-4;
     }
 
     .tabs > button {
         @apply text-primary;
         @apply font-bold;
         @apply px-4;
-        @apply py-3;
+        @apply pt-3;
+        @apply pb-2;
+
+        margin-bottom: -4px;
     }
 
     .tabs > button[aria-selected="true"] {
         @apply border-primary;
-        @apply border-b-2;
+        @apply border-b-4;
     }
 
-    h3 {
+    h2 {
         @apply mb-3;
     }
 </style>

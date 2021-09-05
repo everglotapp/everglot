@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte"
+    import { onDestroy, onMount, createEventDispatcher } from "svelte"
     import Time from "svelte-time"
     import {
         MicIcon,
@@ -22,8 +22,8 @@
 
     export let shownPromptUuid: string | null
     export let locale: SupportedLocale | null
-    export let handleSuccess: () => void = () => {}
-    export let handleFailure: () => void = () => {}
+
+    const dispatch = createEventDispatcher()
 
     const { translate } = fluentStores()!
 
@@ -196,7 +196,7 @@
             const response = await res.json()
             if (response.success) {
                 newPostBody = ""
-                handleSuccess()
+                dispatch("success")
                 if (recordedBlob) {
                     const res2 = await createPostRecording(
                         response.meta.post.uuid,
@@ -208,19 +208,19 @@
                     if (res2.status === 200) {
                         const response2 = await res2.json()
                         if (response2.success) {
-                            handleSuccess()
+                            dispatch("success")
                         } else {
-                            handleFailure()
+                            dispatch("failure")
                         }
                     } else {
-                        handleFailure()
+                        dispatch("failure")
                     }
                 }
             } else {
-                handleFailure()
+                dispatch("failure")
             }
         } else {
-            handleFailure()
+            dispatch("failure")
         }
     }
 
@@ -365,6 +365,16 @@
 </div>
 
 <style>
+    [placeholder]:empty::before {
+        content: attr(placeholder);
+
+        @apply text-gray;
+    }
+
+    [placeholder]:empty:focus::before {
+        content: "";
+    }
+
     .body-input {
         word-wrap: anywhere;
         overflow-wrap: anywhere;

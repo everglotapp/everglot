@@ -169,6 +169,14 @@
         refreshPosts()
         unsetPrompt()
     }
+
+    function handlePostReplySuccess() {
+        refreshPosts()
+    }
+
+    function handlePostLikeSuccess() {
+        refreshPosts()
+    }
 </script>
 
 <Localized id="index-browser-window-title" let:text>
@@ -282,7 +290,7 @@
 <PostForm
     shownPromptUuid={shownPrompt ? shownPrompt.uuid : null}
     locale={pickedLocale || null}
-    handleSuccess={handlePostSuccess}
+    on:success={handlePostSuccess}
 />
 <div class="container max-w-2xl py-2 px-3 sm:px-0 gap-y-1">
     {#each posts as post (post.uuid)}
@@ -298,6 +306,8 @@
                     createdAt={post.createdAt}
                     prompt={post.prompt}
                     language={post.language}
+                    on:replySuccess={handlePostReplySuccess}
+                    on:likeSuccess={handlePostLikeSuccess}
                 />
             </div>
         {/if}

@@ -647,10 +647,10 @@
 
     {#if showLargeImageModalUrl && typeof window !== "undefined"}
         <EscapeKeyListener on:keydown={() => (showLargeImageModalUrl = null)} />
-        <ClickAwayListener
+        <!-- <ClickAwayListener
             elementId="large-image-view"
             on:clickaway={() => (showLargeImageModalUrl = null)}
-        />
+        /> -->
         <Modal>
             <div
                 class="grid place-items-center w-full h-full"

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { createEventDispatcher } from "svelte"
     import { scale } from "svelte/transition"
     import { svelteTime } from "svelte-time"
     import {
@@ -18,7 +19,6 @@
     import type { AllPostsQuery } from "../../types/generated/graphql"
     import { PromptType } from "../../types/generated/graphql"
     import { createPost } from "../../routes/_helpers/posts"
-    import { allPostsStore } from "../../stores/feed"
     import type { SupportedLocale } from "../../constants"
     import { USER_UPLOADED_RECORDINGS_BASE_PATH } from "../../constants"
 
@@ -35,6 +35,9 @@
     export let recordings: PostNode["recordings"]
     export let prompt: PostNode["prompt"]
     export let language: PostNode["language"]
+    export let linkToAuthorProfile: boolean = true
+
+    const dispatch = createEventDispatcher()
 
     $: replyNodes = replies.nodes.filter(Boolean).map((reply) => reply!)
 
@@ -46,7 +49,10 @@
         )
 
     async function handleReply() {
-        if (!newReplyBody) {
+        if (!newReplyBody || !newReplyBody.length) {
+            return
+        }
+        if (!language) {
             return
         }
         const res = await createPost(
@@ -60,15 +66,12 @@
             if (response.success) {
                 // success
                 newReplyBody = ""
-                $allPostsStore.context = {
-                    ...$allPostsStore.context,
-                    paused: true,
-                }
-                $allPostsStore.context = {
-                    ...$allPostsStore.context,
-                    paused: false,
-                }
+                dispatch("replySuccess")
+            } else {
+                dispatch("replyFailure")
             }
+        } else {
+            dispatch("replyFailure")
         }
     }
     let showReplies: boolean = false
@@ -95,20 +98,17 @@
             const response = await res.json()
             if (response.success) {
                 // success
-                $allPostsStore.context = {
-                    ...$allPostsStore.context,
-                    paused: true,
-                }
-                $allPostsStore.context = {
-                    ...$allPostsStore.context,
-                    paused: false,
-                }
+                dispatch("likeSuccess")
                 setTimeout(() => {
                     tmpLiked = false
                     tmpUnliked = false
                 }, 250)
                 return
+            } else {
+                dispatch("likeFailure")
             }
+        } else {
+            dispatch("likeFailure")
         }
         tmpLiked = false
         tmpUnliked = false
@@ -125,17 +125,30 @@
 >
     <div class="flex flex-row">
         <div class="pr-3 sm:pr-4">
-            <a href={`/u/${author.username}`}
-                ><Avatar username={author.username} url={author.avatarUrl} /></a
-            >
+            {#if linkToAuthorProfile}
+                <a href={`/u/${author.username}`}
+                    ><Avatar
+                        username={author.username}
+                        url={author.avatarUrl}
+                    /></a
+                >
+            {:else}
+                <Avatar username={author.username} url={author.avatarUrl} />
+            {/if}
         </div>
         <div class="w-full">
-            <div class="mb-1 flex items-center justify-between">
-                <a href={`/u/${author.username}`}
-                    ><span class="text-gray-bitdark font-bold"
+            <div class="flex items-center justify-between">
+                {#if linkToAuthorProfile}
+                    <a href={`/u/${author.username}`}
+                        ><span class="text-gray-bitdark font-bold"
+                            >{author.displayName || author.username}</span
+                        ></a
+                    >
+                {:else}
+                    <span class="text-gray-bitdark font-bold"
                         >{author.displayName || author.username}</span
-                    ></a
-                >
+                    >
+                {/if}
                 <time
                     use:svelteTime={{
                         timestamp: createdAt,
@@ -154,7 +167,7 @@
             </div>
             {#if prompt}
                 <div
-                    class="prompt-icon text-gray font-bold text-sm flex flex-nowrap items-center mb-1"
+                    class="prompt-icon text-gray font-bold text-sm flex flex-nowrap items-center"
                 >
                     {#if prompt.type === PromptType.Word}
                         <ZapIcon size="18" class="mr-2 self-start" /><span
@@ -166,7 +179,7 @@
                     {/if}
                 </div>
             {/if}
-            <div class="body">
+            <div class="body mt-1">
                 {#each (body || "").split("\n") as bodyPart}
                     {bodyPart}<br />
                 {/each}
@@ -270,13 +283,24 @@
                             <time
                                 use:svelteTime={{
                                     timestamp: reply.createdAt,
-                                    format: "DD-MM-YYYY h:mm A",
+                                    format:
+                                        new Date(reply.createdAt).getDate() ===
+                                        new Date().getDate()
+                                            ? "h:mm A"
+                                            : new Date(
+                                                  reply.createdAt
+                                              ).getFullYear() ===
+                                              new Date().getFullYear()
+                                            ? "D MMM h:mm A"
+                                            : "D MMM YYYY h:mm A",
                                 }}
                                 title={reply.createdAt.toLocaleString()}
                                 class="text-sm text-gray-bitdark"
                             />
                         </div>
-                        <div>{reply.body}</div>
+                        <div>
+                            {reply.body}
+                        </div>
                     </div>
                 </div>
             {/each}

@@ -71,7 +71,8 @@ export async function get(req: Request, res: Response, _next: () => void) {
         data: {
             prompt: {
                 uuid: prompt.uuid,
-                content: prompt[`content_${locale}`],
+                content:
+                    prompt[`content_${locale}` as `content_${PromptLocale}`],
                 type: prompt.type,
             },
         },
@@ -80,11 +81,9 @@ export async function get(req: Request, res: Response, _next: () => void) {
 
 type QueriedPrompt = {
     uuid: string
-    content_en: string | null
-    content_de: string | null
-    content_zh: string | null
     type: PromptType
-}
+} & Record<`content_${PromptLocale}`, string | null>
+
 async function getRandomPrompt(
     language: PromptLocale,
     excludeUuids?: string[]

@@ -34,6 +34,7 @@ export default {
     client: {
         input: config.client.input().replace(/\.js$/, ".ts"),
         output: config.client.output(),
+        sourceMap: dev,
         plugins: [
             replace({
                 "process.browser": true,

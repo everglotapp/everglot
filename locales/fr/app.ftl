@@ -69,7 +69,7 @@ chat-side-panel-activity-guess-character-feedback-character-already-picked = La 
 chat-side-panel-activity-guess-character-feedback-character-not-available = La lettre { $badCharacter } ne semble pas juste
 chat-side-panel-activity-would-you-rather-picked-answer = Tu as choisi<strong class="text-gray-bitdark">{ $answer }</strong>!
 chat-side-panel-activity-would-you-rather-timer =
-    L'enquête finira en{ $seconds ->
+    L'enquête finira en { $seconds ->
         [one] { $seconds } seconde
        *[other] { $seconds } secondes
     }.

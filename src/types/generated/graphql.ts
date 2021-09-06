@@ -20753,7 +20753,7 @@ export type CreatePostLikeMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostLikeMutation = { __typename?: 'Mutation', createPostLike?: Maybe<{ __typename?: 'CreatePostLikePayload', postLike?: Maybe<{ __typename?: 'PostLike', postId: number, userId: number, nodeId: string, createdAt: any }> }> };
+export type CreatePostLikeMutation = { __typename?: 'Mutation', createPostLike?: Maybe<{ __typename?: 'CreatePostLikePayload', postLike?: Maybe<{ __typename?: 'PostLike', id: number, postId: number, userId: number, nodeId: string, createdAt: any }> }> };
 
 export type CreatePostRecordingMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -20979,6 +20979,13 @@ export type OutstandingFcmNotificationsQueryVariables = Exact<{ [key: string]: n
 
 
 export type OutstandingFcmNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: Maybe<{ __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<Maybe<{ __typename?: 'Notification', id: number, params?: Maybe<any>, expiresAt?: Maybe<any>, withheldUntil?: Maybe<any>, recipient?: Maybe<{ __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }>, recipientGroup?: Maybe<{ __typename?: 'Group', uuid: any, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', user?: Maybe<{ __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }> }>> } }> }>> } }> };
+
+export type PostLikeNotificationQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type PostLikeNotificationQuery = { __typename?: 'Query', postLike?: Maybe<{ __typename?: 'PostLike', post?: Maybe<{ __typename?: 'Post', authorId?: Maybe<number>, body: string, parentPostId?: Maybe<number> }>, user?: Maybe<{ __typename?: 'User', id: number, username?: Maybe<string>, displayName?: Maybe<string> }> }> };
 
 export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
   token: Scalars['String'];
@@ -21318,6 +21325,7 @@ export const CreatePostLike = gql`
     mutation CreatePostLike($userId: Int!, $postId: Int!) {
   createPostLike(input: {postLike: {postId: $postId, userId: $userId}}) {
     postLike {
+      id
       postId
       userId
       nodeId
@@ -21751,6 +21759,22 @@ export const OutstandingFcmNotifications = gql`
           }
         }
       }
+    }
+  }
+}
+    `;
+export const PostLikeNotification = gql`
+    query PostLikeNotification($id: Int!) {
+  postLike(id: $id) {
+    post {
+      authorId
+      body
+      parentPostId
+    }
+    user {
+      id
+      username
+      displayName
     }
   }
 }

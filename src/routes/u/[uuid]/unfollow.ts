@@ -32,6 +32,13 @@ export async function post(req: Request, res: Response, next: () => void) {
         next()
         return
     }
+    if (userId === currentUserId) {
+        chlog
+            .child({ userId, currentUserId })
+            .debug("User tried to unfollow themselves")
+        unprocessableEntity(res, "You cannot unfollow yourself")
+        return
+    }
     const userFollowershipId = await getUserFollowershipIdByUserIdAndFollowerId(
         userId,
         currentUserId

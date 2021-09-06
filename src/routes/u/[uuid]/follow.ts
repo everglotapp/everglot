@@ -28,6 +28,13 @@ export async function post(req: Request, res: Response, next: () => void) {
         next()
         return
     }
+    if (userId === currentUserId) {
+        chlog
+            .child({ userId, currentUserId })
+            .debug("User tried to follow themselves")
+        unprocessableEntity(res, "You cannot follow yourself")
+        return
+    }
     const userFollowership = await createUserFollowership({
         userId,
         followerId: currentUserId,

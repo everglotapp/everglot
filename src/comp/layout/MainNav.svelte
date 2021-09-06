@@ -283,13 +283,14 @@
                                                         : undefined}
                                                     class="group"
                                                 >
-                                                    <ButtonSmall
+                                                    <ButtonLarge
                                                         variant="TEXT"
                                                         color="SECONDARY"
                                                         href={`/chat?group=${group.uuid}`}
-                                                        className="w-full justify-between items-center"
+                                                        className="w-full"
                                                     >
-                                                        <span class="font-sans"
+                                                        <span
+                                                            class="font-sans flex items-center justify-between w-full"
                                                             >{group.groupName ||
                                                                 ""}
                                                             ({group.language
@@ -307,7 +308,7 @@
                                                                     class="text-gray-bitdark ml-2"
                                                                 />{/if}
                                                         </span>
-                                                    </ButtonSmall>
+                                                    </ButtonLarge>
                                                 </div>
                                             {/each}
                                         {/if}
@@ -632,8 +633,9 @@
                             />
                             {#if $joinedCallRoom}
                                 <MicIcon
-                                    size="16"
+                                    size="18"
                                     class="text-primary absolute mic-icon"
+                                    strokeWidth={3}
                                 />
                             {/if}
                         {:else}
@@ -891,7 +893,17 @@
     }
 
     #settings-dropdown-clickaway :global(.mic-icon) {
-        right: 18px;
-        bottom: 10px;
+        right: 6px;
+        bottom: 6px;
+        background: #fff;
+        border-radius: 50%;
+        padding: 2px;
+        border: 1px solid #ddd;
+
+        @screen sm {
+            right: 18px;
+            bottom: 10px;
+            border: 0;
+        }
     }
 </style>

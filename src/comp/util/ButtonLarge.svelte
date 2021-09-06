@@ -83,6 +83,9 @@
             @apply cursor-pointer;
             @apply transition-colors;
             @apply items-center;
+
+            line-height: 1.5rem;
+            font-size: 1.15rem;
         }
 
         button:disabled,

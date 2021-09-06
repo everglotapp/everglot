@@ -3,7 +3,6 @@
     import { goto } from "@sapper/app"
 
     import { query } from "@urql/svelte"
-    import { scale } from "svelte/transition"
     import {
         XCircleIcon,
         ZapIcon,
@@ -198,7 +197,7 @@
                     tag="button"
                     variant={shownPrompt ? "OUTLINED" : "FILLED"}
                     on:click={handleShuffle}
-                    ><ZapIcon size="24" class="mr-2" /><span
+                    ><ZapIcon size="20" class="mr-2" /><span
                         class="hidden sm:inline"
                         >{#if shownPrompt}
                             <Localized
@@ -237,7 +236,7 @@
                     >
                 {/each}
             </select>
-            <ButtonLarge
+            <ButtonSmall
                 on:click={() =>
                     (languagePickerFocused = !languagePickerFocused)}
                 variant="TEXT"
@@ -259,15 +258,11 @@
                         <ChevronDownIcon size="18" />
                     {/if}
                 </div>
-            </ButtonLarge>
+            </ButtonSmall>
         </div>
     </div>
     {#if shownPrompt && promptsSupportedForPickedLocale}
-        <div
-            class="pt-8 pb-4 px-4 font-secondary relative"
-            in:scale={{ duration: 200 }}
-            out:scale={{ duration: 200 }}
-        >
+        <div class="pt-8 pb-4 px-4 font-secondary relative">
             {#if shownPrompt.type === PromptType.Question}
                 <div class="font-bold text-2xl text-center">
                     {shownPrompt.content}

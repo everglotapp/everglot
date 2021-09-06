@@ -8,6 +8,7 @@
 
     import Headline3 from "../typography/Headline3.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import ButtonLarge from "../util/ButtonLarge.svelte"
     import Spinner from "../util/Spinner.svelte"
     import { WEBRTC_CONTEXT } from "../util/WebrtcProvider.svelte"
     import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
@@ -78,7 +79,7 @@
                     ><Localized id="chat-sidebar-controls-display" /></button
                 >
                 <div class="toggle" on:click={handleToggleSplit}>
-                    <div aria-selected={split}>
+                    <div aria-selected={split} style="padding-right: 0.35rem;">
                         <Localized id="chat-sidebar-controls-toggle-on" />
                     </div>
                     <div aria-selected={!split}>
@@ -92,7 +93,10 @@
                     ><Localized id="chat-sidebar-controls-games" /></button
                 >
                 <div class="toggle" on:click={handleToggleSplit}>
-                    <div aria-selected={showGamesOnMobile}>
+                    <div
+                        aria-selected={showGamesOnMobile}
+                        style="padding-right: 0.35rem;"
+                    >
                         <Localized id="chat-sidebar-controls-toggle-on" />
                     </div>
                     <div aria-selected={!showGamesOnMobile}>
@@ -156,7 +160,10 @@
                         ><Localized id="chat-sidebar-controls-mic" /></button
                     >
                     <div class="toggle" on:click={handleToggleMic}>
-                        <div aria-selected={mic}>
+                        <div
+                            aria-selected={mic}
+                            style="padding-right: 0.35rem;"
+                        >
                             <Localized id="chat-sidebar-controls-toggle-on" />
                         </div>
                         <div aria-selected={!mic}>
@@ -181,7 +188,10 @@
                         ><Localized id="chat-sidebar-controls-audio" /></button
                     >
                     <div class="toggle" on:click={handleToggleAudioButton}>
-                        <div aria-selected={audio}>
+                        <div
+                            aria-selected={audio}
+                            style="padding-right: 0.35rem;"
+                        >
                             <Localized id="chat-sidebar-controls-toggle-on" />
                         </div>
                         <div aria-selected={!audio}>
@@ -214,7 +224,7 @@
             {:else if $isInCall && $joinedCallRoom !== $groupUuid}
                 {#if $currentUserIsGroupMember}
                     <div class="flex justify-center mt-2 mb-1">
-                        <ButtonSmall
+                        <ButtonLarge
                             tag="button"
                             on:click={() => ($showSwitchCallModal = true)}
                             variant="OUTLINED"
@@ -222,13 +232,13 @@
                             className="items-center"
                             ><MicIcon size="24" class="mr-2" /><Localized
                                 id="chat-sidebar-start-call"
-                            /></ButtonSmall
+                            /></ButtonLarge
                         >
                     </div>
                 {/if}
             {:else if $currentUserIsGroupMember}
                 <div class="flex justify-center mt-2 mb-1">
-                    <ButtonSmall
+                    <ButtonLarge
                         tag="button"
                         on:click={handleJoinCall}
                         variant="OUTLINED"
@@ -236,7 +246,7 @@
                         className="items-center"
                         ><MicIcon size="24" class="mr-2" /><Localized
                             id="chat-sidebar-start-call"
-                        /></ButtonSmall
+                        /></ButtonLarge
                     >
                 </div>
             {/if}

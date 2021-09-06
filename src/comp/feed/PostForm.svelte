@@ -270,7 +270,7 @@
                     >{#if recording}<CheckIcon
                             size="18"
                             strokeWidth={3}
-                        />{:else}<MicIcon size="18" class="mr-2" /><Localized
+                        />{:else}<MicIcon size="20" class="mr-2" /><Localized
                             id="index-post-form-record-button"
                         />{/if}</ButtonLarge
                 >
@@ -280,7 +280,7 @@
                         tag="button"
                         variant="TEXT"
                         on:click={handleUserRecordCancel}
-                        ><XIcon size="18" class="text-gray" /></ButtonSmall
+                        ><XIcon size="20" class="text-gray" /></ButtonSmall
                     >
                 {/if}
                 <ButtonLarge

@@ -116,7 +116,7 @@
 </div>
 {#if tab === ProfileTab.About}
     <div class="flex flex-wrap-reverse md:flex-nowrap container max-w-2xl">
-        <div class="pt-4 sm:pt-8 pb-4 px-4">
+        <div class="pt-4 sm:pt-8 pb-4 px-4" style="flex: 0 0 240px;">
             <h2>Languages</h2>
             <ul>
                 {#each userLanguages as language}

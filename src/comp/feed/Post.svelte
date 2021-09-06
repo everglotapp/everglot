@@ -276,7 +276,7 @@
         >
             {#each replyNodes as reply (reply.uuid)}
                 <div
-                    class="flex flex-row ml-8 pl-4 pt-4 border-l-2 border-gray-verylight"
+                    class="reply flex flex-row ml-8 pl-4 pt-4 border-l-2 border-gray-verylight"
                     in:scale|local={{ duration: 200 }}
                 >
                     <div class="pr-3 sm:pr-4">
@@ -323,6 +323,11 @@
     .body {
         @apply overflow-hidden;
         @apply overflow-ellipsis;
+    }
+
+    .reply:first-child {
+        @apply pt-2;
+        @apply mt-2;
     }
 
     .prompt-icon :global(svg) {

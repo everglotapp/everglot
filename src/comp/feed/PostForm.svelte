@@ -13,6 +13,7 @@
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import ButtonLarge from "../util/ButtonLarge.svelte"
     import {
         createPost,
         createPostRecording,
@@ -257,7 +258,7 @@
         />
         <div>
             <div class="flex items-center justify-end relative">
-                <ButtonSmall
+                <ButtonLarge
                     className={"ml-1 items-center" +
                         (recording ? " recording" : " mr-1")}
                     tag="button"
@@ -271,7 +272,7 @@
                             strokeWidth={3}
                         />{:else}<MicIcon size="18" class="mr-2" /><Localized
                             id="index-post-form-record-button"
-                        />{/if}</ButtonSmall
+                        />{/if}</ButtonLarge
                 >
                 {#if recording}
                     <ButtonSmall
@@ -282,13 +283,13 @@
                         ><XIcon size="18" class="text-gray" /></ButtonSmall
                     >
                 {/if}
-                <ButtonSmall
+                <ButtonLarge
                     className="items-center"
                     tag="button"
                     on:click={() => handlePost()}
                     ><SendIcon size="18" class="mr-2" /><Localized
                         id="index-post-form-post-button"
-                    /></ButtonSmall
+                    /></ButtonLarge
                 >
                 {#if recording}
                     <div

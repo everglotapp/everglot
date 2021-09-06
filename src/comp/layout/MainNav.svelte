@@ -19,6 +19,7 @@
     import Avatar from "../users/Avatar.svelte"
 
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import ButtonLarge from "../util/ButtonLarge.svelte"
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
     import Modal from "../util/Modal.svelte"
@@ -689,13 +690,13 @@
                         id="invite-modal-close"
                     /></ButtonSmall
                 >
-                <ButtonSmall
+                <ButtonLarge
                     tag="button"
                     on:click={handleCopyClipboard}
                     className="flex items-center"
                     ><CopyIcon size="24" class="mr-2" /><Localized
                         id="invite-modal-copy"
-                    /></ButtonSmall
+                    /></ButtonLarge
                 >
             </div>
             {#if copiedInviteLink !== null}

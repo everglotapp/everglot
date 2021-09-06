@@ -115,7 +115,7 @@
     >
 </div>
 {#if tab === ProfileTab.About}
-    <div class="flex flex-wrap-reverse container max-w-2xl">
+    <div class="flex flex-wrap-reverse md:flex-nowrap container max-w-2xl">
         <div class="pt-4 sm:pt-8 pb-4 px-4">
             <h2>Languages</h2>
             <ul>
@@ -137,13 +137,19 @@
             <h2>About Me</h2>
             <p>
                 {#if bio && bio.length}{bio}{:else}<span class="text-gray"
-                        >We're all eagerly waiting for {username} to introduce themselves.</span
+                        >We're all eagerly waiting for {displayName || username}
+                        to introduce themselves.</span
                     >{/if}
             </p>
         </div>
     </div>
 {:else if tab === ProfileTab.Squeeks}
     <div class="container max-w-2xl py-2 px-3 sm:px-0 gap-y-1">
+        {#if !userPosts.length}
+            <span class="text-gray"
+                >So far, {displayName || username} has not posted any squeeks.</span
+            >
+        {/if}
         {#each userPosts as post (post.uuid)}
             {#if post.author}
                 <div class="post">

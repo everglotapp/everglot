@@ -19,6 +19,7 @@
     import Post from "../comp/feed/Post.svelte"
     import PostForm from "../comp/feed/PostForm.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
+    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
 
     import { PromptType } from "../types/generated/graphql"
@@ -236,7 +237,7 @@
                     >
                 {/each}
             </select>
-            <ButtonSmall
+            <ButtonLarge
                 on:click={() =>
                     (languagePickerFocused = !languagePickerFocused)}
                 variant="TEXT"
@@ -258,7 +259,7 @@
                         <ChevronDownIcon size="18" />
                     {/if}
                 </div>
-            </ButtonSmall>
+            </ButtonLarge>
         </div>
     </div>
     {#if shownPrompt && promptsSupportedForPickedLocale}
@@ -279,14 +280,14 @@
                     <Localized id="index-prompt-instruction-word" />
                 </div>
             {/if}
-            <ButtonSmall
+            <ButtonLarge
                 tag="button"
                 variant="TEXT"
                 on:click={() => unsetPrompt()}
                 className="close-prompt-button"
             >
                 <XCircleIcon size="32" strokeWidth={1} />
-            </ButtonSmall>
+            </ButtonLarge>
         </div>
     {/if}
 </div>

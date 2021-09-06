@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, createEventDispatcher } from "svelte"
-    import { scale } from "svelte/transition"
+    import { fade } from "svelte/transition"
 
     import { operationStore, query } from "@urql/svelte"
 
@@ -230,8 +230,8 @@
                         class="inline-block text-center"
                         style="min-width: 24px; width: 24px; margin-left: 2px; margin-right: 2px;"
                         >{#key $userFollowershipsStore.fetching}<span
-                                in:scale={{ duration: 100, delay: 150 }}
-                                out:scale={{ duration: 100 }}
+                                in:fade={{ duration: 100, delay: 150 }}
+                                out:fade|local={{ duration: 100 }}
                                 class="text-gray-bitdark font-bold"
                                 >{followers.length}</span
                             >{/key}</span

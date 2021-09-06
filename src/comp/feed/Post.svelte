@@ -13,6 +13,7 @@
 
     import Avatar from "../users/Avatar.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import ButtonLarge from "../util/ButtonLarge.svelte"
 
     import { currentUserStore, currentUserUuid } from "../../stores/currentUser"
 
@@ -232,22 +233,29 @@
                 </div>
             {/if}
         </div>
-        <ButtonSmall
-            className={`reply-button items-center justify-center recording ml-0 mr-1${
-                showReplies ? " close" : ""
-            }`}
-            tag="button"
-            variant={showReplies ? "TEXT" : "OUTLINED"}
-            color={showReplies ? "SECONDARY" : "PRIMARY"}
-            on:click={() => (showReplies = !showReplies)}
-            >{#if showReplies}
-                <XIcon size="16" /><span>Close</span>
-            {:else}<MessageCircleIcon size="16" /><span
+        {#if showReplies}
+            <ButtonSmall
+                className="reply-button close items-center justify-center recording ml-0 mr-1"
+                tag="button"
+                variant="TEXT"
+                color="SECONDARY"
+                on:click={() => (showReplies = !showReplies)}
+                ><XIcon size="16" /><span>Close</span></ButtonSmall
+            >
+        {:else}
+            <ButtonLarge
+                className="reply-button items-center justify-center recording ml-0 mr-1"
+                tag="button"
+                variant="OUTLINED"
+                color="PRIMARY"
+                on:click={() => (showReplies = !showReplies)}
+                ><MessageCircleIcon size="16" /><span
                     class="text-sm text-gray-bitdark font-bold select-none rounded-lg"
                     >{replies?.totalCount || 0} replies</span
-                >{/if}</ButtonSmall
-        >
-        <ButtonSmall
+                ></ButtonLarge
+            >
+        {/if}
+        <ButtonLarge
             className="like-button flex items-center justify-center cursor-pointer rounded-lg bg-gray-lightest"
             on:click={() => handleLike()}
             tag="button"
@@ -257,7 +265,7 @@
             <span class="text-sm font-bold text-gray-bitdark select-none"
                 >{likes ? likes.totalCount : 0}</span
             >
-        </ButtonSmall>
+        </ButtonLarge>
     </div>
     {#if showReplies}
         <div

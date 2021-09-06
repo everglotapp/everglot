@@ -157,7 +157,7 @@
                     variant="FILLED"
                     color="PRIMARY"
                     className="w-full"
-                    href="/"
+                    href="/signup"
                     ><span><Localized id="main-nav-continue" /></span
                     ></ButtonSmall
                 >
@@ -388,7 +388,8 @@
                                     <div class="my-auto pt-2">
                                         {#if $currentUser && $currentUser.username && $currentUser.username.length}
                                             <span
-                                                class="px-4 pb-2 text-gray-bitdark font-bold"
+                                                class="px-4 pb-2 text-gray-bitdark font-bold block overflow-hidden overflow-ellipsis whitespace-nowrap"
+                                                style="max-width: 10rem;"
                                                 >{$currentUser.username}</span
                                             >
                                             <hr class="mt-2" />

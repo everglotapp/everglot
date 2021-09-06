@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, createEventDispatcher } from "svelte"
-    import { fade } from "svelte/transition"
+    import { fade, scale } from "svelte/transition"
 
     import { operationStore, query } from "@urql/svelte"
 
@@ -190,9 +190,9 @@
         <div
             id={ENLARGEN_PROFILE_PICTURE_BUTTON_ID}
             in:scale|local={{ delay: 400, duration: 100 }}
-            class="avatar-container mb-4 mr-4 sm:mr-8 ml-3 sm:ml-0 cursor-pointer"
+            class="avatar-container flex mb-4 mr-4 sm:mr-8 ml-3 sm:ml-0 cursor-pointer"
             class:cursor-pointer={shownAvatarUrl != null}
-            style={`border-radius: 50%; width: ${AVATAR_SIZE}px; height: ${AVATAR_SIZE}px; max-height: 33vw; max-width: 33vw;`}
+            style={`border-radius: 50%; max-height: 33vw; max-width: 33vw;`}
             on:click={() => {
                 if (shownAvatarUrl != null) {
                     showLargeProfilePictureUrl = shownAvatarUrl
@@ -284,5 +284,7 @@
     .avatar-container > :global(div) {
         max-width: 33vw;
         max-height: 33vw;
+        width: auto;
+        height: auto;
     }
 </style>

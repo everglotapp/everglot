@@ -74,8 +74,8 @@
     @layer components {
         button,
         a {
-            @apply py-3;
-            @apply px-10;
+            @apply py-2;
+            @apply px-6;
             @apply inline-flex;
             @apply rounded-xl;
             @apply font-bold;
@@ -83,6 +83,9 @@
             @apply cursor-pointer;
             @apply transition-colors;
             @apply items-center;
+
+            line-height: 1.5rem;
+            font-size: 1.15rem;
         }
 
         button:disabled,

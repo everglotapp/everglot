@@ -1,0 +1,12 @@
+mutation DeleteUserFollowership($id: Int!) {
+  deleteUserFollower(input: {id: $id}) {
+    userFollower {
+      followerId
+      userId
+      nodeId
+      createdAt
+      __typename
+    }
+    __typename
+  }
+}

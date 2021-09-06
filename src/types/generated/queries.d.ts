@@ -134,6 +134,42 @@ declare module '*/promptIdByUuid.graphql' {
 }
     
 
+declare module '*/createUserFollowership.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateUserFollowership: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/deleteUserFollowership.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const DeleteUserFollowership: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userByUsernameFollowerships.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserByUsernameFollowerships: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userFollowershipByUserIdAndFollowerId.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserFollowershipIdByUserIdAndFollowerId: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createGroupUser.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -332,6 +368,24 @@ declare module '*/unsubscribeUserEmailNotifications.graphql' {
 }
     
 
+declare module '*/userByUsernamePosts.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserByUsernamePosts: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userProfile.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserProfile: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createUser.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -345,6 +399,15 @@ declare module '*/createUserLanguage.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const CreateUserLanguage: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/currentUserProfile.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CurrentUserProfile: DocumentNode;
 
   export default defaultDocument;
 }
@@ -377,19 +440,19 @@ declare module '*/userIdByEmail.graphql' {
 }
     
 
-declare module '*/userLanguageInfo.graphql' {
+declare module '*/userIdByUuid.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const UserLanguageInfo: DocumentNode;
+  export const UserIdByUuid: DocumentNode;
 
   export default defaultDocument;
 }
     
 
-declare module '*/userProfile.graphql' {
+declare module '*/userLanguageInfo.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const UserProfile: DocumentNode;
+  export const UserLanguageInfo: DocumentNode;
 
   export default defaultDocument;
 }

@@ -66,7 +66,7 @@ chat-side-panel-activity-guess-character-feedback-character-already-picked = La 
 chat-side-panel-activity-guess-character-feedback-character-not-available = La lettera { $badLetter } non sembra corretta
 chat-side-panel-activity-would-you-rather-picked-answer = Hai provato <strong class="text-gray-bitdark">{ $answer }</strong>!
 chat-side-panel-activity-would-you-rather-timer =
-    Il sondaggio finisce fra{ $seconds ->
+    Il sondaggio finisce fra { $seconds ->
         [one] { $seconds } secondo
        *[other] { $seconds } secondi
     }.
@@ -216,3 +216,4 @@ locale-ko = Coreano
 locale-ja = Giapponese
 locale-ru = Russo
 locale-ar = Arabo
+locale-pt = Portoghese

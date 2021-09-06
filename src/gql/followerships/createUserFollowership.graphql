@@ -1,0 +1,12 @@
+mutation CreateUserFollowership($userId: Int!, $followerId: Int!) {
+    createUserFollower(
+        input: { userFollower: { userId: $userId, followerId: $followerId } }
+    ) {
+        userFollower {
+            userId
+            followerId
+            nodeId
+            createdAt
+        }
+    }
+}

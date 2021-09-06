@@ -1,4 +1,4 @@
-query UserProfile {
+query CurrentUserProfile {
     currentUser {
         bio
         email
@@ -35,5 +35,6 @@ query UserProfile {
                 joinedOn
             }
         }
+        displayName
     }
 }

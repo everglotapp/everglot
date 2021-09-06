@@ -7,7 +7,7 @@
 
 ## Chat page
 
-chat-browser-window-title = { -brand-name }- 共に学ぶ。
+chat-browser-window-title = { -brand-name } – 共に学ぶ。
 chat-panel-games = ゲーム
 chat-panel-subtitles = 字幕
 chat-submit-form-join-group = グループへの参加
@@ -69,10 +69,7 @@ chat-side-panel-activity-guess-character-feedback-character-already-picked = キ
 chat-side-panel-activity-guess-character-feedback-character-not-available = キャラクターの{ $badCharacter }は利用できません。
 chat-side-panel-activity-would-you-rather-picked-answer = あなたは<strong class="text-gray-bitdark">を選びました。{ $answer }</strong>!
 chat-side-panel-activity-would-you-rather-timer =
-    投票が終了するのは{ $seconds ->
-        [one] { $seconds } second
-       *[other] { $seconds } seconds
-    }.
+    投票が終了するのは{ $seconds }秒。
 chat-side-panel-activity-would-you-rather-next-question = 別の質問をする
 chat-side-panel-activity-random-question-next-question = 別の質問をする
 chat-side-panel-activity-random-question-discuss = グループで話し合ってください。
@@ -80,9 +77,9 @@ chat-submit-form-send = 送信
 chat-submit-form-connecting = 接続する ...
 # Chat text message input field
 chat-submit-form-input = { "" }
-    .placeholder = Enter text message …
+    .placeholder = Enter text message ...
 chat-activity-text-input = { "" }
-    .placeholder = Enter your guess …
+    .placeholder = Enter your guess ...
 chat-submit-form-voice = オーディオ
 chat-submit-form-voice-join-call = ジョインコール
 chat-submit-form-voice-leave-call = 電話をかける
@@ -165,7 +162,7 @@ signup-form-learning-levels-select-a1 = A1 - 初心者
 signup-form-learning-levels-select-a2 = A2 - 初級
 signup-form-learning-levels-select-b1 = B1 - 中級
 signup-form-learning-levels-select-b2 = B2 - 中級上
-signup-form-learning-levels-select-c1 = C1-上級
+signup-form-learning-levels-select-c1 = C1 - 上級
 signup-form-learning-levels-select-c2 = C2 - プロフィシェンシー
 signup-form-difficult-msg =
     <p data-l10n-name="difficult">Everglotは、初心者や初級レベルの学習者にはかなり難しいかもしれません。
@@ -259,3 +256,4 @@ locale-ko = 韓国語
 locale-ja = 日本語
 locale-ru = ロシア語
 locale-ar = アラビア語
+locale-pt = ポルトガル語

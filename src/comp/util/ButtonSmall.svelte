@@ -82,7 +82,7 @@
     @layer components {
         button,
         a {
-            @apply py-2;
+            @apply py-1;
             @apply px-4;
             @apply inline-flex;
             @apply rounded-xl;

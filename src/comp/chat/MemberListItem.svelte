@@ -3,7 +3,7 @@
 
     import type { Maybe } from "../../types/generated/graphql"
 
-    import Bio from "../users/Bio.svelte"
+    import ProfilePreview from "../users/ProfilePreview.svelte"
     import Avatar from "../users/Avatar.svelte"
 
     import { MicIcon, MicOffIcon, VolumeXIcon } from "svelte-feather-icons"
@@ -19,7 +19,7 @@
     export let username: Maybe<string> | undefined
     export let uuid: string | undefined
 
-    export let showBio = false
+    export let showProfilePreview = false
     export let handleClickAway: (e: CustomEvent<any>) => any
     export let handleEscapeKey: (e: CustomEvent<any>) => any
 
@@ -59,7 +59,7 @@
             <VolumeXIcon size="18" class="text-gray-bitdark ml-1" />
         {/if}
     {/if}
-    {#if showBio}
+    {#if showProfilePreview}
         <ClickAwayListener elementId={id} on:clickaway={handleClickAway} />
         <EscapeKeyListener on:keydown={handleEscapeKey} />
         <div
@@ -77,7 +77,7 @@
                         delay: 0,
                     }}
                 >
-                    <Bio userUuid={uuid || null} />
+                    <ProfilePreview userUuid={uuid || null} />
                 </div>
             </div>
         </div>

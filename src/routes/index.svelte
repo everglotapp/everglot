@@ -3,7 +3,6 @@
     import { goto } from "@sapper/app"
 
     import { query } from "@urql/svelte"
-    import { scale } from "svelte/transition"
     import {
         XCircleIcon,
         ZapIcon,
@@ -19,6 +18,7 @@
     import Post from "../comp/feed/Post.svelte"
     import PostForm from "../comp/feed/PostForm.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
+    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
 
     import { PromptType } from "../types/generated/graphql"
@@ -169,6 +169,17 @@
         refreshPosts()
         unsetPrompt()
     }
+
+    function handlePostReplySuccess() {
+        refreshPosts()
+    }
+
+    function handlePostLikeSuccess() {
+        refreshPosts()
+    }
+    function handlePostUnlikeSuccess() {
+        refreshPosts()
+    }
 </script>
 
 <Localized id="index-browser-window-title" let:text>
@@ -186,7 +197,7 @@
                     tag="button"
                     variant={shownPrompt ? "OUTLINED" : "FILLED"}
                     on:click={handleShuffle}
-                    ><ZapIcon size="24" class="mr-2" /><span
+                    ><ZapIcon size="20" class="mr-2" /><span
                         class="hidden sm:inline"
                         >{#if shownPrompt}
                             <Localized
@@ -251,11 +262,7 @@
         </div>
     </div>
     {#if shownPrompt && promptsSupportedForPickedLocale}
-        <div
-            class="pt-8 pb-4 px-4 font-secondary relative"
-            in:scale={{ duration: 200 }}
-            out:scale={{ duration: 200 }}
-        >
+        <div class="pt-8 pb-4 px-4 font-secondary relative">
             {#if shownPrompt.type === PromptType.Question}
                 <div class="font-bold text-2xl text-center">
                     {shownPrompt.content}
@@ -268,21 +275,21 @@
                     <Localized id="index-prompt-instruction-word" />
                 </div>
             {/if}
-            <ButtonSmall
+            <ButtonLarge
                 tag="button"
                 variant="TEXT"
                 on:click={() => unsetPrompt()}
                 className="close-prompt-button"
             >
                 <XCircleIcon size="32" strokeWidth={1} />
-            </ButtonSmall>
+            </ButtonLarge>
         </div>
     {/if}
 </div>
 <PostForm
     shownPromptUuid={shownPrompt ? shownPrompt.uuid : null}
     locale={pickedLocale || null}
-    handleSuccess={handlePostSuccess}
+    on:success={handlePostSuccess}
 />
 <div class="container max-w-2xl py-2 px-3 sm:px-0 gap-y-1">
     {#each posts as post (post.uuid)}
@@ -298,6 +305,9 @@
                     createdAt={post.createdAt}
                     prompt={post.prompt}
                     language={post.language}
+                    on:replySuccess={handlePostReplySuccess}
+                    on:likeSuccess={handlePostLikeSuccess}
+                    on:unlikeSuccess={handlePostUnlikeSuccess}
                 />
             </div>
         {/if}
@@ -305,16 +315,6 @@
 </div>
 
 <style>
-    [placeholder]:empty::before {
-        content: attr(placeholder);
-
-        @apply text-gray;
-    }
-
-    [placeholder]:empty:focus::before {
-        content: "";
-    }
-
     .post:not(:last-child) {
         @apply border-b;
         @apply border-gray-200;
@@ -323,7 +323,7 @@
     .language-select-wrapper {
         @apply relative;
 
-        width: 8rem;
+        width: 9rem;
         height: 2.7rem;
     }
 

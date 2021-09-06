@@ -19,6 +19,7 @@
     import Avatar from "../users/Avatar.svelte"
 
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import ButtonLarge from "../util/ButtonLarge.svelte"
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
     import Modal from "../util/Modal.svelte"
@@ -282,13 +283,14 @@
                                                         : undefined}
                                                     class="group"
                                                 >
-                                                    <ButtonSmall
+                                                    <ButtonLarge
                                                         variant="TEXT"
                                                         color="SECONDARY"
                                                         href={`/chat?group=${group.uuid}`}
-                                                        className="w-full justify-between items-center"
+                                                        className="w-full"
                                                     >
-                                                        <span class="font-sans"
+                                                        <span
+                                                            class="font-sans flex items-center justify-between w-full"
                                                             >{group.groupName ||
                                                                 ""}
                                                             ({group.language
@@ -306,7 +308,7 @@
                                                                     class="text-gray-bitdark ml-2"
                                                                 />{/if}
                                                         </span>
-                                                    </ButtonSmall>
+                                                    </ButtonLarge>
                                                 </div>
                                             {/each}
                                         {/if}
@@ -631,8 +633,9 @@
                             />
                             {#if $joinedCallRoom}
                                 <MicIcon
-                                    size="16"
+                                    size="18"
                                     class="text-primary absolute mic-icon"
+                                    strokeWidth={3}
                                 />
                             {/if}
                         {:else}
@@ -689,13 +692,13 @@
                         id="invite-modal-close"
                     /></ButtonSmall
                 >
-                <ButtonSmall
+                <ButtonLarge
                     tag="button"
                     on:click={handleCopyClipboard}
                     className="flex items-center"
                     ><CopyIcon size="24" class="mr-2" /><Localized
                         id="invite-modal-copy"
-                    /></ButtonSmall
+                    /></ButtonLarge
                 >
             </div>
             {#if copiedInviteLink !== null}
@@ -890,7 +893,17 @@
     }
 
     #settings-dropdown-clickaway :global(.mic-icon) {
-        right: 18px;
-        bottom: 10px;
+        right: 6px;
+        bottom: 6px;
+        background: #fff;
+        border-radius: 50%;
+        padding: 2px;
+        border: 1px solid #ddd;
+
+        @screen sm {
+            right: 18px;
+            bottom: 10px;
+            border: 0;
+        }
     }
 </style>

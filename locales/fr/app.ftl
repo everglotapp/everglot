@@ -28,15 +28,15 @@ chat-sidebar-controls-toggle-on = Marche
 chat-sidebar-controls-toggle-off = Arrêt
 chat-sidebar-start-call = Participer à l'appel
 chat-sidebar-leave-call = Quitter l'appel
-chat-sidebar-switch-call-text = Tu as déjà participer à un appel, est-ce que tu veux changer à ce groupe?
+chat-sidebar-switch-call-text = Tu es déjà sur un appel, est-ce que tu veux changer à ce groupe?
 chat-sidebar-switch-call-cancel = Annuler
 chat-sidebar-switch-call-confirm = Changer
-chat-side-panel-bubble = Bienvenue au centre des jeux. Choisis un jeu pour jouer avec ton groupe.
+chat-side-panel-bubble = Bienvenue au centre des jeux. Choisis un jeu à jouer avec ton groupe.
 chat-side-panel-bubble-no-activity-available = Désolé, Everglot ne supporte pas encore des jeux en { $language } .
 chat-side-panel-menu-hangman = Jouer le pendu
-chat-side-panel-menu-would-you-rather = Jouer Qu'est-ce que tu préfèrerais
+chat-side-panel-menu-would-you-rather = Jouer à « Tu préfères »
 chat-side-panel-menu-random-question = Poser une question aléatoire
-chat-side-panel-menu-guess-character = Jouer deviner le caractère
+chat-side-panel-menu-guess-character = Jouer « Devine le caractère »
 chat-side-panel-activity-hangman = Le pendu
 chat-side-panel-activity-would-you-rather = Qu'est-ce que tu préfèrerais
 chat-side-panel-activity-random-question = Question aléatoire
@@ -69,7 +69,7 @@ chat-side-panel-activity-guess-character-feedback-character-already-picked = La 
 chat-side-panel-activity-guess-character-feedback-character-not-available = La lettre { $badCharacter } ne semble pas juste
 chat-side-panel-activity-would-you-rather-picked-answer = Tu as choisi<strong class="text-gray-bitdark">{ $answer }</strong>!
 chat-side-panel-activity-would-you-rather-timer =
-    L'enquête finira en{ $seconds ->
+    L'enquête finira en { $seconds ->
         [one] { $seconds } seconde
        *[other] { $seconds } secondes
     }.

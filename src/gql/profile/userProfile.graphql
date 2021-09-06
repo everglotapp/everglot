@@ -1,0 +1,22 @@
+query UserProfile($username: String!) {
+    userByUsername(username: $username) {
+        bio
+        gender
+        username
+        avatarUrl
+        uuid
+        userLanguages {
+            totalCount
+            nodes {
+                language {
+                    englishName
+                }
+                languageSkillLevel {
+                    name
+                }
+                native
+            }
+        }
+        displayName
+    }
+}

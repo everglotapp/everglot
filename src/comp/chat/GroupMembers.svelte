@@ -41,17 +41,17 @@
         }
     }
 
-    let showBioUuid: number | null = null
-    function hideBioOf(userUuid: number | null) {
-        if (showBioUuid === userUuid) {
-            showBioUuid = null
+    let showProfilePreviewUserUuid: number | null = null
+    function hideProfilePreviewOf(userUuid: number | null) {
+        if (showProfilePreviewUserUuid === userUuid) {
+            showProfilePreviewUserUuid = null
         }
     }
-    function toggleBioOf(userUuid: number | null) {
-        if (showBioUuid === userUuid) {
-            showBioUuid = null
+    function toggleProfilePreviewOf(userUuid: number | null) {
+        if (showProfilePreviewUserUuid === userUuid) {
+            showProfilePreviewUserUuid = null
         } else {
-            showBioUuid = userUuid
+            showProfilePreviewUserUuid = userUuid
         }
     }
 </script>
@@ -95,10 +95,13 @@
                             uuid={user.uuid}
                             avatarUrl={user.avatarUrl}
                             username={user.username}
-                            showBio={showBioUuid === user.uuid}
-                            handleClickAway={() => hideBioOf(user.uuid)}
-                            handleEscapeKey={() => hideBioOf(user.uuid)}
-                            on:click={() => toggleBioOf(user.uuid)}
+                            showProfilePreview={showProfilePreviewUserUuid ===
+                                user.uuid}
+                            handleClickAway={() =>
+                                hideProfilePreviewOf(user.uuid)}
+                            handleEscapeKey={() =>
+                                hideProfilePreviewOf(user.uuid)}
+                            on:click={() => toggleProfilePreviewOf(user.uuid)}
                         />
                     {/if}
                 {/each}
@@ -127,10 +130,13 @@
                             uuid={user.uuid}
                             avatarUrl={user.avatarUrl}
                             username={user.username}
-                            showBio={showBioUuid === user.uuid}
-                            handleClickAway={() => hideBioOf(user.uuid)}
-                            handleEscapeKey={() => hideBioOf(user.uuid)}
-                            on:click={() => toggleBioOf(user.uuid)}
+                            showProfilePreview={showProfilePreviewUserUuid ===
+                                user.uuid}
+                            handleClickAway={() =>
+                                hideProfilePreviewOf(user.uuid)}
+                            handleEscapeKey={() =>
+                                hideProfilePreviewOf(user.uuid)}
+                            on:click={() => toggleProfilePreviewOf(user.uuid)}
                         />
                     {/if}
                 {/each}
@@ -146,10 +152,13 @@
                             uuid={user.uuid}
                             avatarUrl={user.avatarUrl}
                             username={user.username}
-                            showBio={showBioUuid === user.uuid}
-                            handleClickAway={() => hideBioOf(user.uuid)}
-                            handleEscapeKey={() => hideBioOf(user.uuid)}
-                            on:click={() => toggleBioOf(user.uuid)}
+                            showProfilePreview={showProfilePreviewUserUuid ===
+                                user.uuid}
+                            handleClickAway={() =>
+                                hideProfilePreviewOf(user.uuid)}
+                            handleEscapeKey={() =>
+                                hideProfilePreviewOf(user.uuid)}
+                            on:click={() => toggleProfilePreviewOf(user.uuid)}
                         />
                     {/if}
                 {/each}

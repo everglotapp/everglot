@@ -1,5 +1,6 @@
 import { db } from "../../server/db"
 
+import { PROMPT_LOCALES } from "../../constants"
 import log from "../../logger"
 
 const chlog = log.child({
@@ -8,9 +9,7 @@ const chlog = log.child({
 
 import type { Request, Response } from "express"
 import type { PromptType } from "../../types/generated/graphql"
-
-const PROMPT_LOCALES = ["en", "de", "zh"] as const
-type PromptLocale = typeof PROMPT_LOCALES[number]
+import type { PromptLocale } from "../../constants"
 
 const RECENTLY_SHOWN_SECONDS = 30
 const promptsShownByUser: Record<number, { uuid: string; shownAt: Date }[]> = {}
@@ -72,7 +71,8 @@ export async function get(req: Request, res: Response, _next: () => void) {
         data: {
             prompt: {
                 uuid: prompt.uuid,
-                content: prompt[`content_${locale}`],
+                content:
+                    prompt[`content_${locale}` as `content_${PromptLocale}`],
                 type: prompt.type,
             },
         },
@@ -81,11 +81,9 @@ export async function get(req: Request, res: Response, _next: () => void) {
 
 type QueriedPrompt = {
     uuid: string
-    content_en: string | null
-    content_de: string | null
-    content_zh: string | null
     type: PromptType
-}
+} & Record<`content_${PromptLocale}`, string | null>
+
 async function getRandomPrompt(
     language: PromptLocale,
     excludeUuids?: string[]

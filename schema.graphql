@@ -873,6 +873,40 @@ type Query implements Node {
     filter: UserDeviceFilter
   ): UserDevicesConnection
 
+  """Reads and enables pagination through a set of `UserFollower`."""
+  userFollowers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `UserFollower`."""
+    orderBy: [UserFollowersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserFollowerCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFollowerFilter
+  ): UserFollowersConnection
+
   """Reads and enables pagination through a set of `UserLanguage`."""
   userLanguages(
     """Only read the first `n` values of the set."""
@@ -1621,6 +1655,7 @@ type Query implements Node {
   userDevice(id: Int!): UserDevice
   userDeviceByUuid(uuid: UUID!): UserDevice
   userDeviceByFcmToken(fcmToken: String!): UserDevice
+  userFollower(id: Int!): UserFollower
   userLanguage(id: Int!): UserLanguage
   userSession(sid: String!): UserSession
   user(id: Int!): User
@@ -1915,6 +1950,14 @@ type Query implements Node {
     """
     nodeId: ID!
   ): UserDevice
+
+  """Reads a single `UserFollower` using its globally unique `ID`."""
+  userFollowerByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `UserFollower`.
+    """
+    nodeId: ID!
+  ): UserFollower
 
   """Reads a single `UserLanguage` using its globally unique `ID`."""
   userLanguageByNodeId(
@@ -2520,6 +2563,74 @@ type User implements Node {
     filter: PostRecordingFilter
   ): PostRecordingsConnection!
 
+  """Reads and enables pagination through a set of `UserFollower`."""
+  followers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `UserFollower`."""
+    orderBy: [UserFollowersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserFollowerCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFollowerFilter
+  ): UserFollowersConnection!
+
+  """Reads and enables pagination through a set of `UserFollower`."""
+  followedUsers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `UserFollower`."""
+    orderBy: [UserFollowersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserFollowerCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFollowerFilter
+  ): UserFollowersConnection!
+
   """Reads and enables pagination through a set of `Language`."""
   languagesByUserLanguageUserIdAndLanguageId(
     """Only read the first `n` values of the set."""
@@ -3063,6 +3174,74 @@ type User implements Node {
     """
     filter: PostFilter
   ): UserPostsByPostRecordingUserIdAndPostIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByUserFollowerUserIdAndFollowerId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): UserUsersByUserFollowerUserIdAndFollowerIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByUserFollowerFollowerIdAndUserId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): UserUsersByUserFollowerFollowerIdAndUserIdManyToManyConnection!
 }
 
 """
@@ -13566,6 +13745,108 @@ input UserDeviceFilter {
   not: UserDeviceFilter
 }
 
+"""A connection to a list of `UserFollower` values."""
+type UserFollowersConnection {
+  """A list of `UserFollower` objects."""
+  nodes: [UserFollower]!
+
+  """
+  A list of edges which contains the `UserFollower` and cursor to aid in pagination.
+  """
+  edges: [UserFollowersEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `UserFollower` you could get from the connection."""
+  totalCount: Int!
+}
+
+type UserFollower implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  userId: Int!
+  followerId: Int!
+  createdAt: Datetime!
+
+  """Reads a single `User` that is related to this `UserFollower`."""
+  user: User
+
+  """Reads a single `User` that is related to this `UserFollower`."""
+  follower: User
+}
+
+"""A `UserFollower` edge in the connection."""
+type UserFollowersEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `UserFollower` at the end of the edge."""
+  node: UserFollower
+}
+
+"""Methods to use when ordering `UserFollower`."""
+enum UserFollowersOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  FOLLOWER_ID_ASC
+  FOLLOWER_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `UserFollower` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input UserFollowerCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `followerId` field."""
+  followerId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `UserFollower` object types. All fields are combined with a logical ‘and.’
+"""
+input UserFollowerFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `followerId` field."""
+  followerId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [UserFollowerFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [UserFollowerFilter!]
+
+  """Negates the expression."""
+  not: UserFollowerFilter
+}
+
 """
 A connection to a list of `Language` values, with data from `UserLanguage`.
 """
@@ -14544,6 +14825,130 @@ type UserPostsByPostRecordingUserIdAndPostIdManyToManyEdge {
   ): PostRecordingsConnection!
 }
 
+"""
+A connection to a list of `User` values, with data from `UserFollower`.
+"""
+type UserUsersByUserFollowerUserIdAndFollowerIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `UserFollower`, and the cursor to aid in pagination.
+  """
+  edges: [UserUsersByUserFollowerUserIdAndFollowerIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `UserFollower`."""
+type UserUsersByUserFollowerUserIdAndFollowerIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `UserFollower`."""
+  followedUsers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `UserFollower`."""
+    orderBy: [UserFollowersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserFollowerCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFollowerFilter
+  ): UserFollowersConnection!
+}
+
+"""
+A connection to a list of `User` values, with data from `UserFollower`.
+"""
+type UserUsersByUserFollowerFollowerIdAndUserIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `UserFollower`, and the cursor to aid in pagination.
+  """
+  edges: [UserUsersByUserFollowerFollowerIdAndUserIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `UserFollower`."""
+type UserUsersByUserFollowerFollowerIdAndUserIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `UserFollower`."""
+  followers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `UserFollower`."""
+    orderBy: [UserFollowersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserFollowerCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFollowerFilter
+  ): UserFollowersConnection!
+}
+
 """A `GroupUser` edge in the connection."""
 type GroupUsersEdge {
   """A cursor for use in pagination."""
@@ -14931,6 +15336,14 @@ type Mutation {
     """
     input: CreateUserDeviceInput!
   ): CreateUserDevicePayload
+
+  """Creates a single `UserFollower`."""
+  createUserFollower(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateUserFollowerInput!
+  ): CreateUserFollowerPayload
 
   """Creates a single `UserLanguage`."""
   createUserLanguage(
@@ -15763,6 +16176,24 @@ type Mutation {
     """
     input: UpdateUserDeviceByFcmTokenInput!
   ): UpdateUserDevicePayload
+
+  """
+  Updates a single `UserFollower` using its globally unique id and a patch.
+  """
+  updateUserFollowerByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserFollowerByNodeIdInput!
+  ): UpdateUserFollowerPayload
+
+  """Updates a single `UserFollower` using a unique key and a patch."""
+  updateUserFollower(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserFollowerInput!
+  ): UpdateUserFollowerPayload
 
   """
   Updates a single `UserLanguage` using its globally unique id and a patch.
@@ -16927,6 +17358,22 @@ type Mutation {
     """
     input: DeleteUserDeviceByFcmTokenInput!
   ): DeleteUserDevicePayload
+
+  """Deletes a single `UserFollower` using its globally unique id."""
+  deleteUserFollowerByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserFollowerByNodeIdInput!
+  ): DeleteUserFollowerPayload
+
+  """Deletes a single `UserFollower` using a unique key."""
+  deleteUserFollower(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserFollowerInput!
+  ): DeleteUserFollowerPayload
 
   """Deletes a single `UserLanguage` using its globally unique id."""
   deleteUserLanguageByNodeId(
@@ -18715,6 +19162,55 @@ input UserDeviceInput {
   uuid: UUID
   userId: Int
   fcmToken: String
+  createdAt: Datetime
+}
+
+"""The output of our create `UserFollower` mutation."""
+type CreateUserFollowerPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserFollower` that was created by this mutation."""
+  userFollower: UserFollower
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserFollower`."""
+  user: User
+
+  """Reads a single `User` that is related to this `UserFollower`."""
+  follower: User
+
+  """An edge for our `UserFollower`. May be used by Relay 1."""
+  userFollowerEdge(
+    """The method to use when ordering `UserFollower`."""
+    orderBy: [UserFollowersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserFollowersEdge
+}
+
+"""All input for the create `UserFollower` mutation."""
+input CreateUserFollowerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `UserFollower` to be created by this mutation."""
+  userFollower: UserFollowerInput!
+}
+
+"""An input for mutations affecting `UserFollower`"""
+input UserFollowerInput {
+  id: Int
+  userId: Int!
+  followerId: Int!
   createdAt: Datetime
 }
 
@@ -22001,6 +22497,79 @@ input UpdateUserDeviceByFcmTokenInput {
   """
   patch: UserDevicePatch!
   fcmToken: String!
+}
+
+"""The output of our update `UserFollower` mutation."""
+type UpdateUserFollowerPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserFollower` that was updated by this mutation."""
+  userFollower: UserFollower
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserFollower`."""
+  user: User
+
+  """Reads a single `User` that is related to this `UserFollower`."""
+  follower: User
+
+  """An edge for our `UserFollower`. May be used by Relay 1."""
+  userFollowerEdge(
+    """The method to use when ordering `UserFollower`."""
+    orderBy: [UserFollowersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserFollowersEdge
+}
+
+"""All input for the `updateUserFollowerByNodeId` mutation."""
+input UpdateUserFollowerByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `UserFollower` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `UserFollower` being updated.
+  """
+  patch: UserFollowerPatch!
+}
+
+"""
+Represents an update to a `UserFollower`. Fields that are set will be updated.
+"""
+input UserFollowerPatch {
+  id: Int
+  userId: Int
+  followerId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateUserFollower` mutation."""
+input UpdateUserFollowerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `UserFollower` being updated.
+  """
+  patch: UserFollowerPatch!
+  id: Int!
 }
 
 """The output of our update `UserLanguage` mutation."""
@@ -25461,6 +26030,60 @@ input DeleteUserDeviceByFcmTokenInput {
   """
   clientMutationId: String
   fcmToken: String!
+}
+
+"""The output of our delete `UserFollower` mutation."""
+type DeleteUserFollowerPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserFollower` that was deleted by this mutation."""
+  userFollower: UserFollower
+  deletedUserFollowerNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserFollower`."""
+  user: User
+
+  """Reads a single `User` that is related to this `UserFollower`."""
+  follower: User
+
+  """An edge for our `UserFollower`. May be used by Relay 1."""
+  userFollowerEdge(
+    """The method to use when ordering `UserFollower`."""
+    orderBy: [UserFollowersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserFollowersEdge
+}
+
+"""All input for the `deleteUserFollowerByNodeId` mutation."""
+input DeleteUserFollowerByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `UserFollower` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteUserFollower` mutation."""
+input DeleteUserFollowerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
 }
 
 """The output of our delete `UserLanguage` mutation."""

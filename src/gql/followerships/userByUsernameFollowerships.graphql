@@ -1,0 +1,26 @@
+query UserByUsernameFollowerships($username: String!) {
+    userByUsername(username: $username) {
+        followers {
+            nodes {
+                follower {
+                    uuid
+                    avatarUrl
+                    bio
+                    displayName
+                    username
+                }
+            }
+        }
+        followedUsers {
+            nodes {
+                user {
+                    avatarUrl
+                    bio
+                    displayName
+                    uuid
+                    username
+                }
+            }
+        }
+    }
+}

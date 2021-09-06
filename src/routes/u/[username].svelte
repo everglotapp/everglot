@@ -1,15 +1,11 @@
 <script lang="ts">
-    import { onMount } from "svelte"
-    import { scale } from "svelte/transition"
     import { stores } from "@sapper/app"
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
     import BrowserTitle from "../../comp/layout/BrowserTitle.svelte"
+    import ProfileHeader from "../../comp/users/ProfileHeader.svelte"
     import Post from "../../comp/feed/Post.svelte"
-    import EscapeKeyListener from "../../comp/util/EscapeKeyListener.svelte"
-    import ClickAwayListener from "../../comp/util/ClickAwayListener.svelte"
-    import Modal from "../../comp/util/Modal.svelte"
 
     import { query, operationStore } from "@urql/svelte"
     import {
@@ -17,14 +13,10 @@
         UserProfile,
     } from "../../types/generated/graphql"
     import type {
-        UserProfileQuery,
         UserByUsernamePostsQuery,
+        UserProfileQuery,
     } from "../../types/generated/graphql"
-    import Avatar from "../../comp/users/Avatar.svelte"
-    import {
-        ANDROID_WEBVIEW_USER_AGENT,
-        ENLARGEN_PROFILE_PICTURE_BUTTON_ID,
-    } from "../../constants"
+    import { currentUserUuid } from "../../stores/currentUser"
 
     const { page } = stores()
 
@@ -47,10 +39,16 @@
         $userProfileStore.data && !$userProfileStore.error
             ? $userProfileStore.data.userByUsername
             : null
+    $: userIsCurrentUser = Boolean(
+        $currentUserUuid !== null &&
+            userProfile &&
+            $currentUserUuid === userProfile.uuid
+    )
     $: userLanguages =
         userProfile?.userLanguages?.nodes
             .filter(Boolean)
             .map((node) => node!) || []
+    $: userUuid = userProfile?.uuid
 
     $: userPosts =
         $userPostsStore.data && !$userPostsStore.error
@@ -59,71 +57,15 @@
                   .map((node) => node!) || []
             : []
 
-    // let errorId: string | null = null
-
-    // let newAvatarUrl: string | null = null
-    // let avatarForm: HTMLFormElement
-    // async function handleUploadAvatar(e: Event) {
-    //     e.preventDefault()
-    //     errorId = null
-    //     newAvatarUrl = null
-    //     const formData = new FormData(avatarForm)
-    //     try {
-    //         const response = await fetch("/profile/picture", {
-    //             method: "POST",
-    //             body: formData,
-    //         })
-    //         const res = await response.json()
-    //         if (res && res.success) {
-    //             newAvatarUrl = res.meta.avatarUrl
-    //             $userProfileStore.context = {
-    //                 requestPolicy: "cache-and-network",
-    //                 pause: true,
-    //             }
-    //             $userProfileStore.context = {
-    //                 requestPolicy: "cache-and-network",
-    //                 pause: false,
-    //             }
-    //             $currentUserStore.context = {
-    //                 requestPolicy: "cache-and-network",
-    //                 pause: true,
-    //             }
-    //             $currentUserStore.context = {
-    //                 requestPolicy: "cache-and-network",
-    //                 pause: false,
-    //             }
-    //         } else {
-    //             errorId = "profile-avatar-upload-failed"
-    //         }
-    //     } catch (e) {
-    //         errorId = "profile-avatar-upload-failed"
-    //     }
-    // }
-
-    $: displayName = userProfile?.displayName
-    $: bio = userProfile?.bio
-    $: avatarUrl = userProfile?.avatarUrl
-
-    // Hide these in mobile webviews until file uploads work.
-    let hideUploadAvatarForm = false
-    onMount(() => {
-        if (navigator.userAgent === ANDROID_WEBVIEW_USER_AGENT) {
-            /**
-             * @see https://github.com/flutter/plugins/pull/3225
-             */
-            hideUploadAvatarForm = true
-        }
-    })
-
-    $: newAvatarUrl = avatarUrl
+    $: displayName = userProfile?.displayName || null
+    $: bio = userProfile?.bio || null
+    $: avatarUrl = userProfile?.avatarUrl || null
 
     enum ProfileTab {
         About,
         Squeeks,
     }
     let tab: ProfileTab = ProfileTab.About
-
-    const AVATAR_SIZE = 160
 
     const refreshPosts = () => {
         $userPostsStore.context = {
@@ -143,10 +85,9 @@
     function handlePostLikeSuccess() {
         refreshPosts()
     }
-
-    $: shownAvatarUrl =
-        $userProfileStore.fetching && newAvatarUrl ? newAvatarUrl : avatarUrl
-    let showLargeProfilePictureUrl: string | null = null
+    function handlePostUnlikeSuccess() {
+        refreshPosts()
+    }
 </script>
 
 <svelte:head />
@@ -155,46 +96,15 @@
     <BrowserTitle title={text} />
 </Localized>
 
-<div class="flex container max-w-2xl font-secondary pt-4 sm:pt-8 items-center">
-    {#key newAvatarUrl}
-        <div
-            id={ENLARGEN_PROFILE_PICTURE_BUTTON_ID}
-            in:scale|local={{ delay: 400, duration: 100 }}
-            class="mb-4 mr-8 cursor-pointer"
-            class:cursor-pointer={shownAvatarUrl != null}
-            style={`border-radius: 50%; width: ${AVATAR_SIZE}px; height: ${AVATAR_SIZE}px;`}
-            on:click={() => {
-                if (shownAvatarUrl != null) {
-                    showLargeProfilePictureUrl = shownAvatarUrl
-                }
-            }}
-        >
-            <Avatar
-                username={username || ""}
-                url={shownAvatarUrl || ""}
-                size={AVATAR_SIZE}
-            />
-        </div>
-    {/key}
-    <div class="flex flex-wrap items-center">
-        {#if displayName}
-            <span
-                class="text-2xl font-primary font-bold overflow-hidden overflow-ellipsis mr-2"
-                title={displayName || ""}>{displayName || ""}</span
-            ><span
-                class="text-xl font-primary text-gray-bitdark overflow-hidden overflow-ellipsis"
-                title={username || ""}>({username || ""})</span
-            >
-        {:else}
-            <span
-                class="text-2xl font-primary font-bold overflow-hidden overflow-ellipsis"
-                title={username || ""}>{username || ""}</span
-            >
-        {/if}
-    </div>
-</div>
+<ProfileHeader
+    {userUuid}
+    {avatarUrl}
+    {displayName}
+    {username}
+    isCurrentUser={userIsCurrentUser}
+/>
 
-<div class="tabs container max-w-2xl">
+<div class="tabs container max-w-2xl mb-4">
     <button
         aria-selected={tab === ProfileTab.About}
         on:click={() => (tab = ProfileTab.About)}>About</button
@@ -206,7 +116,7 @@
 </div>
 {#if tab === ProfileTab.About}
     <div class="flex flex-wrap-reverse container max-w-2xl">
-        <div class="pt-8 pb-4 px-4">
+        <div class="pt-4 sm:pt-8 pb-4 px-4">
             <h2>Languages</h2>
             <ul>
                 {#each userLanguages as language}
@@ -223,11 +133,11 @@
                 {/each}
             </ul>
         </div>
-        <div class="pt-8 pb-4 px-4">
+        <div class="pt-4 sm:pt-8 pb-4 px-4">
             <h2>About Me</h2>
             <p>
-                {#if bio && bio.length}{bio}{:else}<span
-                        class="text-gray italic">(empty)</span
+                {#if bio && bio.length}{bio}{:else}<span class="text-gray"
+                        >We're all eagerly waiting for {username} to introduce themselves.</span
                     >{/if}
             </p>
         </div>
@@ -250,35 +160,12 @@
                         linkToAuthorProfile={false}
                         on:replySuccess={handlePostReplySuccess}
                         on:likeSuccess={handlePostLikeSuccess}
+                        on:unlikeSuccess={handlePostUnlikeSuccess}
                     />
                 </div>
             {/if}
         {/each}
     </div>
-{/if}
-
-{#if showLargeProfilePictureUrl && typeof window !== "undefined"}
-    <EscapeKeyListener on:keydown={() => (showLargeProfilePictureUrl = null)} />
-    <ClickAwayListener
-        elementId={[
-            ENLARGEN_PROFILE_PICTURE_BUTTON_ID,
-            "large-profile-picture-view",
-        ]}
-        on:clickaway={() => (showLargeProfilePictureUrl = null)}
-    />
-    <Modal>
-        <div
-            class="grid place-items-center w-full h-full"
-            id="large-profile-picture-view"
-        >
-            <img
-                src={showLargeProfilePictureUrl}
-                alt="Enlargened profile"
-                role="presentation"
-                style="border-radius: 50%; max-width: 95vw; max-height: 90vh; box-shadow: 1px 1px 3px #393939, 1px 1px 9px #777; background: radial-gradient(circle at center, #fff 0, #fff 50%, #dcdcdc 100%);"
-            />
-        </div>
-    </Modal>
 {/if}
 
 <style>
@@ -304,5 +191,9 @@
 
     h2 {
         @apply mb-3;
+
+        @screen sm {
+            @apply mb-2;
+        }
     }
 </style>

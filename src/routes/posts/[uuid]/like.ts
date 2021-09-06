@@ -4,7 +4,7 @@ import { unprocessableEntity } from "../../../helpers"
 import log from "../../../logger"
 
 const chlog = log.child({
-    namespace: "posts-like",
+    namespace: "posts-uuid-like",
 })
 
 import type { Request, Response } from "express"

@@ -1878,6 +1878,43 @@ export type CreateUserDevicePayloadUserDeviceEdgeArgs = {
   orderBy?: Maybe<Array<UserDevicesOrderBy>>;
 };
 
+/** All input for the create `UserFollower` mutation. */
+export type CreateUserFollowerInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserFollower` to be created by this mutation. */
+  userFollower: UserFollowerInput;
+};
+
+/** The output of our create `UserFollower` mutation. */
+export type CreateUserFollowerPayload = {
+  __typename?: 'CreateUserFollowerPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserFollower` that was created by this mutation. */
+  userFollower?: Maybe<UserFollower>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserFollower`. */
+  user?: Maybe<User>;
+  /** Reads a single `User` that is related to this `UserFollower`. */
+  follower?: Maybe<User>;
+  /** An edge for our `UserFollower`. May be used by Relay 1. */
+  userFollowerEdge?: Maybe<UserFollowersEdge>;
+};
+
+
+/** The output of our create `UserFollower` mutation. */
+export type CreateUserFollowerPayloadUserFollowerEdgeArgs = {
+  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+};
+
 /** All input for the create `User` mutation. */
 export type CreateUserInput = {
   /**
@@ -4425,6 +4462,54 @@ export type DeleteUserDevicePayload = {
 /** The output of our delete `UserDevice` mutation. */
 export type DeleteUserDevicePayloadUserDeviceEdgeArgs = {
   orderBy?: Maybe<Array<UserDevicesOrderBy>>;
+};
+
+/** All input for the `deleteUserFollowerByNodeId` mutation. */
+export type DeleteUserFollowerByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `UserFollower` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteUserFollower` mutation. */
+export type DeleteUserFollowerInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `UserFollower` mutation. */
+export type DeleteUserFollowerPayload = {
+  __typename?: 'DeleteUserFollowerPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserFollower` that was deleted by this mutation. */
+  userFollower?: Maybe<UserFollower>;
+  deletedUserFollowerNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserFollower`. */
+  user?: Maybe<User>;
+  /** Reads a single `User` that is related to this `UserFollower`. */
+  follower?: Maybe<User>;
+  /** An edge for our `UserFollower`. May be used by Relay 1. */
+  userFollowerEdge?: Maybe<UserFollowersEdge>;
+};
+
+
+/** The output of our delete `UserFollower` mutation. */
+export type DeleteUserFollowerPayloadUserFollowerEdgeArgs = {
+  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
 };
 
 /** All input for the `deleteUser` mutation. */
@@ -9043,6 +9128,8 @@ export type Mutation = {
   createChineseRandomQuestion?: Maybe<CreateChineseRandomQuestionPayload>;
   /** Creates a single `UserDevice`. */
   createUserDevice?: Maybe<CreateUserDevicePayload>;
+  /** Creates a single `UserFollower`. */
+  createUserFollower?: Maybe<CreateUserFollowerPayload>;
   /** Creates a single `UserLanguage`. */
   createUserLanguage?: Maybe<CreateUserLanguagePayload>;
   /** Creates a single `UserSession`. */
@@ -9231,6 +9318,10 @@ export type Mutation = {
   updateUserDeviceByUuid?: Maybe<UpdateUserDevicePayload>;
   /** Updates a single `UserDevice` using a unique key and a patch. */
   updateUserDeviceByFcmToken?: Maybe<UpdateUserDevicePayload>;
+  /** Updates a single `UserFollower` using its globally unique id and a patch. */
+  updateUserFollowerByNodeId?: Maybe<UpdateUserFollowerPayload>;
+  /** Updates a single `UserFollower` using a unique key and a patch. */
+  updateUserFollower?: Maybe<UpdateUserFollowerPayload>;
   /** Updates a single `UserLanguage` using its globally unique id and a patch. */
   updateUserLanguageByNodeId?: Maybe<UpdateUserLanguagePayload>;
   /** Updates a single `UserLanguage` using a unique key and a patch. */
@@ -9501,6 +9592,10 @@ export type Mutation = {
   deleteUserDeviceByUuid?: Maybe<DeleteUserDevicePayload>;
   /** Deletes a single `UserDevice` using a unique key. */
   deleteUserDeviceByFcmToken?: Maybe<DeleteUserDevicePayload>;
+  /** Deletes a single `UserFollower` using its globally unique id. */
+  deleteUserFollowerByNodeId?: Maybe<DeleteUserFollowerPayload>;
+  /** Deletes a single `UserFollower` using a unique key. */
+  deleteUserFollower?: Maybe<DeleteUserFollowerPayload>;
   /** Deletes a single `UserLanguage` using its globally unique id. */
   deleteUserLanguageByNodeId?: Maybe<DeleteUserLanguagePayload>;
   /** Deletes a single `UserLanguage` using a unique key. */
@@ -9775,6 +9870,12 @@ export type MutationCreateChineseRandomQuestionArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateUserDeviceArgs = {
   input: CreateUserDeviceInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateUserFollowerArgs = {
+  input: CreateUserFollowerInput;
 };
 
 
@@ -10339,6 +10440,18 @@ export type MutationUpdateUserDeviceByUuidArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateUserDeviceByFcmTokenArgs = {
   input: UpdateUserDeviceByFcmTokenInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserFollowerByNodeIdArgs = {
+  input: UpdateUserFollowerByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserFollowerArgs = {
+  input: UpdateUserFollowerInput;
 };
 
 
@@ -11149,6 +11262,18 @@ export type MutationDeleteUserDeviceByUuidArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserDeviceByFcmTokenArgs = {
   input: DeleteUserDeviceByFcmTokenInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserFollowerByNodeIdArgs = {
+  input: DeleteUserFollowerByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserFollowerArgs = {
+  input: DeleteUserFollowerInput;
 };
 
 
@@ -13409,6 +13534,8 @@ export type Query = Node & {
   chineseRandomQuestions?: Maybe<ChineseRandomQuestionsConnection>;
   /** Reads and enables pagination through a set of `UserDevice`. */
   userDevices?: Maybe<UserDevicesConnection>;
+  /** Reads and enables pagination through a set of `UserFollower`. */
+  userFollowers?: Maybe<UserFollowersConnection>;
   /** Reads and enables pagination through a set of `UserLanguage`. */
   userLanguages?: Maybe<UserLanguagesConnection>;
   /** Reads and enables pagination through a set of `UserSession`. */
@@ -13498,6 +13625,7 @@ export type Query = Node & {
   userDevice?: Maybe<UserDevice>;
   userDeviceByUuid?: Maybe<UserDevice>;
   userDeviceByFcmToken?: Maybe<UserDevice>;
+  userFollower?: Maybe<UserFollower>;
   userLanguage?: Maybe<UserLanguage>;
   userSession?: Maybe<UserSession>;
   user?: Maybe<User>;
@@ -13597,6 +13725,8 @@ export type Query = Node & {
   chineseRandomQuestionByNodeId?: Maybe<ChineseRandomQuestion>;
   /** Reads a single `UserDevice` using its globally unique `ID`. */
   userDeviceByNodeId?: Maybe<UserDevice>;
+  /** Reads a single `UserFollower` using its globally unique `ID`. */
+  userFollowerByNodeId?: Maybe<UserFollower>;
   /** Reads a single `UserLanguage` using its globally unique `ID`. */
   userLanguageByNodeId?: Maybe<UserLanguage>;
   /** Reads a single `UserSession` using its globally unique `ID`. */
@@ -13968,6 +14098,19 @@ export type QueryUserDevicesArgs = {
   orderBy?: Maybe<Array<UserDevicesOrderBy>>;
   condition?: Maybe<UserDeviceCondition>;
   filter?: Maybe<UserDeviceFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserFollowersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  condition?: Maybe<UserFollowerCondition>;
+  filter?: Maybe<UserFollowerFilter>;
 };
 
 
@@ -14526,6 +14669,12 @@ export type QueryUserDeviceByFcmTokenArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryUserFollowerArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryUserLanguageArgs = {
   id: Scalars['Int'];
 };
@@ -14954,6 +15103,12 @@ export type QueryChineseRandomQuestionByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUserDeviceByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserFollowerByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
 
@@ -18578,6 +18733,57 @@ export type UpdateUserDevicePayloadUserDeviceEdgeArgs = {
   orderBy?: Maybe<Array<UserDevicesOrderBy>>;
 };
 
+/** All input for the `updateUserFollowerByNodeId` mutation. */
+export type UpdateUserFollowerByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `UserFollower` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `UserFollower` being updated. */
+  patch: UserFollowerPatch;
+};
+
+/** All input for the `updateUserFollower` mutation. */
+export type UpdateUserFollowerInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `UserFollower` being updated. */
+  patch: UserFollowerPatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `UserFollower` mutation. */
+export type UpdateUserFollowerPayload = {
+  __typename?: 'UpdateUserFollowerPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserFollower` that was updated by this mutation. */
+  userFollower?: Maybe<UserFollower>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserFollower`. */
+  user?: Maybe<User>;
+  /** Reads a single `User` that is related to this `UserFollower`. */
+  follower?: Maybe<User>;
+  /** An edge for our `UserFollower`. May be used by Relay 1. */
+  userFollowerEdge?: Maybe<UserFollowersEdge>;
+};
+
+
+/** The output of our update `UserFollower` mutation. */
+export type UpdateUserFollowerPayloadUserFollowerEdgeArgs = {
+  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+};
+
 /** All input for the `updateUser` mutation. */
 export type UpdateUserInput = {
   /**
@@ -18761,6 +18967,10 @@ export type User = Node & {
   postLikes: PostLikesConnection;
   /** Reads and enables pagination through a set of `PostRecording`. */
   postRecordings: PostRecordingsConnection;
+  /** Reads and enables pagination through a set of `UserFollower`. */
+  followers: UserFollowersConnection;
+  /** Reads and enables pagination through a set of `UserFollower`. */
+  followedUsers: UserFollowersConnection;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByUserLanguageUserIdAndLanguageId: UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
@@ -18793,6 +19003,10 @@ export type User = Node & {
   postsByPostLikeUserIdAndPostId: UserPostsByPostLikeUserIdAndPostIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Post`. */
   postsByPostRecordingUserIdAndPostId: UserPostsByPostRecordingUserIdAndPostIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByUserFollowerUserIdAndFollowerId: UserUsersByUserFollowerUserIdAndFollowerIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByUserFollowerFollowerIdAndUserId: UserUsersByUserFollowerFollowerIdAndUserIdManyToManyConnection;
 };
 
 
@@ -18913,6 +19127,30 @@ export type UserPostRecordingsArgs = {
   orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
   condition?: Maybe<PostRecordingCondition>;
   filter?: Maybe<PostRecordingFilter>;
+};
+
+
+export type UserFollowersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  condition?: Maybe<UserFollowerCondition>;
+  filter?: Maybe<UserFollowerFilter>;
+};
+
+
+export type UserFollowedUsersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  condition?: Maybe<UserFollowerCondition>;
+  filter?: Maybe<UserFollowerFilter>;
 };
 
 
@@ -19107,6 +19345,30 @@ export type UserPostsByPostRecordingUserIdAndPostIdArgs = {
   filter?: Maybe<PostFilter>;
 };
 
+
+export type UserUsersByUserFollowerUserIdAndFollowerIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
+
+export type UserUsersByUserFollowerFollowerIdAndUserIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+};
+
 /** A condition to be used against `User` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type UserCondition = {
   /** Checks for equality with the object’s `id` field. */
@@ -19295,6 +19557,106 @@ export type UserFilter = {
   /** Negates the expression. */
   not?: Maybe<UserFilter>;
 };
+
+export type UserFollower = Node & {
+  __typename?: 'UserFollower';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  userId: Scalars['Int'];
+  followerId: Scalars['Int'];
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `User` that is related to this `UserFollower`. */
+  user?: Maybe<User>;
+  /** Reads a single `User` that is related to this `UserFollower`. */
+  follower?: Maybe<User>;
+};
+
+/**
+ * A condition to be used against `UserFollower` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type UserFollowerCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `followerId` field. */
+  followerId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `UserFollower` object types. All fields are combined with a logical ‘and.’ */
+export type UserFollowerFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `followerId` field. */
+  followerId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<UserFollowerFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<UserFollowerFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<UserFollowerFilter>;
+};
+
+/** An input for mutations affecting `UserFollower` */
+export type UserFollowerInput = {
+  id?: Maybe<Scalars['Int']>;
+  userId: Scalars['Int'];
+  followerId: Scalars['Int'];
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `UserFollower`. Fields that are set will be updated. */
+export type UserFollowerPatch = {
+  id?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+  followerId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `UserFollower` values. */
+export type UserFollowersConnection = {
+  __typename?: 'UserFollowersConnection';
+  /** A list of `UserFollower` objects. */
+  nodes: Array<Maybe<UserFollower>>;
+  /** A list of edges which contains the `UserFollower` and cursor to aid in pagination. */
+  edges: Array<UserFollowersEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `UserFollower` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `UserFollower` edge in the connection. */
+export type UserFollowersEdge = {
+  __typename?: 'UserFollowersEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `UserFollower` at the end of the edge. */
+  node?: Maybe<UserFollower>;
+};
+
+/** Methods to use when ordering `UserFollower`. */
+export enum UserFollowersOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+  FollowerIdAsc = 'FOLLOWER_ID_ASC',
+  FollowerIdDesc = 'FOLLOWER_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
 
 /** A connection to a list of `Group` values, with data from `GroupUser`. */
 export type UserGroupsByGroupUserUserIdAndGroupIdManyToManyConnection = {
@@ -20176,6 +20538,80 @@ export type UserUsersByMessageSenderIdAndRecipientIdManyToManyEdgeMessagesByReci
   filter?: Maybe<MessageFilter>;
 };
 
+/** A connection to a list of `User` values, with data from `UserFollower`. */
+export type UserUsersByUserFollowerFollowerIdAndUserIdManyToManyConnection = {
+  __typename?: 'UserUsersByUserFollowerFollowerIdAndUserIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `UserFollower`, and the cursor to aid in pagination. */
+  edges: Array<UserUsersByUserFollowerFollowerIdAndUserIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `UserFollower`. */
+export type UserUsersByUserFollowerFollowerIdAndUserIdManyToManyEdge = {
+  __typename?: 'UserUsersByUserFollowerFollowerIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `UserFollower`. */
+  followers: UserFollowersConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `UserFollower`. */
+export type UserUsersByUserFollowerFollowerIdAndUserIdManyToManyEdgeFollowersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  condition?: Maybe<UserFollowerCondition>;
+  filter?: Maybe<UserFollowerFilter>;
+};
+
+/** A connection to a list of `User` values, with data from `UserFollower`. */
+export type UserUsersByUserFollowerUserIdAndFollowerIdManyToManyConnection = {
+  __typename?: 'UserUsersByUserFollowerUserIdAndFollowerIdManyToManyConnection';
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** A list of edges which contains the `User`, info from the `UserFollower`, and the cursor to aid in pagination. */
+  edges: Array<UserUsersByUserFollowerUserIdAndFollowerIdManyToManyEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `UserFollower`. */
+export type UserUsersByUserFollowerUserIdAndFollowerIdManyToManyEdge = {
+  __typename?: 'UserUsersByUserFollowerUserIdAndFollowerIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `UserFollower`. */
+  followedUsers: UserFollowersConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `UserFollower`. */
+export type UserUsersByUserFollowerUserIdAndFollowerIdManyToManyEdgeFollowedUsersArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  condition?: Maybe<UserFollowerCondition>;
+  filter?: Maybe<UserFollowerFilter>;
+};
+
 /** A connection to a list of `User` values. */
 export type UsersConnection = {
   __typename?: 'UsersConnection';
@@ -20358,12 +20794,35 @@ export type PromptIdByUuidQueryVariables = Exact<{
 
 export type PromptIdByUuidQuery = { __typename?: 'Query', promptByUuid?: Maybe<{ __typename?: 'Prompt', id: number, nodeId: string }> };
 
-export type UserByUsernamePostsQueryVariables = Exact<{
+export type CreateUserFollowershipMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  followerId: Scalars['Int'];
+}>;
+
+
+export type CreateUserFollowershipMutation = { __typename?: 'Mutation', createUserFollower?: Maybe<{ __typename?: 'CreateUserFollowerPayload', userFollower?: Maybe<{ __typename?: 'UserFollower', userId: number, followerId: number, nodeId: string, createdAt: any }> }> };
+
+export type DeleteUserFollowershipMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteUserFollowershipMutation = { __typename?: 'Mutation', deleteUserFollower?: Maybe<{ __typename?: 'DeleteUserFollowerPayload', userFollower?: Maybe<{ __typename?: 'UserFollower', followerId: number, userId: number, nodeId: string, createdAt: any }> }> };
+
+export type UserByUsernameFollowershipsQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type UserByUsernamePostsQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', authoredPosts: { __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> } }> };
+export type UserByUsernameFollowershipsQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', followers: { __typename?: 'UserFollowersConnection', nodes: Array<Maybe<{ __typename?: 'UserFollower', follower?: Maybe<{ __typename?: 'User', uuid: any, avatarUrl?: Maybe<string>, bio: string, displayName?: Maybe<string>, username?: Maybe<string> }> }>> }, followedUsers: { __typename?: 'UserFollowersConnection', nodes: Array<Maybe<{ __typename?: 'UserFollower', user?: Maybe<{ __typename?: 'User', avatarUrl?: Maybe<string>, bio: string, displayName?: Maybe<string>, uuid: any, username?: Maybe<string> }> }>> } }> };
+
+export type UserFollowershipIdByUserIdAndFollowerIdQueryVariables = Exact<{
+  followerId: Scalars['Int'];
+  userId: Scalars['Int'];
+}>;
+
+
+export type UserFollowershipIdByUserIdAndFollowerIdQuery = { __typename?: 'Query', userFollowers?: Maybe<{ __typename?: 'UserFollowersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'UserFollower', id: number, nodeId: string }>> }> };
 
 export type CreateGroupUserMutationVariables = Exact<{
   userType: UserType;
@@ -20529,6 +20988,20 @@ export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
 
 export type UnsubscribeUserEmailNotificationsMutation = { __typename?: 'Mutation', updateUserByEmailUnsubscribeToken?: Maybe<{ __typename?: 'UpdateUserPayload', clientMutationId?: Maybe<string>, user?: Maybe<{ __typename?: 'User', email: string, uuid: any, username?: Maybe<string> }> }> };
 
+export type UserByUsernamePostsQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type UserByUsernamePostsQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', authoredPosts: { __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> } }> };
+
+export type UserProfileQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type UserProfileQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', bio: string, gender?: Maybe<string>, username?: Maybe<string>, avatarUrl?: Maybe<string>, uuid: any, displayName?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'UserLanguage', native: boolean, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>> } }> };
+
 export type CreateUserMutationVariables = Exact<{
   email: Scalars['String'];
   gender: Scalars['String'];
@@ -20580,19 +21053,19 @@ export type UserIdByEmailQueryVariables = Exact<{
 
 export type UserIdByEmailQuery = { __typename?: 'Query', userByEmail?: Maybe<{ __typename?: 'User', id: number }> };
 
+export type UserIdByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type UserIdByUuidQuery = { __typename?: 'Query', userByUuid?: Maybe<{ __typename?: 'User', id: number }> };
+
 export type UserLanguageInfoQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
 export type UserLanguageInfoQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', id: number, uuid: any, userLanguages: { __typename?: 'UserLanguagesConnection', nodes: Array<Maybe<{ __typename?: 'UserLanguage', nodeId: string, languageId: number, languageSkillLevelId?: Maybe<number>, native: boolean }>> } }> };
-
-export type UserProfileQueryVariables = Exact<{
-  username: Scalars['String'];
-}>;
-
-
-export type UserProfileQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', bio: string, gender?: Maybe<string>, username?: Maybe<string>, avatarUrl?: Maybe<string>, uuid: any, displayName?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'UserLanguage', native: boolean, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>> } }> };
 
 export type UserUuidByIdQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -20907,86 +21380,68 @@ export const PromptIdByUuid = gql`
   }
 }
     `;
-export const UserByUsernamePosts = gql`
-    query UserByUsernamePosts($username: String!) {
+export const CreateUserFollowership = gql`
+    mutation CreateUserFollowership($userId: Int!, $followerId: Int!) {
+  createUserFollower(
+    input: {userFollower: {userId: $userId, followerId: $followerId}}
+  ) {
+    userFollower {
+      userId
+      followerId
+      nodeId
+      createdAt
+    }
+  }
+}
+    `;
+export const DeleteUserFollowership = gql`
+    mutation DeleteUserFollowership($id: Int!) {
+  deleteUserFollower(input: {id: $id}) {
+    userFollower {
+      followerId
+      userId
+      nodeId
+      createdAt
+    }
+  }
+}
+    `;
+export const UserByUsernameFollowerships = gql`
+    query UserByUsernameFollowerships($username: String!) {
   userByUsername(username: $username) {
-    authoredPosts(orderBy: CREATED_AT_DESC, condition: {parentPostId: null}) {
+    followers {
       nodes {
-        uuid
-        nodeId
-        createdAt
-        author {
+        follower {
           uuid
-          username
           avatarUrl
+          bio
           displayName
-        }
-        body
-        likes {
-          totalCount
-          nodes {
-            user {
-              uuid
-            }
-          }
-        }
-        parentPost {
-          uuid
-        }
-        replies(orderBy: CREATED_AT_ASC, filter: {not: {parentPostId: {isNull: true}}}) {
-          totalCount
-          nodes {
-            uuid
-            nodeId
-            createdAt
-            author {
-              uuid
-              username
-              avatarUrl
-            }
-            likes {
-              totalCount
-              nodes {
-                user {
-                  uuid
-                }
-              }
-            }
-            body
-            parentPost {
-              uuid
-            }
-            language {
-              alpha2
-            }
-            prompt {
-              content
-              uuid
-              type
-            }
-          }
-        }
-        recordings {
-          totalCount
-          nodes {
-            filename
-            extension
-            uuid
-            user {
-              uuid
-            }
-          }
-        }
-        language {
-          alpha2
-        }
-        prompt {
-          content
-          uuid
-          type
+          username
         }
       }
     }
+    followedUsers {
+      nodes {
+        user {
+          avatarUrl
+          bio
+          displayName
+          uuid
+          username
+        }
+      }
+    }
+  }
+}
+    `;
+export const UserFollowershipIdByUserIdAndFollowerId = gql`
+    query UserFollowershipIdByUserIdAndFollowerId($followerId: Int!, $userId: Int!) {
+  userFollowers(condition: {followerId: $followerId, userId: $userId}) {
+    nodes {
+      id
+      nodeId
+    }
+    totalCount
   }
 }
     `;
@@ -21314,6 +21769,113 @@ export const UnsubscribeUserEmailNotifications = gql`
   }
 }
     `;
+export const UserByUsernamePosts = gql`
+    query UserByUsernamePosts($username: String!) {
+  userByUsername(username: $username) {
+    authoredPosts(orderBy: CREATED_AT_DESC, condition: {parentPostId: null}) {
+      nodes {
+        uuid
+        nodeId
+        createdAt
+        author {
+          uuid
+          username
+          avatarUrl
+          displayName
+        }
+        body
+        likes {
+          totalCount
+          nodes {
+            user {
+              uuid
+            }
+          }
+        }
+        parentPost {
+          uuid
+        }
+        replies(orderBy: CREATED_AT_ASC, filter: {not: {parentPostId: {isNull: true}}}) {
+          totalCount
+          nodes {
+            uuid
+            nodeId
+            createdAt
+            author {
+              uuid
+              username
+              avatarUrl
+            }
+            likes {
+              totalCount
+              nodes {
+                user {
+                  uuid
+                }
+              }
+            }
+            body
+            parentPost {
+              uuid
+            }
+            language {
+              alpha2
+            }
+            prompt {
+              content
+              uuid
+              type
+            }
+          }
+        }
+        recordings {
+          totalCount
+          nodes {
+            filename
+            extension
+            uuid
+            user {
+              uuid
+            }
+          }
+        }
+        language {
+          alpha2
+        }
+        prompt {
+          content
+          uuid
+          type
+        }
+      }
+    }
+  }
+}
+    `;
+export const UserProfile = gql`
+    query UserProfile($username: String!) {
+  userByUsername(username: $username) {
+    bio
+    gender
+    username
+    avatarUrl
+    uuid
+    userLanguages {
+      totalCount
+      nodes {
+        language {
+          englishName
+        }
+        languageSkillLevel {
+          name
+        }
+        native
+      }
+    }
+    displayName
+  }
+}
+    `;
 export const CreateUser = gql`
     mutation CreateUser($email: String!, $gender: String!, $passwordHash: String!, $username: String!, $uuid: UUID!, $avatarUrl: String!, $locale: Int, $emailUnsubscribeToken: String!) {
   createUser(
@@ -21404,6 +21966,13 @@ export const UserIdByEmail = gql`
   }
 }
     `;
+export const UserIdByUuid = gql`
+    query UserIdByUuid($uuid: UUID!) {
+  userByUuid(uuid: $uuid) {
+    id
+  }
+}
+    `;
 export const UserLanguageInfo = gql`
     query UserLanguageInfo($id: Int!) {
   user(id: $id) {
@@ -21417,30 +21986,6 @@ export const UserLanguageInfo = gql`
         native
       }
     }
-  }
-}
-    `;
-export const UserProfile = gql`
-    query UserProfile($username: String!) {
-  userByUsername(username: $username) {
-    bio
-    gender
-    username
-    avatarUrl
-    uuid
-    userLanguages {
-      totalCount
-      nodes {
-        language {
-          englishName
-        }
-        languageSkillLevel {
-          name
-        }
-        native
-      }
-    }
-    displayName
   }
 }
     `;

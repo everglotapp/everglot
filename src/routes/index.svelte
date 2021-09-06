@@ -177,6 +177,9 @@
     function handlePostLikeSuccess() {
         refreshPosts()
     }
+    function handlePostUnlikeSuccess() {
+        refreshPosts()
+    }
 </script>
 
 <Localized id="index-browser-window-title" let:text>
@@ -308,6 +311,7 @@
                     language={post.language}
                     on:replySuccess={handlePostReplySuccess}
                     on:likeSuccess={handlePostLikeSuccess}
+                    on:unlikeSuccess={handlePostUnlikeSuccess}
                 />
             </div>
         {/if}
@@ -315,16 +319,6 @@
 </div>
 
 <style>
-    [placeholder]:empty::before {
-        content: attr(placeholder);
-
-        @apply text-gray;
-    }
-
-    [placeholder]:empty:focus::before {
-        content: "";
-    }
-
     .post:not(:last-child) {
         @apply border-b;
         @apply border-gray-200;

@@ -20,6 +20,16 @@ import {
     UserUuidById,
     UpdateUserAvatarUrl,
     RegisterUserActivity,
+    UserIdByUuidQuery,
+    UserIdByUuid,
+    CreateUserFollowershipMutationVariables,
+    CreateUserFollowershipMutation,
+    CreateUserFollowership,
+    DeleteUserFollowershipMutation,
+    DeleteUserFollowership,
+    DeleteUserFollowershipMutationVariables,
+    UserFollowershipIdByUserIdAndFollowerIdQuery,
+    UserFollowershipIdByUserIdAndFollowerId,
 } from "../types/generated/graphql"
 
 export async function registerUserActivity(
@@ -101,4 +111,74 @@ export async function getUserIdByEmail(
         return null
     }
     return res.data.userByEmail?.id || null
+}
+
+export async function getUserIdByUuid(uuid: string): Promise<number | null> {
+    const res = await performQuery<UserIdByUuidQuery>(
+        UserIdByUuid.loc!.source,
+        { uuid }
+    )
+    if (!res.data) {
+        chlog.child({ res, uuid }).error("Failed to find user ID by UUID")
+        return null
+    }
+    return res.data?.userByUuid?.id || null
+}
+
+export async function createUserFollowership(
+    vars: CreateUserFollowershipMutationVariables
+): Promise<
+    | NonNullable<
+          CreateUserFollowershipMutation["createUserFollower"]
+      >["userFollower"]
+    | null
+> {
+    const res = await performQuery<CreateUserFollowershipMutation>(
+        CreateUserFollowership.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        chlog.child({ res }).error("Failed to create post like")
+        return null
+    }
+    return res.data?.createUserFollower?.userFollower || null
+}
+
+export async function deleteUserFollowership(
+    vars: DeleteUserFollowershipMutationVariables
+): Promise<
+    | NonNullable<
+          DeleteUserFollowershipMutation["deleteUserFollower"]
+      >["userFollower"]
+    | null
+> {
+    const res = await performQuery<DeleteUserFollowershipMutation>(
+        DeleteUserFollowership.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        chlog.child({ res }).error("Failed to delete post like")
+        return null
+    }
+    return res.data?.deleteUserFollower?.userFollower || null
+}
+
+export async function getUserFollowershipIdByUserIdAndFollowerId(
+    userId: number,
+    followerId: number
+): Promise<number | null> {
+    const res =
+        await performQuery<UserFollowershipIdByUserIdAndFollowerIdQuery>(
+            UserFollowershipIdByUserIdAndFollowerId.loc!.source,
+            { followerId, userId }
+        )
+    if (!res.data) {
+        chlog
+            .child({ res, followerId, userId })
+            .error("Failed to find followership ID by user ID and follower ID ")
+        return null
+    }
+    return res.data?.userFollowers?.totalCount === 1
+        ? res.data.userFollowers.nodes[0]!.id
+        : null
 }

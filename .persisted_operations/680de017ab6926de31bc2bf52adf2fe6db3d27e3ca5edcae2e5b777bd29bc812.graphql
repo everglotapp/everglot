@@ -1,0 +1,11 @@
+query UserFollowershipIdByUserIdAndFollowerId($followerId: Int!, $userId: Int!) {
+  userFollowers(condition: {followerId: $followerId, userId: $userId}) {
+    nodes {
+      id
+      nodeId
+      __typename
+    }
+    totalCount
+    __typename
+  }
+}

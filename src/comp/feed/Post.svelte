@@ -94,21 +94,24 @@
                 "Content-Type": "application/json",
             },
         })
+        const onSuccess = () =>
+            dispatch(tmpLiked ? "likeSuccess" : "unlikeSuccess")
+        const onFailure = () =>
+            dispatch(tmpLiked ? "likeFailure" : "unlikeFailure")
         if (res.status === 200) {
             const response = await res.json()
             if (response.success) {
-                // success
-                dispatch("likeSuccess")
+                onSuccess()
                 setTimeout(() => {
                     tmpLiked = false
                     tmpUnliked = false
                 }, 250)
                 return
             } else {
-                dispatch("likeFailure")
+                onFailure()
             }
         } else {
-            dispatch("likeFailure")
+            onFailure()
         }
         tmpLiked = false
         tmpUnliked = false

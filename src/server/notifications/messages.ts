@@ -6,7 +6,7 @@ import {
     GroupMessageNotificationQuery,
 } from "../../types/generated/graphql"
 import type { ChatMessage } from "../../types/chat"
-import type { FcmParamsV1 } from "./params/v1"
+import { FcmMessageParamsDataTypeV1, FcmParamsV1 } from "./params/v1"
 import { enqueueFcmNotification } from "./fcm"
 import { getGroupIdByUuid } from "../groups"
 import { NotificationParamsVersion } from "./params"
@@ -118,9 +118,12 @@ class GroupMessageNotificationBuilder {
         return this.message.text
     }
 
-    get data(): { type: string; recipientGroupUuid: string } {
+    get data(): {
+        type: FcmMessageParamsDataTypeV1
+        recipientGroupUuid: string
+    } {
         return {
-            type: "GROUP_MESSAGE",
+            type: FcmMessageParamsDataTypeV1.GroupMessage,
             recipientGroupUuid: this.groupUuid,
             //recipientUuid: "",
         }

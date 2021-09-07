@@ -185,7 +185,9 @@
     // }
 </script>
 
-<div class="flex container max-w-2xl font-secondary pt-4 sm:pt-8 items-center">
+<div
+    class="flex container max-w-2xl font-secondary pt-4 sm:pt-8 items-center relative"
+>
     {#key newAvatarUrl}
         <div
             id={ENLARGEN_PROFILE_PICTURE_BUTTON_ID}
@@ -206,9 +208,18 @@
             />
         </div>
     {/key}
-    <div class="flex flex-wrap items-center">
-        <div class="flex flex-col">
-            <div>
+    <div class="flex flex-wrap items-center flex-grow">
+        <div class="flex flex-col flex-grow">
+            {#if $currentUserUuid && isCurrentUser}
+                <div class="self-end pr-2">
+                    <ButtonSmall
+                        variant="FILLED"
+                        color="PRIMARY"
+                        href="/profile">Change Avatar</ButtonSmall
+                    >
+                </div>
+            {/if}
+            <div class="flex flex-wrap">
                 {#if displayName}
                     <span
                         class="text-2xl font-primary font-bold overflow-hidden overflow-ellipsis mr-2"

@@ -1,0 +1,17 @@
+query PostLikeNotification($id: Int!) {
+  postLike(id: $id) {
+    post {
+      authorId
+      body
+      parentPostId
+      __typename
+    }
+    user {
+      id
+      username
+      displayName
+      __typename
+    }
+    __typename
+  }
+}

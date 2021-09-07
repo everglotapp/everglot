@@ -85,7 +85,7 @@ async function sendNextEmailNotification() {
     if (!params) {
         chlog
             .child({ notification })
-            .debug(
+            .error(
                 "Not sending email, params required for template or manual subject and body"
             )
         sendNextEmailNotificationAfterDelay()
@@ -95,7 +95,7 @@ async function sendNextEmailNotification() {
     if (!recipient) {
         chlog
             .child({ notification })
-            .debug("Not sending email, user required for To address")
+            .error("Not sending email, user required for To address")
         sendNextEmailNotificationAfterDelay()
         return
     }
@@ -237,9 +237,13 @@ export async function enqueueEmailNotification(
     if (!channelId) {
         return null
     }
+    const recipient = { userId, groupId: null }
+    chlog
+        .child({ recipient, expiresAt, withheldUntil, params })
+        .debug("Enqueuing email notification")
     return enqueueNotification(
         channelId,
-        { userId, groupId: null },
+        recipient,
         expiresAt,
         withheldUntil,
         params

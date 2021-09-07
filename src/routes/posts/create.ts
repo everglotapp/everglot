@@ -1,5 +1,5 @@
 import log from "../../logger"
-import { unprocessableEntity } from "../../helpers"
+import { unprocessableEntity, forbidden } from "../../helpers"
 
 const chlog = log.child({
     namespace: "posts-create",
@@ -10,8 +10,68 @@ import { createPost, getPostIdByUuid } from "../../server/posts"
 import { getLanguageIdByAlpha2 } from "../../server/locales"
 import { SUPPORTED_LOCALES } from "../../constants"
 import { getPromptIdByUuid } from "../../server/prompts"
+import { getPostReplyNotification } from "../../server/notifications/posts"
+import { enqueueFcmNotification } from "../../server/notifications/fcm"
+import { NotificationParamsVersion } from "../../server/notifications/params"
+import { userHasCompletedProfile } from "../../server/users"
+import { FcmMessageParamsDataTypeV1 } from "../../server/notifications/params/v1"
 
 const MAX_BODY_LENGTH = 2048
+
+const REPLY_NOTIFICATION_EXPIRY_SECONDS = 60 * 60
+
+export async function notifyOriginalAuthorAfterReply(
+    post: {
+        id: number
+        body: string
+        createdAt: any
+        uuid: any
+        nodeId: string
+    },
+    currentUserId: number
+) {
+    const notificationData = await getPostReplyNotification(post.id)
+    if (!notificationData) {
+        chlog.child({ post }).error("No notification data for post reply")
+        return
+    }
+    const { body, parentPost, author } = notificationData
+    if (!parentPost || !parentPost.authorId || !author) {
+        chlog.child({ post }).error("Missing notification data for post reply")
+        return
+    }
+    if (parentPost.authorId === currentUserId) {
+        // Don't notify if the author replies to their own post.
+        return
+    }
+    const expiresAt = new Date(
+        Date.now() + REPLY_NOTIFICATION_EXPIRY_SECONDS * 1000
+    )
+    const withheldUntil = null
+    const username =
+        author.displayName && author.displayName.length
+            ? author.displayName
+            : author.username
+    enqueueFcmNotification(
+        { userId: parentPost.authorId, groupId: null },
+        expiresAt,
+        withheldUntil,
+        {
+            message: {
+                notification: {
+                    title: `${
+                        username && username.length ? username : "Someone"
+                    } has replied to your post`,
+                    body: `${body.substr(0, 64)}`,
+                },
+                data: {
+                    type: FcmMessageParamsDataTypeV1.PostReply,
+                },
+            },
+            version: NotificationParamsVersion.V1,
+        }
+    )
+}
 
 function sanitizeBody(body: string) {
     return body.trim().substr(0, MAX_BODY_LENGTH)
@@ -21,6 +81,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
     const { user_id: userId } = req.session
     if (!userId) {
         res.redirect("/")
+        return
+    }
+    if (!(await userHasCompletedProfile(userId))) {
+        forbidden(res, "Please complete your profile")
         return
     }
     const unsanitizedBody = req.body["body"]
@@ -97,6 +161,9 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 },
             },
         })
+        if (parentPostId) {
+            notifyOriginalAuthorAfterReply(post, userId)
+        }
     } else {
         res.json({
             success: false,

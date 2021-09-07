@@ -25,7 +25,7 @@ import {
     markNotificationAsJustSent,
     NotificationRecipient,
 } from "./utils"
-import type { NotificationParamsV1 } from "./params"
+import type { NotificationParams } from "./params"
 import type { FcmParamsV1 } from "./params/v1"
 import type { messaging } from "firebase-admin"
 
@@ -82,7 +82,7 @@ async function sendNextFcmNotification() {
     if (!params) {
         chlog
             .child({ notification })
-            .debug("Not sending FCM notification, no params have been passed")
+            .error("Not sending FCM notification, no params have been passed")
         sendNextFcmNotificationAfterDelay()
         return
     }
@@ -164,7 +164,7 @@ async function getNextOutstandingFcmNotification() {
                 if (now > expiresAt) {
                     chlog
                         .child({ notification })
-                        .debug("Email notification has expired")
+                        .trace("FCM notification has expired")
                     return false
                 }
             }
@@ -173,7 +173,7 @@ async function getNextOutstandingFcmNotification() {
                 if (now < withheldUntil) {
                     chlog
                         .child({ notification })
-                        .debug("FCM notification is still withheld")
+                        .trace("FCM notification is still withheld")
                     return false
                 }
             }
@@ -186,12 +186,15 @@ export async function enqueueFcmNotification(
     recipient: NotificationRecipient,
     expiresAt: Date | null,
     withheldUntil: Date | null,
-    params: NotificationParamsV1 | null
+    params: NotificationParams | null
 ) {
     const channelId = await getFcmNotificationChannelId()
     if (!channelId) {
         return null
     }
+    chlog
+        .child({ recipient, expiresAt, withheldUntil, params })
+        .debug("Enqueuing FCM notification")
     return enqueueNotification(
         channelId,
         recipient,

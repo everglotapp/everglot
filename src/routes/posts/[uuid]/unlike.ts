@@ -51,6 +51,7 @@ export async function post(req: Request, res: Response, next: () => void) {
         res.json({
             success: true,
         })
+        // TODO: Cancel pending notifications for this user.
     } else {
         chlog.child({ postLike, postLikeId }).debug("Failed to unlike post")
         unprocessableEntity(res, "You have not liked this post")

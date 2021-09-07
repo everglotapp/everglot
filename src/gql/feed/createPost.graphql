@@ -20,6 +20,7 @@ mutation CreatePost(
         post {
             body
             createdAt
+            id
             uuid
             nodeId
         }

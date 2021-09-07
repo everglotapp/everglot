@@ -368,6 +368,15 @@ declare module '*/postLikeNotification.graphql' {
 }
     
 
+declare module '*/postReplyNotification.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const PostReplyNotification: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/unsubscribeUserEmailNotifications.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

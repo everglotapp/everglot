@@ -16,8 +16,6 @@ import {
     PostLikeIdByPostIdAndUserId,
     CreatePostRecordingMutationVariables,
     CreatePostRecordingMutation,
-    PostLikeNotificationQuery,
-    PostLikeNotification,
 } from "../types/generated/graphql"
 import {
     CreatePost,
@@ -121,18 +119,4 @@ export async function createPostRecording(
         return null
     }
     return res.data?.createPostRecording?.postRecording || null
-}
-
-export async function getPostLikeNotification(postLikeId: number) {
-    const res = await performQuery<PostLikeNotificationQuery>(
-        PostLikeNotification.loc!.source,
-        { id: postLikeId }
-    )
-    if (!res.data) {
-        chlog
-            .child({ res, postLikeId })
-            .error("Failed to get post like notification data by post like ID")
-        return null
-    }
-    return res.data?.postLike || null
 }

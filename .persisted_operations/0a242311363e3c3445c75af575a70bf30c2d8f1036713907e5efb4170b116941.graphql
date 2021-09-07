@@ -4,6 +4,7 @@ mutation CreatePost($authorId: Int!, $body: String!, $parentPostId: Int, $langua
     post {
       body
       createdAt
+      id
       uuid
       nodeId
       __typename

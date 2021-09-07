@@ -20745,7 +20745,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost?: Maybe<{ __typename?: 'CreatePostPayload', clientMutationId?: Maybe<string>, post?: Maybe<{ __typename?: 'Post', body: string, createdAt: any, uuid: any, nodeId: string }> }> };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost?: Maybe<{ __typename?: 'CreatePostPayload', clientMutationId?: Maybe<string>, post?: Maybe<{ __typename?: 'Post', body: string, createdAt: any, id: number, uuid: any, nodeId: string }> }> };
 
 export type CreatePostLikeMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -20986,6 +20986,13 @@ export type PostLikeNotificationQueryVariables = Exact<{
 
 
 export type PostLikeNotificationQuery = { __typename?: 'Query', postLike?: Maybe<{ __typename?: 'PostLike', post?: Maybe<{ __typename?: 'Post', authorId?: Maybe<number>, body: string, parentPostId?: Maybe<number> }>, user?: Maybe<{ __typename?: 'User', id: number, username?: Maybe<string>, displayName?: Maybe<string> }> }> };
+
+export type PostReplyNotificationQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type PostReplyNotificationQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', authorId?: Maybe<number>, body: string, createdAt: any, parentPost?: Maybe<{ __typename?: 'Post', authorId?: Maybe<number> }>, author?: Maybe<{ __typename?: 'User', displayName?: Maybe<string>, username?: Maybe<string> }> }> };
 
 export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
   token: Scalars['String'];
@@ -21315,6 +21322,7 @@ export const CreatePost = gql`
     post {
       body
       createdAt
+      id
       uuid
       nodeId
     }
@@ -21775,6 +21783,22 @@ export const PostLikeNotification = gql`
       id
       username
       displayName
+    }
+  }
+}
+    `;
+export const PostReplyNotification = gql`
+    query PostReplyNotification($id: Int!) {
+  post(id: $id) {
+    authorId
+    parentPost {
+      authorId
+    }
+    body
+    createdAt
+    author {
+      displayName
+      username
     }
   }
 }

@@ -8,11 +8,8 @@ const chlog = log.child({
 })
 
 import type { Request, Response } from "express"
-import {
-    createPostLike,
-    getPostIdByUuid,
-    getPostLikeNotification,
-} from "../../../server/posts"
+import { createPostLike, getPostIdByUuid } from "../../../server/posts"
+import { getPostLikeNotification } from "../../../server/notifications/posts"
 import { enqueueFcmNotification } from "../../../server/notifications/fcm"
 import { NotificationParamsVersion } from "../../../server/notifications/params"
 

@@ -13,6 +13,7 @@ import { getPostLikeNotification } from "../../../server/notifications/posts"
 import { enqueueFcmNotification } from "../../../server/notifications/fcm"
 import { NotificationParamsVersion } from "../../../server/notifications/params"
 import { userHasCompletedProfile } from "../../../server/users"
+import { FcmMessageParamsDataTypeV1 } from "../../../server/notifications/params/v1"
 
 const NOTIFICATION_EXPIRY_SECONDS = 60 * 60
 /**
@@ -68,6 +69,9 @@ async function notifyAuthor(
                         username && username.length ? username : "Someone"
                     } likes your ${post.parentPostId ? "comment" : "post"}`,
                     body: `${post.body.substr(0, 64)}`,
+                },
+                data: {
+                    type: FcmMessageParamsDataTypeV1.PostLike,
                 },
             },
             version: NotificationParamsVersion.V1,

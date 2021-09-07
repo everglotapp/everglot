@@ -14,6 +14,7 @@ import { getPostReplyNotification } from "../../server/notifications/posts"
 import { enqueueFcmNotification } from "../../server/notifications/fcm"
 import { NotificationParamsVersion } from "../../server/notifications/params"
 import { userHasCompletedProfile } from "../../server/users"
+import { FcmMessageParamsDataTypeV1 } from "../../server/notifications/params/v1"
 
 const MAX_BODY_LENGTH = 2048
 
@@ -62,6 +63,9 @@ export async function notifyOriginalAuthorAfterReply(
                         username && username.length ? username : "Someone"
                     } has replied to your post`,
                     body: `${body.substr(0, 64)}`,
+                },
+                data: {
+                    type: FcmMessageParamsDataTypeV1.PostReply,
                 },
             },
             version: NotificationParamsVersion.V1,

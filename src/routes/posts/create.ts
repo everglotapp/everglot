@@ -47,6 +47,10 @@ export async function notifyOriginalAuthorAfterReply(
         Date.now() + REPLY_NOTIFICATION_EXPIRY_SECONDS * 1000
     )
     const withheldUntil = null
+    const username =
+        author.displayName && author.displayName.length
+            ? author.displayName
+            : author.username
     enqueueFcmNotification(
         { userId: parentPost.authorId, groupId: null },
         expiresAt,
@@ -55,7 +59,7 @@ export async function notifyOriginalAuthorAfterReply(
             message: {
                 notification: {
                     title: `${
-                        author.displayName || author.username
+                        username && username.length ? username : "Someone"
                     } has replied to your post`,
                     body: `${body.substr(0, 64)}`,
                 },

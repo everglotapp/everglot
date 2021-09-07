@@ -53,6 +53,10 @@ async function notifyAuthor(
     const withheldUntil = new Date(
         Date.now() + NOTIFICATION_WITHHELD_SECONDS * 1000
     )
+    const username =
+        user.displayName && user.displayName.length
+            ? user.displayName
+            : user.username
     enqueueFcmNotification(
         { userId: post.authorId, groupId: null },
         expiresAt,
@@ -60,9 +64,9 @@ async function notifyAuthor(
         {
             message: {
                 notification: {
-                    title: `${user.displayName || user.username} likes your ${
-                        post.parentPostId ? "comment" : "post"
-                    }`,
+                    title: `${
+                        username && username.length ? username : "Someone"
+                    } likes your ${post.parentPostId ? "comment" : "post"}`,
                     body: `${post.body.substr(0, 64)}`,
                 },
             },

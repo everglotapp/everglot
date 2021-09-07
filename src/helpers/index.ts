@@ -21,6 +21,16 @@ export function serverError(
     })
 }
 
+export function forbidden(
+    res: Response,
+    message = "You do not have access to this resource or action."
+) {
+    res.status(403).json({
+        success: false,
+        message,
+    })
+}
+
 const CONTENT_TYPE_JSON = "application/json"
 /**
  * Ends the response if request wasn't of type `application/json`.

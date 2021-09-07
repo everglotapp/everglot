@@ -1,5 +1,5 @@
 import log from "../../logger"
-import { unprocessableEntity } from "../../helpers"
+import { unprocessableEntity, forbidden } from "../../helpers"
 
 const chlog = log.child({
     namespace: "posts-create",
@@ -13,6 +13,7 @@ import { getPromptIdByUuid } from "../../server/prompts"
 import { getPostReplyNotification } from "../../server/notifications/posts"
 import { enqueueFcmNotification } from "../../server/notifications/fcm"
 import { NotificationParamsVersion } from "../../server/notifications/params"
+import { userHasCompletedProfile } from "../../server/users"
 
 const MAX_BODY_LENGTH = 2048
 
@@ -72,6 +73,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
     const { user_id: userId } = req.session
     if (!userId) {
         res.redirect("/")
+        return
+    }
+    if (!(await userHasCompletedProfile(userId))) {
+        forbidden(res, "Please complete your profile")
         return
     }
     const unsanitizedBody = req.body["body"]

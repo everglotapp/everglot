@@ -1,5 +1,5 @@
 import { validate as uuidValidate } from "uuid"
-import { unprocessableEntity } from "../../../helpers"
+import { forbidden, unprocessableEntity } from "../../../helpers"
 
 import log from "../../../logger"
 
@@ -12,6 +12,7 @@ import { createPostLike, getPostIdByUuid } from "../../../server/posts"
 import { getPostLikeNotification } from "../../../server/notifications/posts"
 import { enqueueFcmNotification } from "../../../server/notifications/fcm"
 import { NotificationParamsVersion } from "../../../server/notifications/params"
+import { userHasCompletedProfile } from "../../../server/users"
 
 const NOTIFICATION_EXPIRY_SECONDS = 60 * 60
 /**
@@ -74,6 +75,10 @@ export async function post(req: Request, res: Response, next: () => void) {
     const { user_id: userId } = req.session
     if (!userId) {
         res.redirect("/")
+        return
+    }
+    if (!(await userHasCompletedProfile(userId))) {
+        forbidden(res, "Please complete your profile")
         return
     }
     const uuid = req.params["uuid"]

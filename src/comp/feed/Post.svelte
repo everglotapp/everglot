@@ -280,16 +280,20 @@
                     in:scale|local={{ duration: 200 }}
                 >
                     <div class="pr-3 sm:pr-4">
-                        <Avatar
-                            username={reply.author.username}
-                            url={reply.author.avatarUrl}
-                            size={36}
-                        />
+                        <a href={`/u/${reply.author.username}`}>
+                            <Avatar
+                                username={reply.author.username}
+                                url={reply.author.avatarUrl}
+                                size={36}
+                            /></a
+                        >
                     </div>
                     <div class="w-full">
                         <div class="mb-1 flex items-center justify-between">
-                            <span class="text-gray-bitdark font-bold"
-                                >{reply.author.username}</span
+                            <a href={`/u/${reply.author.username}`}
+                                ><span class="text-gray-bitdark font-bold"
+                                    >{reply.author.username}</span
+                                ></a
                             >
                             <time
                                 use:svelteTime={{

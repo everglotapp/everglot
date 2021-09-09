@@ -219,7 +219,7 @@
                     >
                 </div>
             {/if}
-            <div class="flex flex-wrap">
+            <div class="flex flex-wrap items-center">
                 {#if displayName}
                     <span
                         class="text-2xl font-primary font-bold overflow-hidden overflow-ellipsis mr-2"
@@ -238,8 +238,8 @@
             <div class="mt-1">
                 <span
                     ><span class="mr-1">Followers:</span><span
-                        class="inline-block text-center"
-                        style="min-width: 24px; width: 24px; margin-left: 2px; margin-right: 2px;"
+                        class="inline-block"
+                        style="min-width: 24px; width: 32px; margin-left: 2px; margin-right: 2px;"
                         >{#key $userFollowershipsStore.fetching}<span
                                 in:fade={{ duration: 100, delay: 150 }}
                                 out:fade|local={{ duration: 100 }}

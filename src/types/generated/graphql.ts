@@ -21053,6 +21053,14 @@ export type UpdateUserAvatarUrlMutationVariables = Exact<{
 
 export type UpdateUserAvatarUrlMutation = { __typename?: 'Mutation', updateUser?: Maybe<{ __typename?: 'UpdateUserPayload', user?: Maybe<{ __typename?: 'User', avatarUrl?: Maybe<string> }> }> };
 
+export type UpdateUserBioMutationVariables = Exact<{
+  bio: Scalars['String'];
+  id: Scalars['Int'];
+}>;
+
+
+export type UpdateUserBioMutation = { __typename?: 'Mutation', updateUser?: Maybe<{ __typename?: 'UpdateUserPayload', user?: Maybe<{ __typename?: 'User', bio: string }> }> };
+
 export type UserHasCompletedProfileQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -21993,6 +22001,15 @@ export const UpdateUserAvatarUrl = gql`
   updateUser(input: {patch: {avatarUrl: $avatarUrl}, id: $id}) {
     user {
       avatarUrl
+    }
+  }
+}
+    `;
+export const UpdateUserBio = gql`
+    mutation UpdateUserBio($bio: String!, $id: Int!) {
+  updateUser(input: {patch: {bio: $bio}, id: $id}) {
+    user {
+      bio
     }
   }
 }

@@ -3,12 +3,14 @@
     export let url: string = ""
     export let size: number = 50
     export let showShadow: boolean = true
+    export let id: string | undefined = undefined
 
     $: initial = username.charAt(0)
     $: showImage = url?.startsWith("https://") || url?.startsWith("/")
 </script>
 
 <div
+    {id}
     class={`wrapper ${showImage ? "image" : "initial"}${
         showShadow ? " shadow-md" : ""
     }`}

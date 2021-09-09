@@ -440,6 +440,15 @@ declare module '*/updateUserAvatarUrl.graphql' {
 }
     
 
+declare module '*/updateUserBio.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UpdateUserBio: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/userHasCompletedProfile.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

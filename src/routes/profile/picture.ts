@@ -6,6 +6,10 @@ import type { Request, Response } from "express"
 import { updateUserAvatarUrl } from "../../server/users"
 import { USER_AVATARS_BASE_PATH } from "../../constants"
 
+const chlog = log.child({
+    namespace: "profile-picture",
+})
+
 export async function post(req: Request, res: Response, _next: () => void) {
     jsonResponse(res)
     const { user_id: userId } = req.session
@@ -21,19 +25,19 @@ export async function post(req: Request, res: Response, _next: () => void) {
         })
         return
     }
-    log.child({ file: req.file }).debug("Parsed avatar file")
+    chlog.child({ file: req.file }).debug("Parsed avatar file")
 
     const avatarUrl = `${USER_AVATARS_BASE_PATH}/${req.file.filename}`
     if (!updateUserAvatarUrl({ avatarUrl, id: userId })) {
-        log.child({ avatarUrl, userId }).error(
-            "Failed to save stored avatar to database"
-        )
+        chlog
+            .child({ avatarUrl, userId })
+            .error("Failed to save stored avatar to database")
         // TODO: Remove file
         serverError(res)
         return
     }
 
-    log.child({ avatarUrl, userId }).debug("Successfully saved new avatar")
+    chlog.child({ avatarUrl, userId }).debug("Successfully saved new avatar")
     // TODO: Remove old avatar
     res.status(200).json({
         success: true,

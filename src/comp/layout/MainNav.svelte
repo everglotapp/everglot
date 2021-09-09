@@ -317,10 +317,11 @@
                             </div>
                         {/if}
                     {/if}
-                    {#if $userHasCompletedProfile && !$allGroupsStore.fetching && !$allGroupsStore.error && $privateGroups.length}
+                    {#if $userHasCompletedProfile && !$allGroupsStore.fetching && !$allGroupsStore.error}
                         <button
-                            aria-current={segment === "chat" &&
-                            !$currentGroupIsGlobal
+                            aria-current={(segment === "chat" &&
+                                !$currentGroupIsGlobal) ||
+                            (!$privateGroups.length && segment === "signup")
                                 ? "page"
                                 : undefined}
                             id="groups-dropdown-clickaway"

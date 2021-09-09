@@ -30,6 +30,9 @@ import {
     DeleteUserFollowershipMutationVariables,
     UserFollowershipIdByUserIdAndFollowerIdQuery,
     UserFollowershipIdByUserIdAndFollowerId,
+    UpdateUserBioMutationVariables,
+    UpdateUserBioMutation,
+    UpdateUserBio,
 } from "../types/generated/graphql"
 
 export async function registerUserActivity(
@@ -55,6 +58,20 @@ export async function updateUserAvatarUrl(
     )
     if (!res.data || !res.data.updateUser || res.errors) {
         chlog.child({ res }).error("Failed to change user's avatarUrl")
+        return false
+    }
+    return true
+}
+
+export async function updateUserBio(
+    vars: UpdateUserBioMutationVariables
+): Promise<boolean> {
+    const res = await performQuery<UpdateUserBioMutation>(
+        UpdateUserBio.loc!.source,
+        vars
+    )
+    if (!res.data || !res.data.updateUser || res.errors) {
+        chlog.child({ res }).error("Failed to change user's bio")
         return false
     }
     return true

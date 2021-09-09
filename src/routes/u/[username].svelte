@@ -1,5 +1,6 @@
 <script lang="ts">
     import { stores } from "@sapper/app"
+    import { scale } from "svelte/transition"
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
@@ -22,6 +23,7 @@
     import { currentUser, currentUserUuid } from "../../stores/currentUser"
     import ErrorMessage from "../../comp/util/ErrorMessage.svelte"
     import ButtonSmall from "../../comp/util/ButtonSmall.svelte"
+    import ButtonLarge from "../../comp/util/ButtonLarge.svelte"
     import Spinner from "../../comp/util/Spinner.svelte"
 
     const { page } = stores()
@@ -56,8 +58,7 @@
                 username,
             }
             if ($currentUser && username === $currentUser.username) {
-                $currentUserProfileStore.context = { paused: true }
-                $currentUserProfileStore.context = { paused: false }
+                refreshCurrentUserProfile()
             }
         }
     }
@@ -103,6 +104,28 @@
     }
     let tab: ProfileTab = ProfileTab.About
 
+    const refreshProfile = () => {
+        $userProfileStore.context = {
+            ...$userProfileStore.context,
+            paused: true,
+        }
+        $userProfileStore.context = {
+            ...$userProfileStore.context,
+            paused: false,
+        }
+    }
+
+    const refreshCurrentUserProfile = () => {
+        $currentUserProfileStore.context = {
+            ...$currentUserProfileStore.context,
+            paused: true,
+        }
+        $currentUserProfileStore.context = {
+            ...$currentUserProfileStore.context,
+            paused: false,
+        }
+    }
+
     const refreshPosts = () => {
         $userPostsStore.context = {
             ...$userPostsStore.context,
@@ -123,6 +146,61 @@
     }
     function handlePostUnlikeSuccess() {
         refreshPosts()
+    }
+
+    let editBio: boolean = false
+    let newBio: string | null = null
+    let preventRefreshBio = false
+    $: if (
+        !$currentUserProfileStore.fetching &&
+        $currentUserProfileStore.data
+    ) {
+        if (!preventRefreshBio) {
+            if (!editBio) {
+                newBio = bio
+            }
+        }
+        preventRefreshBio = true
+    }
+
+    let errorId: string | undefined
+    async function handleUpdateBio() {
+        if (!newBio || !newBio.length) {
+            return
+        }
+        console.log({
+            method: "POST",
+            body: JSON.stringify({ bio: newBio }),
+        })
+        const onSuccess = () => {
+            refreshCurrentUserProfile()
+            refreshProfile()
+        }
+        const onFailure = () => {
+            // refreshCurrentUserProfile()
+            // refreshProfile()
+        }
+        try {
+            const response = await fetch("/profile/bio", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ bio: newBio }),
+            })
+            const res = await response.json()
+            if (res && res.success) {
+                onSuccess()
+            } else {
+                errorId = "profile-bio-update-failed"
+                onFailure()
+            }
+        } catch (e) {
+            errorId = "profile-bio-update-failed"
+            onFailure()
+        }
+        editBio = false
     }
 </script>
 
@@ -210,17 +288,60 @@
                         </ul>
                     </div>
                 </div>
-                <div class="pt-4 sm:pt-8 pb-4 px-4">
+                <div class="pt-4 sm:pt-8 pb-4 px-4 flex-1">
                     <div class="pb-8">
-                        <h2>About Me</h2>
-                        <p class="m-0">
-                            {#if bio && bio.length}{bio}{:else}<span
-                                    class="text-gray"
-                                    >We're all eagerly waiting for {displayName ||
-                                        username}
-                                    to introduce themselves.</span
-                                >{/if}
-                        </p>
+                        <h2 class="flex items-center">
+                            About Me<ButtonSmall
+                                tag="button"
+                                variant="TEXT"
+                                color="PRIMARY"
+                                className="flex items-center text-sm ml-1"
+                                on:click={() => (editBio = true)}
+                                >change</ButtonSmall
+                            >
+                        </h2>
+                        {#if editBio}
+                            <div
+                                in:scale={{ duration: 100 }}
+                                out:scale={{ duration: 100 }}
+                            >
+                                <textarea
+                                    rows={5}
+                                    bind:value={newBio}
+                                    class="w-full"
+                                />
+                                <div class="flex items-center justify-end pt-1">
+                                    <ButtonLarge
+                                        tag="button"
+                                        variant="TEXT"
+                                        color="SECONDARY"
+                                        className="flex items-center text-sm"
+                                        on:click={() => (editBio = false)}
+                                        >Cancel</ButtonLarge
+                                    >
+                                    <ButtonLarge
+                                        tag="button"
+                                        variant="FILLED"
+                                        color="PRIMARY"
+                                        className="flex items-center text-sm ml-1"
+                                        on:click={handleUpdateBio}
+                                        >Save</ButtonLarge
+                                    >
+                                </div>
+                            </div>
+                        {:else}
+                            <p class="m-0">
+                                {#if bio && bio.length}
+                                    {#each (bio || "").split("\n") as bioPart}
+                                        {bioPart}<br />
+                                    {/each}
+                                {:else}<span class="text-gray"
+                                        >We're all eagerly waiting for {displayName ||
+                                            username}
+                                        to introduce themselves.</span
+                                    >{/if}
+                            </p>
+                        {/if}
                     </div>
                     {#if currentUserGroupUsers.length}
                         <div class="pb-8">
@@ -235,13 +356,14 @@
                                             className="group-item flex justify-start"
                                         >
                                             <span
-                                                class="font-sans overflow-hidden overflow-ellipsis pr-8"
-                                                style="width: 220px;"
+                                                class="group-item-name font-sans overflow-hidden overflow-ellipsis pr-8"
                                             >
                                                 {groupUser.group
                                                     .groupName}</span
                                             >
-                                            <span class="font-sans font-normal">
+                                            <span
+                                                class="group-item-lang font-sans font-normal"
+                                            >
                                                 {#if groupUser.userType === UserType.Global}
                                                     {groupUser.group.language
                                                         ? groupUser.group
@@ -326,6 +448,14 @@
 
     :global(.group-item) {
         min-width: 320px;
+    }
+
+    :global(.group-item) .group-item-name {
+        width: 180px;
+
+        @screen sm {
+            width: 250px;
+        }
     }
 
     h2 {

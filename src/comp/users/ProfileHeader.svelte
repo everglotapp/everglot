@@ -35,10 +35,24 @@
         operationStore<UserByUsernameFollowershipsQuery>(
             UserByUsernameFollowerships
         )
-    $: userFollowershipsStore.variables = {
-        username,
-    }
+    userFollowershipsStore.context = { paused: true }
+    userFollowershipsStore.variables = { username }
     query(userFollowershipsStore)
+    $: if (username) {
+        userFollowershipsStore.context = {
+            paused: true,
+        }
+        userFollowershipsStore.variables = {
+            username,
+        }
+        userFollowershipsStore.context = {
+            paused: false,
+        }
+    } else {
+        userFollowershipsStore.context = {
+            paused: true,
+        }
+    }
 
     $: userFollowerships =
         $userFollowershipsStore.data && !$userFollowershipsStore.error

@@ -35,7 +35,7 @@
         operationStore<UserByUsernameFollowershipsQuery>(
             UserByUsernameFollowerships
         )
-    userFollowershipsStore.variables = {
+    $: userFollowershipsStore.variables = {
         username,
     }
     query(userFollowershipsStore)
@@ -143,10 +143,9 @@
         tmpUnfollowed = false
     }
 
-    // $: shownAvatarUrl =
-    //     $userProfileStore.fetching && newAvatarUrl ? newAvatarUrl : avatarUrl
-    // TODO: change this after update works
-    $: shownAvatarUrl = newAvatarUrl
+    $: shownAvatarUrl = newAvatarUrl !== null ? newAvatarUrl : avatarUrl
+    // @ts-expect-error
+    $: username, (newAvatarUrl = null)
     let showLargeProfilePictureUrl: string | null = null
 
     const dispatch = createEventDispatcher()
@@ -159,6 +158,12 @@
         errorId = null
         newAvatarUrl = null
         const formData = new FormData(avatarForm)
+        const onSuccess = () => {
+            dispatch("uploadProfilePictureSuccess")
+        }
+        const onFailure = () => {
+            dispatch("uploadProfilePictureFailure")
+        }
         try {
             const response = await fetch("/profile/picture", {
                 method: "POST",
@@ -167,11 +172,14 @@
             const res = await response.json()
             if (res && res.success) {
                 newAvatarUrl = res.meta.avatarUrl
+                onSuccess()
             } else {
                 errorId = "profile-avatar-upload-failed"
+                onFailure()
             }
         } catch (e) {
             errorId = "profile-avatar-upload-failed"
+            onFailure()
         }
     }
 </script>

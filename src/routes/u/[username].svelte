@@ -165,7 +165,7 @@
 
     let errorId: string | undefined
     async function handleUpdateBio() {
-        if (!newBio || !newBio.length) {
+        if (newBio === null) {
             return
         }
         console.log({
@@ -291,14 +291,14 @@
                 <div class="pt-4 sm:pt-8 pb-4 px-4 flex-1">
                     <div class="pb-8">
                         <h2 class="flex items-center">
-                            About Me<ButtonSmall
-                                tag="button"
-                                variant="TEXT"
-                                color="PRIMARY"
-                                className="flex items-center text-sm ml-1"
-                                on:click={() => (editBio = true)}
-                                >change</ButtonSmall
-                            >
+                            About Me{#if $currentUserUuid && userIsCurrentUser}<ButtonSmall
+                                    tag="button"
+                                    variant="TEXT"
+                                    color="PRIMARY"
+                                    className="flex items-center text-sm ml-1"
+                                    on:click={() => (editBio = true)}
+                                    >change</ButtonSmall
+                                >{/if}
                         </h2>
                         {#if editBio}
                             <div

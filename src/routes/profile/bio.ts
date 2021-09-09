@@ -9,6 +9,12 @@ const chlog = log.child({
     namespace: "profile-bio",
 })
 
+const MAX_BIO_LENGTH = 1024
+
+function sanitizeBio(bio: string) {
+    return bio.trim().substr(0, MAX_BIO_LENGTH)
+}
+
 export async function post(req: Request, res: Response, _next: () => void) {
     jsonResponse(res)
     const { user_id: userId } = req.session
@@ -18,7 +24,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
 
     const bio = req.body["bio"]
-    if (!bio || typeof bio !== "string" || !bio.length) {
+    if (typeof bio !== "string") {
         res.status(422).json({
             success: false,
             message: "Please specify a bio.",
@@ -26,7 +32,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    if (!updateUserBio({ bio: bio.trim(), id: userId })) {
+    if (!updateUserBio({ bio: sanitizeBio(bio), id: userId })) {
         chlog
             .child({ bio, userId })
             .error("Failed to update user bio in database")

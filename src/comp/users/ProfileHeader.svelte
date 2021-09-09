@@ -1,8 +1,10 @@
 <script lang="ts">
     import { onMount, createEventDispatcher } from "svelte"
     import { fade, scale } from "svelte/transition"
+    import { v4 as uuidv4 } from "uuid"
 
     import { operationStore, query } from "@urql/svelte"
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
     import Avatar from "./Avatar.svelte"
 
@@ -10,10 +12,11 @@
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import Modal from "../util/Modal.svelte"
+    import ErrorMessage from "../util/ErrorMessage.svelte"
 
     import {
         ANDROID_WEBVIEW_USER_AGENT,
-        ENLARGEN_PROFILE_PICTURE_BUTTON_ID,
+        USER_UPLOAD_AVATAR_FILE_FORM_FIELD,
     } from "../../constants"
     import type {
         Maybe,
@@ -64,6 +67,8 @@
 
     // Hide these in mobile webviews until file uploads work.
     let hideUploadAvatarForm = false
+    let fileInputId: string
+    let avatarId: string
     onMount(() => {
         if (navigator.userAgent === ANDROID_WEBVIEW_USER_AGENT) {
             /**
@@ -71,6 +76,9 @@
              */
             hideUploadAvatarForm = true
         }
+        newAvatarUrl = avatarUrl
+        fileInputId = uuidv4()
+        avatarId = uuidv4()
     })
 
     const refreshFollowerships = () => {
@@ -135,7 +143,6 @@
         tmpUnfollowed = false
     }
 
-    $: newAvatarUrl = avatarUrl
     // $: shownAvatarUrl =
     //     $userProfileStore.fetching && newAvatarUrl ? newAvatarUrl : avatarUrl
     // TODO: change this after update works
@@ -143,82 +150,106 @@
     let showLargeProfilePictureUrl: string | null = null
 
     const dispatch = createEventDispatcher()
-    // let errorId: string | null = null
+    let errorId: string | null = null
 
-    // let newAvatarUrl: string | null = null
-    // let avatarForm: HTMLFormElement
-    // async function handleUploadAvatar(e: Event) {
-    //     e.preventDefault()
-    //     errorId = null
-    //     newAvatarUrl = null
-    //     const formData = new FormData(avatarForm)
-    //     try {
-    //         const response = await fetch("/profile/picture", {
-    //             method: "POST",
-    //             body: formData,
-    //         })
-    //         const res = await response.json()
-    //         if (res && res.success) {
-    //             newAvatarUrl = res.meta.avatarUrl
-    //             $userProfileStore.context = {
-    //                 requestPolicy: "cache-and-network",
-    //                 pause: true,
-    //             }
-    //             $userProfileStore.context = {
-    //                 requestPolicy: "cache-and-network",
-    //                 pause: false,
-    //             }
-    //             $currentUserStore.context = {
-    //                 requestPolicy: "cache-and-network",
-    //                 pause: true,
-    //             }
-    //             $currentUserStore.context = {
-    //                 requestPolicy: "cache-and-network",
-    //                 pause: false,
-    //             }
-    //         } else {
-    //             errorId = "profile-avatar-upload-failed"
-    //         }
-    //     } catch (e) {
-    //         errorId = "profile-avatar-upload-failed"
-    //     }
-    // }
+    let newAvatarUrl: string | null = null
+    let avatarForm: HTMLFormElement
+    async function handleUploadAvatar(e: Event) {
+        e.preventDefault()
+        errorId = null
+        newAvatarUrl = null
+        const formData = new FormData(avatarForm)
+        try {
+            const response = await fetch("/profile/picture", {
+                method: "POST",
+                body: formData,
+            })
+            const res = await response.json()
+            if (res && res.success) {
+                newAvatarUrl = res.meta.avatarUrl
+            } else {
+                errorId = "profile-avatar-upload-failed"
+            }
+        } catch (e) {
+            errorId = "profile-avatar-upload-failed"
+        }
+    }
 </script>
 
+<div class="flex container max-w-2xl">
+    {#if errorId}
+        <div class="mb-4 sm:mb-16">
+            <ErrorMessage>
+                <Localized id={errorId} />
+            </ErrorMessage>
+        </div>
+    {/if}
+</div>
 <div
     class="flex container max-w-2xl font-secondary pt-4 sm:pt-8 items-center relative"
 >
     {#key newAvatarUrl}
         <div
-            id={ENLARGEN_PROFILE_PICTURE_BUTTON_ID}
             in:scale|local={{ delay: 400, duration: 100 }}
-            class="avatar-container flex mb-4 mr-4 sm:mr-8 ml-3 sm:ml-0 cursor-pointer"
+            class="avatar-container flex mb-4 mr-4 sm:mr-8 ml-3 sm:ml-0 cursor-pointer relative"
             class:cursor-pointer={shownAvatarUrl != null}
             style={`border-radius: 50%; max-height: 33vw; max-width: 33vw;`}
-            on:click={() => {
-                if (shownAvatarUrl != null) {
-                    showLargeProfilePictureUrl = shownAvatarUrl
-                }
-            }}
         >
             <Avatar
+                id={avatarId}
                 username={username || ""}
                 url={shownAvatarUrl || ""}
                 size={AVATAR_SIZE}
+                on:click={() => {
+                    if (shownAvatarUrl != null) {
+                        showLargeProfilePictureUrl = shownAvatarUrl
+                    }
+                }}
             />
+            {#if !hideUploadAvatarForm && $currentUserUuid && isCurrentUser}
+                <label
+                    for={fileInputId}
+                    class="absolute bg-gray-light text-black cursor-pointer p-2"
+                    style="right: 15%; bottom: -13px; border-radius: 50%;"
+                    ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        aria-hidden="true"
+                        role="img"
+                        width="18px"
+                        height="18px"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 16 16"
+                        ><g fill="currentColor"
+                            ><path
+                                d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"
+                            /><path
+                                d="M8 11a2.5 2.5 0 1 1 0-5a2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7a3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0z"
+                            /></g
+                        ></svg
+                    ></label
+                >
+                <form
+                    action="/profile/picture"
+                    enctype="multipart/form-data"
+                    method="post"
+                    bind:this={avatarForm}
+                    class="hidden"
+                >
+                    <input
+                        id={fileInputId}
+                        type="file"
+                        name={USER_UPLOAD_AVATAR_FILE_FORM_FIELD}
+                        accept="image/png,image/jpeg"
+                        required
+                        on:change={handleUploadAvatar}
+                    />
+                </form>
+            {/if}
         </div>
     {/key}
     <div class="flex flex-wrap items-center flex-grow">
         <div class="flex flex-col flex-grow">
-            {#if $currentUserUuid && isCurrentUser}
-                <div class="self-end pr-2">
-                    <ButtonSmall
-                        variant="FILLED"
-                        color="PRIMARY"
-                        href="/profile">Change Avatar</ButtonSmall
-                    >
-                </div>
-            {/if}
             <div class="flex flex-wrap items-center">
                 {#if displayName}
                     <span
@@ -270,10 +301,7 @@
 {#if showLargeProfilePictureUrl && typeof window !== "undefined"}
     <EscapeKeyListener on:keydown={() => (showLargeProfilePictureUrl = null)} />
     <ClickAwayListener
-        elementId={[
-            ENLARGEN_PROFILE_PICTURE_BUTTON_ID,
-            "large-profile-picture-view",
-        ]}
+        elementId={[avatarId, "large-profile-picture-view"]}
         on:clickaway={() => (showLargeProfilePictureUrl = null)}
     />
     <Modal>

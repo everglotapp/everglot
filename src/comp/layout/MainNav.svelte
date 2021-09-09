@@ -412,13 +412,13 @@
                                                 >
                                             </div>
                                         {/if}
-                                        {#if $userHasCompletedProfile}
+                                        {#if $currentUser && $userHasCompletedProfile}
                                             <div>
                                                 <ButtonSmall
                                                     variant="TEXT"
                                                     color="SECONDARY"
                                                     className="w-full"
-                                                    href="/profile"
+                                                    href={`/u/${$currentUser.username}`}
                                                     ><span
                                                         ><Localized
                                                             id="main-nav-profile"

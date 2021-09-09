@@ -11,13 +11,17 @@
     import {
         UserByUsernamePosts,
         UserProfile,
+        CurrentUserProfile,
+        UserType,
     } from "../../types/generated/graphql"
     import type {
         UserByUsernamePostsQuery,
         UserProfileQuery,
+        CurrentUserProfileQuery,
     } from "../../types/generated/graphql"
-    import { currentUserUuid } from "../../stores/currentUser"
+    import { currentUser, currentUserUuid } from "../../stores/currentUser"
     import ErrorMessage from "../../comp/util/ErrorMessage.svelte"
+    import ButtonSmall from "../../comp/util/ButtonSmall.svelte"
     import Spinner from "../../comp/util/Spinner.svelte"
 
     const { page } = stores()
@@ -29,6 +33,11 @@
         username,
     }
     query(userProfileStore)
+
+    const currentUserProfileStore =
+        operationStore<CurrentUserProfileQuery>(CurrentUserProfile)
+    currentUserProfileStore.context = { paused: true }
+    query(currentUserProfileStore)
 
     const userPostsStore =
         operationStore<UserByUsernamePostsQuery>(UserByUsernamePosts)
@@ -45,6 +54,10 @@
             }
             userPostsStore.variables = {
                 username,
+            }
+            if ($currentUser && username === $currentUser.username) {
+                $currentUserProfileStore.context = { paused: true }
+                $currentUserProfileStore.context = { paused: false }
             }
         }
     }
@@ -74,6 +87,15 @@
     $: displayName = userProfile?.displayName || null
     $: bio = userProfile?.bio || null
     $: avatarUrl = userProfile?.avatarUrl || null
+
+    $: currentUserProfile =
+        $currentUserProfileStore.data && !$currentUserProfileStore.error
+            ? $currentUserProfileStore.data.currentUser || null
+            : null
+    $: currentUserGroupUsers =
+        currentUserProfile?.groupUsers?.nodes
+            .filter(Boolean)
+            .map((node) => node!) || []
 
     enum ProfileTab {
         About,
@@ -149,36 +171,103 @@
                 class="flex flex-wrap-reverse md:flex-nowrap container max-w-2xl"
             >
                 <div class="pt-4 sm:pt-8 pb-4 px-4" style="flex: 0 0 240px;">
-                    <h2>Languages</h2>
-                    <ul>
-                        {#each userLanguages as language}
-                            <li class="font-bold text-gray-bitdark">
-                                {language.language
-                                    ? language.language.englishName
-                                    : ""}
-                                {#if language && language.native}
-                                    <Localized
-                                        id="profile-language-native-hint"
-                                    />
-                                {:else}
-                                    ({language && language.languageSkillLevel
-                                        ? language.languageSkillLevel.name || ""
-                                        : ""})
-                                {/if}
-                            </li>
-                        {/each}
-                    </ul>
+                    {#if $currentUserUuid && userIsCurrentUser}
+                        <div class="pb-8">
+                            <h2>Email</h2>
+                            {#if $currentUserProfileStore.data && currentUserProfile}
+                                <span
+                                    >{currentUserProfile.email ||
+                                        "unknown"}</span
+                                >
+                            {:else}
+                                <span>…</span>
+                            {/if}
+                        </div>
+                    {/if}
+                    <div class="pb-8">
+                        <h2>Languages</h2>
+                        <ul>
+                            {#each userLanguages as language}
+                                <li
+                                    class="font-bold text-gray-bitdark list-none"
+                                >
+                                    {language.language
+                                        ? language.language.englishName
+                                        : ""}
+                                    {#if language && language.native}
+                                        <Localized
+                                            id="profile-language-native-hint"
+                                        />
+                                    {:else}
+                                        ({language &&
+                                        language.languageSkillLevel
+                                            ? language.languageSkillLevel
+                                                  .name || ""
+                                            : ""})
+                                    {/if}
+                                </li>
+                            {/each}
+                        </ul>
+                    </div>
                 </div>
                 <div class="pt-4 sm:pt-8 pb-4 px-4">
-                    <h2>About Me</h2>
-                    <p>
-                        {#if bio && bio.length}{bio}{:else}<span
-                                class="text-gray"
-                                >We're all eagerly waiting for {displayName ||
-                                    username}
-                                to introduce themselves.</span
-                            >{/if}
-                    </p>
+                    <div class="pb-8">
+                        <h2>About Me</h2>
+                        <p class="m-0">
+                            {#if bio && bio.length}{bio}{:else}<span
+                                    class="text-gray"
+                                    >We're all eagerly waiting for {displayName ||
+                                        username}
+                                    to introduce themselves.</span
+                                >{/if}
+                        </p>
+                    </div>
+                    {#if currentUserGroupUsers.length}
+                        <div class="pb-8">
+                            <h2>Groups</h2>
+                            {#each currentUserGroupUsers as groupUser}
+                                {#if groupUser.group}
+                                    <li class="list-none">
+                                        <ButtonSmall
+                                            href={`/chat?group=${groupUser.group.uuid}`}
+                                            variant="TEXT"
+                                            color="SECONDARY"
+                                            className="group-item flex justify-start"
+                                        >
+                                            <span
+                                                class="font-sans overflow-hidden overflow-ellipsis pr-8"
+                                                style="width: 220px;"
+                                            >
+                                                {groupUser.group
+                                                    .groupName}</span
+                                            >
+                                            <span class="font-sans font-normal">
+                                                {#if groupUser.userType === UserType.Global}
+                                                    {groupUser.group.language
+                                                        ? groupUser.group
+                                                              .language
+                                                              .englishName
+                                                        : ""}
+                                                {:else}
+                                                    {groupUser.group.language
+                                                        ? groupUser.group
+                                                              .language
+                                                              .englishName
+                                                        : ""}
+                                                    {groupUser.group
+                                                        .languageSkillLevel
+                                                        ? groupUser.group
+                                                              .languageSkillLevel
+                                                              .name
+                                                        : ""}
+                                                {/if}</span
+                                            >
+                                        </ButtonSmall>
+                                    </li>
+                                {/if}
+                            {/each}
+                        </div>
+                    {/if}
                 </div>
             </div>
         {:else if tab === ProfileTab.Squeeks}
@@ -233,6 +322,10 @@
     .tabs > button[aria-selected="true"] {
         @apply border-primary;
         @apply border-b-4;
+    }
+
+    :global(.group-item) {
+        min-width: 320px;
     }
 
     h2 {

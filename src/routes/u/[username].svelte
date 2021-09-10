@@ -51,6 +51,8 @@
     $: if ($page.params.username !== username) {
         username = $page.params.username
         if (username) {
+            preventRefreshBio = false
+            newBio = null
             userProfileStore.variables = {
                 username,
             }

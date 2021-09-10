@@ -7,6 +7,7 @@
     import BrowserTitle from "../../comp/layout/BrowserTitle.svelte"
     import ProfileHeader from "../../comp/users/ProfileHeader.svelte"
     import Post from "../../comp/feed/Post.svelte"
+    import Avatar from "../../comp/users/Avatar.svelte"
 
     import { query, operationStore } from "@urql/svelte"
     import { XIcon, CheckIcon } from "svelte-feather-icons"
@@ -26,12 +27,14 @@
     import ButtonSmall from "../../comp/util/ButtonSmall.svelte"
     import ButtonLarge from "../../comp/util/ButtonLarge.svelte"
     import Spinner from "../../comp/util/Spinner.svelte"
+    import { userFollowershipsStore } from "../../stores/profile"
 
     const { page } = stores()
 
     let username: string = $page.params.username
 
     const userProfileStore = operationStore<UserProfileQuery>(UserProfile)
+    userProfileStore.context = { paused: true }
     userProfileStore.variables = {
         username,
     }
@@ -49,6 +52,24 @@
     }
     query(userPostsStore)
 
+    userFollowershipsStore.variables = { username }
+    query(userFollowershipsStore)
+    $: if (username) {
+        userFollowershipsStore.context = {
+            paused: true,
+        }
+        userFollowershipsStore.variables = {
+            username,
+        }
+        userFollowershipsStore.context = {
+            paused: false,
+        }
+    } else {
+        userFollowershipsStore.context = {
+            paused: true,
+        }
+    }
+
     $: if ($page.params.username !== username) {
         username = $page.params.username
         if (username) {
@@ -60,6 +81,7 @@
             userPostsStore.variables = {
                 username,
             }
+            refreshProfile()
             if ($currentUser && username === $currentUser.username) {
                 refreshCurrentUserProfile()
             }
@@ -101,9 +123,28 @@
             .filter(Boolean)
             .map((node) => node!) || []
 
+    $: userFollowerships =
+        $userFollowershipsStore.data && !$userFollowershipsStore.error
+            ? $userFollowershipsStore.data.userByUsername
+            : null
+    $: followedUsers =
+        userFollowerships?.followedUsers.nodes
+            .filter(Boolean)
+            .map((node) => node!.user)
+            .filter(Boolean)
+            .map((user) => user!) || []
+    $: followers =
+        userFollowerships?.followers.nodes
+            .filter(Boolean)
+            .map((node) => node!.follower)
+            .filter(Boolean)
+            .map((user) => user!) || []
+
     enum ProfileTab {
         About,
         Squeeks,
+        Followers,
+        Following,
     }
     let tab: ProfileTab = ProfileTab.About
 
@@ -140,6 +181,17 @@
         }
     }
 
+    const refreshFollowerships = () => {
+        $userFollowershipsStore.context = {
+            ...$userFollowershipsStore.context,
+            paused: true,
+        }
+        $userFollowershipsStore.context = {
+            ...$userFollowershipsStore.context,
+            paused: false,
+        }
+    }
+
     function handlePostReplySuccess() {
         refreshPosts()
     }
@@ -149,6 +201,13 @@
     }
     function handlePostUnlikeSuccess() {
         refreshPosts()
+    }
+
+    function handleFollowSuccess() {
+        refreshFollowerships()
+    }
+    function handleUnfollowSuccess() {
+        refreshFollowerships()
     }
 
     let editBio: boolean = false
@@ -237,6 +296,9 @@
             {displayName}
             {username}
             isCurrentUser={userIsCurrentUser}
+            {followers}
+            on:followSuccess={handleFollowSuccess}
+            on:unfollowSuccess={handleUnfollowSuccess}
         />
 
         <div class="tabs container max-w-2xl mb-4">
@@ -247,6 +309,14 @@
             <button
                 aria-selected={tab === ProfileTab.Squeeks}
                 on:click={() => (tab = ProfileTab.Squeeks)}>Squeeks</button
+            >
+            <button
+                aria-selected={tab === ProfileTab.Followers}
+                on:click={() => (tab = ProfileTab.Followers)}>Followers</button
+            >
+            <button
+                aria-selected={tab === ProfileTab.Following}
+                on:click={() => (tab = ProfileTab.Following)}>Following</button
             >
         </div>
         {#if tab === ProfileTab.About}
@@ -433,6 +503,87 @@
                     {/if}
                 {/each}
             </div>
+        {:else if tab === ProfileTab.Followers}
+            <div
+                class="flex flex-col flex-wrap-reverse md:flex-nowrap container max-w-2xl"
+            >
+                {#if !followers.length}
+                    <div class="py-4 px-2 text-gray w-full text-center">
+                        Nobody is following {displayName || username}, yet ☹️
+                    </div>
+                {/if}
+                <ul class="flex flex-col w-full">
+                    {#each followers as follower (follower.uuid)}
+                        <li class="flex w-full items-center py-1 px-4">
+                            <div class="pr-3 sm:pr-4">
+                                <a href={`/u/${follower.username}`}>
+                                    <Avatar
+                                        username={follower.username ||
+                                            undefined}
+                                        url={follower.avatarUrl || undefined}
+                                        size={48}
+                                    /></a
+                                >
+                            </div>
+                            <div
+                                class="flex flex-col flex-nowrap text-gray-bitdark"
+                            >
+                                <div>
+                                    <a
+                                        href={`/u/${follower.username}`}
+                                        class="text-gray-bitdark"
+                                        >{follower.displayName ||
+                                            follower.username}</a
+                                    >
+                                </div>
+                                {#if follower.bio}<div>{follower.bio}</div>{/if}
+                            </div>
+                        </li>
+                    {/each}
+                </ul>
+            </div>
+        {:else if tab === ProfileTab.Following}
+            <div
+                class="flex flex-col flex-wrap-reverse md:flex-nowrap container max-w-2xl"
+            >
+                {#if !followedUsers.length}
+                    <div class="py-4 px-2 text-gray w-full text-center">
+                        {displayName || username} is not following anyone.
+                    </div>
+                {/if}
+                <ul class="flex flex-col w-full">
+                    {#each followedUsers as followedUser (followedUser.uuid)}
+                        <li class="flex w-full items-center py-1 px-4">
+                            <div class="pr-3 sm:pr-4">
+                                <a href={`/u/${followedUser.username}`}>
+                                    <Avatar
+                                        username={followedUser.username ||
+                                            undefined}
+                                        url={followedUser.avatarUrl ||
+                                            undefined}
+                                        size={48}
+                                    /></a
+                                >
+                            </div>
+                            <div
+                                class="flex flex-col flex-nowrap text-gray-bitdark"
+                            >
+                                <div>
+                                    <a
+                                        href={`/u/${followedUser.username}`}
+                                        class="text-gray-bitdark"
+                                        >{followedUser.displayName ||
+                                            followedUser.username}</a
+                                    >
+                                </div>
+                                {#if followedUser.bio}<div>
+                                        {followedUser.bio}
+                                    </div>{/if}
+                            </div>
+                        </li>
+                    {/each}
+                </ul>
+            </div>
         {/if}
     {/if}
 {/if}
@@ -441,21 +592,36 @@
     .tabs {
         @apply border-gray-light;
         @apply border-b-4;
+        @apply flex;
+        @apply flex-nowrap;
+        @apply overflow-x-auto;
+
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+        display: none;
     }
 
     .tabs > button {
         @apply text-primary;
         @apply font-bold;
-        @apply px-4;
-        @apply pt-3;
-        @apply pb-2;
+        @apply relative;
 
-        margin-bottom: -4px;
+        padding: 0.75rem 0.7rem 0.5rem;
+        font-size: 0.95rem;
     }
 
-    .tabs > button[aria-selected="true"] {
-        @apply border-primary;
-        @apply border-b-4;
+    .tabs > button[aria-selected="true"]::after {
+        @apply bg-primary;
+        @apply absolute;
+        @apply left-0;
+        @apply right-0;
+
+        height: 4px;
+        bottom: -2px;
+        content: "";
     }
 
     :global(.group-item) {

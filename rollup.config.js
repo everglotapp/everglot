@@ -59,7 +59,7 @@ export default {
             }),
             json({ compact: true }),
             commonjs(),
-            typescript({ sourceMap: dev }),
+            typescript({ sourceMap: dev, noEmit: !dev }),
             graphql(),
             fluent({
                 include: "locales/**/*.ftl",
@@ -144,7 +144,7 @@ export default {
             }),
             json({ compact: true }),
             commonjs(),
-            typescript({ sourceMap: dev }),
+            typescript({ sourceMap: dev, noEmit: !dev }),
             graphql(),
             fluent({
                 include: "locales/**/*.ftl",

@@ -22,8 +22,8 @@
         Maybe,
         UserByUsernameFollowershipsQuery,
     } from "../../types/generated/graphql"
-    import { UserByUsernameFollowerships } from "../../types/generated/graphql"
     import { currentUserUuid } from "../../stores/currentUser"
+    import { userFollowershipsStore } from "../../stores/profile"
 
     export let displayName: Maybe<string>
     export let username: Maybe<string>
@@ -31,45 +31,16 @@
     export let userUuid: Maybe<string>
     export let isCurrentUser: boolean
 
-    const userFollowershipsStore =
-        operationStore<UserByUsernameFollowershipsQuery>(
-            UserByUsernameFollowerships
-        )
-    userFollowershipsStore.context = { paused: true }
-    userFollowershipsStore.variables = { username }
-    query(userFollowershipsStore)
-    $: if (username) {
-        userFollowershipsStore.context = {
-            paused: true,
-        }
-        userFollowershipsStore.variables = {
-            username,
-        }
-        userFollowershipsStore.context = {
-            paused: false,
-        }
-    } else {
-        userFollowershipsStore.context = {
-            paused: true,
-        }
-    }
+    export let followers: NonNullable<
+        NonNullable<
+            NonNullable<
+                NonNullable<
+                    UserByUsernameFollowershipsQuery["userByUsername"]
+                >["followers"]["nodes"]
+            >[number]
+        >["follower"]
+    >[]
 
-    $: userFollowerships =
-        $userFollowershipsStore.data && !$userFollowershipsStore.error
-            ? $userFollowershipsStore.data.userByUsername
-            : null
-    $: _followedUsers =
-        userFollowerships?.followedUsers.nodes
-            .filter(Boolean)
-            .map((node) => node!.user)
-            .filter(Boolean)
-            .map((user) => user!) || []
-    $: followers =
-        userFollowerships?.followers.nodes
-            .filter(Boolean)
-            .map((node) => node!.follower)
-            .filter(Boolean)
-            .map((user) => user!) || []
     $: currentUserIsFollowing =
         !isCurrentUser &&
         $currentUserUuid !== null &&
@@ -94,17 +65,6 @@
         fileInputId = uuidv4()
         avatarId = uuidv4()
     })
-
-    const refreshFollowerships = () => {
-        $userFollowershipsStore.context = {
-            ...$userFollowershipsStore.context,
-            paused: true,
-        }
-        $userFollowershipsStore.context = {
-            ...$userFollowershipsStore.context,
-            paused: false,
-        }
-    }
 
     let tmpFollowed = false
     let tmpUnfollowed = false

@@ -100379,6 +100379,18 @@
             "deprecationReason": null
           },
           {
+            "name": "followedByCurrentUser",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "languagesByUserLanguageUserIdAndLanguageId",
             "description": "Reads and enables pagination through a set of `Language`.",
             "args": [
@@ -103651,6 +103663,18 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringFilter",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "followedByCurrentUser",
+            "description": "Filter by the object’s `followedByCurrentUser` field.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "BooleanFilter",
               "ofType": null
             },
             "defaultValue": null,

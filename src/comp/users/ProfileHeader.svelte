@@ -1,9 +1,8 @@
 <script lang="ts">
     import { onMount, createEventDispatcher } from "svelte"
-    import { fade, scale } from "svelte/transition"
+    import { scale } from "svelte/transition"
     import { v4 as uuidv4 } from "uuid"
 
-    import { operationStore, query } from "@urql/svelte"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
     import Avatar from "./Avatar.svelte"
@@ -23,7 +22,6 @@
         UserByUsernameFollowershipsQuery,
     } from "../../types/generated/graphql"
     import { currentUserUuid } from "../../stores/currentUser"
-    import { userFollowershipsStore } from "../../stores/profile"
 
     export let displayName: Maybe<string>
     export let username: Maybe<string>
@@ -92,11 +90,9 @@
         })
         const onSuccess = () => {
             dispatch(tmpFollowed ? "followSuccess" : "unfollowSuccess")
-            refreshFollowerships()
         }
         const onFailure = () => {
             dispatch(tmpFollowed ? "followFailure" : "unfollowFailure")
-            refreshFollowerships()
         }
         if (res.status === 200) {
             const response = await res.json()
@@ -250,22 +246,22 @@
             </div>
             <div class="mt-1">
                 <span
-                    ><span class="mr-1">Followers:</span><span
-                        class="inline-block"
-                        style="min-width: 24px; width: 32px; margin-left: 2px; margin-right: 2px;"
-                        >{#key $userFollowershipsStore.fetching}<span
-                                in:fade={{ duration: 100, delay: 150 }}
-                                out:fade|local={{ duration: 100 }}
-                                class="text-gray-bitdark font-bold"
-                                >{followers.length}</span
-                            >{/key}</span
-                    ></span
+                    ><span class="inline-block">
+                        <span class="text-gray-bitdark font-bold"
+                            >{followers.length}</span
+                        ></span
+                    ><span class="mx-2">Followers</span></span
                 >
                 {#if !isCurrentUser}
                     <ButtonSmall
                         tag="button"
                         on:click={handleFollow}
-                        variant="OUTLINED"
+                        variant={currentUserIsFollowing && !tmpUnfollowed
+                            ? "OUTLINED"
+                            : "FILLED"}
+                        color={currentUserIsFollowing && !tmpUnfollowed
+                            ? "SECONDARY"
+                            : "PRIMARY"}
                         className="flex items-center"
                     >
                         {#if (currentUserIsFollowing && !tmpUnfollowed) || tmpFollowed}

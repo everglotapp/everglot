@@ -16,7 +16,7 @@
    "PromptIdByUuid": "248224999c87bcd59f838327092460317a5abba0140afc737373d73bcc846e2c",
    "CreateUserFollowership": "24be48ef2297467fe65e5181e813eaecb0f546afd79d45715b3f8c015ad86348",
    "DeleteUserFollowership": "9e9d8136908b8eb3ccac184cce86143e36afef3b430a59dbf5610d5038cad496",
-   "UserByUsernameFollowerships": "23a1428d38bb20e11053fd90cd9d19e5972a5db807bfad91466cafbb8800d1b2",
+   "UserByUsernameFollowerships": "7526cebd2df85852749ec2ee2e7c911227ee63e71e016018e6add9951ba92fc1",
    "UserFollowershipIdByUserIdAndFollowerId": "680de017ab6926de31bc2bf52adf2fe6db3d27e3ca5edcae2e5b777bd29bc812",
    "CreateGroupUser": "c4ab767dd17854487e034a8d3908de1a0d703ccc5db00f6e25885b83fb3b71e3",
    "JoinGlobalGroup": "1ffe3b3ab40ed47ebaf685259f0ada00b93bb83719ff5f19fe8f9b021ff1b139",

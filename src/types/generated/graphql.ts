@@ -18971,6 +18971,7 @@ export type User = Node & {
   followers: UserFollowersConnection;
   /** Reads and enables pagination through a set of `UserFollower`. */
   followedUsers: UserFollowersConnection;
+  followedByCurrentUser?: Maybe<Scalars['Boolean']>;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByUserLanguageUserIdAndLanguageId: UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection;
   /** Reads and enables pagination through a set of `LanguageSkillLevel`. */
@@ -19550,6 +19551,8 @@ export type UserFilter = {
   emailUnsubscribeToken?: Maybe<StringFilter>;
   /** Filter by the object’s `displayName` field. */
   displayName?: Maybe<StringFilter>;
+  /** Filter by the object’s `followedByCurrentUser` field. */
+  followedByCurrentUser?: Maybe<BooleanFilter>;
   /** Checks for all expressions in this list. */
   and?: Maybe<Array<UserFilter>>;
   /** Checks for any expressions in this list. */
@@ -20814,7 +20817,7 @@ export type UserByUsernameFollowershipsQueryVariables = Exact<{
 }>;
 
 
-export type UserByUsernameFollowershipsQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', followers: { __typename?: 'UserFollowersConnection', nodes: Array<Maybe<{ __typename?: 'UserFollower', follower?: Maybe<{ __typename?: 'User', uuid: any, avatarUrl?: Maybe<string>, bio: string, displayName?: Maybe<string>, username?: Maybe<string> }> }>> }, followedUsers: { __typename?: 'UserFollowersConnection', nodes: Array<Maybe<{ __typename?: 'UserFollower', user?: Maybe<{ __typename?: 'User', avatarUrl?: Maybe<string>, bio: string, displayName?: Maybe<string>, uuid: any, username?: Maybe<string> }> }>> } }> };
+export type UserByUsernameFollowershipsQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', followers: { __typename?: 'UserFollowersConnection', nodes: Array<Maybe<{ __typename?: 'UserFollower', follower?: Maybe<{ __typename?: 'User', uuid: any, avatarUrl?: Maybe<string>, bio: string, displayName?: Maybe<string>, username?: Maybe<string>, followedByCurrentUser?: Maybe<boolean> }> }>> }, followedUsers: { __typename?: 'UserFollowersConnection', nodes: Array<Maybe<{ __typename?: 'UserFollower', user?: Maybe<{ __typename?: 'User', avatarUrl?: Maybe<string>, bio: string, displayName?: Maybe<string>, uuid: any, followedByCurrentUser?: Maybe<boolean>, username?: Maybe<string> }> }>> } }> };
 
 export type UserFollowershipIdByUserIdAndFollowerIdQueryVariables = Exact<{
   followerId: Scalars['Int'];
@@ -21448,6 +21451,7 @@ export const UserByUsernameFollowerships = gql`
           bio
           displayName
           username
+          followedByCurrentUser
         }
       }
     }
@@ -21458,6 +21462,7 @@ export const UserByUsernameFollowerships = gql`
           bio
           displayName
           uuid
+          followedByCurrentUser
           username
         }
       }

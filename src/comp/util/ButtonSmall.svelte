@@ -12,7 +12,7 @@
             PRIMARY:
                 "border hover:bg-gray-lightest text-primary focus:border-white focus:bg-white focus:ring-white cursor-pointer",
             SECONDARY:
-                "border bg-transparent border-transparent hover:bg-gray-lightest text-gray-200 focus:text-primary focus:border-white focus:bg-white focus:ring-primary focus:border-primary hover:text-primary sm:bg-transparent sm:border-gray-400 sm:text-gray-200 sm:hover:text-primary sm:focus:text-primary cursor-pointer",
+                "border bg-transparent border-transparent hover:bg-gray-lightest text-gray-bitdark focus:text-primary focus:border-white focus:bg-white focus:ring-primary focus:border-primary hover:text-primary sm:bg-transparent sm:border-gray-400 sm:hover:text-primary sm:focus:text-primary cursor-pointer",
         },
         TEXT: {
             PRIMARY:

@@ -12,22 +12,24 @@
     import { query, operationStore } from "@urql/svelte"
     import { XIcon, CheckIcon } from "svelte-feather-icons"
     import {
+        Maybe,
         UserByUsernamePosts,
         UserProfile,
-        CurrentUserProfile,
         UserType,
     } from "../../types/generated/graphql"
     import type {
         UserByUsernamePostsQuery,
         UserProfileQuery,
-        CurrentUserProfileQuery,
     } from "../../types/generated/graphql"
     import { currentUser, currentUserUuid } from "../../stores/currentUser"
     import ErrorMessage from "../../comp/util/ErrorMessage.svelte"
     import ButtonSmall from "../../comp/util/ButtonSmall.svelte"
     import ButtonLarge from "../../comp/util/ButtonLarge.svelte"
     import Spinner from "../../comp/util/Spinner.svelte"
-    import { userFollowershipsStore } from "../../stores/profile"
+    import {
+        currentUserProfileStore,
+        userFollowershipsStore,
+    } from "../../stores/profile"
 
     const { page } = stores()
 
@@ -40,8 +42,6 @@
     }
     query(userProfileStore)
 
-    const currentUserProfileStore =
-        operationStore<CurrentUserProfileQuery>(CurrentUserProfile)
     currentUserProfileStore.context = { paused: true }
     query(currentUserProfileStore)
 
@@ -266,6 +266,40 @@
         }
         editBio = false
     }
+
+    async function handleFollow(user: {
+        uuid: any
+        followedByCurrentUser?: Maybe<boolean>
+    }) {
+        if (!user.uuid) {
+            return
+        }
+        const endpoint = user.followedByCurrentUser
+            ? `/u/${user.uuid}/unfollow`
+            : `/u/${user.uuid}/follow`
+
+        const res = await fetch(endpoint, {
+            method: "post",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
+        const onSuccess = () => {
+            refreshFollowerships()
+        }
+        if (res.status === 200) {
+            const response = await res.json()
+            if (response.success) {
+                onSuccess()
+                return
+            } else {
+                // onFailure()
+            }
+        } else {
+            // onFailure()
+        }
+    }
 </script>
 
 {#if username}
@@ -363,7 +397,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="pt-4 sm:pt-8 pb-4 px-4 flex-1">
+                <div class="pt-4 sm:pt-8 pb-4 px-4" style="flex: 1 1 400px;">
                     <div class="pb-8">
                         <h2 class="flex items-center">
                             About Me{#if userIsCurrentUser}<ButtonSmall
@@ -514,7 +548,11 @@
                 {/if}
                 <ul class="flex flex-col w-full">
                     {#each followers as follower (follower.uuid)}
-                        <li class="flex w-full items-center py-1 px-4">
+                        <li
+                            class="flex w-full items-center pt-2 pb-3 px-4"
+                            in:scale|local={{ duration: 100 }}
+                            out:scale|local={{ duration: 100 }}
+                        >
                             <div class="pr-3 sm:pr-4">
                                 <a href={`/u/${follower.username}`}>
                                     <Avatar
@@ -526,7 +564,7 @@
                                 >
                             </div>
                             <div
-                                class="flex flex-col flex-nowrap text-gray-bitdark"
+                                class="flex flex-col flex-nowrap flex-1 text-gray-bitdark"
                             >
                                 <div>
                                     <a
@@ -536,8 +574,33 @@
                                             follower.username}</a
                                     >
                                 </div>
-                                {#if follower.bio}<div>{follower.bio}</div>{/if}
+                                {#if follower.bio}<div class="bio">
+                                        {follower.bio}
+                                    </div>{/if}
                             </div>
+                            {#if $currentUserUuid !== null && follower.uuid !== $currentUserUuid}
+                                <div
+                                    class="flex items-center justify-center text-gray-bitdark"
+                                >
+                                    <ButtonSmall
+                                        tag="button"
+                                        on:click={() => handleFollow(follower)}
+                                        variant={follower.followedByCurrentUser
+                                            ? "OUTLINED"
+                                            : "FILLED"}
+                                        color={follower.followedByCurrentUser
+                                            ? "SECONDARY"
+                                            : "PRIMARY"}
+                                        className="flex items-center"
+                                    >
+                                        {#if follower.followedByCurrentUser}
+                                            Unfollow
+                                        {:else}
+                                            Follow
+                                        {/if}
+                                    </ButtonSmall>
+                                </div>
+                            {/if}
                         </li>
                     {/each}
                 </ul>
@@ -553,7 +616,11 @@
                 {/if}
                 <ul class="flex flex-col w-full">
                     {#each followedUsers as followedUser (followedUser.uuid)}
-                        <li class="flex w-full items-center py-1 px-4">
+                        <li
+                            class="flex w-full items-center pt-2 pb-3 px-4"
+                            in:scale|local={{ duration: 100 }}
+                            out:scale|local={{ duration: 100 }}
+                        >
                             <div class="pr-3 sm:pr-4">
                                 <a href={`/u/${followedUser.username}`}>
                                     <Avatar
@@ -566,7 +633,7 @@
                                 >
                             </div>
                             <div
-                                class="flex flex-col flex-nowrap text-gray-bitdark"
+                                class="flex flex-col flex-nowrap flex-1 text-gray-bitdark"
                             >
                                 <div>
                                     <a
@@ -576,10 +643,34 @@
                                             followedUser.username}</a
                                     >
                                 </div>
-                                {#if followedUser.bio}<div>
+                                {#if followedUser.bio}<div class="bio">
                                         {followedUser.bio}
                                     </div>{/if}
                             </div>
+                            {#if $currentUserUuid !== null && followedUser.uuid !== $currentUserUuid}
+                                <div
+                                    class="flex items-center justify-center text-gray-bitdark"
+                                >
+                                    <ButtonSmall
+                                        tag="button"
+                                        on:click={() =>
+                                            handleFollow(followedUser)}
+                                        variant={followedUser.followedByCurrentUser
+                                            ? "OUTLINED"
+                                            : "FILLED"}
+                                        color={followedUser.followedByCurrentUser
+                                            ? "SECONDARY"
+                                            : "PRIMARY"}
+                                        className="flex items-center"
+                                    >
+                                        {#if followedUser.followedByCurrentUser}
+                                            Unfollow
+                                        {:else}
+                                            Follow
+                                        {/if}
+                                    </ButtonSmall>
+                                </div>
+                            {/if}
                         </li>
                     {/each}
                 </ul>
@@ -642,5 +733,13 @@
         @screen sm {
             @apply mb-2;
         }
+    }
+
+    .bio {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
 </style>

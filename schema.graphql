@@ -2630,6 +2630,7 @@ type User implements Node {
     """
     filter: UserFollowerFilter
   ): UserFollowersConnection!
+  followedByCurrentUser: Boolean
 
   """Reads and enables pagination through a set of `Language`."""
   languagesByUserLanguageUserIdAndLanguageId(
@@ -3901,6 +3902,9 @@ input UserFilter {
 
   """Filter by the object’s `displayName` field."""
   displayName: StringFilter
+
+  """Filter by the object’s `followedByCurrentUser` field."""
+  followedByCurrentUser: BooleanFilter
 
   """Checks for all expressions in this list."""
   and: [UserFilter!]

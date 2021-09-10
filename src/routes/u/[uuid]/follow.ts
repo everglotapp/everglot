@@ -24,7 +24,7 @@ export async function post(req: Request, res: Response, next: () => void) {
     }
     const userId = await getUserIdByUuid(uuid)
     if (!userId) {
-        chlog.child({ uuid }).debug("Did not find post by UUID")
+        chlog.child({ uuid }).debug("Did not find user ID by UUID")
         next()
         return
     }
@@ -49,7 +49,7 @@ export async function post(req: Request, res: Response, next: () => void) {
     } else {
         chlog
             .child({ userFollowership, followerId: currentUserId, userId })
-            .debug("Failed to like post")
-        unprocessableEntity(res, "You already liked this post")
+            .debug("Failed to follow user")
+        unprocessableEntity(res, "You already follow this user")
     }
 }

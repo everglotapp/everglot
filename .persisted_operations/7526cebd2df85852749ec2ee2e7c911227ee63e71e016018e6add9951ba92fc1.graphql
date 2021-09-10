@@ -8,6 +8,7 @@ query UserByUsernameFollowerships($username: String!) {
           bio
           displayName
           username
+          followedByCurrentUser
           __typename
         }
         __typename
@@ -21,6 +22,7 @@ query UserByUsernameFollowerships($username: String!) {
           bio
           displayName
           uuid
+          followedByCurrentUser
           username
           __typename
         }

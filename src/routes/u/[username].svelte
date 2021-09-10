@@ -9,6 +9,7 @@
     import Post from "../../comp/feed/Post.svelte"
 
     import { query, operationStore } from "@urql/svelte"
+    import { XIcon, CheckIcon } from "svelte-feather-icons"
     import {
         UserByUsernamePosts,
         UserProfile,
@@ -155,11 +156,12 @@
     let preventRefreshBio = false
     $: if (
         !$currentUserProfileStore.fetching &&
-        $currentUserProfileStore.data
+        $currentUserProfileStore.data &&
+        currentUserProfile
     ) {
         if (!preventRefreshBio) {
             if (!editBio) {
-                newBio = bio
+                newBio = currentUserProfile.bio
             }
         }
         preventRefreshBio = true
@@ -175,6 +177,7 @@
             body: JSON.stringify({ bio: newBio }),
         })
         const onSuccess = () => {
+            preventRefreshBio = false
             refreshCurrentUserProfile()
             refreshProfile()
         }
@@ -296,10 +299,10 @@
                             About Me{#if userIsCurrentUser}<ButtonSmall
                                     tag="button"
                                     variant="TEXT"
-                                    color="PRIMARY"
+                                    color={editBio ? "SECONDARY" : "PRIMARY"}
                                     className="flex items-center text-sm ml-1"
-                                    on:click={() => (editBio = true)}
-                                    >change</ButtonSmall
+                                    on:click={() => (editBio = !editBio)}
+                                    >{#if editBio}cancel{:else}change{/if}</ButtonSmall
                                 >{/if}
                         </h2>
                         {#if editBio}
@@ -319,7 +322,10 @@
                                         color="SECONDARY"
                                         className="flex items-center text-sm"
                                         on:click={() => (editBio = false)}
-                                        >Cancel</ButtonLarge
+                                        ><XIcon
+                                            size="20"
+                                            class="mr-2"
+                                        />Cancel</ButtonLarge
                                     >
                                     <ButtonLarge
                                         tag="button"
@@ -327,7 +333,10 @@
                                         color="PRIMARY"
                                         className="flex items-center text-sm ml-1"
                                         on:click={handleUpdateBio}
-                                        >Save</ButtonLarge
+                                        ><CheckIcon
+                                            size="20"
+                                            class="mr-2"
+                                        />Save</ButtonLarge
                                     >
                                 </div>
                             </div>

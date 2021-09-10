@@ -3,6 +3,7 @@
     import { goto } from "@sapper/app"
 
     import { query } from "@urql/svelte"
+    import { v4 as uuidv4 } from "uuid"
     import {
         XCircleIcon,
         ZapIcon,
@@ -32,8 +33,7 @@
     query(allPostsStore)
     query(currentUserStore)
 
-    let languagePicker: HTMLSelectElement | undefined
-    let languagePickerFocused: boolean = false
+    let languageButtonFocused: boolean = false
     let pickedLocale: SupportedLocale | undefined = "en"
     $: pickedLanguage = pickedLocale
         ? languages.find((language) => language.alpha2 === pickedLocale)
@@ -50,7 +50,7 @@
                 .filter(Boolean)
                 .map((node) => node!) || []
     }
-    type LanguageItem = { value: string; label: string }
+    type LanguageItem = { value: SupportedLocale; label: string }
     let items: LanguageItem[] = []
     $: items = languages
         .filter((language) =>
@@ -59,7 +59,7 @@
             )
         )
         .map(({ alpha2, englishName }) => ({
-            value: alpha2,
+            value: alpha2 as SupportedLocale,
             label: englishName,
         }))
 
@@ -84,6 +84,7 @@
         clearRedirectTimeout()
     }
 
+    let languageButtonId: string
     onMount(() => {
         if ($currentUserStore.stale) {
             if (redirectTimeout === null) {
@@ -95,6 +96,7 @@
                 }, 800)
             }
         }
+        languageButtonId = uuidv4()
     })
 
     onDestroy(() => {
@@ -112,15 +114,11 @@
               .map((post) => post!)
         : []
 
-    $: {
-        if (languagePicker) {
-            if (languagePickerFocused) {
-                languagePicker.focus()
-            } else {
-                languagePicker.blur()
-            }
-        }
+    function handlePickLocale(locale: SupportedLocale) {
+        pickedLocale = locale
+        languageButtonFocused = false
     }
+
     async function handleShuffle() {
         if (
             !pickedLocale ||
@@ -225,10 +223,8 @@
         <div class="language-select-wrapper">
             <select
                 class="language-select rounded-lg"
-                on:focus={() => (languagePickerFocused = true)}
-                on:blur={() => (languagePickerFocused = false)}
-                bind:this={languagePicker}
                 bind:value={pickedLocale}
+                aria-labelledby={languageButtonId}
             >
                 {#each items as item}
                     <option value={item.value}
@@ -237,8 +233,9 @@
                 {/each}
             </select>
             <ButtonSmall
+                id={languageButtonId}
                 on:click={() =>
-                    (languagePickerFocused = !languagePickerFocused)}
+                    (languageButtonFocused = !languageButtonFocused)}
                 variant="TEXT"
                 tag="button"
                 color="SECONDARY"
@@ -252,13 +249,30 @@
                     {/if}</span
                 >
                 <div class="pl-5 flex items-center">
-                    {#if languagePickerFocused}
+                    {#if languageButtonFocused}
                         <ChevronUpIcon size="18" />
                     {:else}
                         <ChevronDownIcon size="18" />
                     {/if}
                 </div>
             </ButtonSmall>
+            {#if languageButtonFocused}
+                <div class="relative language-button-dropdown">
+                    <ul>
+                        {#each items as item}
+                            <li
+                                value={item.value}
+                                aria-selected={item.value === pickedLocale}
+                                on:click={() => handlePickLocale(item.value)}
+                            >
+                                <div class="py-1 px-3">
+                                    <Localized id={`locale-${item.value}`} />
+                                </div>
+                            </li>
+                        {/each}
+                    </ul>
+                </div>
+            {/if}
         </div>
     </div>
     {#if shownPrompt && promptsSupportedForPickedLocale}
@@ -370,6 +384,50 @@
         .language-select:focus + :global(.language-button) {
             @apply hidden !important;
         }
+    }
+
+    .language-button-dropdown {
+        /* max-height: calc(min(240px, 50vh)); */
+        max-height: 240px;
+        bottom: -2px;
+        top: 100%;
+
+        @apply w-full;
+        @apply z-10;
+        @apply overflow-y-auto;
+        @apply overflow-x-hidden;
+    }
+
+    .language-button-dropdown ul {
+        @apply w-full;
+    }
+
+    .language-button-dropdown ul li {
+        @apply bg-white;
+        @apply cursor-pointer;
+        @apply font-bold;
+        @apply relative;
+        @apply text-gray-bitdark;
+    }
+
+    .language-button-dropdown ul li:hover {
+        @apply bg-primary-lightest;
+    }
+
+    .language-button-dropdown ul li[aria-selected="true"] {
+        @apply font-bold;
+        @apply text-primary;
+    }
+
+    .language-button-dropdown ul li[aria-selected="true"]::before {
+        @apply bg-primary;
+        @apply inline-flex;
+        @apply absolute;
+        @apply top-0;
+        @apply bottom-0;
+
+        width: 3px;
+        content: "";
     }
 
     :global(.close-prompt-button) {

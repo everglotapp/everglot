@@ -32,7 +32,7 @@ import type { messaging } from "firebase-admin"
 let handleNotifications = false
 let notificationHandler: NodeJS.Timeout | undefined
 
-const NOTIFICATION_DELAY_MS = 50
+const NOTIFICATION_DELAY_MS = 250
 
 export function listen() {
     chlog.debug("Listening for FCM notifications")

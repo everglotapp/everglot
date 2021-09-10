@@ -314,6 +314,15 @@ declare module '*/createUserDevice.graphql' {
 }
     
 
+declare module '*/deleteInvalidFcmToken.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const DeleteInvalidFcmToken: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/groupMessageNotification.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

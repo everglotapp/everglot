@@ -20947,6 +20947,13 @@ export type CreateUserDeviceMutationVariables = Exact<{
 
 export type CreateUserDeviceMutation = { __typename?: 'Mutation', createUserDevice?: Maybe<{ __typename?: 'CreateUserDevicePayload', userDevice?: Maybe<{ __typename?: 'UserDevice', uuid: any, fcmToken?: Maybe<string>, id: number }> }> };
 
+export type DeleteInvalidFcmTokenMutationVariables = Exact<{
+  fcmToken: Scalars['String'];
+}>;
+
+
+export type DeleteInvalidFcmTokenMutation = { __typename?: 'Mutation', deleteUserDeviceByFcmToken?: Maybe<{ __typename?: 'DeleteUserDevicePayload', clientMutationId?: Maybe<string>, userDevice?: Maybe<{ __typename?: 'UserDevice', userId?: Maybe<number>, fcmToken?: Maybe<string>, id: number }> }> };
+
 export type GroupMessageNotificationQueryVariables = Exact<{
   groupUuid: Scalars['UUID'];
   senderUuid: Scalars['UUID'];
@@ -21667,6 +21674,18 @@ export const CreateUserDevice = gql`
       fcmToken
       id
     }
+  }
+}
+    `;
+export const DeleteInvalidFcmToken = gql`
+    mutation DeleteInvalidFcmToken($fcmToken: String!) {
+  deleteUserDeviceByFcmToken(input: {fcmToken: $fcmToken}) {
+    userDevice {
+      userId
+      fcmToken
+      id
+    }
+    clientMutationId
   }
 }
     `;

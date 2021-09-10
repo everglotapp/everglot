@@ -34,6 +34,7 @@
    "AdminEmailsFcmTokens": "caebf941214310390006ef637bbcb145bb3add1292171ab972e4c0d20c313793",
    "CreateNotification": "f8aa0ef3f3b1cd0af535e633174d0059976cc41852a212937d4fb9bf8f6d12b2",
    "CreateUserDevice": "ad007b1bb97d8b422b3eed423d1da83214a4dc9bfad4c885f44834eb284fbd6f",
+   "DeleteInvalidFcmToken": "13d2407fc585628d43f472c1dd25b1a3fb9dcaf649fa48ad82da02c6819525b3",
    "GroupMessageNotification": "7ed9a449a1bb8903814300e737fd6b3441c2748024572db141839f0b8280a97c",
    "MarkNotificationAsSent": "1f9769588899e34aee2006ff85dbe165fdc1da7e36f7233f40200b61749f7efb",
    "NotificationChannelByName": "87385710d4ae10734f8916bce50e540dd35a1ddd85cc2c15723457fad830e6da",

@@ -1,0 +1,12 @@
+mutation DeleteInvalidFcmToken($fcmToken: String!) {
+  deleteUserDeviceByFcmToken(input: {fcmToken: $fcmToken}) {
+    userDevice {
+      userId
+      fcmToken
+      id
+      __typename
+    }
+    clientMutationId
+    __typename
+  }
+}

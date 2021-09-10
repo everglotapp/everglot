@@ -20,6 +20,8 @@
     import PostForm from "../comp/feed/PostForm.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+    import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
+    import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
 
     import { PromptType } from "../types/generated/graphql"
@@ -85,6 +87,7 @@
     }
 
     let languageButtonId: string
+    let languageButtonDropdownId: string
     onMount(() => {
         if ($currentUserStore.stale) {
             if (redirectTimeout === null) {
@@ -97,6 +100,7 @@
             }
         }
         languageButtonId = uuidv4()
+        languageButtonDropdownId = uuidv4()
     })
 
     onDestroy(() => {
@@ -257,7 +261,10 @@
                 </div>
             </ButtonSmall>
             {#if languageButtonFocused}
-                <div class="relative language-button-dropdown">
+                <div
+                    id={languageButtonDropdownId}
+                    class="relative language-button-dropdown"
+                >
                     <ul>
                         {#each items as item}
                             <li
@@ -272,6 +279,13 @@
                         {/each}
                     </ul>
                 </div>
+                <ClickAwayListener
+                    elementId={[languageButtonDropdownId, languageButtonId]}
+                    on:clickaway={() => (languageButtonFocused = false)}
+                />
+                <EscapeKeyListener
+                    on:keydown={() => (languageButtonFocused = false)}
+                />
             {/if}
         </div>
     </div>
@@ -387,8 +401,7 @@
     }
 
     .language-button-dropdown {
-        /* max-height: calc(min(240px, 50vh)); */
-        max-height: 240px;
+        max-height: calc(min(280px, 50vh));
         bottom: -2px;
         top: 100%;
 
@@ -396,6 +409,10 @@
         @apply z-10;
         @apply overflow-y-auto;
         @apply overflow-x-hidden;
+        @apply border;
+        @apply border-gray-light;
+        @apply shadow-sm;
+        @apply rounded-b-md;
     }
 
     .language-button-dropdown ul {
@@ -408,6 +425,11 @@
         @apply font-bold;
         @apply relative;
         @apply text-gray-bitdark;
+        @apply font-secondary;
+        @apply text-base;
+
+        padding-top: 2px;
+        padding-bottom: 2px;
     }
 
     .language-button-dropdown ul li:hover {

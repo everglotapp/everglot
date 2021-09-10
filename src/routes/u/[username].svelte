@@ -306,9 +306,10 @@
                                 >{/if}
                         </h2>
                         {#if editBio}
-                            <div
+                            <form
                                 in:scale={{ duration: 100 }}
                                 out:scale={{ duration: 100 }}
+                                on:submit|preventDefault={handleUpdateBio}
                             >
                                 <textarea
                                     rows={5}
@@ -329,17 +330,17 @@
                                     >
                                     <ButtonLarge
                                         tag="button"
+                                        type="submit"
                                         variant="FILLED"
                                         color="PRIMARY"
                                         className="flex items-center text-sm ml-1"
-                                        on:click={handleUpdateBio}
                                         ><CheckIcon
                                             size="20"
                                             class="mr-2"
                                         />Save</ButtonLarge
                                     >
                                 </div>
-                            </div>
+                            </form>
                         {:else}
                             <p class="m-0">
                                 {#if bio && bio.length}

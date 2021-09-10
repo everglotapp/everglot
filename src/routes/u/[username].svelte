@@ -251,7 +251,7 @@
                 class="flex flex-wrap-reverse md:flex-nowrap container max-w-2xl"
             >
                 <div class="pt-4 sm:pt-8 pb-4 px-4" style="flex: 0 0 240px;">
-                    {#if $currentUserUuid && userIsCurrentUser}
+                    {#if userIsCurrentUser}
                         <div class="pb-8">
                             <h2>Email</h2>
                             {#if $currentUserProfileStore.data && currentUserProfile}
@@ -293,7 +293,7 @@
                 <div class="pt-4 sm:pt-8 pb-4 px-4 flex-1">
                     <div class="pb-8">
                         <h2 class="flex items-center">
-                            About Me{#if $currentUserUuid && userIsCurrentUser}<ButtonSmall
+                            About Me{#if userIsCurrentUser}<ButtonSmall
                                     tag="button"
                                     variant="TEXT"
                                     color="PRIMARY"
@@ -345,7 +345,7 @@
                             </p>
                         {/if}
                     </div>
-                    {#if currentUserGroupUsers.length}
+                    {#if userIsCurrentUser && currentUserGroupUsers.length}
                         <div class="pb-8">
                             <h2>Groups</h2>
                             {#each currentUserGroupUsers as groupUser}

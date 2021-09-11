@@ -51,4 +51,5 @@ export enum FcmMessageParamsDataTypeV1 {
     GroupMessage = "GROUP_MESSAGE",
     PostLike = "POST_LIKE",
     PostReply = "POST_REPLY",
+    UserFollowership = "USER_FOLLOWERSHIP",
 }

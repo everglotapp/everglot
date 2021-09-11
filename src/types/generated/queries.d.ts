@@ -395,6 +395,15 @@ declare module '*/unsubscribeUserEmailNotifications.graphql' {
 }
     
 
+declare module '*/userFollowershipNotification.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserFollowershipNotification: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/userByUsernamePosts.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

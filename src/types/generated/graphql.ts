@@ -23265,7 +23265,7 @@ export type CreateUserFollowershipMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserFollowershipMutation = { __typename?: 'Mutation', createUserFollower?: Maybe<{ __typename?: 'CreateUserFollowerPayload', userFollower?: Maybe<{ __typename?: 'UserFollower', userId: number, followerId: number, nodeId: string, createdAt: any }> }> };
+export type CreateUserFollowershipMutation = { __typename?: 'Mutation', createUserFollower?: Maybe<{ __typename?: 'CreateUserFollowerPayload', userFollower?: Maybe<{ __typename?: 'UserFollower', id: number, userId: number, followerId: number, nodeId: string, createdAt: any }> }> };
 
 export type DeleteUserFollowershipMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -23473,6 +23473,13 @@ export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
 
 
 export type UnsubscribeUserEmailNotificationsMutation = { __typename?: 'Mutation', updateUserByEmailUnsubscribeToken?: Maybe<{ __typename?: 'UpdateUserPayload', clientMutationId?: Maybe<string>, user?: Maybe<{ __typename?: 'User', email: string, uuid: any, username?: Maybe<string> }> }> };
+
+export type UserFollowershipNotificationQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserFollowershipNotificationQuery = { __typename?: 'Query', userFollower?: Maybe<{ __typename?: 'UserFollower', follower?: Maybe<{ __typename?: 'User', username?: Maybe<string>, displayName?: Maybe<string> }>, user?: Maybe<{ __typename?: 'User', id: number }> }> };
 
 export type UserByUsernamePostsQueryVariables = Exact<{
   username: Scalars['String'];
@@ -23903,6 +23910,7 @@ export const CreateUserFollowership = gql`
     input: {userFollower: {userId: $userId, followerId: $followerId}}
   ) {
     userFollower {
+      id
       userId
       followerId
       nodeId
@@ -24328,6 +24336,19 @@ export const UnsubscribeUserEmailNotifications = gql`
       email
       uuid
       username
+    }
+  }
+}
+    `;
+export const UserFollowershipNotification = gql`
+    query UserFollowershipNotification($id: Int!) {
+  userFollower(id: $id) {
+    follower {
+      username
+      displayName
+    }
+    user {
+      id
     }
   }
 }

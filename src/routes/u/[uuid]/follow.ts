@@ -1,5 +1,5 @@
 import { validate as uuidValidate } from "uuid"
-import { unprocessableEntity } from "../../../helpers"
+import { forbidden, unprocessableEntity } from "../../../helpers"
 
 import log from "../../../logger"
 
@@ -9,11 +9,72 @@ const chlog = log.child({
 
 import type { Request, Response } from "express"
 import { createUserFollowership, getUserIdByUuid } from "../../../server/users"
+import { getUserFollowershipNotification } from "../../../server/notifications/followerships"
+import { enqueueFcmNotification } from "../../../server/notifications/fcm"
+import { NotificationParamsVersion } from "../../../server/notifications/params"
+import { userHasCompletedProfile } from "../../../server/users"
+import { FcmMessageParamsDataTypeV1 } from "../../../server/notifications/params/v1"
+
+const NOTIFICATION_EXPIRY_SECONDS = 60 * 60
+/**
+ * Allows user to cancel the notification
+ * by unfollowing within this timeframe.
+ */
+const NOTIFICATION_WITHHELD_SECONDS = 10
+
+async function notifyFollowedUser(userFollower: { id: number }) {
+    const notificationData = await getUserFollowershipNotification(
+        userFollower.id
+    )
+    if (!notificationData) {
+        chlog
+            .child({ userFollower })
+            .error("No notification data for user followership")
+        return
+    }
+    const { follower, user } = notificationData
+    if (!follower || !user) {
+        chlog
+            .child({ userFollower, notificationData })
+            .error("Missing notification data for user followership")
+        return
+    }
+    const expiresAt = new Date(Date.now() + NOTIFICATION_EXPIRY_SECONDS * 1000)
+    const withheldUntil = new Date(
+        Date.now() + NOTIFICATION_WITHHELD_SECONDS * 1000
+    )
+    const username =
+        follower.displayName && follower.displayName.length
+            ? follower.displayName
+            : follower.username
+    enqueueFcmNotification(
+        { userId: user.id, groupId: null },
+        expiresAt,
+        withheldUntil,
+        {
+            message: {
+                notification: {
+                    title: `${
+                        username && username.length ? username : "Someone"
+                    } now follows you`,
+                },
+                data: {
+                    type: FcmMessageParamsDataTypeV1.UserFollowership,
+                },
+            },
+            version: NotificationParamsVersion.V1,
+        }
+    )
+}
 
 export async function post(req: Request, res: Response, next: () => void) {
     const { user_id: currentUserId } = req.session
     if (!currentUserId) {
         res.redirect("/")
+        return
+    }
+    if (!(await userHasCompletedProfile(currentUserId))) {
+        forbidden(res, "Please complete your profile")
         return
     }
     const uuid = req.params["uuid"]
@@ -46,6 +107,7 @@ export async function post(req: Request, res: Response, next: () => void) {
         res.json({
             success: true,
         })
+        notifyFollowedUser(userFollowership)
     } else {
         chlog
             .child({ userFollowership, followerId: currentUserId, userId })

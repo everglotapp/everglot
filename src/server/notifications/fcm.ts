@@ -234,7 +234,7 @@ export async function createUserDevice(
         { ...userDevice }
     )
     if (res.errors || !res.data) {
-        chlog.child({ userDevice }).warn("Failed to create user device")
+        chlog.child({ userDevice }).debug("Failed to create user device")
         return null
     }
     chlog.child({ userDevice }).debug("Successfully created user device")

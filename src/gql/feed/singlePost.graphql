@@ -1,5 +1,5 @@
-query AllPosts {
-    posts(orderBy: CREATED_AT_DESC, condition: { parentPostId: null }) {
+query SinglePost($snowflakeId: BigInt!) {
+    posts(condition: { parentPostId: null, snowflakeId: $snowflakeId }) {
         nodes {
             uuid
             nodeId

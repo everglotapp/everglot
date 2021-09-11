@@ -37,6 +37,7 @@
     export let prompt: PostNode["prompt"]
     export let language: PostNode["language"]
     export let linkToAuthorProfile: boolean = true
+    export let forceShowReplies: boolean = false
 
     const dispatch = createEventDispatcher()
 
@@ -208,7 +209,7 @@
     </div>
     <div class="flex flex-row pt-1 justify-end items-center">
         <div class="flex relative mr-1">
-            {#if showReplies}
+            {#if showReplies || forceShowReplies}
                 <div
                     contenteditable
                     bind:textContent={newReplyBody}
@@ -233,27 +234,29 @@
                 </div>
             {/if}
         </div>
-        {#if showReplies}
-            <ButtonSmall
-                className="reply-button close items-center justify-center recording ml-0 mr-1"
-                tag="button"
-                variant="TEXT"
-                color="SECONDARY"
-                on:click={() => (showReplies = !showReplies)}
-                ><XIcon size="16" /><span>Close</span></ButtonSmall
-            >
-        {:else}
-            <ButtonLarge
-                className="reply-button items-center justify-center recording ml-0 mr-1"
-                tag="button"
-                variant="OUTLINED"
-                color="PRIMARY"
-                on:click={() => (showReplies = !showReplies)}
-                ><MessageCircleIcon size="16" /><span
-                    class="text-sm text-gray-bitdark font-bold select-none rounded-lg"
-                    >{replies?.totalCount || 0} replies</span
-                ></ButtonLarge
-            >
+        {#if !forceShowReplies}
+            {#if showReplies}
+                <ButtonSmall
+                    className="reply-button close items-center justify-center recording ml-0 mr-1"
+                    tag="button"
+                    variant="TEXT"
+                    color="SECONDARY"
+                    on:click={() => (showReplies = !showReplies)}
+                    ><XIcon size="16" /><span>Close</span></ButtonSmall
+                >
+            {:else}
+                <ButtonLarge
+                    className="reply-button items-center justify-center recording ml-0 mr-1"
+                    tag="button"
+                    variant="OUTLINED"
+                    color="PRIMARY"
+                    on:click={() => (showReplies = !showReplies)}
+                    ><MessageCircleIcon size="16" /><span
+                        class="text-sm text-gray-bitdark font-bold select-none rounded-lg"
+                        >{replies?.totalCount || 0} replies</span
+                    ></ButtonLarge
+                >
+            {/if}
         {/if}
         <ButtonLarge
             className="like-button flex items-center justify-center cursor-pointer rounded-lg bg-gray-lightest"
@@ -267,7 +270,7 @@
             >
         </ButtonLarge>
     </div>
-    {#if showReplies}
+    {#if showReplies || forceShowReplies}
         <div
             class="origin-top-right"
             class:pb-4={replies?.totalCount && replies?.totalCount > 0}

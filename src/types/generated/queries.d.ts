@@ -134,6 +134,15 @@ declare module '*/promptIdByUuid.graphql' {
 }
     
 
+declare module '*/singlePost.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const SinglePost: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createUserFollowership.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

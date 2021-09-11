@@ -10,6 +10,12 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /**
+   * A signed eight-byte integer. The upper big integer values are greater than the
+   * max value for a JavaScript number. Therefore all big integers will be output as
+   * strings and not numbers.
+   */
+  BigInt: any;
   /** A location in a connection that can be used for resuming pagination. */
   Cursor: any;
   /**
@@ -21,6 +27,32 @@ export type Scalars = {
   JSON: any;
   /** A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122). */
   UUID: any;
+};
+
+/** A filter to be used against BigInt fields. All fields are combined with a logical ‘and.’ */
+export type BigIntFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['BigInt']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['BigInt']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['BigInt']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['BigInt']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['BigInt']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['BigInt']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['BigInt']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['BigInt']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['BigInt']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['BigInt']>;
 };
 
 /** A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’ */
@@ -3833,6 +3865,16 @@ export type DeletePostByNodeIdInput = {
   nodeId: Scalars['ID'];
 };
 
+/** All input for the `deletePostBySnowflakeId` mutation. */
+export type DeletePostBySnowflakeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  snowflakeId: Scalars['BigInt'];
+};
+
 /** All input for the `deletePostByUuid` mutation. */
 export type DeletePostByUuidInput = {
   /**
@@ -5465,6 +5507,28 @@ export enum FrenchWouldYouRatherQuestionsOrderBy {
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
+
+/** All input for the `generateSnowflakeId` mutation. */
+export type GenerateSnowflakeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+};
+
+/** The output of our `generateSnowflakeId` mutation. */
+export type GenerateSnowflakeIdPayload = {
+  __typename?: 'GenerateSnowflakeIdPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  result?: Maybe<Scalars['BigInt']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
 
 export type GermanRandomQuestion = Node & {
   __typename?: 'GermanRandomQuestion';
@@ -9355,6 +9419,8 @@ export type Mutation = {
   updatePost?: Maybe<UpdatePostPayload>;
   /** Updates a single `Post` using a unique key and a patch. */
   updatePostByUuid?: Maybe<UpdatePostPayload>;
+  /** Updates a single `Post` using a unique key and a patch. */
+  updatePostBySnowflakeId?: Maybe<UpdatePostPayload>;
   /** Updates a single `Prompt` using its globally unique id and a patch. */
   updatePromptByNodeId?: Maybe<UpdatePromptPayload>;
   /** Updates a single `Prompt` using a unique key and a patch. */
@@ -9635,6 +9701,8 @@ export type Mutation = {
   deletePost?: Maybe<DeletePostPayload>;
   /** Deletes a single `Post` using a unique key. */
   deletePostByUuid?: Maybe<DeletePostPayload>;
+  /** Deletes a single `Post` using a unique key. */
+  deletePostBySnowflakeId?: Maybe<DeletePostPayload>;
   /** Deletes a single `Prompt` using its globally unique id. */
   deletePromptByNodeId?: Maybe<DeletePromptPayload>;
   /** Deletes a single `Prompt` using a unique key. */
@@ -9841,6 +9909,7 @@ export type Mutation = {
   deleteChineseWouldYouRatherQuestion?: Maybe<DeleteChineseWouldYouRatherQuestionPayload>;
   /** Deletes a single `ChineseWouldYouRatherQuestion` using a unique key. */
   deleteChineseWouldYouRatherQuestionByUuid?: Maybe<DeleteChineseWouldYouRatherQuestionPayload>;
+  generateSnowflakeId?: Maybe<GenerateSnowflakeIdPayload>;
   joinGlobalGroup?: Maybe<JoinGlobalGroupPayload>;
   registerUserActivity?: Maybe<RegisterUserActivityPayload>;
   /** Upserts a single `GroupUser`. */
@@ -10441,6 +10510,12 @@ export type MutationUpdatePostArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdatePostByUuidArgs = {
   input: UpdatePostByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostBySnowflakeIdArgs = {
+  input: UpdatePostBySnowflakeIdInput;
 };
 
 
@@ -11285,6 +11360,12 @@ export type MutationDeletePostByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostBySnowflakeIdArgs = {
+  input: DeletePostBySnowflakeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeletePromptByNodeIdArgs = {
   input: DeletePromptByNodeIdInput;
 };
@@ -11899,6 +11980,12 @@ export type MutationDeleteChineseWouldYouRatherQuestionArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteChineseWouldYouRatherQuestionByUuidArgs = {
   input: DeleteChineseWouldYouRatherQuestionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationGenerateSnowflakeIdArgs = {
+  input: GenerateSnowflakeIdInput;
 };
 
 
@@ -12999,6 +13086,7 @@ export type Post = Node & {
   createdAt: Scalars['Datetime'];
   languageId: Scalars['Int'];
   promptId?: Maybe<Scalars['Int']>;
+  snowflakeId: Scalars['BigInt'];
   /** Reads a single `User` that is related to this `Post`. */
   author?: Maybe<User>;
   /** Reads a single `Post` that is related to this `Post`. */
@@ -13139,6 +13227,8 @@ export type PostCondition = {
   languageId?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `promptId` field. */
   promptId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `snowflakeId` field. */
+  snowflakeId?: Maybe<Scalars['BigInt']>;
 };
 
 /** A filter to be used against `Post` object types. All fields are combined with a logical ‘and.’ */
@@ -13159,6 +13249,8 @@ export type PostFilter = {
   languageId?: Maybe<IntFilter>;
   /** Filter by the object’s `promptId` field. */
   promptId?: Maybe<IntFilter>;
+  /** Filter by the object’s `snowflakeId` field. */
+  snowflakeId?: Maybe<BigIntFilter>;
   /** Checks for all expressions in this list. */
   and?: Maybe<Array<PostFilter>>;
   /** Checks for any expressions in this list. */
@@ -13177,6 +13269,7 @@ export type PostInput = {
   createdAt?: Maybe<Scalars['Datetime']>;
   languageId: Scalars['Int'];
   promptId?: Maybe<Scalars['Int']>;
+  snowflakeId?: Maybe<Scalars['BigInt']>;
 };
 
 /** A connection to a list of `Language` values, with data from `Post`. */
@@ -13326,6 +13419,7 @@ export type PostPatch = {
   createdAt?: Maybe<Scalars['Datetime']>;
   languageId?: Maybe<Scalars['Int']>;
   promptId?: Maybe<Scalars['Int']>;
+  snowflakeId?: Maybe<Scalars['BigInt']>;
 };
 
 /** A connection to a list of `Prompt` values, with data from `Post`. */
@@ -13650,6 +13744,8 @@ export enum PostsOrderBy {
   LanguageIdDesc = 'LANGUAGE_ID_DESC',
   PromptIdAsc = 'PROMPT_ID_ASC',
   PromptIdDesc = 'PROMPT_ID_DESC',
+  SnowflakeIdAsc = 'SNOWFLAKE_ID_ASC',
+  SnowflakeIdDesc = 'SNOWFLAKE_ID_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
@@ -14190,6 +14286,7 @@ export type Query = Node & {
   postRecordingByUuid?: Maybe<PostRecording>;
   post?: Maybe<Post>;
   postByUuid?: Maybe<Post>;
+  postBySnowflakeId?: Maybe<Post>;
   prompt?: Maybe<Prompt>;
   promptByUuid?: Maybe<Prompt>;
   germanRandomQuestion?: Maybe<GermanRandomQuestion>;
@@ -15122,6 +15219,12 @@ export type QueryPostArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryPostByUuidArgs = {
   uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostBySnowflakeIdArgs = {
+  snowflakeId: Scalars['BigInt'];
 };
 
 
@@ -18627,6 +18730,18 @@ export type UpdatePostByNodeIdInput = {
   patch: PostPatch;
 };
 
+/** All input for the `updatePostBySnowflakeId` mutation. */
+export type UpdatePostBySnowflakeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Post` being updated. */
+  patch: PostPatch;
+  snowflakeId: Scalars['BigInt'];
+};
+
 /** All input for the `updatePostByUuid` mutation. */
 export type UpdatePostByUuidInput = {
   /**
@@ -20814,6 +20929,7 @@ export type UpsertPostRecordingWhere = {
 export type UpsertPostWhere = {
   id?: Maybe<Scalars['Int']>;
   uuid?: Maybe<Scalars['UUID']>;
+  snowflakeId?: Maybe<Scalars['BigInt']>;
 };
 
 /** All input for the upsert `Prompt` mutation. */
@@ -23199,7 +23315,7 @@ export type RegisterUserActivityMutation = { __typename?: 'Mutation', registerUs
 export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }> };
+export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }> };
 
 export type CreatePostMutationVariables = Exact<{
   authorId: Scalars['Int'];
@@ -23258,6 +23374,13 @@ export type PromptIdByUuidQueryVariables = Exact<{
 
 
 export type PromptIdByUuidQuery = { __typename?: 'Query', promptByUuid?: Maybe<{ __typename?: 'Prompt', id: number, nodeId: string }> };
+
+export type SinglePostQueryVariables = Exact<{
+  snowflakeId: Scalars['BigInt'];
+}>;
+
+
+export type SinglePostQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }> };
 
 export type CreateUserFollowershipMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -23817,6 +23940,7 @@ export const AllPosts = gql`
         uuid
         type
       }
+      snowflakeId
     }
   }
 }
@@ -23901,6 +24025,88 @@ export const PromptIdByUuid = gql`
   promptByUuid(uuid: $uuid) {
     id
     nodeId
+  }
+}
+    `;
+export const SinglePost = gql`
+    query SinglePost($snowflakeId: BigInt!) {
+  posts(condition: {parentPostId: null, snowflakeId: $snowflakeId}) {
+    nodes {
+      uuid
+      nodeId
+      createdAt
+      author {
+        uuid
+        username
+        avatarUrl
+        displayName
+      }
+      body
+      likes {
+        totalCount
+        nodes {
+          user {
+            uuid
+          }
+        }
+      }
+      parentPost {
+        uuid
+      }
+      replies(orderBy: CREATED_AT_ASC, filter: {not: {parentPostId: {isNull: true}}}) {
+        totalCount
+        nodes {
+          uuid
+          nodeId
+          createdAt
+          author {
+            uuid
+            username
+            avatarUrl
+          }
+          likes {
+            totalCount
+            nodes {
+              user {
+                uuid
+              }
+            }
+          }
+          body
+          parentPost {
+            uuid
+          }
+          language {
+            alpha2
+          }
+          prompt {
+            content
+            uuid
+            type
+          }
+        }
+      }
+      recordings {
+        totalCount
+        nodes {
+          filename
+          extension
+          uuid
+          user {
+            uuid
+          }
+        }
+      }
+      language {
+        alpha2
+      }
+      prompt {
+        content
+        uuid
+        type
+      }
+      snowflakeId
+    }
   }
 }
     `;

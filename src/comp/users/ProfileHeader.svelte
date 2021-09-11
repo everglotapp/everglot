@@ -187,7 +187,7 @@
             {#if !hideUploadAvatarForm && $currentUserUuid && isCurrentUser}
                 <label
                     for={fileInputId}
-                    class="absolute bg-gray-light text-black cursor-pointer p-2"
+                    class="absolute bg-gray-light text-black cursor-pointer p-2 border-2 border-white"
                     style="right: 15%; bottom: -13px; border-radius: 50%;"
                     ><svg
                         xmlns="http://www.w3.org/2000/svg"

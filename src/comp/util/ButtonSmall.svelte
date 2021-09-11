@@ -12,13 +12,13 @@
             PRIMARY:
                 "border hover:bg-gray-lightest text-primary focus:border-white focus:bg-white focus:ring-white cursor-pointer",
             SECONDARY:
-                "border bg-transparent border-transparent hover:bg-gray-lightest text-gray-bitdark focus:text-primary focus:border-white focus:bg-white focus:ring-primary focus:border-primary hover:text-primary sm:bg-transparent sm:border-gray-400 sm:hover:text-primary sm:focus:text-primary cursor-pointer",
+                "border bg-transparent border-gray-light hover:bg-gray-lightest text-gray-bitdark focus:text-primary focus:border-white focus:bg-white focus:ring-primary focus:border-primary hover:text-primary sm:bg-transparent sm:hover:text-primary sm:focus:text-primary cursor-pointer",
         },
         TEXT: {
             PRIMARY:
                 "border border-transparent hover:bg-gray-lightest text-primary focus:bg-white focus:border-primary cursor-pointer",
             SECONDARY:
-                "border border-transparent hover:bg-gray-lightest text-gray-bitdark focus:bg-white focus:border-bitdark cursor-pointer",
+                "border border-transparent hover:bg-gray-lightest text-gray-bitdark focus:bg-white focus:border-gray-bitdark cursor-pointer",
         },
     }
 </script>

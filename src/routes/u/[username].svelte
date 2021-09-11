@@ -72,6 +72,7 @@
 
     $: if ($page.params.username !== username) {
         username = $page.params.username
+        tab = ProfileTab.About
         if (username) {
             preventRefreshBio = false
             newBio = null
@@ -132,13 +133,27 @@
             .filter(Boolean)
             .map((node) => node!.user)
             .filter(Boolean)
-            .map((user) => user!) || []
+            .map((user) => user!)
+            .sort((_a, b) =>
+                $currentUserUuid === null
+                    ? 0
+                    : b.uuid === $currentUserUuid
+                    ? 1
+                    : -1
+            ) || []
     $: followers =
         userFollowerships?.followers.nodes
             .filter(Boolean)
             .map((node) => node!.follower)
             .filter(Boolean)
-            .map((user) => user!) || []
+            .map((user) => user!)
+            .sort((_a, b) =>
+                $currentUserUuid === null
+                    ? 0
+                    : b.uuid === $currentUserUuid
+                    ? 1
+                    : -1
+            ) || []
 
     enum ProfileTab {
         About,
@@ -418,7 +433,7 @@
                                 <textarea
                                     rows={5}
                                     bind:value={newBio}
-                                    class="w-full"
+                                    class="w-full font-sans"
                                 />
                                 <div class="flex items-center justify-end pt-1">
                                     <ButtonLarge
@@ -702,6 +717,13 @@
 
         padding: 0.75rem 0.7rem 0.5rem;
         font-size: 0.95rem;
+
+        @screen sm {
+            @apply pt-3;
+            @apply pb-2;
+            @apply px-3;
+            @apply text-base;
+        }
     }
 
     .tabs > button[aria-selected="true"]::after {

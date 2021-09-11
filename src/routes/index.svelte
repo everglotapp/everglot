@@ -14,7 +14,7 @@
 
     import { userHasCompletedProfile } from "../stores"
     import { allPostsStore, allPosts } from "../stores/feed"
-    import { currentUserStore } from "../stores/currentUser"
+    import { currentUser, currentUserStore } from "../stores/currentUser"
 
     import Post from "../comp/feed/Post.svelte"
     import PostForm from "../comp/feed/PostForm.svelte"
@@ -37,9 +37,6 @@
 
     let languageButtonFocused: boolean = false
     let pickedLocale: SupportedLocale | undefined = "en"
-    $: pickedLanguage = pickedLocale
-        ? languages.find((language) => language.alpha2 === pickedLocale)
-        : null
 
     $: promptsSupportedForPickedLocale = (
         PROMPT_LOCALES as readonly string[]
@@ -118,9 +115,36 @@
               .map((post) => post!)
         : []
 
+    let feedLocaleInitialized = false
+    $: if (
+        !$currentUserStore.fetching &&
+        $currentUser !== null &&
+        !feedLocaleInitialized
+    ) {
+        if ($currentUser.preference?.feedLanguage?.alpha2) {
+            if (
+                (SUPPORTED_LOCALES as readonly string[]).includes(
+                    $currentUser.preference.feedLanguage.alpha2
+                )
+            ) {
+                pickedLocale = $currentUser.preference.feedLanguage
+                    .alpha2 as SupportedLocale
+            }
+        }
+        feedLocaleInitialized = true
+    }
+
     function handlePickLocale(locale: SupportedLocale) {
         pickedLocale = locale
         languageButtonFocused = false
+        fetch(`/preferences/update`, {
+            method: "post",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ feedLocale: pickedLocale }),
+        })
     }
 
     async function handleShuffle() {
@@ -188,159 +212,164 @@
     <BrowserTitle title={text} />
 </Localized>
 
-<div class="container max-w-2xl pt-4 px-2">
-    <div
-        class="flex flex-row items-center justify-between w-full flex-nowrap mb-2"
-    >
-        <div>
-            {#if promptsSupportedForPickedLocale}
-                <ButtonSmall
-                    className="items-center"
-                    tag="button"
-                    variant={shownPrompt ? "OUTLINED" : "FILLED"}
-                    on:click={handleShuffle}
-                    ><ZapIcon size="20" class="mr-2" /><span
-                        class="hidden sm:inline"
-                        >{#if shownPrompt}
-                            <Localized
-                                id="index-shuffle-prompts-button-prompt-shown"
-                            />
-                        {:else}
-                            <Localized
-                                id="index-shuffle-prompts-button-initial"
-                            />
-                        {/if}</span
-                    ><span class="inline sm:hidden"
-                        >{#if shownPrompt}
-                            <Localized
-                                id="index-shuffle-prompts-button-prompt-shown-mobile"
-                            />
-                        {:else}
-                            <Localized
-                                id="index-shuffle-prompts-button-initial-mobile"
-                            />
-                        {/if}</span
-                    ></ButtonSmall
-                >
-            {/if}
-        </div>
-        <div class="language-select-wrapper">
-            <select
-                class="language-select rounded-lg"
-                bind:value={pickedLocale}
-                aria-labelledby={languageButtonId}
-            >
-                {#each items as item}
-                    <option value={item.value}
-                        ><Localized id={`locale-${item.value}`} /></option
+{#if feedLocaleInitialized}
+    <div class="container max-w-2xl pt-4 px-2">
+        <div
+            class="flex flex-row items-center justify-between w-full flex-nowrap mb-2"
+        >
+            <div>
+                {#if promptsSupportedForPickedLocale}
+                    <ButtonSmall
+                        className="items-center"
+                        tag="button"
+                        variant={shownPrompt ? "OUTLINED" : "FILLED"}
+                        on:click={handleShuffle}
+                        ><ZapIcon size="20" class="mr-2" /><span
+                            class="hidden sm:inline"
+                            >{#if shownPrompt}
+                                <Localized
+                                    id="index-shuffle-prompts-button-prompt-shown"
+                                />
+                            {:else}
+                                <Localized
+                                    id="index-shuffle-prompts-button-initial"
+                                />
+                            {/if}</span
+                        ><span class="inline sm:hidden"
+                            >{#if shownPrompt}
+                                <Localized
+                                    id="index-shuffle-prompts-button-prompt-shown-mobile"
+                                />
+                            {:else}
+                                <Localized
+                                    id="index-shuffle-prompts-button-initial-mobile"
+                                />
+                            {/if}</span
+                        ></ButtonSmall
                     >
-                {/each}
-            </select>
-            <ButtonSmall
-                id={languageButtonId}
-                on:click={() =>
-                    (languageButtonFocused = !languageButtonFocused)}
-                variant="TEXT"
-                tag="button"
-                color="SECONDARY"
-                className="language-button flex items-center text-gray-bitdark font-secondary font-bold relative"
-            >
-                <span class="overflow-hidden overflow-ellipsis">
-                    {#if pickedLocale}
-                        <Localized id={`locale-${pickedLocale}`} />
-                    {:else}
-                        Pick …
-                    {/if}</span
+                {/if}
+            </div>
+            <div class="language-select-wrapper">
+                <select
+                    class="language-select rounded-lg"
+                    bind:value={pickedLocale}
+                    aria-labelledby={languageButtonId}
                 >
-                <div class="pl-5 flex items-center">
-                    {#if languageButtonFocused}
-                        <ChevronUpIcon size="18" />
-                    {:else}
-                        <ChevronDownIcon size="18" />
-                    {/if}
-                </div>
-            </ButtonSmall>
-            {#if languageButtonFocused}
-                <div
-                    id={languageButtonDropdownId}
-                    class="relative language-button-dropdown"
+                    {#each items as item}
+                        <option value={item.value}
+                            ><Localized id={`locale-${item.value}`} /></option
+                        >
+                    {/each}
+                </select>
+                <ButtonSmall
+                    id={languageButtonId}
+                    on:click={() =>
+                        (languageButtonFocused = !languageButtonFocused)}
+                    variant="TEXT"
+                    tag="button"
+                    color="SECONDARY"
+                    className="language-button flex items-center text-gray-bitdark font-secondary font-bold relative"
                 >
-                    <ul>
-                        {#each items as item}
-                            <li
-                                value={item.value}
-                                aria-selected={item.value === pickedLocale}
-                                on:click={() => handlePickLocale(item.value)}
-                            >
-                                <div class="py-1 px-3">
-                                    <Localized id={`locale-${item.value}`} />
-                                </div>
-                            </li>
-                        {/each}
-                    </ul>
-                </div>
-                <ClickAwayListener
-                    elementId={[languageButtonDropdownId, languageButtonId]}
-                    on:clickaway={() => (languageButtonFocused = false)}
-                />
-                <EscapeKeyListener
-                    on:keydown={() => (languageButtonFocused = false)}
-                />
-            {/if}
+                    <span class="overflow-hidden overflow-ellipsis">
+                        {#if pickedLocale}
+                            <Localized id={`locale-${pickedLocale}`} />
+                        {:else}
+                            Pick …
+                        {/if}</span
+                    >
+                    <div class="pl-5 flex items-center">
+                        {#if languageButtonFocused}
+                            <ChevronUpIcon size="18" />
+                        {:else}
+                            <ChevronDownIcon size="18" />
+                        {/if}
+                    </div>
+                </ButtonSmall>
+                {#if languageButtonFocused}
+                    <div
+                        id={languageButtonDropdownId}
+                        class="relative language-button-dropdown"
+                    >
+                        <ul>
+                            {#each items as item}
+                                <li
+                                    value={item.value}
+                                    aria-selected={item.value === pickedLocale}
+                                    on:click={() =>
+                                        handlePickLocale(item.value)}
+                                >
+                                    <div class="py-1 px-3">
+                                        <Localized
+                                            id={`locale-${item.value}`}
+                                        />
+                                    </div>
+                                </li>
+                            {/each}
+                        </ul>
+                    </div>
+                    <ClickAwayListener
+                        elementId={[languageButtonDropdownId, languageButtonId]}
+                        on:clickaway={() => (languageButtonFocused = false)}
+                    />
+                    <EscapeKeyListener
+                        on:keydown={() => (languageButtonFocused = false)}
+                    />
+                {/if}
+            </div>
         </div>
-    </div>
-    {#if shownPrompt && promptsSupportedForPickedLocale}
-        <div class="pt-8 pb-4 px-4 font-secondary relative">
-            {#if shownPrompt.type === PromptType.Question}
-                <div class="font-bold text-2xl text-center">
-                    {shownPrompt.content}
-                </div>
-            {:else if shownPrompt.type === PromptType.Word}
-                <div class="font-bold text-4xl text-center mb-2">
-                    {shownPrompt.content}
-                </div>
-                <div class="text-lg text-gray text-center">
-                    <Localized id="index-prompt-instruction-word" />
-                </div>
-            {/if}
-            <ButtonLarge
-                tag="button"
-                variant="TEXT"
-                on:click={() => unsetPrompt()}
-                className="close-prompt-button"
-            >
-                <XCircleIcon size="32" strokeWidth={1} />
-            </ButtonLarge>
-        </div>
-    {/if}
-</div>
-<PostForm
-    shownPromptUuid={shownPrompt ? shownPrompt.uuid : null}
-    locale={pickedLocale || null}
-    on:success={handlePostSuccess}
-/>
-<div class="container max-w-2xl py-2 px-3 sm:px-0 gap-y-1">
-    {#each posts as post (post.uuid)}
-        {#if post.author}
-            <div class="post">
-                <Post
-                    uuid={post.uuid}
-                    body={post.body}
-                    author={post.author}
-                    likes={post.likes}
-                    replies={post.replies}
-                    recordings={post.recordings}
-                    createdAt={post.createdAt}
-                    prompt={post.prompt}
-                    language={post.language}
-                    on:replySuccess={handlePostReplySuccess}
-                    on:likeSuccess={handlePostLikeSuccess}
-                    on:unlikeSuccess={handlePostUnlikeSuccess}
-                />
+        {#if shownPrompt && promptsSupportedForPickedLocale}
+            <div class="pt-8 pb-4 px-4 font-secondary relative">
+                {#if shownPrompt.type === PromptType.Question}
+                    <div class="font-bold text-2xl text-center">
+                        {shownPrompt.content}
+                    </div>
+                {:else if shownPrompt.type === PromptType.Word}
+                    <div class="font-bold text-4xl text-center mb-2">
+                        {shownPrompt.content}
+                    </div>
+                    <div class="text-lg text-gray text-center">
+                        <Localized id="index-prompt-instruction-word" />
+                    </div>
+                {/if}
+                <ButtonLarge
+                    tag="button"
+                    variant="TEXT"
+                    on:click={() => unsetPrompt()}
+                    className="close-prompt-button"
+                >
+                    <XCircleIcon size="32" strokeWidth={1} />
+                </ButtonLarge>
             </div>
         {/if}
-    {/each}
-</div>
+    </div>
+    <PostForm
+        shownPromptUuid={shownPrompt ? shownPrompt.uuid : null}
+        locale={pickedLocale || null}
+        on:success={handlePostSuccess}
+    />
+    <div class="container max-w-2xl py-2 px-3 sm:px-0 gap-y-1">
+        {#each posts as post (post.uuid)}
+            {#if post.author}
+                <div class="post">
+                    <Post
+                        uuid={post.uuid}
+                        body={post.body}
+                        author={post.author}
+                        likes={post.likes}
+                        replies={post.replies}
+                        recordings={post.recordings}
+                        createdAt={post.createdAt}
+                        prompt={post.prompt}
+                        language={post.language}
+                        on:replySuccess={handlePostReplySuccess}
+                        on:likeSuccess={handlePostLikeSuccess}
+                        on:unlikeSuccess={handlePostUnlikeSuccess}
+                    />
+                </div>
+            {/if}
+        {/each}
+    </div>
+{/if}
 
 <style>
     .post:not(:last-child) {

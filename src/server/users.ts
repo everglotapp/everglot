@@ -33,6 +33,12 @@ import {
     UpdateUserBioMutationVariables,
     UpdateUserBioMutation,
     UpdateUserBio,
+    UpsertUserPreferenceMutationVariables,
+    UpsertUserPreferenceMutation,
+    UpsertUserPreference,
+    CreateUserPreferenceMutationVariables,
+    CreateUserPreferenceMutation,
+    CreateUserPreference,
 } from "../types/generated/graphql"
 
 export async function registerUserActivity(
@@ -198,4 +204,42 @@ export async function getUserFollowershipIdByUserIdAndFollowerId(
     return res.data?.userFollowers?.totalCount === 1
         ? res.data.userFollowers.nodes[0]!.id
         : null
+}
+
+export async function upsertUserPreference(
+    vars: UpsertUserPreferenceMutationVariables
+): Promise<
+    | NonNullable<
+          UpsertUserPreferenceMutation["upsertUserPreference"]
+      >["userPreference"]
+    | null
+> {
+    const res = await performQuery<UpsertUserPreferenceMutation>(
+        UpsertUserPreference.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        chlog.child({ res }).error("Failed to upsert user preference")
+        return null
+    }
+    return res.data?.upsertUserPreference?.userPreference || null
+}
+
+export async function createUserPreference(
+    vars: CreateUserPreferenceMutationVariables
+): Promise<
+    | NonNullable<
+          CreateUserPreferenceMutation["createUserPreference"]
+      >["userPreference"]
+    | null
+> {
+    const res = await performQuery<CreateUserPreferenceMutation>(
+        CreateUserPreference.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        chlog.child({ res }).error("Failed to create user preference")
+        return null
+    }
+    return res.data?.createUserPreference?.userPreference || null
 }

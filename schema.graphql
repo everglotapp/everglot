@@ -941,6 +941,40 @@ type Query implements Node {
     filter: UserLanguageFilter
   ): UserLanguagesConnection
 
+  """Reads and enables pagination through a set of `UserPreference`."""
+  userPreferences(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `UserPreference`."""
+    orderBy: [UserPreferencesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserPreferenceCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserPreferenceFilter
+  ): UserPreferencesConnection
+
   """Reads and enables pagination through a set of `UserSession`."""
   userSessions(
     """Only read the first `n` values of the set."""
@@ -1657,6 +1691,8 @@ type Query implements Node {
   userDeviceByFcmToken(fcmToken: String!): UserDevice
   userFollower(id: Int!): UserFollower
   userLanguage(id: Int!): UserLanguage
+  userPreference(id: Int!): UserPreference
+  userPreferenceByUserId(userId: Int!): UserPreference
   userSession(sid: String!): UserSession
   user(id: Int!): User
   userByUsername(username: String!): User
@@ -1966,6 +2002,14 @@ type Query implements Node {
     """
     nodeId: ID!
   ): UserLanguage
+
+  """Reads a single `UserPreference` using its globally unique `ID`."""
+  userPreferenceByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `UserPreference`.
+    """
+    nodeId: ID!
+  ): UserPreference
 
   """Reads a single `UserSession` using its globally unique `ID`."""
   userSessionByNodeId(
@@ -2630,6 +2674,9 @@ type User implements Node {
     """
     filter: UserFollowerFilter
   ): UserFollowersConnection!
+
+  """Reads a single `UserPreference` that is related to this `User`."""
+  preference: UserPreference
   followedByCurrentUser: Boolean
 
   """Reads and enables pagination through a set of `Language`."""
@@ -3431,6 +3478,40 @@ type Language implements Node {
     """
     filter: PromptFilter
   ): PromptsConnection!
+
+  """Reads and enables pagination through a set of `UserPreference`."""
+  userPreferencesByFeedLanguageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `UserPreference`."""
+    orderBy: [UserPreferencesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserPreferenceCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserPreferenceFilter
+  ): UserPreferencesConnection!
 
   """Reads and enables pagination through a set of `InviteToken`."""
   inviteTokensByUserLocaleAndSignedUpWithTokenId(
@@ -12864,6 +12945,108 @@ type UserLanguagesEdge {
   node: UserLanguage
 }
 
+"""A connection to a list of `UserPreference` values."""
+type UserPreferencesConnection {
+  """A list of `UserPreference` objects."""
+  nodes: [UserPreference]!
+
+  """
+  A list of edges which contains the `UserPreference` and cursor to aid in pagination.
+  """
+  edges: [UserPreferencesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `UserPreference` you could get from the connection."""
+  totalCount: Int!
+}
+
+type UserPreference implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  userId: Int!
+  feedLanguageId: Int!
+  createdAt: Datetime!
+
+  """Reads a single `User` that is related to this `UserPreference`."""
+  user: User
+
+  """Reads a single `Language` that is related to this `UserPreference`."""
+  feedLanguage: Language
+}
+
+"""A `UserPreference` edge in the connection."""
+type UserPreferencesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `UserPreference` at the end of the edge."""
+  node: UserPreference
+}
+
+"""Methods to use when ordering `UserPreference`."""
+enum UserPreferencesOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  FEED_LANGUAGE_ID_ASC
+  FEED_LANGUAGE_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `UserPreference` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input UserPreferenceCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `feedLanguageId` field."""
+  feedLanguageId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `UserPreference` object types. All fields are combined with a logical ‘and.’
+"""
+input UserPreferenceFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `feedLanguageId` field."""
+  feedLanguageId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [UserPreferenceFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [UserPreferenceFilter!]
+
+  """Negates the expression."""
+  not: UserPreferenceFilter
+}
+
 """A connection to a list of `InviteToken` values, with data from `User`."""
 type LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyConnection {
   """A list of `InviteToken` objects."""
@@ -15357,6 +15540,14 @@ type Mutation {
     input: CreateUserLanguageInput!
   ): CreateUserLanguagePayload
 
+  """Creates a single `UserPreference`."""
+  createUserPreference(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateUserPreferenceInput!
+  ): CreateUserPreferencePayload
+
   """Creates a single `UserSession`."""
   createUserSession(
     """
@@ -16216,6 +16407,32 @@ type Mutation {
     """
     input: UpdateUserLanguageInput!
   ): UpdateUserLanguagePayload
+
+  """
+  Updates a single `UserPreference` using its globally unique id and a patch.
+  """
+  updateUserPreferenceByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserPreferenceByNodeIdInput!
+  ): UpdateUserPreferencePayload
+
+  """Updates a single `UserPreference` using a unique key and a patch."""
+  updateUserPreference(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserPreferenceInput!
+  ): UpdateUserPreferencePayload
+
+  """Updates a single `UserPreference` using a unique key and a patch."""
+  updateUserPreferenceByUserId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserPreferenceByUserIdInput!
+  ): UpdateUserPreferencePayload
 
   """
   Updates a single `UserSession` using its globally unique id and a patch.
@@ -17395,6 +17612,30 @@ type Mutation {
     input: DeleteUserLanguageInput!
   ): DeleteUserLanguagePayload
 
+  """Deletes a single `UserPreference` using its globally unique id."""
+  deleteUserPreferenceByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserPreferenceByNodeIdInput!
+  ): DeleteUserPreferencePayload
+
+  """Deletes a single `UserPreference` using a unique key."""
+  deleteUserPreference(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserPreferenceInput!
+  ): DeleteUserPreferencePayload
+
+  """Deletes a single `UserPreference` using a unique key."""
+  deleteUserPreferenceByUserId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserPreferenceByUserIdInput!
+  ): DeleteUserPreferencePayload
+
   """Deletes a single `UserSession` using its globally unique id."""
   deleteUserSessionByNodeId(
     """
@@ -17902,6 +18143,476 @@ type Mutation {
     """
     input: RegisterUserActivityInput!
   ): RegisterUserActivityPayload
+
+  """Upserts a single `GroupUser`."""
+  upsertGroupUser(
+    where: UpsertGroupUserWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertGroupUserInput!
+  ): UpsertGroupUserPayload
+
+  """Upserts a single `Group`."""
+  upsertGroup(
+    where: UpsertGroupWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertGroupInput!
+  ): UpsertGroupPayload
+
+  """Upserts a single `ChineseGuessCharacterQuestion`."""
+  upsertChineseGuessCharacterQuestion(
+    where: UpsertChineseGuessCharacterQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertChineseGuessCharacterQuestionInput!
+  ): UpsertChineseGuessCharacterQuestionPayload
+
+  """Upserts a single `InviteToken`."""
+  upsertInviteToken(
+    where: UpsertInviteTokenWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertInviteTokenInput!
+  ): UpsertInviteTokenPayload
+
+  """Upserts a single `LanguageSkillLevel`."""
+  upsertLanguageSkillLevel(
+    where: UpsertLanguageSkillLevelWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertLanguageSkillLevelInput!
+  ): UpsertLanguageSkillLevelPayload
+
+  """Upserts a single `Language`."""
+  upsertLanguage(
+    where: UpsertLanguageWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertLanguageInput!
+  ): UpsertLanguagePayload
+
+  """Upserts a single `MessagePreview`."""
+  upsertMessagePreview(
+    where: UpsertMessagePreviewWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertMessagePreviewInput!
+  ): UpsertMessagePreviewPayload
+
+  """Upserts a single `Message`."""
+  upsertMessage(
+    where: UpsertMessageWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertMessageInput!
+  ): UpsertMessagePayload
+
+  """Upserts a single `NotificationChannel`."""
+  upsertNotificationChannel(
+    where: UpsertNotificationChannelWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertNotificationChannelInput!
+  ): UpsertNotificationChannelPayload
+
+  """Upserts a single `Notification`."""
+  upsertNotification(
+    where: UpsertNotificationWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertNotificationInput!
+  ): UpsertNotificationPayload
+
+  """Upserts a single `PostLike`."""
+  upsertPostLike(
+    where: UpsertPostLikeWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertPostLikeInput!
+  ): UpsertPostLikePayload
+
+  """Upserts a single `PostRecording`."""
+  upsertPostRecording(
+    where: UpsertPostRecordingWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertPostRecordingInput!
+  ): UpsertPostRecordingPayload
+
+  """Upserts a single `Post`."""
+  upsertPost(
+    where: UpsertPostWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertPostInput!
+  ): UpsertPostPayload
+
+  """Upserts a single `Prompt`."""
+  upsertPrompt(
+    where: UpsertPromptWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertPromptInput!
+  ): UpsertPromptPayload
+
+  """Upserts a single `GermanRandomQuestion`."""
+  upsertGermanRandomQuestion(
+    where: UpsertGermanRandomQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertGermanRandomQuestionInput!
+  ): UpsertGermanRandomQuestionPayload
+
+  """Upserts a single `EnglishRandomQuestion`."""
+  upsertEnglishRandomQuestion(
+    where: UpsertEnglishRandomQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertEnglishRandomQuestionInput!
+  ): UpsertEnglishRandomQuestionPayload
+
+  """Upserts a single `SpanishRandomQuestion`."""
+  upsertSpanishRandomQuestion(
+    where: UpsertSpanishRandomQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertSpanishRandomQuestionInput!
+  ): UpsertSpanishRandomQuestionPayload
+
+  """Upserts a single `FrenchRandomQuestion`."""
+  upsertFrenchRandomQuestion(
+    where: UpsertFrenchRandomQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertFrenchRandomQuestionInput!
+  ): UpsertFrenchRandomQuestionPayload
+
+  """Upserts a single `ItalianRandomQuestion`."""
+  upsertItalianRandomQuestion(
+    where: UpsertItalianRandomQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertItalianRandomQuestionInput!
+  ): UpsertItalianRandomQuestionPayload
+
+  """Upserts a single `JapaneseRandomQuestion`."""
+  upsertJapaneseRandomQuestion(
+    where: UpsertJapaneseRandomQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertJapaneseRandomQuestionInput!
+  ): UpsertJapaneseRandomQuestionPayload
+
+  """Upserts a single `KoreanRandomQuestion`."""
+  upsertKoreanRandomQuestion(
+    where: UpsertKoreanRandomQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertKoreanRandomQuestionInput!
+  ): UpsertKoreanRandomQuestionPayload
+
+  """Upserts a single `PortugueseRandomQuestion`."""
+  upsertPortugueseRandomQuestion(
+    where: UpsertPortugueseRandomQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertPortugueseRandomQuestionInput!
+  ): UpsertPortugueseRandomQuestionPayload
+
+  """Upserts a single `RussianRandomQuestion`."""
+  upsertRussianRandomQuestion(
+    where: UpsertRussianRandomQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertRussianRandomQuestionInput!
+  ): UpsertRussianRandomQuestionPayload
+
+  """Upserts a single `ChineseRandomQuestion`."""
+  upsertChineseRandomQuestion(
+    where: UpsertChineseRandomQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertChineseRandomQuestionInput!
+  ): UpsertChineseRandomQuestionPayload
+
+  """Upserts a single `UserDevice`."""
+  upsertUserDevice(
+    where: UpsertUserDeviceWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertUserDeviceInput!
+  ): UpsertUserDevicePayload
+
+  """Upserts a single `UserFollower`."""
+  upsertUserFollower(
+    where: UpsertUserFollowerWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertUserFollowerInput!
+  ): UpsertUserFollowerPayload
+
+  """Upserts a single `UserLanguage`."""
+  upsertUserLanguage(
+    where: UpsertUserLanguageWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertUserLanguageInput!
+  ): UpsertUserLanguagePayload
+
+  """Upserts a single `UserPreference`."""
+  upsertUserPreference(
+    where: UpsertUserPreferenceWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertUserPreferenceInput!
+  ): UpsertUserPreferencePayload
+
+  """Upserts a single `UserSession`."""
+  upsertUserSession(
+    where: UpsertUserSessionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertUserSessionInput!
+  ): UpsertUserSessionPayload
+
+  """Upserts a single `User`."""
+  upsertUser(
+    where: UpsertUserWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertUserInput!
+  ): UpsertUserPayload
+
+  """Upserts a single `GermanWord`."""
+  upsertGermanWord(
+    where: UpsertGermanWordWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertGermanWordInput!
+  ): UpsertGermanWordPayload
+
+  """Upserts a single `EnglishWord`."""
+  upsertEnglishWord(
+    where: UpsertEnglishWordWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertEnglishWordInput!
+  ): UpsertEnglishWordPayload
+
+  """Upserts a single `SpanishWord`."""
+  upsertSpanishWord(
+    where: UpsertSpanishWordWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertSpanishWordInput!
+  ): UpsertSpanishWordPayload
+
+  """Upserts a single `FrenchWord`."""
+  upsertFrenchWord(
+    where: UpsertFrenchWordWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertFrenchWordInput!
+  ): UpsertFrenchWordPayload
+
+  """Upserts a single `ItalianWord`."""
+  upsertItalianWord(
+    where: UpsertItalianWordWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertItalianWordInput!
+  ): UpsertItalianWordPayload
+
+  """Upserts a single `PortugueseWord`."""
+  upsertPortugueseWord(
+    where: UpsertPortugueseWordWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertPortugueseWordInput!
+  ): UpsertPortugueseWordPayload
+
+  """Upserts a single `RussianWord`."""
+  upsertRussianWord(
+    where: UpsertRussianWordWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertRussianWordInput!
+  ): UpsertRussianWordPayload
+
+  """Upserts a single `GermanWouldYouRatherQuestion`."""
+  upsertGermanWouldYouRatherQuestion(
+    where: UpsertGermanWouldYouRatherQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertGermanWouldYouRatherQuestionInput!
+  ): UpsertGermanWouldYouRatherQuestionPayload
+
+  """Upserts a single `EnglishWouldYouRatherQuestion`."""
+  upsertEnglishWouldYouRatherQuestion(
+    where: UpsertEnglishWouldYouRatherQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertEnglishWouldYouRatherQuestionInput!
+  ): UpsertEnglishWouldYouRatherQuestionPayload
+
+  """Upserts a single `SpanishWouldYouRatherQuestion`."""
+  upsertSpanishWouldYouRatherQuestion(
+    where: UpsertSpanishWouldYouRatherQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertSpanishWouldYouRatherQuestionInput!
+  ): UpsertSpanishWouldYouRatherQuestionPayload
+
+  """Upserts a single `FrenchWouldYouRatherQuestion`."""
+  upsertFrenchWouldYouRatherQuestion(
+    where: UpsertFrenchWouldYouRatherQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertFrenchWouldYouRatherQuestionInput!
+  ): UpsertFrenchWouldYouRatherQuestionPayload
+
+  """Upserts a single `ItalianWouldYouRatherQuestion`."""
+  upsertItalianWouldYouRatherQuestion(
+    where: UpsertItalianWouldYouRatherQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertItalianWouldYouRatherQuestionInput!
+  ): UpsertItalianWouldYouRatherQuestionPayload
+
+  """Upserts a single `JapaneseWouldYouRatherQuestion`."""
+  upsertJapaneseWouldYouRatherQuestion(
+    where: UpsertJapaneseWouldYouRatherQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertJapaneseWouldYouRatherQuestionInput!
+  ): UpsertJapaneseWouldYouRatherQuestionPayload
+
+  """Upserts a single `KoreanWouldYouRatherQuestion`."""
+  upsertKoreanWouldYouRatherQuestion(
+    where: UpsertKoreanWouldYouRatherQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertKoreanWouldYouRatherQuestionInput!
+  ): UpsertKoreanWouldYouRatherQuestionPayload
+
+  """Upserts a single `PortugueseWouldYouRatherQuestion`."""
+  upsertPortugueseWouldYouRatherQuestion(
+    where: UpsertPortugueseWouldYouRatherQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertPortugueseWouldYouRatherQuestionInput!
+  ): UpsertPortugueseWouldYouRatherQuestionPayload
+
+  """Upserts a single `RussianWouldYouRatherQuestion`."""
+  upsertRussianWouldYouRatherQuestion(
+    where: UpsertRussianWouldYouRatherQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertRussianWouldYouRatherQuestionInput!
+  ): UpsertRussianWouldYouRatherQuestionPayload
+
+  """Upserts a single `ChineseWouldYouRatherQuestion`."""
+  upsertChineseWouldYouRatherQuestion(
+    where: UpsertChineseWouldYouRatherQuestionWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertChineseWouldYouRatherQuestionInput!
+  ): UpsertChineseWouldYouRatherQuestionPayload
 }
 
 """The output of our create `GroupUser` mutation."""
@@ -19271,6 +19982,55 @@ input UserLanguageInput {
   languageId: Int
   languageSkillLevelId: Int
   native: Boolean
+  createdAt: Datetime
+}
+
+"""The output of our create `UserPreference` mutation."""
+type CreateUserPreferencePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserPreference` that was created by this mutation."""
+  userPreference: UserPreference
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserPreference`."""
+  user: User
+
+  """Reads a single `Language` that is related to this `UserPreference`."""
+  feedLanguage: Language
+
+  """An edge for our `UserPreference`. May be used by Relay 1."""
+  userPreferenceEdge(
+    """The method to use when ordering `UserPreference`."""
+    orderBy: [UserPreferencesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserPreferencesEdge
+}
+
+"""All input for the create `UserPreference` mutation."""
+input CreateUserPreferenceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `UserPreference` to be created by this mutation."""
+  userPreference: UserPreferenceInput!
+}
+
+"""An input for mutations affecting `UserPreference`"""
+input UserPreferenceInput {
+  id: Int
+  userId: Int!
+  feedLanguageId: Int!
   createdAt: Datetime
 }
 
@@ -22654,6 +23414,94 @@ input UpdateUserLanguageInput {
   """
   patch: UserLanguagePatch!
   id: Int!
+}
+
+"""The output of our update `UserPreference` mutation."""
+type UpdateUserPreferencePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserPreference` that was updated by this mutation."""
+  userPreference: UserPreference
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserPreference`."""
+  user: User
+
+  """Reads a single `Language` that is related to this `UserPreference`."""
+  feedLanguage: Language
+
+  """An edge for our `UserPreference`. May be used by Relay 1."""
+  userPreferenceEdge(
+    """The method to use when ordering `UserPreference`."""
+    orderBy: [UserPreferencesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserPreferencesEdge
+}
+
+"""All input for the `updateUserPreferenceByNodeId` mutation."""
+input UpdateUserPreferenceByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `UserPreference` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `UserPreference` being updated.
+  """
+  patch: UserPreferencePatch!
+}
+
+"""
+Represents an update to a `UserPreference`. Fields that are set will be updated.
+"""
+input UserPreferencePatch {
+  id: Int
+  userId: Int
+  feedLanguageId: Int
+  createdAt: Datetime
+}
+
+"""All input for the `updateUserPreference` mutation."""
+input UpdateUserPreferenceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `UserPreference` being updated.
+  """
+  patch: UserPreferencePatch!
+  id: Int!
+}
+
+"""All input for the `updateUserPreferenceByUserId` mutation."""
+input UpdateUserPreferenceByUserIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `UserPreference` being updated.
+  """
+  patch: UserPreferencePatch!
+  userId: Int!
 }
 
 """The output of our update `UserSession` mutation."""
@@ -26149,6 +26997,70 @@ input DeleteUserLanguageInput {
   id: Int!
 }
 
+"""The output of our delete `UserPreference` mutation."""
+type DeleteUserPreferencePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserPreference` that was deleted by this mutation."""
+  userPreference: UserPreference
+  deletedUserPreferenceNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserPreference`."""
+  user: User
+
+  """Reads a single `Language` that is related to this `UserPreference`."""
+  feedLanguage: Language
+
+  """An edge for our `UserPreference`. May be used by Relay 1."""
+  userPreferenceEdge(
+    """The method to use when ordering `UserPreference`."""
+    orderBy: [UserPreferencesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserPreferencesEdge
+}
+
+"""All input for the `deleteUserPreferenceByNodeId` mutation."""
+input DeleteUserPreferenceByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `UserPreference` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteUserPreference` mutation."""
+input DeleteUserPreferenceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deleteUserPreferenceByUserId` mutation."""
+input DeleteUserPreferenceByUserIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  userId: Int!
+}
+
 """The output of our delete `UserSession` mutation."""
 type DeleteUserSessionPayload {
   """
@@ -27480,4 +28392,2141 @@ input RegisterUserActivityInput {
   """
   clientMutationId: String
   userId: Int!
+}
+
+"""The output of our upsert `GroupUser` mutation."""
+type UpsertGroupUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GroupUser` that was upserted by this mutation."""
+  groupUser: GroupUser
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `GroupUser`."""
+  user: User
+
+  """Reads a single `Group` that is related to this `GroupUser`."""
+  group: Group
+
+  """An edge for our `GroupUser`. May be used by Relay 1."""
+  groupUserEdge(
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupUsersEdge
+}
+
+"""Where conditions for the upsert `GroupUser` mutation."""
+input UpsertGroupUserWhere {
+  id: Int
+}
+
+"""All input for the upsert `GroupUser` mutation."""
+input UpsertGroupUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `GroupUser` to be upserted by this mutation."""
+  groupUser: GroupUserInput!
+}
+
+"""The output of our upsert `Group` mutation."""
+type UpsertGroupPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Group` that was upserted by this mutation."""
+  group: Group
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Language` that is related to this `Group`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Group`."""
+  languageSkillLevel: LanguageSkillLevel
+
+  """An edge for our `Group`. May be used by Relay 1."""
+  groupEdge(
+    """The method to use when ordering `Group`."""
+    orderBy: [GroupsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GroupsEdge
+}
+
+"""Where conditions for the upsert `Group` mutation."""
+input UpsertGroupWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `Group` mutation."""
+input UpsertGroupInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Group` to be upserted by this mutation."""
+  group: GroupInput!
+}
+
+"""The output of our upsert `ChineseGuessCharacterQuestion` mutation."""
+type UpsertChineseGuessCharacterQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  The `ChineseGuessCharacterQuestion` that was upserted by this mutation.
+  """
+  chineseGuessCharacterQuestion: ChineseGuessCharacterQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseGuessCharacterQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `ChineseGuessCharacterQuestion`. May be used by Relay 1.
+  """
+  chineseGuessCharacterQuestionEdge(
+    """The method to use when ordering `ChineseGuessCharacterQuestion`."""
+    orderBy: [ChineseGuessCharacterQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChineseGuessCharacterQuestionsEdge
+}
+
+"""
+Where conditions for the upsert `ChineseGuessCharacterQuestion` mutation.
+"""
+input UpsertChineseGuessCharacterQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `ChineseGuessCharacterQuestion` mutation."""
+input UpsertChineseGuessCharacterQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ChineseGuessCharacterQuestion` to be upserted by this mutation."""
+  chineseGuessCharacterQuestion: ChineseGuessCharacterQuestionInput!
+}
+
+"""The output of our upsert `InviteToken` mutation."""
+type UpsertInviteTokenPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `InviteToken` that was upserted by this mutation."""
+  inviteToken: InviteToken
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `InviteToken`."""
+  user: User
+
+  """An edge for our `InviteToken`. May be used by Relay 1."""
+  inviteTokenEdge(
+    """The method to use when ordering `InviteToken`."""
+    orderBy: [InviteTokensOrderBy!] = [PRIMARY_KEY_ASC]
+  ): InviteTokensEdge
+}
+
+"""Where conditions for the upsert `InviteToken` mutation."""
+input UpsertInviteTokenWhere {
+  id: Int
+}
+
+"""All input for the upsert `InviteToken` mutation."""
+input UpsertInviteTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `InviteToken` to be upserted by this mutation."""
+  inviteToken: InviteTokenInput!
+}
+
+"""The output of our upsert `LanguageSkillLevel` mutation."""
+type UpsertLanguageSkillLevelPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `LanguageSkillLevel` that was upserted by this mutation."""
+  languageSkillLevel: LanguageSkillLevel
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `LanguageSkillLevel`. May be used by Relay 1."""
+  languageSkillLevelEdge(
+    """The method to use when ordering `LanguageSkillLevel`."""
+    orderBy: [LanguageSkillLevelsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): LanguageSkillLevelsEdge
+}
+
+"""Where conditions for the upsert `LanguageSkillLevel` mutation."""
+input UpsertLanguageSkillLevelWhere {
+  id: Int
+}
+
+"""All input for the upsert `LanguageSkillLevel` mutation."""
+input UpsertLanguageSkillLevelInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `LanguageSkillLevel` to be upserted by this mutation."""
+  languageSkillLevel: LanguageSkillLevelInput!
+}
+
+"""The output of our upsert `Language` mutation."""
+type UpsertLanguagePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Language` that was upserted by this mutation."""
+  language: Language
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Language`. May be used by Relay 1."""
+  languageEdge(
+    """The method to use when ordering `Language`."""
+    orderBy: [LanguagesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): LanguagesEdge
+}
+
+"""Where conditions for the upsert `Language` mutation."""
+input UpsertLanguageWhere {
+  id: Int
+  alpha2: String
+  englishName: String
+}
+
+"""All input for the upsert `Language` mutation."""
+input UpsertLanguageInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Language` to be upserted by this mutation."""
+  language: LanguageInput!
+}
+
+"""The output of our upsert `MessagePreview` mutation."""
+type UpsertMessagePreviewPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `MessagePreview` that was upserted by this mutation."""
+  messagePreview: MessagePreview
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Message` that is related to this `MessagePreview`."""
+  message: Message
+
+  """An edge for our `MessagePreview`. May be used by Relay 1."""
+  messagePreviewEdge(
+    """The method to use when ordering `MessagePreview`."""
+    orderBy: [MessagePreviewsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): MessagePreviewsEdge
+}
+
+"""Where conditions for the upsert `MessagePreview` mutation."""
+input UpsertMessagePreviewWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `MessagePreview` mutation."""
+input UpsertMessagePreviewInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `MessagePreview` to be upserted by this mutation."""
+  messagePreview: MessagePreviewInput!
+}
+
+"""The output of our upsert `Message` mutation."""
+type UpsertMessagePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Message` that was upserted by this mutation."""
+  message: Message
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `Message`."""
+  sender: User
+
+  """Reads a single `User` that is related to this `Message`."""
+  recipient: User
+
+  """Reads a single `Group` that is related to this `Message`."""
+  recipientGroup: Group
+
+  """Reads a single `Message` that is related to this `Message`."""
+  parentMessage: Message
+
+  """An edge for our `Message`. May be used by Relay 1."""
+  messageEdge(
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): MessagesEdge
+}
+
+"""Where conditions for the upsert `Message` mutation."""
+input UpsertMessageWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `Message` mutation."""
+input UpsertMessageInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Message` to be upserted by this mutation."""
+  message: MessageInput!
+}
+
+"""The output of our upsert `NotificationChannel` mutation."""
+type UpsertNotificationChannelPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `NotificationChannel` that was upserted by this mutation."""
+  notificationChannel: NotificationChannel
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `NotificationChannel`. May be used by Relay 1."""
+  notificationChannelEdge(
+    """The method to use when ordering `NotificationChannel`."""
+    orderBy: [NotificationChannelsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NotificationChannelsEdge
+}
+
+"""Where conditions for the upsert `NotificationChannel` mutation."""
+input UpsertNotificationChannelWhere {
+  id: Int
+  uuid: UUID
+  name: String
+}
+
+"""All input for the upsert `NotificationChannel` mutation."""
+input UpsertNotificationChannelInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `NotificationChannel` to be upserted by this mutation."""
+  notificationChannel: NotificationChannelInput!
+}
+
+"""The output of our upsert `Notification` mutation."""
+type UpsertNotificationPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Notification` that was upserted by this mutation."""
+  notification: Notification
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `Notification`."""
+  recipient: User
+
+  """
+  Reads a single `NotificationChannel` that is related to this `Notification`.
+  """
+  channel: NotificationChannel
+
+  """Reads a single `Group` that is related to this `Notification`."""
+  recipientGroup: Group
+
+  """An edge for our `Notification`. May be used by Relay 1."""
+  notificationEdge(
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NotificationsEdge
+}
+
+"""Where conditions for the upsert `Notification` mutation."""
+input UpsertNotificationWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `Notification` mutation."""
+input UpsertNotificationInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Notification` to be upserted by this mutation."""
+  notification: NotificationInput!
+}
+
+"""The output of our upsert `PostLike` mutation."""
+type UpsertPostLikePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostLike` that was upserted by this mutation."""
+  postLike: PostLike
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `PostLike`."""
+  user: User
+
+  """Reads a single `Post` that is related to this `PostLike`."""
+  post: Post
+
+  """An edge for our `PostLike`. May be used by Relay 1."""
+  postLikeEdge(
+    """The method to use when ordering `PostLike`."""
+    orderBy: [PostLikesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostLikesEdge
+}
+
+"""Where conditions for the upsert `PostLike` mutation."""
+input UpsertPostLikeWhere {
+  id: Int
+}
+
+"""All input for the upsert `PostLike` mutation."""
+input UpsertPostLikeInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PostLike` to be upserted by this mutation."""
+  postLike: PostLikeInput!
+}
+
+"""The output of our upsert `PostRecording` mutation."""
+type UpsertPostRecordingPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostRecording` that was upserted by this mutation."""
+  postRecording: PostRecording
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `PostRecording`."""
+  user: User
+
+  """Reads a single `Post` that is related to this `PostRecording`."""
+  post: Post
+
+  """An edge for our `PostRecording`. May be used by Relay 1."""
+  postRecordingEdge(
+    """The method to use when ordering `PostRecording`."""
+    orderBy: [PostRecordingsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostRecordingsEdge
+}
+
+"""Where conditions for the upsert `PostRecording` mutation."""
+input UpsertPostRecordingWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `PostRecording` mutation."""
+input UpsertPostRecordingInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PostRecording` to be upserted by this mutation."""
+  postRecording: PostRecordingInput!
+}
+
+"""The output of our upsert `Post` mutation."""
+type UpsertPostPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Post` that was upserted by this mutation."""
+  post: Post
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `Post`."""
+  author: User
+
+  """Reads a single `Post` that is related to this `Post`."""
+  parentPost: Post
+
+  """Reads a single `Language` that is related to this `Post`."""
+  language: Language
+
+  """Reads a single `Prompt` that is related to this `Post`."""
+  prompt: Prompt
+
+  """An edge for our `Post`. May be used by Relay 1."""
+  postEdge(
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostsEdge
+}
+
+"""Where conditions for the upsert `Post` mutation."""
+input UpsertPostWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `Post` mutation."""
+input UpsertPostInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Post` to be upserted by this mutation."""
+  post: PostInput!
+}
+
+"""The output of our upsert `Prompt` mutation."""
+type UpsertPromptPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Prompt` that was upserted by this mutation."""
+  prompt: Prompt
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Language` that is related to this `Prompt`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Prompt`."""
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `Prompt`. May be used by Relay 1."""
+  promptEdge(
+    """The method to use when ordering `Prompt`."""
+    orderBy: [PromptsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PromptsEdge
+}
+
+"""Where conditions for the upsert `Prompt` mutation."""
+input UpsertPromptWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `Prompt` mutation."""
+input UpsertPromptInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Prompt` to be upserted by this mutation."""
+  prompt: PromptInput!
+}
+
+"""The output of our upsert `GermanRandomQuestion` mutation."""
+type UpsertGermanRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GermanRandomQuestion` that was upserted by this mutation."""
+  germanRandomQuestion: GermanRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `GermanRandomQuestion`. May be used by Relay 1."""
+  germanRandomQuestionEdge(
+    """The method to use when ordering `GermanRandomQuestion`."""
+    orderBy: [GermanRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GermanRandomQuestionsEdge
+}
+
+"""Where conditions for the upsert `GermanRandomQuestion` mutation."""
+input UpsertGermanRandomQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `GermanRandomQuestion` mutation."""
+input UpsertGermanRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `GermanRandomQuestion` to be upserted by this mutation."""
+  germanRandomQuestion: GermanRandomQuestionInput!
+}
+
+"""The output of our upsert `EnglishRandomQuestion` mutation."""
+type UpsertEnglishRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `EnglishRandomQuestion` that was upserted by this mutation."""
+  englishRandomQuestion: EnglishRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `EnglishRandomQuestion`. May be used by Relay 1."""
+  englishRandomQuestionEdge(
+    """The method to use when ordering `EnglishRandomQuestion`."""
+    orderBy: [EnglishRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): EnglishRandomQuestionsEdge
+}
+
+"""Where conditions for the upsert `EnglishRandomQuestion` mutation."""
+input UpsertEnglishRandomQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `EnglishRandomQuestion` mutation."""
+input UpsertEnglishRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `EnglishRandomQuestion` to be upserted by this mutation."""
+  englishRandomQuestion: EnglishRandomQuestionInput!
+}
+
+"""The output of our upsert `SpanishRandomQuestion` mutation."""
+type UpsertSpanishRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `SpanishRandomQuestion` that was upserted by this mutation."""
+  spanishRandomQuestion: SpanishRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `SpanishRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `SpanishRandomQuestion`. May be used by Relay 1."""
+  spanishRandomQuestionEdge(
+    """The method to use when ordering `SpanishRandomQuestion`."""
+    orderBy: [SpanishRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): SpanishRandomQuestionsEdge
+}
+
+"""Where conditions for the upsert `SpanishRandomQuestion` mutation."""
+input UpsertSpanishRandomQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `SpanishRandomQuestion` mutation."""
+input UpsertSpanishRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `SpanishRandomQuestion` to be upserted by this mutation."""
+  spanishRandomQuestion: SpanishRandomQuestionInput!
+}
+
+"""The output of our upsert `FrenchRandomQuestion` mutation."""
+type UpsertFrenchRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `FrenchRandomQuestion` that was upserted by this mutation."""
+  frenchRandomQuestion: FrenchRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `FrenchRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `FrenchRandomQuestion`. May be used by Relay 1."""
+  frenchRandomQuestionEdge(
+    """The method to use when ordering `FrenchRandomQuestion`."""
+    orderBy: [FrenchRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): FrenchRandomQuestionsEdge
+}
+
+"""Where conditions for the upsert `FrenchRandomQuestion` mutation."""
+input UpsertFrenchRandomQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `FrenchRandomQuestion` mutation."""
+input UpsertFrenchRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `FrenchRandomQuestion` to be upserted by this mutation."""
+  frenchRandomQuestion: FrenchRandomQuestionInput!
+}
+
+"""The output of our upsert `ItalianRandomQuestion` mutation."""
+type UpsertItalianRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ItalianRandomQuestion` that was upserted by this mutation."""
+  italianRandomQuestion: ItalianRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ItalianRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `ItalianRandomQuestion`. May be used by Relay 1."""
+  italianRandomQuestionEdge(
+    """The method to use when ordering `ItalianRandomQuestion`."""
+    orderBy: [ItalianRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ItalianRandomQuestionsEdge
+}
+
+"""Where conditions for the upsert `ItalianRandomQuestion` mutation."""
+input UpsertItalianRandomQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `ItalianRandomQuestion` mutation."""
+input UpsertItalianRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ItalianRandomQuestion` to be upserted by this mutation."""
+  italianRandomQuestion: ItalianRandomQuestionInput!
+}
+
+"""The output of our upsert `JapaneseRandomQuestion` mutation."""
+type UpsertJapaneseRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `JapaneseRandomQuestion` that was upserted by this mutation."""
+  japaneseRandomQuestion: JapaneseRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `JapaneseRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `JapaneseRandomQuestion`. May be used by Relay 1."""
+  japaneseRandomQuestionEdge(
+    """The method to use when ordering `JapaneseRandomQuestion`."""
+    orderBy: [JapaneseRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): JapaneseRandomQuestionsEdge
+}
+
+"""Where conditions for the upsert `JapaneseRandomQuestion` mutation."""
+input UpsertJapaneseRandomQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `JapaneseRandomQuestion` mutation."""
+input UpsertJapaneseRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `JapaneseRandomQuestion` to be upserted by this mutation."""
+  japaneseRandomQuestion: JapaneseRandomQuestionInput!
+}
+
+"""The output of our upsert `KoreanRandomQuestion` mutation."""
+type UpsertKoreanRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `KoreanRandomQuestion` that was upserted by this mutation."""
+  koreanRandomQuestion: KoreanRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `KoreanRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `KoreanRandomQuestion`. May be used by Relay 1."""
+  koreanRandomQuestionEdge(
+    """The method to use when ordering `KoreanRandomQuestion`."""
+    orderBy: [KoreanRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): KoreanRandomQuestionsEdge
+}
+
+"""Where conditions for the upsert `KoreanRandomQuestion` mutation."""
+input UpsertKoreanRandomQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `KoreanRandomQuestion` mutation."""
+input UpsertKoreanRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `KoreanRandomQuestion` to be upserted by this mutation."""
+  koreanRandomQuestion: KoreanRandomQuestionInput!
+}
+
+"""The output of our upsert `PortugueseRandomQuestion` mutation."""
+type UpsertPortugueseRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PortugueseRandomQuestion` that was upserted by this mutation."""
+  portugueseRandomQuestion: PortugueseRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `PortugueseRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `PortugueseRandomQuestion`. May be used by Relay 1."""
+  portugueseRandomQuestionEdge(
+    """The method to use when ordering `PortugueseRandomQuestion`."""
+    orderBy: [PortugueseRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PortugueseRandomQuestionsEdge
+}
+
+"""Where conditions for the upsert `PortugueseRandomQuestion` mutation."""
+input UpsertPortugueseRandomQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `PortugueseRandomQuestion` mutation."""
+input UpsertPortugueseRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PortugueseRandomQuestion` to be upserted by this mutation."""
+  portugueseRandomQuestion: PortugueseRandomQuestionInput!
+}
+
+"""The output of our upsert `RussianRandomQuestion` mutation."""
+type UpsertRussianRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `RussianRandomQuestion` that was upserted by this mutation."""
+  russianRandomQuestion: RussianRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `RussianRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `RussianRandomQuestion`. May be used by Relay 1."""
+  russianRandomQuestionEdge(
+    """The method to use when ordering `RussianRandomQuestion`."""
+    orderBy: [RussianRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): RussianRandomQuestionsEdge
+}
+
+"""Where conditions for the upsert `RussianRandomQuestion` mutation."""
+input UpsertRussianRandomQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `RussianRandomQuestion` mutation."""
+input UpsertRussianRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `RussianRandomQuestion` to be upserted by this mutation."""
+  russianRandomQuestion: RussianRandomQuestionInput!
+}
+
+"""The output of our upsert `ChineseRandomQuestion` mutation."""
+type UpsertChineseRandomQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChineseRandomQuestion` that was upserted by this mutation."""
+  chineseRandomQuestion: ChineseRandomQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `ChineseRandomQuestion`. May be used by Relay 1."""
+  chineseRandomQuestionEdge(
+    """The method to use when ordering `ChineseRandomQuestion`."""
+    orderBy: [ChineseRandomQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChineseRandomQuestionsEdge
+}
+
+"""Where conditions for the upsert `ChineseRandomQuestion` mutation."""
+input UpsertChineseRandomQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `ChineseRandomQuestion` mutation."""
+input UpsertChineseRandomQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ChineseRandomQuestion` to be upserted by this mutation."""
+  chineseRandomQuestion: ChineseRandomQuestionInput!
+}
+
+"""The output of our upsert `UserDevice` mutation."""
+type UpsertUserDevicePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserDevice` that was upserted by this mutation."""
+  userDevice: UserDevice
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserDevice`."""
+  user: User
+
+  """An edge for our `UserDevice`. May be used by Relay 1."""
+  userDeviceEdge(
+    """The method to use when ordering `UserDevice`."""
+    orderBy: [UserDevicesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserDevicesEdge
+}
+
+"""Where conditions for the upsert `UserDevice` mutation."""
+input UpsertUserDeviceWhere {
+  id: Int
+  uuid: UUID
+  fcmToken: String
+}
+
+"""All input for the upsert `UserDevice` mutation."""
+input UpsertUserDeviceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `UserDevice` to be upserted by this mutation."""
+  userDevice: UserDeviceInput!
+}
+
+"""The output of our upsert `UserFollower` mutation."""
+type UpsertUserFollowerPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserFollower` that was upserted by this mutation."""
+  userFollower: UserFollower
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserFollower`."""
+  user: User
+
+  """Reads a single `User` that is related to this `UserFollower`."""
+  follower: User
+
+  """An edge for our `UserFollower`. May be used by Relay 1."""
+  userFollowerEdge(
+    """The method to use when ordering `UserFollower`."""
+    orderBy: [UserFollowersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserFollowersEdge
+}
+
+"""Where conditions for the upsert `UserFollower` mutation."""
+input UpsertUserFollowerWhere {
+  id: Int
+}
+
+"""All input for the upsert `UserFollower` mutation."""
+input UpsertUserFollowerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `UserFollower` to be upserted by this mutation."""
+  userFollower: UserFollowerInput!
+}
+
+"""The output of our upsert `UserLanguage` mutation."""
+type UpsertUserLanguagePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserLanguage` that was upserted by this mutation."""
+  userLanguage: UserLanguage
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserLanguage`."""
+  user: User
+
+  """Reads a single `Language` that is related to this `UserLanguage`."""
+  language: Language
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `UserLanguage`.
+  """
+  languageSkillLevel: LanguageSkillLevel
+
+  """An edge for our `UserLanguage`. May be used by Relay 1."""
+  userLanguageEdge(
+    """The method to use when ordering `UserLanguage`."""
+    orderBy: [UserLanguagesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserLanguagesEdge
+}
+
+"""Where conditions for the upsert `UserLanguage` mutation."""
+input UpsertUserLanguageWhere {
+  id: Int
+}
+
+"""All input for the upsert `UserLanguage` mutation."""
+input UpsertUserLanguageInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `UserLanguage` to be upserted by this mutation."""
+  userLanguage: UserLanguageInput!
+}
+
+"""The output of our upsert `UserPreference` mutation."""
+type UpsertUserPreferencePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserPreference` that was upserted by this mutation."""
+  userPreference: UserPreference
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserPreference`."""
+  user: User
+
+  """Reads a single `Language` that is related to this `UserPreference`."""
+  feedLanguage: Language
+
+  """An edge for our `UserPreference`. May be used by Relay 1."""
+  userPreferenceEdge(
+    """The method to use when ordering `UserPreference`."""
+    orderBy: [UserPreferencesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserPreferencesEdge
+}
+
+"""Where conditions for the upsert `UserPreference` mutation."""
+input UpsertUserPreferenceWhere {
+  id: Int
+  userId: Int
+}
+
+"""All input for the upsert `UserPreference` mutation."""
+input UpsertUserPreferenceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `UserPreference` to be upserted by this mutation."""
+  userPreference: UserPreferenceInput!
+}
+
+"""The output of our upsert `UserSession` mutation."""
+type UpsertUserSessionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserSession` that was upserted by this mutation."""
+  userSession: UserSession
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `UserSession`. May be used by Relay 1."""
+  userSessionEdge(
+    """The method to use when ordering `UserSession`."""
+    orderBy: [UserSessionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserSessionsEdge
+}
+
+"""Where conditions for the upsert `UserSession` mutation."""
+input UpsertUserSessionWhere {
+  sid: String
+}
+
+"""All input for the upsert `UserSession` mutation."""
+input UpsertUserSessionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `UserSession` to be upserted by this mutation."""
+  userSession: UserSessionInput!
+}
+
+"""The output of our upsert `User` mutation."""
+type UpsertUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `User` that was upserted by this mutation."""
+  user: User
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Language` that is related to this `User`."""
+  languageByLocale: Language
+
+  """Reads a single `InviteToken` that is related to this `User`."""
+  signedUpWithToken: InviteToken
+
+  """An edge for our `User`. May be used by Relay 1."""
+  userEdge(
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UsersEdge
+}
+
+"""Where conditions for the upsert `User` mutation."""
+input UpsertUserWhere {
+  id: Int
+  username: String
+  email: String
+  uuid: UUID
+  emailUnsubscribeToken: String
+}
+
+"""All input for the upsert `User` mutation."""
+input UpsertUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `User` to be upserted by this mutation."""
+  user: UserInput!
+}
+
+"""The output of our upsert `GermanWord` mutation."""
+type UpsertGermanWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GermanWord` that was upserted by this mutation."""
+  germanWord: GermanWord
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `GermanWord`. May be used by Relay 1."""
+  germanWordEdge(
+    """The method to use when ordering `GermanWord`."""
+    orderBy: [GermanWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GermanWordsEdge
+}
+
+"""Where conditions for the upsert `GermanWord` mutation."""
+input UpsertGermanWordWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `GermanWord` mutation."""
+input UpsertGermanWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `GermanWord` to be upserted by this mutation."""
+  germanWord: GermanWordInput!
+}
+
+"""The output of our upsert `EnglishWord` mutation."""
+type UpsertEnglishWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `EnglishWord` that was upserted by this mutation."""
+  englishWord: EnglishWord
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `EnglishWord`. May be used by Relay 1."""
+  englishWordEdge(
+    """The method to use when ordering `EnglishWord`."""
+    orderBy: [EnglishWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): EnglishWordsEdge
+}
+
+"""Where conditions for the upsert `EnglishWord` mutation."""
+input UpsertEnglishWordWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `EnglishWord` mutation."""
+input UpsertEnglishWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `EnglishWord` to be upserted by this mutation."""
+  englishWord: EnglishWordInput!
+}
+
+"""The output of our upsert `SpanishWord` mutation."""
+type UpsertSpanishWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `SpanishWord` that was upserted by this mutation."""
+  spanishWord: SpanishWord
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `SpanishWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `SpanishWord`. May be used by Relay 1."""
+  spanishWordEdge(
+    """The method to use when ordering `SpanishWord`."""
+    orderBy: [SpanishWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): SpanishWordsEdge
+}
+
+"""Where conditions for the upsert `SpanishWord` mutation."""
+input UpsertSpanishWordWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `SpanishWord` mutation."""
+input UpsertSpanishWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `SpanishWord` to be upserted by this mutation."""
+  spanishWord: SpanishWordInput!
+}
+
+"""The output of our upsert `FrenchWord` mutation."""
+type UpsertFrenchWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `FrenchWord` that was upserted by this mutation."""
+  frenchWord: FrenchWord
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `FrenchWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `FrenchWord`. May be used by Relay 1."""
+  frenchWordEdge(
+    """The method to use when ordering `FrenchWord`."""
+    orderBy: [FrenchWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): FrenchWordsEdge
+}
+
+"""Where conditions for the upsert `FrenchWord` mutation."""
+input UpsertFrenchWordWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `FrenchWord` mutation."""
+input UpsertFrenchWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `FrenchWord` to be upserted by this mutation."""
+  frenchWord: FrenchWordInput!
+}
+
+"""The output of our upsert `ItalianWord` mutation."""
+type UpsertItalianWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ItalianWord` that was upserted by this mutation."""
+  italianWord: ItalianWord
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ItalianWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `ItalianWord`. May be used by Relay 1."""
+  italianWordEdge(
+    """The method to use when ordering `ItalianWord`."""
+    orderBy: [ItalianWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ItalianWordsEdge
+}
+
+"""Where conditions for the upsert `ItalianWord` mutation."""
+input UpsertItalianWordWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `ItalianWord` mutation."""
+input UpsertItalianWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ItalianWord` to be upserted by this mutation."""
+  italianWord: ItalianWordInput!
+}
+
+"""The output of our upsert `PortugueseWord` mutation."""
+type UpsertPortugueseWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PortugueseWord` that was upserted by this mutation."""
+  portugueseWord: PortugueseWord
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `PortugueseWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `PortugueseWord`. May be used by Relay 1."""
+  portugueseWordEdge(
+    """The method to use when ordering `PortugueseWord`."""
+    orderBy: [PortugueseWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PortugueseWordsEdge
+}
+
+"""Where conditions for the upsert `PortugueseWord` mutation."""
+input UpsertPortugueseWordWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `PortugueseWord` mutation."""
+input UpsertPortugueseWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PortugueseWord` to be upserted by this mutation."""
+  portugueseWord: PortugueseWordInput!
+}
+
+"""The output of our upsert `RussianWord` mutation."""
+type UpsertRussianWordPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `RussianWord` that was upserted by this mutation."""
+  russianWord: RussianWord
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `RussianWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """An edge for our `RussianWord`. May be used by Relay 1."""
+  russianWordEdge(
+    """The method to use when ordering `RussianWord`."""
+    orderBy: [RussianWordsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): RussianWordsEdge
+}
+
+"""Where conditions for the upsert `RussianWord` mutation."""
+input UpsertRussianWordWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `RussianWord` mutation."""
+input UpsertRussianWordInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `RussianWord` to be upserted by this mutation."""
+  russianWord: RussianWordInput!
+}
+
+"""The output of our upsert `GermanWouldYouRatherQuestion` mutation."""
+type UpsertGermanWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GermanWouldYouRatherQuestion` that was upserted by this mutation."""
+  germanWouldYouRatherQuestion: GermanWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `GermanWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  germanWouldYouRatherQuestionEdge(
+    """The method to use when ordering `GermanWouldYouRatherQuestion`."""
+    orderBy: [GermanWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): GermanWouldYouRatherQuestionsEdge
+}
+
+"""
+Where conditions for the upsert `GermanWouldYouRatherQuestion` mutation.
+"""
+input UpsertGermanWouldYouRatherQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `GermanWouldYouRatherQuestion` mutation."""
+input UpsertGermanWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `GermanWouldYouRatherQuestion` to be upserted by this mutation."""
+  germanWouldYouRatherQuestion: GermanWouldYouRatherQuestionInput!
+}
+
+"""The output of our upsert `EnglishWouldYouRatherQuestion` mutation."""
+type UpsertEnglishWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  The `EnglishWouldYouRatherQuestion` that was upserted by this mutation.
+  """
+  englishWouldYouRatherQuestion: EnglishWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `EnglishWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  englishWouldYouRatherQuestionEdge(
+    """The method to use when ordering `EnglishWouldYouRatherQuestion`."""
+    orderBy: [EnglishWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): EnglishWouldYouRatherQuestionsEdge
+}
+
+"""
+Where conditions for the upsert `EnglishWouldYouRatherQuestion` mutation.
+"""
+input UpsertEnglishWouldYouRatherQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `EnglishWouldYouRatherQuestion` mutation."""
+input UpsertEnglishWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `EnglishWouldYouRatherQuestion` to be upserted by this mutation."""
+  englishWouldYouRatherQuestion: EnglishWouldYouRatherQuestionInput!
+}
+
+"""The output of our upsert `SpanishWouldYouRatherQuestion` mutation."""
+type UpsertSpanishWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  The `SpanishWouldYouRatherQuestion` that was upserted by this mutation.
+  """
+  spanishWouldYouRatherQuestion: SpanishWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `SpanishWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `SpanishWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  spanishWouldYouRatherQuestionEdge(
+    """The method to use when ordering `SpanishWouldYouRatherQuestion`."""
+    orderBy: [SpanishWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): SpanishWouldYouRatherQuestionsEdge
+}
+
+"""
+Where conditions for the upsert `SpanishWouldYouRatherQuestion` mutation.
+"""
+input UpsertSpanishWouldYouRatherQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `SpanishWouldYouRatherQuestion` mutation."""
+input UpsertSpanishWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `SpanishWouldYouRatherQuestion` to be upserted by this mutation."""
+  spanishWouldYouRatherQuestion: SpanishWouldYouRatherQuestionInput!
+}
+
+"""The output of our upsert `FrenchWouldYouRatherQuestion` mutation."""
+type UpsertFrenchWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `FrenchWouldYouRatherQuestion` that was upserted by this mutation."""
+  frenchWouldYouRatherQuestion: FrenchWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `FrenchWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `FrenchWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  frenchWouldYouRatherQuestionEdge(
+    """The method to use when ordering `FrenchWouldYouRatherQuestion`."""
+    orderBy: [FrenchWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): FrenchWouldYouRatherQuestionsEdge
+}
+
+"""
+Where conditions for the upsert `FrenchWouldYouRatherQuestion` mutation.
+"""
+input UpsertFrenchWouldYouRatherQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `FrenchWouldYouRatherQuestion` mutation."""
+input UpsertFrenchWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `FrenchWouldYouRatherQuestion` to be upserted by this mutation."""
+  frenchWouldYouRatherQuestion: FrenchWouldYouRatherQuestionInput!
+}
+
+"""The output of our upsert `ItalianWouldYouRatherQuestion` mutation."""
+type UpsertItalianWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  The `ItalianWouldYouRatherQuestion` that was upserted by this mutation.
+  """
+  italianWouldYouRatherQuestion: ItalianWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ItalianWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `ItalianWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  italianWouldYouRatherQuestionEdge(
+    """The method to use when ordering `ItalianWouldYouRatherQuestion`."""
+    orderBy: [ItalianWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ItalianWouldYouRatherQuestionsEdge
+}
+
+"""
+Where conditions for the upsert `ItalianWouldYouRatherQuestion` mutation.
+"""
+input UpsertItalianWouldYouRatherQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `ItalianWouldYouRatherQuestion` mutation."""
+input UpsertItalianWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ItalianWouldYouRatherQuestion` to be upserted by this mutation."""
+  italianWouldYouRatherQuestion: ItalianWouldYouRatherQuestionInput!
+}
+
+"""The output of our upsert `JapaneseWouldYouRatherQuestion` mutation."""
+type UpsertJapaneseWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  The `JapaneseWouldYouRatherQuestion` that was upserted by this mutation.
+  """
+  japaneseWouldYouRatherQuestion: JapaneseWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `JapaneseWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `JapaneseWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  japaneseWouldYouRatherQuestionEdge(
+    """The method to use when ordering `JapaneseWouldYouRatherQuestion`."""
+    orderBy: [JapaneseWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): JapaneseWouldYouRatherQuestionsEdge
+}
+
+"""
+Where conditions for the upsert `JapaneseWouldYouRatherQuestion` mutation.
+"""
+input UpsertJapaneseWouldYouRatherQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `JapaneseWouldYouRatherQuestion` mutation."""
+input UpsertJapaneseWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `JapaneseWouldYouRatherQuestion` to be upserted by this mutation."""
+  japaneseWouldYouRatherQuestion: JapaneseWouldYouRatherQuestionInput!
+}
+
+"""The output of our upsert `KoreanWouldYouRatherQuestion` mutation."""
+type UpsertKoreanWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `KoreanWouldYouRatherQuestion` that was upserted by this mutation."""
+  koreanWouldYouRatherQuestion: KoreanWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `KoreanWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `KoreanWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  koreanWouldYouRatherQuestionEdge(
+    """The method to use when ordering `KoreanWouldYouRatherQuestion`."""
+    orderBy: [KoreanWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): KoreanWouldYouRatherQuestionsEdge
+}
+
+"""
+Where conditions for the upsert `KoreanWouldYouRatherQuestion` mutation.
+"""
+input UpsertKoreanWouldYouRatherQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `KoreanWouldYouRatherQuestion` mutation."""
+input UpsertKoreanWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `KoreanWouldYouRatherQuestion` to be upserted by this mutation."""
+  koreanWouldYouRatherQuestion: KoreanWouldYouRatherQuestionInput!
+}
+
+"""The output of our upsert `PortugueseWouldYouRatherQuestion` mutation."""
+type UpsertPortugueseWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  The `PortugueseWouldYouRatherQuestion` that was upserted by this mutation.
+  """
+  portugueseWouldYouRatherQuestion: PortugueseWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `PortugueseWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `PortugueseWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  portugueseWouldYouRatherQuestionEdge(
+    """The method to use when ordering `PortugueseWouldYouRatherQuestion`."""
+    orderBy: [PortugueseWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PortugueseWouldYouRatherQuestionsEdge
+}
+
+"""
+Where conditions for the upsert `PortugueseWouldYouRatherQuestion` mutation.
+"""
+input UpsertPortugueseWouldYouRatherQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `PortugueseWouldYouRatherQuestion` mutation."""
+input UpsertPortugueseWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The `PortugueseWouldYouRatherQuestion` to be upserted by this mutation.
+  """
+  portugueseWouldYouRatherQuestion: PortugueseWouldYouRatherQuestionInput!
+}
+
+"""The output of our upsert `RussianWouldYouRatherQuestion` mutation."""
+type UpsertRussianWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  The `RussianWouldYouRatherQuestion` that was upserted by this mutation.
+  """
+  russianWouldYouRatherQuestion: RussianWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `RussianWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `RussianWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  russianWouldYouRatherQuestionEdge(
+    """The method to use when ordering `RussianWouldYouRatherQuestion`."""
+    orderBy: [RussianWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): RussianWouldYouRatherQuestionsEdge
+}
+
+"""
+Where conditions for the upsert `RussianWouldYouRatherQuestion` mutation.
+"""
+input UpsertRussianWouldYouRatherQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `RussianWouldYouRatherQuestion` mutation."""
+input UpsertRussianWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `RussianWouldYouRatherQuestion` to be upserted by this mutation."""
+  russianWouldYouRatherQuestion: RussianWouldYouRatherQuestionInput!
+}
+
+"""The output of our upsert `ChineseWouldYouRatherQuestion` mutation."""
+type UpsertChineseWouldYouRatherQuestionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  The `ChineseWouldYouRatherQuestion` that was upserted by this mutation.
+  """
+  chineseWouldYouRatherQuestion: ChineseWouldYouRatherQuestion
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """
+  An edge for our `ChineseWouldYouRatherQuestion`. May be used by Relay 1.
+  """
+  chineseWouldYouRatherQuestionEdge(
+    """The method to use when ordering `ChineseWouldYouRatherQuestion`."""
+    orderBy: [ChineseWouldYouRatherQuestionsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChineseWouldYouRatherQuestionsEdge
+}
+
+"""
+Where conditions for the upsert `ChineseWouldYouRatherQuestion` mutation.
+"""
+input UpsertChineseWouldYouRatherQuestionWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `ChineseWouldYouRatherQuestion` mutation."""
+input UpsertChineseWouldYouRatherQuestionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ChineseWouldYouRatherQuestion` to be upserted by this mutation."""
+  chineseWouldYouRatherQuestion: ChineseWouldYouRatherQuestionInput!
 }

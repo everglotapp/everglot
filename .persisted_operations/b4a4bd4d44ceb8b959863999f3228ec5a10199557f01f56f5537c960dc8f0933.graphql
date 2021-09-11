@@ -1,0 +1,12 @@
+mutation UpsertUserPreference($feedLanguageId: Int!, $userId: Int!) {
+  upsertUserPreference(input: {userPreference: {feedLanguageId: $feedLanguageId, userId: $userId}}, where: {userId: $userId}) {
+    userPreference {
+      createdAt
+      id
+      nodeId
+      feedLanguageId
+      __typename
+    }
+    __typename
+  }
+}

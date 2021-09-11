@@ -431,6 +431,15 @@ declare module '*/createUserLanguage.graphql' {
 }
     
 
+declare module '*/createUserPreference.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateUserPreference: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/currentUserProfile.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -453,6 +462,15 @@ declare module '*/updateUserBio.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const UpdateUserBio: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/upsertUserPreference.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UpsertUserPreference: DocumentNode;
 
   export default defaultDocument;
 }

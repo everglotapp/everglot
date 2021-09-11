@@ -21,6 +21,13 @@ query CurrentUser {
       }
       __typename
     }
+    preference {
+      feedLanguage {
+        alpha2
+        __typename
+      }
+      __typename
+    }
     __typename
   }
 }

@@ -1991,6 +1991,43 @@ export type CreateUserPayloadUserEdgeArgs = {
   orderBy?: Maybe<Array<UsersOrderBy>>;
 };
 
+/** All input for the create `UserPreference` mutation. */
+export type CreateUserPreferenceInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserPreference` to be created by this mutation. */
+  userPreference: UserPreferenceInput;
+};
+
+/** The output of our create `UserPreference` mutation. */
+export type CreateUserPreferencePayload = {
+  __typename?: 'CreateUserPreferencePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserPreference` that was created by this mutation. */
+  userPreference?: Maybe<UserPreference>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserPreference`. */
+  user?: Maybe<User>;
+  /** Reads a single `Language` that is related to this `UserPreference`. */
+  feedLanguage?: Maybe<Language>;
+  /** An edge for our `UserPreference`. May be used by Relay 1. */
+  userPreferenceEdge?: Maybe<UserPreferencesEdge>;
+};
+
+
+/** The output of our create `UserPreference` mutation. */
+export type CreateUserPreferencePayloadUserPreferenceEdgeArgs = {
+  orderBy?: Maybe<Array<UserPreferencesOrderBy>>;
+};
+
 /** All input for the create `UserSession` mutation. */
 export type CreateUserSessionInput = {
   /**
@@ -4597,6 +4634,64 @@ export type DeleteUserPayload = {
 /** The output of our delete `User` mutation. */
 export type DeleteUserPayloadUserEdgeArgs = {
   orderBy?: Maybe<Array<UsersOrderBy>>;
+};
+
+/** All input for the `deleteUserPreferenceByNodeId` mutation. */
+export type DeleteUserPreferenceByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `UserPreference` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteUserPreferenceByUserId` mutation. */
+export type DeleteUserPreferenceByUserIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  userId: Scalars['Int'];
+};
+
+/** All input for the `deleteUserPreference` mutation. */
+export type DeleteUserPreferenceInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `UserPreference` mutation. */
+export type DeleteUserPreferencePayload = {
+  __typename?: 'DeleteUserPreferencePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserPreference` that was deleted by this mutation. */
+  userPreference?: Maybe<UserPreference>;
+  deletedUserPreferenceNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserPreference`. */
+  user?: Maybe<User>;
+  /** Reads a single `Language` that is related to this `UserPreference`. */
+  feedLanguage?: Maybe<Language>;
+  /** An edge for our `UserPreference`. May be used by Relay 1. */
+  userPreferenceEdge?: Maybe<UserPreferencesEdge>;
+};
+
+
+/** The output of our delete `UserPreference` mutation. */
+export type DeleteUserPreferencePayloadUserPreferenceEdgeArgs = {
+  orderBy?: Maybe<Array<UserPreferencesOrderBy>>;
 };
 
 /** All input for the `deleteUserSessionByNodeId` mutation. */
@@ -7361,6 +7456,8 @@ export type Language = Node & {
   posts: PostsConnection;
   /** Reads and enables pagination through a set of `Prompt`. */
   prompts: PromptsConnection;
+  /** Reads and enables pagination through a set of `UserPreference`. */
+  userPreferencesByFeedLanguageId: UserPreferencesConnection;
   /** Reads and enables pagination through a set of `InviteToken`. */
   inviteTokensByUserLocaleAndSignedUpWithTokenId: LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
@@ -7437,6 +7534,18 @@ export type LanguagePromptsArgs = {
   orderBy?: Maybe<Array<PromptsOrderBy>>;
   condition?: Maybe<PromptCondition>;
   filter?: Maybe<PromptFilter>;
+};
+
+
+export type LanguageUserPreferencesByFeedLanguageIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserPreferencesOrderBy>>;
+  condition?: Maybe<UserPreferenceCondition>;
+  filter?: Maybe<UserPreferenceFilter>;
 };
 
 
@@ -9132,6 +9241,8 @@ export type Mutation = {
   createUserFollower?: Maybe<CreateUserFollowerPayload>;
   /** Creates a single `UserLanguage`. */
   createUserLanguage?: Maybe<CreateUserLanguagePayload>;
+  /** Creates a single `UserPreference`. */
+  createUserPreference?: Maybe<CreateUserPreferencePayload>;
   /** Creates a single `UserSession`. */
   createUserSession?: Maybe<CreateUserSessionPayload>;
   /** Creates a single `User`. */
@@ -9326,6 +9437,12 @@ export type Mutation = {
   updateUserLanguageByNodeId?: Maybe<UpdateUserLanguagePayload>;
   /** Updates a single `UserLanguage` using a unique key and a patch. */
   updateUserLanguage?: Maybe<UpdateUserLanguagePayload>;
+  /** Updates a single `UserPreference` using its globally unique id and a patch. */
+  updateUserPreferenceByNodeId?: Maybe<UpdateUserPreferencePayload>;
+  /** Updates a single `UserPreference` using a unique key and a patch. */
+  updateUserPreference?: Maybe<UpdateUserPreferencePayload>;
+  /** Updates a single `UserPreference` using a unique key and a patch. */
+  updateUserPreferenceByUserId?: Maybe<UpdateUserPreferencePayload>;
   /** Updates a single `UserSession` using its globally unique id and a patch. */
   updateUserSessionByNodeId?: Maybe<UpdateUserSessionPayload>;
   /** Updates a single `UserSession` using a unique key and a patch. */
@@ -9600,6 +9717,12 @@ export type Mutation = {
   deleteUserLanguageByNodeId?: Maybe<DeleteUserLanguagePayload>;
   /** Deletes a single `UserLanguage` using a unique key. */
   deleteUserLanguage?: Maybe<DeleteUserLanguagePayload>;
+  /** Deletes a single `UserPreference` using its globally unique id. */
+  deleteUserPreferenceByNodeId?: Maybe<DeleteUserPreferencePayload>;
+  /** Deletes a single `UserPreference` using a unique key. */
+  deleteUserPreference?: Maybe<DeleteUserPreferencePayload>;
+  /** Deletes a single `UserPreference` using a unique key. */
+  deleteUserPreferenceByUserId?: Maybe<DeleteUserPreferencePayload>;
   /** Deletes a single `UserSession` using its globally unique id. */
   deleteUserSessionByNodeId?: Maybe<DeleteUserSessionPayload>;
   /** Deletes a single `UserSession` using a unique key. */
@@ -9720,6 +9843,100 @@ export type Mutation = {
   deleteChineseWouldYouRatherQuestionByUuid?: Maybe<DeleteChineseWouldYouRatherQuestionPayload>;
   joinGlobalGroup?: Maybe<JoinGlobalGroupPayload>;
   registerUserActivity?: Maybe<RegisterUserActivityPayload>;
+  /** Upserts a single `GroupUser`. */
+  upsertGroupUser?: Maybe<UpsertGroupUserPayload>;
+  /** Upserts a single `Group`. */
+  upsertGroup?: Maybe<UpsertGroupPayload>;
+  /** Upserts a single `ChineseGuessCharacterQuestion`. */
+  upsertChineseGuessCharacterQuestion?: Maybe<UpsertChineseGuessCharacterQuestionPayload>;
+  /** Upserts a single `InviteToken`. */
+  upsertInviteToken?: Maybe<UpsertInviteTokenPayload>;
+  /** Upserts a single `LanguageSkillLevel`. */
+  upsertLanguageSkillLevel?: Maybe<UpsertLanguageSkillLevelPayload>;
+  /** Upserts a single `Language`. */
+  upsertLanguage?: Maybe<UpsertLanguagePayload>;
+  /** Upserts a single `MessagePreview`. */
+  upsertMessagePreview?: Maybe<UpsertMessagePreviewPayload>;
+  /** Upserts a single `Message`. */
+  upsertMessage?: Maybe<UpsertMessagePayload>;
+  /** Upserts a single `NotificationChannel`. */
+  upsertNotificationChannel?: Maybe<UpsertNotificationChannelPayload>;
+  /** Upserts a single `Notification`. */
+  upsertNotification?: Maybe<UpsertNotificationPayload>;
+  /** Upserts a single `PostLike`. */
+  upsertPostLike?: Maybe<UpsertPostLikePayload>;
+  /** Upserts a single `PostRecording`. */
+  upsertPostRecording?: Maybe<UpsertPostRecordingPayload>;
+  /** Upserts a single `Post`. */
+  upsertPost?: Maybe<UpsertPostPayload>;
+  /** Upserts a single `Prompt`. */
+  upsertPrompt?: Maybe<UpsertPromptPayload>;
+  /** Upserts a single `GermanRandomQuestion`. */
+  upsertGermanRandomQuestion?: Maybe<UpsertGermanRandomQuestionPayload>;
+  /** Upserts a single `EnglishRandomQuestion`. */
+  upsertEnglishRandomQuestion?: Maybe<UpsertEnglishRandomQuestionPayload>;
+  /** Upserts a single `SpanishRandomQuestion`. */
+  upsertSpanishRandomQuestion?: Maybe<UpsertSpanishRandomQuestionPayload>;
+  /** Upserts a single `FrenchRandomQuestion`. */
+  upsertFrenchRandomQuestion?: Maybe<UpsertFrenchRandomQuestionPayload>;
+  /** Upserts a single `ItalianRandomQuestion`. */
+  upsertItalianRandomQuestion?: Maybe<UpsertItalianRandomQuestionPayload>;
+  /** Upserts a single `JapaneseRandomQuestion`. */
+  upsertJapaneseRandomQuestion?: Maybe<UpsertJapaneseRandomQuestionPayload>;
+  /** Upserts a single `KoreanRandomQuestion`. */
+  upsertKoreanRandomQuestion?: Maybe<UpsertKoreanRandomQuestionPayload>;
+  /** Upserts a single `PortugueseRandomQuestion`. */
+  upsertPortugueseRandomQuestion?: Maybe<UpsertPortugueseRandomQuestionPayload>;
+  /** Upserts a single `RussianRandomQuestion`. */
+  upsertRussianRandomQuestion?: Maybe<UpsertRussianRandomQuestionPayload>;
+  /** Upserts a single `ChineseRandomQuestion`. */
+  upsertChineseRandomQuestion?: Maybe<UpsertChineseRandomQuestionPayload>;
+  /** Upserts a single `UserDevice`. */
+  upsertUserDevice?: Maybe<UpsertUserDevicePayload>;
+  /** Upserts a single `UserFollower`. */
+  upsertUserFollower?: Maybe<UpsertUserFollowerPayload>;
+  /** Upserts a single `UserLanguage`. */
+  upsertUserLanguage?: Maybe<UpsertUserLanguagePayload>;
+  /** Upserts a single `UserPreference`. */
+  upsertUserPreference?: Maybe<UpsertUserPreferencePayload>;
+  /** Upserts a single `UserSession`. */
+  upsertUserSession?: Maybe<UpsertUserSessionPayload>;
+  /** Upserts a single `User`. */
+  upsertUser?: Maybe<UpsertUserPayload>;
+  /** Upserts a single `GermanWord`. */
+  upsertGermanWord?: Maybe<UpsertGermanWordPayload>;
+  /** Upserts a single `EnglishWord`. */
+  upsertEnglishWord?: Maybe<UpsertEnglishWordPayload>;
+  /** Upserts a single `SpanishWord`. */
+  upsertSpanishWord?: Maybe<UpsertSpanishWordPayload>;
+  /** Upserts a single `FrenchWord`. */
+  upsertFrenchWord?: Maybe<UpsertFrenchWordPayload>;
+  /** Upserts a single `ItalianWord`. */
+  upsertItalianWord?: Maybe<UpsertItalianWordPayload>;
+  /** Upserts a single `PortugueseWord`. */
+  upsertPortugueseWord?: Maybe<UpsertPortugueseWordPayload>;
+  /** Upserts a single `RussianWord`. */
+  upsertRussianWord?: Maybe<UpsertRussianWordPayload>;
+  /** Upserts a single `GermanWouldYouRatherQuestion`. */
+  upsertGermanWouldYouRatherQuestion?: Maybe<UpsertGermanWouldYouRatherQuestionPayload>;
+  /** Upserts a single `EnglishWouldYouRatherQuestion`. */
+  upsertEnglishWouldYouRatherQuestion?: Maybe<UpsertEnglishWouldYouRatherQuestionPayload>;
+  /** Upserts a single `SpanishWouldYouRatherQuestion`. */
+  upsertSpanishWouldYouRatherQuestion?: Maybe<UpsertSpanishWouldYouRatherQuestionPayload>;
+  /** Upserts a single `FrenchWouldYouRatherQuestion`. */
+  upsertFrenchWouldYouRatherQuestion?: Maybe<UpsertFrenchWouldYouRatherQuestionPayload>;
+  /** Upserts a single `ItalianWouldYouRatherQuestion`. */
+  upsertItalianWouldYouRatherQuestion?: Maybe<UpsertItalianWouldYouRatherQuestionPayload>;
+  /** Upserts a single `JapaneseWouldYouRatherQuestion`. */
+  upsertJapaneseWouldYouRatherQuestion?: Maybe<UpsertJapaneseWouldYouRatherQuestionPayload>;
+  /** Upserts a single `KoreanWouldYouRatherQuestion`. */
+  upsertKoreanWouldYouRatherQuestion?: Maybe<UpsertKoreanWouldYouRatherQuestionPayload>;
+  /** Upserts a single `PortugueseWouldYouRatherQuestion`. */
+  upsertPortugueseWouldYouRatherQuestion?: Maybe<UpsertPortugueseWouldYouRatherQuestionPayload>;
+  /** Upserts a single `RussianWouldYouRatherQuestion`. */
+  upsertRussianWouldYouRatherQuestion?: Maybe<UpsertRussianWouldYouRatherQuestionPayload>;
+  /** Upserts a single `ChineseWouldYouRatherQuestion`. */
+  upsertChineseWouldYouRatherQuestion?: Maybe<UpsertChineseWouldYouRatherQuestionPayload>;
 };
 
 
@@ -9882,6 +10099,12 @@ export type MutationCreateUserFollowerArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateUserLanguageArgs = {
   input: CreateUserLanguageInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateUserPreferenceArgs = {
+  input: CreateUserPreferenceInput;
 };
 
 
@@ -10464,6 +10687,24 @@ export type MutationUpdateUserLanguageByNodeIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateUserLanguageArgs = {
   input: UpdateUserLanguageInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserPreferenceByNodeIdArgs = {
+  input: UpdateUserPreferenceByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserPreferenceArgs = {
+  input: UpdateUserPreferenceInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserPreferenceByUserIdArgs = {
+  input: UpdateUserPreferenceByUserIdInput;
 };
 
 
@@ -11290,6 +11531,24 @@ export type MutationDeleteUserLanguageArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserPreferenceByNodeIdArgs = {
+  input: DeleteUserPreferenceByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserPreferenceArgs = {
+  input: DeleteUserPreferenceInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserPreferenceByUserIdArgs = {
+  input: DeleteUserPreferenceByUserIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserSessionByNodeIdArgs = {
   input: DeleteUserSessionByNodeIdInput;
 };
@@ -11652,6 +11911,335 @@ export type MutationJoinGlobalGroupArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationRegisterUserActivityArgs = {
   input: RegisterUserActivityInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertGroupUserArgs = {
+  where?: Maybe<UpsertGroupUserWhere>;
+  input: UpsertGroupUserInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertGroupArgs = {
+  where?: Maybe<UpsertGroupWhere>;
+  input: UpsertGroupInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertChineseGuessCharacterQuestionArgs = {
+  where?: Maybe<UpsertChineseGuessCharacterQuestionWhere>;
+  input: UpsertChineseGuessCharacterQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertInviteTokenArgs = {
+  where?: Maybe<UpsertInviteTokenWhere>;
+  input: UpsertInviteTokenInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertLanguageSkillLevelArgs = {
+  where?: Maybe<UpsertLanguageSkillLevelWhere>;
+  input: UpsertLanguageSkillLevelInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertLanguageArgs = {
+  where?: Maybe<UpsertLanguageWhere>;
+  input: UpsertLanguageInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertMessagePreviewArgs = {
+  where?: Maybe<UpsertMessagePreviewWhere>;
+  input: UpsertMessagePreviewInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertMessageArgs = {
+  where?: Maybe<UpsertMessageWhere>;
+  input: UpsertMessageInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertNotificationChannelArgs = {
+  where?: Maybe<UpsertNotificationChannelWhere>;
+  input: UpsertNotificationChannelInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertNotificationArgs = {
+  where?: Maybe<UpsertNotificationWhere>;
+  input: UpsertNotificationInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertPostLikeArgs = {
+  where?: Maybe<UpsertPostLikeWhere>;
+  input: UpsertPostLikeInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertPostRecordingArgs = {
+  where?: Maybe<UpsertPostRecordingWhere>;
+  input: UpsertPostRecordingInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertPostArgs = {
+  where?: Maybe<UpsertPostWhere>;
+  input: UpsertPostInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertPromptArgs = {
+  where?: Maybe<UpsertPromptWhere>;
+  input: UpsertPromptInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertGermanRandomQuestionArgs = {
+  where?: Maybe<UpsertGermanRandomQuestionWhere>;
+  input: UpsertGermanRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertEnglishRandomQuestionArgs = {
+  where?: Maybe<UpsertEnglishRandomQuestionWhere>;
+  input: UpsertEnglishRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertSpanishRandomQuestionArgs = {
+  where?: Maybe<UpsertSpanishRandomQuestionWhere>;
+  input: UpsertSpanishRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertFrenchRandomQuestionArgs = {
+  where?: Maybe<UpsertFrenchRandomQuestionWhere>;
+  input: UpsertFrenchRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertItalianRandomQuestionArgs = {
+  where?: Maybe<UpsertItalianRandomQuestionWhere>;
+  input: UpsertItalianRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertJapaneseRandomQuestionArgs = {
+  where?: Maybe<UpsertJapaneseRandomQuestionWhere>;
+  input: UpsertJapaneseRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertKoreanRandomQuestionArgs = {
+  where?: Maybe<UpsertKoreanRandomQuestionWhere>;
+  input: UpsertKoreanRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertPortugueseRandomQuestionArgs = {
+  where?: Maybe<UpsertPortugueseRandomQuestionWhere>;
+  input: UpsertPortugueseRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertRussianRandomQuestionArgs = {
+  where?: Maybe<UpsertRussianRandomQuestionWhere>;
+  input: UpsertRussianRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertChineseRandomQuestionArgs = {
+  where?: Maybe<UpsertChineseRandomQuestionWhere>;
+  input: UpsertChineseRandomQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertUserDeviceArgs = {
+  where?: Maybe<UpsertUserDeviceWhere>;
+  input: UpsertUserDeviceInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertUserFollowerArgs = {
+  where?: Maybe<UpsertUserFollowerWhere>;
+  input: UpsertUserFollowerInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertUserLanguageArgs = {
+  where?: Maybe<UpsertUserLanguageWhere>;
+  input: UpsertUserLanguageInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertUserPreferenceArgs = {
+  where?: Maybe<UpsertUserPreferenceWhere>;
+  input: UpsertUserPreferenceInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertUserSessionArgs = {
+  where?: Maybe<UpsertUserSessionWhere>;
+  input: UpsertUserSessionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertUserArgs = {
+  where?: Maybe<UpsertUserWhere>;
+  input: UpsertUserInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertGermanWordArgs = {
+  where?: Maybe<UpsertGermanWordWhere>;
+  input: UpsertGermanWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertEnglishWordArgs = {
+  where?: Maybe<UpsertEnglishWordWhere>;
+  input: UpsertEnglishWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertSpanishWordArgs = {
+  where?: Maybe<UpsertSpanishWordWhere>;
+  input: UpsertSpanishWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertFrenchWordArgs = {
+  where?: Maybe<UpsertFrenchWordWhere>;
+  input: UpsertFrenchWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertItalianWordArgs = {
+  where?: Maybe<UpsertItalianWordWhere>;
+  input: UpsertItalianWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertPortugueseWordArgs = {
+  where?: Maybe<UpsertPortugueseWordWhere>;
+  input: UpsertPortugueseWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertRussianWordArgs = {
+  where?: Maybe<UpsertRussianWordWhere>;
+  input: UpsertRussianWordInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertGermanWouldYouRatherQuestionArgs = {
+  where?: Maybe<UpsertGermanWouldYouRatherQuestionWhere>;
+  input: UpsertGermanWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertEnglishWouldYouRatherQuestionArgs = {
+  where?: Maybe<UpsertEnglishWouldYouRatherQuestionWhere>;
+  input: UpsertEnglishWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertSpanishWouldYouRatherQuestionArgs = {
+  where?: Maybe<UpsertSpanishWouldYouRatherQuestionWhere>;
+  input: UpsertSpanishWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertFrenchWouldYouRatherQuestionArgs = {
+  where?: Maybe<UpsertFrenchWouldYouRatherQuestionWhere>;
+  input: UpsertFrenchWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertItalianWouldYouRatherQuestionArgs = {
+  where?: Maybe<UpsertItalianWouldYouRatherQuestionWhere>;
+  input: UpsertItalianWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertJapaneseWouldYouRatherQuestionArgs = {
+  where?: Maybe<UpsertJapaneseWouldYouRatherQuestionWhere>;
+  input: UpsertJapaneseWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertKoreanWouldYouRatherQuestionArgs = {
+  where?: Maybe<UpsertKoreanWouldYouRatherQuestionWhere>;
+  input: UpsertKoreanWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertPortugueseWouldYouRatherQuestionArgs = {
+  where?: Maybe<UpsertPortugueseWouldYouRatherQuestionWhere>;
+  input: UpsertPortugueseWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertRussianWouldYouRatherQuestionArgs = {
+  where?: Maybe<UpsertRussianWouldYouRatherQuestionWhere>;
+  input: UpsertRussianWouldYouRatherQuestionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertChineseWouldYouRatherQuestionArgs = {
+  where?: Maybe<UpsertChineseWouldYouRatherQuestionWhere>;
+  input: UpsertChineseWouldYouRatherQuestionInput;
 };
 
 /** An object with a globally unique `ID`. */
@@ -13538,6 +14126,8 @@ export type Query = Node & {
   userFollowers?: Maybe<UserFollowersConnection>;
   /** Reads and enables pagination through a set of `UserLanguage`. */
   userLanguages?: Maybe<UserLanguagesConnection>;
+  /** Reads and enables pagination through a set of `UserPreference`. */
+  userPreferences?: Maybe<UserPreferencesConnection>;
   /** Reads and enables pagination through a set of `UserSession`. */
   userSessions?: Maybe<UserSessionsConnection>;
   /** Reads and enables pagination through a set of `User`. */
@@ -13627,6 +14217,8 @@ export type Query = Node & {
   userDeviceByFcmToken?: Maybe<UserDevice>;
   userFollower?: Maybe<UserFollower>;
   userLanguage?: Maybe<UserLanguage>;
+  userPreference?: Maybe<UserPreference>;
+  userPreferenceByUserId?: Maybe<UserPreference>;
   userSession?: Maybe<UserSession>;
   user?: Maybe<User>;
   userByUsername?: Maybe<User>;
@@ -13729,6 +14321,8 @@ export type Query = Node & {
   userFollowerByNodeId?: Maybe<UserFollower>;
   /** Reads a single `UserLanguage` using its globally unique `ID`. */
   userLanguageByNodeId?: Maybe<UserLanguage>;
+  /** Reads a single `UserPreference` using its globally unique `ID`. */
+  userPreferenceByNodeId?: Maybe<UserPreference>;
   /** Reads a single `UserSession` using its globally unique `ID`. */
   userSessionByNodeId?: Maybe<UserSession>;
   /** Reads a single `User` using its globally unique `ID`. */
@@ -14124,6 +14718,19 @@ export type QueryUserLanguagesArgs = {
   orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
   condition?: Maybe<UserLanguageCondition>;
   filter?: Maybe<UserLanguageFilter>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserPreferencesArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<UserPreferencesOrderBy>>;
+  condition?: Maybe<UserPreferenceCondition>;
+  filter?: Maybe<UserPreferenceFilter>;
 };
 
 
@@ -14681,6 +15288,18 @@ export type QueryUserLanguageArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryUserPreferenceArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserPreferenceByUserIdArgs = {
+  userId: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryUserSessionArgs = {
   sid: Scalars['String'];
 };
@@ -15115,6 +15734,12 @@ export type QueryUserFollowerByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUserLanguageByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserPreferenceByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
 
@@ -18875,6 +19500,69 @@ export type UpdateUserPayloadUserEdgeArgs = {
   orderBy?: Maybe<Array<UsersOrderBy>>;
 };
 
+/** All input for the `updateUserPreferenceByNodeId` mutation. */
+export type UpdateUserPreferenceByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `UserPreference` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `UserPreference` being updated. */
+  patch: UserPreferencePatch;
+};
+
+/** All input for the `updateUserPreferenceByUserId` mutation. */
+export type UpdateUserPreferenceByUserIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `UserPreference` being updated. */
+  patch: UserPreferencePatch;
+  userId: Scalars['Int'];
+};
+
+/** All input for the `updateUserPreference` mutation. */
+export type UpdateUserPreferenceInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `UserPreference` being updated. */
+  patch: UserPreferencePatch;
+  id: Scalars['Int'];
+};
+
+/** The output of our update `UserPreference` mutation. */
+export type UpdateUserPreferencePayload = {
+  __typename?: 'UpdateUserPreferencePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserPreference` that was updated by this mutation. */
+  userPreference?: Maybe<UserPreference>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserPreference`. */
+  user?: Maybe<User>;
+  /** Reads a single `Language` that is related to this `UserPreference`. */
+  feedLanguage?: Maybe<Language>;
+  /** An edge for our `UserPreference`. May be used by Relay 1. */
+  userPreferenceEdge?: Maybe<UserPreferencesEdge>;
+};
+
+
+/** The output of our update `UserPreference` mutation. */
+export type UpdateUserPreferencePayloadUserPreferenceEdgeArgs = {
+  orderBy?: Maybe<Array<UserPreferencesOrderBy>>;
+};
+
 /** All input for the `updateUserSessionByNodeId` mutation. */
 export type UpdateUserSessionByNodeIdInput = {
   /**
@@ -18920,6 +19608,1678 @@ export type UpdateUserSessionPayload = {
 /** The output of our update `UserSession` mutation. */
 export type UpdateUserSessionPayloadUserSessionEdgeArgs = {
   orderBy?: Maybe<Array<UserSessionsOrderBy>>;
+};
+
+/** All input for the upsert `ChineseGuessCharacterQuestion` mutation. */
+export type UpsertChineseGuessCharacterQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseGuessCharacterQuestion` to be upserted by this mutation. */
+  chineseGuessCharacterQuestion: ChineseGuessCharacterQuestionInput;
+};
+
+/** The output of our upsert `ChineseGuessCharacterQuestion` mutation. */
+export type UpsertChineseGuessCharacterQuestionPayload = {
+  __typename?: 'UpsertChineseGuessCharacterQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseGuessCharacterQuestion` that was upserted by this mutation. */
+  chineseGuessCharacterQuestion?: Maybe<ChineseGuessCharacterQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseGuessCharacterQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ChineseGuessCharacterQuestion`. May be used by Relay 1. */
+  chineseGuessCharacterQuestionEdge?: Maybe<ChineseGuessCharacterQuestionsEdge>;
+};
+
+
+/** The output of our upsert `ChineseGuessCharacterQuestion` mutation. */
+export type UpsertChineseGuessCharacterQuestionPayloadChineseGuessCharacterQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `ChineseGuessCharacterQuestion` mutation. */
+export type UpsertChineseGuessCharacterQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `ChineseRandomQuestion` mutation. */
+export type UpsertChineseRandomQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseRandomQuestion` to be upserted by this mutation. */
+  chineseRandomQuestion: ChineseRandomQuestionInput;
+};
+
+/** The output of our upsert `ChineseRandomQuestion` mutation. */
+export type UpsertChineseRandomQuestionPayload = {
+  __typename?: 'UpsertChineseRandomQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseRandomQuestion` that was upserted by this mutation. */
+  chineseRandomQuestion?: Maybe<ChineseRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ChineseRandomQuestion`. May be used by Relay 1. */
+  chineseRandomQuestionEdge?: Maybe<ChineseRandomQuestionsEdge>;
+};
+
+
+/** The output of our upsert `ChineseRandomQuestion` mutation. */
+export type UpsertChineseRandomQuestionPayloadChineseRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `ChineseRandomQuestion` mutation. */
+export type UpsertChineseRandomQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `ChineseWouldYouRatherQuestion` mutation. */
+export type UpsertChineseWouldYouRatherQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseWouldYouRatherQuestion` to be upserted by this mutation. */
+  chineseWouldYouRatherQuestion: ChineseWouldYouRatherQuestionInput;
+};
+
+/** The output of our upsert `ChineseWouldYouRatherQuestion` mutation. */
+export type UpsertChineseWouldYouRatherQuestionPayload = {
+  __typename?: 'UpsertChineseWouldYouRatherQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ChineseWouldYouRatherQuestion` that was upserted by this mutation. */
+  chineseWouldYouRatherQuestion?: Maybe<ChineseWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ChineseWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ChineseWouldYouRatherQuestion`. May be used by Relay 1. */
+  chineseWouldYouRatherQuestionEdge?: Maybe<ChineseWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our upsert `ChineseWouldYouRatherQuestion` mutation. */
+export type UpsertChineseWouldYouRatherQuestionPayloadChineseWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `ChineseWouldYouRatherQuestion` mutation. */
+export type UpsertChineseWouldYouRatherQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `EnglishRandomQuestion` mutation. */
+export type UpsertEnglishRandomQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishRandomQuestion` to be upserted by this mutation. */
+  englishRandomQuestion: EnglishRandomQuestionInput;
+};
+
+/** The output of our upsert `EnglishRandomQuestion` mutation. */
+export type UpsertEnglishRandomQuestionPayload = {
+  __typename?: 'UpsertEnglishRandomQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishRandomQuestion` that was upserted by this mutation. */
+  englishRandomQuestion?: Maybe<EnglishRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `EnglishRandomQuestion`. May be used by Relay 1. */
+  englishRandomQuestionEdge?: Maybe<EnglishRandomQuestionsEdge>;
+};
+
+
+/** The output of our upsert `EnglishRandomQuestion` mutation. */
+export type UpsertEnglishRandomQuestionPayloadEnglishRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<EnglishRandomQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `EnglishRandomQuestion` mutation. */
+export type UpsertEnglishRandomQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `EnglishWord` mutation. */
+export type UpsertEnglishWordInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishWord` to be upserted by this mutation. */
+  englishWord: EnglishWordInput;
+};
+
+/** The output of our upsert `EnglishWord` mutation. */
+export type UpsertEnglishWordPayload = {
+  __typename?: 'UpsertEnglishWordPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishWord` that was upserted by this mutation. */
+  englishWord?: Maybe<EnglishWord>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `EnglishWord`. May be used by Relay 1. */
+  englishWordEdge?: Maybe<EnglishWordsEdge>;
+};
+
+
+/** The output of our upsert `EnglishWord` mutation. */
+export type UpsertEnglishWordPayloadEnglishWordEdgeArgs = {
+  orderBy?: Maybe<Array<EnglishWordsOrderBy>>;
+};
+
+/** Where conditions for the upsert `EnglishWord` mutation. */
+export type UpsertEnglishWordWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `EnglishWouldYouRatherQuestion` mutation. */
+export type UpsertEnglishWouldYouRatherQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishWouldYouRatherQuestion` to be upserted by this mutation. */
+  englishWouldYouRatherQuestion: EnglishWouldYouRatherQuestionInput;
+};
+
+/** The output of our upsert `EnglishWouldYouRatherQuestion` mutation. */
+export type UpsertEnglishWouldYouRatherQuestionPayload = {
+  __typename?: 'UpsertEnglishWouldYouRatherQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `EnglishWouldYouRatherQuestion` that was upserted by this mutation. */
+  englishWouldYouRatherQuestion?: Maybe<EnglishWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `EnglishWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `EnglishWouldYouRatherQuestion`. May be used by Relay 1. */
+  englishWouldYouRatherQuestionEdge?: Maybe<EnglishWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our upsert `EnglishWouldYouRatherQuestion` mutation. */
+export type UpsertEnglishWouldYouRatherQuestionPayloadEnglishWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `EnglishWouldYouRatherQuestion` mutation. */
+export type UpsertEnglishWouldYouRatherQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `FrenchRandomQuestion` mutation. */
+export type UpsertFrenchRandomQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `FrenchRandomQuestion` to be upserted by this mutation. */
+  frenchRandomQuestion: FrenchRandomQuestionInput;
+};
+
+/** The output of our upsert `FrenchRandomQuestion` mutation. */
+export type UpsertFrenchRandomQuestionPayload = {
+  __typename?: 'UpsertFrenchRandomQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `FrenchRandomQuestion` that was upserted by this mutation. */
+  frenchRandomQuestion?: Maybe<FrenchRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `FrenchRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `FrenchRandomQuestion`. May be used by Relay 1. */
+  frenchRandomQuestionEdge?: Maybe<FrenchRandomQuestionsEdge>;
+};
+
+
+/** The output of our upsert `FrenchRandomQuestion` mutation. */
+export type UpsertFrenchRandomQuestionPayloadFrenchRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<FrenchRandomQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `FrenchRandomQuestion` mutation. */
+export type UpsertFrenchRandomQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `FrenchWord` mutation. */
+export type UpsertFrenchWordInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `FrenchWord` to be upserted by this mutation. */
+  frenchWord: FrenchWordInput;
+};
+
+/** The output of our upsert `FrenchWord` mutation. */
+export type UpsertFrenchWordPayload = {
+  __typename?: 'UpsertFrenchWordPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `FrenchWord` that was upserted by this mutation. */
+  frenchWord?: Maybe<FrenchWord>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `FrenchWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `FrenchWord`. May be used by Relay 1. */
+  frenchWordEdge?: Maybe<FrenchWordsEdge>;
+};
+
+
+/** The output of our upsert `FrenchWord` mutation. */
+export type UpsertFrenchWordPayloadFrenchWordEdgeArgs = {
+  orderBy?: Maybe<Array<FrenchWordsOrderBy>>;
+};
+
+/** Where conditions for the upsert `FrenchWord` mutation. */
+export type UpsertFrenchWordWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `FrenchWouldYouRatherQuestion` mutation. */
+export type UpsertFrenchWouldYouRatherQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `FrenchWouldYouRatherQuestion` to be upserted by this mutation. */
+  frenchWouldYouRatherQuestion: FrenchWouldYouRatherQuestionInput;
+};
+
+/** The output of our upsert `FrenchWouldYouRatherQuestion` mutation. */
+export type UpsertFrenchWouldYouRatherQuestionPayload = {
+  __typename?: 'UpsertFrenchWouldYouRatherQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `FrenchWouldYouRatherQuestion` that was upserted by this mutation. */
+  frenchWouldYouRatherQuestion?: Maybe<FrenchWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `FrenchWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `FrenchWouldYouRatherQuestion`. May be used by Relay 1. */
+  frenchWouldYouRatherQuestionEdge?: Maybe<FrenchWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our upsert `FrenchWouldYouRatherQuestion` mutation. */
+export type UpsertFrenchWouldYouRatherQuestionPayloadFrenchWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `FrenchWouldYouRatherQuestion` mutation. */
+export type UpsertFrenchWouldYouRatherQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `GermanRandomQuestion` mutation. */
+export type UpsertGermanRandomQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanRandomQuestion` to be upserted by this mutation. */
+  germanRandomQuestion: GermanRandomQuestionInput;
+};
+
+/** The output of our upsert `GermanRandomQuestion` mutation. */
+export type UpsertGermanRandomQuestionPayload = {
+  __typename?: 'UpsertGermanRandomQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanRandomQuestion` that was upserted by this mutation. */
+  germanRandomQuestion?: Maybe<GermanRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `GermanRandomQuestion`. May be used by Relay 1. */
+  germanRandomQuestionEdge?: Maybe<GermanRandomQuestionsEdge>;
+};
+
+
+/** The output of our upsert `GermanRandomQuestion` mutation. */
+export type UpsertGermanRandomQuestionPayloadGermanRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<GermanRandomQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `GermanRandomQuestion` mutation. */
+export type UpsertGermanRandomQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `GermanWord` mutation. */
+export type UpsertGermanWordInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanWord` to be upserted by this mutation. */
+  germanWord: GermanWordInput;
+};
+
+/** The output of our upsert `GermanWord` mutation. */
+export type UpsertGermanWordPayload = {
+  __typename?: 'UpsertGermanWordPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanWord` that was upserted by this mutation. */
+  germanWord?: Maybe<GermanWord>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `GermanWord`. May be used by Relay 1. */
+  germanWordEdge?: Maybe<GermanWordsEdge>;
+};
+
+
+/** The output of our upsert `GermanWord` mutation. */
+export type UpsertGermanWordPayloadGermanWordEdgeArgs = {
+  orderBy?: Maybe<Array<GermanWordsOrderBy>>;
+};
+
+/** Where conditions for the upsert `GermanWord` mutation. */
+export type UpsertGermanWordWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `GermanWouldYouRatherQuestion` mutation. */
+export type UpsertGermanWouldYouRatherQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanWouldYouRatherQuestion` to be upserted by this mutation. */
+  germanWouldYouRatherQuestion: GermanWouldYouRatherQuestionInput;
+};
+
+/** The output of our upsert `GermanWouldYouRatherQuestion` mutation. */
+export type UpsertGermanWouldYouRatherQuestionPayload = {
+  __typename?: 'UpsertGermanWouldYouRatherQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GermanWouldYouRatherQuestion` that was upserted by this mutation. */
+  germanWouldYouRatherQuestion?: Maybe<GermanWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `GermanWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `GermanWouldYouRatherQuestion`. May be used by Relay 1. */
+  germanWouldYouRatherQuestionEdge?: Maybe<GermanWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our upsert `GermanWouldYouRatherQuestion` mutation. */
+export type UpsertGermanWouldYouRatherQuestionPayloadGermanWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `GermanWouldYouRatherQuestion` mutation. */
+export type UpsertGermanWouldYouRatherQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `Group` mutation. */
+export type UpsertGroupInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Group` to be upserted by this mutation. */
+  group: GroupInput;
+};
+
+/** The output of our upsert `Group` mutation. */
+export type UpsertGroupPayload = {
+  __typename?: 'UpsertGroupPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Group` that was upserted by this mutation. */
+  group?: Maybe<Group>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `Group`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Group`. */
+  languageSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `Group`. May be used by Relay 1. */
+  groupEdge?: Maybe<GroupsEdge>;
+};
+
+
+/** The output of our upsert `Group` mutation. */
+export type UpsertGroupPayloadGroupEdgeArgs = {
+  orderBy?: Maybe<Array<GroupsOrderBy>>;
+};
+
+/** All input for the upsert `GroupUser` mutation. */
+export type UpsertGroupUserInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GroupUser` to be upserted by this mutation. */
+  groupUser: GroupUserInput;
+};
+
+/** The output of our upsert `GroupUser` mutation. */
+export type UpsertGroupUserPayload = {
+  __typename?: 'UpsertGroupUserPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GroupUser` that was upserted by this mutation. */
+  groupUser?: Maybe<GroupUser>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `GroupUser`. */
+  user?: Maybe<User>;
+  /** Reads a single `Group` that is related to this `GroupUser`. */
+  group?: Maybe<Group>;
+  /** An edge for our `GroupUser`. May be used by Relay 1. */
+  groupUserEdge?: Maybe<GroupUsersEdge>;
+};
+
+
+/** The output of our upsert `GroupUser` mutation. */
+export type UpsertGroupUserPayloadGroupUserEdgeArgs = {
+  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+};
+
+/** Where conditions for the upsert `GroupUser` mutation. */
+export type UpsertGroupUserWhere = {
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** Where conditions for the upsert `Group` mutation. */
+export type UpsertGroupWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `InviteToken` mutation. */
+export type UpsertInviteTokenInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `InviteToken` to be upserted by this mutation. */
+  inviteToken: InviteTokenInput;
+};
+
+/** The output of our upsert `InviteToken` mutation. */
+export type UpsertInviteTokenPayload = {
+  __typename?: 'UpsertInviteTokenPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `InviteToken` that was upserted by this mutation. */
+  inviteToken?: Maybe<InviteToken>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `InviteToken`. */
+  user?: Maybe<User>;
+  /** An edge for our `InviteToken`. May be used by Relay 1. */
+  inviteTokenEdge?: Maybe<InviteTokensEdge>;
+};
+
+
+/** The output of our upsert `InviteToken` mutation. */
+export type UpsertInviteTokenPayloadInviteTokenEdgeArgs = {
+  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+};
+
+/** Where conditions for the upsert `InviteToken` mutation. */
+export type UpsertInviteTokenWhere = {
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** All input for the upsert `ItalianRandomQuestion` mutation. */
+export type UpsertItalianRandomQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ItalianRandomQuestion` to be upserted by this mutation. */
+  italianRandomQuestion: ItalianRandomQuestionInput;
+};
+
+/** The output of our upsert `ItalianRandomQuestion` mutation. */
+export type UpsertItalianRandomQuestionPayload = {
+  __typename?: 'UpsertItalianRandomQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ItalianRandomQuestion` that was upserted by this mutation. */
+  italianRandomQuestion?: Maybe<ItalianRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ItalianRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ItalianRandomQuestion`. May be used by Relay 1. */
+  italianRandomQuestionEdge?: Maybe<ItalianRandomQuestionsEdge>;
+};
+
+
+/** The output of our upsert `ItalianRandomQuestion` mutation. */
+export type UpsertItalianRandomQuestionPayloadItalianRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ItalianRandomQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `ItalianRandomQuestion` mutation. */
+export type UpsertItalianRandomQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `ItalianWord` mutation. */
+export type UpsertItalianWordInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ItalianWord` to be upserted by this mutation. */
+  italianWord: ItalianWordInput;
+};
+
+/** The output of our upsert `ItalianWord` mutation. */
+export type UpsertItalianWordPayload = {
+  __typename?: 'UpsertItalianWordPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ItalianWord` that was upserted by this mutation. */
+  italianWord?: Maybe<ItalianWord>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ItalianWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ItalianWord`. May be used by Relay 1. */
+  italianWordEdge?: Maybe<ItalianWordsEdge>;
+};
+
+
+/** The output of our upsert `ItalianWord` mutation. */
+export type UpsertItalianWordPayloadItalianWordEdgeArgs = {
+  orderBy?: Maybe<Array<ItalianWordsOrderBy>>;
+};
+
+/** Where conditions for the upsert `ItalianWord` mutation. */
+export type UpsertItalianWordWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `ItalianWouldYouRatherQuestion` mutation. */
+export type UpsertItalianWouldYouRatherQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ItalianWouldYouRatherQuestion` to be upserted by this mutation. */
+  italianWouldYouRatherQuestion: ItalianWouldYouRatherQuestionInput;
+};
+
+/** The output of our upsert `ItalianWouldYouRatherQuestion` mutation. */
+export type UpsertItalianWouldYouRatherQuestionPayload = {
+  __typename?: 'UpsertItalianWouldYouRatherQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `ItalianWouldYouRatherQuestion` that was upserted by this mutation. */
+  italianWouldYouRatherQuestion?: Maybe<ItalianWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `ItalianWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `ItalianWouldYouRatherQuestion`. May be used by Relay 1. */
+  italianWouldYouRatherQuestionEdge?: Maybe<ItalianWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our upsert `ItalianWouldYouRatherQuestion` mutation. */
+export type UpsertItalianWouldYouRatherQuestionPayloadItalianWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `ItalianWouldYouRatherQuestion` mutation. */
+export type UpsertItalianWouldYouRatherQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `JapaneseRandomQuestion` mutation. */
+export type UpsertJapaneseRandomQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `JapaneseRandomQuestion` to be upserted by this mutation. */
+  japaneseRandomQuestion: JapaneseRandomQuestionInput;
+};
+
+/** The output of our upsert `JapaneseRandomQuestion` mutation. */
+export type UpsertJapaneseRandomQuestionPayload = {
+  __typename?: 'UpsertJapaneseRandomQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `JapaneseRandomQuestion` that was upserted by this mutation. */
+  japaneseRandomQuestion?: Maybe<JapaneseRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `JapaneseRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `JapaneseRandomQuestion`. May be used by Relay 1. */
+  japaneseRandomQuestionEdge?: Maybe<JapaneseRandomQuestionsEdge>;
+};
+
+
+/** The output of our upsert `JapaneseRandomQuestion` mutation. */
+export type UpsertJapaneseRandomQuestionPayloadJapaneseRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<JapaneseRandomQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `JapaneseRandomQuestion` mutation. */
+export type UpsertJapaneseRandomQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `JapaneseWouldYouRatherQuestion` mutation. */
+export type UpsertJapaneseWouldYouRatherQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `JapaneseWouldYouRatherQuestion` to be upserted by this mutation. */
+  japaneseWouldYouRatherQuestion: JapaneseWouldYouRatherQuestionInput;
+};
+
+/** The output of our upsert `JapaneseWouldYouRatherQuestion` mutation. */
+export type UpsertJapaneseWouldYouRatherQuestionPayload = {
+  __typename?: 'UpsertJapaneseWouldYouRatherQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `JapaneseWouldYouRatherQuestion` that was upserted by this mutation. */
+  japaneseWouldYouRatherQuestion?: Maybe<JapaneseWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `JapaneseWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `JapaneseWouldYouRatherQuestion`. May be used by Relay 1. */
+  japaneseWouldYouRatherQuestionEdge?: Maybe<JapaneseWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our upsert `JapaneseWouldYouRatherQuestion` mutation. */
+export type UpsertJapaneseWouldYouRatherQuestionPayloadJapaneseWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `JapaneseWouldYouRatherQuestion` mutation. */
+export type UpsertJapaneseWouldYouRatherQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `KoreanRandomQuestion` mutation. */
+export type UpsertKoreanRandomQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `KoreanRandomQuestion` to be upserted by this mutation. */
+  koreanRandomQuestion: KoreanRandomQuestionInput;
+};
+
+/** The output of our upsert `KoreanRandomQuestion` mutation. */
+export type UpsertKoreanRandomQuestionPayload = {
+  __typename?: 'UpsertKoreanRandomQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `KoreanRandomQuestion` that was upserted by this mutation. */
+  koreanRandomQuestion?: Maybe<KoreanRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `KoreanRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `KoreanRandomQuestion`. May be used by Relay 1. */
+  koreanRandomQuestionEdge?: Maybe<KoreanRandomQuestionsEdge>;
+};
+
+
+/** The output of our upsert `KoreanRandomQuestion` mutation. */
+export type UpsertKoreanRandomQuestionPayloadKoreanRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<KoreanRandomQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `KoreanRandomQuestion` mutation. */
+export type UpsertKoreanRandomQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `KoreanWouldYouRatherQuestion` mutation. */
+export type UpsertKoreanWouldYouRatherQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `KoreanWouldYouRatherQuestion` to be upserted by this mutation. */
+  koreanWouldYouRatherQuestion: KoreanWouldYouRatherQuestionInput;
+};
+
+/** The output of our upsert `KoreanWouldYouRatherQuestion` mutation. */
+export type UpsertKoreanWouldYouRatherQuestionPayload = {
+  __typename?: 'UpsertKoreanWouldYouRatherQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `KoreanWouldYouRatherQuestion` that was upserted by this mutation. */
+  koreanWouldYouRatherQuestion?: Maybe<KoreanWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `KoreanWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `KoreanWouldYouRatherQuestion`. May be used by Relay 1. */
+  koreanWouldYouRatherQuestionEdge?: Maybe<KoreanWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our upsert `KoreanWouldYouRatherQuestion` mutation. */
+export type UpsertKoreanWouldYouRatherQuestionPayloadKoreanWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `KoreanWouldYouRatherQuestion` mutation. */
+export type UpsertKoreanWouldYouRatherQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `Language` mutation. */
+export type UpsertLanguageInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Language` to be upserted by this mutation. */
+  language: LanguageInput;
+};
+
+/** The output of our upsert `Language` mutation. */
+export type UpsertLanguagePayload = {
+  __typename?: 'UpsertLanguagePayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Language` that was upserted by this mutation. */
+  language?: Maybe<Language>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** An edge for our `Language`. May be used by Relay 1. */
+  languageEdge?: Maybe<LanguagesEdge>;
+};
+
+
+/** The output of our upsert `Language` mutation. */
+export type UpsertLanguagePayloadLanguageEdgeArgs = {
+  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+};
+
+/** All input for the upsert `LanguageSkillLevel` mutation. */
+export type UpsertLanguageSkillLevelInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `LanguageSkillLevel` to be upserted by this mutation. */
+  languageSkillLevel: LanguageSkillLevelInput;
+};
+
+/** The output of our upsert `LanguageSkillLevel` mutation. */
+export type UpsertLanguageSkillLevelPayload = {
+  __typename?: 'UpsertLanguageSkillLevelPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `LanguageSkillLevel` that was upserted by this mutation. */
+  languageSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** An edge for our `LanguageSkillLevel`. May be used by Relay 1. */
+  languageSkillLevelEdge?: Maybe<LanguageSkillLevelsEdge>;
+};
+
+
+/** The output of our upsert `LanguageSkillLevel` mutation. */
+export type UpsertLanguageSkillLevelPayloadLanguageSkillLevelEdgeArgs = {
+  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+};
+
+/** Where conditions for the upsert `LanguageSkillLevel` mutation. */
+export type UpsertLanguageSkillLevelWhere = {
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** Where conditions for the upsert `Language` mutation. */
+export type UpsertLanguageWhere = {
+  id?: Maybe<Scalars['Int']>;
+  alpha2?: Maybe<Scalars['String']>;
+  englishName?: Maybe<Scalars['String']>;
+};
+
+/** All input for the upsert `Message` mutation. */
+export type UpsertMessageInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Message` to be upserted by this mutation. */
+  message: MessageInput;
+};
+
+/** The output of our upsert `Message` mutation. */
+export type UpsertMessagePayload = {
+  __typename?: 'UpsertMessagePayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Message` that was upserted by this mutation. */
+  message?: Maybe<Message>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Message`. */
+  sender?: Maybe<User>;
+  /** Reads a single `User` that is related to this `Message`. */
+  recipient?: Maybe<User>;
+  /** Reads a single `Group` that is related to this `Message`. */
+  recipientGroup?: Maybe<Group>;
+  /** Reads a single `Message` that is related to this `Message`. */
+  parentMessage?: Maybe<Message>;
+  /** An edge for our `Message`. May be used by Relay 1. */
+  messageEdge?: Maybe<MessagesEdge>;
+};
+
+
+/** The output of our upsert `Message` mutation. */
+export type UpsertMessagePayloadMessageEdgeArgs = {
+  orderBy?: Maybe<Array<MessagesOrderBy>>;
+};
+
+/** All input for the upsert `MessagePreview` mutation. */
+export type UpsertMessagePreviewInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `MessagePreview` to be upserted by this mutation. */
+  messagePreview: MessagePreviewInput;
+};
+
+/** The output of our upsert `MessagePreview` mutation. */
+export type UpsertMessagePreviewPayload = {
+  __typename?: 'UpsertMessagePreviewPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `MessagePreview` that was upserted by this mutation. */
+  messagePreview?: Maybe<MessagePreview>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Message` that is related to this `MessagePreview`. */
+  message?: Maybe<Message>;
+  /** An edge for our `MessagePreview`. May be used by Relay 1. */
+  messagePreviewEdge?: Maybe<MessagePreviewsEdge>;
+};
+
+
+/** The output of our upsert `MessagePreview` mutation. */
+export type UpsertMessagePreviewPayloadMessagePreviewEdgeArgs = {
+  orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
+};
+
+/** Where conditions for the upsert `MessagePreview` mutation. */
+export type UpsertMessagePreviewWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** Where conditions for the upsert `Message` mutation. */
+export type UpsertMessageWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `NotificationChannel` mutation. */
+export type UpsertNotificationChannelInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `NotificationChannel` to be upserted by this mutation. */
+  notificationChannel: NotificationChannelInput;
+};
+
+/** The output of our upsert `NotificationChannel` mutation. */
+export type UpsertNotificationChannelPayload = {
+  __typename?: 'UpsertNotificationChannelPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `NotificationChannel` that was upserted by this mutation. */
+  notificationChannel?: Maybe<NotificationChannel>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** An edge for our `NotificationChannel`. May be used by Relay 1. */
+  notificationChannelEdge?: Maybe<NotificationChannelsEdge>;
+};
+
+
+/** The output of our upsert `NotificationChannel` mutation. */
+export type UpsertNotificationChannelPayloadNotificationChannelEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+};
+
+/** Where conditions for the upsert `NotificationChannel` mutation. */
+export type UpsertNotificationChannelWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+/** All input for the upsert `Notification` mutation. */
+export type UpsertNotificationInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Notification` to be upserted by this mutation. */
+  notification: NotificationInput;
+};
+
+/** The output of our upsert `Notification` mutation. */
+export type UpsertNotificationPayload = {
+  __typename?: 'UpsertNotificationPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Notification` that was upserted by this mutation. */
+  notification?: Maybe<Notification>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Notification`. */
+  recipient?: Maybe<User>;
+  /** Reads a single `NotificationChannel` that is related to this `Notification`. */
+  channel?: Maybe<NotificationChannel>;
+  /** Reads a single `Group` that is related to this `Notification`. */
+  recipientGroup?: Maybe<Group>;
+  /** An edge for our `Notification`. May be used by Relay 1. */
+  notificationEdge?: Maybe<NotificationsEdge>;
+};
+
+
+/** The output of our upsert `Notification` mutation. */
+export type UpsertNotificationPayloadNotificationEdgeArgs = {
+  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+};
+
+/** Where conditions for the upsert `Notification` mutation. */
+export type UpsertNotificationWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `PortugueseRandomQuestion` mutation. */
+export type UpsertPortugueseRandomQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PortugueseRandomQuestion` to be upserted by this mutation. */
+  portugueseRandomQuestion: PortugueseRandomQuestionInput;
+};
+
+/** The output of our upsert `PortugueseRandomQuestion` mutation. */
+export type UpsertPortugueseRandomQuestionPayload = {
+  __typename?: 'UpsertPortugueseRandomQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PortugueseRandomQuestion` that was upserted by this mutation. */
+  portugueseRandomQuestion?: Maybe<PortugueseRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `PortugueseRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `PortugueseRandomQuestion`. May be used by Relay 1. */
+  portugueseRandomQuestionEdge?: Maybe<PortugueseRandomQuestionsEdge>;
+};
+
+
+/** The output of our upsert `PortugueseRandomQuestion` mutation. */
+export type UpsertPortugueseRandomQuestionPayloadPortugueseRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<PortugueseRandomQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `PortugueseRandomQuestion` mutation. */
+export type UpsertPortugueseRandomQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `PortugueseWord` mutation. */
+export type UpsertPortugueseWordInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PortugueseWord` to be upserted by this mutation. */
+  portugueseWord: PortugueseWordInput;
+};
+
+/** The output of our upsert `PortugueseWord` mutation. */
+export type UpsertPortugueseWordPayload = {
+  __typename?: 'UpsertPortugueseWordPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PortugueseWord` that was upserted by this mutation. */
+  portugueseWord?: Maybe<PortugueseWord>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `PortugueseWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `PortugueseWord`. May be used by Relay 1. */
+  portugueseWordEdge?: Maybe<PortugueseWordsEdge>;
+};
+
+
+/** The output of our upsert `PortugueseWord` mutation. */
+export type UpsertPortugueseWordPayloadPortugueseWordEdgeArgs = {
+  orderBy?: Maybe<Array<PortugueseWordsOrderBy>>;
+};
+
+/** Where conditions for the upsert `PortugueseWord` mutation. */
+export type UpsertPortugueseWordWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `PortugueseWouldYouRatherQuestion` mutation. */
+export type UpsertPortugueseWouldYouRatherQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PortugueseWouldYouRatherQuestion` to be upserted by this mutation. */
+  portugueseWouldYouRatherQuestion: PortugueseWouldYouRatherQuestionInput;
+};
+
+/** The output of our upsert `PortugueseWouldYouRatherQuestion` mutation. */
+export type UpsertPortugueseWouldYouRatherQuestionPayload = {
+  __typename?: 'UpsertPortugueseWouldYouRatherQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PortugueseWouldYouRatherQuestion` that was upserted by this mutation. */
+  portugueseWouldYouRatherQuestion?: Maybe<PortugueseWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `PortugueseWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `PortugueseWouldYouRatherQuestion`. May be used by Relay 1. */
+  portugueseWouldYouRatherQuestionEdge?: Maybe<PortugueseWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our upsert `PortugueseWouldYouRatherQuestion` mutation. */
+export type UpsertPortugueseWouldYouRatherQuestionPayloadPortugueseWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `PortugueseWouldYouRatherQuestion` mutation. */
+export type UpsertPortugueseWouldYouRatherQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `Post` mutation. */
+export type UpsertPostInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Post` to be upserted by this mutation. */
+  post: PostInput;
+};
+
+/** All input for the upsert `PostLike` mutation. */
+export type UpsertPostLikeInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostLike` to be upserted by this mutation. */
+  postLike: PostLikeInput;
+};
+
+/** The output of our upsert `PostLike` mutation. */
+export type UpsertPostLikePayload = {
+  __typename?: 'UpsertPostLikePayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostLike` that was upserted by this mutation. */
+  postLike?: Maybe<PostLike>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostLike`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostLike`. */
+  post?: Maybe<Post>;
+  /** An edge for our `PostLike`. May be used by Relay 1. */
+  postLikeEdge?: Maybe<PostLikesEdge>;
+};
+
+
+/** The output of our upsert `PostLike` mutation. */
+export type UpsertPostLikePayloadPostLikeEdgeArgs = {
+  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+};
+
+/** Where conditions for the upsert `PostLike` mutation. */
+export type UpsertPostLikeWhere = {
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** The output of our upsert `Post` mutation. */
+export type UpsertPostPayload = {
+  __typename?: 'UpsertPostPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Post` that was upserted by this mutation. */
+  post?: Maybe<Post>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `Post`. */
+  author?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `Post`. */
+  parentPost?: Maybe<Post>;
+  /** Reads a single `Language` that is related to this `Post`. */
+  language?: Maybe<Language>;
+  /** Reads a single `Prompt` that is related to this `Post`. */
+  prompt?: Maybe<Prompt>;
+  /** An edge for our `Post`. May be used by Relay 1. */
+  postEdge?: Maybe<PostsEdge>;
+};
+
+
+/** The output of our upsert `Post` mutation. */
+export type UpsertPostPayloadPostEdgeArgs = {
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+};
+
+/** All input for the upsert `PostRecording` mutation. */
+export type UpsertPostRecordingInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostRecording` to be upserted by this mutation. */
+  postRecording: PostRecordingInput;
+};
+
+/** The output of our upsert `PostRecording` mutation. */
+export type UpsertPostRecordingPayload = {
+  __typename?: 'UpsertPostRecordingPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostRecording` that was upserted by this mutation. */
+  postRecording?: Maybe<PostRecording>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostRecording`. */
+  user?: Maybe<User>;
+  /** Reads a single `Post` that is related to this `PostRecording`. */
+  post?: Maybe<Post>;
+  /** An edge for our `PostRecording`. May be used by Relay 1. */
+  postRecordingEdge?: Maybe<PostRecordingsEdge>;
+};
+
+
+/** The output of our upsert `PostRecording` mutation. */
+export type UpsertPostRecordingPayloadPostRecordingEdgeArgs = {
+  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+};
+
+/** Where conditions for the upsert `PostRecording` mutation. */
+export type UpsertPostRecordingWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** Where conditions for the upsert `Post` mutation. */
+export type UpsertPostWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `Prompt` mutation. */
+export type UpsertPromptInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Prompt` to be upserted by this mutation. */
+  prompt: PromptInput;
+};
+
+/** The output of our upsert `Prompt` mutation. */
+export type UpsertPromptPayload = {
+  __typename?: 'UpsertPromptPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Prompt` that was upserted by this mutation. */
+  prompt?: Maybe<Prompt>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `Prompt`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `Prompt`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `Prompt`. May be used by Relay 1. */
+  promptEdge?: Maybe<PromptsEdge>;
+};
+
+
+/** The output of our upsert `Prompt` mutation. */
+export type UpsertPromptPayloadPromptEdgeArgs = {
+  orderBy?: Maybe<Array<PromptsOrderBy>>;
+};
+
+/** Where conditions for the upsert `Prompt` mutation. */
+export type UpsertPromptWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `RussianRandomQuestion` mutation. */
+export type UpsertRussianRandomQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `RussianRandomQuestion` to be upserted by this mutation. */
+  russianRandomQuestion: RussianRandomQuestionInput;
+};
+
+/** The output of our upsert `RussianRandomQuestion` mutation. */
+export type UpsertRussianRandomQuestionPayload = {
+  __typename?: 'UpsertRussianRandomQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `RussianRandomQuestion` that was upserted by this mutation. */
+  russianRandomQuestion?: Maybe<RussianRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `RussianRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `RussianRandomQuestion`. May be used by Relay 1. */
+  russianRandomQuestionEdge?: Maybe<RussianRandomQuestionsEdge>;
+};
+
+
+/** The output of our upsert `RussianRandomQuestion` mutation. */
+export type UpsertRussianRandomQuestionPayloadRussianRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<RussianRandomQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `RussianRandomQuestion` mutation. */
+export type UpsertRussianRandomQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `RussianWord` mutation. */
+export type UpsertRussianWordInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `RussianWord` to be upserted by this mutation. */
+  russianWord: RussianWordInput;
+};
+
+/** The output of our upsert `RussianWord` mutation. */
+export type UpsertRussianWordPayload = {
+  __typename?: 'UpsertRussianWordPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `RussianWord` that was upserted by this mutation. */
+  russianWord?: Maybe<RussianWord>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `RussianWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `RussianWord`. May be used by Relay 1. */
+  russianWordEdge?: Maybe<RussianWordsEdge>;
+};
+
+
+/** The output of our upsert `RussianWord` mutation. */
+export type UpsertRussianWordPayloadRussianWordEdgeArgs = {
+  orderBy?: Maybe<Array<RussianWordsOrderBy>>;
+};
+
+/** Where conditions for the upsert `RussianWord` mutation. */
+export type UpsertRussianWordWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `RussianWouldYouRatherQuestion` mutation. */
+export type UpsertRussianWouldYouRatherQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `RussianWouldYouRatherQuestion` to be upserted by this mutation. */
+  russianWouldYouRatherQuestion: RussianWouldYouRatherQuestionInput;
+};
+
+/** The output of our upsert `RussianWouldYouRatherQuestion` mutation. */
+export type UpsertRussianWouldYouRatherQuestionPayload = {
+  __typename?: 'UpsertRussianWouldYouRatherQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `RussianWouldYouRatherQuestion` that was upserted by this mutation. */
+  russianWouldYouRatherQuestion?: Maybe<RussianWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `RussianWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `RussianWouldYouRatherQuestion`. May be used by Relay 1. */
+  russianWouldYouRatherQuestionEdge?: Maybe<RussianWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our upsert `RussianWouldYouRatherQuestion` mutation. */
+export type UpsertRussianWouldYouRatherQuestionPayloadRussianWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `RussianWouldYouRatherQuestion` mutation. */
+export type UpsertRussianWouldYouRatherQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `SpanishRandomQuestion` mutation. */
+export type UpsertSpanishRandomQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `SpanishRandomQuestion` to be upserted by this mutation. */
+  spanishRandomQuestion: SpanishRandomQuestionInput;
+};
+
+/** The output of our upsert `SpanishRandomQuestion` mutation. */
+export type UpsertSpanishRandomQuestionPayload = {
+  __typename?: 'UpsertSpanishRandomQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `SpanishRandomQuestion` that was upserted by this mutation. */
+  spanishRandomQuestion?: Maybe<SpanishRandomQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `SpanishRandomQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `SpanishRandomQuestion`. May be used by Relay 1. */
+  spanishRandomQuestionEdge?: Maybe<SpanishRandomQuestionsEdge>;
+};
+
+
+/** The output of our upsert `SpanishRandomQuestion` mutation. */
+export type UpsertSpanishRandomQuestionPayloadSpanishRandomQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<SpanishRandomQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `SpanishRandomQuestion` mutation. */
+export type UpsertSpanishRandomQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `SpanishWord` mutation. */
+export type UpsertSpanishWordInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `SpanishWord` to be upserted by this mutation. */
+  spanishWord: SpanishWordInput;
+};
+
+/** The output of our upsert `SpanishWord` mutation. */
+export type UpsertSpanishWordPayload = {
+  __typename?: 'UpsertSpanishWordPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `SpanishWord` that was upserted by this mutation. */
+  spanishWord?: Maybe<SpanishWord>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `SpanishWord`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `SpanishWord`. May be used by Relay 1. */
+  spanishWordEdge?: Maybe<SpanishWordsEdge>;
+};
+
+
+/** The output of our upsert `SpanishWord` mutation. */
+export type UpsertSpanishWordPayloadSpanishWordEdgeArgs = {
+  orderBy?: Maybe<Array<SpanishWordsOrderBy>>;
+};
+
+/** Where conditions for the upsert `SpanishWord` mutation. */
+export type UpsertSpanishWordWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `SpanishWouldYouRatherQuestion` mutation. */
+export type UpsertSpanishWouldYouRatherQuestionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `SpanishWouldYouRatherQuestion` to be upserted by this mutation. */
+  spanishWouldYouRatherQuestion: SpanishWouldYouRatherQuestionInput;
+};
+
+/** The output of our upsert `SpanishWouldYouRatherQuestion` mutation. */
+export type UpsertSpanishWouldYouRatherQuestionPayload = {
+  __typename?: 'UpsertSpanishWouldYouRatherQuestionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `SpanishWouldYouRatherQuestion` that was upserted by this mutation. */
+  spanishWouldYouRatherQuestion?: Maybe<SpanishWouldYouRatherQuestion>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `SpanishWouldYouRatherQuestion`. */
+  recommendedSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `SpanishWouldYouRatherQuestion`. May be used by Relay 1. */
+  spanishWouldYouRatherQuestionEdge?: Maybe<SpanishWouldYouRatherQuestionsEdge>;
+};
+
+
+/** The output of our upsert `SpanishWouldYouRatherQuestion` mutation. */
+export type UpsertSpanishWouldYouRatherQuestionPayloadSpanishWouldYouRatherQuestionEdgeArgs = {
+  orderBy?: Maybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `SpanishWouldYouRatherQuestion` mutation. */
+export type UpsertSpanishWouldYouRatherQuestionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** All input for the upsert `UserDevice` mutation. */
+export type UpsertUserDeviceInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserDevice` to be upserted by this mutation. */
+  userDevice: UserDeviceInput;
+};
+
+/** The output of our upsert `UserDevice` mutation. */
+export type UpsertUserDevicePayload = {
+  __typename?: 'UpsertUserDevicePayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserDevice` that was upserted by this mutation. */
+  userDevice?: Maybe<UserDevice>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserDevice`. */
+  user?: Maybe<User>;
+  /** An edge for our `UserDevice`. May be used by Relay 1. */
+  userDeviceEdge?: Maybe<UserDevicesEdge>;
+};
+
+
+/** The output of our upsert `UserDevice` mutation. */
+export type UpsertUserDevicePayloadUserDeviceEdgeArgs = {
+  orderBy?: Maybe<Array<UserDevicesOrderBy>>;
+};
+
+/** Where conditions for the upsert `UserDevice` mutation. */
+export type UpsertUserDeviceWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  fcmToken?: Maybe<Scalars['String']>;
+};
+
+/** All input for the upsert `UserFollower` mutation. */
+export type UpsertUserFollowerInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserFollower` to be upserted by this mutation. */
+  userFollower: UserFollowerInput;
+};
+
+/** The output of our upsert `UserFollower` mutation. */
+export type UpsertUserFollowerPayload = {
+  __typename?: 'UpsertUserFollowerPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserFollower` that was upserted by this mutation. */
+  userFollower?: Maybe<UserFollower>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserFollower`. */
+  user?: Maybe<User>;
+  /** Reads a single `User` that is related to this `UserFollower`. */
+  follower?: Maybe<User>;
+  /** An edge for our `UserFollower`. May be used by Relay 1. */
+  userFollowerEdge?: Maybe<UserFollowersEdge>;
+};
+
+
+/** The output of our upsert `UserFollower` mutation. */
+export type UpsertUserFollowerPayloadUserFollowerEdgeArgs = {
+  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+};
+
+/** Where conditions for the upsert `UserFollower` mutation. */
+export type UpsertUserFollowerWhere = {
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** All input for the upsert `User` mutation. */
+export type UpsertUserInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `User` to be upserted by this mutation. */
+  user: UserInput;
+};
+
+/** All input for the upsert `UserLanguage` mutation. */
+export type UpsertUserLanguageInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserLanguage` to be upserted by this mutation. */
+  userLanguage: UserLanguageInput;
+};
+
+/** The output of our upsert `UserLanguage` mutation. */
+export type UpsertUserLanguagePayload = {
+  __typename?: 'UpsertUserLanguagePayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserLanguage` that was upserted by this mutation. */
+  userLanguage?: Maybe<UserLanguage>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserLanguage`. */
+  user?: Maybe<User>;
+  /** Reads a single `Language` that is related to this `UserLanguage`. */
+  language?: Maybe<Language>;
+  /** Reads a single `LanguageSkillLevel` that is related to this `UserLanguage`. */
+  languageSkillLevel?: Maybe<LanguageSkillLevel>;
+  /** An edge for our `UserLanguage`. May be used by Relay 1. */
+  userLanguageEdge?: Maybe<UserLanguagesEdge>;
+};
+
+
+/** The output of our upsert `UserLanguage` mutation. */
+export type UpsertUserLanguagePayloadUserLanguageEdgeArgs = {
+  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+};
+
+/** Where conditions for the upsert `UserLanguage` mutation. */
+export type UpsertUserLanguageWhere = {
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** The output of our upsert `User` mutation. */
+export type UpsertUserPayload = {
+  __typename?: 'UpsertUserPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `User` that was upserted by this mutation. */
+  user?: Maybe<User>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Language` that is related to this `User`. */
+  languageByLocale?: Maybe<Language>;
+  /** Reads a single `InviteToken` that is related to this `User`. */
+  signedUpWithToken?: Maybe<InviteToken>;
+  /** An edge for our `User`. May be used by Relay 1. */
+  userEdge?: Maybe<UsersEdge>;
+};
+
+
+/** The output of our upsert `User` mutation. */
+export type UpsertUserPayloadUserEdgeArgs = {
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+};
+
+/** All input for the upsert `UserPreference` mutation. */
+export type UpsertUserPreferenceInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserPreference` to be upserted by this mutation. */
+  userPreference: UserPreferenceInput;
+};
+
+/** The output of our upsert `UserPreference` mutation. */
+export type UpsertUserPreferencePayload = {
+  __typename?: 'UpsertUserPreferencePayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserPreference` that was upserted by this mutation. */
+  userPreference?: Maybe<UserPreference>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `UserPreference`. */
+  user?: Maybe<User>;
+  /** Reads a single `Language` that is related to this `UserPreference`. */
+  feedLanguage?: Maybe<Language>;
+  /** An edge for our `UserPreference`. May be used by Relay 1. */
+  userPreferenceEdge?: Maybe<UserPreferencesEdge>;
+};
+
+
+/** The output of our upsert `UserPreference` mutation. */
+export type UpsertUserPreferencePayloadUserPreferenceEdgeArgs = {
+  orderBy?: Maybe<Array<UserPreferencesOrderBy>>;
+};
+
+/** Where conditions for the upsert `UserPreference` mutation. */
+export type UpsertUserPreferenceWhere = {
+  id?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+};
+
+/** All input for the upsert `UserSession` mutation. */
+export type UpsertUserSessionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserSession` to be upserted by this mutation. */
+  userSession: UserSessionInput;
+};
+
+/** The output of our upsert `UserSession` mutation. */
+export type UpsertUserSessionPayload = {
+  __typename?: 'UpsertUserSessionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `UserSession` that was upserted by this mutation. */
+  userSession?: Maybe<UserSession>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** An edge for our `UserSession`. May be used by Relay 1. */
+  userSessionEdge?: Maybe<UserSessionsEdge>;
+};
+
+
+/** The output of our upsert `UserSession` mutation. */
+export type UpsertUserSessionPayloadUserSessionEdgeArgs = {
+  orderBy?: Maybe<Array<UserSessionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `UserSession` mutation. */
+export type UpsertUserSessionWhere = {
+  sid?: Maybe<Scalars['String']>;
+};
+
+/** Where conditions for the upsert `User` mutation. */
+export type UpsertUserWhere = {
+  id?: Maybe<Scalars['Int']>;
+  username?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  uuid?: Maybe<Scalars['UUID']>;
+  emailUnsubscribeToken?: Maybe<Scalars['String']>;
 };
 
 export type User = Node & {
@@ -18971,6 +21331,8 @@ export type User = Node & {
   followers: UserFollowersConnection;
   /** Reads and enables pagination through a set of `UserFollower`. */
   followedUsers: UserFollowersConnection;
+  /** Reads a single `UserPreference` that is related to this `User`. */
+  preference?: Maybe<UserPreference>;
   followedByCurrentUser?: Maybe<Scalars['Boolean']>;
   /** Reads and enables pagination through a set of `Language`. */
   languagesByUserLanguageUserIdAndLanguageId: UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyConnection;
@@ -20304,6 +22666,106 @@ export type UserPostsByPostRecordingUserIdAndPostIdManyToManyEdgeRecordingsArgs 
   filter?: Maybe<PostRecordingFilter>;
 };
 
+export type UserPreference = Node & {
+  __typename?: 'UserPreference';
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  id: Scalars['Int'];
+  userId: Scalars['Int'];
+  feedLanguageId: Scalars['Int'];
+  createdAt: Scalars['Datetime'];
+  /** Reads a single `User` that is related to this `UserPreference`. */
+  user?: Maybe<User>;
+  /** Reads a single `Language` that is related to this `UserPreference`. */
+  feedLanguage?: Maybe<Language>;
+};
+
+/**
+ * A condition to be used against `UserPreference` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type UserPreferenceCondition = {
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `feedLanguageId` field. */
+  feedLanguageId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A filter to be used against `UserPreference` object types. All fields are combined with a logical ‘and.’ */
+export type UserPreferenceFilter = {
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `feedLanguageId` field. */
+  feedLanguageId?: Maybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<UserPreferenceFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<UserPreferenceFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<UserPreferenceFilter>;
+};
+
+/** An input for mutations affecting `UserPreference` */
+export type UserPreferenceInput = {
+  id?: Maybe<Scalars['Int']>;
+  userId: Scalars['Int'];
+  feedLanguageId: Scalars['Int'];
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** Represents an update to a `UserPreference`. Fields that are set will be updated. */
+export type UserPreferencePatch = {
+  id?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+  feedLanguageId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+};
+
+/** A connection to a list of `UserPreference` values. */
+export type UserPreferencesConnection = {
+  __typename?: 'UserPreferencesConnection';
+  /** A list of `UserPreference` objects. */
+  nodes: Array<Maybe<UserPreference>>;
+  /** A list of edges which contains the `UserPreference` and cursor to aid in pagination. */
+  edges: Array<UserPreferencesEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `UserPreference` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `UserPreference` edge in the connection. */
+export type UserPreferencesEdge = {
+  __typename?: 'UserPreferencesEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `UserPreference` at the end of the edge. */
+  node?: Maybe<UserPreference>;
+};
+
+/** Methods to use when ordering `UserPreference`. */
+export enum UserPreferencesOrderBy {
+  Natural = 'NATURAL',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+  FeedLanguageIdAsc = 'FEED_LANGUAGE_ID_ASC',
+  FeedLanguageIdDesc = 'FEED_LANGUAGE_ID_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
 /** A connection to a list of `Prompt` values, with data from `Post`. */
 export type UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection = {
   __typename?: 'UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection';
@@ -20725,7 +23187,7 @@ export type GroupChatMessagesQuery = { __typename?: 'Query', groupByUuid?: Maybe
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: Maybe<{ __typename?: 'User', bio: string, email: string, gender?: Maybe<string>, username?: Maybe<string>, uuid: any, avatarUrl?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number }, languageByLocale?: Maybe<{ __typename?: 'Language', alpha2: string }>, inviteTokens: { __typename?: 'InviteTokensConnection', nodes: Array<Maybe<{ __typename?: 'InviteToken', inviteToken: string }>> } }> };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: Maybe<{ __typename?: 'User', bio: string, email: string, gender?: Maybe<string>, username?: Maybe<string>, uuid: any, avatarUrl?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number }, languageByLocale?: Maybe<{ __typename?: 'Language', alpha2: string }>, inviteTokens: { __typename?: 'InviteTokensConnection', nodes: Array<Maybe<{ __typename?: 'InviteToken', inviteToken: string }>> }, preference?: Maybe<{ __typename?: 'UserPreference', feedLanguage?: Maybe<{ __typename?: 'Language', alpha2: string }> }> }> };
 
 export type RegisterUserActivityMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -21050,6 +23512,14 @@ export type CreateUserLanguageMutationVariables = Exact<{
 
 export type CreateUserLanguageMutation = { __typename?: 'Mutation', createUserLanguage?: Maybe<{ __typename?: 'CreateUserLanguagePayload', userLanguage?: Maybe<{ __typename?: 'UserLanguage', id: number }> }> };
 
+export type CreateUserPreferenceMutationVariables = Exact<{
+  feedLanguageId: Scalars['Int'];
+  userId: Scalars['Int'];
+}>;
+
+
+export type CreateUserPreferenceMutation = { __typename?: 'Mutation', createUserPreference?: Maybe<{ __typename?: 'CreateUserPreferencePayload', userPreference?: Maybe<{ __typename?: 'UserPreference', createdAt: any, id: number, nodeId: string, feedLanguageId: number }> }> };
+
 export type CurrentUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -21070,6 +23540,14 @@ export type UpdateUserBioMutationVariables = Exact<{
 
 
 export type UpdateUserBioMutation = { __typename?: 'Mutation', updateUser?: Maybe<{ __typename?: 'UpdateUserPayload', user?: Maybe<{ __typename?: 'User', bio: string }> }> };
+
+export type UpsertUserPreferenceMutationVariables = Exact<{
+  feedLanguageId: Scalars['Int'];
+  userId: Scalars['Int'];
+}>;
+
+
+export type UpsertUserPreferenceMutation = { __typename?: 'Mutation', upsertUserPreference?: Maybe<{ __typename?: 'UpsertUserPreferencePayload', userPreference?: Maybe<{ __typename?: 'UserPreference', createdAt: any, id: number, nodeId: string, feedLanguageId: number }> }> };
 
 export type UserHasCompletedProfileQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -21238,6 +23716,11 @@ export const CurrentUser = gql`
     inviteTokens {
       nodes {
         inviteToken
+      }
+    }
+    preference {
+      feedLanguage {
+        alpha2
       }
     }
   }
@@ -21978,6 +24461,20 @@ export const CreateUserLanguage = gql`
   }
 }
     `;
+export const CreateUserPreference = gql`
+    mutation CreateUserPreference($feedLanguageId: Int!, $userId: Int!) {
+  createUserPreference(
+    input: {userPreference: {feedLanguageId: $feedLanguageId, userId: $userId}}
+  ) {
+    userPreference {
+      createdAt
+      id
+      nodeId
+      feedLanguageId
+    }
+  }
+}
+    `;
 export const CurrentUserProfile = gql`
     query CurrentUserProfile {
   currentUser {
@@ -22034,6 +24531,21 @@ export const UpdateUserBio = gql`
   updateUser(input: {patch: {bio: $bio}, id: $id}) {
     user {
       bio
+    }
+  }
+}
+    `;
+export const UpsertUserPreference = gql`
+    mutation UpsertUserPreference($feedLanguageId: Int!, $userId: Int!) {
+  upsertUserPreference(
+    input: {userPreference: {feedLanguageId: $feedLanguageId, userId: $userId}}
+    where: {userId: $userId}
+  ) {
+    userPreference {
+      createdAt
+      id
+      nodeId
+      feedLanguageId
     }
   }
 }

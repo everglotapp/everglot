@@ -5,6 +5,7 @@ import PersistedOperationsPlugin from "@graphile/persisted-operations"
 import PgSimplifyInflectorPlugin from "@graphile-contrib/pg-simplify-inflector"
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter"
 import PgManyToManyPlugin from "@graphile-contrib/pg-many-to-many"
+import { PgMutationUpsertPlugin } from "postgraphile-upsert-plugin"
 import type { PostGraphileOptions } from "postgraphile"
 
 import PostgraphileLogger from "../../logger/postgraphileLogger"
@@ -30,6 +31,7 @@ export function getPostGraphileOptions(): PostGraphileOptions {
             PgSimplifyInflectorPlugin,
             PgManyToManyPlugin,
             ConnectionFilterPlugin,
+            PgMutationUpsertPlugin,
         ],
         watchPg: true,
         graphiql: dev,

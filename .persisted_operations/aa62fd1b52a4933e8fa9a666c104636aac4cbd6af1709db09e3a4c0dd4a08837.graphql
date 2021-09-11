@@ -1,0 +1,12 @@
+mutation CreateUserPreference($feedLanguageId: Int!, $userId: Int!) {
+  createUserPreference(input: {userPreference: {feedLanguageId: $feedLanguageId, userId: $userId}}) {
+    userPreference {
+      createdAt
+      id
+      nodeId
+      feedLanguageId
+      __typename
+    }
+    __typename
+  }
+}

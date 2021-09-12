@@ -30,8 +30,9 @@ type FcmMessageParamsV1 = {
         body?: string
         imageUrl?: string
     }
-    data?: {
+    data: {
         [key: string]: string
+        type: FcmMessageParamsDataTypeV1
     }
     android?: any
     webpush?: any
@@ -44,4 +45,11 @@ type FcmMessageParamsV1 = {
 export type FcmParamsV1 = {
     message: FcmMessageParamsV1
     excludeUserUuids?: string[]
+}
+
+export enum FcmMessageParamsDataTypeV1 {
+    GroupMessage = "GROUP_MESSAGE",
+    PostLike = "POST_LIKE",
+    PostReply = "POST_REPLY",
+    UserFollowership = "USER_FOLLOWERSHIP",
 }

@@ -1,0 +1,9 @@
+mutation UpdateUserBio($bio: String!, $id: Int!) {
+  updateUser(input: {patch: {bio: $bio}, id: $id}) {
+    user {
+      bio
+      __typename
+    }
+    __typename
+  }
+}

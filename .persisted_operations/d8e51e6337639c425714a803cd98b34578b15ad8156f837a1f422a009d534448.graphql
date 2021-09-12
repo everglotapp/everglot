@@ -1,5 +1,5 @@
-query AllPosts {
-  posts(orderBy: CREATED_AT_DESC, condition: {parentPostId: null}) {
+query SinglePost($snowflakeId: BigInt!) {
+  posts(condition: {parentPostId: null, snowflakeId: $snowflakeId}) {
     nodes {
       uuid
       nodeId
@@ -8,6 +8,7 @@ query AllPosts {
         uuid
         username
         avatarUrl
+        displayName
         __typename
       }
       body
@@ -92,6 +93,7 @@ query AllPosts {
         type
         __typename
       }
+      snowflakeId
       __typename
     }
     __typename

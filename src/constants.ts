@@ -27,7 +27,7 @@ export const SUPPORTED_LOCALES = [
     "es",
     "fr",
     "ja",
-    // "ko",
+    "ko",
     "ru",
     "pt",
 ] as const
@@ -50,13 +50,46 @@ export type HangmanLocale = typeof HANGMAN_LOCALES[number]
 export const GUESS_CHARACTER_LOCALES = ["zh"] as const
 export type GuessCharacterLocale = typeof GUESS_CHARACTER_LOCALES[number]
 
-export const WOULD_YOU_RATHER_LOCALES = ["en", "de", "zh"] as const
+export const WOULD_YOU_RATHER_LOCALES = [
+    "en",
+    "de",
+    "zh",
+    // "it",
+    // "es",
+    // "fr",
+    // "ja",
+    // "ko",
+    // "ru",
+    // "pt",
+] as const
 export type WouldYouRatherLocale = typeof WOULD_YOU_RATHER_LOCALES[number]
 
-export const RANDOM_QUESTION_LOCALES = ["en", "de", "zh"] as const
+export const RANDOM_QUESTION_LOCALES = [
+    "en",
+    "de",
+    "zh",
+    // "it",
+    // "es",
+    // "fr",
+    // "ja",
+    // "ko",
+    // "ru",
+    // "pt",
+] as const
 export type RandomQuestionLocale = typeof RANDOM_QUESTION_LOCALES[number]
 
-export const PROMPT_LOCALES = ["en", "de", "zh"] as const
+export const PROMPT_LOCALES = [
+    "en",
+    "de",
+    "zh",
+    // "it",
+    // "es",
+    // "fr",
+    // "ja",
+    // "ko",
+    // "ru",
+    // "pt",
+] as const
 export type PromptLocale = typeof RANDOM_QUESTION_LOCALES[number]
 
 export const MESSAGE_PREVIEW_BASE_PATH = "/images/preview" as const
@@ -71,6 +104,7 @@ export const USER_CREATE_POST_RECORDING_FILE_FORM_FIELD = "recording" as const
 export const WEBRTC_CONTEXT_KEY = "WEBRTC"
 
 export const SIDEBAR_MENU_ICON_BUTTON_ID = uuidv4()
+export const ENLARGEN_PROFILE_PICTURE_BUTTON_ID = uuidv4()
 
 export const ALPHABET: Record<HangmanLocale, readonly string[]> = {
     en: [

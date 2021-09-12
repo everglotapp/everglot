@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte"
+    import { onDestroy, onMount, createEventDispatcher } from "svelte"
     import Time from "svelte-time"
     import {
         MicIcon,
@@ -13,6 +13,7 @@
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import ButtonLarge from "../util/ButtonLarge.svelte"
     import {
         createPost,
         createPostRecording,
@@ -22,8 +23,8 @@
 
     export let shownPromptUuid: string | null
     export let locale: SupportedLocale | null
-    export let handleSuccess: () => void = () => {}
-    export let handleFailure: () => void = () => {}
+
+    const dispatch = createEventDispatcher()
 
     const { translate } = fluentStores()!
 
@@ -196,7 +197,7 @@
             const response = await res.json()
             if (response.success) {
                 newPostBody = ""
-                handleSuccess()
+                dispatch("success")
                 if (recordedBlob) {
                     const res2 = await createPostRecording(
                         response.meta.post.uuid,
@@ -208,19 +209,19 @@
                     if (res2.status === 200) {
                         const response2 = await res2.json()
                         if (response2.success) {
-                            handleSuccess()
+                            dispatch("success")
                         } else {
-                            handleFailure()
+                            dispatch("failure")
                         }
                     } else {
-                        handleFailure()
+                        dispatch("failure")
                     }
                 }
             } else {
-                handleFailure()
+                dispatch("failure")
             }
         } else {
-            handleFailure()
+            dispatch("failure")
         }
     }
 
@@ -257,7 +258,7 @@
         />
         <div>
             <div class="flex items-center justify-end relative">
-                <ButtonSmall
+                <ButtonLarge
                     className={"ml-1 items-center" +
                         (recording ? " recording" : " mr-1")}
                     tag="button"
@@ -269,9 +270,9 @@
                     >{#if recording}<CheckIcon
                             size="18"
                             strokeWidth={3}
-                        />{:else}<MicIcon size="18" class="mr-2" /><Localized
+                        />{:else}<MicIcon size="20" class="mr-2" /><Localized
                             id="index-post-form-record-button"
-                        />{/if}</ButtonSmall
+                        />{/if}</ButtonLarge
                 >
                 {#if recording}
                     <ButtonSmall
@@ -279,16 +280,16 @@
                         tag="button"
                         variant="TEXT"
                         on:click={handleUserRecordCancel}
-                        ><XIcon size="18" class="text-gray" /></ButtonSmall
+                        ><XIcon size="20" class="text-gray" /></ButtonSmall
                     >
                 {/if}
-                <ButtonSmall
+                <ButtonLarge
                     className="items-center"
                     tag="button"
                     on:click={() => handlePost()}
                     ><SendIcon size="18" class="mr-2" /><Localized
                         id="index-post-form-post-button"
-                    /></ButtonSmall
+                    /></ButtonLarge
                 >
                 {#if recording}
                     <div
@@ -365,6 +366,16 @@
 </div>
 
 <style>
+    [placeholder]:empty::before {
+        content: attr(placeholder);
+
+        @apply text-gray;
+    }
+
+    [placeholder]:empty:focus::before {
+        content: "";
+    }
+
     .body-input {
         word-wrap: anywhere;
         overflow-wrap: anywhere;

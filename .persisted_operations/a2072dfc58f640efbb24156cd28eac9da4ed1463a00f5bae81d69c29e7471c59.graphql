@@ -1,0 +1,6 @@
+query UserIdByUuid($uuid: UUID!) {
+  userByUuid(uuid: $uuid) {
+    id
+    __typename
+  }
+}

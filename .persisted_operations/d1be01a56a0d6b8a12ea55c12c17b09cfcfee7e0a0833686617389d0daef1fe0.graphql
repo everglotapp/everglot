@@ -1,0 +1,14 @@
+query UserFollowershipNotification($id: Int!) {
+  userFollower(id: $id) {
+    follower {
+      username
+      displayName
+      __typename
+    }
+    user {
+      id
+      __typename
+    }
+    __typename
+  }
+}

@@ -1,0 +1,83 @@
+query SinglePost($snowflakeId: BigInt!) {
+    posts(condition: { parentPostId: null, snowflakeId: $snowflakeId }) {
+        nodes {
+            uuid
+            nodeId
+            createdAt
+            author {
+                uuid
+                username
+                avatarUrl
+                displayName
+            }
+            body
+            likes {
+                totalCount
+                nodes {
+                    user {
+                        uuid
+                    }
+                }
+            }
+            parentPost {
+                uuid
+            }
+            replies(
+                orderBy: CREATED_AT_ASC
+                filter: { not: { parentPostId: { isNull: true } } }
+            ) {
+                totalCount
+                nodes {
+                    uuid
+                    nodeId
+                    createdAt
+                    author {
+                        uuid
+                        username
+                        avatarUrl
+                    }
+                    likes {
+                        totalCount
+                        nodes {
+                            user {
+                                uuid
+                            }
+                        }
+                    }
+                    body
+                    parentPost {
+                        uuid
+                    }
+                    language {
+                        alpha2
+                    }
+                    prompt {
+                        content
+                        uuid
+                        type
+                    }
+                }
+            }
+            recordings {
+                totalCount
+                nodes {
+                    filename
+                    extension
+                    uuid
+                    user {
+                        uuid
+                    }
+                }
+            }
+            language {
+                alpha2
+            }
+            prompt {
+                content
+                uuid
+                type
+            }
+            snowflakeId
+        }
+    }
+}

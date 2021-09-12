@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { createEventDispatcher } from "svelte"
     import { scale } from "svelte/transition"
     import { svelteTime } from "svelte-time"
     import {
@@ -12,13 +13,13 @@
 
     import Avatar from "../users/Avatar.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
+    import ButtonLarge from "../util/ButtonLarge.svelte"
 
     import { currentUserStore, currentUserUuid } from "../../stores/currentUser"
 
     import type { AllPostsQuery } from "../../types/generated/graphql"
     import { PromptType } from "../../types/generated/graphql"
     import { createPost } from "../../routes/_helpers/posts"
-    import { allPostsStore } from "../../stores/feed"
     import type { SupportedLocale } from "../../constants"
     import { USER_UPLOADED_RECORDINGS_BASE_PATH } from "../../constants"
 
@@ -35,6 +36,10 @@
     export let recordings: PostNode["recordings"]
     export let prompt: PostNode["prompt"]
     export let language: PostNode["language"]
+    export let linkToAuthorProfile: boolean = true
+    export let forceShowReplies: boolean = false
+
+    const dispatch = createEventDispatcher()
 
     $: replyNodes = replies.nodes.filter(Boolean).map((reply) => reply!)
 
@@ -46,7 +51,10 @@
         )
 
     async function handleReply() {
-        if (!newReplyBody) {
+        if (!newReplyBody || !newReplyBody.length) {
+            return
+        }
+        if (!language) {
             return
         }
         const res = await createPost(
@@ -60,15 +68,12 @@
             if (response.success) {
                 // success
                 newReplyBody = ""
-                $allPostsStore.context = {
-                    ...$allPostsStore.context,
-                    paused: true,
-                }
-                $allPostsStore.context = {
-                    ...$allPostsStore.context,
-                    paused: false,
-                }
+                dispatch("replySuccess")
+            } else {
+                dispatch("replyFailure")
             }
+        } else {
+            dispatch("replyFailure")
         }
     }
     let showReplies: boolean = false
@@ -91,24 +96,24 @@
                 "Content-Type": "application/json",
             },
         })
+        const onSuccess = () =>
+            dispatch(tmpLiked ? "likeSuccess" : "unlikeSuccess")
+        const onFailure = () =>
+            dispatch(tmpLiked ? "likeFailure" : "unlikeFailure")
         if (res.status === 200) {
             const response = await res.json()
             if (response.success) {
-                // success
-                $allPostsStore.context = {
-                    ...$allPostsStore.context,
-                    paused: true,
-                }
-                $allPostsStore.context = {
-                    ...$allPostsStore.context,
-                    paused: false,
-                }
+                onSuccess()
                 setTimeout(() => {
                     tmpLiked = false
                     tmpUnliked = false
                 }, 250)
                 return
+            } else {
+                onFailure()
             }
+        } else {
+            onFailure()
         }
         tmpLiked = false
         tmpUnliked = false
@@ -125,13 +130,30 @@
 >
     <div class="flex flex-row">
         <div class="pr-3 sm:pr-4">
-            <Avatar username={author.username} url={author.avatarUrl} />
+            {#if linkToAuthorProfile}
+                <a href={`/u/${author.username}`}
+                    ><Avatar
+                        username={author.username}
+                        url={author.avatarUrl}
+                    /></a
+                >
+            {:else}
+                <Avatar username={author.username} url={author.avatarUrl} />
+            {/if}
         </div>
         <div class="w-full">
-            <div class="mb-1 flex items-center justify-between">
-                <span class="text-gray-bitdark font-bold"
-                    >{author.username}</span
-                >
+            <div class="flex items-center justify-between">
+                {#if linkToAuthorProfile}
+                    <a href={`/u/${author.username}`}
+                        ><span class="text-gray-bitdark font-bold"
+                            >{author.displayName || author.username}</span
+                        ></a
+                    >
+                {:else}
+                    <span class="text-gray-bitdark font-bold"
+                        >{author.displayName || author.username}</span
+                    >
+                {/if}
                 <time
                     use:svelteTime={{
                         timestamp: createdAt,
@@ -150,19 +172,19 @@
             </div>
             {#if prompt}
                 <div
-                    class="prompt-icon text-gray font-bold text-sm flex flex-nowrap items-center mb-1"
+                    class="prompt-icon text-gray font-bold text-sm flex flex-nowrap items-center"
                 >
                     {#if prompt.type === PromptType.Word}
-                        <ZapIcon size="18" class="mr-2" /><span
+                        <ZapIcon size="18" class="mr-2 self-start" /><span
                             >Make a sentence with "{prompt.content}"</span
                         >
                     {:else if prompt.type === PromptType.Question}
-                        <ZapIcon size="18" class="mr-2" />
+                        <ZapIcon size="18" class="mr-2 self-start" />
                         <span>{prompt.content}</span>
                     {/if}
                 </div>
             {/if}
-            <div class="body">
+            <div class="body mt-1">
                 {#each (body || "").split("\n") as bodyPart}
                     {bodyPart}<br />
                 {/each}
@@ -187,7 +209,7 @@
     </div>
     <div class="flex flex-row pt-1 justify-end items-center">
         <div class="flex relative mr-1">
-            {#if showReplies}
+            {#if showReplies || forceShowReplies}
                 <div
                     contenteditable
                     bind:textContent={newReplyBody}
@@ -212,22 +234,31 @@
                 </div>
             {/if}
         </div>
-        <ButtonSmall
-            className={`reply-button items-center justify-center recording ml-0 mr-1${
-                showReplies ? " close" : ""
-            }`}
-            tag="button"
-            variant={showReplies ? "TEXT" : "OUTLINED"}
-            color={showReplies ? "SECONDARY" : "PRIMARY"}
-            on:click={() => (showReplies = !showReplies)}
-            >{#if showReplies}
-                <XIcon size="16" /><span>Close</span>
-            {:else}<MessageCircleIcon size="16" /><span
-                    class="text-sm text-gray-bitdark font-bold select-none rounded-lg"
-                    >{replies?.totalCount || 0} replies</span
-                >{/if}</ButtonSmall
-        >
-        <ButtonSmall
+        {#if !forceShowReplies}
+            {#if showReplies}
+                <ButtonSmall
+                    className="reply-button close items-center justify-center recording ml-0 mr-1"
+                    tag="button"
+                    variant="TEXT"
+                    color="SECONDARY"
+                    on:click={() => (showReplies = !showReplies)}
+                    ><XIcon size="16" /><span>Close</span></ButtonSmall
+                >
+            {:else}
+                <ButtonLarge
+                    className="reply-button items-center justify-center recording ml-0 mr-1"
+                    tag="button"
+                    variant="OUTLINED"
+                    color="PRIMARY"
+                    on:click={() => (showReplies = !showReplies)}
+                    ><MessageCircleIcon size="16" /><span
+                        class="text-sm text-gray-bitdark font-bold select-none rounded-lg"
+                        >{replies?.totalCount || 0} replies</span
+                    ></ButtonLarge
+                >
+            {/if}
+        {/if}
+        <ButtonLarge
             className="like-button flex items-center justify-center cursor-pointer rounded-lg bg-gray-lightest"
             on:click={() => handleLike()}
             tag="button"
@@ -237,9 +268,9 @@
             <span class="text-sm font-bold text-gray-bitdark select-none"
                 >{likes ? likes.totalCount : 0}</span
             >
-        </ButtonSmall>
+        </ButtonLarge>
     </div>
-    {#if showReplies}
+    {#if showReplies || forceShowReplies}
         <div
             class="origin-top-right"
             class:pb-4={replies?.totalCount && replies?.totalCount > 0}
@@ -248,31 +279,46 @@
         >
             {#each replyNodes as reply (reply.uuid)}
                 <div
-                    class="flex flex-row ml-8 pl-4 pt-4 border-l-2 border-gray-verylight"
+                    class="reply flex flex-row ml-8 pl-4 pt-4 border-l-2 border-gray-verylight"
                     in:scale|local={{ duration: 200 }}
                 >
                     <div class="pr-3 sm:pr-4">
-                        <Avatar
-                            username={reply.author.username}
-                            url={reply.author.avatarUrl}
-                            size={36}
-                        />
+                        <a href={`/u/${reply.author.username}`}>
+                            <Avatar
+                                username={reply.author.username}
+                                url={reply.author.avatarUrl}
+                                size={36}
+                            /></a
+                        >
                     </div>
                     <div class="w-full">
                         <div class="mb-1 flex items-center justify-between">
-                            <span class="text-gray-bitdark font-bold"
-                                >{reply.author.username}</span
+                            <a href={`/u/${reply.author.username}`}
+                                ><span class="text-gray-bitdark font-bold"
+                                    >{reply.author.username}</span
+                                ></a
                             >
                             <time
                                 use:svelteTime={{
                                     timestamp: reply.createdAt,
-                                    format: "DD-MM-YYYY h:mm A",
+                                    format:
+                                        new Date(reply.createdAt).getDate() ===
+                                        new Date().getDate()
+                                            ? "h:mm A"
+                                            : new Date(
+                                                  reply.createdAt
+                                              ).getFullYear() ===
+                                              new Date().getFullYear()
+                                            ? "D MMM h:mm A"
+                                            : "D MMM YYYY h:mm A",
                                 }}
                                 title={reply.createdAt.toLocaleString()}
                                 class="text-sm text-gray-bitdark"
                             />
                         </div>
-                        <div>{reply.body}</div>
+                        <div>
+                            {reply.body}
+                        </div>
                     </div>
                 </div>
             {/each}
@@ -284,6 +330,11 @@
     .body {
         @apply overflow-hidden;
         @apply overflow-ellipsis;
+    }
+
+    .reply:first-child {
+        @apply pt-2;
+        @apply mt-2;
     }
 
     .prompt-icon :global(svg) {

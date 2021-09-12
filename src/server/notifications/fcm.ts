@@ -5,6 +5,9 @@ import {
     CreateUserDevice,
     CreateUserDeviceMutation,
     CreateUserDeviceMutationVariables,
+    DeleteInvalidFcmToken,
+    DeleteInvalidFcmTokenMutation,
+    DeleteInvalidFcmTokenMutationVariables,
     Maybe,
     UserDevice,
 } from "../../types/generated/graphql"
@@ -25,14 +28,14 @@ import {
     markNotificationAsJustSent,
     NotificationRecipient,
 } from "./utils"
-import type { NotificationParamsV1 } from "./params"
+import type { NotificationParams } from "./params"
 import type { FcmParamsV1 } from "./params/v1"
 import type { messaging } from "firebase-admin"
 
 let handleNotifications = false
 let notificationHandler: NodeJS.Timeout | undefined
 
-const NOTIFICATION_DELAY_MS = 50
+const NOTIFICATION_DELAY_MS = 1000
 
 export function listen() {
     chlog.debug("Listening for FCM notifications")
@@ -82,7 +85,7 @@ async function sendNextFcmNotification() {
     if (!params) {
         chlog
             .child({ notification })
-            .debug("Not sending FCM notification, no params have been passed")
+            .error("Not sending FCM notification, no params have been passed")
         sendNextFcmNotificationAfterDelay()
         return
     }
@@ -117,28 +120,47 @@ async function sendNextFcmNotification() {
         ...messageParams,
     }
     // Only actually try to send the message and confirm if we have tokens to send it to.
-    if (tokens.length) {
-        const result = await getApp().messaging().sendMulticast(message)
-        if (result.successCount <= 0) {
-            chlog
-                .child({ notification, result })
-                .error("Failed to send at least one FCM message successfully")
-            sendNextFcmNotificationAfterDelay()
-            return
-        }
-    }
-    const markedAsSent = await markNotificationAsJustSent(notification.id)
-    if (!markedAsSent) {
-        chlog
-            .child({ message, notification, markedAsSent })
-            .error(
-                "After successfully sending an FCM message could not mark its corresponding notification as sent, aborting FCM notification listener"
-            )
-        // We need to abort here to prevent the same message from being sent repeatedly.
-        stop()
+    if (!tokens.length) {
+        // TODO: Try next notifications in queue until one has target tokens.
+        sendNextFcmNotificationAfterDelay()
         return
     }
-    chlog.child({ message }).debug("Successfully sent an FCM message")
+    const result = await getApp().messaging().sendMulticast(message)
+    if (result.failureCount > 0) {
+        chlog
+            .child({ notification, result })
+            .error("Failed to send at least one FCM message successfully")
+        const tokensToDelete: string[] = []
+        result.responses.forEach((response, i) => {
+            if (
+                response.error &&
+                response.error.code ===
+                    "messaging/registration-token-not-registered"
+            ) {
+                tokensToDelete.push(tokens[i])
+            }
+        })
+        for (const token of tokensToDelete) {
+            deleteInvalidFcmToken({ fcmToken: token })
+        }
+        sendNextFcmNotificationAfterDelay()
+        return
+    }
+    if (result.successCount > 0) {
+        // Consider notification delivered as long as at least one message has been sent properly.
+        const markedAsSent = await markNotificationAsJustSent(notification.id)
+        if (!markedAsSent) {
+            chlog
+                .child({ message, notification, markedAsSent })
+                .error(
+                    "After successfully sending an FCM message could not mark its corresponding notification as sent, aborting FCM notification listener"
+                )
+            // We need to abort here to prevent the same message from being sent repeatedly.
+            stop()
+            return
+        }
+        chlog.child({ message }).debug("Successfully sent an FCM message")
+    }
     sendNextFcmNotificationAfterDelay()
 }
 
@@ -164,7 +186,7 @@ async function getNextOutstandingFcmNotification() {
                 if (now > expiresAt) {
                     chlog
                         .child({ notification })
-                        .debug("Email notification has expired")
+                        .trace("FCM notification has expired")
                     return false
                 }
             }
@@ -173,7 +195,7 @@ async function getNextOutstandingFcmNotification() {
                 if (now < withheldUntil) {
                     chlog
                         .child({ notification })
-                        .debug("FCM notification is still withheld")
+                        .trace("FCM notification is still withheld")
                     return false
                 }
             }
@@ -186,12 +208,15 @@ export async function enqueueFcmNotification(
     recipient: NotificationRecipient,
     expiresAt: Date | null,
     withheldUntil: Date | null,
-    params: NotificationParamsV1 | null
+    params: NotificationParams | null
 ) {
     const channelId = await getFcmNotificationChannelId()
     if (!channelId) {
         return null
     }
+    chlog
+        .child({ recipient, expiresAt, withheldUntil, params })
+        .debug("Enqueuing FCM notification")
     return enqueueNotification(
         channelId,
         recipient,
@@ -208,8 +233,27 @@ export async function createUserDevice(
         CreateUserDevice.loc!.source,
         { ...userDevice }
     )
+    if (res.errors || !res.data) {
+        chlog.child({ userDevice }).debug("Failed to create user device")
+        return null
+    }
     chlog.child({ userDevice }).debug("Successfully created user device")
     return res.data?.createUserDevice || null
+}
+
+async function deleteInvalidFcmToken(
+    vars: DeleteInvalidFcmTokenMutationVariables
+): Promise<DeleteInvalidFcmTokenMutation["deleteUserDeviceByFcmToken"] | null> {
+    const res = await performQuery<DeleteInvalidFcmTokenMutation>(
+        DeleteInvalidFcmToken.loc!.source,
+        { ...vars }
+    )
+    if (res.errors || !res.data) {
+        chlog.child({ vars }).warn("Failed to delete invalid FCM token")
+        return null
+    }
+    chlog.child({ vars }).debug("Successfully deleted FCM token")
+    return res.data?.deleteUserDeviceByFcmToken || null
 }
 
 function userDevicesToFcmTokens({

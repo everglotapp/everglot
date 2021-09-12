@@ -11,7 +11,7 @@ import path from "path"
 import { unlink } from "fs"
 
 const chlog = log.child({
-    namespace: "posts-recordings-create",
+    namespace: "posts-uuid-recordings-create",
 })
 
 async function convertToM4a(

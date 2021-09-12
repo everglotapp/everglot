@@ -14,7 +14,7 @@ import { registerUserActivity } from "./users"
 import type { Express, Request } from "express"
 import type { Pool } from "pg"
 
-const { NODE_ENV, DEMO_TOKEN } = process.env
+const { NODE_ENV, DEMO_TOKEN, DEMO2_TOKEN } = process.env
 const dev = NODE_ENV === "development"
 
 const APP_IS_BEHIND_REVERSE_PROXY = true // could be an env variable
@@ -86,6 +86,9 @@ function pathIsProtected(req: Request): boolean {
     ]
     if (DEMO_TOKEN && DEMO_TOKEN.length) {
         UNPROTECTED_ROUTES.push(`/demo/${DEMO_TOKEN}`)
+    }
+    if (DEMO2_TOKEN && DEMO2_TOKEN.length) {
+        UNPROTECTED_ROUTES.push(`/demo/${DEMO2_TOKEN}`)
     }
     if (UNPROTECTED_ROUTES.includes(req.path)) {
         return false

@@ -1,0 +1,14 @@
+query PostReplyNotification($id: Int!) {
+    post(id: $id) {
+        authorId
+        parentPost {
+            authorId
+        }
+        body
+        createdAt
+        author {
+            displayName
+            username
+        }
+    }
+}

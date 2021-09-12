@@ -6,13 +6,15 @@ import {
     MAX_TEACHING,
 } from "../users"
 
-import { userHasCompletedProfile } from "../server/users"
+import { userHasCompletedProfile, createUserPreference } from "../server/users"
 
 import type { Request, Response } from "express"
 import { ensureJson, serverError } from "../helpers"
 
 import { createDatabasePool } from "../server/db"
 import { notifyAdminsOfSignUp } from "../server/notifications/admin"
+import { SUPPORTED_LOCALES } from "../constants"
+import { getLanguageIdByAlpha2 } from "../server/locales"
 
 export async function get(req: Request, res: Response, next: () => void) {
     if (!req.session.user_id) {
@@ -177,6 +179,22 @@ export async function post(req: Request, res: Response, _next: () => void) {
             res.status(200).json({
                 success: true,
             })
+            let firstTargetLanguage = null
+            for (const code of learning) {
+                if ((SUPPORTED_LOCALES as readonly string[]).includes(code)) {
+                    firstTargetLanguage = code
+                    break
+                }
+            }
+            const firstTargetLanguageId = await getLanguageIdByAlpha2(
+                firstTargetLanguage || "en"
+            )
+            if (firstTargetLanguageId !== null) {
+                createUserPreference({
+                    feedLanguageId: firstTargetLanguageId,
+                    userId,
+                })
+            }
             notifyAdminsOfSignUp(req.body.username)
         } catch (e) {
             await client.query("ROLLBACK")

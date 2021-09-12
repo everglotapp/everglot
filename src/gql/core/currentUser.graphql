@@ -17,5 +17,10 @@ query CurrentUser {
                 inviteToken
             }
         }
+        preference {
+            feedLanguage {
+                alpha2
+            }
+        }
     }
 }

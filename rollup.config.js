@@ -34,6 +34,7 @@ export default {
     client: {
         input: config.client.input().replace(/\.js$/, ".ts"),
         output: config.client.output(),
+        sourceMap: dev,
         plugins: [
             replace({
                 "process.browser": true,
@@ -58,7 +59,7 @@ export default {
             }),
             json({ compact: true }),
             commonjs(),
-            typescript({ sourceMap: dev }),
+            typescript({ sourceMap: dev, noEmit: !dev }),
             graphql(),
             fluent({
                 include: "locales/**/*.ftl",
@@ -143,7 +144,7 @@ export default {
             }),
             json({ compact: true }),
             commonjs(),
-            typescript({ sourceMap: dev }),
+            typescript({ sourceMap: dev, noEmit: !dev }),
             graphql(),
             fluent({
                 include: "locales/**/*.ftl",

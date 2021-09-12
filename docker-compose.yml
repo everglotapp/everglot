@@ -21,6 +21,8 @@ services:
             SENDINBLUE_API_KEY: ${SENDINBLUE_API_KEY:?Please set SENDINBLUE_API_KEY}
             DEMO_TOKEN: ${DEMO_TOKEN}
             DEMO_USER_EMAIL: ${DEMO_USER_EMAIL}
+            DEMO2_TOKEN: ${DEMO2_TOKEN}
+            DEMO2_USER_EMAIL: ${DEMO2_USER_EMAIL}
 
     everglot-db:
         image: postgres:13-alpine

@@ -13,7 +13,7 @@
     import { chatUsers } from "../../stores/chat"
 
     import Avatar from "../users/Avatar.svelte"
-    import Bio from "../users/Bio.svelte"
+    import ProfilePreview from "../users/ProfilePreview.svelte"
 
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
@@ -28,7 +28,7 @@
     export let time = ""
     export let text = ""
 
-    let showBio = false
+    let showProfilePreview = false
     let showMore = false
 
     const MAX_BODY_LEN = 580
@@ -197,12 +197,14 @@
 >
     <div class="avatar" id={`message-${uuid}-avatar`}>
         {#if user !== null}
-            {#if showBio}
+            {#if showProfilePreview}
                 <ClickAwayListener
                     elementId={`message-${uuid}-avatar`}
-                    on:clickaway={() => (showBio = false)}
+                    on:clickaway={() => (showProfilePreview = false)}
                 />
-                <EscapeKeyListener on:keydown={() => (showBio = false)} />
+                <EscapeKeyListener
+                    on:keydown={() => (showProfilePreview = false)}
+                />
                 <div
                     class="relative"
                     aria-label={`User Bio`}
@@ -215,7 +217,7 @@
                             in:scale|local={{ duration: 200, delay: 0 }}
                             out:scale|local={{ duration: 200, delay: 0 }}
                         >
-                            <Bio {userUuid} />
+                            <ProfilePreview {userUuid} />
                         </div>
                     </div>
                 </div>
@@ -236,7 +238,7 @@
                     username={user.username || ""}
                     url={user.avatarUrl || ""}
                     size={36}
-                    on:click={() => (showBio = !showBio)}
+                    on:click={() => (showProfilePreview = !showProfilePreview)}
                 />
             </div>
         {/if}
@@ -250,7 +252,7 @@
                             class="username mr-2 cursor-pointer"
                             on:click={(event) => {
                                 event.stopPropagation()
-                                showBio = !showBio
+                                showProfilePreview = !showProfilePreview
                             }}>{user.username}</span
                         >
                     {:else}

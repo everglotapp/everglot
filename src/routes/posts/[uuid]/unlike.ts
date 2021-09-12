@@ -4,7 +4,7 @@ import { unprocessableEntity } from "../../../helpers"
 import log from "../../../logger"
 
 const chlog = log.child({
-    namespace: "posts-unlike",
+    namespace: "posts-uuid-unlike",
 })
 
 import type { Request, Response } from "express"
@@ -51,6 +51,7 @@ export async function post(req: Request, res: Response, next: () => void) {
         res.json({
             success: true,
         })
+        // TODO: Cancel pending notifications for this user.
     } else {
         chlog.child({ postLike, postLikeId }).debug("Failed to unlike post")
         unprocessableEntity(res, "You have not liked this post")

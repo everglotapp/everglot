@@ -19,7 +19,6 @@
     import Post from "../comp/feed/Post.svelte"
     import PostForm from "../comp/feed/PostForm.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
-    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
@@ -335,14 +334,14 @@
                         <Localized id="index-prompt-instruction-word" />
                     </div>
                 {/if}
-                <ButtonLarge
+                <ButtonSmall
                     tag="button"
                     variant="TEXT"
                     on:click={() => unsetPrompt()}
                     className="close-prompt-button"
                 >
                     <XCircleIcon size="32" strokeWidth={1} />
-                </ButtonLarge>
+                </ButtonSmall>
             </div>
         {/if}
     </div>

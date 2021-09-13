@@ -90,7 +90,10 @@ export const PROMPT_LOCALES = [
     "ru",
     "pt",
 ] as const
-export type PromptLocale = typeof RANDOM_QUESTION_LOCALES[number]
+export type PromptLocale = typeof PROMPT_LOCALES[number]
+
+export const GAMIFY_POST_LOCALES = ["de"] as const
+export type GamifyPostLocale = typeof GAMIFY_POST_LOCALES[number]
 
 export const MESSAGE_PREVIEW_BASE_PATH = "/images/preview" as const
 export const USER_UPLOADED_IMAGES_BASE_PATH = "/images/uploads" as const

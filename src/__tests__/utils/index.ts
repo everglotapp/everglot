@@ -284,7 +284,7 @@ export function sessionCookieHeader(sessionCookie: Maybe<string>) {
 
 // Adapted from https://stackoverflow.com/a/55680330/9926795
 function getSessionCookieValue(res: Response) {
-    const cookies = res.headers.raw()["set-cookie"] || []
+    const cookies: string[] = res.headers.raw()["set-cookie"] || []
     const headerToCookie = (header: string) => {
         const [name, value] = header.split("=")
         return { name, value }

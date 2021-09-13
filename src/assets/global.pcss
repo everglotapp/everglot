@@ -107,18 +107,17 @@
     [type="time"],
     [type="week"],
     [multiple],
-    textarea,
     select {
         @apply flex;
         @apply rounded-xl;
-        @apply border-gray-300;
+        @apply border-gray-light;
         @apply text-gray-600;
         @apply py-1;
         @apply px-3;
         @apply leading-relaxed;
-        @apply focus:border-gray-300;
+        @apply focus:border-gray-light;
         @apply focus:ring-2;
-        @apply focus:ring-gray-200;
+        @apply focus:ring-gray-light;
         @apply focus:ring-opacity-50;
         @apply font-secondary;
     }
@@ -130,6 +129,19 @@
     input:disabled,
     input[disabled] {
         @apply cursor-not-allowed text-gray-light;
+    }
+
+    textarea {
+        @apply border;
+        @apply border-gray-light;
+        @apply bg-gray-lightest;
+        @apply rounded-lg;
+        @apply text-gray-600;
+        @apply leading-relaxed;
+        @apply focus:border-gray-300;
+        @apply focus:ring-2;
+        @apply focus:ring-gray-200;
+        @apply focus:ring-opacity-50;
     }
 }
 
@@ -151,7 +163,6 @@
     [type="time"]:focus,
     [type="week"]:focus,
     [multiple]:focus,
-    textarea:focus,
     select:focus {
         @apply border-primary ring-primary;
     }

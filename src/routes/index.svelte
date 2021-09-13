@@ -134,9 +134,8 @@
         feedLocaleInitialized = true
     }
 
-    function handlePickLocale(locale: SupportedLocale) {
-        pickedLocale = locale
-        languageButtonFocused = false
+    let previouslyPickedLocale: SupportedLocale | undefined = "en"
+    $: if (pickedLocale && pickedLocale !== previouslyPickedLocale) {
         fetch(`/preferences/update`, {
             method: "post",
             headers: {
@@ -145,6 +144,11 @@
             },
             body: JSON.stringify({ feedLocale: pickedLocale }),
         })
+        previouslyPickedLocale = pickedLocale
+    }
+    function handlePickLocale(locale: SupportedLocale) {
+        pickedLocale = locale
+        languageButtonFocused = false
     }
 
     async function handleShuffle() {

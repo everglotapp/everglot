@@ -421,7 +421,7 @@
                                     color={editBio ? "SECONDARY" : "PRIMARY"}
                                     className="flex items-center text-sm ml-1"
                                     on:click={() => (editBio = !editBio)}
-                                    >{#if editBio}cancel{:else}change{/if}</ButtonSmall
+                                    >{#if editBio}cancel{:else}edit{/if}</ButtonSmall
                                 >{/if}
                         </h2>
                         {#if editBio}
@@ -461,7 +461,10 @@
                                 </div>
                             </form>
                         {:else}
-                            <p class="m-0">
+                            <p
+                                class="m-0"
+                                in:scale|local={{ duration: 60, delay: 150 }}
+                            >
                                 {#if bio && bio.length}
                                     {#each (bio || "").split("\n") as bioPart}
                                         {bioPart}<br />

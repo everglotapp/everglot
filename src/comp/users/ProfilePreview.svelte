@@ -1,8 +1,10 @@
 <script lang="ts">
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { ChevronRightIcon } from "svelte-feather-icons"
 
     import { chatUsers } from "../../stores/chat"
     import { getActiveStatus } from "../../users"
+    import ButtonSmall from "../util/ButtonSmall.svelte"
 
     import Avatar from "./Avatar.svelte"
 
@@ -58,7 +60,19 @@
                 </div>
             </div>
         </div>
-        <div>{user.bio}</div>
+        <div class="flex justify-center pt-4">
+            <ButtonSmall
+                href={`/u/${user.username}`}
+                tag="a"
+                color="PRIMARY"
+                variant="OUTLINED"
+                className="mb-0 flex items-center"
+                ><span>Go to Profile</span><ChevronRightIcon
+                    class="ml-2"
+                    size="18"
+                /></ButtonSmall
+            >
+        </div>
     {/if}
 </div>
 

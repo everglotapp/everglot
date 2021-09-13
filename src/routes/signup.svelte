@@ -93,8 +93,8 @@
     $: totalTeaching = teaching.length
     $: totalLearning = learning.length
 
-    $: notSupportedLearning = learning.filter(({ value }) =>
-        (SUPPORTED_LOCALES as readonly string[]).includes(value)
+    $: notSupportedLearning = learning.filter(
+        ({ value }) => !(SUPPORTED_LOCALES as readonly string[]).includes(value)
     )
 
     $: learningCodes = learning.map((item) => item.value)

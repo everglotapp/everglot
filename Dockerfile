@@ -1,4 +1,4 @@
-from node:14.17-alpine
+from node:16.9-alpine
 
 # Install Yarn.
 # Necessary as of 2021-03-21 only to run the git-based NPM dependency deep-email-validator.

@@ -60,6 +60,17 @@ async function startWebServer(db: Pool): Promise<http.Server> {
                     chlog.info(`Server successfully started on port ${port}.`)
                     resolve(httpServer!)
                 })
+                .on("request", (req: http.IncomingMessage) => {
+                    chlog
+                        .child({
+                            referer: req.headers.referer,
+                            origin: req.headers.origin,
+                            xForwardedFor: req.headers["x-forwarded-for"],
+                            remoteAddress: req.socket.remoteAddress,
+                            userAgent: req.headers["user-agent"],
+                        })
+                        .trace(`${req.method || "req"} ${req.url}`)
+                })
                 .on("error", (e: NodeJS.ErrnoException) => {
                     chlog.warn(`${e.code}: ${e.message}`)
                     setTimeout(async () => {

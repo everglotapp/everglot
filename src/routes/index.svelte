@@ -348,7 +348,7 @@
     <PostForm
         shownPromptUuid={shownPrompt ? shownPrompt.uuid : null}
         locale={pickedLocale || null}
-        on:success={handlePostSuccess}
+        on:postSuccess={handlePostSuccess}
     />
     <div class="container max-w-2xl py-2 px-3 sm:px-0 gap-y-1">
         {#each posts as post (post.uuid)}

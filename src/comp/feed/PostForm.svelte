@@ -9,13 +9,12 @@
         PlayIcon,
         PauseIcon,
         TrashIcon,
-        HelpCircleIcon,
-        XCircleIcon,
     } from "svelte-feather-icons"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
+    import Modal from "../util/Modal.svelte"
     import {
         createPost,
         createPostRecording,
@@ -199,7 +198,7 @@
             const response = await res.json()
             if (response.success) {
                 newPostBody = ""
-                dispatch("success")
+                dispatch("postSuccess")
                 if (recordedBlob) {
                     const res2 = await createPostRecording(
                         response.meta.post.uuid,
@@ -211,19 +210,19 @@
                     if (res2.status === 200) {
                         const response2 = await res2.json()
                         if (response2.success) {
-                            dispatch("success")
+                            dispatch("postSuccess")
                         } else {
-                            dispatch("failure")
+                            dispatch("postFailure")
                         }
                     } else {
-                        dispatch("failure")
+                        dispatch("postFailure")
                     }
                 }
             } else {
-                dispatch("failure")
+                dispatch("postFailure")
             }
         } else {
-            dispatch("failure")
+            dispatch("postFailure")
         }
     }
 
@@ -254,6 +253,18 @@
         gamify = false
     }
 
+    enum PostGameType {
+        GuessCase,
+        GuessGender,
+        Cloze,
+    }
+    let gameType: PostGameType | null = null
+    function handleCloseGamify() {
+        gamify = false
+        gameType = null
+        selection = null
+    }
+
     function handleBodyKeyup(event: Event) {
         newPostBody = event.target?.innerHTML
         tryHandleBodyTextSelection()
@@ -261,44 +272,139 @@
     function handleBodyMouseup() {
         tryHandleBodyTextSelection()
     }
+    let bodyInputNode: HTMLElement
     let gamify: boolean = false
     let willHandleSelect: boolean = false
+    let selection: Selection | null = null
     function tryHandleBodyTextSelection() {
-        console.log({ gamify, willHandleSelect })
         if (!willHandleSelect) {
             return
         }
-        // TODO: do handle select
+        if (
+            !gamify ||
+            gameType === null ||
+            ![
+                PostGameType.GuessCase,
+                PostGameType.GuessGender,
+                PostGameType.Cloze,
+            ].includes(gameType)
+        ) {
+            return
+        }
+        const windowSelection = window.getSelection()
+        if (windowSelection && windowSelection.type === "Range") {
+            const { focusNode: node } = windowSelection
+            if (
+                node &&
+                node.nodeType === Node.TEXT_NODE &&
+                node.parentNode === bodyInputNode
+            ) {
+                selection = windowSelection
+            }
+        }
         willHandleSelect = false
     }
     function handleBodySelectStart() {
         willHandleSelect = true
     }
+    $: selectionStart = selection ? selection.focusOffset : null
+    $: selectionEnd = selection ? selection.anchorOffset : undefined
+    $: selectionNode = selection ? (selection.focusNode as Text) : null
+    let selectedText: string | null = null
+    $: if (selectionNode) {
+        selectedText = selectionNode.data.substring(
+            selectionStart || 0,
+            selectionEnd
+        )
+    } else {
+        selectedText = null
+    }
 </script>
 
+{#if gamify && gameType === null}
+    <Modal>
+        <div
+            class="relative bg-gray-lightest rounded-lg shadow-md overflow-hidden"
+        >
+            <div class="absolute right-0 top-3">
+                <ButtonSmall
+                    on:click={() => (gamify = false)}
+                    tag="button"
+                    variant="TEXT"
+                    color="SECONDARY"
+                    ><XIcon size="18" class="text-gray my-1" /></ButtonSmall
+                >
+            </div>
+            <div
+                class="py-4 pl-8 pr-16 font-bold text-gray-bitdark border-gray-light border-b"
+            >
+                Which game do you want to create?
+            </div>
+            <div class="bg-white flex flex-col items-center py-4 px-4">
+                <ButtonLarge
+                    on:click={() => (gameType = PostGameType.GuessCase)}
+                    tag="button"
+                    variant="OUTLINED"
+                    color="PRIMARY"
+                    className="mb-2">Guess the Case</ButtonLarge
+                >
+                <ButtonLarge
+                    on:click={() => (gameType = PostGameType.GuessGender)}
+                    tag="button"
+                    variant="OUTLINED"
+                    color="PRIMARY"
+                    className="mb-2">Guess the Gender</ButtonLarge
+                >
+                <ButtonLarge
+                    on:click={() => (gameType = PostGameType.Cloze)}
+                    tag="button"
+                    variant="OUTLINED"
+                    color="PRIMARY">Cloze</ButtonLarge
+                >
+            </div>
+        </div>
+    </Modal>
+{/if}
 <div class="container max-w-2xl mb-2 pb-4 px-2">
     <div class="flex flex-col items-end justify-center w-full flex-wrap">
-        {#if gamify}
+        {#if gamify && gameType !== null}
             <div
-                class="flex items-center justify-between pt-1 pb-2 px-2 text-sm text-gray-bitdark font-bold text-left w-full font-secondary"
+                class="flex items-center justify-between pt-1 pb-2 px-2 text-sm text-gray-bitdark font-bold text-left w-full font-secondary relative"
             >
                 <span class="flex items-center">
-                    <HelpCircleIcon size="18" class="mr-2" /><span
-                        >Hint: Select parts of your post.</span
-                    ></span
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        aria-hidden="true"
+                        class="mr-2"
+                        role="img"
+                        width="18"
+                        height="18"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 16 16"
+                        ><g fill="currentColor"
+                            ><path
+                                d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zM3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"
+                            /><path
+                                d="M5.5 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm-4-4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0z"
+                            /></g
+                        ></svg
+                    >Gamify: Select parts of your post.</span
                 >
                 <ButtonSmall
                     tag="button"
                     variant="TEXT"
-                    on:click={() => (gamify = false)}
-                    className="close-gamify-button"
+                    on:click={handleCloseGamify}
+                    className="close-gamify-button flex items-center"
                 >
-                    <XCircleIcon size="32" strokeWidth={1} />
+                    <XIcon size="16" strokeWidth={1} class="mr-1" />
+                    <span>Cancel</span>
                 </ButtonSmall>
             </div>
         {/if}
         <div
-            class="body-input w-full overflow-hidden overflow-ellipsis py-2 px-4 mb-2 border border-gray-light bg-gray-lightest rounded-lg"
+            bind:this={bodyInputNode}
+            class="body-input"
             contenteditable={gamify ? "false" : "true"}
             aria-multiline
             role="textbox"
@@ -308,6 +414,67 @@
             on:mouseup={handleBodyMouseup}
             on:selectstart={handleBodySelectStart}
         />
+        <div class="relative w-full">
+            {#if selectedText !== null}
+                <div
+                    class="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center"
+                    style="margin-bottom: -1rem;"
+                >
+                    <div
+                        class="bg-white shadow-lg rounded-lg z-20 flex flex-col items-center"
+                    >
+                        {#if gameType === PostGameType.GuessCase}
+                            <ButtonSmall
+                                tag="button"
+                                variant="TEXT"
+                                on:click={() => (selection = null)}
+                                className="mb-1 w-full flex justify-center"
+                            >
+                                Nominativ
+                            </ButtonSmall>
+                            <ButtonSmall
+                                tag="button"
+                                variant="TEXT"
+                                on:click={() => (selection = null)}
+                                className="mb-1 w-full flex justify-center"
+                            >
+                                Genitiv
+                            </ButtonSmall>
+                            <ButtonSmall
+                                tag="button"
+                                variant="TEXT"
+                                on:click={() => (selection = null)}
+                                className="mb-1 w-full flex justify-center"
+                            >
+                                Dativ
+                            </ButtonSmall>
+                            <ButtonSmall
+                                tag="button"
+                                variant="TEXT"
+                                on:click={() => (selection = null)}
+                                className="mb-1 w-full flex justify-center"
+                            >
+                                Akkusativ
+                            </ButtonSmall>
+                            <hr class="w-full" />
+                            <ButtonSmall
+                                tag="button"
+                                variant="TEXT"
+                                color="SECONDARY"
+                                on:click={() => (selection = null)}
+                                className="flex justify-center items-center w-full text-sm"
+                            >
+                                <XIcon
+                                    size="16"
+                                    strokeWidth={1}
+                                    class="mr-1"
+                                />Cancel
+                            </ButtonSmall>
+                        {/if}
+                    </div>
+                </div>
+            {/if}
+        </div>
         <div>
             <div class="flex items-center flex-wrap justify-end relative">
                 {#if gamificationSupported && !gamify && newPostBody && newPostBody.length}
@@ -459,10 +626,21 @@
         overflow-wrap: anywhere;
         white-space: break-spaces;
         min-height: 6rem;
+
+        @apply w-full;
+        @apply overflow-hidden;
+        @apply overflow-ellipsis;
+        @apply py-2;
+        @apply px-4;
+        @apply mb-2;
+        @apply border;
+        @apply border-gray-light;
+        @apply bg-gray-lightest;
+        @apply rounded-lg;
     }
 
     :global(.close-gamify-button) {
-        @apply text-gray;
+        @apply text-gray-bitdark;
     }
 
     :global(.recording) {

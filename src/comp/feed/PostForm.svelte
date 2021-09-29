@@ -283,6 +283,16 @@
         selection = null
     }
 
+    function handleSelectionDropdownClickaway(event: CustomEvent<any>) {
+        if (!willHandleSelect && (event.event as MouseEvent).button === 0) {
+            console.log("clickaway", {
+                willHandleSelect,
+                selection,
+                selectionDropdownId,
+            })
+            selection = null
+        }
+    }
     function handleBodyKeyup(event: Event) {
         newPostBody = event.target?.innerHTML
         console.log("keyup", { willHandleSelect })
@@ -297,6 +307,7 @@
         tryHandleBodyTextSelection()
     }
     let bodyInputNode: HTMLElement
+    let selectionParentNode: HTMLElement
     let gamify: boolean = false
     let willHandleSelect: boolean = false
     let selection: Selection | null = null
@@ -376,6 +387,10 @@
     } else {
         selectedText = null
     }
+    $: selectionBoundingRect =
+        selection?.getRangeAt(0).getBoundingClientRect() || null
+    $: selectionParentBoundingRect =
+        selectionParentNode?.getBoundingClientRect() || null
 </script>
 
 {#if gamify && gameType === null}
@@ -459,94 +474,95 @@
                 </ButtonSmall>
             </div>
         {/if}
-        <div
-            bind:this={bodyInputNode}
-            id={bodyInputId}
-            class="body-input"
-            contenteditable={gamify ? "false" : "true"}
-            aria-multiline
-            role="textbox"
-            placeholder={bodyInputPlaceholder}
-            aria-placeholder={bodyInputPlaceholder}
-            on:keyup={handleBodyKeyup}
-            on:mouseup={handleBodyMouseup}
-            on:selectstart={handleBodySelectStart}
-            on:selectionchange={handleDocumentSelectionChange}
-        />
-        <div id={selectionDropdownId} class="relative w-full">
-            {#if selectedText !== null}
-                <div
-                    class="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center"
-                    style="margin-bottom: -1rem;"
-                >
+        <div bind:this={selectionParentNode} class="w-full">
+            {#if selectedText !== null && selectionBoundingRect && selectionParentBoundingRect}
+                <div id={selectionDropdownId} class="relative w-full">
                     <div
-                        class="bg-white shadow-lg rounded-lg z-20 flex flex-col items-center"
+                        class="absolute flex items-center justify-center"
+                        style={`
+                    top: ${
+                        selectionBoundingRect.bottom -
+                        selectionParentBoundingRect.top
+                    }px;
+                    right: ${-(
+                        selectionBoundingRect.right -
+                        selectionParentBoundingRect.right
+                    )}px;`}
                     >
-                        {#if gameType === PostGameKind.GuessCase}
-                            <ButtonSmall
-                                tag="button"
-                                variant="TEXT"
-                                on:click={() => (selection = null)}
-                                className="mb-1 w-full flex justify-center"
-                            >
-                                Nominativ
-                            </ButtonSmall>
-                            <ButtonSmall
-                                tag="button"
-                                variant="TEXT"
-                                on:click={() => (selection = null)}
-                                className="mb-1 w-full flex justify-center"
-                            >
-                                Genitiv
-                            </ButtonSmall>
-                            <ButtonSmall
-                                tag="button"
-                                variant="TEXT"
-                                on:click={() => (selection = null)}
-                                className="mb-1 w-full flex justify-center"
-                            >
-                                Dativ
-                            </ButtonSmall>
-                            <ButtonSmall
-                                tag="button"
-                                variant="TEXT"
-                                on:click={() => (selection = null)}
-                                className="mb-1 w-full flex justify-center"
-                            >
-                                Akkusativ
-                            </ButtonSmall>
-                            <hr class="w-full" />
-                            <ButtonSmall
-                                tag="button"
-                                variant="TEXT"
-                                color="SECONDARY"
-                                on:click={() => (selection = null)}
-                                className="flex justify-center items-center w-full text-sm"
-                            >
-                                <XIcon
-                                    size="16"
-                                    strokeWidth={1}
-                                    class="mr-1"
-                                />Cancel
-                            </ButtonSmall>
-                        {/if}
+                        <div
+                            class="bg-white shadow-lg rounded-lg z-20 flex flex-col items-center"
+                        >
+                            {#if gameType === PostGameKind.GuessCase}
+                                <ButtonSmall
+                                    tag="button"
+                                    variant="TEXT"
+                                    on:click={() => (selection = null)}
+                                    className="mb-1 w-full flex justify-center"
+                                >
+                                    Nominativ
+                                </ButtonSmall>
+                                <ButtonSmall
+                                    tag="button"
+                                    variant="TEXT"
+                                    on:click={() => (selection = null)}
+                                    className="mb-1 w-full flex justify-center"
+                                >
+                                    Genitiv
+                                </ButtonSmall>
+                                <ButtonSmall
+                                    tag="button"
+                                    variant="TEXT"
+                                    on:click={() => (selection = null)}
+                                    className="mb-1 w-full flex justify-center"
+                                >
+                                    Dativ
+                                </ButtonSmall>
+                                <ButtonSmall
+                                    tag="button"
+                                    variant="TEXT"
+                                    on:click={() => (selection = null)}
+                                    className="mb-1 w-full flex justify-center"
+                                >
+                                    Akkusativ
+                                </ButtonSmall>
+                                <hr class="w-full" />
+                                <ButtonSmall
+                                    tag="button"
+                                    variant="TEXT"
+                                    color="SECONDARY"
+                                    on:click={() => (selection = null)}
+                                    className="flex justify-center items-center w-full text-sm"
+                                >
+                                    <XIcon
+                                        size="16"
+                                        strokeWidth={1}
+                                        class="mr-1"
+                                    />Cancel
+                                </ButtonSmall>
+                            {/if}
+                        </div>
                     </div>
+                    <ClickAwayListener
+                        elementId={[bodyInputId, selectionDropdownId]}
+                        on:clickaway={handleSelectionDropdownClickaway}
+                    />
+                    <EscapeKeyListener on:keydown={() => (selection = null)} />
                 </div>
-                <ClickAwayListener
-                    elementId={[bodyInputId, selectionDropdownId]}
-                    on:clickaway={() => {
-                        if (!willHandleSelect) {
-                            console.log("clickaway", {
-                                willHandleSelect,
-                                selection,
-                                selectionDropdownId,
-                            })
-                            selection = null
-                        }
-                    }}
-                />
-                <EscapeKeyListener on:keydown={() => (selection = null)} />
             {/if}
+            <div
+                bind:this={bodyInputNode}
+                id={bodyInputId}
+                class="body-input"
+                contenteditable={gamify ? "false" : "true"}
+                aria-multiline
+                role="textbox"
+                placeholder={bodyInputPlaceholder}
+                aria-placeholder={bodyInputPlaceholder}
+                on:keyup={handleBodyKeyup}
+                on:mouseup={handleBodyMouseup}
+                on:selectstart={handleBodySelectStart}
+                on:selectionchange={handleDocumentSelectionChange}
+            />
         </div>
         <div>
             <div class="flex items-center flex-wrap justify-end relative">

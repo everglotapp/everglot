@@ -12,9 +12,13 @@
     } from "svelte-feather-icons"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
+    import { v4 as uuidv4 } from "uuid"
+
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
     import Modal from "../util/Modal.svelte"
+    import ClickAwayListener from "../util/ClickAwayListener.svelte"
+    import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
     import {
         createPost,
         createPostRecording,
@@ -226,11 +230,21 @@
         }
     }
 
+    let bodyInputId: string
+    let selectionDropdownId: string
     onMount(() => {
         const supportedMimeTypes = getSupportedMimeTypes("audio")
         if (supportedMimeTypes.length) {
             preferredMimeType = supportedMimeTypes[0]
         }
+
+        bodyInputId = uuidv4()
+        selectionDropdownId = uuidv4()
+
+        document.addEventListener(
+            "selectionchange",
+            handleDocumentSelectionChange
+        )
 
         setInterval(updateRecordingDuration, 250)
         setInterval(updateAudioTimings, 250)
@@ -239,6 +253,10 @@
     onDestroy(() => {
         clearUpdateRecordingDurationInterval()
         clearUpdateAudioTimingsInterval()
+        document.removeEventListener(
+            "selectionchange",
+            handleDocumentSelectionChange
+        )
     })
 
     $: bodyInputPlaceholder = $translate(
@@ -253,12 +271,12 @@
         gamify = false
     }
 
-    enum PostGameType {
+    enum PostGameKind {
         GuessCase,
         GuessGender,
         Cloze,
     }
-    let gameType: PostGameType | null = null
+    let gameType: PostGameKind | null = null
     function handleCloseGamify() {
         gamify = false
         gameType = null
@@ -267,9 +285,15 @@
 
     function handleBodyKeyup(event: Event) {
         newPostBody = event.target?.innerHTML
+        console.log("keyup", { willHandleSelect })
         tryHandleBodyTextSelection()
     }
     function handleBodyMouseup() {
+        console.log("mouseup", { willHandleSelect })
+        if (!willHandleSelect) {
+            // secondary click away handler
+            selection = null
+        }
         tryHandleBodyTextSelection()
     }
     let bodyInputNode: HTMLElement
@@ -284,15 +308,19 @@
             !gamify ||
             gameType === null ||
             ![
-                PostGameType.GuessCase,
-                PostGameType.GuessGender,
-                PostGameType.Cloze,
+                PostGameKind.GuessCase,
+                PostGameKind.GuessGender,
+                PostGameKind.Cloze,
             ].includes(gameType)
         ) {
             return
         }
         const windowSelection = window.getSelection()
-        if (windowSelection && windowSelection.type === "Range") {
+        if (
+            windowSelection &&
+            !windowSelection.isCollapsed &&
+            windowSelection.type === "Range"
+        ) {
             const { focusNode: node } = windowSelection
             if (
                 node &&
@@ -305,13 +333,42 @@
         willHandleSelect = false
     }
     function handleBodySelectStart() {
+        console.log("selectstart", { willHandleSelect })
         willHandleSelect = true
+    }
+    let selectionDelay: number | null = null
+    function handleDocumentSelectionChange() {
+        console.log("selectionchange", { willHandleSelect })
+        if (typeof window === "undefined") {
+            return
+        }
+        const currentSelection = window.getSelection()
+        if (!currentSelection) {
+            return
+        }
+        if (
+            !selection ||
+            currentSelection.focusOffset !== selection.focusOffset
+        ) {
+            selection = currentSelection
+            if (selectionDelay) {
+                window.clearTimeout(selectionDelay)
+            }
+            selectionDelay = window.setTimeout(() => {
+                tryHandleBodyTextSelection()
+                selectionDelay = null
+            }, 500)
+        }
     }
     $: selectionStart = selection ? selection.focusOffset : null
     $: selectionEnd = selection ? selection.anchorOffset : undefined
     $: selectionNode = selection ? (selection.focusNode as Text) : null
     let selectedText: string | null = null
-    $: if (selectionNode) {
+    $: if (
+        selectionNode &&
+        selectionNode.data &&
+        (selectionStart || 0) != selectionEnd
+    ) {
         selectedText = selectionNode.data.substring(
             selectionStart || 0,
             selectionEnd
@@ -336,27 +393,27 @@
                 >
             </div>
             <div
-                class="py-4 pl-8 pr-16 font-bold text-gray-bitdark border-gray-light border-b"
+                class="py-4 pl-8 pr-16 font-bold text-gray-dark border-gray-light border-b font-secondary"
             >
-                Which game do you want to create?
+                Which kind of game to create?
             </div>
             <div class="bg-white flex flex-col items-center py-4 px-4">
                 <ButtonLarge
-                    on:click={() => (gameType = PostGameType.GuessCase)}
+                    on:click={() => (gameType = PostGameKind.GuessCase)}
                     tag="button"
                     variant="OUTLINED"
                     color="PRIMARY"
                     className="mb-2">Guess the Case</ButtonLarge
                 >
                 <ButtonLarge
-                    on:click={() => (gameType = PostGameType.GuessGender)}
+                    on:click={() => (gameType = PostGameKind.GuessGender)}
                     tag="button"
                     variant="OUTLINED"
                     color="PRIMARY"
                     className="mb-2">Guess the Gender</ButtonLarge
                 >
                 <ButtonLarge
-                    on:click={() => (gameType = PostGameType.Cloze)}
+                    on:click={() => (gameType = PostGameKind.Cloze)}
                     tag="button"
                     variant="OUTLINED"
                     color="PRIMARY">Cloze</ButtonLarge
@@ -404,6 +461,7 @@
         {/if}
         <div
             bind:this={bodyInputNode}
+            id={bodyInputId}
             class="body-input"
             contenteditable={gamify ? "false" : "true"}
             aria-multiline
@@ -413,8 +471,9 @@
             on:keyup={handleBodyKeyup}
             on:mouseup={handleBodyMouseup}
             on:selectstart={handleBodySelectStart}
+            on:selectionchange={handleDocumentSelectionChange}
         />
-        <div class="relative w-full">
+        <div id={selectionDropdownId} class="relative w-full">
             {#if selectedText !== null}
                 <div
                     class="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center"
@@ -423,7 +482,7 @@
                     <div
                         class="bg-white shadow-lg rounded-lg z-20 flex flex-col items-center"
                     >
-                        {#if gameType === PostGameType.GuessCase}
+                        {#if gameType === PostGameKind.GuessCase}
                             <ButtonSmall
                                 tag="button"
                                 variant="TEXT"
@@ -473,6 +532,20 @@
                         {/if}
                     </div>
                 </div>
+                <ClickAwayListener
+                    elementId={[bodyInputId, selectionDropdownId]}
+                    on:clickaway={() => {
+                        if (!willHandleSelect) {
+                            console.log("clickaway", {
+                                willHandleSelect,
+                                selection,
+                                selectionDropdownId,
+                            })
+                            selection = null
+                        }
+                    }}
+                />
+                <EscapeKeyListener on:keydown={() => (selection = null)} />
             {/if}
         </div>
         <div>

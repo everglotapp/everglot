@@ -5,6 +5,16 @@
 
 -brand-name = Everglot
 
+## Feed page
+
+post-game-guess-case-nominative = Nominativ
+post-game-guess-case-genitive = Genitiv
+post-game-guess-case-dative = Dativ
+post-game-guess-case-accusative = Akkusativ
+post-game-guess-gender-masculine = Maskulin
+post-game-guess-gender-feminine = Feminin
+post-game-guess-gender-neuter = Neutral
+
 ## Chat page
 
 chat-browser-window-title = { -brand-name } – Sprachgemeinschaft

@@ -111,6 +111,12 @@ export const WEBRTC_CONTEXT_KEY = "WEBRTC"
 export const SIDEBAR_MENU_ICON_BUTTON_ID = uuidv4()
 export const ENLARGEN_PROFILE_PICTURE_BUTTON_ID = uuidv4()
 
+export enum PostGameKind {
+    GuessCase = "GUESS_CASE",
+    GuessGender = "GUESS_GENDER",
+    Cloze = "CLOZE",
+}
+
 export const ALPHABET: Record<HangmanLocale, readonly string[]> = {
     en: [
         "a",

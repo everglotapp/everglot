@@ -57,12 +57,12 @@
         if (!language) {
             return
         }
-        const res = await createPost(
-            newReplyBody,
-            language.alpha2 as SupportedLocale,
-            uuid,
-            null
-        )
+        const res = await createPost({
+            body: newReplyBody,
+            locale: language.alpha2 as SupportedLocale,
+            parentPostUuid: uuid,
+            promptUuid: null,
+        })
         if (res.status === 200) {
             const response = await res.json()
             if (response.success) {

@@ -24,7 +24,11 @@
         createPostRecording,
     } from "../../routes/_helpers/posts"
     import { getSupportedMimeTypes } from "../../routes/_helpers/posts/recording"
-    import { GAMIFY_POST_LOCALES, SupportedLocale } from "../../constants"
+    import {
+        GAMIFY_POST_LOCALES,
+        SupportedLocale,
+        PostGameKind,
+    } from "../../constants"
 
     export let shownPromptUuid: string | null
     export let locale: SupportedLocale | null
@@ -192,16 +196,19 @@
             return
         }
 
-        const res = await createPost(
-            newPostBody,
+        const res = await createPost({
+            body: newPostBody,
             locale,
-            null,
-            shownPromptUuid || null
-        )
+            parentPostUuid: null,
+            promptUuid: shownPromptUuid || null,
+        })
         if (res.status === 200) {
             const response = await res.json()
             if (response.success) {
                 newPostBody = ""
+                if (bodyInputNode) {
+                    bodyInputNode.innerHTML = ""
+                }
                 dispatch("postSuccess")
                 if (recordedBlob) {
                     const res2 = await createPostRecording(
@@ -271,20 +278,18 @@
         gamify = false
     }
 
-    enum PostGameKind {
-        GuessCase,
-        GuessGender,
-        Cloze,
-    }
     let gameType: PostGameKind | null = null
     function handleCloseGamify() {
         gamify = false
         gameType = null
         selection = null
+        pickedRanges = []
     }
 
-    function handleSelectionDropdownClickaway(event: CustomEvent<any>) {
-        if (!willHandleSelect && (event.event as MouseEvent).button === 0) {
+    function handleSelectionDropdownClickaway(
+        event: CustomEvent<{ event: MouseEvent }>
+    ) {
+        if (!willHandleSelect && event.detail.event.button === 0) {
             console.log("clickaway", {
                 willHandleSelect,
                 selection,
@@ -391,6 +396,59 @@
         selection?.getRangeAt(0).getBoundingClientRect() || null
     $: selectionParentBoundingRect =
         selectionParentNode?.getBoundingClientRect() || null
+
+    const GUESS_CASE_LOCALES = ["de"] as const
+    type GuessCaseLocale = typeof GUESS_CASE_LOCALES[number]
+    const GUESS_CASE_OPTIONS: Record<GuessCaseLocale, { [k: string]: string }> =
+        {
+            de: {
+                NOMINATIVE: "nominative",
+                GENITIVE: "genitive",
+                DATIVE: "dative",
+                ACCUSATIVE: "accusative",
+            },
+        }
+    type GuessCaseOption = typeof GUESS_CASE_OPTIONS[GuessCaseLocale]
+    const GUESS_GENDER_LOCALES = ["en", "de"] as const
+    type GuessGenderLocale = typeof GUESS_GENDER_LOCALES[number]
+    const GUESS_GENDER_OPTIONS: Record<
+        GuessGenderLocale,
+        { [k: string]: string }
+    > = {
+        en: {
+            MASCULINE: "masculine",
+            FEMININE: "feminine",
+        },
+        de: {
+            MASCULINE: "masculine",
+            FEMININE: "feminine",
+            NEUTER: "neuter",
+        },
+    }
+    type GuessGenderOption = typeof GUESS_GENDER_OPTIONS[GuessGenderLocale]
+    interface PostGameSelectionRange = {
+        start: number
+        end: number
+    }
+    type GuessGenderSelectionRange = PostGameSelectionRange & {
+        option: keyof GuessGenderOption
+    }
+    type GuessCaseSelectionRange = PostGameSelectionRange & {
+        option: keyof GuessCaseOption
+    }
+    let pickedRanges: PostGameSelectionRange[] = []
+    $: availableGuessCaseOptions =
+        locale && (GUESS_CASE_LOCALES as readonly string[]).includes(locale)
+            ? Object.entries(GUESS_CASE_OPTIONS[locale as GuessCaseLocale]).map(
+                  (entry) => ({ value: entry[0], localizationId: entry[1] })
+              )
+            : []
+    $: availableGuessGenderOptions =
+        locale && (GUESS_GENDER_LOCALES as readonly string[]).includes(locale)
+            ? Object.entries(
+                  GUESS_GENDER_OPTIONS[locale as GuessGenderLocale]
+              ).map((entry) => ({ value: entry[0], localizationId: entry[1] }))
+            : []
 </script>
 
 {#if gamify && gameType === null}
@@ -480,66 +538,73 @@
                     <div
                         class="absolute flex items-center justify-center"
                         style={`
-                    top: ${
+                    top: ${Math.max(
+                        0,
                         selectionBoundingRect.bottom -
-                        selectionParentBoundingRect.top
-                    }px;
-                    right: ${-(
-                        selectionBoundingRect.right -
-                        selectionParentBoundingRect.right
+                            selectionParentBoundingRect.top
+                    )}px;
+                    right: ${Math.max(
+                        0,
+                        -(
+                            selectionBoundingRect.right -
+                            selectionParentBoundingRect.right
+                        )
                     )}px;`}
                     >
                         <div
-                            class="bg-white shadow-lg rounded-lg z-20 flex flex-col items-center"
+                            class="bg-white shadow-lg border border-gray-light rounded-lg z-20 flex flex-col items-center"
                         >
                             {#if gameType === PostGameKind.GuessCase}
-                                <ButtonSmall
-                                    tag="button"
-                                    variant="TEXT"
-                                    on:click={() => (selection = null)}
-                                    className="mb-1 w-full flex justify-center"
-                                >
-                                    Nominativ
-                                </ButtonSmall>
-                                <ButtonSmall
-                                    tag="button"
-                                    variant="TEXT"
-                                    on:click={() => (selection = null)}
-                                    className="mb-1 w-full flex justify-center"
-                                >
-                                    Genitiv
-                                </ButtonSmall>
-                                <ButtonSmall
-                                    tag="button"
-                                    variant="TEXT"
-                                    on:click={() => (selection = null)}
-                                    className="mb-1 w-full flex justify-center"
-                                >
-                                    Dativ
-                                </ButtonSmall>
-                                <ButtonSmall
-                                    tag="button"
-                                    variant="TEXT"
-                                    on:click={() => (selection = null)}
-                                    className="mb-1 w-full flex justify-center"
-                                >
-                                    Akkusativ
-                                </ButtonSmall>
-                                <hr class="w-full" />
-                                <ButtonSmall
-                                    tag="button"
-                                    variant="TEXT"
-                                    color="SECONDARY"
-                                    on:click={() => (selection = null)}
-                                    className="flex justify-center items-center w-full text-sm"
-                                >
-                                    <XIcon
-                                        size="16"
-                                        strokeWidth={1}
-                                        class="mr-1"
-                                    />Cancel
-                                </ButtonSmall>
+                                {#each availableGuessCaseOptions as option}
+                                    <ButtonSmall
+                                        tag="button"
+                                        variant="TEXT"
+                                        on:click={() => {
+                                            pickedRanges.push({
+                                                start: selectionStart || 0,
+                                                end:
+                                                    selectionEnd ||
+                                                    selectedText.length - 1,
+                                                option: option.value,
+                                            })
+                                            pickedRanges = pickedRanges
+                                            selection = null
+                                        }}
+                                        className="mb-1 w-full flex justify-center"
+                                    >
+                                        <Localized
+                                            id={`post-game-guess-case-${option.localizationId}`}
+                                        />
+                                    </ButtonSmall>
+                                {/each}
+                            {:else if gameType === PostGameKind.GuessGender}
+                                {#each availableGuessGenderOptions as option}
+                                    <ButtonSmall
+                                        tag="button"
+                                        variant="TEXT"
+                                        on:click={() => (selection = null)}
+                                        className="mb-1 w-full flex justify-center"
+                                    >
+                                        <Localized
+                                            id={`post-game-guess-gender-${option.localizationId}`}
+                                        />
+                                    </ButtonSmall>
+                                {/each}
                             {/if}
+                            <hr class="w-full" />
+                            <ButtonSmall
+                                tag="button"
+                                variant="TEXT"
+                                color="SECONDARY"
+                                on:click={() => (selection = null)}
+                                className="flex justify-center items-center w-full text-sm"
+                            >
+                                <XIcon
+                                    size="16"
+                                    strokeWidth={1}
+                                    class="mr-1"
+                                />Cancel
+                            </ButtonSmall>
                         </div>
                     </div>
                     <ClickAwayListener

@@ -150,23 +150,23 @@ export async function post(req: Request, res: Response, _next: () => void) {
         parentPostId,
         promptId,
     })
-    if (post) {
-        chlog.child({ post }).debug("User successfully created post")
-        res.json({
-            success: true,
-            meta: {
-                post: {
-                    uuid: post.uuid,
-                    nodeId: post.nodeId,
-                },
-            },
-        })
-        if (parentPostId) {
-            notifyOriginalAuthorAfterReply(post, userId)
-        }
-    } else {
+    if (!post) {
         res.json({
             success: false,
         })
+        return
+    }
+    chlog.child({ post }).debug("User successfully created post")
+    res.json({
+        success: true,
+        meta: {
+            post: {
+                uuid: post.uuid,
+                nodeId: post.nodeId,
+            },
+        },
+    })
+    if (parentPostId) {
+        notifyOriginalAuthorAfterReply(post, userId)
     }
 }

@@ -333,13 +333,20 @@
         console.log("keyup", { willHandleSelect })
         tryHandleBodyTextSelection()
     }
+    let preventAutoSelectionHandling: boolean = false
     function handleBodyMouseup() {
         console.log("mouseup", { willHandleSelect })
+        preventAutoSelectionHandling = false
         if (!willHandleSelect) {
             // secondary click away handler
             selection = null
         }
         tryHandleBodyTextSelection()
+    }
+    function handleBodyMousedown() {
+        console.log("mousedown", { willHandleSelect })
+        preventAutoSelectionHandling = true
+        tryClearAutoSelectionTimeout()
     }
     let writableBodyInputNode: HTMLElement
     let readonlyBodyInputNode: HTMLElement
@@ -381,9 +388,13 @@
         console.log("selectstart", { willHandleSelect })
         willHandleSelect = true
     }
-    let selectionDelay: number | null = null
+    let autoSelectionTimeout: number | null = null
     function handleDocumentSelectionChange() {
-        console.log("selectionchange", { willHandleSelect })
+        console.log("selectionchange", {
+            willHandleSelect,
+            currentSelection: window.getSelection(),
+            autoSelectionTimeout,
+        })
         if (typeof window === "undefined") {
             return
         }
@@ -396,14 +407,24 @@
             currentSelection.focusOffset !== selection.focusOffset
         ) {
             selection = currentSelection
-            if (selectionDelay) {
-                window.clearTimeout(selectionDelay)
+            tryClearAutoSelectionTimeout()
+            if (!preventAutoSelectionHandling) {
+                autoSelectionTimeout = window.setTimeout(() => {
+                    if (!preventAutoSelectionHandling) {
+                        console.log("autoSelectionTimeout expired, handling")
+                        tryHandleBodyTextSelection()
+                        autoSelectionTimeout = null
+                    }
+                }, 500)
             }
-            selectionDelay = window.setTimeout(() => {
-                tryHandleBodyTextSelection()
-                selectionDelay = null
-            }, 500)
         }
+    }
+    function tryClearAutoSelectionTimeout() {
+        if (!autoSelectionTimeout) {
+            return
+        }
+        window.clearTimeout(autoSelectionTimeout)
+        autoSelectionTimeout = null
     }
     $: selectionRange =
         selection && selection.rangeCount ? selection.getRangeAt(0) : null
@@ -658,6 +679,7 @@
                 placeholder={bodyInputPlaceholder}
                 aria-placeholder={bodyInputPlaceholder}
                 on:keyup={handleBodyKeyup}
+                on:mousedown={handleBodyMousedown}
                 on:mouseup={handleBodyMouseup}
                 on:selectstart={handleBodySelectStart}
                 on:selectionchange={handleDocumentSelectionChange}
@@ -689,9 +711,6 @@
                 placeholder={bodyInputPlaceholder}
                 aria-placeholder={bodyInputPlaceholder}
                 on:keyup={handleBodyKeyup}
-                on:mouseup={handleBodyMouseup}
-                on:selectstart={handleBodySelectStart}
-                on:selectionchange={handleDocumentSelectionChange}
             />
         </div>
         <div>

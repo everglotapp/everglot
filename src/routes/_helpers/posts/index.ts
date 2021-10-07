@@ -31,6 +31,7 @@ export function formatPostBody(body: string): string {
     return body
         .replace(/\<br(\ | \/)?\>/g, "")
         .replace(/\<div\>(.*?)\<\/div\>/g, (_match, p1) => `${p1}\n`)
+        .replace(/(<([^>]+)>)/gi, "")
 }
 
 export async function createPostRecording(postUuid: string, recording: Blob) {

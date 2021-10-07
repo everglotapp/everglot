@@ -14,6 +14,7 @@ post-game-guess-case-accusative = Akkusativ
 post-game-guess-gender-masculine = Maskulin
 post-game-guess-gender-feminine = Feminin
 post-game-guess-gender-neuter = Neutral
+post-game-cloze-new-gap = Lücke erstellen
 
 ## Chat page
 

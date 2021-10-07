@@ -19,7 +19,7 @@ export async function createPost({
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            body: formatPostBodyForCreate(body),
+            body: formatPostBody(body),
             locale,
             parentPostUuid,
             promptUuid,
@@ -27,7 +27,7 @@ export async function createPost({
     })
 }
 
-function formatPostBodyForCreate(body: string): string {
+export function formatPostBody(body: string): string {
     return body
         .replace(/\<br(\ | \/)?\>/g, "")
         .replace(/\<div\>(.*?)\<\/div\>/g, (_match, p1) => `${p1}\n`)

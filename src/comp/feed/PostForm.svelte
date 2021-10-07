@@ -22,13 +22,23 @@
     import {
         createPost,
         createPostRecording,
+        formatPostBody,
     } from "../../routes/_helpers/posts"
     import { getSupportedMimeTypes } from "../../routes/_helpers/posts/recording"
     import {
         GAMIFY_POST_LOCALES,
-        SupportedLocale,
         PostGameKind,
+        BodyPartKind,
+        GUESS_CASE_LOCALES,
+        GUESS_CASE_OPTIONS,
+        GUESS_GENDER_LOCALES,
+        GUESS_GENDER_OPTIONS,
     } from "../../constants"
+    import type {
+        SupportedLocale,
+        PostGameSelectionRange,
+    } from "../../constants"
+    import { getBodyParts } from "../../routes/_helpers/posts/selections"
 
     export let shownPromptUuid: string | null
     export let locale: SupportedLocale | null
@@ -206,9 +216,10 @@
             const response = await res.json()
             if (response.success) {
                 newPostBody = ""
-                if (bodyInputNode) {
-                    bodyInputNode.innerHTML = ""
+                if (writableBodyInputNode) {
+                    writableBodyInputNode.innerHTML = ""
                 }
+                handleCloseGamify()
                 dispatch("postSuccess")
                 if (recordedBlob) {
                     const res2 = await createPostRecording(
@@ -279,11 +290,30 @@
     }
 
     let gameType: PostGameKind | null = null
+    function handleSelectGameType(kind: PostGameKind) {
+        gameType = kind
+        removeAllSelections()
+    }
     function handleCloseGamify() {
         gamify = false
         gameType = null
         selection = null
         pickedRanges = []
+    }
+    function removeAllSelections() {
+        const s = window.getSelection
+            ? window.getSelection()
+            : document.selection
+        if (!s) {
+            selection = null
+            return
+        }
+        if (s.removeAllRanges) {
+            s.removeAllRanges()
+        } else if (s.empty) {
+            s.empty()
+        }
+        selection = null
     }
 
     function handleSelectionDropdownClickaway(
@@ -311,7 +341,8 @@
         }
         tryHandleBodyTextSelection()
     }
-    let bodyInputNode: HTMLElement
+    let writableBodyInputNode: HTMLElement
+    let readonlyBodyInputNode: HTMLElement
     let selectionParentNode: HTMLElement
     let gamify: boolean = false
     let willHandleSelect: boolean = false
@@ -341,7 +372,7 @@
             if (
                 node &&
                 node.nodeType === Node.TEXT_NODE &&
-                node.parentNode === bodyInputNode
+                node.parentNode === readonlyBodyInputNode
             ) {
                 selection = windowSelection
             }
@@ -376,8 +407,10 @@
             }, 500)
         }
     }
-    $: selectionStart = selection ? selection.focusOffset : null
-    $: selectionEnd = selection ? selection.anchorOffset : undefined
+    $: selectionRange =
+        selection && selection.rangeCount ? selection.getRangeAt(0) : null
+    $: selectionStart = selectionRange?.startOffset || null
+    $: selectionEnd = selectionRange ? selectionRange.endOffset - 1 : undefined
     $: selectionNode = selection ? (selection.focusNode as Text) : null
     let selectedText: string | null = null
     $: if (
@@ -392,50 +425,10 @@
     } else {
         selectedText = null
     }
-    $: selectionBoundingRect =
-        selection?.getRangeAt(0).getBoundingClientRect() || null
+    $: selectionBoundingRect = selectionRange?.getBoundingClientRect() || null
     $: selectionParentBoundingRect =
         selectionParentNode?.getBoundingClientRect() || null
 
-    const GUESS_CASE_LOCALES = ["de"] as const
-    type GuessCaseLocale = typeof GUESS_CASE_LOCALES[number]
-    const GUESS_CASE_OPTIONS: Record<GuessCaseLocale, { [k: string]: string }> =
-        {
-            de: {
-                NOMINATIVE: "nominative",
-                GENITIVE: "genitive",
-                DATIVE: "dative",
-                ACCUSATIVE: "accusative",
-            },
-        }
-    type GuessCaseOption = typeof GUESS_CASE_OPTIONS[GuessCaseLocale]
-    const GUESS_GENDER_LOCALES = ["en", "de"] as const
-    type GuessGenderLocale = typeof GUESS_GENDER_LOCALES[number]
-    const GUESS_GENDER_OPTIONS: Record<
-        GuessGenderLocale,
-        { [k: string]: string }
-    > = {
-        en: {
-            MASCULINE: "masculine",
-            FEMININE: "feminine",
-        },
-        de: {
-            MASCULINE: "masculine",
-            FEMININE: "feminine",
-            NEUTER: "neuter",
-        },
-    }
-    type GuessGenderOption = typeof GUESS_GENDER_OPTIONS[GuessGenderLocale]
-    interface PostGameSelectionRange = {
-        start: number
-        end: number
-    }
-    type GuessGenderSelectionRange = PostGameSelectionRange & {
-        option: keyof GuessGenderOption
-    }
-    type GuessCaseSelectionRange = PostGameSelectionRange & {
-        option: keyof GuessCaseOption
-    }
     let pickedRanges: PostGameSelectionRange[] = []
     $: availableGuessCaseOptions =
         locale && (GUESS_CASE_LOCALES as readonly string[]).includes(locale)
@@ -448,6 +441,13 @@
             ? Object.entries(
                   GUESS_GENDER_OPTIONS[locale as GuessGenderLocale]
               ).map((entry) => ({ value: entry[0], localizationId: entry[1] }))
+            : []
+
+    $: formattedNewPostBody = formatPostBody(newPostBody || "")
+
+    $: displayedNewPostBodyParts =
+        gamify && pickedRanges
+            ? getBodyParts(formattedNewPostBody, pickedRanges)
             : []
 </script>
 
@@ -472,21 +472,23 @@
             </div>
             <div class="bg-white flex flex-col items-center py-4 px-4">
                 <ButtonLarge
-                    on:click={() => (gameType = PostGameKind.GuessCase)}
+                    on:click={() =>
+                        handleSelectGameType(PostGameKind.GuessCase)}
                     tag="button"
                     variant="OUTLINED"
                     color="PRIMARY"
                     className="mb-2">Guess the Case</ButtonLarge
                 >
                 <ButtonLarge
-                    on:click={() => (gameType = PostGameKind.GuessGender)}
+                    on:click={() =>
+                        handleSelectGameType(PostGameKind.GuessGender)}
                     tag="button"
                     variant="OUTLINED"
                     color="PRIMARY"
                     className="mb-2">Guess the Gender</ButtonLarge
                 >
                 <ButtonLarge
-                    on:click={() => (gameType = PostGameKind.Cloze)}
+                    on:click={() => handleSelectGameType(PostGameKind.Cloze)}
                     tag="button"
                     variant="OUTLINED"
                     color="PRIMARY">Cloze</ButtonLarge
@@ -533,7 +535,7 @@
             </div>
         {/if}
         <div bind:this={selectionParentNode} class="w-full">
-            {#if selectedText !== null && selectionBoundingRect && selectionParentBoundingRect}
+            {#if gamify && gameType !== null && selectedText !== null && selectionBoundingRect && selectionParentBoundingRect}
                 <div id={selectionDropdownId} class="relative w-full">
                     <div
                         class="absolute flex items-center justify-center"
@@ -560,15 +562,17 @@
                                         tag="button"
                                         variant="TEXT"
                                         on:click={() => {
-                                            pickedRanges.push({
-                                                start: selectionStart || 0,
-                                                end:
-                                                    selectionEnd ||
-                                                    selectedText.length - 1,
-                                                option: option.value,
-                                            })
-                                            pickedRanges = pickedRanges
-                                            selection = null
+                                            pickedRanges = [
+                                                ...pickedRanges,
+                                                {
+                                                    start: selectionStart || 0,
+                                                    end:
+                                                        selectionEnd ||
+                                                        selectedText.length - 1,
+                                                    option: option.value,
+                                                },
+                                            ]
+                                            removeAllSelections()
                                         }}
                                         className="mb-1 w-full flex justify-center"
                                     >
@@ -582,7 +586,19 @@
                                     <ButtonSmall
                                         tag="button"
                                         variant="TEXT"
-                                        on:click={() => (selection = null)}
+                                        on:click={() => {
+                                            pickedRanges = [
+                                                ...pickedRanges,
+                                                {
+                                                    start: selectionStart || 0,
+                                                    end:
+                                                        selectionEnd ||
+                                                        selectedText.length - 1,
+                                                    option: option.value,
+                                                },
+                                            ]
+                                            removeAllSelections()
+                                        }}
                                         className="mb-1 w-full flex justify-center"
                                     >
                                         <Localized
@@ -590,13 +606,33 @@
                                         />
                                     </ButtonSmall>
                                 {/each}
+                            {:else if gameType === PostGameKind.Cloze}
+                                <ButtonSmall
+                                    tag="button"
+                                    variant="TEXT"
+                                    on:click={() => {
+                                        pickedRanges = [
+                                            ...pickedRanges,
+                                            {
+                                                start: selectionStart || 0,
+                                                end:
+                                                    selectionEnd ||
+                                                    selectedText.length - 1,
+                                            },
+                                        ]
+                                        removeAllSelections()
+                                    }}
+                                    className="mb-1 w-full flex justify-center"
+                                >
+                                    <Localized id="post-game-cloze-new-gap" />
+                                </ButtonSmall>
                             {/if}
                             <hr class="w-full" />
                             <ButtonSmall
                                 tag="button"
                                 variant="TEXT"
                                 color="SECONDARY"
-                                on:click={() => (selection = null)}
+                                on:click={() => removeAllSelections()}
                                 className="flex justify-center items-center w-full text-sm"
                             >
                                 <XIcon
@@ -615,10 +651,41 @@
                 </div>
             {/if}
             <div
-                bind:this={bodyInputNode}
-                id={bodyInputId}
+                bind:this={readonlyBodyInputNode}
+                id={gamify ? bodyInputId : undefined}
                 class="body-input"
-                contenteditable={gamify ? "false" : "true"}
+                class:hidden={!gamify}
+                aria-multiline
+                role="textbox"
+                placeholder={bodyInputPlaceholder}
+                aria-placeholder={bodyInputPlaceholder}
+                on:keyup={handleBodyKeyup}
+                on:mouseup={handleBodyMouseup}
+                on:selectstart={handleBodySelectStart}
+                on:selectionchange={handleDocumentSelectionChange}
+            >
+                {#if gamify}
+                    {#each displayedNewPostBodyParts as bodyPart}
+                        {#if bodyPart.kind === BodyPartKind.LineBreak}
+                            <br />
+                        {:else if bodyPart.kind === BodyPartKind.Selected}
+                            <span
+                                class="bg-primary-lightest border-primary border-b px-1 py-1 cursor-pointer"
+                                style="margin-left: 1px; margin-right: 1px;"
+                                >{bodyPart.value}</span
+                            >
+                        {:else if bodyPart.kind === BodyPartKind.Text}
+                            {bodyPart.value}
+                        {/if}
+                    {/each}
+                {/if}
+            </div>
+            <div
+                bind:this={writableBodyInputNode}
+                id={gamify ? undefined : bodyInputId}
+                class="body-input"
+                class:hidden={gamify}
+                contenteditable
                 aria-multiline
                 role="textbox"
                 placeholder={bodyInputPlaceholder}

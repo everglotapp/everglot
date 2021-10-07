@@ -11,6 +11,8 @@ POSTGRES_USER=everglot_app_user
 POSTGRES_PASSWORD=everglot_app_pass
 POSTGRES_DB=everglot_app_db
 SESSION_COOKIE_VALIDATION_SECRETS=["SomeVeryLongRandomSecret123"]
+AGORA_APP_CERTIFICATE=inserthere
+SENDINBLUE_API_KEY=inserthere
 ```
 
 In development you should keep the first three variables as they are. Definitely change the cookie validation secret(s).

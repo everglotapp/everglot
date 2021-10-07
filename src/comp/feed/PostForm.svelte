@@ -362,19 +362,17 @@
         ) {
             return
         }
-        const windowSelection = window.getSelection()
-        if (
-            windowSelection &&
-            !windowSelection.isCollapsed &&
-            windowSelection.type === "Range"
-        ) {
-            const { focusNode: node } = windowSelection
+        const s = window.getSelection
+            ? window.getSelection()
+            : document.selection
+        if (s && !s.isCollapsed && s.type === "Range") {
+            const { focusNode: node } = s
             if (
                 node &&
                 node.nodeType === Node.TEXT_NODE &&
                 node.parentNode === readonlyBodyInputNode
             ) {
-                selection = windowSelection
+                selection = s
             }
         }
         willHandleSelect = false

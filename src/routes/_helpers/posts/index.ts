@@ -1,6 +1,8 @@
 import { USER_CREATE_POST_RECORDING_FILE_FORM_FIELD } from "../../../constants"
 import type { SupportedLocale } from "../../../constants"
 
+import { decode as decodeHTML } from "he"
+
 export async function createPost({
     body,
     locale,
@@ -28,10 +30,12 @@ export async function createPost({
 }
 
 export function formatPostBody(body: string): string {
-    return body
-        .replace(/\<br(\ | \/)?\>/g, "")
-        .replace(/\<div\>(.*?)\<\/div\>/g, (_match, p1) => `${p1}\n`)
-        .replace(/(<([^>]+)>)/gi, "")
+    return decodeHTML(
+        body
+            .replace(/\<br(\ | \/)?\>/g, "")
+            .replace(/\<div\>(.*?)\<\/div\>/g, (_match, p1) => `${p1}\n`)
+            .replace(/(<([^>]+)>)/gi, "")
+    )
 }
 
 export async function createPostRecording(postUuid: string, recording: Blob) {

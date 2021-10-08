@@ -207,7 +207,7 @@
         }
 
         const res = await createPost({
-            body: newPostBody,
+            body: formattedNewPostBody,
             locale,
             parentPostUuid: null,
             promptUuid: shownPromptUuid || null,
@@ -329,9 +329,34 @@
         }
     }
     function handleBodyKeyup(event: Event) {
-        newPostBody = event.target?.innerHTML
+        newPostBody = writableBodyInputNode.innerHTML
         console.log("keyup", { willHandleSelect })
         tryHandleBodyTextSelection()
+    }
+    const dragTypeIsForbidden = (type: string) =>
+        type === "text/uri-list" ||
+        type === "application/x-moz-nativeimage" ||
+        type.startsWith("image/")
+    function handleBodyDragover(event: DragEvent) {
+        console.log("dragover", { event })
+        const types = event.dataTransfer?.types || []
+        if (types.some(dragTypeIsForbidden)) {
+            console.log("Forbidden dragover!")
+            event.preventDefault()
+        } else {
+            console.log("Allowed dragover!")
+        }
+    }
+    function handleBodyDrop(event: DragEvent) {
+        const types = event.dataTransfer?.types || []
+        if (types.some(dragTypeIsForbidden)) {
+            console.log("Forbidden drop!")
+            event.preventDefault()
+        } else {
+            console.log("Allowed drop!")
+        }
+        setTimeout(() => (newPostBody = writableBodyInputNode.innerHTML), 50)
+        console.log("drop", { event })
     }
     let preventAutoSelectionHandling: boolean = false
     function handleBodyMouseup() {
@@ -372,6 +397,7 @@
         const s = window.getSelection
             ? window.getSelection()
             : document.selection
+        console.log({ s, range: s && s.rangeCount ? s.getRangeAt(0) : null })
         if (s && !s.isCollapsed && s.type === "Range") {
             const { focusNode: node } = s
             if (
@@ -428,6 +454,8 @@
     }
     $: selectionRange =
         selection && selection.rangeCount ? selection.getRangeAt(0) : null
+    $: selectionOffset =
+        selection && selection.rangeCount && selection.anchorNode ? 1 : 0
     $: selectionStart = selectionRange?.startOffset || null
     $: selectionEnd = selectionRange ? selectionRange.endOffset - 1 : undefined
     $: selectionNode = selection ? (selection.focusNode as Text) : null
@@ -517,7 +545,19 @@
     </Modal>
 {/if}
 <div class="container max-w-2xl mb-2 pb-4 px-2">
-    <div class="flex flex-col items-end justify-center w-full flex-wrap">
+    <div
+        class="flex flex-col items-end justify-center w-full flex-wrap"
+        on:dragover={(e) => {
+            if (e.target !== writableBodyInputNode) {
+                e.preventDefault()
+            }
+        }}
+        on:drop={(e) => {
+            if (e.target !== writableBodyInputNode) {
+                e.preventDefault()
+            }
+        }}
+    >
         {#if gamify && gameType !== null}
             <div
                 class="flex items-center justify-between pt-1 pb-2 px-2 text-sm text-gray-bitdark font-bold text-left w-full font-secondary relative"
@@ -683,6 +723,8 @@
                 on:mouseup={handleBodyMouseup}
                 on:selectstart={handleBodySelectStart}
                 on:selectionchange={handleDocumentSelectionChange}
+                on:drop|preventDefault
+                on:paste|preventDefault
             >
                 {#if gamify}
                     {#each displayedNewPostBodyParts as bodyPart}
@@ -711,6 +753,8 @@
                 placeholder={bodyInputPlaceholder}
                 aria-placeholder={bodyInputPlaceholder}
                 on:keyup={handleBodyKeyup}
+                on:dragover={handleBodyDragover}
+                on:drop={handleBodyDrop}
             />
         </div>
         <div>

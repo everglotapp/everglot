@@ -270,6 +270,8 @@
             handleDocumentSelectionChange
         )
 
+        window.addEventListener("resize", handleWindowResize)
+
         setInterval(updateRecordingDuration, 250)
         setInterval(updateAudioTimings, 250)
     })
@@ -281,6 +283,7 @@
             "selectionchange",
             handleDocumentSelectionChange
         )
+        window.removeEventListener("resize", handleWindowResize)
     })
 
     $: bodyInputPlaceholder = $translate(
@@ -506,11 +509,26 @@
                           selectionEnd! >= range.end)
               )
             : null
+    let selectionBoundingRect: DOMRect | null = null
     $: selectionBoundingRect = selectionRange?.getBoundingClientRect() || null
+    let selectionParentBoundingRect: DOMRect | null = null
     $: selectionParentBoundingRect =
         selectionParentNode?.getBoundingClientRect() || null
+    function handleWindowResize() {
+        selectionBoundingRect = selectionRange?.getBoundingClientRect() || null
+        selectionParentBoundingRect =
+            selectionParentNode?.getBoundingClientRect() || null
+    }
 
     let editBodyPartUuid: string | null = null
+    $: editedRangeIndex =
+        editBodyPartUuid === null
+            ? null
+            : pickedRanges.findIndex((range) => range.uuid === editBodyPartUuid)
+    $: editedRange =
+        editedRangeIndex === null || editedRangeIndex === -1
+            ? null
+            : pickedRanges[editedRangeIndex]
     $: showSelectionDropdown =
         gamify &&
         gameType !== null &&
@@ -760,6 +778,10 @@
                                     <ButtonSmall
                                         tag="button"
                                         variant="TEXT"
+                                        color={!editedRange ||
+                                        editedRange.option === option.value
+                                            ? "PRIMARY"
+                                            : "SECONDARY"}
                                         on:click={() =>
                                             handlePickGuessCaseOption(option)}
                                         className="mb-1 w-full flex justify-center"
@@ -777,6 +799,10 @@
                                     <ButtonSmall
                                         tag="button"
                                         variant="TEXT"
+                                        color={!editedRange ||
+                                        editedRange.option === option.value
+                                            ? "PRIMARY"
+                                            : "SECONDARY"}
                                         on:click={() =>
                                             handlePickGuessGenderOption(option)}
                                         className="mb-1 w-full flex justify-center"

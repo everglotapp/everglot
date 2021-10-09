@@ -36,6 +36,8 @@
     } from "../../constants"
     import type {
         SupportedLocale,
+        GuessCaseLocale,
+        GuessGenderLocale,
         PostGameSelectionRange,
     } from "../../constants"
     import { getBodyParts } from "../../routes/_helpers/posts/selections"
@@ -292,7 +294,7 @@
     let gameType: PostGameKind | null = null
     function handleSelectGameType(kind: PostGameKind) {
         gameType = kind
-        removeAllSelections()
+        clearAllSelections()
     }
     function handleCloseGamify() {
         gamify = false
@@ -300,7 +302,7 @@
         selection = null
         pickedRanges = []
     }
-    function removeAllSelections() {
+    function clearAllSelections() {
         const s = window.getSelection
             ? window.getSelection()
             : document.selection
@@ -416,32 +418,41 @@
     }
     let autoSelectionTimeout: number | null = null
     function handleDocumentSelectionChange() {
-        console.log("selectionchange", {
-            willHandleSelect,
-            currentSelection: window.getSelection(),
-            autoSelectionTimeout,
-        })
         if (typeof window === "undefined") {
             return
         }
-        const currentSelection = window.getSelection()
-        if (!currentSelection) {
+        const s = window.getSelection
+            ? window.getSelection()
+            : document.selection
+        if (!s) {
             return
         }
+        console.log("selectionchange", {
+            willHandleSelect,
+            s,
+            autoSelectionTimeout,
+        })
         if (
             !selection ||
-            currentSelection.focusOffset !== selection.focusOffset
+            s.focusNode !== selection.focusNode ||
+            s.anchorNode !== selection.anchorNode ||
+            s.focusOffset !== selection.focusOffset ||
+            s.anchorOffset !== selection.anchorOffset
         ) {
-            selection = currentSelection
+            selection = s
             tryClearAutoSelectionTimeout()
-            if (!preventAutoSelectionHandling) {
-                autoSelectionTimeout = window.setTimeout(() => {
-                    if (!preventAutoSelectionHandling) {
-                        console.log("autoSelectionTimeout expired, handling")
-                        tryHandleBodyTextSelection()
-                        autoSelectionTimeout = null
-                    }
-                }, 500)
+            if (s.rangeCount) {
+                if (!preventAutoSelectionHandling) {
+                    autoSelectionTimeout = window.setTimeout(() => {
+                        if (!preventAutoSelectionHandling) {
+                            console.log(
+                                "autoSelectionTimeout expired, handling"
+                            )
+                            tryHandleBodyTextSelection()
+                            autoSelectionTimeout = null
+                        }
+                    }, 500)
+                }
             }
         }
     }
@@ -454,11 +465,47 @@
     }
     $: selectionRange =
         selection && selection.rangeCount ? selection.getRangeAt(0) : null
-    $: selectionOffset =
-        selection && selection.rangeCount && selection.anchorNode ? 1 : 0
-    $: selectionStart = selectionRange?.startOffset || null
-    $: selectionEnd = selectionRange ? selectionRange.endOffset - 1 : undefined
-    $: selectionNode = selection ? (selection.focusNode as Text) : null
+    let selectionStart: number | null = null
+    let selectionEnd: number | undefined
+    $: if (selectionRange && readonlyBodyInputNode) {
+        const preCaretRange = selectionRange.cloneRange()
+        preCaretRange.selectNodeContents(readonlyBodyInputNode)
+        preCaretRange.setEnd(
+            selectionRange.endContainer,
+            selectionRange.endOffset
+        )
+
+        selectionEnd = preCaretRange.toString().length - 1
+        selectionStart =
+            preCaretRange.toString().length - selectionRange.toString().length
+    } else {
+        selectionStart = null
+        selectionEnd = undefined
+    }
+    $: if (
+        selectionRange &&
+        pickedRanges.some(
+            (range) =>
+                (range.start >= selectionStart! &&
+                    range.start <= selectionEnd!) ||
+                (range.end >= selectionStart! && range.end <= selectionEnd!)
+        )
+    ) {
+        // Clear selection in case it overlaps a range that's already been picked.
+        console.log("Selection overlaps a range that has already been picked", {
+            pickedRanges,
+            selectionStart,
+            selectionEnd,
+        })
+        clearAllSelections()
+    }
+    $: selectionNode = selection
+        ? selection.focusNode
+            ? (selection.focusNode as Text).length
+                ? (selection.focusNode as Text)
+                : (selection.anchorNode as Text)
+            : (selection.anchorNode as Text)
+        : null
     let selectedText: string | null = null
     $: if (
         selectionNode &&
@@ -467,7 +514,7 @@
     ) {
         selectedText = selectionNode.data.substring(
             selectionStart || 0,
-            selectionEnd
+            typeof selectionEnd === "undefined" ? undefined : selectionEnd + 1
         )
     } else {
         selectedText = null
@@ -477,6 +524,10 @@
         selectionParentNode?.getBoundingClientRect() || null
 
     let pickedRanges: PostGameSelectionRange[] = []
+    $: pickedRangesWithIds = pickedRanges.map((range) => ({
+        ...range,
+        id: uuidv4(),
+    }))
     $: availableGuessCaseOptions =
         locale && (GUESS_CASE_LOCALES as readonly string[]).includes(locale)
             ? Object.entries(GUESS_CASE_OPTIONS[locale as GuessCaseLocale]).map(
@@ -492,10 +543,9 @@
 
     $: formattedNewPostBody = formatPostBody(newPostBody || "")
 
-    $: displayedNewPostBodyParts =
-        gamify && pickedRanges
-            ? getBodyParts(formattedNewPostBody, pickedRanges)
-            : []
+    $: displayedNewPostBodyParts = gamify
+        ? getBodyParts(formattedNewPostBody, pickedRangesWithIds)
+        : []
 </script>
 
 {#if gamify && gameType === null}
@@ -631,7 +681,7 @@
                                                     option: option.value,
                                                 },
                                             ]
-                                            removeAllSelections()
+                                            clearAllSelections()
                                         }}
                                         className="mb-1 w-full flex justify-center"
                                     >
@@ -656,7 +706,7 @@
                                                     option: option.value,
                                                 },
                                             ]
-                                            removeAllSelections()
+                                            clearAllSelections()
                                         }}
                                         className="mb-1 w-full flex justify-center"
                                     >
@@ -679,7 +729,7 @@
                                                     selectedText.length - 1,
                                             },
                                         ]
-                                        removeAllSelections()
+                                        clearAllSelections()
                                     }}
                                     className="mb-1 w-full flex justify-center"
                                 >
@@ -691,7 +741,7 @@
                                 tag="button"
                                 variant="TEXT"
                                 color="SECONDARY"
-                                on:click={() => removeAllSelections()}
+                                on:click={() => clearAllSelections()}
                                 className="flex justify-center items-center w-full text-sm"
                             >
                                 <XIcon

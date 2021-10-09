@@ -464,64 +464,52 @@
         autoSelectionTimeout = null
     }
     $: selectionRange =
-        selection && selection.rangeCount ? selection.getRangeAt(0) : null
-    let selectionStart: number | null = null
-    let selectionEnd: number | undefined
+        gamify && selection !== null && selection.rangeCount
+            ? selection.getRangeAt(0)
+            : null
+    $: selectedText = selectionRange ? selectionRange.toString() : null
+    let rangeBeforeCaret: Range | null = null
     $: if (selectionRange && readonlyBodyInputNode) {
-        const preCaretRange = selectionRange.cloneRange()
-        preCaretRange.selectNodeContents(readonlyBodyInputNode)
-        preCaretRange.setEnd(
+        rangeBeforeCaret = selectionRange.cloneRange()
+        rangeBeforeCaret.selectNodeContents(readonlyBodyInputNode)
+        rangeBeforeCaret.setEnd(
             selectionRange.endContainer,
             selectionRange.endOffset
         )
-
-        selectionEnd = preCaretRange.toString().length - 1
-        selectionStart =
-            preCaretRange.toString().length - selectionRange.toString().length
     } else {
-        selectionStart = null
-        selectionEnd = undefined
+        rangeBeforeCaret = null
     }
-    $: if (
-        selectionRange &&
-        pickedRanges.some(
-            (range) =>
-                (range.start >= selectionStart! &&
-                    range.start <= selectionEnd!) ||
-                (range.end >= selectionStart! && range.end <= selectionEnd!)
-        )
-    ) {
-        // Clear selection in case it overlaps a range that's already been picked.
-        console.log("Selection overlaps a range that has already been picked", {
-            pickedRanges,
-            selectionStart,
-            selectionEnd,
-        })
-        clearAllSelections()
-    }
-    $: selectionNode = selection
-        ? selection.focusNode
-            ? (selection.focusNode as Text).length
-                ? (selection.focusNode as Text)
-                : (selection.anchorNode as Text)
-            : (selection.anchorNode as Text)
-        : null
-    let selectedText: string | null = null
-    $: if (
-        selectionNode &&
-        selectionNode.data &&
-        (selectionStart || 0) != selectionEnd
-    ) {
-        selectedText = selectionNode.data.substring(
-            selectionStart || 0,
-            typeof selectionEnd === "undefined" ? undefined : selectionEnd + 1
-        )
-    } else {
-        selectedText = null
-    }
+    $: textBeforeCaret = rangeBeforeCaret?.toString() || null
+    $: selectionStart =
+        textBeforeCaret && selectedText
+            ? textBeforeCaret.length - selectedText.length
+            : null
+    $: selectionEnd = textBeforeCaret ? textBeforeCaret.length - 1 : null
+    $: selectionOverlapsPickedRange =
+        selectionStart !== null && selectionEnd !== null
+            ? pickedRanges.some(
+                  (range) =>
+                      (selectionStart! >= range.start &&
+                          selectionStart! <= range.end) ||
+                      (selectionEnd! >= range.start &&
+                          selectionEnd! <= range.end) ||
+                      (selectionStart! <= range.start &&
+                          selectionEnd! >= range.end)
+              )
+            : null
     $: selectionBoundingRect = selectionRange?.getBoundingClientRect() || null
     $: selectionParentBoundingRect =
         selectionParentNode?.getBoundingClientRect() || null
+    $: showSelectionDropdown =
+        gamify &&
+        gameType !== null &&
+        selectedText !== null &&
+        selectedText.length &&
+        selectionStart !== null &&
+        selectionEnd !== null &&
+        selectionOverlapsPickedRange === false &&
+        selectionBoundingRect &&
+        selectionParentBoundingRect
 
     let pickedRanges: PostGameSelectionRange[] = []
     $: pickedRangesWithIds = pickedRanges.map((range) => ({
@@ -644,7 +632,7 @@
             </div>
         {/if}
         <div bind:this={selectionParentNode} class="w-full">
-            {#if gamify && gameType !== null && selectedText !== null && selectionBoundingRect && selectionParentBoundingRect}
+            {#if showSelectionDropdown}
                 <div id={selectionDropdownId} class="relative w-full">
                     <div
                         class="absolute flex items-center justify-center"
@@ -674,10 +662,8 @@
                                             pickedRanges = [
                                                 ...pickedRanges,
                                                 {
-                                                    start: selectionStart || 0,
-                                                    end:
-                                                        selectionEnd ||
-                                                        selectedText.length - 1,
+                                                    start: selectionStart,
+                                                    end: selectionEnd,
                                                     option: option.value,
                                                 },
                                             ]
@@ -699,10 +685,8 @@
                                             pickedRanges = [
                                                 ...pickedRanges,
                                                 {
-                                                    start: selectionStart || 0,
-                                                    end:
-                                                        selectionEnd ||
-                                                        selectedText.length - 1,
+                                                    start: selectionStart,
+                                                    end: selectionEnd,
                                                     option: option.value,
                                                 },
                                             ]
@@ -723,10 +707,8 @@
                                         pickedRanges = [
                                             ...pickedRanges,
                                             {
-                                                start: selectionStart || 0,
-                                                end:
-                                                    selectionEnd ||
-                                                    selectedText.length - 1,
+                                                start: selectionStart,
+                                                end: selectionEnd,
                                             },
                                         ]
                                         clearAllSelections()

@@ -60,15 +60,9 @@ exports.up = (pgm) => {
         }
     )
     pgm.sql(`GRANT SELECT ON app_public.post_games TO evg_client`)
-    pgm.createIndex({ schema: "app_public", name: "post_games" }, "user_id")
     pgm.createIndex({ schema: "app_public", name: "post_games" }, "post_id")
-    pgm.createIndex(
-        { schema: "app_public", name: "post_games" },
-        ["post_id", "user_id"],
-        { unique: true }
-    )
     pgm.sql(
-        `GRANT INSERT(user_id, post_id, game_type)
+        `GRANT INSERT(post_id, game_type)
         ON app_public.post_games
         TO evg_server`
     )
@@ -116,17 +110,11 @@ exports.down = (pgm) => {
         `REVOKE USAGE, SELECT ON SEQUENCE app_public.post_games_id_seq FROM evg_server`
     )
     pgm.sql(
-        `REVOKE INSERT(user_id, post_id, game_type)
+        `REVOKE INSERT(post_id, game_type)
         ON app_public.post_games
         FROM evg_server`
     )
     pgm.dropIndex({ schema: "app_public", name: "post_games" }, "post_id")
-    pgm.dropIndex({ schema: "app_public", name: "post_games" }, "user_id")
-    pgm.dropIndex(
-        { schema: "app_public", name: "post_games" },
-        ["post_id", "user_id"],
-        { unique: true }
-    )
     pgm.sql(`REVOKE SELECT ON app_public.post_games FROM evg_client`)
     pgm.dropPolicy(
         { schema: "app_public", name: "post_games" },

@@ -1,5 +1,8 @@
-import { USER_CREATE_POST_RECORDING_FILE_FORM_FIELD } from "../../../constants"
-import type { SupportedLocale } from "../../../constants"
+import {
+    PostGameType,
+    USER_CREATE_POST_RECORDING_FILE_FORM_FIELD,
+} from "../../../constants"
+import type { SupportedLocale, PostGameRange } from "../../../constants"
 
 import { decode as decodeHTML } from "he"
 
@@ -8,11 +11,15 @@ export async function createPost({
     locale,
     parentPostUuid,
     promptUuid,
+    gameType,
+    ranges,
 }: {
     body: string
     locale: SupportedLocale
     parentPostUuid: string | null
     promptUuid: string | null
+    gameType: PostGameType | null
+    ranges: PostGameRange[] | null
 }) {
     return await fetch("/posts/create", {
         method: "post",
@@ -25,6 +32,8 @@ export async function createPost({
             locale,
             parentPostUuid,
             promptUuid,
+            gameType,
+            ranges,
         }),
     })
 }
@@ -35,6 +44,7 @@ export function formatPostBody(body: string): string {
             .replace(/\<br(\ | \/)?\>/g, "")
             .replace(/\<div\>(.*?)\<\/div\>/g, (_match, p1) => `${p1}\n`)
             .replace(/(<([^>]+)>)/gi, "")
+            .trim()
     )
 }
 

@@ -27,8 +27,7 @@
     import { getSupportedMimeTypes } from "../../routes/_helpers/posts/recording"
     import {
         GAMIFY_POST_LOCALES,
-        PostGameKind,
-        BodyPartKind,
+        BodyPartType,
         GUESS_CASE_LOCALES,
         GUESS_CASE_OPTIONS,
         GUESS_GENDER_LOCALES,
@@ -45,6 +44,7 @@
         GuessGenderRange,
     } from "../../constants"
     import { getBodyParts } from "../../routes/_helpers/posts/selections"
+    import { PostGameType } from "../../types/generated/graphql"
 
     export let shownPromptUuid: string | null
     export let locale: SupportedLocale | null
@@ -217,6 +217,8 @@
             locale,
             parentPostUuid: null,
             promptUuid: shownPromptUuid || null,
+            gameType: gamify && gameRanges.length ? gameType : null,
+            ranges: gamify && gameType !== null ? gameRanges : null,
         })
         if (res.status === 200) {
             const response = await res.json()
@@ -301,8 +303,8 @@
         gamify = false
     }
 
-    let gameType: PostGameKind | null = null
-    function handleSelectGameType(kind: PostGameKind) {
+    let gameType: PostGameType | null = null
+    function handleSelectGameType(kind: PostGameType) {
         gameType = kind
         clearAllSelections()
     }
@@ -399,9 +401,9 @@
             !gamify ||
             gameType === null ||
             ![
-                PostGameKind.GuessCase,
-                PostGameKind.GuessGender,
-                PostGameKind.Cloze,
+                PostGameType.GuessCase,
+                PostGameType.GuessGender,
+                PostGameType.Cloze,
             ].includes(gameType)
         ) {
             return
@@ -693,7 +695,7 @@
             <div class="bg-white flex flex-col items-center py-4 px-4">
                 <ButtonLarge
                     on:click={() =>
-                        handleSelectGameType(PostGameKind.GuessCase)}
+                        handleSelectGameType(PostGameType.GuessCase)}
                     tag="button"
                     variant="OUTLINED"
                     color="PRIMARY"
@@ -701,14 +703,14 @@
                 >
                 <ButtonLarge
                     on:click={() =>
-                        handleSelectGameType(PostGameKind.GuessGender)}
+                        handleSelectGameType(PostGameType.GuessGender)}
                     tag="button"
                     variant="OUTLINED"
                     color="PRIMARY"
                     className="mb-2">Guess the Gender</ButtonLarge
                 >
                 <ButtonLarge
-                    on:click={() => handleSelectGameType(PostGameKind.Cloze)}
+                    on:click={() => handleSelectGameType(PostGameType.Cloze)}
                     tag="button"
                     variant="OUTLINED"
                     color="PRIMARY">Cloze</ButtonLarge
@@ -794,7 +796,7 @@
                         <div
                             class="bg-white shadow-lg border border-gray-light rounded-lg z-20 flex flex-col items-center"
                         >
-                            {#if gameType === PostGameKind.GuessCase}
+                            {#if gameType === PostGameType.GuessCase}
                                 {#each availableGuessCaseOptions as option}
                                     <ButtonSmall
                                         tag="button"
@@ -815,7 +817,7 @@
                                 {#if editBodyPartUuid !== null}
                                     <hr class="w-full" />
                                 {/if}
-                            {:else if gameType === PostGameKind.GuessGender}
+                            {:else if gameType === PostGameType.GuessGender}
                                 {#each availableGuessGenderOptions as option}
                                     <ButtonSmall
                                         tag="button"
@@ -836,7 +838,7 @@
                                 {#if editBodyPartUuid !== null}
                                     <hr class="w-full" />
                                 {/if}
-                            {:else if gameType === PostGameKind.Cloze}
+                            {:else if gameType === PostGameType.Cloze}
                                 {#if editBodyPartUuid === null}
                                     <ButtonSmall
                                         tag="button"
@@ -919,9 +921,9 @@
             >
                 {#if gamify}
                     {#each displayedNewPostBodyParts as bodyPart}
-                        {#if bodyPart.kind === BodyPartKind.LineBreak}
+                        {#if bodyPart.type === BodyPartType.LineBreak}
                             <br />
-                        {:else if bodyPart.kind === BodyPartKind.Range}
+                        {:else if bodyPart.type === BodyPartType.Range}
                             <span
                                 id={bodyPart.uuid}
                                 class="bg-primary-lightest border-primary border-b px-1 py-1 cursor-pointer"
@@ -931,7 +933,7 @@
                                     handleEditBodyPart(bodyPart.uuid)}
                                 >{bodyPart.value}</span
                             >
-                        {:else if bodyPart.kind === BodyPartKind.Text}
+                        {:else if bodyPart.type === BodyPartType.Text}
                             {bodyPart.value}
                         {/if}
                     {/each}

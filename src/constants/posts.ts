@@ -1,14 +1,19 @@
+import {
+    GrammaticalCase,
+    GrammaticalGender,
+    PostGameType,
+} from "../types/generated/graphql"
 import type { GuessCaseLocale, GuessGenderLocale } from "./locales"
 
-export enum PostGameKind {
-    GuessCase = "GUESS_CASE",
-    GuessGender = "GUESS_GENDER",
-    Cloze = "CLOZE",
-}
+export const AVAILABLE_POST_GAME_TYPES = [
+    PostGameType.GuessCase,
+    PostGameType.GuessGender,
+    PostGameType.Cloze,
+] as const
 
 export const GUESS_CASE_OPTIONS: Record<
     GuessCaseLocale,
-    { [k: string]: string }
+    Record<GrammaticalCase, string>
 > = {
     de: {
         NOMINATIVE: "nominative",
@@ -30,7 +35,7 @@ export const GUESS_CASE_OPTIONS: Record<
 export type GuessCaseOption = typeof GUESS_CASE_OPTIONS[GuessCaseLocale]
 export const GUESS_GENDER_OPTIONS: Record<
     GuessGenderLocale,
-    { [k: string]: string }
+    Record<GrammaticalGender, string>
 > = {
     fr: {
         MASCULINE: "masculine",
@@ -47,7 +52,7 @@ export const GUESS_GENDER_OPTIONS: Record<
     de: {
         MASCULINE: "masculine",
         FEMININE: "feminine",
-        NEUTER: "neuter",
+        NEUTRAL: "neuter",
     },
 } as const
 export type GuessGenderOption = typeof GUESS_GENDER_OPTIONS[GuessGenderLocale]
@@ -65,13 +70,13 @@ export interface GuessCaseRange extends PostGameRange {
     option: keyof GuessCaseOption
 }
 
-export const enum BodyPartKind {
+export const enum BodyPartType {
     Text = "TEXT",
     LineBreak = "LINEBREAK",
     Range = "RANGE",
 }
 export type BodyPart = {
     uuid?: string
-    kind: BodyPartKind
+    type: BodyPartType
     value?: string
 }

@@ -1,4 +1,4 @@
-import { BodyPartKind } from "../../../constants/posts"
+import { BodyPartType } from "../../../constants/posts"
 import type { BodyPart, PostGameRange } from "../../../constants/posts"
 
 export function getBodyParts(
@@ -7,21 +7,21 @@ export function getBodyParts(
 ): BodyPart[] {
     let parts: BodyPart[] = body
         .split("\n")
-        .map((text) => ({ kind: BodyPartKind.Text, value: text }))
+        .map((text) => ({ type: BodyPartType.Text, value: text }))
     parts = parts.flatMap((part, i) => {
         if (i + 1 == parts.length) {
             return [part]
         }
         // add line break after all lines except for the last
-        return [part, { kind: BodyPartKind.LineBreak }]
+        return [part, { type: BodyPartType.LineBreak }]
     })
     let i = 0
     const measuredParts: BodyPart[] = []
     for (const part of parts) {
-        if (part.kind === BodyPartKind.LineBreak) {
+        if (part.type === BodyPartType.LineBreak) {
             measuredParts.push(part)
             i += 1
-        } else if (part.kind === BodyPartKind.Text) {
+        } else if (part.type === BodyPartType.Text) {
             let currentParts: BodyPart[] = []
             const value = part.value!
             const start = i
@@ -36,14 +36,14 @@ export function getBodyParts(
                 if (overlappingRange) {
                     if (j < overlappingRange.start) {
                         currentParts.push({
-                            kind: BodyPartKind.Text,
+                            type: BodyPartType.Text,
                             value: value.substring(j, overlappingRange.start),
                         })
                         j = overlappingRange.start
                     } else {
                         currentParts.push({
                             uuid: overlappingRange.uuid,
-                            kind: BodyPartKind.Range,
+                            type: BodyPartType.Range,
                             value: value.substring(j, overlappingRange.end + 1),
                         })
                         j = overlappingRange.end + 1
@@ -51,7 +51,7 @@ export function getBodyParts(
                     }
                 } else {
                     currentParts.push({
-                        kind: BodyPartKind.Text,
+                        type: BodyPartType.Text,
                         value: value.substring(j, end + 1),
                     })
                     break

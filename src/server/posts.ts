@@ -2,18 +2,21 @@ import { performQuery } from "./gql"
 
 import log from "../logger"
 
-import {
+import type {
     CreatePostMutationVariables,
     CreatePostMutation,
     CreatePostLikeMutationVariables,
     CreatePostLikeMutation,
+    CreatePostGameMutationVariables,
+    CreatePostGameMutation,
+    CreatePostGameRangeMutationVariables,
+    CreatePostGameRangeMutation,
+    CreatePostGameAnswerMutationVariables,
+    CreatePostGameAnswerMutation,
     PostIdByUuidQuery,
-    PostIdByUuid,
     DeletePostLikeMutationVariables,
     DeletePostLikeMutation,
-    DeletePostLike,
     PostLikeIdByPostIdAndUserIdQuery,
-    PostLikeIdByPostIdAndUserId,
     CreatePostRecordingMutationVariables,
     CreatePostRecordingMutation,
 } from "../types/generated/graphql"
@@ -21,6 +24,12 @@ import {
     CreatePost,
     CreatePostLike,
     CreatePostRecording,
+    CreatePostGameRange,
+    CreatePostGame,
+    CreatePostGameAnswer,
+    PostIdByUuid,
+    PostLikeIdByPostIdAndUserId,
+    DeletePostLike,
 } from "../types/generated/graphql"
 
 const chlog = log.child({ namespace: "posts" })
@@ -119,4 +128,58 @@ export async function createPostRecording(
         return null
     }
     return res.data?.createPostRecording?.postRecording || null
+}
+
+export async function createPostGame(
+    vars: CreatePostGameMutationVariables
+): Promise<
+    NonNullable<CreatePostGameMutation["createPostGame"]>["postGame"] | null
+> {
+    const res = await performQuery<CreatePostGameMutation>(
+        CreatePostGame.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        chlog.child({ res }).error("Failed to create post game")
+        return null
+    }
+    return res.data?.createPostGame?.postGame || null
+}
+
+export async function createPostGameRange(
+    vars: CreatePostGameRangeMutationVariables
+): Promise<
+    | NonNullable<
+          CreatePostGameRangeMutation["createPostGameRange"]
+      >["postGameRange"]
+    | null
+> {
+    const res = await performQuery<CreatePostGameRangeMutation>(
+        CreatePostGameRange.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        chlog.child({ res }).error("Failed to create post game range")
+        return null
+    }
+    return res.data?.createPostGameRange?.postGameRange || null
+}
+
+export async function createPostGameAnswer(
+    vars: CreatePostGameAnswerMutationVariables
+): Promise<
+    | NonNullable<
+          CreatePostGameAnswerMutation["createPostGameAnswer"]
+      >["postGameAnswer"]
+    | null
+> {
+    const res = await performQuery<CreatePostGameAnswerMutation>(
+        CreatePostGameAnswer.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        chlog.child({ res }).error("Failed to create post game answer")
+        return null
+    }
+    return res.data?.createPostGameAnswer?.postGameAnswer || null
 }

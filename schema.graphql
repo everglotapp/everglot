@@ -2810,40 +2810,6 @@ type User implements Node {
   """Reads a single `UserPreference` that is related to this `User`."""
   preference: UserPreference
 
-  """Reads and enables pagination through a set of `PostGame`."""
-  postGames(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `PostGame`."""
-    orderBy: [PostGamesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PostGameCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PostGameFilter
-  ): PostGamesConnection!
-
   """Reads a single `PostGameAnswer` that is related to this `User`."""
   postGameAnswer: PostGameAnswer
   followedByCurrentUser: Boolean
@@ -3459,40 +3425,6 @@ type User implements Node {
     """
     filter: UserFilter
   ): UserUsersByUserFollowerFollowerIdAndUserIdManyToManyConnection!
-
-  """Reads and enables pagination through a set of `Post`."""
-  postsByPostGameUserIdAndPostId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Post`."""
-    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PostCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PostFilter
-  ): UserPostsByPostGameUserIdAndPostIdManyToManyConnection!
 }
 
 """
@@ -9564,40 +9496,6 @@ type Post implements Node {
     """
     filter: UserFilter
   ): PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection!
-
-  """Reads and enables pagination through a set of `User`."""
-  usersByPostGamePostIdAndUserId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `User`."""
-    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: UserCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: UserFilter
-  ): PostUsersByPostGamePostIdAndUserIdManyToManyConnection!
 }
 
 """
@@ -10007,15 +9905,11 @@ type PostGame implements Node {
   id: Int!
   uuid: UUID!
   postId: Int!
-  userId: Int!
   gameType: PostGameType!
   createdAt: Datetime!
 
   """Reads a single `Post` that is related to this `PostGame`."""
   post: Post
-
-  """Reads a single `User` that is related to this `PostGame`."""
-  user: User
 
   """Reads and enables pagination through a set of `PostGameRange`."""
   postGameRangesByGameId(
@@ -10506,8 +10400,6 @@ enum PostGamesOrderBy {
   UUID_DESC
   POST_ID_ASC
   POST_ID_DESC
-  USER_ID_ASC
-  USER_ID_DESC
   GAME_TYPE_ASC
   GAME_TYPE_DESC
   CREATED_AT_ASC
@@ -10530,9 +10422,6 @@ input PostGameCondition {
   """Checks for equality with the object’s `postId` field."""
   postId: Int
 
-  """Checks for equality with the object’s `userId` field."""
-  userId: Int
-
   """Checks for equality with the object’s `gameType` field."""
   gameType: PostGameType
 
@@ -10552,9 +10441,6 @@ input PostGameFilter {
 
   """Filter by the object’s `postId` field."""
   postId: IntFilter
-
-  """Filter by the object’s `userId` field."""
-  userId: IntFilter
 
   """Filter by the object’s `gameType` field."""
   gameType: PostGameTypeFilter
@@ -11172,66 +11058,6 @@ type PostUsersByPostRecordingPostIdAndUserIdManyToManyEdge {
     """
     filter: PostRecordingFilter
   ): PostRecordingsConnection!
-}
-
-"""A connection to a list of `User` values, with data from `PostGame`."""
-type PostUsersByPostGamePostIdAndUserIdManyToManyConnection {
-  """A list of `User` objects."""
-  nodes: [User]!
-
-  """
-  A list of edges which contains the `User`, info from the `PostGame`, and the cursor to aid in pagination.
-  """
-  edges: [PostUsersByPostGamePostIdAndUserIdManyToManyEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `User` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `User` edge in the connection, with data from `PostGame`."""
-type PostUsersByPostGamePostIdAndUserIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `User` at the end of the edge."""
-  node: User
-
-  """Reads and enables pagination through a set of `PostGame`."""
-  postGames(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `PostGame`."""
-    orderBy: [PostGamesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PostGameCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PostGameFilter
-  ): PostGamesConnection!
 }
 
 """A `Post` edge in the connection."""
@@ -16157,66 +15983,6 @@ type UserUsersByUserFollowerFollowerIdAndUserIdManyToManyEdge {
   ): UserFollowersConnection!
 }
 
-"""A connection to a list of `Post` values, with data from `PostGame`."""
-type UserPostsByPostGameUserIdAndPostIdManyToManyConnection {
-  """A list of `Post` objects."""
-  nodes: [Post]!
-
-  """
-  A list of edges which contains the `Post`, info from the `PostGame`, and the cursor to aid in pagination.
-  """
-  edges: [UserPostsByPostGameUserIdAndPostIdManyToManyEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Post` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `Post` edge in the connection, with data from `PostGame`."""
-type UserPostsByPostGameUserIdAndPostIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Post` at the end of the edge."""
-  node: Post
-
-  """Reads and enables pagination through a set of `PostGame`."""
-  games(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `PostGame`."""
-    orderBy: [PostGamesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PostGameCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PostGameFilter
-  ): PostGamesConnection!
-}
-
 """A `GroupUser` edge in the connection."""
 type GroupUsersEdge {
   """A cursor for use in pagination."""
@@ -20568,9 +20334,6 @@ type CreatePostGamePayload {
   """Reads a single `Post` that is related to this `PostGame`."""
   post: Post
 
-  """Reads a single `User` that is related to this `PostGame`."""
-  user: User
-
   """An edge for our `PostGame`. May be used by Relay 1."""
   postGameEdge(
     """The method to use when ordering `PostGame`."""
@@ -20595,7 +20358,6 @@ input PostGameInput {
   id: Int
   uuid: UUID
   postId: Int!
-  userId: Int!
   gameType: PostGameType!
   createdAt: Datetime
 }
@@ -23623,9 +23385,6 @@ type UpdatePostGamePayload {
   """Reads a single `Post` that is related to this `PostGame`."""
   post: Post
 
-  """Reads a single `User` that is related to this `PostGame`."""
-  user: User
-
   """An edge for our `PostGame`. May be used by Relay 1."""
   postGameEdge(
     """The method to use when ordering `PostGame`."""
@@ -23659,7 +23418,6 @@ input PostGamePatch {
   id: Int
   uuid: UUID
   postId: Int
-  userId: Int
   gameType: PostGameType
   createdAt: Datetime
 }
@@ -27880,9 +27638,6 @@ type DeletePostGamePayload {
   """Reads a single `Post` that is related to this `PostGame`."""
   post: Post
 
-  """Reads a single `User` that is related to this `PostGame`."""
-  user: User
-
   """An edge for our `PostGame`. May be used by Relay 1."""
   postGameEdge(
     """The method to use when ordering `PostGame`."""
@@ -30969,9 +30724,6 @@ type UpsertPostGamePayload {
 
   """Reads a single `Post` that is related to this `PostGame`."""
   post: Post
-
-  """Reads a single `User` that is related to this `PostGame`."""
-  user: User
 
   """An edge for our `PostGame`. May be used by Relay 1."""
   postGameEdge(

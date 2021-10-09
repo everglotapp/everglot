@@ -80,6 +80,33 @@ declare module '*/createPost.graphql' {
 }
     
 
+declare module '*/createPostGame.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostGame: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createPostGameAnswer.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostGameAnswer: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createPostGameRange.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostGameRange: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createPostLike.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

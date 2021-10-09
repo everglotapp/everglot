@@ -42,6 +42,7 @@ export function getBodyParts(
                         j = overlappingRange.start
                     } else {
                         currentParts.push({
+                            uuid: overlappingRange.uuid,
                             kind: BodyPartKind.Selected,
                             value: value.substring(j, overlappingRange.end + 1),
                         })
@@ -60,5 +61,6 @@ export function getBodyParts(
             i += value.length
         }
     }
+    console.log({ body, pickedRanges, measuredParts })
     return measuredParts
 }

@@ -16,8 +16,8 @@ export const GUESS_CASE_OPTIONS: Record<
         DATIVE: "dative",
         ACCUSATIVE: "accusative",
     },
-}
-type GuessCaseOption = typeof GUESS_CASE_OPTIONS[GuessCaseLocale]
+} as const
+export type GuessCaseOption = typeof GUESS_CASE_OPTIONS[GuessCaseLocale]
 export const GUESS_GENDER_OPTIONS: Record<
     GuessGenderLocale,
     { [k: string]: string }
@@ -31,27 +31,29 @@ export const GUESS_GENDER_OPTIONS: Record<
         FEMININE: "feminine",
         NEUTER: "neuter",
     },
-}
-type GuessGenderOption = typeof GUESS_GENDER_OPTIONS[GuessGenderLocale]
+} as const
+export type GuessGenderOption = typeof GUESS_GENDER_OPTIONS[GuessGenderLocale]
 export interface PostGameSelectionRange {
+    uuid: string
     start: number
     end: number
 }
-// @ts-expect-error
-type _GuessGenderSelectionRange = PostGameSelectionRange & {
+
+export interface GuessGenderSelectionRange extends PostGameSelectionRange {
     option: keyof GuessGenderOption
 }
-// @ts-expect-error
-type _GuessCaseSelectionRange = PostGameSelectionRange & {
+
+export interface GuessCaseSelectionRange extends PostGameSelectionRange {
     option: keyof GuessCaseOption
 }
 
 export const enum BodyPartKind {
-    Text,
-    LineBreak,
-    Selected,
+    Text = "TEXT",
+    LineBreak = "LINEBREAK",
+    Selected = "SELECTED",
 }
 export type BodyPart = {
+    uuid?: string
     kind: BodyPartKind
     value?: string
 }

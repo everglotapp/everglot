@@ -39,6 +39,10 @@
         GuessCaseLocale,
         GuessGenderLocale,
         PostGameSelectionRange,
+        GuessCaseOption,
+        GuessGenderOption,
+        GuessCaseSelectionRange,
+        GuessGenderSelectionRange,
     } from "../../constants"
     import { getBodyParts } from "../../routes/_helpers/posts/selections"
 
@@ -330,7 +334,7 @@
             selection = null
         }
     }
-    function handleBodyKeyup(event: Event) {
+    function handleBodyKeyup(_event: Event) {
         newPostBody = writableBodyInputNode.innerHTML
         console.log("keyup", { willHandleSelect })
         tryHandleBodyTextSelection()
@@ -401,14 +405,22 @@
             : document.selection
         console.log({ s, range: s && s.rangeCount ? s.getRangeAt(0) : null })
         if (s && !s.isCollapsed && s.type === "Range") {
-            const { focusNode: node } = s
+            const { focusNode, anchorNode } = s
             if (
-                node &&
-                node.nodeType === Node.TEXT_NODE &&
-                node.parentNode === readonlyBodyInputNode
+                editBodyPartUuid !== null &&
+                (focusNode !== anchorNode ||
+                    !focusNode ||
+                    focusNode.id !== editBodyPartUuid)
             ) {
-                selection = s
+                editBodyPartUuid = null
             }
+            // if (
+            //     focusNode &&
+            //     focusNode.nodeType === Node.TEXT_NODE &&
+            //     focusNode.parentNode === readonlyBodyInputNode
+            // ) {
+            selection = s
+            // }
         }
         willHandleSelect = false
     }
@@ -500,22 +512,21 @@
     $: selectionBoundingRect = selectionRange?.getBoundingClientRect() || null
     $: selectionParentBoundingRect =
         selectionParentNode?.getBoundingClientRect() || null
+
+    let editBodyPartUuid: string | null = null
     $: showSelectionDropdown =
         gamify &&
         gameType !== null &&
-        selectedText !== null &&
-        selectedText.length &&
-        selectionStart !== null &&
-        selectionEnd !== null &&
-        selectionOverlapsPickedRange === false &&
         selectionBoundingRect &&
-        selectionParentBoundingRect
+        selectionParentBoundingRect &&
+        ((selectedText !== null &&
+            selectedText.length &&
+            selectionStart !== null &&
+            selectionEnd !== null &&
+            selectionOverlapsPickedRange === false) ||
+            editBodyPartUuid !== null)
 
     let pickedRanges: PostGameSelectionRange[] = []
-    $: pickedRangesWithIds = pickedRanges.map((range) => ({
-        ...range,
-        id: uuidv4(),
-    }))
     $: availableGuessCaseOptions =
         locale && (GUESS_CASE_LOCALES as readonly string[]).includes(locale)
             ? Object.entries(GUESS_CASE_OPTIONS[locale as GuessCaseLocale]).map(
@@ -532,8 +543,102 @@
     $: formattedNewPostBody = formatPostBody(newPostBody || "")
 
     $: displayedNewPostBodyParts = gamify
-        ? getBodyParts(formattedNewPostBody, pickedRangesWithIds)
+        ? getBodyParts(formattedNewPostBody, pickedRanges)
         : []
+
+    function addRange(range: PostGameSelectionRange) {
+        pickedRanges = [...pickedRanges, range]
+    }
+
+    function handleEditBodyPart(uuid: string) {
+        editBodyPartUuid = uuid
+        // Highlight picked body part that is being edited.
+        const bodyPartNode = document.getElementById(uuid)
+        if (bodyPartNode) {
+            clearAllSelections()
+            if (document.body.createTextRange) {
+                const range = document.body.createTextRange()
+                range.moveToElementText(bodyPartNode)
+                range.select()
+            } else if (window.getSelection) {
+                const s = window.getSelection()
+                if (s) {
+                    const range = document.createRange()
+                    range.selectNodeContents(bodyPartNode)
+                    s.removeAllRanges()
+                    s.addRange(range)
+                }
+            }
+        }
+    }
+
+    function updateRange(
+        uuid: string,
+        rangePatch: Partial<PostGameSelectionRange>
+    ) {
+        const i = pickedRanges.findIndex((range) => range.uuid === uuid)
+        if (i === -1) {
+            // This should never happen as editBodyPartUuid is generated client-side.
+            return
+        }
+        pickedRanges[i] = { ...pickedRanges[i], ...rangePatch }
+        pickedRanges = pickedRanges
+    }
+
+    function removeRange(uuid: string) {
+        const i = pickedRanges.findIndex((range) => range.uuid === uuid)
+        if (i === -1) {
+            // This should never happen as editBodyPartUuid is generated client-side.
+            return
+        }
+        pickedRanges.splice(i, 1)
+        pickedRanges = pickedRanges
+    }
+
+    function handlePickGuessCaseOption(option: GuessCaseOption) {
+        if (editBodyPartUuid === null) {
+            addRange({
+                uuid: uuidv4(),
+                start: selectionStart as number,
+                end: selectionEnd as number,
+                option: option.value,
+            } as GuessCaseSelectionRange)
+        } else {
+            updateRange(editBodyPartUuid, {
+                option: option.value,
+            } as GuessCaseSelectionRange)
+            editBodyPartUuid = null
+        }
+        clearAllSelections()
+    }
+
+    function handlePickGuessGenderOption(option: GuessGenderOption) {
+        if (editBodyPartUuid === null) {
+            addRange({
+                uuid: uuidv4(),
+                start: selectionStart as number,
+                end: selectionEnd as number,
+                option: option.value,
+            } as GuessGenderSelectionRange)
+        } else {
+            updateRange(editBodyPartUuid, {
+                option: option.value,
+            } as GuessGenderSelectionRange)
+            editBodyPartUuid = null
+        }
+        clearAllSelections()
+    }
+
+    function handleAddClozeEntry() {
+        if (editBodyPartUuid === null) {
+            addRange({
+                uuid: uuidv4(),
+                start: selectionStart as number,
+                end: selectionEnd as number,
+            })
+        }
+        clearAllSelections()
+    }
 </script>
 
 {#if gamify && gameType === null}
@@ -658,17 +763,8 @@
                                     <ButtonSmall
                                         tag="button"
                                         variant="TEXT"
-                                        on:click={() => {
-                                            pickedRanges = [
-                                                ...pickedRanges,
-                                                {
-                                                    start: selectionStart,
-                                                    end: selectionEnd,
-                                                    option: option.value,
-                                                },
-                                            ]
-                                            clearAllSelections()
-                                        }}
+                                        on:click={() =>
+                                            handlePickGuessCaseOption(option)}
                                         className="mb-1 w-full flex justify-center"
                                     >
                                         <Localized
@@ -676,22 +772,16 @@
                                         />
                                     </ButtonSmall>
                                 {/each}
+                                {#if editBodyPartUuid !== null}
+                                    <hr class="w-full" />
+                                {/if}
                             {:else if gameType === PostGameKind.GuessGender}
                                 {#each availableGuessGenderOptions as option}
                                     <ButtonSmall
                                         tag="button"
                                         variant="TEXT"
-                                        on:click={() => {
-                                            pickedRanges = [
-                                                ...pickedRanges,
-                                                {
-                                                    start: selectionStart,
-                                                    end: selectionEnd,
-                                                    option: option.value,
-                                                },
-                                            ]
-                                            clearAllSelections()
-                                        }}
+                                        on:click={() =>
+                                            handlePickGuessGenderOption(option)}
                                         className="mb-1 w-full flex justify-center"
                                     >
                                         <Localized
@@ -699,23 +789,42 @@
                                         />
                                     </ButtonSmall>
                                 {/each}
+                                {#if editBodyPartUuid !== null}
+                                    <hr class="w-full" />
+                                {/if}
                             {:else if gameType === PostGameKind.Cloze}
+                                {#if editBodyPartUuid === null}
+                                    <ButtonSmall
+                                        tag="button"
+                                        variant="TEXT"
+                                        on:click={() => handleAddClozeEntry()}
+                                        className="mb-1 w-full flex justify-center"
+                                    >
+                                        <Localized
+                                            id="post-game-cloze-new-gap"
+                                        />
+                                    </ButtonSmall>
+                                {/if}
+                            {/if}
+                            {#if editBodyPartUuid !== null}
                                 <ButtonSmall
                                     tag="button"
                                     variant="TEXT"
+                                    color="SECONDARY"
                                     on:click={() => {
-                                        pickedRanges = [
-                                            ...pickedRanges,
-                                            {
-                                                start: selectionStart,
-                                                end: selectionEnd,
-                                            },
-                                        ]
-                                        clearAllSelections()
+                                        if (editBodyPartUuid !== null) {
+                                            removeRange(editBodyPartUuid)
+                                            editBodyPartUuid = null
+                                            clearAllSelections()
+                                        }
                                     }}
-                                    className="mb-1 w-full flex justify-center"
+                                    className="flex justify-center items-center w-full text-danger"
                                 >
-                                    <Localized id="post-game-cloze-new-gap" />
+                                    <TrashIcon
+                                        size="16"
+                                        strokeWidth={2}
+                                        class="mr-2"
+                                    />Remove
                                 </ButtonSmall>
                             {/if}
                             <hr class="w-full" />
@@ -764,8 +873,12 @@
                             <br />
                         {:else if bodyPart.kind === BodyPartKind.Selected}
                             <span
+                                id={bodyPart.uuid}
                                 class="bg-primary-lightest border-primary border-b px-1 py-1 cursor-pointer"
                                 style="margin-left: 1px; margin-right: 1px;"
+                                on:click={() =>
+                                    bodyPart.uuid &&
+                                    handleEditBodyPart(bodyPart.uuid)}
                                 >{bodyPart.value}</span
                             >
                         {:else if bodyPart.kind === BodyPartKind.Text}

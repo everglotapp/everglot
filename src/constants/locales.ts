@@ -77,7 +77,7 @@ export type GamifyPostLocale = typeof GAMIFY_POST_LOCALES[number]
 export const GUESS_CASE_LOCALES = ["de"] as const
 export type GuessCaseLocale = typeof GUESS_CASE_LOCALES[number]
 
-export const GUESS_GENDER_LOCALES = ["en", "de"] as const
+export const GUESS_GENDER_LOCALES = ["fr", "es", "it", "de"] as const
 export type GuessGenderLocale = typeof GUESS_GENDER_LOCALES[number]
 
 export const ALPHABET: Record<HangmanLocale, readonly string[]> = {

@@ -16,13 +16,31 @@ export const GUESS_CASE_OPTIONS: Record<
         DATIVE: "dative",
         ACCUSATIVE: "accusative",
     },
+    it: {
+        SUBJECT: "subject",
+        INDIRECT_OBJECT: "indirect_object",
+        DIRECT_OBJECT: "direct_object",
+    },
+    zh: {
+        SUBJECT: "subject",
+        INDIRECT_OBJECT: "indirect_object",
+        DIRECT_OBJECT: "direct_object",
+    },
 } as const
 export type GuessCaseOption = typeof GUESS_CASE_OPTIONS[GuessCaseLocale]
 export const GUESS_GENDER_OPTIONS: Record<
     GuessGenderLocale,
     { [k: string]: string }
 > = {
-    en: {
+    fr: {
+        MASCULINE: "masculine",
+        FEMININE: "feminine",
+    },
+    it: {
+        MASCULINE: "masculine",
+        FEMININE: "feminine",
+    },
+    es: {
         MASCULINE: "masculine",
         FEMININE: "feminine",
     },

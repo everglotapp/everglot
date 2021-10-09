@@ -359,6 +359,108 @@ type Query implements Node {
     filter: NotificationFilter
   ): NotificationsConnection
 
+  """Reads and enables pagination through a set of `PostGameAnswer`."""
+  postGameAnswers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostGameAnswer`."""
+    orderBy: [PostGameAnswersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostGameAnswerCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostGameAnswerFilter
+  ): PostGameAnswersConnection
+
+  """Reads and enables pagination through a set of `PostGameRange`."""
+  postGameRanges(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostGameRange`."""
+    orderBy: [PostGameRangesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostGameRangeCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostGameRangeFilter
+  ): PostGameRangesConnection
+
+  """Reads and enables pagination through a set of `PostGame`."""
+  postGames(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostGame`."""
+    orderBy: [PostGamesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostGameCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostGameFilter
+  ): PostGamesConnection
+
   """Reads and enables pagination through a set of `PostLike`."""
   postLikes(
     """Only read the first `n` values of the set."""
@@ -1659,6 +1761,13 @@ type Query implements Node {
   notificationChannelByName(name: String!): NotificationChannel
   notification(id: Int!): Notification
   notificationByUuid(uuid: UUID!): Notification
+  postGameAnswer(id: Int!): PostGameAnswer
+  postGameAnswerByUuid(uuid: UUID!): PostGameAnswer
+  postGameAnswerByUserId(userId: Int!): PostGameAnswer
+  postGameRange(id: Int!): PostGameRange
+  postGameRangeByUuid(uuid: UUID!): PostGameRange
+  postGame(id: Int!): PostGame
+  postGameByUuid(uuid: UUID!): PostGame
   postLike(id: Int!): PostLike
   postRecording(id: Int!): PostRecording
   postRecordingByUuid(uuid: UUID!): PostRecording
@@ -1869,6 +1978,28 @@ type Query implements Node {
     """
     nodeId: ID!
   ): Notification
+
+  """Reads a single `PostGameAnswer` using its globally unique `ID`."""
+  postGameAnswerByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `PostGameAnswer`.
+    """
+    nodeId: ID!
+  ): PostGameAnswer
+
+  """Reads a single `PostGameRange` using its globally unique `ID`."""
+  postGameRangeByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `PostGameRange`.
+    """
+    nodeId: ID!
+  ): PostGameRange
+
+  """Reads a single `PostGame` using its globally unique `ID`."""
+  postGameByNodeId(
+    """The globally unique `ID` to be used in selecting a single `PostGame`."""
+    nodeId: ID!
+  ): PostGame
 
   """Reads a single `PostLike` using its globally unique `ID`."""
   postLikeByNodeId(
@@ -2678,6 +2809,43 @@ type User implements Node {
 
   """Reads a single `UserPreference` that is related to this `User`."""
   preference: UserPreference
+
+  """Reads and enables pagination through a set of `PostGame`."""
+  postGames(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostGame`."""
+    orderBy: [PostGamesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostGameCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostGameFilter
+  ): PostGamesConnection!
+
+  """Reads a single `PostGameAnswer` that is related to this `User`."""
+  postGameAnswer: PostGameAnswer
   followedByCurrentUser: Boolean
 
   """Reads and enables pagination through a set of `Language`."""
@@ -3291,6 +3459,40 @@ type User implements Node {
     """
     filter: UserFilter
   ): UserUsersByUserFollowerFollowerIdAndUserIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Post`."""
+  postsByPostGameUserIdAndPostId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): UserPostsByPostGameUserIdAndPostIdManyToManyConnection!
 }
 
 """
@@ -9159,6 +9361,40 @@ type Post implements Node {
     filter: PostRecordingFilter
   ): PostRecordingsConnection!
 
+  """Reads and enables pagination through a set of `PostGame`."""
+  games(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostGame`."""
+    orderBy: [PostGamesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostGameCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostGameFilter
+  ): PostGamesConnection!
+
   """Reads and enables pagination through a set of `User`."""
   usersByPostParentPostIdAndAuthorId(
     """Only read the first `n` values of the set."""
@@ -9328,6 +9564,40 @@ type Post implements Node {
     """
     filter: UserFilter
   ): PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByPostGamePostIdAndUserId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): PostUsersByPostGamePostIdAndUserIdManyToManyConnection!
 }
 
 """
@@ -9710,6 +9980,638 @@ input PostRecordingFilter {
 
   """Negates the expression."""
   not: PostRecordingFilter
+}
+
+"""A connection to a list of `PostGame` values."""
+type PostGamesConnection {
+  """A list of `PostGame` objects."""
+  nodes: [PostGame]!
+
+  """
+  A list of edges which contains the `PostGame` and cursor to aid in pagination.
+  """
+  edges: [PostGamesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `PostGame` you could get from the connection."""
+  totalCount: Int!
+}
+
+type PostGame implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  postId: Int!
+  userId: Int!
+  gameType: PostGameType!
+  createdAt: Datetime!
+
+  """Reads a single `Post` that is related to this `PostGame`."""
+  post: Post
+
+  """Reads a single `User` that is related to this `PostGame`."""
+  user: User
+
+  """Reads and enables pagination through a set of `PostGameRange`."""
+  postGameRangesByGameId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostGameRange`."""
+    orderBy: [PostGameRangesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostGameRangeCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostGameRangeFilter
+  ): PostGameRangesConnection!
+}
+
+enum PostGameType {
+  GUESS_CASE
+  GUESS_GENDER
+  CLOZE
+}
+
+"""A connection to a list of `PostGameRange` values."""
+type PostGameRangesConnection {
+  """A list of `PostGameRange` objects."""
+  nodes: [PostGameRange]!
+
+  """
+  A list of edges which contains the `PostGameRange` and cursor to aid in pagination.
+  """
+  edges: [PostGameRangesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `PostGameRange` you could get from the connection."""
+  totalCount: Int!
+}
+
+type PostGameRange implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  gameId: Int!
+  startIndex: Int!
+  endIndex: Int!
+
+  """Case as chosen by the post creator"""
+  caseOption: GrammaticalCase
+
+  """Gender as chosen by the post creator"""
+  genderOption: GrammaticalGender
+  createdAt: Datetime!
+
+  """Reads a single `PostGame` that is related to this `PostGameRange`."""
+  game: PostGame
+
+  """Reads and enables pagination through a set of `PostGameAnswer`."""
+  postGameAnswersByRangeId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostGameAnswer`."""
+    orderBy: [PostGameAnswersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostGameAnswerCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostGameAnswerFilter
+  ): PostGameAnswersConnection!
+}
+
+enum GrammaticalCase {
+  NOMINATIVE
+  GENITIVE
+  DATIVE
+  ACCUSATIVE
+  LATIVE
+  ABLATIVE
+  VOCATIVE
+  ESSIVE
+  COMITATIVE
+}
+
+enum GrammaticalGender {
+  MASCULINE
+  FEMININE
+  NEUTRAL
+  MASCULINE_PLURAL
+  FEMININE_PLURAL
+  NEUTRAL_PLURAL
+  MASCULINE_SINGULAR
+  FEMININE_SINGULAR
+  NEUTRAL_SINGULAR
+}
+
+"""A connection to a list of `PostGameAnswer` values."""
+type PostGameAnswersConnection {
+  """A list of `PostGameAnswer` objects."""
+  nodes: [PostGameAnswer]!
+
+  """
+  A list of edges which contains the `PostGameAnswer` and cursor to aid in pagination.
+  """
+  edges: [PostGameAnswersEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `PostGameAnswer` you could get from the connection."""
+  totalCount: Int!
+}
+
+type PostGameAnswer implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  rangeId: Int!
+  userId: Int!
+  caseOption: GrammaticalCase
+  genderOption: GrammaticalGender
+  clozeAnswer: String
+  correct: Boolean!
+  createdAt: Datetime!
+
+  """
+  Reads a single `PostGameRange` that is related to this `PostGameAnswer`.
+  """
+  range: PostGameRange
+
+  """Reads a single `User` that is related to this `PostGameAnswer`."""
+  user: User
+}
+
+"""A `PostGameAnswer` edge in the connection."""
+type PostGameAnswersEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PostGameAnswer` at the end of the edge."""
+  node: PostGameAnswer
+}
+
+"""Methods to use when ordering `PostGameAnswer`."""
+enum PostGameAnswersOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  RANGE_ID_ASC
+  RANGE_ID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  CASE_OPTION_ASC
+  CASE_OPTION_DESC
+  GENDER_OPTION_ASC
+  GENDER_OPTION_DESC
+  CLOZE_ANSWER_ASC
+  CLOZE_ANSWER_DESC
+  CORRECT_ASC
+  CORRECT_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `PostGameAnswer` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input PostGameAnswerCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `rangeId` field."""
+  rangeId: Int
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `caseOption` field."""
+  caseOption: GrammaticalCase
+
+  """Checks for equality with the object’s `genderOption` field."""
+  genderOption: GrammaticalGender
+
+  """Checks for equality with the object’s `clozeAnswer` field."""
+  clozeAnswer: String
+
+  """Checks for equality with the object’s `correct` field."""
+  correct: Boolean
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `PostGameAnswer` object types. All fields are combined with a logical ‘and.’
+"""
+input PostGameAnswerFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `rangeId` field."""
+  rangeId: IntFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `caseOption` field."""
+  caseOption: GrammaticalCaseFilter
+
+  """Filter by the object’s `genderOption` field."""
+  genderOption: GrammaticalGenderFilter
+
+  """Filter by the object’s `clozeAnswer` field."""
+  clozeAnswer: StringFilter
+
+  """Filter by the object’s `correct` field."""
+  correct: BooleanFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [PostGameAnswerFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PostGameAnswerFilter!]
+
+  """Negates the expression."""
+  not: PostGameAnswerFilter
+}
+
+"""
+A filter to be used against GrammaticalCase fields. All fields are combined with a logical ‘and.’
+"""
+input GrammaticalCaseFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: GrammaticalCase
+
+  """Not equal to the specified value."""
+  notEqualTo: GrammaticalCase
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: GrammaticalCase
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: GrammaticalCase
+
+  """Included in the specified list."""
+  in: [GrammaticalCase!]
+
+  """Not included in the specified list."""
+  notIn: [GrammaticalCase!]
+
+  """Less than the specified value."""
+  lessThan: GrammaticalCase
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: GrammaticalCase
+
+  """Greater than the specified value."""
+  greaterThan: GrammaticalCase
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: GrammaticalCase
+}
+
+"""
+A filter to be used against GrammaticalGender fields. All fields are combined with a logical ‘and.’
+"""
+input GrammaticalGenderFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: GrammaticalGender
+
+  """Not equal to the specified value."""
+  notEqualTo: GrammaticalGender
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: GrammaticalGender
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: GrammaticalGender
+
+  """Included in the specified list."""
+  in: [GrammaticalGender!]
+
+  """Not included in the specified list."""
+  notIn: [GrammaticalGender!]
+
+  """Less than the specified value."""
+  lessThan: GrammaticalGender
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: GrammaticalGender
+
+  """Greater than the specified value."""
+  greaterThan: GrammaticalGender
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: GrammaticalGender
+}
+
+"""A `PostGameRange` edge in the connection."""
+type PostGameRangesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PostGameRange` at the end of the edge."""
+  node: PostGameRange
+}
+
+"""Methods to use when ordering `PostGameRange`."""
+enum PostGameRangesOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  GAME_ID_ASC
+  GAME_ID_DESC
+  START_INDEX_ASC
+  START_INDEX_DESC
+  END_INDEX_ASC
+  END_INDEX_DESC
+  CASE_OPTION_ASC
+  CASE_OPTION_DESC
+  GENDER_OPTION_ASC
+  GENDER_OPTION_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `PostGameRange` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input PostGameRangeCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `gameId` field."""
+  gameId: Int
+
+  """Checks for equality with the object’s `startIndex` field."""
+  startIndex: Int
+
+  """Checks for equality with the object’s `endIndex` field."""
+  endIndex: Int
+
+  """Checks for equality with the object’s `caseOption` field."""
+  caseOption: GrammaticalCase
+
+  """Checks for equality with the object’s `genderOption` field."""
+  genderOption: GrammaticalGender
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `PostGameRange` object types. All fields are combined with a logical ‘and.’
+"""
+input PostGameRangeFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `gameId` field."""
+  gameId: IntFilter
+
+  """Filter by the object’s `startIndex` field."""
+  startIndex: IntFilter
+
+  """Filter by the object’s `endIndex` field."""
+  endIndex: IntFilter
+
+  """Filter by the object’s `caseOption` field."""
+  caseOption: GrammaticalCaseFilter
+
+  """Filter by the object’s `genderOption` field."""
+  genderOption: GrammaticalGenderFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [PostGameRangeFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PostGameRangeFilter!]
+
+  """Negates the expression."""
+  not: PostGameRangeFilter
+}
+
+"""A `PostGame` edge in the connection."""
+type PostGamesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PostGame` at the end of the edge."""
+  node: PostGame
+}
+
+"""Methods to use when ordering `PostGame`."""
+enum PostGamesOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  POST_ID_ASC
+  POST_ID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  GAME_TYPE_ASC
+  GAME_TYPE_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `PostGame` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input PostGameCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `postId` field."""
+  postId: Int
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `gameType` field."""
+  gameType: PostGameType
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `PostGame` object types. All fields are combined with a logical ‘and.’
+"""
+input PostGameFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `postId` field."""
+  postId: IntFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `gameType` field."""
+  gameType: PostGameTypeFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [PostGameFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PostGameFilter!]
+
+  """Negates the expression."""
+  not: PostGameFilter
+}
+
+"""
+A filter to be used against PostGameType fields. All fields are combined with a logical ‘and.’
+"""
+input PostGameTypeFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: PostGameType
+
+  """Not equal to the specified value."""
+  notEqualTo: PostGameType
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: PostGameType
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: PostGameType
+
+  """Included in the specified list."""
+  in: [PostGameType!]
+
+  """Not included in the specified list."""
+  notIn: [PostGameType!]
+
+  """Less than the specified value."""
+  lessThan: PostGameType
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: PostGameType
+
+  """Greater than the specified value."""
+  greaterThan: PostGameType
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: PostGameType
 }
 
 """A connection to a list of `User` values, with data from `Post`."""
@@ -10270,6 +11172,66 @@ type PostUsersByPostRecordingPostIdAndUserIdManyToManyEdge {
     """
     filter: PostRecordingFilter
   ): PostRecordingsConnection!
+}
+
+"""A connection to a list of `User` values, with data from `PostGame`."""
+type PostUsersByPostGamePostIdAndUserIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `PostGame`, and the cursor to aid in pagination.
+  """
+  edges: [PostUsersByPostGamePostIdAndUserIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `PostGame`."""
+type PostUsersByPostGamePostIdAndUserIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `PostGame`."""
+  postGames(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostGame`."""
+    orderBy: [PostGamesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostGameCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostGameFilter
+  ): PostGamesConnection!
 }
 
 """A `Post` edge in the connection."""
@@ -15195,6 +16157,66 @@ type UserUsersByUserFollowerFollowerIdAndUserIdManyToManyEdge {
   ): UserFollowersConnection!
 }
 
+"""A connection to a list of `Post` values, with data from `PostGame`."""
+type UserPostsByPostGameUserIdAndPostIdManyToManyConnection {
+  """A list of `Post` objects."""
+  nodes: [Post]!
+
+  """
+  A list of edges which contains the `Post`, info from the `PostGame`, and the cursor to aid in pagination.
+  """
+  edges: [UserPostsByPostGameUserIdAndPostIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Post` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Post` edge in the connection, with data from `PostGame`."""
+type UserPostsByPostGameUserIdAndPostIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Post` at the end of the edge."""
+  node: Post
+
+  """Reads and enables pagination through a set of `PostGame`."""
+  games(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PostGame`."""
+    orderBy: [PostGamesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostGameCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostGameFilter
+  ): PostGamesConnection!
+}
+
 """A `GroupUser` edge in the connection."""
 type GroupUsersEdge {
   """A cursor for use in pagination."""
@@ -15462,6 +16484,30 @@ type Mutation {
     """
     input: CreateNotificationInput!
   ): CreateNotificationPayload
+
+  """Creates a single `PostGameAnswer`."""
+  createPostGameAnswer(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePostGameAnswerInput!
+  ): CreatePostGameAnswerPayload
+
+  """Creates a single `PostGameRange`."""
+  createPostGameRange(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePostGameRangeInput!
+  ): CreatePostGameRangePayload
+
+  """Creates a single `PostGame`."""
+  createPostGame(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePostGameInput!
+  ): CreatePostGamePayload
 
   """Creates a single `PostLike`."""
   createPostLike(
@@ -16006,6 +17052,90 @@ type Mutation {
     """
     input: UpdateNotificationByUuidInput!
   ): UpdateNotificationPayload
+
+  """
+  Updates a single `PostGameAnswer` using its globally unique id and a patch.
+  """
+  updatePostGameAnswerByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostGameAnswerByNodeIdInput!
+  ): UpdatePostGameAnswerPayload
+
+  """Updates a single `PostGameAnswer` using a unique key and a patch."""
+  updatePostGameAnswer(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostGameAnswerInput!
+  ): UpdatePostGameAnswerPayload
+
+  """Updates a single `PostGameAnswer` using a unique key and a patch."""
+  updatePostGameAnswerByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostGameAnswerByUuidInput!
+  ): UpdatePostGameAnswerPayload
+
+  """Updates a single `PostGameAnswer` using a unique key and a patch."""
+  updatePostGameAnswerByUserId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostGameAnswerByUserIdInput!
+  ): UpdatePostGameAnswerPayload
+
+  """
+  Updates a single `PostGameRange` using its globally unique id and a patch.
+  """
+  updatePostGameRangeByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostGameRangeByNodeIdInput!
+  ): UpdatePostGameRangePayload
+
+  """Updates a single `PostGameRange` using a unique key and a patch."""
+  updatePostGameRange(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostGameRangeInput!
+  ): UpdatePostGameRangePayload
+
+  """Updates a single `PostGameRange` using a unique key and a patch."""
+  updatePostGameRangeByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostGameRangeByUuidInput!
+  ): UpdatePostGameRangePayload
+
+  """Updates a single `PostGame` using its globally unique id and a patch."""
+  updatePostGameByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostGameByNodeIdInput!
+  ): UpdatePostGamePayload
+
+  """Updates a single `PostGame` using a unique key and a patch."""
+  updatePostGame(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostGameInput!
+  ): UpdatePostGamePayload
+
+  """Updates a single `PostGame` using a unique key and a patch."""
+  updatePostGameByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePostGameByUuidInput!
+  ): UpdatePostGamePayload
 
   """Updates a single `PostLike` using its globally unique id and a patch."""
   updatePostLikeByNodeId(
@@ -17283,6 +18413,86 @@ type Mutation {
     input: DeleteNotificationByUuidInput!
   ): DeleteNotificationPayload
 
+  """Deletes a single `PostGameAnswer` using its globally unique id."""
+  deletePostGameAnswerByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostGameAnswerByNodeIdInput!
+  ): DeletePostGameAnswerPayload
+
+  """Deletes a single `PostGameAnswer` using a unique key."""
+  deletePostGameAnswer(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostGameAnswerInput!
+  ): DeletePostGameAnswerPayload
+
+  """Deletes a single `PostGameAnswer` using a unique key."""
+  deletePostGameAnswerByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostGameAnswerByUuidInput!
+  ): DeletePostGameAnswerPayload
+
+  """Deletes a single `PostGameAnswer` using a unique key."""
+  deletePostGameAnswerByUserId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostGameAnswerByUserIdInput!
+  ): DeletePostGameAnswerPayload
+
+  """Deletes a single `PostGameRange` using its globally unique id."""
+  deletePostGameRangeByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostGameRangeByNodeIdInput!
+  ): DeletePostGameRangePayload
+
+  """Deletes a single `PostGameRange` using a unique key."""
+  deletePostGameRange(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostGameRangeInput!
+  ): DeletePostGameRangePayload
+
+  """Deletes a single `PostGameRange` using a unique key."""
+  deletePostGameRangeByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostGameRangeByUuidInput!
+  ): DeletePostGameRangePayload
+
+  """Deletes a single `PostGame` using its globally unique id."""
+  deletePostGameByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostGameByNodeIdInput!
+  ): DeletePostGamePayload
+
+  """Deletes a single `PostGame` using a unique key."""
+  deletePostGame(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostGameInput!
+  ): DeletePostGamePayload
+
+  """Deletes a single `PostGame` using a unique key."""
+  deletePostGameByUuid(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePostGameByUuidInput!
+  ): DeletePostGamePayload
+
   """Deletes a single `PostLike` using its globally unique id."""
   deletePostLikeByNodeId(
     """
@@ -18325,6 +19535,36 @@ type Mutation {
     input: UpsertNotificationInput!
   ): UpsertNotificationPayload
 
+  """Upserts a single `PostGameAnswer`."""
+  upsertPostGameAnswer(
+    where: UpsertPostGameAnswerWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertPostGameAnswerInput!
+  ): UpsertPostGameAnswerPayload
+
+  """Upserts a single `PostGameRange`."""
+  upsertPostGameRange(
+    where: UpsertPostGameRangeWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertPostGameRangeInput!
+  ): UpsertPostGameRangePayload
+
+  """Upserts a single `PostGame`."""
+  upsertPostGame(
+    where: UpsertPostGameWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertPostGameInput!
+  ): UpsertPostGamePayload
+
   """Upserts a single `PostLike`."""
   upsertPostLike(
     where: UpsertPostLikeWhere
@@ -19197,6 +20437,167 @@ input NotificationInput {
   readAt: Datetime
   createdAt: Datetime
   recipientGroupId: Int
+}
+
+"""The output of our create `PostGameAnswer` mutation."""
+type CreatePostGameAnswerPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostGameAnswer` that was created by this mutation."""
+  postGameAnswer: PostGameAnswer
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `PostGameRange` that is related to this `PostGameAnswer`.
+  """
+  range: PostGameRange
+
+  """Reads a single `User` that is related to this `PostGameAnswer`."""
+  user: User
+
+  """An edge for our `PostGameAnswer`. May be used by Relay 1."""
+  postGameAnswerEdge(
+    """The method to use when ordering `PostGameAnswer`."""
+    orderBy: [PostGameAnswersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostGameAnswersEdge
+}
+
+"""All input for the create `PostGameAnswer` mutation."""
+input CreatePostGameAnswerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PostGameAnswer` to be created by this mutation."""
+  postGameAnswer: PostGameAnswerInput!
+}
+
+"""An input for mutations affecting `PostGameAnswer`"""
+input PostGameAnswerInput {
+  id: Int
+  uuid: UUID
+  rangeId: Int!
+  userId: Int!
+  caseOption: GrammaticalCase
+  genderOption: GrammaticalGender
+  clozeAnswer: String
+  correct: Boolean!
+  createdAt: Datetime
+}
+
+"""The output of our create `PostGameRange` mutation."""
+type CreatePostGameRangePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostGameRange` that was created by this mutation."""
+  postGameRange: PostGameRange
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `PostGame` that is related to this `PostGameRange`."""
+  game: PostGame
+
+  """An edge for our `PostGameRange`. May be used by Relay 1."""
+  postGameRangeEdge(
+    """The method to use when ordering `PostGameRange`."""
+    orderBy: [PostGameRangesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostGameRangesEdge
+}
+
+"""All input for the create `PostGameRange` mutation."""
+input CreatePostGameRangeInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PostGameRange` to be created by this mutation."""
+  postGameRange: PostGameRangeInput!
+}
+
+"""An input for mutations affecting `PostGameRange`"""
+input PostGameRangeInput {
+  id: Int
+  uuid: UUID
+  gameId: Int!
+  startIndex: Int!
+  endIndex: Int!
+
+  """Case as chosen by the post creator"""
+  caseOption: GrammaticalCase
+
+  """Gender as chosen by the post creator"""
+  genderOption: GrammaticalGender
+  createdAt: Datetime
+}
+
+"""The output of our create `PostGame` mutation."""
+type CreatePostGamePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostGame` that was created by this mutation."""
+  postGame: PostGame
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Post` that is related to this `PostGame`."""
+  post: Post
+
+  """Reads a single `User` that is related to this `PostGame`."""
+  user: User
+
+  """An edge for our `PostGame`. May be used by Relay 1."""
+  postGameEdge(
+    """The method to use when ordering `PostGame`."""
+    orderBy: [PostGamesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostGamesEdge
+}
+
+"""All input for the create `PostGame` mutation."""
+input CreatePostGameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PostGame` to be created by this mutation."""
+  postGame: PostGameInput!
+}
+
+"""An input for mutations affecting `PostGame`"""
+input PostGameInput {
+  id: Int
+  uuid: UUID
+  postId: Int!
+  userId: Int!
+  gameType: PostGameType!
+  createdAt: Datetime
 }
 
 """The output of our create `PostLike` mutation."""
@@ -21997,6 +23398,299 @@ input UpdateNotificationByUuidInput {
   An object where the defined keys will be set on the `Notification` being updated.
   """
   patch: NotificationPatch!
+  uuid: UUID!
+}
+
+"""The output of our update `PostGameAnswer` mutation."""
+type UpdatePostGameAnswerPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostGameAnswer` that was updated by this mutation."""
+  postGameAnswer: PostGameAnswer
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `PostGameRange` that is related to this `PostGameAnswer`.
+  """
+  range: PostGameRange
+
+  """Reads a single `User` that is related to this `PostGameAnswer`."""
+  user: User
+
+  """An edge for our `PostGameAnswer`. May be used by Relay 1."""
+  postGameAnswerEdge(
+    """The method to use when ordering `PostGameAnswer`."""
+    orderBy: [PostGameAnswersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostGameAnswersEdge
+}
+
+"""All input for the `updatePostGameAnswerByNodeId` mutation."""
+input UpdatePostGameAnswerByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PostGameAnswer` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `PostGameAnswer` being updated.
+  """
+  patch: PostGameAnswerPatch!
+}
+
+"""
+Represents an update to a `PostGameAnswer`. Fields that are set will be updated.
+"""
+input PostGameAnswerPatch {
+  id: Int
+  uuid: UUID
+  rangeId: Int
+  userId: Int
+  caseOption: GrammaticalCase
+  genderOption: GrammaticalGender
+  clozeAnswer: String
+  correct: Boolean
+  createdAt: Datetime
+}
+
+"""All input for the `updatePostGameAnswer` mutation."""
+input UpdatePostGameAnswerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `PostGameAnswer` being updated.
+  """
+  patch: PostGameAnswerPatch!
+  id: Int!
+}
+
+"""All input for the `updatePostGameAnswerByUuid` mutation."""
+input UpdatePostGameAnswerByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `PostGameAnswer` being updated.
+  """
+  patch: PostGameAnswerPatch!
+  uuid: UUID!
+}
+
+"""All input for the `updatePostGameAnswerByUserId` mutation."""
+input UpdatePostGameAnswerByUserIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `PostGameAnswer` being updated.
+  """
+  patch: PostGameAnswerPatch!
+  userId: Int!
+}
+
+"""The output of our update `PostGameRange` mutation."""
+type UpdatePostGameRangePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostGameRange` that was updated by this mutation."""
+  postGameRange: PostGameRange
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `PostGame` that is related to this `PostGameRange`."""
+  game: PostGame
+
+  """An edge for our `PostGameRange`. May be used by Relay 1."""
+  postGameRangeEdge(
+    """The method to use when ordering `PostGameRange`."""
+    orderBy: [PostGameRangesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostGameRangesEdge
+}
+
+"""All input for the `updatePostGameRangeByNodeId` mutation."""
+input UpdatePostGameRangeByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PostGameRange` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `PostGameRange` being updated.
+  """
+  patch: PostGameRangePatch!
+}
+
+"""
+Represents an update to a `PostGameRange`. Fields that are set will be updated.
+"""
+input PostGameRangePatch {
+  id: Int
+  uuid: UUID
+  gameId: Int
+  startIndex: Int
+  endIndex: Int
+
+  """Case as chosen by the post creator"""
+  caseOption: GrammaticalCase
+
+  """Gender as chosen by the post creator"""
+  genderOption: GrammaticalGender
+  createdAt: Datetime
+}
+
+"""All input for the `updatePostGameRange` mutation."""
+input UpdatePostGameRangeInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `PostGameRange` being updated.
+  """
+  patch: PostGameRangePatch!
+  id: Int!
+}
+
+"""All input for the `updatePostGameRangeByUuid` mutation."""
+input UpdatePostGameRangeByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `PostGameRange` being updated.
+  """
+  patch: PostGameRangePatch!
+  uuid: UUID!
+}
+
+"""The output of our update `PostGame` mutation."""
+type UpdatePostGamePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostGame` that was updated by this mutation."""
+  postGame: PostGame
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Post` that is related to this `PostGame`."""
+  post: Post
+
+  """Reads a single `User` that is related to this `PostGame`."""
+  user: User
+
+  """An edge for our `PostGame`. May be used by Relay 1."""
+  postGameEdge(
+    """The method to use when ordering `PostGame`."""
+    orderBy: [PostGamesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostGamesEdge
+}
+
+"""All input for the `updatePostGameByNodeId` mutation."""
+input UpdatePostGameByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PostGame` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `PostGame` being updated.
+  """
+  patch: PostGamePatch!
+}
+
+"""
+Represents an update to a `PostGame`. Fields that are set will be updated.
+"""
+input PostGamePatch {
+  id: Int
+  uuid: UUID
+  postId: Int
+  userId: Int
+  gameType: PostGameType
+  createdAt: Datetime
+}
+
+"""All input for the `updatePostGame` mutation."""
+input UpdatePostGameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `PostGame` being updated.
+  """
+  patch: PostGamePatch!
+  id: Int!
+}
+
+"""All input for the `updatePostGameByUuid` mutation."""
+input UpdatePostGameByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `PostGame` being updated.
+  """
+  patch: PostGamePatch!
   uuid: UUID!
 }
 
@@ -26029,6 +27723,207 @@ input DeleteNotificationByUuidInput {
   uuid: UUID!
 }
 
+"""The output of our delete `PostGameAnswer` mutation."""
+type DeletePostGameAnswerPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostGameAnswer` that was deleted by this mutation."""
+  postGameAnswer: PostGameAnswer
+  deletedPostGameAnswerNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `PostGameRange` that is related to this `PostGameAnswer`.
+  """
+  range: PostGameRange
+
+  """Reads a single `User` that is related to this `PostGameAnswer`."""
+  user: User
+
+  """An edge for our `PostGameAnswer`. May be used by Relay 1."""
+  postGameAnswerEdge(
+    """The method to use when ordering `PostGameAnswer`."""
+    orderBy: [PostGameAnswersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostGameAnswersEdge
+}
+
+"""All input for the `deletePostGameAnswerByNodeId` mutation."""
+input DeletePostGameAnswerByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PostGameAnswer` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deletePostGameAnswer` mutation."""
+input DeletePostGameAnswerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deletePostGameAnswerByUuid` mutation."""
+input DeletePostGameAnswerByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""All input for the `deletePostGameAnswerByUserId` mutation."""
+input DeletePostGameAnswerByUserIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  userId: Int!
+}
+
+"""The output of our delete `PostGameRange` mutation."""
+type DeletePostGameRangePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostGameRange` that was deleted by this mutation."""
+  postGameRange: PostGameRange
+  deletedPostGameRangeNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `PostGame` that is related to this `PostGameRange`."""
+  game: PostGame
+
+  """An edge for our `PostGameRange`. May be used by Relay 1."""
+  postGameRangeEdge(
+    """The method to use when ordering `PostGameRange`."""
+    orderBy: [PostGameRangesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostGameRangesEdge
+}
+
+"""All input for the `deletePostGameRangeByNodeId` mutation."""
+input DeletePostGameRangeByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PostGameRange` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deletePostGameRange` mutation."""
+input DeletePostGameRangeInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deletePostGameRangeByUuid` mutation."""
+input DeletePostGameRangeByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
+"""The output of our delete `PostGame` mutation."""
+type DeletePostGamePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostGame` that was deleted by this mutation."""
+  postGame: PostGame
+  deletedPostGameNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Post` that is related to this `PostGame`."""
+  post: Post
+
+  """Reads a single `User` that is related to this `PostGame`."""
+  user: User
+
+  """An edge for our `PostGame`. May be used by Relay 1."""
+  postGameEdge(
+    """The method to use when ordering `PostGame`."""
+    orderBy: [PostGamesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostGamesEdge
+}
+
+"""All input for the `deletePostGameByNodeId` mutation."""
+input DeletePostGameByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `PostGame` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deletePostGame` mutation."""
+input DeletePostGameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
+"""All input for the `deletePostGameByUuid` mutation."""
+input DeletePostGameByUuidInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  uuid: UUID!
+}
+
 """The output of our delete `PostLike` mutation."""
 type DeletePostLikePayload {
   """
@@ -28965,6 +30860,141 @@ input UpsertNotificationInput {
 
   """The `Notification` to be upserted by this mutation."""
   notification: NotificationInput!
+}
+
+"""The output of our upsert `PostGameAnswer` mutation."""
+type UpsertPostGameAnswerPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostGameAnswer` that was upserted by this mutation."""
+  postGameAnswer: PostGameAnswer
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `PostGameRange` that is related to this `PostGameAnswer`.
+  """
+  range: PostGameRange
+
+  """Reads a single `User` that is related to this `PostGameAnswer`."""
+  user: User
+
+  """An edge for our `PostGameAnswer`. May be used by Relay 1."""
+  postGameAnswerEdge(
+    """The method to use when ordering `PostGameAnswer`."""
+    orderBy: [PostGameAnswersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostGameAnswersEdge
+}
+
+"""Where conditions for the upsert `PostGameAnswer` mutation."""
+input UpsertPostGameAnswerWhere {
+  id: Int
+  uuid: UUID
+  userId: Int
+}
+
+"""All input for the upsert `PostGameAnswer` mutation."""
+input UpsertPostGameAnswerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PostGameAnswer` to be upserted by this mutation."""
+  postGameAnswer: PostGameAnswerInput!
+}
+
+"""The output of our upsert `PostGameRange` mutation."""
+type UpsertPostGameRangePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostGameRange` that was upserted by this mutation."""
+  postGameRange: PostGameRange
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `PostGame` that is related to this `PostGameRange`."""
+  game: PostGame
+
+  """An edge for our `PostGameRange`. May be used by Relay 1."""
+  postGameRangeEdge(
+    """The method to use when ordering `PostGameRange`."""
+    orderBy: [PostGameRangesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostGameRangesEdge
+}
+
+"""Where conditions for the upsert `PostGameRange` mutation."""
+input UpsertPostGameRangeWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `PostGameRange` mutation."""
+input UpsertPostGameRangeInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PostGameRange` to be upserted by this mutation."""
+  postGameRange: PostGameRangeInput!
+}
+
+"""The output of our upsert `PostGame` mutation."""
+type UpsertPostGamePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `PostGame` that was upserted by this mutation."""
+  postGame: PostGame
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Post` that is related to this `PostGame`."""
+  post: Post
+
+  """Reads a single `User` that is related to this `PostGame`."""
+  user: User
+
+  """An edge for our `PostGame`. May be used by Relay 1."""
+  postGameEdge(
+    """The method to use when ordering `PostGame`."""
+    orderBy: [PostGamesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PostGamesEdge
+}
+
+"""Where conditions for the upsert `PostGame` mutation."""
+input UpsertPostGameWhere {
+  id: Int
+  uuid: UUID
+}
+
+"""All input for the upsert `PostGame` mutation."""
+input UpsertPostGameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `PostGame` to be upserted by this mutation."""
+  postGame: PostGameInput!
 }
 
 """The output of our upsert `PostLike` mutation."""

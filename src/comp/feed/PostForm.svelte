@@ -38,11 +38,11 @@
         SupportedLocale,
         GuessCaseLocale,
         GuessGenderLocale,
-        PostGameSelectionRange,
+        PostGameRange,
         GuessCaseOption,
         GuessGenderOption,
-        GuessCaseSelectionRange,
-        GuessGenderSelectionRange,
+        GuessCaseRange,
+        GuessGenderRange,
     } from "../../constants"
     import { getBodyParts } from "../../routes/_helpers/posts/selections"
 
@@ -310,7 +310,7 @@
         gamify = false
         gameType = null
         selection = null
-        pickedRanges = []
+        gameRanges = []
     }
     function clearAllSelections() {
         const s = window.getSelection
@@ -504,7 +504,7 @@
     $: selectionEnd = textBeforeCaret ? textBeforeCaret.length - 1 : null
     $: selectionOverlapsPickedRange =
         selectionStart !== null && selectionEnd !== null
-            ? pickedRanges.some(
+            ? gameRanges.some(
                   (range) =>
                       (selectionStart! >= range.start &&
                           selectionStart! <= range.end) ||
@@ -542,11 +542,11 @@
     $: editedRangeIndex =
         editBodyPartUuid === null
             ? null
-            : pickedRanges.findIndex((range) => range.uuid === editBodyPartUuid)
+            : gameRanges.findIndex((range) => range.uuid === editBodyPartUuid)
     $: editedRange =
         editedRangeIndex === null || editedRangeIndex === -1
             ? null
-            : pickedRanges[editedRangeIndex]
+            : gameRanges[editedRangeIndex]
     $: showSelectionDropdown =
         gamify &&
         gameType !== null &&
@@ -559,7 +559,7 @@
             selectionOverlapsPickedRange === false) ||
             editBodyPartUuid !== null)
 
-    let pickedRanges: PostGameSelectionRange[] = []
+    let gameRanges: PostGameRange[] = []
     $: availableGuessCaseOptions =
         locale && (GUESS_CASE_LOCALES as readonly string[]).includes(locale)
             ? Object.entries(GUESS_CASE_OPTIONS[locale as GuessCaseLocale]).map(
@@ -576,11 +576,11 @@
     $: formattedNewPostBody = formatPostBody(newPostBody || "")
 
     $: displayedNewPostBodyParts = gamify
-        ? getBodyParts(formattedNewPostBody, pickedRanges)
+        ? getBodyParts(formattedNewPostBody, gameRanges)
         : []
 
-    function addRange(range: PostGameSelectionRange) {
-        pickedRanges = [...pickedRanges, range]
+    function addRange(range: PostGameRange) {
+        gameRanges = [...gameRanges, range]
     }
 
     function handleEditBodyPart(uuid: string) {
@@ -605,27 +605,24 @@
         }
     }
 
-    function updateRange(
-        uuid: string,
-        rangePatch: Partial<PostGameSelectionRange>
-    ) {
-        const i = pickedRanges.findIndex((range) => range.uuid === uuid)
+    function updateRange(uuid: string, rangePatch: Partial<PostGameRange>) {
+        const i = gameRanges.findIndex((range) => range.uuid === uuid)
         if (i === -1) {
             // This should never happen as editBodyPartUuid is generated client-side.
             return
         }
-        pickedRanges[i] = { ...pickedRanges[i], ...rangePatch }
-        pickedRanges = pickedRanges
+        gameRanges[i] = { ...gameRanges[i], ...rangePatch }
+        gameRanges = gameRanges
     }
 
     function removeRange(uuid: string) {
-        const i = pickedRanges.findIndex((range) => range.uuid === uuid)
+        const i = gameRanges.findIndex((range) => range.uuid === uuid)
         if (i === -1) {
             // This should never happen as editBodyPartUuid is generated client-side.
             return
         }
-        pickedRanges.splice(i, 1)
-        pickedRanges = pickedRanges
+        gameRanges.splice(i, 1)
+        gameRanges = gameRanges
     }
 
     function handlePickGuessCaseOption(option: GuessCaseOption) {
@@ -635,11 +632,11 @@
                 start: selectionStart as number,
                 end: selectionEnd as number,
                 option: option.value,
-            } as GuessCaseSelectionRange)
+            } as GuessCaseRange)
         } else {
             updateRange(editBodyPartUuid, {
                 option: option.value,
-            } as GuessCaseSelectionRange)
+            } as GuessCaseRange)
             editBodyPartUuid = null
         }
         clearAllSelections()
@@ -652,11 +649,11 @@
                 start: selectionStart as number,
                 end: selectionEnd as number,
                 option: option.value,
-            } as GuessGenderSelectionRange)
+            } as GuessGenderRange)
         } else {
             updateRange(editBodyPartUuid, {
                 option: option.value,
-            } as GuessGenderSelectionRange)
+            } as GuessGenderRange)
             editBodyPartUuid = null
         }
         clearAllSelections()
@@ -924,7 +921,7 @@
                     {#each displayedNewPostBodyParts as bodyPart}
                         {#if bodyPart.kind === BodyPartKind.LineBreak}
                             <br />
-                        {:else if bodyPart.kind === BodyPartKind.Selected}
+                        {:else if bodyPart.kind === BodyPartKind.Range}
                             <span
                                 id={bodyPart.uuid}
                                 class="bg-primary-lightest border-primary border-b px-1 py-1 cursor-pointer"

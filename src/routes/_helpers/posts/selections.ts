@@ -1,9 +1,9 @@
 import { BodyPartKind } from "../../../constants/posts"
-import type { BodyPart, PostGameSelectionRange } from "../../../constants/posts"
+import type { BodyPart, PostGameRange } from "../../../constants/posts"
 
 export function getBodyParts(
     body: string,
-    pickedRanges: PostGameSelectionRange[]
+    pickedRanges: PostGameRange[]
 ): BodyPart[] {
     let parts: BodyPart[] = body
         .split("\n")
@@ -43,7 +43,7 @@ export function getBodyParts(
                     } else {
                         currentParts.push({
                             uuid: overlappingRange.uuid,
-                            kind: BodyPartKind.Selected,
+                            kind: BodyPartKind.Range,
                             value: value.substring(j, overlappingRange.end + 1),
                         })
                         j = overlappingRange.end + 1

@@ -331,7 +331,7 @@
                 selection,
                 selectionDropdownId,
             })
-            selection = null
+            clearAllSelections()
         }
     }
     function handleBodyKeyup(_event: Event) {
@@ -370,7 +370,7 @@
         preventAutoSelectionHandling = false
         if (!willHandleSelect) {
             // secondary click away handler
-            selection = null
+            clearAllSelections()
         }
         tryHandleBodyTextSelection()
     }
@@ -431,6 +431,9 @@
             ? window.getSelection()
             : document.selection
         if (!s) {
+            return
+        }
+        if (s.type !== "Range") {
             return
         }
         console.log("selectionchange", {
@@ -841,7 +844,9 @@
                         elementId={[bodyInputId, selectionDropdownId]}
                         on:clickaway={handleSelectionDropdownClickaway}
                     />
-                    <EscapeKeyListener on:keydown={() => (selection = null)} />
+                    <EscapeKeyListener
+                        on:keydown={() => clearAllSelections()}
+                    />
                 </div>
             {/if}
             <div

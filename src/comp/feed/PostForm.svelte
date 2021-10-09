@@ -270,6 +270,9 @@
             handleDocumentSelectionChange
         )
 
+        recalculateBoundingRects()
+        setTimeout(recalculateBoundingRects, 100)
+        setTimeout(recalculateBoundingRects, 1000)
         window.addEventListener("resize", handleWindowResize)
 
         setInterval(updateRecordingDuration, 250)
@@ -418,6 +421,8 @@
                 editBodyPartUuid = null
             }
             selection = s
+        } else {
+            selection = null
         }
         willHandleSelect = false
     }
@@ -451,7 +456,7 @@
             s.focusOffset !== selection.focusOffset ||
             s.anchorOffset !== selection.anchorOffset
         ) {
-            selection = s
+            selection = s && !s.isCollapsed && s.type === "Range" ? s : null
             tryClearAutoSelectionTimeout()
             if (s.rangeCount) {
                 if (!preventAutoSelectionHandling) {
@@ -514,10 +519,23 @@
     let selectionParentBoundingRect: DOMRect | null = null
     $: selectionParentBoundingRect =
         selectionParentNode?.getBoundingClientRect() || null
-    function handleWindowResize() {
+    function recalculateBoundingRects() {
         selectionBoundingRect = selectionRange?.getBoundingClientRect() || null
         selectionParentBoundingRect =
             selectionParentNode?.getBoundingClientRect() || null
+    }
+    $: {
+        gamify
+        gameType
+        shownPromptUuid
+        newPostBody
+        recalculateBoundingRects()
+        ;[100, 250, 500, 1000].forEach((delay) =>
+            setTimeout(recalculateBoundingRects, delay)
+        )
+    }
+    function handleWindowResize() {
+        recalculateBoundingRects()
     }
 
     let editBodyPartUuid: string | null = null
@@ -747,7 +765,7 @@
                     className="close-gamify-button flex items-center"
                 >
                     <XIcon size="16" strokeWidth={1} class="mr-1" />
-                    <span>Cancel</span>
+                    <Localized id={`post-game-cancel`} />
                 </ButtonSmall>
             </div>
         {/if}
@@ -757,16 +775,22 @@
                     <div
                         class="absolute flex items-center justify-center"
                         style={`
-                    top: ${Math.max(
-                        0,
-                        selectionBoundingRect.bottom -
-                            selectionParentBoundingRect.top
+                    top: ${Math.min(
+                        selectionParentBoundingRect.height - 32,
+                        Math.max(
+                            32,
+                            4 +
+                                selectionBoundingRect.bottom -
+                                selectionParentBoundingRect.top
+                        )
                     )}px;
-                    right: ${Math.max(
-                        0,
-                        -(
-                            selectionBoundingRect.right -
-                            selectionParentBoundingRect.right
+                    right: ${Math.min(
+                        selectionParentBoundingRect.width - 120,
+                        Math.max(
+                            0,
+                            selectionParentBoundingRect.right -
+                                selectionBoundingRect.left -
+                                120
                         )
                     )}px;`}
                     >
@@ -847,7 +871,9 @@
                                         size="16"
                                         strokeWidth={2}
                                         class="mr-2"
-                                    />Remove
+                                    /><Localized
+                                        id={`post-game-selection-remove`}
+                                    />
                                 </ButtonSmall>
                             {/if}
                             <hr class="w-full" />
@@ -862,7 +888,9 @@
                                     size="16"
                                     strokeWidth={1}
                                     class="mr-1"
-                                />Cancel
+                                /><Localized
+                                    id={`post-game-selection-cancel`}
+                                />
                             </ButtonSmall>
                         </div>
                     </div>

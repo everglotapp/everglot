@@ -15,6 +15,9 @@ post-game-guess-gender-masculine = Maskulin
 post-game-guess-gender-feminine = Feminin
 post-game-guess-gender-neuter = Neutral
 post-game-cloze-new-gap = Lücke erstellen
+post-game-cancel = Abbrechen
+post-game-selection-remove = Löschen
+post-game-selection-cancel = Abbrechen
 
 ## Chat page
 

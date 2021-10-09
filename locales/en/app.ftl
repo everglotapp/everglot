@@ -17,6 +17,9 @@ index-post-form-record-button = Record
 index-post-form-post-button = Post
 index-post-form-body-input-placeholder = Squeek your mind …
 post-game-cloze-new-gap = Create Gap
+post-game-cancel = Cancel
+post-game-selection-remove = Remove
+post-game-selection-cancel = Cancel
 
 ## Chat page
 

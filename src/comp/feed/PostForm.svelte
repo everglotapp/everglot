@@ -414,13 +414,7 @@
             ) {
                 editBodyPartUuid = null
             }
-            // if (
-            //     focusNode &&
-            //     focusNode.nodeType === Node.TEXT_NODE &&
-            //     focusNode.parentNode === readonlyBodyInputNode
-            // ) {
             selection = s
-            // }
         }
         willHandleSelect = false
     }

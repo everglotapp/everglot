@@ -9912,7 +9912,7 @@ type PostGame implements Node {
   post: Post
 
   """Reads and enables pagination through a set of `PostGameRange`."""
-  postGameRangesByGameId(
+  ranges(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -9991,7 +9991,7 @@ type PostGameRange implements Node {
   game: PostGame
 
   """Reads and enables pagination through a set of `PostGameAnswer`."""
-  postGameAnswersByRangeId(
+  answers(
     """Only read the first `n` values of the set."""
     first: Int
 

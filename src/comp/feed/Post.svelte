@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte"
+    import { onMount, createEventDispatcher } from "svelte"
     import { scale } from "svelte/transition"
     import { svelteTime } from "svelte-time"
+    import { v4 as uuidv4 } from "uuid"
     import {
         HeartIcon,
         MessageCircleIcon,
@@ -11,17 +12,29 @@
     } from "svelte-feather-icons"
     import { query } from "@urql/svelte"
 
+    import RangeOptionsDropdown from "./RangeOptionsDropdown.svelte"
     import Avatar from "../users/Avatar.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
+    import ClickAwayListener from "../util/ClickAwayListener.svelte"
+    import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
     import { currentUserStore, currentUserUuid } from "../../stores/currentUser"
 
     import type { AllPostsQuery } from "../../types/generated/graphql"
-    import { PromptType } from "../../types/generated/graphql"
+    import { PromptType, PostGameType } from "../../types/generated/graphql"
     import { createPost } from "../../routes/_helpers/posts"
-    import type { SupportedLocale } from "../../constants"
+    import {
+        BodyPartType,
+        GuessCaseOption,
+        GuessCaseRange,
+        GuessGenderOption,
+        GuessGenderRange,
+        PostGameRange,
+        SupportedLocale,
+    } from "../../constants"
     import { USER_UPLOADED_RECORDINGS_BASE_PATH } from "../../constants"
+    import { getBodyParts } from "../../routes/_helpers/posts/selections"
 
     query(currentUserStore)
 
@@ -36,10 +49,19 @@
     export let recordings: PostNode["recordings"]
     export let prompt: PostNode["prompt"]
     export let language: PostNode["language"]
+    export let games: PostNode["games"]
     export let linkToAuthorProfile: boolean = true
     export let forceShowReplies: boolean = false
 
     const dispatch = createEventDispatcher()
+
+    let bodyNode: HTMLElement
+    let bodyId: string
+    let rangeOptionsDropdownId: string
+    onMount(() => {
+        bodyId = uuidv4()
+        rangeOptionsDropdownId = uuidv4()
+    })
 
     $: replyNodes = replies.nodes.filter(Boolean).map((reply) => reply!)
 
@@ -120,6 +142,95 @@
     }
     let tmpLiked = false
     let tmpUnliked = false
+
+    $: game = games.nodes.length ? games.nodes[0] : null
+    const currentUserCreatedGame = false
+    const currentUserAnswer = null
+    let rangeByUuid: Record<
+        string,
+        NonNullable<NonNullable<typeof game>["ranges"]["nodes"][number]>
+    >
+    $: rangeByUuid =
+        game?.ranges.nodes.filter(Boolean).reduce(
+            (uuidToRange, range) => ({
+                ...uuidToRange,
+                [range!.uuid]: range,
+            }),
+            {}
+        ) || {}
+    $: bodyParts = getBodyParts(
+        body,
+        Object.values(rangeByUuid).map((range) => ({
+            start: range.startIndex,
+            end: range.endIndex,
+            uuid: range.uuid,
+        })) || []
+    )
+    let answerRangeUuid: string | null = null
+    let answerRanges: Record<string, PostGameRange | null> = {}
+    function handleAnswerRange(uuid: string) {
+        answerRangeUuid = uuid
+    }
+    function handlePickAnswer(range: PostGameRange) {
+        if (answerRangeUuid === null) {
+            return
+        }
+        answerRanges[answerRangeUuid] = range
+    }
+    function handleRemoveAnswer() {
+        if (answerRangeUuid === null) {
+            return
+        }
+        delete answerRanges[answerRangeUuid]
+        answerRanges = answerRanges
+    }
+    $: answerRangeElement =
+        answerRangeUuid === null
+            ? null
+            : document.getElementById(answerRangeUuid)
+    function handlePickGuessCaseOption(
+        event: CustomEvent<{ option: { value: keyof GuessCaseOption } }>
+    ) {
+        const { option } = event.detail
+        if (answerRangeUuid === null) {
+            return
+        }
+        const range = rangeByUuid[answerRangeUuid] || null
+        if (range === null) {
+            handleRemoveAnswer()
+        } else {
+            handlePickAnswer({
+                start: range.startIndex,
+                end: range.endIndex,
+                uuid: answerRangeUuid,
+                option: option.value,
+            } as GuessCaseRange)
+        }
+        answerRangeUuid = null
+    }
+
+    function handlePickGuessGenderOption(
+        event: CustomEvent<{ option: { value: keyof GuessGenderOption } }>
+    ) {
+        const { option } = event.detail
+        if (answerRangeUuid === null) {
+            return
+        }
+        const range = rangeByUuid[answerRangeUuid] || null
+        if (range === null) {
+            handleRemoveAnswer()
+        } else {
+            handlePickAnswer(
+                (answerRanges[answerRangeUuid] = {
+                    start: range.startIndex,
+                    end: range.endIndex,
+                    uuid: answerRangeUuid,
+                    option: option.value,
+                } as GuessGenderRange)
+            )
+        }
+        answerRangeUuid = null
+    }
 </script>
 
 <div
@@ -172,7 +283,7 @@
             </div>
             {#if prompt}
                 <div
-                    class="prompt-icon text-gray font-bold text-sm flex flex-nowrap items-center"
+                    class="prompt-note text-gray font-bold text-sm flex flex-nowrap items-center"
                 >
                     {#if prompt.type === PromptType.Word}
                         <ZapIcon size="18" class="mr-2 self-start" /><span
@@ -184,9 +295,103 @@
                     {/if}
                 </div>
             {/if}
-            <div class="body mt-1">
-                {#each (body || "").split("\n") as bodyPart}
-                    {bodyPart}<br />
+            {#if game}
+                <div
+                    class="game-note flex flex-nowrap items-center text-sm text-gray font-bold"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        aria-hidden="true"
+                        class="mr-2"
+                        role="img"
+                        width="18"
+                        height="18"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 16 16"
+                        ><g fill="currentColor"
+                            ><path
+                                d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zM3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"
+                            /><path
+                                d="M5.5 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm-4-4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0z"
+                            /></g
+                        ></svg
+                    ><span
+                        >{author.displayName || author.username} is challenging you
+                        to a {game.gameType}!
+                    </span>
+                </div>
+            {/if}
+            <div id={bodyId} bind:this={bodyNode} class="body mt-1">
+                {#if game && answerRangeUuid !== null && language?.alpha2}
+                    <RangeOptionsDropdown
+                        id={rangeOptionsDropdownId}
+                        anchor={answerRangeElement}
+                        container={bodyNode || null}
+                        locale={language.alpha2}
+                        gameType={game.gameType}
+                        editedRange={answerRanges[answerRangeUuid] || null}
+                        on:cancel={() => (answerRangeUuid = null)}
+                        on:remove={() => {
+                            if (answerRangeUuid !== null) {
+                                if (
+                                    answerRanges.hasOwnProperty(answerRangeUuid)
+                                ) {
+                                    answerRanges[answerRangeUuid] = null
+                                }
+                                answerRangeUuid = null
+                            }
+                        }}
+                        showRemove={answerRanges.hasOwnProperty(
+                            answerRangeUuid
+                        ) && answerRanges[answerRangeUuid] !== null}
+                        on:guessCaseOptionPicked={handlePickGuessCaseOption}
+                        on:guessGenderOptionPicked={handlePickGuessGenderOption}
+                    />
+                    <ClickAwayListener
+                        elementId={[answerRangeUuid, rangeOptionsDropdownId]}
+                        on:clickaway={() => (answerRangeUuid = null)}
+                    />
+                    <EscapeKeyListener
+                        on:keydown={() => (answerRangeUuid = null)}
+                    />
+                {/if}
+                {#each bodyParts as bodyPart}
+                    {#if bodyPart.type === BodyPartType.LineBreak}
+                        <br id={bodyPart.uuid} />
+                    {:else if bodyPart.type === BodyPartType.Range}
+                        {#if game && (game.gameType === PostGameType.GuessCase || game.gameType === PostGameType.GuessGender)}
+                            <span
+                                id={bodyPart.uuid}
+                                class="body-part-range inline-flex border-b px-1 py-1 mx-1 cursor-pointer"
+                                class:answered={answerRanges.hasOwnProperty(
+                                    bodyPart.uuid
+                                ) && answerRanges[bodyPart.uuid] !== null}
+                                class:not-answered={!answerRanges.hasOwnProperty(
+                                    bodyPart.uuid
+                                ) || answerRanges[bodyPart.uuid] === null}
+                                on:click={() =>
+                                    bodyPart.uuid &&
+                                    handleAnswerRange(bodyPart.uuid)}
+                                >{bodyPart.value}</span
+                            >
+                        {:else if game && game.gameType === PostGameType.Cloze}
+                            <input
+                                id={bodyPart.uuid}
+                                type="text"
+                                class="inline mx-1"
+                                name={bodyPart.uuid}
+                                style={`width: ${
+                                    rangeByUuid[bodyPart.uuid].endIndex -
+                                    rangeByUuid[bodyPart.uuid].startIndex +
+                                    1 +
+                                    2
+                                }em;`}
+                            />
+                        {/if}
+                    {:else if bodyPart.type === BodyPartType.Text}
+                        {bodyPart.value}
+                    {/if}
                 {/each}
             </div>
             {#if recordings.totalCount && recordings.nodes[0]}
@@ -327,18 +532,27 @@
 </div>
 
 <style>
-    .body {
-        @apply overflow-hidden;
-        @apply overflow-ellipsis;
-    }
-
     .reply:first-child {
         @apply pt-2;
         @apply mt-2;
     }
 
-    .prompt-icon :global(svg) {
+    .prompt-note :global(svg) {
         min-width: 18px;
+    }
+
+    .game-note :global(svg) {
+        min-width: 18px;
+    }
+
+    .body-part-range.answered {
+        @apply border-primary;
+        @apply border-b-2;
+    }
+
+    .body-part-range.not-answered {
+        @apply bg-primary-lightest;
+        @apply border-primary;
     }
 
     :global(.reply-button) {

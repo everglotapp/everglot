@@ -65,6 +65,10 @@ exports.up = (pgm) => {
             },
         }
     )
+    pgm.sql(`
+        COMMENT ON CONSTRAINT post_game_ranges_game_id_fkey on app_public.post_game_ranges is
+        E'@gameId rangesByGameId\n@foreignFieldName ranges\nGame that this range was made for.';
+    `)
     pgm.addConstraint(
         { schema: "app_public", name: "post_game_ranges" },
         "has_max_one_selected_option",

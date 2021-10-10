@@ -14,6 +14,7 @@
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import { v4 as uuidv4 } from "uuid"
 
+    import RangeOptionsDropdown from "./RangeOptionsDropdown.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
     import Modal from "../util/Modal.svelte"
@@ -257,7 +258,7 @@
     }
 
     let bodyInputId: string
-    let selectionDropdownId: string
+    let rangeOptionsDropdownId: string
     onMount(() => {
         const supportedMimeTypes = getSupportedMimeTypes("audio")
         if (supportedMimeTypes.length) {
@@ -265,17 +266,12 @@
         }
 
         bodyInputId = uuidv4()
-        selectionDropdownId = uuidv4()
+        rangeOptionsDropdownId = uuidv4()
 
         document.addEventListener(
             "selectionchange",
             handleDocumentSelectionChange
         )
-
-        recalculateBoundingRects()
-        setTimeout(recalculateBoundingRects, 100)
-        setTimeout(recalculateBoundingRects, 1000)
-        window.addEventListener("resize", handleWindowResize)
 
         setInterval(updateRecordingDuration, 250)
         setInterval(updateAudioTimings, 250)
@@ -288,7 +284,6 @@
             "selectionchange",
             handleDocumentSelectionChange
         )
-        window.removeEventListener("resize", handleWindowResize)
     })
 
     $: bodyInputPlaceholder = $translate(
@@ -330,18 +325,6 @@
         selection = null
     }
 
-    function handleSelectionDropdownClickaway(
-        event: CustomEvent<{ event: MouseEvent }>
-    ) {
-        if (!willHandleSelect && event.detail.event.button === 0) {
-            console.log("clickaway", {
-                willHandleSelect,
-                selection,
-                selectionDropdownId,
-            })
-            clearAllSelections()
-        }
-    }
     function handleBodyKeyup(_event: Event) {
         newPostBody = writableBodyInputNode.innerHTML
         console.log("keyup", { willHandleSelect })
@@ -389,9 +372,9 @@
     }
     let writableBodyInputNode: HTMLElement
     let readonlyBodyInputNode: HTMLElement
-    let selectionParentNode: HTMLElement
     let gamify: boolean = false
     let willHandleSelect: boolean = false
+    let selectionParentNode: HTMLElement
     let selection: Selection | null = null
     function tryHandleBodyTextSelection() {
         if (!willHandleSelect) {
@@ -516,29 +499,6 @@
                           selectionEnd! >= range.end)
               )
             : null
-    let selectionBoundingRect: DOMRect | null = null
-    $: selectionBoundingRect = selectionRange?.getBoundingClientRect() || null
-    let selectionParentBoundingRect: DOMRect | null = null
-    $: selectionParentBoundingRect =
-        selectionParentNode?.getBoundingClientRect() || null
-    function recalculateBoundingRects() {
-        selectionBoundingRect = selectionRange?.getBoundingClientRect() || null
-        selectionParentBoundingRect =
-            selectionParentNode?.getBoundingClientRect() || null
-    }
-    $: {
-        gamify
-        gameType
-        shownPromptUuid
-        newPostBody
-        recalculateBoundingRects()
-        ;[100, 250, 500, 1000].forEach((delay) =>
-            setTimeout(recalculateBoundingRects, delay)
-        )
-    }
-    function handleWindowResize() {
-        recalculateBoundingRects()
-    }
 
     let editBodyPartUuid: string | null = null
     $: editedRangeIndex =
@@ -552,8 +512,6 @@
     $: showSelectionDropdown =
         gamify &&
         gameType !== null &&
-        selectionBoundingRect &&
-        selectionParentBoundingRect &&
         ((selectedText !== null &&
             selectedText.length &&
             selectionStart !== null &&
@@ -562,18 +520,6 @@
             editBodyPartUuid !== null)
 
     let gameRanges: PostGameRange[] = []
-    $: availableGuessCaseOptions =
-        locale && (GUESS_CASE_LOCALES as readonly string[]).includes(locale)
-            ? Object.entries(GUESS_CASE_OPTIONS[locale as GuessCaseLocale]).map(
-                  (entry) => ({ value: entry[0], localizationId: entry[1] })
-              )
-            : []
-    $: availableGuessGenderOptions =
-        locale && (GUESS_GENDER_LOCALES as readonly string[]).includes(locale)
-            ? Object.entries(
-                  GUESS_GENDER_OPTIONS[locale as GuessGenderLocale]
-              ).map((entry) => ({ value: entry[0], localizationId: entry[1] }))
-            : []
 
     $: formattedNewPostBody = formatPostBody(newPostBody || "")
 
@@ -627,7 +573,10 @@
         gameRanges = gameRanges
     }
 
-    function handlePickGuessCaseOption(option: GuessCaseOption) {
+    function handlePickGuessCaseOption(
+        event: CustomEvent<{ option: { value: keyof GuessCaseOption } }>
+    ) {
+        const option = event.detail.option
         if (editBodyPartUuid === null) {
             addRange({
                 uuid: uuidv4(),
@@ -644,7 +593,10 @@
         clearAllSelections()
     }
 
-    function handlePickGuessGenderOption(option: GuessGenderOption) {
+    function handlePickGuessGenderOption(
+        event: CustomEvent<{ option: { value: keyof GuessGenderOption } }>
+    ) {
+        const option = event.detail.option
         if (editBodyPartUuid === null) {
             addRange({
                 uuid: uuidv4(),
@@ -670,6 +622,28 @@
             })
         }
         clearAllSelections()
+    }
+
+    function handleRangeOptionsDropdownClickaway(
+        event: CustomEvent<{ event: MouseEvent }>
+    ) {
+        if (!willHandleSelect && event.detail.event.button === 0) {
+            console.log("clickaway", {
+                willHandleSelect,
+                selection,
+                rangeOptionsDropdownId,
+            })
+            clearAllSelections()
+        }
+    }
+
+    let forceRecalculateDropdownPosition = false
+    $: {
+        gamify
+        gameType
+        shownPromptUuid
+        newPostBody
+        forceRecalculateDropdownPosition = true
     }
 </script>
 
@@ -768,139 +742,37 @@
                 </ButtonSmall>
             </div>
         {/if}
-        <div bind:this={selectionParentNode} class="w-full">
-            {#if showSelectionDropdown}
-                <div id={selectionDropdownId} class="relative w-full">
-                    <div
-                        class="absolute flex items-center justify-center"
-                        style={`
-                    top: ${Math.min(
-                        selectionParentBoundingRect.height - 32,
-                        Math.max(
-                            32,
-                            4 +
-                                selectionBoundingRect.bottom -
-                                selectionParentBoundingRect.top
-                        )
-                    )}px;
-                    right: ${Math.min(
-                        selectionParentBoundingRect.width - 120,
-                        Math.max(
-                            0,
-                            selectionParentBoundingRect.right -
-                                selectionBoundingRect.left -
-                                120
-                        )
-                    )}px;`}
-                    >
-                        <div
-                            class="bg-white shadow-lg border border-gray-light rounded-lg z-20 flex flex-col items-center"
-                        >
-                            {#if gameType === PostGameType.GuessCase}
-                                {#each availableGuessCaseOptions as option}
-                                    <ButtonSmall
-                                        tag="button"
-                                        variant="TEXT"
-                                        color={!editedRange ||
-                                        editedRange.option === option.value
-                                            ? "PRIMARY"
-                                            : "SECONDARY"}
-                                        on:click={() =>
-                                            handlePickGuessCaseOption(option)}
-                                        className="mb-1 w-full flex justify-center"
-                                    >
-                                        <Localized
-                                            id={`post-game-guess-case-${option.localizationId}`}
-                                        />
-                                    </ButtonSmall>
-                                {/each}
-                                {#if editBodyPartUuid !== null}
-                                    <hr class="w-full" />
-                                {/if}
-                            {:else if gameType === PostGameType.GuessGender}
-                                {#each availableGuessGenderOptions as option}
-                                    <ButtonSmall
-                                        tag="button"
-                                        variant="TEXT"
-                                        color={!editedRange ||
-                                        editedRange.option === option.value
-                                            ? "PRIMARY"
-                                            : "SECONDARY"}
-                                        on:click={() =>
-                                            handlePickGuessGenderOption(option)}
-                                        className="mb-1 w-full flex justify-center"
-                                    >
-                                        <Localized
-                                            id={`post-game-guess-gender-${option.localizationId}`}
-                                        />
-                                    </ButtonSmall>
-                                {/each}
-                                {#if editBodyPartUuid !== null}
-                                    <hr class="w-full" />
-                                {/if}
-                            {:else if gameType === PostGameType.Cloze}
-                                {#if editBodyPartUuid === null}
-                                    <ButtonSmall
-                                        tag="button"
-                                        variant="TEXT"
-                                        on:click={() => handleAddClozeEntry()}
-                                        className="mb-1 w-full flex justify-center"
-                                    >
-                                        <Localized
-                                            id="post-game-cloze-new-gap"
-                                        />
-                                    </ButtonSmall>
-                                {/if}
-                            {/if}
-                            {#if editBodyPartUuid !== null}
-                                <ButtonSmall
-                                    tag="button"
-                                    variant="TEXT"
-                                    color="SECONDARY"
-                                    on:click={() => {
-                                        if (editBodyPartUuid !== null) {
-                                            removeRange(editBodyPartUuid)
-                                            editBodyPartUuid = null
-                                            clearAllSelections()
-                                        }
-                                    }}
-                                    className="flex justify-center items-center w-full text-danger"
-                                >
-                                    <TrashIcon
-                                        size="16"
-                                        strokeWidth={2}
-                                        class="mr-2"
-                                    /><Localized
-                                        id={`post-game-selection-remove`}
-                                    />
-                                </ButtonSmall>
-                            {/if}
-                            <hr class="w-full" />
-                            <ButtonSmall
-                                tag="button"
-                                variant="TEXT"
-                                color="SECONDARY"
-                                on:click={() => clearAllSelections()}
-                                className="flex justify-center items-center w-full text-sm"
-                            >
-                                <XIcon
-                                    size="16"
-                                    strokeWidth={1}
-                                    class="mr-1"
-                                /><Localized
-                                    id={`post-game-selection-cancel`}
-                                />
-                            </ButtonSmall>
-                        </div>
-                    </div>
-                    <ClickAwayListener
-                        elementId={[bodyInputId, selectionDropdownId]}
-                        on:clickaway={handleSelectionDropdownClickaway}
-                    />
-                    <EscapeKeyListener
-                        on:keydown={() => clearAllSelections()}
-                    />
-                </div>
+        <div class="w-full">
+            {#if showSelectionDropdown && locale !== null && gameType !== null}
+                <RangeOptionsDropdown
+                    id={rangeOptionsDropdownId}
+                    anchor={selectionRange}
+                    container={selectionRange?.commonAncestorContainer
+                        ?.parentElement || null}
+                    {locale}
+                    {gameType}
+                    {editedRange}
+                    on:cancel={() => clearAllSelections()}
+                    on:remove={() => {
+                        if (editBodyPartUuid !== null) {
+                            removeRange(editBodyPartUuid)
+                            editBodyPartUuid = null
+                            clearAllSelections()
+                        }
+                    }}
+                    forceRecalculatePosition={forceRecalculateDropdownPosition}
+                    on:positionRecalculated={() =>
+                        (forceRecalculateDropdownPosition = false)}
+                    showRemove={editBodyPartUuid !== null}
+                    on:guessCaseOptionPicked={handlePickGuessCaseOption}
+                    on:guessGenderOptionPicked={handlePickGuessGenderOption}
+                    on:clozeEntryAdded={handleAddClozeEntry}
+                />
+                <ClickAwayListener
+                    elementId={[bodyInputId, rangeOptionsDropdownId]}
+                    on:clickaway={handleRangeOptionsDropdownClickaway}
+                />
+                <EscapeKeyListener on:keydown={() => clearAllSelections()} />
             {/if}
             <div
                 bind:this={readonlyBodyInputNode}

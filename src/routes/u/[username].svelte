@@ -545,6 +545,7 @@
                                 recordings={post.recordings}
                                 createdAt={post.createdAt}
                                 prompt={post.prompt}
+                                games={post.games}
                                 language={post.language}
                                 linkToAuthorProfile={false}
                                 on:replySuccess={handlePostReplySuccess}

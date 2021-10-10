@@ -47,6 +47,10 @@ exports.up = (pgm) => {
             },
         }
     )
+    pgm.sql(`
+        COMMENT ON CONSTRAINT post_game_answers_range_id_fkey on app_public.post_game_answers is
+        E'@gameId answersByRangeId\n@foreignFieldName answers\nRange that was answered.';
+    `)
     pgm.addConstraint(
         { schema: "app_public", name: "post_game_answers" },
         "has_exactly_one_value",

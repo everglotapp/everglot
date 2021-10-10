@@ -360,6 +360,7 @@
                         author={post.author}
                         likes={post.likes}
                         replies={post.replies}
+                        games={post.games}
                         recordings={post.recordings}
                         createdAt={post.createdAt}
                         prompt={post.prompt}

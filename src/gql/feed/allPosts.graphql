@@ -56,6 +56,27 @@ query AllPosts {
                         uuid
                         type
                     }
+                    games {
+                        nodes {
+                            gameType
+                            uuid
+                            ranges {
+                                nodes {
+                                    answers {
+                                        edges {
+                                            node {
+                                                id
+                                            }
+                                        }
+                                    }
+                                    endIndex
+                                    startIndex
+                                    uuid
+                                }
+                                totalCount
+                            }
+                        }
+                    }
                 }
             }
             recordings {
@@ -78,6 +99,27 @@ query AllPosts {
                 type
             }
             snowflakeId
+            games {
+                nodes {
+                    gameType
+                    uuid
+                    ranges {
+                        nodes {
+                            answers {
+                                edges {
+                                    node {
+                                        id
+                                    }
+                                }
+                            }
+                            endIndex
+                            startIndex
+                            uuid
+                        }
+                        totalCount
+                    }
+                }
+            }
         }
     }
 }

@@ -168,6 +168,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
     const gameType = req.body["gameType"]
     const ranges = req.body["ranges"]
+    // TODO: Limit amount of ranges
     // Gamification checks, games will be inserted after the post.
     if (gameType) {
         if (

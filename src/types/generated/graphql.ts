@@ -1532,6 +1532,8 @@ export type CreatePostGameAnswerPayload = {
    * unchanged and unused. May be used by a client to track mutations.
    */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `PostGame` that is related to this `PostGameAnswer`. */
+  game?: Maybe<PostGame>;
   /** The `PostGameAnswer` that was created by this mutation. */
   postGameAnswer?: Maybe<PostGameAnswer>;
   /** An edge for our `PostGameAnswer`. May be used by Relay 1. */
@@ -4003,16 +4005,6 @@ export type DeletePostGameAnswerByNodeIdInput = {
   nodeId: Scalars['ID'];
 };
 
-/** All input for the `deletePostGameAnswerByUserId` mutation. */
-export type DeletePostGameAnswerByUserIdInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  userId: Scalars['Int'];
-};
-
 /** All input for the `deletePostGameAnswerByUuid` mutation. */
 export type DeletePostGameAnswerByUuidInput = {
   /**
@@ -4042,6 +4034,8 @@ export type DeletePostGameAnswerPayload = {
    */
   clientMutationId?: Maybe<Scalars['String']>;
   deletedPostGameAnswerNodeId?: Maybe<Scalars['ID']>;
+  /** Reads a single `PostGame` that is related to this `PostGameAnswer`. */
+  game?: Maybe<PostGame>;
   /** The `PostGameAnswer` that was deleted by this mutation. */
   postGameAnswer?: Maybe<PostGameAnswer>;
   /** An edge for our `PostGameAnswer`. May be used by Relay 1. */
@@ -9913,8 +9907,6 @@ export type Mutation = {
   /** Deletes a single `PostGameAnswer` using its globally unique id. */
   deletePostGameAnswerByNodeId?: Maybe<DeletePostGameAnswerPayload>;
   /** Deletes a single `PostGameAnswer` using a unique key. */
-  deletePostGameAnswerByUserId?: Maybe<DeletePostGameAnswerPayload>;
-  /** Deletes a single `PostGameAnswer` using a unique key. */
   deletePostGameAnswerByUuid?: Maybe<DeletePostGameAnswerPayload>;
   /** Deletes a single `PostGame` using its globally unique id. */
   deletePostGameByNodeId?: Maybe<DeletePostGamePayload>;
@@ -10217,8 +10209,6 @@ export type Mutation = {
   updatePostGameAnswer?: Maybe<UpdatePostGameAnswerPayload>;
   /** Updates a single `PostGameAnswer` using its globally unique id and a patch. */
   updatePostGameAnswerByNodeId?: Maybe<UpdatePostGameAnswerPayload>;
-  /** Updates a single `PostGameAnswer` using a unique key and a patch. */
-  updatePostGameAnswerByUserId?: Maybe<UpdatePostGameAnswerPayload>;
   /** Updates a single `PostGameAnswer` using a unique key and a patch. */
   updatePostGameAnswerByUuid?: Maybe<UpdatePostGameAnswerPayload>;
   /** Updates a single `PostGame` using its globally unique id and a patch. */
@@ -11319,12 +11309,6 @@ export type MutationDeletePostGameAnswerByNodeIdArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
-export type MutationDeletePostGameAnswerByUserIdArgs = {
-  input: DeletePostGameAnswerByUserIdInput;
-};
-
-
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeletePostGameAnswerByUuidArgs = {
   input: DeletePostGameAnswerByUuidInput;
 };
@@ -12239,12 +12223,6 @@ export type MutationUpdatePostGameAnswerArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdatePostGameAnswerByNodeIdArgs = {
   input: UpdatePostGameAnswerByNodeIdInput;
-};
-
-
-/** The root mutation type which contains root level fields which mutate data. */
-export type MutationUpdatePostGameAnswerByUserIdArgs = {
-  input: UpdatePostGameAnswerByUserIdInput;
 };
 
 
@@ -13849,6 +13827,8 @@ export type PostFilter = {
 
 export type PostGame = Node & {
   __typename?: 'PostGame';
+  /** Reads and enables pagination through a set of `PostGameAnswer`. */
+  answerReveals: PostGameAnswersConnection;
   createdAt: Scalars['Datetime'];
   gameType: PostGameType;
   id: Scalars['Int'];
@@ -13856,10 +13836,38 @@ export type PostGame = Node & {
   nodeId: Scalars['ID'];
   /** Reads a single `Post` that is related to this `PostGame`. */
   post?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `PostGameRange`. */
+  postGameRangesByPostGameAnswerGameIdAndRangeId: PostGamePostGameRangesByPostGameAnswerGameIdAndRangeIdManyToManyConnection;
   postId: Scalars['Int'];
   /** Reads and enables pagination through a set of `PostGameRange`. */
   ranges: PostGameRangesConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostGameAnswerGameIdAndUserId: PostGameUsersByPostGameAnswerGameIdAndUserIdManyToManyConnection;
   uuid: Scalars['UUID'];
+};
+
+
+export type PostGameAnswerRevealsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostGameAnswerCondition>;
+  filter?: Maybe<PostGameAnswerFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+};
+
+
+export type PostGamePostGameRangesByPostGameAnswerGameIdAndRangeIdArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostGameRangeCondition>;
+  filter?: Maybe<PostGameRangeFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostGameRangesOrderBy>>;
 };
 
 
@@ -13874,19 +13882,34 @@ export type PostGameRangesArgs = {
   orderBy?: Maybe<Array<PostGameRangesOrderBy>>;
 };
 
+
+export type PostGameUsersByPostGameAnswerGameIdAndUserIdArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+};
+
 export type PostGameAnswer = Node & {
   __typename?: 'PostGameAnswer';
   caseOption?: Maybe<GrammaticalCase>;
   clozeAnswer?: Maybe<Scalars['String']>;
-  correct: Scalars['Boolean'];
+  correct?: Maybe<Scalars['Boolean']>;
   createdAt: Scalars['Datetime'];
+  /** Reads a single `PostGame` that is related to this `PostGameAnswer`. */
+  game?: Maybe<PostGame>;
+  gameId?: Maybe<Scalars['Int']>;
   genderOption?: Maybe<GrammaticalGender>;
   id: Scalars['Int'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   /** Reads a single `PostGameRange` that is related to this `PostGameAnswer`. */
   range?: Maybe<PostGameRange>;
-  rangeId: Scalars['Int'];
+  rangeId?: Maybe<Scalars['Int']>;
   /** Reads a single `User` that is related to this `PostGameAnswer`. */
   user?: Maybe<User>;
   userId: Scalars['Int'];
@@ -13906,6 +13929,8 @@ export type PostGameAnswerCondition = {
   correct?: Maybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `createdAt` field. */
   createdAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `gameId` field. */
+  gameId?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `genderOption` field. */
   genderOption?: Maybe<GrammaticalGender>;
   /** Checks for equality with the object’s `id` field. */
@@ -13930,6 +13955,8 @@ export type PostGameAnswerFilter = {
   correct?: Maybe<BooleanFilter>;
   /** Filter by the object’s `createdAt` field. */
   createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `gameId` field. */
+  gameId?: Maybe<IntFilter>;
   /** Filter by the object’s `genderOption` field. */
   genderOption?: Maybe<GrammaticalGenderFilter>;
   /** Filter by the object’s `id` field. */
@@ -13950,11 +13977,12 @@ export type PostGameAnswerFilter = {
 export type PostGameAnswerInput = {
   caseOption?: Maybe<GrammaticalCase>;
   clozeAnswer?: Maybe<Scalars['String']>;
-  correct: Scalars['Boolean'];
+  correct?: Maybe<Scalars['Boolean']>;
   createdAt?: Maybe<Scalars['Datetime']>;
+  gameId?: Maybe<Scalars['Int']>;
   genderOption?: Maybe<GrammaticalGender>;
   id?: Maybe<Scalars['Int']>;
-  rangeId: Scalars['Int'];
+  rangeId?: Maybe<Scalars['Int']>;
   userId: Scalars['Int'];
   uuid?: Maybe<Scalars['UUID']>;
 };
@@ -13965,6 +13993,7 @@ export type PostGameAnswerPatch = {
   clozeAnswer?: Maybe<Scalars['String']>;
   correct?: Maybe<Scalars['Boolean']>;
   createdAt?: Maybe<Scalars['Datetime']>;
+  gameId?: Maybe<Scalars['Int']>;
   genderOption?: Maybe<GrammaticalGender>;
   id?: Maybe<Scalars['Int']>;
   rangeId?: Maybe<Scalars['Int']>;
@@ -14004,6 +14033,8 @@ export enum PostGameAnswersOrderBy {
   CorrectDesc = 'CORRECT_DESC',
   CreatedAtAsc = 'CREATED_AT_ASC',
   CreatedAtDesc = 'CREATED_AT_DESC',
+  GameIdAsc = 'GAME_ID_ASC',
+  GameIdDesc = 'GAME_ID_DESC',
   GenderOptionAsc = 'GENDER_OPTION_ASC',
   GenderOptionDesc = 'GENDER_OPTION_DESC',
   IdAsc = 'ID_ASC',
@@ -14074,6 +14105,43 @@ export type PostGamePatch = {
   uuid?: Maybe<Scalars['UUID']>;
 };
 
+/** A connection to a list of `PostGameRange` values, with data from `PostGameAnswer`. */
+export type PostGamePostGameRangesByPostGameAnswerGameIdAndRangeIdManyToManyConnection = {
+  __typename?: 'PostGamePostGameRangesByPostGameAnswerGameIdAndRangeIdManyToManyConnection';
+  /** A list of edges which contains the `PostGameRange`, info from the `PostGameAnswer`, and the cursor to aid in pagination. */
+  edges: Array<PostGamePostGameRangesByPostGameAnswerGameIdAndRangeIdManyToManyEdge>;
+  /** A list of `PostGameRange` objects. */
+  nodes: Array<Maybe<PostGameRange>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `PostGameRange` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `PostGameRange` edge in the connection, with data from `PostGameAnswer`. */
+export type PostGamePostGameRangesByPostGameAnswerGameIdAndRangeIdManyToManyEdge = {
+  __typename?: 'PostGamePostGameRangesByPostGameAnswerGameIdAndRangeIdManyToManyEdge';
+  /** Reads and enables pagination through a set of `PostGameAnswer`. */
+  answers: PostGameAnswersConnection;
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `PostGameRange` at the end of the edge. */
+  node?: Maybe<PostGameRange>;
+};
+
+
+/** A `PostGameRange` edge in the connection, with data from `PostGameAnswer`. */
+export type PostGamePostGameRangesByPostGameAnswerGameIdAndRangeIdManyToManyEdgeAnswersArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostGameAnswerCondition>;
+  filter?: Maybe<PostGameAnswerFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+};
+
 export type PostGameRange = Node & {
   __typename?: 'PostGameRange';
   /** Reads and enables pagination through a set of `PostGameAnswer`. */
@@ -14090,7 +14158,11 @@ export type PostGameRange = Node & {
   id: Scalars['Int'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
+  /** Reads and enables pagination through a set of `PostGame`. */
+  postGamesByPostGameAnswerRangeIdAndGameId: PostGameRangePostGamesByPostGameAnswerRangeIdAndGameIdManyToManyConnection;
   startIndex: Scalars['Int'];
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostGameAnswerRangeIdAndUserId: PostGameRangeUsersByPostGameAnswerRangeIdAndUserIdManyToManyConnection;
   uuid: Scalars['UUID'];
 };
 
@@ -14104,6 +14176,30 @@ export type PostGameRangeAnswersArgs = {
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+};
+
+
+export type PostGameRangePostGamesByPostGameAnswerRangeIdAndGameIdArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostGameCondition>;
+  filter?: Maybe<PostGameFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostGamesOrderBy>>;
+};
+
+
+export type PostGameRangeUsersByPostGameAnswerRangeIdAndUserIdArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
 };
 
 /**
@@ -14183,6 +14279,80 @@ export type PostGameRangePatch = {
   uuid?: Maybe<Scalars['UUID']>;
 };
 
+/** A connection to a list of `PostGame` values, with data from `PostGameAnswer`. */
+export type PostGameRangePostGamesByPostGameAnswerRangeIdAndGameIdManyToManyConnection = {
+  __typename?: 'PostGameRangePostGamesByPostGameAnswerRangeIdAndGameIdManyToManyConnection';
+  /** A list of edges which contains the `PostGame`, info from the `PostGameAnswer`, and the cursor to aid in pagination. */
+  edges: Array<PostGameRangePostGamesByPostGameAnswerRangeIdAndGameIdManyToManyEdge>;
+  /** A list of `PostGame` objects. */
+  nodes: Array<Maybe<PostGame>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `PostGame` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `PostGame` edge in the connection, with data from `PostGameAnswer`. */
+export type PostGameRangePostGamesByPostGameAnswerRangeIdAndGameIdManyToManyEdge = {
+  __typename?: 'PostGameRangePostGamesByPostGameAnswerRangeIdAndGameIdManyToManyEdge';
+  /** Reads and enables pagination through a set of `PostGameAnswer`. */
+  answerReveals: PostGameAnswersConnection;
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `PostGame` at the end of the edge. */
+  node?: Maybe<PostGame>;
+};
+
+
+/** A `PostGame` edge in the connection, with data from `PostGameAnswer`. */
+export type PostGameRangePostGamesByPostGameAnswerRangeIdAndGameIdManyToManyEdgeAnswerRevealsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostGameAnswerCondition>;
+  filter?: Maybe<PostGameAnswerFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+};
+
+/** A connection to a list of `User` values, with data from `PostGameAnswer`. */
+export type PostGameRangeUsersByPostGameAnswerRangeIdAndUserIdManyToManyConnection = {
+  __typename?: 'PostGameRangeUsersByPostGameAnswerRangeIdAndUserIdManyToManyConnection';
+  /** A list of edges which contains the `User`, info from the `PostGameAnswer`, and the cursor to aid in pagination. */
+  edges: Array<PostGameRangeUsersByPostGameAnswerRangeIdAndUserIdManyToManyEdge>;
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `PostGameAnswer`. */
+export type PostGameRangeUsersByPostGameAnswerRangeIdAndUserIdManyToManyEdge = {
+  __typename?: 'PostGameRangeUsersByPostGameAnswerRangeIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `PostGameAnswer`. */
+  postGameAnswers: PostGameAnswersConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `PostGameAnswer`. */
+export type PostGameRangeUsersByPostGameAnswerRangeIdAndUserIdManyToManyEdgePostGameAnswersArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostGameAnswerCondition>;
+  filter?: Maybe<PostGameAnswerFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+};
+
 /** A connection to a list of `PostGameRange` values. */
 export type PostGameRangesConnection = {
   __typename?: 'PostGameRangesConnection';
@@ -14258,6 +14428,43 @@ export type PostGameTypeFilter = {
   notEqualTo?: Maybe<PostGameType>;
   /** Not included in the specified list. */
   notIn?: Maybe<Array<PostGameType>>;
+};
+
+/** A connection to a list of `User` values, with data from `PostGameAnswer`. */
+export type PostGameUsersByPostGameAnswerGameIdAndUserIdManyToManyConnection = {
+  __typename?: 'PostGameUsersByPostGameAnswerGameIdAndUserIdManyToManyConnection';
+  /** A list of edges which contains the `User`, info from the `PostGameAnswer`, and the cursor to aid in pagination. */
+  edges: Array<PostGameUsersByPostGameAnswerGameIdAndUserIdManyToManyEdge>;
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `PostGameAnswer`. */
+export type PostGameUsersByPostGameAnswerGameIdAndUserIdManyToManyEdge = {
+  __typename?: 'PostGameUsersByPostGameAnswerGameIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `PostGameAnswer`. */
+  postGameAnswers: PostGameAnswersConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `PostGameAnswer`. */
+export type PostGameUsersByPostGameAnswerGameIdAndUserIdManyToManyEdgePostGameAnswersArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostGameAnswerCondition>;
+  filter?: Maybe<PostGameAnswerFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
 };
 
 /** A connection to a list of `PostGame` values. */
@@ -15400,7 +15607,6 @@ export type Query = Node & {
   postGameAnswer?: Maybe<PostGameAnswer>;
   /** Reads a single `PostGameAnswer` using its globally unique `ID`. */
   postGameAnswerByNodeId?: Maybe<PostGameAnswer>;
-  postGameAnswerByUserId?: Maybe<PostGameAnswer>;
   postGameAnswerByUuid?: Maybe<PostGameAnswer>;
   /** Reads and enables pagination through a set of `PostGameAnswer`. */
   postGameAnswers?: Maybe<PostGameAnswersConnection>;
@@ -16526,12 +16732,6 @@ export type QueryPostGameAnswerArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryPostGameAnswerByNodeIdArgs = {
   nodeId: Scalars['ID'];
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryPostGameAnswerByUserIdArgs = {
-  userId: Scalars['Int'];
 };
 
 
@@ -19925,18 +20125,6 @@ export type UpdatePostGameAnswerByNodeIdInput = {
   patch: PostGameAnswerPatch;
 };
 
-/** All input for the `updatePostGameAnswerByUserId` mutation. */
-export type UpdatePostGameAnswerByUserIdInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** An object where the defined keys will be set on the `PostGameAnswer` being updated. */
-  patch: PostGameAnswerPatch;
-  userId: Scalars['Int'];
-};
-
 /** All input for the `updatePostGameAnswerByUuid` mutation. */
 export type UpdatePostGameAnswerByUuidInput = {
   /**
@@ -19969,6 +20157,8 @@ export type UpdatePostGameAnswerPayload = {
    * unchanged and unused. May be used by a client to track mutations.
    */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `PostGame` that is related to this `PostGameAnswer`. */
+  game?: Maybe<PostGame>;
   /** The `PostGameAnswer` that was updated by this mutation. */
   postGameAnswer?: Maybe<PostGameAnswer>;
   /** An edge for our `PostGameAnswer`. May be used by Relay 1. */
@@ -22185,6 +22375,8 @@ export type UpsertPostGameAnswerPayload = {
   __typename?: 'UpsertPostGameAnswerPayload';
   /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `PostGame` that is related to this `PostGameAnswer`. */
+  game?: Maybe<PostGame>;
   /** The `PostGameAnswer` that was upserted by this mutation. */
   postGameAnswer?: Maybe<PostGameAnswer>;
   /** An edge for our `PostGameAnswer`. May be used by Relay 1. */
@@ -22206,7 +22398,6 @@ export type UpsertPostGameAnswerPayloadPostGameAnswerEdgeArgs = {
 /** Where conditions for the upsert `PostGameAnswer` mutation. */
 export type UpsertPostGameAnswerWhere = {
   id?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
   uuid?: Maybe<Scalars['UUID']>;
 };
 
@@ -22917,8 +23108,12 @@ export type User = Node & {
   /** Reads and enables pagination through a set of `Notification`. */
   notificationsByRecipientId: NotificationsConnection;
   passwordHash?: Maybe<Scalars['String']>;
-  /** Reads a single `PostGameAnswer` that is related to this `User`. */
-  postGameAnswer?: Maybe<PostGameAnswer>;
+  /** Reads and enables pagination through a set of `PostGameAnswer`. */
+  postGameAnswers: PostGameAnswersConnection;
+  /** Reads and enables pagination through a set of `PostGameRange`. */
+  postGameRangesByPostGameAnswerUserIdAndRangeId: UserPostGameRangesByPostGameAnswerUserIdAndRangeIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `PostGame`. */
+  postGamesByPostGameAnswerUserIdAndGameId: UserPostGamesByPostGameAnswerUserIdAndGameIdManyToManyConnection;
   /** Reads and enables pagination through a set of `PostLike`. */
   postLikes: PostLikesConnection;
   /** Reads and enables pagination through a set of `PostRecording`. */
@@ -23167,6 +23362,42 @@ export type UserNotificationsByRecipientIdArgs = {
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<NotificationsOrderBy>>;
+};
+
+
+export type UserPostGameAnswersArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostGameAnswerCondition>;
+  filter?: Maybe<PostGameAnswerFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+};
+
+
+export type UserPostGameRangesByPostGameAnswerUserIdAndRangeIdArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostGameRangeCondition>;
+  filter?: Maybe<PostGameRangeFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostGameRangesOrderBy>>;
+};
+
+
+export type UserPostGamesByPostGameAnswerUserIdAndGameIdArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostGameCondition>;
+  filter?: Maybe<PostGameFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostGamesOrderBy>>;
 };
 
 
@@ -24136,6 +24367,80 @@ export type UserPatch = {
   uuid?: Maybe<Scalars['UUID']>;
 };
 
+/** A connection to a list of `PostGameRange` values, with data from `PostGameAnswer`. */
+export type UserPostGameRangesByPostGameAnswerUserIdAndRangeIdManyToManyConnection = {
+  __typename?: 'UserPostGameRangesByPostGameAnswerUserIdAndRangeIdManyToManyConnection';
+  /** A list of edges which contains the `PostGameRange`, info from the `PostGameAnswer`, and the cursor to aid in pagination. */
+  edges: Array<UserPostGameRangesByPostGameAnswerUserIdAndRangeIdManyToManyEdge>;
+  /** A list of `PostGameRange` objects. */
+  nodes: Array<Maybe<PostGameRange>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `PostGameRange` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `PostGameRange` edge in the connection, with data from `PostGameAnswer`. */
+export type UserPostGameRangesByPostGameAnswerUserIdAndRangeIdManyToManyEdge = {
+  __typename?: 'UserPostGameRangesByPostGameAnswerUserIdAndRangeIdManyToManyEdge';
+  /** Reads and enables pagination through a set of `PostGameAnswer`. */
+  answers: PostGameAnswersConnection;
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `PostGameRange` at the end of the edge. */
+  node?: Maybe<PostGameRange>;
+};
+
+
+/** A `PostGameRange` edge in the connection, with data from `PostGameAnswer`. */
+export type UserPostGameRangesByPostGameAnswerUserIdAndRangeIdManyToManyEdgeAnswersArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostGameAnswerCondition>;
+  filter?: Maybe<PostGameAnswerFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+};
+
+/** A connection to a list of `PostGame` values, with data from `PostGameAnswer`. */
+export type UserPostGamesByPostGameAnswerUserIdAndGameIdManyToManyConnection = {
+  __typename?: 'UserPostGamesByPostGameAnswerUserIdAndGameIdManyToManyConnection';
+  /** A list of edges which contains the `PostGame`, info from the `PostGameAnswer`, and the cursor to aid in pagination. */
+  edges: Array<UserPostGamesByPostGameAnswerUserIdAndGameIdManyToManyEdge>;
+  /** A list of `PostGame` objects. */
+  nodes: Array<Maybe<PostGame>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `PostGame` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `PostGame` edge in the connection, with data from `PostGameAnswer`. */
+export type UserPostGamesByPostGameAnswerUserIdAndGameIdManyToManyEdge = {
+  __typename?: 'UserPostGamesByPostGameAnswerUserIdAndGameIdManyToManyEdge';
+  /** Reads and enables pagination through a set of `PostGameAnswer`. */
+  answerReveals: PostGameAnswersConnection;
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `PostGame` at the end of the edge. */
+  node?: Maybe<PostGame>;
+};
+
+
+/** A `PostGame` edge in the connection, with data from `PostGameAnswer`. */
+export type UserPostGamesByPostGameAnswerUserIdAndGameIdManyToManyEdgeAnswerRevealsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostGameAnswerCondition>;
+  filter?: Maybe<PostGameAnswerFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+};
+
 /** A connection to a list of `Post` values, with data from `Post`. */
 export type UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection = {
   __typename?: 'UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection';
@@ -24804,14 +25109,15 @@ export type CreatePostGameMutation = { __typename?: 'Mutation', createPostGame?:
 export type CreatePostGameAnswerMutationVariables = Exact<{
   genderOption?: Maybe<GrammaticalGender>;
   caseOption?: Maybe<GrammaticalCase>;
-  correct: Scalars['Boolean'];
-  rangeId: Scalars['Int'];
+  correct?: Maybe<Scalars['Boolean']>;
+  rangeId?: Maybe<Scalars['Int']>;
+  gameId?: Maybe<Scalars['Int']>;
   userId: Scalars['Int'];
   clozeAnswer?: Maybe<Scalars['String']>;
 }>;
 
 
-export type CreatePostGameAnswerMutation = { __typename?: 'Mutation', createPostGameAnswer?: Maybe<{ __typename?: 'CreatePostGameAnswerPayload', postGameAnswer?: Maybe<{ __typename?: 'PostGameAnswer', id: number, nodeId: string, createdAt: any, caseOption?: Maybe<GrammaticalCase>, uuid: any, correct: boolean, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }> }> }> };
+export type CreatePostGameAnswerMutation = { __typename?: 'Mutation', createPostGameAnswer?: Maybe<{ __typename?: 'CreatePostGameAnswerPayload', postGameAnswer?: Maybe<{ __typename?: 'PostGameAnswer', id: number, nodeId: string, createdAt: any, caseOption?: Maybe<GrammaticalCase>, uuid: any, correct?: Maybe<boolean>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }>, game?: Maybe<{ __typename?: 'PostGame', uuid: any }> }> }> };
 
 export type CreatePostGameRangeMutationVariables = Exact<{
   gameId: Scalars['Int'];
@@ -24850,6 +25156,20 @@ export type DeletePostLikeMutationVariables = Exact<{
 
 export type DeletePostLikeMutation = { __typename?: 'Mutation', deletePostLike?: Maybe<{ __typename?: 'DeletePostLikePayload', postLike?: Maybe<{ __typename?: 'PostLike', postId: number, userId: number, nodeId: string, createdAt: any }> }> };
 
+export type PostGameByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type PostGameByUuidQuery = { __typename?: 'Query', postGameByUuid?: Maybe<{ __typename?: 'PostGame', id: number, nodeId: string, gameType: PostGameType, ranges: { __typename?: 'PostGameRangesConnection', nodes: Array<Maybe<{ __typename?: 'PostGameRange', uuid: any, id: number, caseOption?: Maybe<GrammaticalCase>, genderOption?: Maybe<GrammaticalGender>, startIndex: number, endIndex: number }>> }, post?: Maybe<{ __typename?: 'Post', authorId?: Maybe<number> }> }> };
+
+export type PostGameIdByUuidQueryVariables = Exact<{
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type PostGameIdByUuidQuery = { __typename?: 'Query', postGameByUuid?: Maybe<{ __typename?: 'PostGame', id: number, nodeId: string }> };
+
 export type PostIdByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
 }>;
@@ -24878,6 +25198,14 @@ export type SinglePostQueryVariables = Exact<{
 
 
 export type SinglePostQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }> };
+
+export type UserHasAnsweredOrRevealedPostGameQueryVariables = Exact<{
+  gameId: Scalars['Int'];
+  userId: Scalars['Int'];
+}>;
+
+
+export type UserHasAnsweredOrRevealedPostGameQuery = { __typename?: 'Query', postGame?: Maybe<{ __typename?: 'PostGame', answerReveals: { __typename?: 'PostGameAnswersConnection', totalCount: number }, ranges: { __typename?: 'PostGameRangesConnection', nodes: Array<Maybe<{ __typename?: 'PostGameRange', answers: { __typename?: 'PostGameAnswersConnection', totalCount: number } }>> } }> };
 
 export type CreateUserFollowershipMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -25513,9 +25841,9 @@ export const CreatePostGame = gql`
 }
     `;
 export const CreatePostGameAnswer = gql`
-    mutation CreatePostGameAnswer($genderOption: GrammaticalGender, $caseOption: GrammaticalCase, $correct: Boolean!, $rangeId: Int!, $userId: Int!, $clozeAnswer: String) {
+    mutation CreatePostGameAnswer($genderOption: GrammaticalGender, $caseOption: GrammaticalCase, $correct: Boolean, $rangeId: Int, $gameId: Int, $userId: Int!, $clozeAnswer: String) {
   createPostGameAnswer(
-    input: {postGameAnswer: {rangeId: $rangeId, userId: $userId, correct: $correct, genderOption: $genderOption, clozeAnswer: $clozeAnswer, caseOption: $caseOption}}
+    input: {postGameAnswer: {rangeId: $rangeId, gameId: $gameId, userId: $userId, correct: $correct, genderOption: $genderOption, clozeAnswer: $clozeAnswer, caseOption: $caseOption}}
   ) {
     postGameAnswer {
       id
@@ -25524,6 +25852,9 @@ export const CreatePostGameAnswer = gql`
       caseOption
       uuid
       range {
+        uuid
+      }
+      game {
         uuid
       }
       correct
@@ -25588,6 +25919,36 @@ export const DeletePostLike = gql`
       nodeId
       createdAt
     }
+  }
+}
+    `;
+export const PostGameByUuid = gql`
+    query PostGameByUuid($uuid: UUID!) {
+  postGameByUuid(uuid: $uuid) {
+    id
+    nodeId
+    ranges {
+      nodes {
+        uuid
+        id
+        caseOption
+        genderOption
+        startIndex
+        endIndex
+      }
+    }
+    gameType
+    post {
+      authorId
+    }
+  }
+}
+    `;
+export const PostGameIdByUuid = gql`
+    query PostGameIdByUuid($uuid: UUID!) {
+  postGameByUuid(uuid: $uuid) {
+    id
+    nodeId
   }
 }
     `;
@@ -25696,6 +26057,22 @@ export const SinglePost = gql`
         type
       }
       snowflakeId
+    }
+  }
+}
+    `;
+export const UserHasAnsweredOrRevealedPostGame = gql`
+    query UserHasAnsweredOrRevealedPostGame($gameId: Int!, $userId: Int!) {
+  postGame(id: $gameId) {
+    answerReveals(condition: {userId: $userId}) {
+      totalCount
+    }
+    ranges {
+      nodes {
+        answers(condition: {userId: $userId}) {
+          totalCount
+        }
+      }
     }
   }
 }

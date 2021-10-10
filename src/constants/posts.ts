@@ -13,7 +13,7 @@ export const AVAILABLE_POST_GAME_TYPES = [
 
 export const GUESS_CASE_OPTIONS: Record<
     GuessCaseLocale,
-    Record<GrammaticalCase, string>
+    Partial<Record<GrammaticalCase, string>>
 > = {
     de: {
         NOMINATIVE: "nominative",
@@ -21,21 +21,21 @@ export const GUESS_CASE_OPTIONS: Record<
         DATIVE: "dative",
         ACCUSATIVE: "accusative",
     },
-    it: {
-        SUBJECT: "subject",
-        INDIRECT_OBJECT: "indirect_object",
-        DIRECT_OBJECT: "direct_object",
-    },
-    zh: {
-        SUBJECT: "subject",
-        INDIRECT_OBJECT: "indirect_object",
-        DIRECT_OBJECT: "direct_object",
-    },
+    // it: {
+    //     SUBJECT: "subject",
+    //     INDIRECT_OBJECT: "indirect_object",
+    //     DIRECT_OBJECT: "direct_object",
+    // },
+    // zh: {
+    //     SUBJECT: "subject",
+    //     INDIRECT_OBJECT: "indirect_object",
+    //     DIRECT_OBJECT: "direct_object",
+    // },
 } as const
 export type GuessCaseOption = typeof GUESS_CASE_OPTIONS[GuessCaseLocale]
 export const GUESS_GENDER_OPTIONS: Record<
     GuessGenderLocale,
-    Record<GrammaticalGender, string>
+    Partial<Record<GrammaticalGender, string>>
 > = {
     fr: {
         MASCULINE: "masculine",

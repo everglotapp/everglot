@@ -1,0 +1,19 @@
+query UserHasAnsweredOrRevealedPostGame($gameId: Int!, $userId: Int!) {
+  postGame(id: $gameId) {
+    answerReveals(condition: {userId: $userId}) {
+      totalCount
+      __typename
+    }
+    ranges {
+      nodes {
+        answers(condition: {userId: $userId}) {
+          totalCount
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

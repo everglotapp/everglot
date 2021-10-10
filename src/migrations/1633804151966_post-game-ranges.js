@@ -81,6 +81,10 @@ exports.up = (pgm) => {
         `,
         }
     )
+    pgm.createIndex(
+        { schema: "app_public", name: "post_game_ranges" },
+        "game_id"
+    )
     pgm.alterTable(
         { schema: "app_public", name: "post_game_ranges" },
         {
@@ -182,6 +186,7 @@ exports.down = (pgm) => {
             levelSecurity: "DISABLE",
         }
     )
+    pgm.dropIndex({ schema: "app_public", name: "post_game_ranges" }, "game_id")
     pgm.dropConstraint(
         { schema: "app_public", name: "post_game_ranges" },
         "has_max_one_selected_option"

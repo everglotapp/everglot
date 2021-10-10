@@ -134,6 +134,24 @@ declare module '*/deletePostLike.graphql' {
 }
     
 
+declare module '*/postGameByUuid.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const PostGameByUuid: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/postGameIdByUuid.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const PostGameIdByUuid: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/postIdByUuid.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -165,6 +183,15 @@ declare module '*/singlePost.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const SinglePost: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userHasAnsweredOrRevealedPostGame.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserHasAnsweredOrRevealedPostGame: DocumentNode;
 
   export default defaultDocument;
 }

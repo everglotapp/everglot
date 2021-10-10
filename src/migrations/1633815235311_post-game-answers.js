@@ -16,13 +16,17 @@ exports.up = (pgm) => {
             range_id: {
                 type: "integer",
                 references: { schema: "app_public", name: "post_game_ranges" },
-                notNull: true,
+                notNull: false,
+            },
+            game_id: {
+                type: "integer",
+                references: { schema: "app_public", name: "post_games" },
+                notNull: false,
             },
             user_id: {
                 type: "integer",
                 references: { schema: "app_public", name: "users" },
                 notNull: true,
-                unique: true,
             },
             case_option: {
                 type: "grammatical_case",
@@ -38,7 +42,7 @@ exports.up = (pgm) => {
             },
             correct: {
                 type: "boolean",
-                notNull: true,
+                notNull: false,
             },
             created_at: {
                 type: "timestamp with time zone",
@@ -49,20 +53,66 @@ exports.up = (pgm) => {
     )
     pgm.sql(`
         COMMENT ON CONSTRAINT post_game_answers_range_id_fkey on app_public.post_game_answers is
-        E'@gameId answersByRangeId\n@foreignFieldName answers\nRange that was answered.';
+        E'@rangeId answersByRangeId\n@foreignFieldName answers\nRange that was answered.';
+    `)
+    pgm.sql(`
+        COMMENT ON CONSTRAINT post_game_answers_game_id_fkey on app_public.post_game_answers is
+        E'@gameId answersByGameId\n@foreignFieldName answerReveals\nGame whose solution the user looked at.';
     `)
     pgm.addConstraint(
         { schema: "app_public", name: "post_game_answers" },
-        "has_exactly_one_value",
+        "has_exactly_one_value_iff_answered",
         {
             check: `
             (
               (case_option IS NOT NULL)::int +
               (gender_option IS NOT NULL)::int +
               (cloze_answer IS NOT NULL)::int
+            ) = (range_id IS NOT NULL)::int
+        `,
+        }
+    )
+    pgm.addConstraint(
+        { schema: "app_public", name: "post_game_answers" },
+        "has_either_game_or_range",
+        {
+            check: `
+            (
+              (game_id IS NOT NULL)::int +
+              (range_id IS NOT NULL)::int
             ) = 1
         `,
         }
+    )
+    pgm.addConstraint(
+        { schema: "app_public", name: "post_game_answers" },
+        "correct_is_null_iff_user_reveals",
+        {
+            check: `
+            (
+                (range_id IS NULL AND correct IS NULL) OR
+                (range_id IS NOT NULL AND correct is NOT NULL)
+            )
+        `,
+        }
+    )
+    pgm.createIndex(
+        { schema: "app_public", name: "post_game_answers" },
+        ["range_id", "user_id"],
+        { unique: true }
+    )
+    pgm.createIndex(
+        { schema: "app_public", name: "post_game_answers" },
+        ["game_id", "user_id"],
+        { unique: true }
+    )
+    pgm.createIndex(
+        { schema: "app_public", name: "post_game_answers" },
+        "range_id"
+    )
+    pgm.createIndex(
+        { schema: "app_public", name: "post_game_answers" },
+        "game_id"
     )
     pgm.alterTable(
         { schema: "app_public", name: "post_game_answers" },
@@ -91,7 +141,7 @@ exports.up = (pgm) => {
     )
     pgm.sql(`GRANT SELECT ON app_public.post_game_answers TO evg_client`)
     pgm.sql(
-        `GRANT INSERT(range_id, user_id, case_option, gender_option, cloze_answer, correct)
+        `GRANT INSERT(range_id, game_id, user_id, case_option, gender_option, cloze_answer, correct)
         ON app_public.post_game_answers
         TO evg_server`
     )
@@ -139,7 +189,7 @@ exports.down = (pgm) => {
         `REVOKE USAGE, SELECT ON SEQUENCE app_public.post_game_answers_id_seq FROM evg_server`
     )
     pgm.sql(
-        `REVOKE INSERT(range_id, user_id, case_option, gender_option, cloze_answer, correct)
+        `REVOKE INSERT(range_id, game_id, user_id, case_option, gender_option, cloze_answer, correct)
         ON app_public.post_game_answers
         FROM evg_server`
     )
@@ -165,9 +215,35 @@ exports.down = (pgm) => {
             levelSecurity: "DISABLE",
         }
     )
+    pgm.dropIndex(
+        { schema: "app_public", name: "post_game_answers" },
+        "game_id"
+    )
+    pgm.dropIndex(
+        { schema: "app_public", name: "post_game_answers" },
+        "range_id"
+    )
+    pgm.dropIndex(
+        { schema: "app_public", name: "post_game_answers" },
+        ["game_id", "user_id"],
+        { unique: true }
+    )
+    pgm.dropIndex(
+        { schema: "app_public", name: "post_game_answers" },
+        ["range_id", "user_id"],
+        { unique: true }
+    )
     pgm.dropConstraint(
         { schema: "app_public", name: "post_game_answers" },
-        "has_exactly_one_value"
+        "correct_is_null_iff_user_reveals"
+    )
+    pgm.dropConstraint(
+        { schema: "app_public", name: "post_game_answers" },
+        "has_either_game_or_range"
+    )
+    pgm.dropConstraint(
+        { schema: "app_public", name: "post_game_answers" },
+        "has_exactly_one_value_iff_answered"
     )
     pgm.dropTable({ schema: "app_public", name: "post_game_answers" })
 }

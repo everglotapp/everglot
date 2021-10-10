@@ -2,7 +2,7 @@ import { performQuery } from "./gql"
 
 import log from "../logger"
 
-import type {
+import {
     CreatePostMutationVariables,
     CreatePostMutation,
     CreatePostLikeMutationVariables,
@@ -19,6 +19,13 @@ import type {
     PostLikeIdByPostIdAndUserIdQuery,
     CreatePostRecordingMutationVariables,
     CreatePostRecordingMutation,
+    PostGameIdByUuidQuery,
+    PostGameIdByUuid,
+    PostGameByUuidQuery,
+    PostGameByUuid,
+    UserHasAnsweredOrRevealedPostGameQueryVariables,
+    UserHasAnsweredOrRevealedPostGame,
+    UserHasAnsweredOrRevealedPostGameQuery,
 } from "../types/generated/graphql"
 import {
     CreatePost,
@@ -165,6 +172,32 @@ export async function createPostGameRange(
     return res.data?.createPostGameRange?.postGameRange || null
 }
 
+export async function getPostGameIdByUuid(
+    uuid: string
+): Promise<number | null> {
+    const res = await performQuery<PostGameIdByUuidQuery>(
+        PostGameIdByUuid.loc!.source,
+        { uuid }
+    )
+    if (!res.data) {
+        chlog.child({ res, uuid }).error("Failed to find post game ID by UUID")
+        return null
+    }
+    return res.data?.postGameByUuid?.id || null
+}
+
+export async function getPostGameByUuid(uuid: string) {
+    const res = await performQuery<PostGameByUuidQuery>(
+        PostGameByUuid.loc!.source,
+        { uuid }
+    )
+    if (!res.data) {
+        chlog.child({ res, uuid }).error("Failed to find post game by UUID")
+        return null
+    }
+    return res.data?.postGameByUuid || null
+}
+
 export async function createPostGameAnswer(
     vars: CreatePostGameAnswerMutationVariables
 ): Promise<
@@ -182,4 +215,22 @@ export async function createPostGameAnswer(
         return null
     }
     return res.data?.createPostGameAnswer?.postGameAnswer || null
+}
+
+export async function userHasAnsweredOrRevealedPostGame(
+    vars: UserHasAnsweredOrRevealedPostGameQueryVariables
+): Promise<boolean | null> {
+    const res = await performQuery<UserHasAnsweredOrRevealedPostGameQuery>(
+        UserHasAnsweredOrRevealedPostGame.loc!.source,
+        vars
+    )
+    if (!res.data || !res.data.postGame) {
+        chlog.child({ res, vars }).error("Failed to find post game by ID")
+        return null
+    }
+    const { answerReveals, ranges } = res.data.postGame
+    if (answerReveals.totalCount > 0) {
+        return true
+    }
+    return ranges.nodes.some((node) => node && node.answers.totalCount > 0)
 }

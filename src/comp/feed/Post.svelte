@@ -21,7 +21,11 @@
 
     import { currentUserStore, currentUserUuid } from "../../stores/currentUser"
 
-    import type { AllPostsQuery } from "../../types/generated/graphql"
+    import type {
+        AllPostsQuery,
+        GrammaticalCase,
+        GrammaticalGender,
+    } from "../../types/generated/graphql"
     import { PromptType, PostGameType } from "../../types/generated/graphql"
     import { createPost } from "../../routes/_helpers/posts"
     import {
@@ -35,6 +39,7 @@
     } from "../../constants"
     import { USER_UPLOADED_RECORDINGS_BASE_PATH } from "../../constants"
     import { getBodyParts } from "../../routes/_helpers/posts/selections"
+    import { createPostGameAnswer } from "../../routes/_helpers/posts/games"
 
     query(currentUserStore)
 
@@ -84,6 +89,8 @@
             locale: language.alpha2 as SupportedLocale,
             parentPostUuid: uuid,
             promptUuid: null,
+            gameType: null,
+            ranges: null,
         })
         if (res.status === 200) {
             const response = await res.json()
@@ -231,6 +238,44 @@
         }
         answerRangeUuid = null
     }
+
+    async function handleSubmitAnswers() {
+        if (!game) {
+            return
+        }
+        let answers: {
+            rangeUuid: string
+            caseOption?: GrammaticalCase
+            genderOption?: GrammaticalGender
+            clozeAnswer?: string | undefined
+        }[] = []
+        if (game.gameType === PostGameType.GuessCase) {
+            answers = Object.entries(answerRanges)
+                .filter(([_uuid, range]) => Boolean(range))
+                .map(([uuid, range]) => ({
+                    rangeUuid: uuid,
+                    caseOption: (range! as GuessCaseRange).option,
+                }))
+        } else if (game.gameType === PostGameType.GuessGender) {
+            answers = Object.entries(answerRanges)
+                .filter(([_uuid, range]) => Boolean(range))
+                .map(([uuid, range]) => ({
+                    rangeUuid: uuid,
+                    genderOption: (range! as GuessGenderRange).option,
+                }))
+        } else if (game.gameType === PostGameType.Cloze) {
+        } else {
+            return
+        }
+        const res = await createPostGameAnswer({ gameUuid: game.uuid, answers })
+        if (res.status === 200) {
+            const response = await res.json()
+            if (response.success) {
+            }
+        }
+    }
+    // TOOD: Check for Cloze as well
+    $: anyRangeAnswered = Object.values(answerRanges).some(Boolean)
 </script>
 
 <div
@@ -412,6 +457,22 @@
             {/if}
         </div>
     </div>
+    {#if currentUserAnswer === null}
+        <div class="flex flex-row pt-1 justify-start items-center">
+            <div class="flex relative mr-1">
+                <ButtonSmall
+                    className="items-center justify-center recording ml-0 mr-1"
+                    tag="button"
+                    variant="OUTLINED"
+                    color="PRIMARY"
+                    on:click={() => handleSubmitAnswers()}
+                    ><SendIcon size="16" class="mr-2" /><span
+                        >{#if anyRangeAnswered}Submit{:else}View answers{/if}</span
+                    ></ButtonSmall
+                >
+            </div>
+        </div>
+    {/if}
     <div class="flex flex-row pt-1 justify-end items-center">
         <div class="flex relative mr-1">
             {#if showReplies || forceShowReplies}

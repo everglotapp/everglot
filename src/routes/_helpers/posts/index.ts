@@ -1,10 +1,8 @@
-import {
-    PostGameType,
-    USER_CREATE_POST_RECORDING_FILE_FORM_FIELD,
-} from "../../../constants"
+import { USER_CREATE_POST_RECORDING_FILE_FORM_FIELD } from "../../../constants"
 import type { SupportedLocale, PostGameRange } from "../../../constants"
 
 import { decode as decodeHTML } from "he"
+import type { PostGameType } from "../../../types/generated/graphql"
 
 export async function createPost({
     body,

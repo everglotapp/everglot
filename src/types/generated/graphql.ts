@@ -25161,7 +25161,7 @@ export type RegisterUserActivityMutation = { __typename?: 'Mutation', registerUs
 export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }>, games: { __typename?: 'PostGamesConnection', nodes: Array<Maybe<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: Maybe<boolean>, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: Maybe<{ __typename?: 'PostGameAnswer', id: number }> }> } }>> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameAnswer', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, correct?: Maybe<boolean>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }> }>> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<Maybe<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, rangeUuid?: Maybe<any> }>> } }>> } }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }>, games: { __typename?: 'PostGamesConnection', nodes: Array<Maybe<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: Maybe<boolean>, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: Maybe<{ __typename?: 'PostGameAnswer', id: number }> }> } }>> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameAnswer', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, correct?: Maybe<boolean>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }> }>> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<Maybe<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, rangeUuid?: Maybe<any> }>> } }>> } }>> }> };
+export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }>, games: { __typename?: 'PostGamesConnection', nodes: Array<Maybe<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: Maybe<boolean>, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: Maybe<{ __typename?: 'PostGameAnswer', id: number }> }> } }>> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameAnswer', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, correct?: Maybe<boolean>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }> }>> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<Maybe<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, rangeUuid?: Maybe<any> }>> } }>> } }>> }> };
 
 export type CreatePostMutationVariables = Exact<{
   authorId: Scalars['Int'];
@@ -25280,7 +25280,7 @@ export type SinglePostQueryVariables = Exact<{
 }>;
 
 
-export type SinglePostQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }> };
+export type SinglePostQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }>, games: { __typename?: 'PostGamesConnection', nodes: Array<Maybe<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: Maybe<boolean>, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: Maybe<{ __typename?: 'PostGameAnswer', id: number }> }> } }>> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameAnswer', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, correct?: Maybe<boolean>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }> }>> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<Maybe<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, rangeUuid?: Maybe<any> }>> } }>> } }>> }> };
 
 export type CreateUserFollowershipMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -25509,7 +25509,7 @@ export type UserByUsernamePostsQueryVariables = Exact<{
 }>;
 
 
-export type UserByUsernamePostsQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', authoredPosts: { __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> } }> };
+export type UserByUsernamePostsQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', authoredPosts: { __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }>, games: { __typename?: 'PostGamesConnection', nodes: Array<Maybe<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: Maybe<boolean>, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: Maybe<{ __typename?: 'PostGameAnswer', id: number }> }> } }>> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameAnswer', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, correct?: Maybe<boolean>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }> }>> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<Maybe<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, rangeUuid?: Maybe<any> }>> } }>> } }>> } }> };
 
 export type UserProfileQueryVariables = Exact<{
   username: Scalars['String'];
@@ -25818,48 +25818,6 @@ export const AllPosts = gql`
             content
             uuid
             type
-          }
-          games {
-            nodes {
-              gameType
-              uuid
-              ranges {
-                nodes {
-                  answers {
-                    edges {
-                      node {
-                        id
-                      }
-                    }
-                  }
-                  endIndex
-                  startIndex
-                  uuid
-                }
-                totalCount
-              }
-              revealedByCurrentUser
-              answersByCurrentUser {
-                nodes {
-                  caseOption
-                  clozeAnswer
-                  correct
-                  genderOption
-                  range {
-                    uuid
-                  }
-                }
-                totalCount
-              }
-              correctAnswers {
-                nodes {
-                  caseOption
-                  clozeAnswer
-                  genderOption
-                  rangeUuid
-                }
-              }
-            }
           }
         }
       }
@@ -26195,6 +26153,48 @@ export const SinglePost = gql`
         type
       }
       snowflakeId
+      games {
+        nodes {
+          gameType
+          uuid
+          ranges {
+            nodes {
+              answers {
+                edges {
+                  node {
+                    id
+                  }
+                }
+              }
+              endIndex
+              startIndex
+              uuid
+            }
+            totalCount
+          }
+          revealedByCurrentUser
+          answersByCurrentUser {
+            nodes {
+              caseOption
+              clozeAnswer
+              correct
+              genderOption
+              range {
+                uuid
+              }
+            }
+            totalCount
+          }
+          correctAnswers {
+            nodes {
+              caseOption
+              clozeAnswer
+              genderOption
+              rangeUuid
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -26725,6 +26725,49 @@ export const UserByUsernamePosts = gql`
           content
           uuid
           type
+        }
+        snowflakeId
+        games {
+          nodes {
+            gameType
+            uuid
+            ranges {
+              nodes {
+                answers {
+                  edges {
+                    node {
+                      id
+                    }
+                  }
+                }
+                endIndex
+                startIndex
+                uuid
+              }
+              totalCount
+            }
+            revealedByCurrentUser
+            answersByCurrentUser {
+              nodes {
+                caseOption
+                clozeAnswer
+                correct
+                genderOption
+                range {
+                  uuid
+                }
+              }
+              totalCount
+            }
+            correctAnswers {
+              nodes {
+                caseOption
+                clozeAnswer
+                genderOption
+                rangeUuid
+              }
+            }
+          }
         }
       }
     }

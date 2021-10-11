@@ -1,5 +1,5 @@
-query AllPosts {
-  posts(orderBy: CREATED_AT_DESC, condition: {parentPostId: null}) {
+query SinglePost($snowflakeId: BigInt!) {
+  posts(condition: {parentPostId: null, snowflakeId: $snowflakeId}) {
     nodes {
       uuid
       nodeId
@@ -63,60 +63,6 @@ query AllPosts {
             content
             uuid
             type
-            __typename
-          }
-          games {
-            nodes {
-              gameType
-              uuid
-              ranges {
-                nodes {
-                  answers {
-                    edges {
-                      node {
-                        id
-                        __typename
-                      }
-                      __typename
-                    }
-                    __typename
-                  }
-                  endIndex
-                  startIndex
-                  uuid
-                  __typename
-                }
-                totalCount
-                __typename
-              }
-              revealedByCurrentUser
-              answersByCurrentUser {
-                nodes {
-                  caseOption
-                  clozeAnswer
-                  correct
-                  genderOption
-                  range {
-                    uuid
-                    __typename
-                  }
-                  __typename
-                }
-                totalCount
-                __typename
-              }
-              correctAnswers {
-                nodes {
-                  caseOption
-                  clozeAnswer
-                  genderOption
-                  rangeUuid
-                  __typename
-                }
-                __typename
-              }
-              __typename
-            }
             __typename
           }
           __typename

@@ -28,6 +28,7 @@
     import { languageCodeMappings } from "../stores"
     import { SUPPORTED_LOCALES, PROMPT_LOCALES } from "../constants"
     import type { SupportedLocale } from "../constants"
+    import { feedLocale } from "../stores/locales"
 
     query(languageCodeMappings)
 
@@ -85,6 +86,7 @@
     let languageButtonId: string
     let languageButtonDropdownId: string
     onMount(() => {
+        $feedLocale = pickedLocale || "en"
         if ($currentUserStore.stale) {
             if (redirectTimeout === null) {
                 redirectTimeout = window.setTimeout(() => {
@@ -128,6 +130,7 @@
             ) {
                 pickedLocale = $currentUser.preference.feedLanguage
                     .alpha2 as SupportedLocale
+                $feedLocale = pickedLocale
             }
         }
         feedLocaleInitialized = true
@@ -144,6 +147,7 @@
             body: JSON.stringify({ feedLocale: pickedLocale }),
         })
         previouslyPickedLocale = pickedLocale
+        $feedLocale = pickedLocale
     }
     function handlePickLocale(locale: SupportedLocale) {
         pickedLocale = locale

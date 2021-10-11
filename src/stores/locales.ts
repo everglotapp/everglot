@@ -1,7 +1,8 @@
-import { derived } from "svelte/store"
+import { derived, writable } from "svelte/store"
 
 import { groupUuid } from "./index"
 import { allGroupsStore } from "./groups"
+import type { SupportedLocale } from "../constants"
 
 /**
  * Contains basic information on the currently selected group.
@@ -42,3 +43,5 @@ export const currentGroupLanguage = derived(
         return $currentGroup.language?.englishName || null
     }
 )
+
+export let feedLocale = writable<SupportedLocale | null>(null)

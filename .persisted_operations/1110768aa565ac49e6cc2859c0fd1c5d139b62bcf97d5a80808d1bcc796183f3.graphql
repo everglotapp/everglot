@@ -94,6 +94,61 @@ query UserByUsernamePosts($username: String!) {
           type
           __typename
         }
+        snowflakeId
+        games {
+          nodes {
+            gameType
+            uuid
+            ranges {
+              nodes {
+                answers {
+                  edges {
+                    node {
+                      id
+                      __typename
+                    }
+                    __typename
+                  }
+                  __typename
+                }
+                endIndex
+                startIndex
+                uuid
+                __typename
+              }
+              totalCount
+              __typename
+            }
+            revealedByCurrentUser
+            answersByCurrentUser {
+              nodes {
+                caseOption
+                clozeAnswer
+                correct
+                genderOption
+                range {
+                  uuid
+                  __typename
+                }
+                __typename
+              }
+              totalCount
+              __typename
+            }
+            correctAnswers {
+              nodes {
+                caseOption
+                clozeAnswer
+                genderOption
+                rangeUuid
+                __typename
+              }
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
         __typename
       }
       __typename

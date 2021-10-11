@@ -249,13 +249,14 @@ email-unsubscribe-failure-contact-us = Por favor contacte-nos se achar que isto 
 
 ## Locales
 
-locale-en = InglÃªs
-locale-de = AlemÃ£o
-locale-zh = ChinÃªs
+locale-en = Inglês
+locale-de = Alemão
+locale-zh = Chinês
 locale-es = Espanhol
 locale-it = Italiano
-locale-fr = FrancÃªs
+locale-fr = Francês
 locale-ko = Coreano
-locale-ja = JaponÃªs
+locale-ja = Japonês
 locale-ru = Russo
-locale-ar = Ã¡rabe
+locale-ar = Árabe
+locale-pt = Português

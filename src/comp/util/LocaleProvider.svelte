@@ -14,7 +14,7 @@
     import ko from "../../../locales/ko/app.ftl"
     import ja from "../../../locales/ja/app.ftl"
 
-    import { currentGroupLocale } from "../../stores/locales"
+    import { currentGroupLocale, feedLocale } from "../../stores/locales"
 
     import { SUPPORTED_LOCALES } from "../../constants"
     import type { SupportedLocale } from "../../constants"
@@ -54,9 +54,12 @@
 
     $: navigatorLocales =
         typeof navigator === "undefined" ? [] : navigator.languages
-    $: preferredLocales = $currentGroupLocale
-        ? [$currentGroupLocale, ...navigatorLocales]
-        : navigatorLocales
+    $: preferredLocales =
+        segment === "" && $feedLocale !== null
+            ? [$feedLocale, ...navigatorLocales]
+            : $currentGroupLocale
+            ? [$currentGroupLocale, ...navigatorLocales]
+            : navigatorLocales
 </script>
 
 <FluentProvider bundles={generateBundles(preferredLocales)}>

@@ -31,7 +31,7 @@ exports.up = (pgm) => {
             pgr.case_option,
             pgr.gender_option,
             CASE WHEN post_game_row.game_type = 'cloze' THEN
-              SUBSTRING(p.body, pgr.start_index, pgr.end_index - pgr.start_index + 1)
+              SUBSTRING(p.body, pgr.start_index + 1, pgr.end_index - pgr.start_index + 1)
             ELSE
               null
             END
@@ -42,7 +42,10 @@ exports.up = (pgm) => {
           ) pgr
           INNER JOIN app_public.posts p
           ON post_game_row.post_id = p.id
-          WHERE app_public.post_games_current_user_can_see_correct_answers(post_game_row)
+          WHERE (
+            app_public.current_user_id() IS NULL
+            OR app_public.post_games_current_user_can_see_correct_answers(post_game_row)
+          )
         $$ language sql stable;`
     )
 }

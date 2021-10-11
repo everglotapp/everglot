@@ -25225,12 +25225,12 @@ export type CreatePostRecordingMutationVariables = Exact<{
 
 export type CreatePostRecordingMutation = { __typename?: 'Mutation', createPostRecording?: Maybe<{ __typename?: 'CreatePostRecordingPayload', postRecording?: Maybe<{ __typename?: 'PostRecording', createdAt: any, extension?: Maybe<string>, filename: string, uuid: any, nodeId: string }> }> };
 
-export type CurrentUserHasAnsweredOrRevealedGameQueryVariables = Exact<{
+export type CurrentUserHasAnsweredOrRevealedPostGameQueryVariables = Exact<{
   gameId: Scalars['Int'];
 }>;
 
 
-export type CurrentUserHasAnsweredOrRevealedGameQuery = { __typename?: 'Query', postGame?: Maybe<{ __typename?: 'PostGame', revealedByCurrentUser?: Maybe<boolean>, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number } }> };
+export type CurrentUserHasAnsweredOrRevealedPostGameQuery = { __typename?: 'Query', postGame?: Maybe<{ __typename?: 'PostGame', revealedByCurrentUser?: Maybe<boolean>, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number } }> };
 
 export type DeletePostLikeMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -25244,7 +25244,7 @@ export type PostGameByUuidQueryVariables = Exact<{
 }>;
 
 
-export type PostGameByUuidQuery = { __typename?: 'Query', postGameByUuid?: Maybe<{ __typename?: 'PostGame', id: number, nodeId: string, gameType: PostGameType, ranges: { __typename?: 'PostGameRangesConnection', nodes: Array<Maybe<{ __typename?: 'PostGameRange', uuid: any, id: number, caseOption?: Maybe<GrammaticalCase>, genderOption?: Maybe<GrammaticalGender>, startIndex: number, endIndex: number }>> }, post?: Maybe<{ __typename?: 'Post', authorId?: Maybe<number> }> }> };
+export type PostGameByUuidQuery = { __typename?: 'Query', postGameByUuid?: Maybe<{ __typename?: 'PostGame', id: number, nodeId: string, gameType: PostGameType, ranges: { __typename?: 'PostGameRangesConnection', nodes: Array<Maybe<{ __typename?: 'PostGameRange', uuid: any, id: number, caseOption?: Maybe<GrammaticalCase>, genderOption?: Maybe<GrammaticalGender>, startIndex: number, endIndex: number }>> }, post?: Maybe<{ __typename?: 'Post', authorId?: Maybe<number>, language?: Maybe<{ __typename?: 'Language', alpha2: string }> }>, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<Maybe<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, rangeUuid?: Maybe<any> }>> } }> };
 
 export type PostGameIdByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
@@ -26027,8 +26027,8 @@ export const CreatePostRecording = gql`
   }
 }
     `;
-export const CurrentUserHasAnsweredOrRevealedGame = gql`
-    query CurrentUserHasAnsweredOrRevealedGame($gameId: Int!) {
+export const CurrentUserHasAnsweredOrRevealedPostGame = gql`
+    query CurrentUserHasAnsweredOrRevealedPostGame($gameId: Int!) {
   postGame(id: $gameId) {
     answersByCurrentUser {
       totalCount
@@ -26067,6 +26067,17 @@ export const PostGameByUuid = gql`
     gameType
     post {
       authorId
+      language {
+        alpha2
+      }
+    }
+    correctAnswers {
+      nodes {
+        caseOption
+        clozeAnswer
+        genderOption
+        rangeUuid
+      }
     }
   }
 }

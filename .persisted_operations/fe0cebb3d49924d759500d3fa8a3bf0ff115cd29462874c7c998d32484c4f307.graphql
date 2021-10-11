@@ -1,4 +1,4 @@
-query CurrentUserHasAnsweredOrRevealedGame($gameId: Int!) {
+query CurrentUserHasAnsweredOrRevealedPostGame($gameId: Int!) {
   postGame(id: $gameId) {
     answersByCurrentUser {
       totalCount

@@ -326,6 +326,7 @@
         }
         answerRangeUuid = null
     }
+    let clozeAnswers: Record<string, string> = {}
 
     async function handleSubmitAnswers() {
         if (!game) {
@@ -361,6 +362,12 @@
                     genderOption: (range! as GuessGenderRange).option,
                 }))
         } else if (game.gameType === PostGameType.Cloze) {
+            answers = Object.entries(clozeAnswers)
+                .filter(([_uuid, answer]) => answer && answer.length)
+                .map(([uuid, answer]) => ({
+                    rangeUuid: uuid,
+                    clozeAnswer: answer.trim(),
+                }))
         } else {
             return
         }
@@ -383,8 +390,17 @@
             onFailure()
         }
     }
-    // TOOD: Check for Cloze as well
-    $: anyRangeAnswered = Object.values(answerRanges).some(Boolean)
+    $: anyRangeAnswered =
+        game === null
+            ? null
+            : game.gameType === PostGameType.GuessCase ||
+              game.gameType === PostGameType.GuessGender
+            ? Object.values(answerRanges).some(Boolean)
+            : game.gameType === PostGameType.Cloze
+            ? Object.values(clozeAnswers).some(
+                  (clozeAnswer) => clozeAnswer && clozeAnswer.length
+              )
+            : null
     let showCorrectAnswers: boolean = false
 </script>
 
@@ -525,9 +541,9 @@
                         on:keydown={() => (answerRangeUuid = null)}
                     />
                 {/if}
-                {#each bodyParts as bodyPart}
+                {#each bodyParts as bodyPart, i}
                     {#if bodyPart.type === BodyPartType.LineBreak}
-                        <br id={bodyPart.uuid} />
+                        <br />
                     {:else if bodyPart.type === BodyPartType.Range && bodyPart.uuid}
                         {#if game && (game.gameType === PostGameType.GuessCase || game.gameType === PostGameType.GuessGender)}
                             {#if currentUserCanAnswer}
@@ -572,42 +588,47 @@
                                                 !currentUserAnswerByRangeUuid[
                                                     bodyPart.uuid
                                                 ].correct)}
-                                        style="bottom: -2rem; left: 50%; right: 50%;"
-                                        ><Localized
-                                            id={game.gameType ===
-                                                PostGameType.GuessCase &&
-                                            displayedAnswerByRangeUuid[
-                                                bodyPart.uuid
-                                            ].caseOption
-                                                ? `post-game-guess-case-${
-                                                      GUESS_CASE_OPTIONS[
-                                                          language.alpha2
-                                                      ][
-                                                          displayedAnswerByRangeUuid[
-                                                              bodyPart.uuid
-                                                          ].caseOption
-                                                      ]
-                                                  }`
-                                                : game.gameType ===
-                                                      PostGameType.GuessGender &&
-                                                  displayedAnswerByRangeUuid[
-                                                      bodyPart.uuid
-                                                  ].genderOption
-                                                ? `post-game-guess-gender-${
-                                                      GUESS_GENDER_OPTIONS[
-                                                          language.alpha2
-                                                      ][
-                                                          displayedAnswerByRangeUuid[
-                                                              bodyPart.uuid
-                                                          ].genderOption
-                                                      ]
-                                                  }`
-                                                : ""}
-                                        /></span
+                                        style={`bottom: -2rem; left: 50%; right: 50%; z-index: ${
+                                            10 + i
+                                        };"`}
+                                        ><span class="bg-white"
+                                            ><Localized
+                                                id={game.gameType ===
+                                                    PostGameType.GuessCase &&
+                                                displayedAnswerByRangeUuid[
+                                                    bodyPart.uuid
+                                                ].caseOption
+                                                    ? `post-game-guess-case-${
+                                                          GUESS_CASE_OPTIONS[
+                                                              language.alpha2
+                                                          ][
+                                                              displayedAnswerByRangeUuid[
+                                                                  bodyPart.uuid
+                                                              ].caseOption
+                                                          ]
+                                                      }`
+                                                    : game.gameType ===
+                                                          PostGameType.GuessGender &&
+                                                      displayedAnswerByRangeUuid[
+                                                          bodyPart.uuid
+                                                      ].genderOption
+                                                    ? `post-game-guess-gender-${
+                                                          GUESS_GENDER_OPTIONS[
+                                                              language.alpha2
+                                                          ][
+                                                              displayedAnswerByRangeUuid[
+                                                                  bodyPart.uuid
+                                                              ].genderOption
+                                                          ]
+                                                      }`
+                                                    : ""}
+                                            /></span
+                                        ></span
                                     ></span
                                 >
                             {:else}
-                                <span class="font-bold text-gray mx-1"
+                                <span
+                                    class="border-b-2 border-gray-bitdark pb-1 mx-1"
                                     >{bodyPart.value}</span
                                 >
                             {/if}
@@ -616,34 +637,63 @@
                                 <input
                                     id={bodyPart.uuid}
                                     type="text"
-                                    class="inline mx-1"
+                                    class="inline mx-1 px-1 py-1"
+                                    bind:value={clozeAnswers[bodyPart.uuid]}
                                     name={bodyPart.uuid}
-                                    style={`width: ${
-                                        rangeByUuid[bodyPart.uuid].endIndex -
-                                        rangeByUuid[bodyPart.uuid].startIndex +
-                                        1 +
-                                        2
-                                    }em;`}
+                                    style={`width: 5em;`}
                                 />
                             {:else if showCorrectAnswers && displayedAnswerByRangeUuid[bodyPart.uuid]}
                                 <span
                                     class="inline-flex border-b-2 border-gray-bitdark px-1 py-1 mx-1 relative mb-8"
-                                    >{displayedAnswerByRangeUuid[bodyPart.uuid]
-                                        .clozeAnswer}</span
+                                    >{correctAnswerByRangeUuid[bodyPart.uuid]
+                                        .clozeAnswer}<span
+                                        class="body-part-range-answer absolute flex justify-center font-bold mr-1"
+                                        class:skipped={game.revealedByCurrentUser ||
+                                            currentUserCreatedGame}
+                                        class:correct={!game.revealedByCurrentUser &&
+                                            !currentUserCreatedGame &&
+                                            Boolean(
+                                                currentUserAnswerByRangeUuid[
+                                                    bodyPart.uuid
+                                                ]
+                                            ) &&
+                                            currentUserAnswerByRangeUuid[
+                                                bodyPart.uuid
+                                            ].correct}
+                                        class:incorrect={!game.revealedByCurrentUser &&
+                                            !currentUserCreatedGame &&
+                                            (!Boolean(
+                                                currentUserAnswerByRangeUuid[
+                                                    bodyPart.uuid
+                                                ]
+                                            ) ||
+                                                !currentUserAnswerByRangeUuid[
+                                                    bodyPart.uuid
+                                                ].correct)}
+                                        style={`bottom: -2rem; left: 50%; right: 50%; z-index: ${
+                                            10 + i
+                                        };"`}
+                                        ><span class="bg-white"
+                                            ><Localized
+                                                id={displayedAnswerByRangeUuid[
+                                                    bodyPart.uuid
+                                                ].clozeAnswer
+                                                    ? displayedAnswerByRangeUuid[
+                                                          bodyPart.uuid
+                                                      ].clozeAnswer
+                                                    : ""}
+                                            /></span
+                                        ></span
+                                    ></span
                                 >
                             {:else}
                                 <input
                                     id={bodyPart.uuid}
                                     type="text"
-                                    class="inline mx-1"
+                                    class="inline mx-1 bg-gray-light px-0 py-1"
                                     disabled
                                     name={bodyPart.uuid}
-                                    style={`width: ${
-                                        rangeByUuid[bodyPart.uuid].endIndex -
-                                        rangeByUuid[bodyPart.uuid].startIndex +
-                                        1 +
-                                        2
-                                    }em;`}
+                                    style={`height: 2rem; width: 4.5rem;`}
                                 />
                             {/if}
                         {/if}
@@ -672,31 +722,35 @@
                 <div class="flex flex-row pt-2 justify-start items-center">
                     <div class="flex relative mr-1">
                         <ButtonSmall
-                            className="flex items-center justify-center ml-0 mr-1"
+                            className="submit-answers-button flex items-center justify-center ml-0 mr-1"
                             tag="button"
                             variant="OUTLINED"
                             color={currentUserCanAnswer && anyRangeAnswered
                                 ? "PRIMARY"
                                 : "SECONDARY"}
                             on:click={() => handleSubmitAnswers()}
-                            >{#if showCorrectAnswers}<EyeIcon
+                            >{#if showCorrectAnswers}<EyeOffIcon
                                     size="16"
                                     class="mr-2"
-                                /><span>Hide Answers</span
-                                >{:else if !currentUserCanAnswer}<EyeOffIcon
+                                /><span class="text-sm">Hide Answers</span
+                                >{:else if !currentUserCanAnswer}<EyeIcon
                                     size="16"
                                     class="mr-2"
-                                /><span>Review Answers</span
+                                /><span class="text-sm">Review Answers</span
                                 >{:else if anyRangeAnswered}<SendIcon
                                     size="16"
                                     class="mr-2"
-                                /><span>Submit</span>{:else}<EyeOffIcon
-                                    size="16"
-                                    class="mr-2"
-                                /><span>Reveal Answers</span>{/if}</ButtonSmall
+                                /><span class="text-sm">Submit</span
+                                >{:else}<EyeIcon size="16" class="mr-2" /><span
+                                    class="text-sm">Reveal Answers</span
+                                >{/if}</ButtonSmall
                         >
                     </div>
-                    {#if !game.revealedByCurrentUser && currentUserAnswers.length}<div
+                    {#if game.revealedByCurrentUser}<div
+                            class="flex text-gray-bitdark text-sm"
+                        >
+                            You skipped this game.
+                        </div>{:else if currentUserAnswers.length}<div
                             class="flex text-gray-bitdark text-sm"
                         >
                             You got {currentUserAnswers.filter(
@@ -737,7 +791,7 @@
         {#if !forceShowReplies}
             {#if showReplies}
                 <ButtonSmall
-                    className="reply-button close items-center justify-center recording ml-0 mr-1"
+                    className="reply-button close items-center justify-center ml-0 mr-1"
                     tag="button"
                     variant="TEXT"
                     color="SECONDARY"
@@ -746,7 +800,7 @@
                 >
             {:else}
                 <ButtonLarge
-                    className="reply-button items-center justify-center recording ml-0 mr-1"
+                    className="reply-button items-center justify-center ml-0 mr-1"
                     tag="button"
                     variant="OUTLINED"
                     color="PRIMARY"
@@ -862,8 +916,14 @@
         @apply text-danger;
     }
 
+    :global(.submit-answers-button) {
+        @apply px-2 !important;
+    }
+
     :global(.reply-button) {
         min-width: 50px;
+
+        @apply px-2 !important;
     }
 
     :global(.reply-button svg) {

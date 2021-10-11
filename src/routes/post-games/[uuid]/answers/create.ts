@@ -21,6 +21,8 @@ const chlog = log.child({
     namespace: "posts-uuid-answers-create",
 })
 
+const MAX_CLOZE_ANSWER_LENGTH = 128
+
 export async function post(req: Request, res: Response, next: () => void) {
     const { user_id: userId } = req.session
     if (!userId) {
@@ -71,14 +73,14 @@ export async function post(req: Request, res: Response, next: () => void) {
     }
     if (game.post.authorId === userId) {
         chlog
-            .child({ userId, uuid })
+            .child({ userId, uuid, game })
             .debug("User tried to answer their own post game")
         unprocessableEntity(res, "You cannot answer your own game")
         return
     }
     if (await currentUserHasAnsweredOrRevealedPostGame({ gameId: game.id })) {
         chlog
-            .child({ userId, uuid })
+            .child({ userId, uuid, game })
             .debug("User has already answered or revealed game")
         unprocessableEntity(
             res,
@@ -98,11 +100,26 @@ export async function post(req: Request, res: Response, next: () => void) {
                     answers,
                     validRangeUuids,
                     answer,
+                    game,
                 })
                 .debug("Invalid answer, contains UUID of invalid range")
             unprocessableEntity(res, "Invalid answer")
             return
         }
+    }
+
+    if (!game.post.language) {
+        chlog
+            .child({
+                userId,
+                uuid,
+                answers,
+                validRangeUuids,
+                game,
+            })
+            .debug("Game's post does not have a language")
+        serverError(res)
+        return
     }
 
     let createdAnswers = []
@@ -142,7 +159,12 @@ export async function post(req: Request, res: Response, next: () => void) {
                     game.gameType === PostGameType.GuessGender
                         ? answer.genderOption
                         : null,
-                clozeAnswer: null,
+                clozeAnswer:
+                    game.gameType === PostGameType.Cloze &&
+                    typeof answer.clozeAnswer === "string" &&
+                    answer.clozeAnswer.length <= MAX_CLOZE_ANSWER_LENGTH
+                        ? answer.clozeAnswer
+                        : null,
             })
             if (!createdAnswer) {
                 serverError(res)
@@ -164,14 +186,35 @@ export async function post(req: Request, res: Response, next: () => void) {
 function isAnswerCorrect(
     answer: PostGameAnswerPayload,
     range: Pick<PostGameRange, "uuid" | "id" | "caseOption" | "genderOption">,
-    game: Pick<PostGame, "gameType">
+    game: Pick<PostGame, "gameType" | "correctAnswers" | "post">
 ): boolean | null {
+    const correctAnswer = game.correctAnswers.nodes.find(
+        (answer) => answer !== null && answer.rangeUuid === range.uuid
+    )
+    if (!correctAnswer) {
+        return null
+    }
     if (game.gameType === PostGameType.GuessCase) {
-        return range.caseOption === answer.caseOption
+        return correctAnswer.caseOption === answer.caseOption
     } else if (game.gameType === PostGameType.GuessGender) {
-        return range.genderOption === answer.genderOption
+        return correctAnswer.genderOption === answer.genderOption
     } else if (game.gameType === PostGameType.Cloze) {
-        return false
+        if (!game.post || !game.post.language) {
+            return null
+        }
+        if (
+            !correctAnswer.clozeAnswer ||
+            !answer.clozeAnswer ||
+            typeof answer.clozeAnswer !== "string"
+        ) {
+            return false
+        }
+        return (
+            answer.clozeAnswer.toLocaleLowerCase(game.post.language.alpha2) ===
+            correctAnswer.clozeAnswer.toLocaleLowerCase(
+                game.post.language.alpha2
+            )
+        )
     }
     return null
 }

@@ -9,11 +9,6 @@
         [guess_gender] Guess the Gender
         [cloze] Cloze
     }
-post-game-type-action = { $gameType ->
-       *[guess_case] guess the case
-        [guess_gender] guess the gender
-        [cloze] a cloze game
-    }
 
 ## Feed page
 
@@ -31,8 +26,13 @@ post-game-cancel = Cancel
 post-game-selection-remove = Remove
 post-game-selection-cancel = Cancel
 post-prompt-note-word = Make a sentence with "{ $word }".
-post-game-note-own = You have challenged the others to { post-game-type-action }.
-post-game-note-other = { $username } is challenging you to { post-game-type-action }!
+post-game-note-gane-action = { $gameType ->
+       *[GUESS_CASE] guess the case
+        [GUESS_GENDER] guess the gender
+        [CLOZE] a cloze game
+    }
+post-game-note-own = You have challenged the others to { post-game-note-gane-action }.
+post-game-note-other = { $username } is challenging you to { post-game-note-gane-action }!
 
 ## Chat page
 

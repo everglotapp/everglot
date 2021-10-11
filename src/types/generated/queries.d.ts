@@ -128,7 +128,7 @@ declare module '*/createPostRecording.graphql' {
 declare module '*/currentUserHasAnsweredOrRevealedPostGame.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const CurrentUserHasAnsweredOrRevealedGame: DocumentNode;
+  export const CurrentUserHasAnsweredOrRevealedPostGame: DocumentNode;
 
   export default defaultDocument;
 }

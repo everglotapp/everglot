@@ -15,6 +15,17 @@ query PostGameByUuid($uuid: UUID!) {
         gameType
         post {
             authorId
+            language {
+                alpha2
+            }
+        }
+        correctAnswers {
+            nodes {
+                caseOption
+                clozeAnswer
+                genderOption
+                rangeUuid
+            }
         }
     }
 }

@@ -229,9 +229,12 @@ export async function currentUserHasAnsweredOrRevealedPostGame(
         chlog.child({ res, vars }).error("Failed to find post game by ID")
         return null
     }
-    const { answerReveals, ranges } = res.data.postGame
-    if (answerReveals.totalCount > 0) {
+    const { revealedByCurrentUser, answersByCurrentUser } = res.data.postGame
+    if (revealedByCurrentUser) {
         return true
     }
-    return ranges.nodes.some((node) => node && node.answers.totalCount > 0)
+    if (answersByCurrentUser === null) {
+        return null
+    }
+    return answersByCurrentUser.totalCount > 0
 }

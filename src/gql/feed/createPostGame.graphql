@@ -1,0 +1,12 @@
+mutation CreatePostGame($postId: Int!, $gameType: PostGameType!) {
+    createPostGame(
+        input: { postGame: { postId: $postId, gameType: $gameType } }
+    ) {
+        postGame {
+            id
+            postId
+            nodeId
+            createdAt
+        }
+    }
+}

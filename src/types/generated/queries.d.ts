@@ -80,6 +80,33 @@ declare module '*/createPost.graphql' {
 }
     
 
+declare module '*/createPostGame.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostGame: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createPostGameAnswer.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostGameAnswer: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/createPostGameRange.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostGameRange: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createPostLike.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -98,10 +125,37 @@ declare module '*/createPostRecording.graphql' {
 }
     
 
+declare module '*/currentUserHasAnsweredOrRevealedPostGame.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CurrentUserHasAnsweredOrRevealedPostGame: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/deletePostLike.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const DeletePostLike: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/postGameByUuid.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const PostGameByUuid: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/postGameIdByUuid.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const PostGameIdByUuid: DocumentNode;
 
   export default defaultDocument;
 }

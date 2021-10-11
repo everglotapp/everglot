@@ -12,14 +12,31 @@
     } from "svelte-feather-icons"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
+    import { v4 as uuidv4 } from "uuid"
+
+    import RangeOptionsDropdown from "./RangeOptionsDropdown.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
+    import Modal from "../util/Modal.svelte"
+    import ClickAwayListener from "../util/ClickAwayListener.svelte"
+    import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
     import {
         createPost,
         createPostRecording,
+        formatPostBody,
     } from "../../routes/_helpers/posts"
     import { getSupportedMimeTypes } from "../../routes/_helpers/posts/recording"
-    import type { SupportedLocale } from "../../constants"
+    import { GAMIFY_POST_LOCALES, BodyPartType } from "../../constants"
+    import type {
+        SupportedLocale,
+        PostGameRange,
+        GuessCaseOption,
+        GuessGenderOption,
+        GuessCaseRange,
+        GuessGenderRange,
+    } from "../../constants"
+    import { getBodyParts } from "../../routes/_helpers/posts/selections"
+    import { PostGameType } from "../../types/generated/graphql"
 
     export let shownPromptUuid: string | null
     export let locale: SupportedLocale | null
@@ -187,17 +204,23 @@
             return
         }
 
-        const res = await createPost(
-            newPostBody,
+        const res = await createPost({
+            body: formattedNewPostBody,
             locale,
-            null,
-            shownPromptUuid || null
-        )
+            parentPostUuid: null,
+            promptUuid: shownPromptUuid || null,
+            gameType: gamify && gameRanges.length ? gameType : null,
+            ranges: gamify && gameType !== null ? gameRanges : null,
+        })
         if (res.status === 200) {
             const response = await res.json()
             if (response.success) {
                 newPostBody = ""
-                dispatch("success")
+                if (writableBodyInputNode) {
+                    writableBodyInputNode.innerHTML = ""
+                }
+                handleCloseGamify()
+                dispatch("postSuccess")
                 if (recordedBlob) {
                     const res2 = await createPostRecording(
                         response.meta.post.uuid,
@@ -209,27 +232,37 @@
                     if (res2.status === 200) {
                         const response2 = await res2.json()
                         if (response2.success) {
-                            dispatch("success")
+                            dispatch("postSuccess")
                         } else {
-                            dispatch("failure")
+                            dispatch("postFailure")
                         }
                     } else {
-                        dispatch("failure")
+                        dispatch("postFailure")
                     }
                 }
             } else {
-                dispatch("failure")
+                dispatch("postFailure")
             }
         } else {
-            dispatch("failure")
+            dispatch("postFailure")
         }
     }
 
+    let bodyInputId: string
+    let rangeOptionsDropdownId: string
     onMount(() => {
         const supportedMimeTypes = getSupportedMimeTypes("audio")
         if (supportedMimeTypes.length) {
             preferredMimeType = supportedMimeTypes[0]
         }
+
+        bodyInputId = uuidv4()
+        rangeOptionsDropdownId = uuidv4()
+
+        document.addEventListener(
+            "selectionchange",
+            handleDocumentSelectionChange
+        )
 
         setInterval(updateRecordingDuration, 250)
         setInterval(updateAudioTimings, 250)
@@ -238,28 +271,582 @@
     onDestroy(() => {
         clearUpdateRecordingDurationInterval()
         clearUpdateAudioTimingsInterval()
+        document.removeEventListener(
+            "selectionchange",
+            handleDocumentSelectionChange
+        )
     })
 
     $: bodyInputPlaceholder = $translate(
         "index-post-form-body-input-placeholder"
     )
+
+    $: gamificationSupported = locale
+        ? (GAMIFY_POST_LOCALES as readonly string[]).includes(locale as string)
+        : false
+
+    $: if (!gamificationSupported) {
+        gamify = false
+    }
+
+    let gameType: PostGameType | null = null
+    function handleSelectGameType(kind: PostGameType) {
+        gameType = kind
+        clearAllSelections()
+    }
+    function handleCloseGamify() {
+        gamify = false
+        gameType = null
+        selection = null
+        gameRanges = []
+    }
+    function clearAllSelections() {
+        const s = window.getSelection
+            ? window.getSelection()
+            : document.selection
+        if (!s) {
+            selection = null
+            return
+        }
+        if (s.removeAllRanges) {
+            s.removeAllRanges()
+        } else if (s.empty) {
+            s.empty()
+        }
+        selection = null
+    }
+
+    function handleBodyKeyup(_event: Event) {
+        newPostBody = writableBodyInputNode.innerHTML
+        console.log("keyup", { willHandleSelect })
+        tryHandleBodyTextSelection()
+    }
+    const dragTypeIsForbidden = (type: string) =>
+        type === "text/uri-list" ||
+        type === "application/x-moz-nativeimage" ||
+        type.startsWith("image/")
+    function handleBodyDragover(event: DragEvent) {
+        console.log("dragover", { event })
+        const types = event.dataTransfer?.types || []
+        if (types.some(dragTypeIsForbidden)) {
+            console.log("Forbidden dragover!")
+            event.preventDefault()
+        } else {
+            console.log("Allowed dragover!")
+        }
+    }
+    function handleBodyDrop(event: DragEvent) {
+        const types = event.dataTransfer?.types || []
+        if (types.some(dragTypeIsForbidden)) {
+            console.log("Forbidden drop!")
+            event.preventDefault()
+        } else {
+            console.log("Allowed drop!")
+        }
+        setTimeout(() => (newPostBody = writableBodyInputNode.innerHTML), 50)
+        console.log("drop", { event })
+    }
+    let preventAutoSelectionHandling: boolean = false
+    function handleBodyMouseup() {
+        console.log("mouseup", { willHandleSelect })
+        preventAutoSelectionHandling = false
+        if (!willHandleSelect) {
+            // secondary click away handler
+            clearAllSelections()
+        }
+        tryHandleBodyTextSelection()
+    }
+    function handleBodyMousedown() {
+        console.log("mousedown", { willHandleSelect })
+        preventAutoSelectionHandling = true
+        tryClearAutoSelectionTimeout()
+    }
+    let writableBodyInputNode: HTMLElement
+    let readonlyBodyInputNode: HTMLElement
+    let gamify: boolean = false
+    let willHandleSelect: boolean = false
+    let selectionParentNode: HTMLElement
+    let selection: Selection | null = null
+    function tryHandleBodyTextSelection() {
+        if (!willHandleSelect) {
+            return
+        }
+        if (
+            !gamify ||
+            gameType === null ||
+            ![
+                PostGameType.GuessCase,
+                PostGameType.GuessGender,
+                PostGameType.Cloze,
+            ].includes(gameType)
+        ) {
+            return
+        }
+        const s = window.getSelection
+            ? window.getSelection()
+            : document.selection
+        console.log({ s, range: s && s.rangeCount ? s.getRangeAt(0) : null })
+        if (s && !s.isCollapsed && s.type === "Range") {
+            const { focusNode, anchorNode } = s
+            if (
+                editBodyPartUuid !== null &&
+                (focusNode !== anchorNode ||
+                    !focusNode ||
+                    focusNode.id !== editBodyPartUuid)
+            ) {
+                editBodyPartUuid = null
+            }
+            selection = s
+        } else {
+            selection = null
+        }
+        willHandleSelect = false
+    }
+    function handleBodySelectStart() {
+        console.log("selectstart", { willHandleSelect })
+        willHandleSelect = true
+    }
+    let autoSelectionTimeout: number | null = null
+    function handleDocumentSelectionChange() {
+        if (typeof window === "undefined") {
+            return
+        }
+        const s = window.getSelection
+            ? window.getSelection()
+            : document.selection
+        if (!s) {
+            return
+        }
+        if (s.type !== "Range") {
+            return
+        }
+        console.log("selectionchange", {
+            willHandleSelect,
+            s,
+            autoSelectionTimeout,
+        })
+        if (
+            !selection ||
+            s.focusNode !== selection.focusNode ||
+            s.anchorNode !== selection.anchorNode ||
+            s.focusOffset !== selection.focusOffset ||
+            s.anchorOffset !== selection.anchorOffset
+        ) {
+            selection = s && !s.isCollapsed && s.type === "Range" ? s : null
+            tryClearAutoSelectionTimeout()
+            if (s.rangeCount) {
+                if (!preventAutoSelectionHandling) {
+                    autoSelectionTimeout = window.setTimeout(() => {
+                        if (!preventAutoSelectionHandling) {
+                            console.log(
+                                "autoSelectionTimeout expired, handling"
+                            )
+                            tryHandleBodyTextSelection()
+                            autoSelectionTimeout = null
+                        }
+                    }, 500)
+                }
+            }
+        }
+    }
+    function tryClearAutoSelectionTimeout() {
+        if (!autoSelectionTimeout) {
+            return
+        }
+        window.clearTimeout(autoSelectionTimeout)
+        autoSelectionTimeout = null
+    }
+    $: selectionRange =
+        gamify && selection !== null && selection.rangeCount
+            ? selection.getRangeAt(0)
+            : null
+    $: selectedText = selectionRange ? selectionRange.toString() : null
+    let rangeBeforeCaret: Range | null = null
+    $: if (selectionRange && readonlyBodyInputNode) {
+        rangeBeforeCaret = selectionRange.cloneRange()
+        rangeBeforeCaret.selectNodeContents(readonlyBodyInputNode)
+        rangeBeforeCaret.setEnd(
+            selectionRange.endContainer,
+            selectionRange.endOffset
+        )
+    } else {
+        rangeBeforeCaret = null
+    }
+    $: textBeforeCaret = rangeBeforeCaret?.toString() || null
+    $: selectionStart =
+        textBeforeCaret && selectedText
+            ? textBeforeCaret.length - selectedText.length
+            : null
+    $: selectionEnd = textBeforeCaret ? textBeforeCaret.length - 1 : null
+    $: selectionOverlapsPickedRange =
+        selectionStart !== null && selectionEnd !== null
+            ? gameRanges.some(
+                  (range) =>
+                      (selectionStart! >= range.start &&
+                          selectionStart! <= range.end) ||
+                      (selectionEnd! >= range.start &&
+                          selectionEnd! <= range.end) ||
+                      (selectionStart! <= range.start &&
+                          selectionEnd! >= range.end)
+              )
+            : null
+
+    let editBodyPartUuid: string | null = null
+    $: editedRangeIndex =
+        editBodyPartUuid === null
+            ? null
+            : gameRanges.findIndex((range) => range.uuid === editBodyPartUuid)
+    $: editedRange =
+        editedRangeIndex === null || editedRangeIndex === -1
+            ? null
+            : gameRanges[editedRangeIndex]
+    $: showSelectionDropdown =
+        gamify &&
+        gameType !== null &&
+        ((selectedText !== null &&
+            selectedText.length &&
+            selectionStart !== null &&
+            selectionEnd !== null &&
+            selectionOverlapsPickedRange === false) ||
+            editBodyPartUuid !== null)
+
+    let gameRanges: PostGameRange[] = []
+
+    $: formattedNewPostBody = formatPostBody(newPostBody || "")
+
+    $: displayedNewPostBodyParts = gamify
+        ? getBodyParts(formattedNewPostBody, gameRanges)
+        : []
+
+    function addRange(range: PostGameRange) {
+        gameRanges = [...gameRanges, range]
+    }
+
+    function handleEditBodyPart(uuid: string) {
+        editBodyPartUuid = uuid
+        // Highlight picked body part that is being edited.
+        const bodyPartNode = document.getElementById(uuid)
+        if (bodyPartNode) {
+            clearAllSelections()
+            if (document.body.createTextRange) {
+                const range = document.body.createTextRange()
+                range.moveToElementText(bodyPartNode)
+                range.select()
+            } else if (window.getSelection) {
+                const s = window.getSelection()
+                if (s) {
+                    const range = document.createRange()
+                    range.selectNodeContents(bodyPartNode)
+                    s.removeAllRanges()
+                    s.addRange(range)
+                }
+            }
+        }
+    }
+
+    function updateRange(uuid: string, rangePatch: Partial<PostGameRange>) {
+        const i = gameRanges.findIndex((range) => range.uuid === uuid)
+        if (i === -1) {
+            // This should never happen as editBodyPartUuid is generated client-side.
+            return
+        }
+        gameRanges[i] = { ...gameRanges[i], ...rangePatch }
+        gameRanges = gameRanges
+    }
+
+    function removeRange(uuid: string) {
+        const i = gameRanges.findIndex((range) => range.uuid === uuid)
+        if (i === -1) {
+            // This should never happen as editBodyPartUuid is generated client-side.
+            return
+        }
+        gameRanges.splice(i, 1)
+        gameRanges = gameRanges
+    }
+
+    function handlePickGuessCaseOption(
+        event: CustomEvent<{ option: { value: keyof GuessCaseOption } }>
+    ) {
+        const option = event.detail.option
+        if (editBodyPartUuid === null) {
+            addRange({
+                uuid: uuidv4(),
+                start: selectionStart as number,
+                end: selectionEnd as number,
+                option: option.value,
+            } as GuessCaseRange)
+        } else {
+            updateRange(editBodyPartUuid, {
+                option: option.value,
+            } as GuessCaseRange)
+            editBodyPartUuid = null
+        }
+        clearAllSelections()
+    }
+
+    function handlePickGuessGenderOption(
+        event: CustomEvent<{ option: { value: keyof GuessGenderOption } }>
+    ) {
+        const option = event.detail.option
+        if (editBodyPartUuid === null) {
+            addRange({
+                uuid: uuidv4(),
+                start: selectionStart as number,
+                end: selectionEnd as number,
+                option: option.value,
+            } as GuessGenderRange)
+        } else {
+            updateRange(editBodyPartUuid, {
+                option: option.value,
+            } as GuessGenderRange)
+            editBodyPartUuid = null
+        }
+        clearAllSelections()
+    }
+
+    function handleAddClozeEntry() {
+        if (editBodyPartUuid === null) {
+            addRange({
+                uuid: uuidv4(),
+                start: selectionStart as number,
+                end: selectionEnd as number,
+            })
+        }
+        clearAllSelections()
+    }
+
+    function handleRangeOptionsDropdownClickaway(
+        event: CustomEvent<{ event: MouseEvent }>
+    ) {
+        if (!willHandleSelect && event.detail.event.button === 0) {
+            console.log("clickaway", {
+                willHandleSelect,
+                selection,
+                rangeOptionsDropdownId,
+            })
+            clearAllSelections()
+        }
+    }
+
+    let forceRecalculateDropdownPosition = false
+    $: {
+        gamify
+        gameType
+        shownPromptUuid
+        newPostBody
+        forceRecalculateDropdownPosition = true
+    }
 </script>
 
-<div class="container max-w-2xl mb-2 pb-4 px-2">
-    <div class="flex flex-col items-end justify-center w-full flex-wrap">
+{#if gamify && gameType === null}
+    <Modal>
         <div
-            class="body-input w-full overflow-hidden overflow-ellipsis py-2 px-4 mb-2 border border-gray-light bg-gray-lightest rounded-lg"
-            contenteditable
-            aria-multiline
-            role="textbox"
-            placeholder={bodyInputPlaceholder}
-            aria-placeholder={bodyInputPlaceholder}
-            bind:innerHTML={newPostBody}
-        />
-        <div>
-            <div class="flex items-center justify-end relative">
+            class="relative bg-gray-lightest rounded-lg shadow-md overflow-hidden"
+        >
+            <div class="absolute right-0 top-3">
+                <ButtonSmall
+                    on:click={() => (gamify = false)}
+                    tag="button"
+                    variant="TEXT"
+                    color="SECONDARY"
+                    ><XIcon size="18" class="text-gray my-1" /></ButtonSmall
+                >
+            </div>
+            <div
+                class="py-4 pl-8 pr-16 font-bold text-gray-dark border-gray-light border-b font-secondary"
+            >
+                Which kind of game to create?
+            </div>
+            <div class="bg-white flex flex-col items-center py-4 px-4">
                 <ButtonLarge
-                    className={"ml-1 items-center" +
+                    on:click={() =>
+                        handleSelectGameType(PostGameType.GuessCase)}
+                    tag="button"
+                    variant="OUTLINED"
+                    color="PRIMARY"
+                    className="mb-2">Guess the Case</ButtonLarge
+                >
+                <ButtonLarge
+                    on:click={() =>
+                        handleSelectGameType(PostGameType.GuessGender)}
+                    tag="button"
+                    variant="OUTLINED"
+                    color="PRIMARY"
+                    className="mb-2">Guess the Gender</ButtonLarge
+                >
+                <ButtonLarge
+                    on:click={() => handleSelectGameType(PostGameType.Cloze)}
+                    tag="button"
+                    variant="OUTLINED"
+                    color="PRIMARY">Cloze</ButtonLarge
+                >
+            </div>
+        </div>
+    </Modal>
+{/if}
+<div class="container max-w-2xl mb-2 pb-4 px-2">
+    <div
+        class="flex flex-col items-end justify-center w-full flex-wrap"
+        on:dragover={(e) => {
+            if (e.target !== writableBodyInputNode) {
+                e.preventDefault()
+            }
+        }}
+        on:drop={(e) => {
+            if (e.target !== writableBodyInputNode) {
+                e.preventDefault()
+            }
+        }}
+    >
+        {#if gamify && gameType !== null}
+            <div
+                class="flex items-center justify-between pt-1 pb-2 px-2 text-sm text-gray-bitdark font-bold text-left w-full font-secondary relative"
+            >
+                <span class="flex items-center">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        aria-hidden="true"
+                        class="mr-2"
+                        role="img"
+                        width="18"
+                        height="18"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 16 16"
+                        ><g fill="currentColor"
+                            ><path
+                                d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zM3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"
+                            /><path
+                                d="M5.5 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm-4-4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0z"
+                            /></g
+                        ></svg
+                    >Gamify: Select parts of your post.</span
+                >
+                <ButtonSmall
+                    tag="button"
+                    variant="TEXT"
+                    on:click={handleCloseGamify}
+                    className="close-gamify-button flex items-center"
+                >
+                    <XIcon size="16" strokeWidth={1} class="mr-1" />
+                    <Localized id={`post-game-cancel`} />
+                </ButtonSmall>
+            </div>
+        {/if}
+        <div class="w-full">
+            {#if showSelectionDropdown && locale !== null && gameType !== null}
+                <RangeOptionsDropdown
+                    id={rangeOptionsDropdownId}
+                    anchor={selectionRange}
+                    container={selectionRange?.commonAncestorContainer
+                        ?.parentElement || null}
+                    {locale}
+                    {gameType}
+                    {editedRange}
+                    on:cancel={() => clearAllSelections()}
+                    on:remove={() => {
+                        if (editBodyPartUuid !== null) {
+                            removeRange(editBodyPartUuid)
+                            editBodyPartUuid = null
+                            clearAllSelections()
+                        }
+                    }}
+                    forceRecalculatePosition={forceRecalculateDropdownPosition}
+                    on:positionRecalculated={() =>
+                        (forceRecalculateDropdownPosition = false)}
+                    showRemove={editBodyPartUuid !== null}
+                    on:guessCaseOptionPicked={handlePickGuessCaseOption}
+                    on:guessGenderOptionPicked={handlePickGuessGenderOption}
+                    on:clozeEntryAdded={handleAddClozeEntry}
+                />
+                <ClickAwayListener
+                    elementId={[bodyInputId, rangeOptionsDropdownId]}
+                    on:clickaway={handleRangeOptionsDropdownClickaway}
+                />
+                <EscapeKeyListener on:keydown={() => clearAllSelections()} />
+            {/if}
+            <div
+                bind:this={readonlyBodyInputNode}
+                id={gamify ? bodyInputId : undefined}
+                class="body-input"
+                class:hidden={!gamify}
+                aria-multiline
+                role="textbox"
+                placeholder={bodyInputPlaceholder}
+                aria-placeholder={bodyInputPlaceholder}
+                on:keyup={handleBodyKeyup}
+                on:mousedown={handleBodyMousedown}
+                on:mouseup={handleBodyMouseup}
+                on:selectstart={handleBodySelectStart}
+                on:selectionchange={handleDocumentSelectionChange}
+                on:drop|preventDefault
+                on:paste|preventDefault
+            >
+                {#if gamify}
+                    {#each displayedNewPostBodyParts as bodyPart}
+                        {#if bodyPart.type === BodyPartType.LineBreak}
+                            <br />
+                        {:else if bodyPart.type === BodyPartType.Range}
+                            <span
+                                id={bodyPart.uuid}
+                                class="bg-primary-lightest border-primary border-b px-1 py-1 cursor-pointer"
+                                style="margin-left: 1px; margin-right: 1px;"
+                                on:click={() =>
+                                    bodyPart.uuid &&
+                                    handleEditBodyPart(bodyPart.uuid)}
+                                >{bodyPart.value}</span
+                            >
+                        {:else if bodyPart.type === BodyPartType.Text}
+                            {bodyPart.value}
+                        {/if}
+                    {/each}
+                {/if}
+            </div>
+            <div
+                bind:this={writableBodyInputNode}
+                id={gamify ? undefined : bodyInputId}
+                class="body-input"
+                class:hidden={gamify}
+                contenteditable
+                aria-multiline
+                role="textbox"
+                placeholder={bodyInputPlaceholder}
+                aria-placeholder={bodyInputPlaceholder}
+                on:keyup={handleBodyKeyup}
+                on:dragover={handleBodyDragover}
+                on:drop={handleBodyDrop}
+            />
+        </div>
+        <div>
+            <div class="flex items-center flex-wrap justify-end relative">
+                {#if gamificationSupported && !gamify && newPostBody && newPostBody.length}
+                    <ButtonLarge
+                        className="flex mb-1 items-center justify-self-start"
+                        tag="button"
+                        variant="OUTLINED"
+                        on:click={() => (gamify = true)}
+                        ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            aria-hidden="true"
+                            class="mr-2"
+                            role="img"
+                            width="18"
+                            height="18"
+                            preserveAspectRatio="xMidYMid meet"
+                            viewBox="0 0 16 16"
+                            ><g fill="currentColor"
+                                ><path
+                                    d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zM3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"
+                                /><path
+                                    d="M5.5 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm-4-4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0z"
+                                /></g
+                            ></svg
+                        >Gamify</ButtonLarge
+                    >
+                {/if}
+                <ButtonLarge
+                    className={"ml-1 mb-1 items-center" +
                         (recording ? " recording" : " mr-1")}
                     tag="button"
                     variant={recording ? "TEXT" : "OUTLINED"}
@@ -276,7 +863,7 @@
                 >
                 {#if recording}
                     <ButtonSmall
-                        className="items-center recording ml-0 mr-1"
+                        className="items-center mb-1 recording ml-0 mr-1"
                         tag="button"
                         variant="TEXT"
                         on:click={handleUserRecordCancel}
@@ -284,7 +871,7 @@
                     >
                 {/if}
                 <ButtonLarge
-                    className="items-center"
+                    className="items-center mb-1"
                     tag="button"
                     on:click={() => handlePost()}
                     ><SendIcon size="18" class="mr-2" /><Localized
@@ -381,6 +968,21 @@
         overflow-wrap: anywhere;
         white-space: break-spaces;
         min-height: 6rem;
+
+        @apply w-full;
+        @apply overflow-hidden;
+        @apply overflow-ellipsis;
+        @apply py-2;
+        @apply px-4;
+        @apply mb-2;
+        @apply border;
+        @apply border-gray-light;
+        @apply bg-gray-lightest;
+        @apply rounded-lg;
+    }
+
+    :global(.close-gamify-button) {
+        @apply text-gray-bitdark;
     }
 
     :global(.recording) {

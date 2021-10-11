@@ -1,0 +1,24 @@
+mutation CreatePostGameAnswer($genderOption: GrammaticalGender, $caseOption: GrammaticalCase, $correct: Boolean, $rangeId: Int, $gameId: Int, $userId: Int!, $clozeAnswer: String) {
+  createPostGameAnswer(input: {postGameAnswer: {rangeId: $rangeId, gameId: $gameId, userId: $userId, correct: $correct, genderOption: $genderOption, clozeAnswer: $clozeAnswer, caseOption: $caseOption}}) {
+    postGameAnswer {
+      id
+      nodeId
+      createdAt
+      caseOption
+      uuid
+      range {
+        uuid
+        __typename
+      }
+      game {
+        uuid
+        __typename
+      }
+      correct
+      clozeAnswer
+      genderOption
+      __typename
+    }
+    __typename
+  }
+}

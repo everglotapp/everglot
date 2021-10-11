@@ -1,0 +1,31 @@
+query PostGameByUuid($uuid: UUID!) {
+    postGameByUuid(uuid: $uuid) {
+        id
+        nodeId
+        ranges {
+            nodes {
+                uuid
+                id
+                caseOption
+                genderOption
+                startIndex
+                endIndex
+            }
+        }
+        gameType
+        post {
+            authorId
+            language {
+                alpha2
+            }
+        }
+        correctAnswers {
+            nodes {
+                caseOption
+                clozeAnswer
+                genderOption
+                rangeUuid
+            }
+        }
+    }
+}

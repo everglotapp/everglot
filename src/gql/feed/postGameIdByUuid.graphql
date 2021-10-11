@@ -1,0 +1,6 @@
+query PostGameIdByUuid($uuid: UUID!) {
+    postGameByUuid(uuid: $uuid) {
+        id
+        nodeId
+    }
+}

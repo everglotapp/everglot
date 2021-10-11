@@ -19,7 +19,6 @@
     import Post from "../comp/feed/Post.svelte"
     import PostForm from "../comp/feed/PostForm.svelte"
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
-    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
     import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
@@ -199,15 +198,16 @@
         refreshPosts()
         unsetPrompt()
     }
-
     function handlePostReplySuccess() {
         refreshPosts()
     }
-
     function handlePostLikeSuccess() {
         refreshPosts()
     }
     function handlePostUnlikeSuccess() {
+        refreshPosts()
+    }
+    function handlePostGameAnswerSuccess() {
         refreshPosts()
     }
 </script>
@@ -335,21 +335,21 @@
                         <Localized id="index-prompt-instruction-word" />
                     </div>
                 {/if}
-                <ButtonLarge
+                <ButtonSmall
                     tag="button"
                     variant="TEXT"
                     on:click={() => unsetPrompt()}
                     className="close-prompt-button"
                 >
                     <XCircleIcon size="32" strokeWidth={1} />
-                </ButtonLarge>
+                </ButtonSmall>
             </div>
         {/if}
     </div>
     <PostForm
         shownPromptUuid={shownPrompt ? shownPrompt.uuid : null}
         locale={pickedLocale || null}
-        on:success={handlePostSuccess}
+        on:postSuccess={handlePostSuccess}
     />
     <div class="container max-w-2xl py-2 px-3 sm:px-0 gap-y-1">
         {#each posts as post (post.uuid)}
@@ -361,6 +361,7 @@
                         author={post.author}
                         likes={post.likes}
                         replies={post.replies}
+                        games={post.games}
                         recordings={post.recordings}
                         createdAt={post.createdAt}
                         prompt={post.prompt}
@@ -368,6 +369,7 @@
                         on:replySuccess={handlePostReplySuccess}
                         on:likeSuccess={handlePostLikeSuccess}
                         on:unlikeSuccess={handlePostUnlikeSuccess}
+                        on:gameAnswerSuccess={handlePostGameAnswerSuccess}
                     />
                 </div>
             {/if}

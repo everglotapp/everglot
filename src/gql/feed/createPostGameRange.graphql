@@ -1,0 +1,32 @@
+mutation CreatePostGameRange(
+    $gameId: Int!
+    $startIndex: Int!
+    $endIndex: Int!
+    $genderOption: GrammaticalGender
+    $caseOption: GrammaticalCase
+    $uuid: UUID
+) {
+    createPostGameRange(
+        input: {
+            postGameRange: {
+                gameId: $gameId
+                startIndex: $startIndex
+                endIndex: $endIndex
+                genderOption: $genderOption
+                caseOption: $caseOption
+                uuid: $uuid
+            }
+        }
+    ) {
+        postGameRange {
+            id
+            gameId
+            nodeId
+            createdAt
+            caseOption
+            endIndex
+            startIndex
+            uuid
+        }
+    }
+}

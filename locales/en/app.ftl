@@ -4,6 +4,11 @@
 ## Global terms and phrases
 
 -brand-name = Everglot
+-post-game-type = { $type ->
+       *[guess_case] Guess the Case
+        [guess_gender] Guess the Gender
+        [cloze] Cloze
+    }
 
 ## Feed page
 
@@ -16,6 +21,18 @@ index-prompt-instruction-word = Use this word in a sentence.
 index-post-form-record-button = Record
 index-post-form-post-button = Post
 index-post-form-body-input-placeholder = Squeek your mind …
+post-game-cloze-new-gap = Create Gap
+post-game-cancel = Cancel
+post-game-selection-remove = Remove
+post-game-selection-cancel = Cancel
+post-prompt-note-word = Make a sentence with "{ $word }".
+post-game-note-gane-action = { $gameType ->
+       *[GUESS_CASE] guess the case
+        [GUESS_GENDER] guess the gender
+        [CLOZE] a cloze game
+    }
+post-game-note-own = You have challenged the others to { post-game-note-gane-action }.
+post-game-note-other = { $username } is challenging you to { post-game-note-gane-action }!
 
 ## Chat page
 

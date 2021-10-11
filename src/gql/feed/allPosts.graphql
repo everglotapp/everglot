@@ -56,6 +56,48 @@ query AllPosts {
                         uuid
                         type
                     }
+                    games {
+                        nodes {
+                            gameType
+                            uuid
+                            ranges {
+                                nodes {
+                                    answers {
+                                        edges {
+                                            node {
+                                                id
+                                            }
+                                        }
+                                    }
+                                    endIndex
+                                    startIndex
+                                    uuid
+                                }
+                                totalCount
+                            }
+                            revealedByCurrentUser
+                            answersByCurrentUser {
+                                nodes {
+                                    caseOption
+                                    clozeAnswer
+                                    correct
+                                    genderOption
+                                    range {
+                                        uuid
+                                    }
+                                }
+                                totalCount
+                            }
+                            correctAnswers {
+                                nodes {
+                                    caseOption
+                                    clozeAnswer
+                                    genderOption
+                                    rangeUuid
+                                }
+                            }
+                        }
+                    }
                 }
             }
             recordings {
@@ -78,6 +120,48 @@ query AllPosts {
                 type
             }
             snowflakeId
+            games {
+                nodes {
+                    gameType
+                    uuid
+                    ranges {
+                        nodes {
+                            answers {
+                                edges {
+                                    node {
+                                        id
+                                    }
+                                }
+                            }
+                            endIndex
+                            startIndex
+                            uuid
+                        }
+                        totalCount
+                    }
+                    revealedByCurrentUser
+                    answersByCurrentUser {
+                        nodes {
+                            caseOption
+                            clozeAnswer
+                            correct
+                            genderOption
+                            range {
+                                uuid
+                            }
+                        }
+                        totalCount
+                    }
+                    correctAnswers {
+                        nodes {
+                            caseOption
+                            clozeAnswer
+                            genderOption
+                            rangeUuid
+                        }
+                    }
+                }
+            }
         }
     }
 }

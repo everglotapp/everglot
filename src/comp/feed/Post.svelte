@@ -9,7 +9,12 @@
         XIcon,
         SendIcon,
         ZapIcon,
+        ChevronUpIcon,
+        ChevronDownIcon,
+        EyeOffIcon,
+        EyeIcon,
     } from "svelte-feather-icons"
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { query } from "@urql/svelte"
 
     import RangeOptionsDropdown from "./RangeOptionsDropdown.svelte"
@@ -19,7 +24,11 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
-    import { currentUserStore, currentUserUuid } from "../../stores/currentUser"
+    import {
+        currentUser,
+        currentUserStore,
+        currentUserUuid,
+    } from "../../stores/currentUser"
 
     import type {
         AllPostsQuery,
@@ -34,6 +43,8 @@
         GuessCaseRange,
         GuessGenderOption,
         GuessGenderRange,
+        GUESS_CASE_OPTIONS,
+        GUESS_GENDER_OPTIONS,
         PostGameRange,
         SupportedLocale,
     } from "../../constants"
@@ -151,8 +162,11 @@
     let tmpUnliked = false
 
     $: game = games.nodes.length ? games.nodes[0] : null
-    const currentUserCreatedGame = false
-    const currentUserAnswer = null
+    $: currentUserCreatedGame =
+        game === null || $currentUserUuid === null
+            ? null
+            : $currentUserUuid === author.uuid
+
     let rangeByUuid: Record<
         string,
         NonNullable<NonNullable<typeof game>["ranges"]["nodes"][number]>
@@ -165,6 +179,7 @@
             }),
             {}
         ) || {}
+
     $: bodyParts = getBodyParts(
         body,
         Object.values(rangeByUuid).map((range) => ({
@@ -173,6 +188,79 @@
             uuid: range.uuid,
         })) || []
     )
+
+    $: currentUserAnswers =
+        game === null
+            ? []
+            : game.answersByCurrentUser.nodes
+                  .filter(Boolean)
+                  .map((node) => node!)
+    let currentUserAnswerByRangeUuid: Record<
+        string,
+        NonNullable<
+            NonNullable<typeof game>["answersByCurrentUser"]["nodes"][number]
+        >
+    >
+    $: currentUserAnswerByRangeUuid =
+        currentUserAnswers === null
+            ? {}
+            : currentUserAnswers
+                  .filter((answer) => answer.range !== null)
+                  .map((answer) => ({ ...answer, range: answer.range! }))
+                  .reduce(
+                      (uuidToAnswer, answer) => ({
+                          ...uuidToAnswer,
+                          [answer.range.uuid]: answer,
+                      }),
+                      {}
+                  )
+    $: currentUserHasAnsweredOrRevealed =
+        game === null
+            ? null
+            : currentUserAnswers.length || game.revealedByCurrentUser
+    $: currentUserCanAnswer =
+        !currentUserCreatedGame && !currentUserHasAnsweredOrRevealed
+    $: correctAnswers =
+        game === null || !game.correctAnswers.nodes.length
+            ? null
+            : game.correctAnswers.nodes.filter(Boolean).map((node) => node!)
+    let correctAnswerByRangeUuid: Record<
+        string,
+        NonNullable<NonNullable<typeof game>["correctAnswers"]["nodes"][number]>
+    >
+    $: correctAnswerByRangeUuid =
+        correctAnswers === null
+            ? {}
+            : correctAnswers.reduce(
+                  (uuidToAnswer, answer) => ({
+                      ...uuidToAnswer,
+                      [answer.rangeUuid]: answer,
+                  }),
+                  {}
+              )
+    let displayedAnswerByRangeUuid: Record<
+        string,
+        | NonNullable<
+              NonNullable<typeof game>["answersByCurrentUser"]["nodes"][number]
+          >
+        | NonNullable<
+              NonNullable<typeof game>["correctAnswers"]["nodes"][number]
+          >
+    >
+    $: displayedAnswerByRangeUuid =
+        game === null
+            ? {}
+            : Object.keys(rangeByUuid).reduce(
+                  (uuidToAnswer, uuid) => ({
+                      ...uuidToAnswer,
+                      [uuid]: game!.revealedByCurrentUser
+                          ? correctAnswerByRangeUuid[uuid]
+                          : currentUserAnswerByRangeUuid[uuid] ||
+                            correctAnswerByRangeUuid[uuid],
+                  }),
+                  {}
+              )
+
     let answerRangeUuid: string | null = null
     let answerRanges: Record<string, PostGameRange | null> = {}
     function handleAnswerRange(uuid: string) {
@@ -243,6 +331,15 @@
         if (!game) {
             return
         }
+        showCorrectAnswers = !showCorrectAnswers
+        if (currentUserCreatedGame) {
+            // Just show answers, cannot answer own game.
+            return
+        }
+        if (currentUserHasAnsweredOrRevealed) {
+            // No need to submit, we already know the correct answers.
+            return
+        }
         let answers: {
             rangeUuid: string
             caseOption?: GrammaticalCase
@@ -267,15 +364,28 @@
         } else {
             return
         }
+        const onSuccess = () => dispatch("gameAnswerSuccess")
+        const onFailure = () => {
+            dispatch("gameAnswerFailure")
+            if (showCorrectAnswers) {
+                showCorrectAnswers = false
+            }
+        }
         const res = await createPostGameAnswer({ gameUuid: game.uuid, answers })
         if (res.status === 200) {
             const response = await res.json()
             if (response.success) {
+                onSuccess()
+            } else {
+                onFailure()
             }
+        } else {
+            onFailure()
         }
     }
     // TOOD: Check for Cloze as well
     $: anyRangeAnswered = Object.values(answerRanges).some(Boolean)
+    let showCorrectAnswers: boolean = false
 </script>
 
 <div
@@ -332,7 +442,10 @@
                 >
                     {#if prompt.type === PromptType.Word}
                         <ZapIcon size="18" class="mr-2 self-start" /><span
-                            >Make a sentence with "{prompt.content}"</span
+                            ><Localized
+                                id="post-prompt-note-word"
+                                args={{ word: prompt.content }}
+                            /></span
                         >
                     {:else if prompt.type === PromptType.Question}
                         <ZapIcon size="18" class="mr-2 self-start" />
@@ -361,10 +474,21 @@
                                 d="M5.5 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm-4-4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0z"
                             /></g
                         ></svg
-                    ><span
-                        >{author.displayName || author.username} is challenging you
-                        to a {game.gameType}!
-                    </span>
+                    >{#if currentUserCreatedGame}<span
+                            ><Localized
+                                id="post-game-note-own"
+                                args={{ gameType: game.gameType }}
+                            />
+                        </span>{:else}<span
+                            ><Localized
+                                id="post-game-note-other"
+                                args={{
+                                    username:
+                                        author.displayName || author.username,
+                                    gameType: game.gameType,
+                                }}
+                            />
+                        </span>{/if}
                 </div>
             {/if}
             <div id={bodyId} bind:this={bodyNode} class="body mt-1">
@@ -404,35 +528,124 @@
                 {#each bodyParts as bodyPart}
                     {#if bodyPart.type === BodyPartType.LineBreak}
                         <br id={bodyPart.uuid} />
-                    {:else if bodyPart.type === BodyPartType.Range}
+                    {:else if bodyPart.type === BodyPartType.Range && bodyPart.uuid}
                         {#if game && (game.gameType === PostGameType.GuessCase || game.gameType === PostGameType.GuessGender)}
-                            <span
-                                id={bodyPart.uuid}
-                                class="body-part-range inline-flex border-b px-1 py-1 mx-1 cursor-pointer"
-                                class:answered={answerRanges.hasOwnProperty(
-                                    bodyPart.uuid
-                                ) && answerRanges[bodyPart.uuid] !== null}
-                                class:not-answered={!answerRanges.hasOwnProperty(
-                                    bodyPart.uuid
-                                ) || answerRanges[bodyPart.uuid] === null}
-                                on:click={() =>
-                                    bodyPart.uuid &&
-                                    handleAnswerRange(bodyPart.uuid)}
-                                >{bodyPart.value}</span
-                            >
+                            {#if currentUserCanAnswer}
+                                <span
+                                    id={bodyPart.uuid}
+                                    class="body-part-range inline-flex border-b px-1 py-1 mx-1 cursor-pointer"
+                                    class:answered={answerRanges.hasOwnProperty(
+                                        bodyPart.uuid
+                                    ) && answerRanges[bodyPart.uuid] !== null}
+                                    class:not-answered={!answerRanges.hasOwnProperty(
+                                        bodyPart.uuid
+                                    ) || answerRanges[bodyPart.uuid] === null}
+                                    on:click={() =>
+                                        bodyPart.uuid &&
+                                        handleAnswerRange(bodyPart.uuid)}
+                                    >{bodyPart.value}</span
+                                >
+                            {:else if showCorrectAnswers && displayedAnswerByRangeUuid[bodyPart.uuid]}
+                                <span
+                                    class="inline-flex border-b-2 border-gray-bitdark px-1 py-1 mx-1 relative mb-8"
+                                    ><span>{bodyPart.value}</span><span
+                                        class="body-part-range-answer absolute flex justify-center font-bold mr-1"
+                                        class:skipped={game.revealedByCurrentUser ||
+                                            currentUserCreatedGame}
+                                        class:correct={!game.revealedByCurrentUser &&
+                                            !currentUserCreatedGame &&
+                                            Boolean(
+                                                currentUserAnswerByRangeUuid[
+                                                    bodyPart.uuid
+                                                ]
+                                            ) &&
+                                            currentUserAnswerByRangeUuid[
+                                                bodyPart.uuid
+                                            ].correct}
+                                        class:incorrect={!game.revealedByCurrentUser &&
+                                            !currentUserCreatedGame &&
+                                            (!Boolean(
+                                                currentUserAnswerByRangeUuid[
+                                                    bodyPart.uuid
+                                                ]
+                                            ) ||
+                                                !currentUserAnswerByRangeUuid[
+                                                    bodyPart.uuid
+                                                ].correct)}
+                                        style="bottom: -2rem; left: 50%; right: 50%;"
+                                        ><Localized
+                                            id={game.gameType ===
+                                                PostGameType.GuessCase &&
+                                            displayedAnswerByRangeUuid[
+                                                bodyPart.uuid
+                                            ].caseOption
+                                                ? `post-game-guess-case-${
+                                                      GUESS_CASE_OPTIONS[
+                                                          language.alpha2
+                                                      ][
+                                                          displayedAnswerByRangeUuid[
+                                                              bodyPart.uuid
+                                                          ].caseOption
+                                                      ]
+                                                  }`
+                                                : game.gameType ===
+                                                      PostGameType.GuessGender &&
+                                                  displayedAnswerByRangeUuid[
+                                                      bodyPart.uuid
+                                                  ].genderOption
+                                                ? `post-game-guess-gender-${
+                                                      GUESS_GENDER_OPTIONS[
+                                                          language.alpha2
+                                                      ][
+                                                          displayedAnswerByRangeUuid[
+                                                              bodyPart.uuid
+                                                          ].genderOption
+                                                      ]
+                                                  }`
+                                                : ""}
+                                        /></span
+                                    ></span
+                                >
+                            {:else}
+                                <span class="font-bold text-gray mx-1"
+                                    >{bodyPart.value}</span
+                                >
+                            {/if}
                         {:else if game && game.gameType === PostGameType.Cloze}
-                            <input
-                                id={bodyPart.uuid}
-                                type="text"
-                                class="inline mx-1"
-                                name={bodyPart.uuid}
-                                style={`width: ${
-                                    rangeByUuid[bodyPart.uuid].endIndex -
-                                    rangeByUuid[bodyPart.uuid].startIndex +
-                                    1 +
-                                    2
-                                }em;`}
-                            />
+                            {#if currentUserCanAnswer}
+                                <input
+                                    id={bodyPart.uuid}
+                                    type="text"
+                                    class="inline mx-1"
+                                    name={bodyPart.uuid}
+                                    style={`width: ${
+                                        rangeByUuid[bodyPart.uuid].endIndex -
+                                        rangeByUuid[bodyPart.uuid].startIndex +
+                                        1 +
+                                        2
+                                    }em;`}
+                                />
+                            {:else if showCorrectAnswers && displayedAnswerByRangeUuid[bodyPart.uuid]}
+                                <span
+                                    class="inline-flex border-b-2 border-gray-bitdark px-1 py-1 mx-1 relative mb-8"
+                                    >{displayedAnswerByRangeUuid[bodyPart.uuid]
+                                        .clozeAnswer}</span
+                                >
+                            {:else}
+                                <input
+                                    id={bodyPart.uuid}
+                                    type="text"
+                                    class="inline mx-1"
+                                    disabled
+                                    name={bodyPart.uuid}
+                                    style={`width: ${
+                                        rangeByUuid[bodyPart.uuid].endIndex -
+                                        rangeByUuid[bodyPart.uuid].startIndex +
+                                        1 +
+                                        2
+                                    }em;`}
+                                />
+                            {/if}
                         {/if}
                     {:else if bodyPart.type === BodyPartType.Text}
                         {bodyPart.value}
@@ -455,24 +668,45 @@
                     />
                 </div>
             {/if}
+            {#if game !== null && $currentUserUuid !== null && $currentUserUuid !== uuid}
+                <div class="flex flex-row pt-2 justify-start items-center">
+                    <div class="flex relative mr-1">
+                        <ButtonSmall
+                            className="flex items-center justify-center ml-0 mr-1"
+                            tag="button"
+                            variant="OUTLINED"
+                            color={currentUserCanAnswer && anyRangeAnswered
+                                ? "PRIMARY"
+                                : "SECONDARY"}
+                            on:click={() => handleSubmitAnswers()}
+                            >{#if showCorrectAnswers}<EyeIcon
+                                    size="16"
+                                    class="mr-2"
+                                /><span>Hide Answers</span
+                                >{:else if !currentUserCanAnswer}<EyeOffIcon
+                                    size="16"
+                                    class="mr-2"
+                                /><span>Review Answers</span
+                                >{:else if anyRangeAnswered}<SendIcon
+                                    size="16"
+                                    class="mr-2"
+                                /><span>Submit</span>{:else}<EyeOffIcon
+                                    size="16"
+                                    class="mr-2"
+                                /><span>Reveal Answers</span>{/if}</ButtonSmall
+                        >
+                    </div>
+                    {#if !game.revealedByCurrentUser && currentUserAnswers.length}<div
+                            class="flex text-gray-bitdark text-sm"
+                        >
+                            You got {currentUserAnswers.filter(
+                                (answer) => answer.correct
+                            ).length}/{game.ranges.nodes.length} correct!
+                        </div>{/if}
+                </div>
+            {/if}
         </div>
     </div>
-    {#if currentUserAnswer === null}
-        <div class="flex flex-row pt-1 justify-start items-center">
-            <div class="flex relative mr-1">
-                <ButtonSmall
-                    className="items-center justify-center recording ml-0 mr-1"
-                    tag="button"
-                    variant="OUTLINED"
-                    color="PRIMARY"
-                    on:click={() => handleSubmitAnswers()}
-                    ><SendIcon size="16" class="mr-2" /><span
-                        >{#if anyRangeAnswered}Submit{:else}View answers{/if}</span
-                    ></ButtonSmall
-                >
-            </div>
-        </div>
-    {/if}
     <div class="flex flex-row pt-1 justify-end items-center">
         <div class="flex relative mr-1">
             {#if showReplies || forceShowReplies}
@@ -614,6 +848,18 @@
     .body-part-range.not-answered {
         @apply bg-primary-lightest;
         @apply border-primary;
+    }
+
+    .body-part-range-answer.skipped {
+        @apply text-gray-bitdark;
+    }
+
+    .body-part-range-answer.correct:not(.skipped) {
+        @apply text-green-500;
+    }
+
+    .body-part-range-answer.incorrect:not(.skipped) {
+        @apply text-danger;
     }
 
     :global(.reply-button) {

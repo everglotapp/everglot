@@ -76,7 +76,7 @@
     $: top =
         containerBoundingRect !== null && anchorBoundingRect !== null
             ? Math.min(
-                  containerBoundingRect.height - 32,
+                  containerBoundingRect.height,
                   Math.max(
                       32,
                       4 + anchorBoundingRect.bottom - containerBoundingRect.top

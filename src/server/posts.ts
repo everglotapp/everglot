@@ -23,9 +23,9 @@ import {
     PostGameIdByUuid,
     PostGameByUuidQuery,
     PostGameByUuid,
-    UserHasAnsweredOrRevealedPostGameQueryVariables,
-    UserHasAnsweredOrRevealedPostGame,
-    UserHasAnsweredOrRevealedPostGameQuery,
+    CurrentUserHasAnsweredOrRevealedPostGameQueryVariables,
+    CurrentUserHasAnsweredOrRevealedPostGame,
+    CurrentUserHasAnsweredOrRevealedPostGameQuery,
 } from "../types/generated/graphql"
 import {
     CreatePost,
@@ -217,13 +217,14 @@ export async function createPostGameAnswer(
     return res.data?.createPostGameAnswer?.postGameAnswer || null
 }
 
-export async function userHasAnsweredOrRevealedPostGame(
-    vars: UserHasAnsweredOrRevealedPostGameQueryVariables
+export async function currentUserHasAnsweredOrRevealedPostGame(
+    vars: CurrentUserHasAnsweredOrRevealedPostGameQueryVariables
 ): Promise<boolean | null> {
-    const res = await performQuery<UserHasAnsweredOrRevealedPostGameQuery>(
-        UserHasAnsweredOrRevealedPostGame.loc!.source,
-        vars
-    )
+    const res =
+        await performQuery<CurrentUserHasAnsweredOrRevealedPostGameQuery>(
+            CurrentUserHasAnsweredOrRevealedPostGame.loc!.source,
+            vars
+        )
     if (!res.data || !res.data.postGame) {
         chlog.child({ res, vars }).error("Failed to find post game by ID")
         return null

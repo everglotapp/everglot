@@ -8,7 +8,7 @@ import type { Request, Response } from "express"
 import {
     getPostGameByUuid,
     createPostGameAnswer,
-    userHasAnsweredOrRevealedPostGame,
+    currentUserHasAnsweredOrRevealedPostGame,
 } from "../../../../server/posts"
 import {
     PostGame,
@@ -76,7 +76,7 @@ export async function post(req: Request, res: Response, next: () => void) {
         unprocessableEntity(res, "You cannot answer your own game")
         return
     }
-    if (await userHasAnsweredOrRevealedPostGame({ gameId: game.id, userId })) {
+    if (await currentUserHasAnsweredOrRevealedPostGame({ gameId: game.id })) {
         chlog
             .child({ userId, uuid })
             .debug("User has already answered or revealed game")

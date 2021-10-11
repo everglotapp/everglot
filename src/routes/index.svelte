@@ -198,15 +198,16 @@
         refreshPosts()
         unsetPrompt()
     }
-
     function handlePostReplySuccess() {
         refreshPosts()
     }
-
     function handlePostLikeSuccess() {
         refreshPosts()
     }
     function handlePostUnlikeSuccess() {
+        refreshPosts()
+    }
+    function handlePostGameAnswerSuccess() {
         refreshPosts()
     }
 </script>
@@ -368,6 +369,7 @@
                         on:replySuccess={handlePostReplySuccess}
                         on:likeSuccess={handlePostLikeSuccess}
                         on:unlikeSuccess={handlePostUnlikeSuccess}
+                        on:gameAnswerSuccess={handlePostGameAnswerSuccess}
                     />
                 </div>
             {/if}

@@ -1,0 +1,8 @@
+query CurrentUserHasAnsweredOrRevealedGame($gameId: Int!) {
+    postGame(id: $gameId) {
+        answersByCurrentUser {
+            totalCount
+        }
+        revealedByCurrentUser
+    }
+}

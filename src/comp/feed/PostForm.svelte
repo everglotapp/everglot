@@ -26,18 +26,9 @@
         formatPostBody,
     } from "../../routes/_helpers/posts"
     import { getSupportedMimeTypes } from "../../routes/_helpers/posts/recording"
-    import {
-        GAMIFY_POST_LOCALES,
-        BodyPartType,
-        GUESS_CASE_LOCALES,
-        GUESS_CASE_OPTIONS,
-        GUESS_GENDER_LOCALES,
-        GUESS_GENDER_OPTIONS,
-    } from "../../constants"
+    import { GAMIFY_POST_LOCALES, BodyPartType } from "../../constants"
     import type {
         SupportedLocale,
-        GuessCaseLocale,
-        GuessGenderLocale,
         PostGameRange,
         GuessCaseOption,
         GuessGenderOption,

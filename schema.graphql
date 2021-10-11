@@ -10077,6 +10077,58 @@ type PostGame implements Node {
     filter: PostGameAnswerFilter
   ): PostGameAnswersConnection!
 
+  """Reads and enables pagination through a set of `PostGameAnswer`."""
+  answersByCurrentUser(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostGameAnswerFilter
+  ): PostGameAnswersConnection!
+  correctAnswers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostGamesCorrectAnswersRecordFilter
+  ): PostGamesCorrectAnswersConnection!
+  currentUserCanSeeCorrectAnswers: Boolean
+  revealedByCurrentUser: Boolean
+
   """Reads and enables pagination through a set of `PostGameRange`."""
   postGameRangesByPostGameAnswerGameIdAndRangeId(
     """Only read the first `n` values of the set."""
@@ -10681,6 +10733,12 @@ input PostGameFilter {
   """Filter by the object’s `createdAt` field."""
   createdAt: DatetimeFilter
 
+  """Filter by the object’s `currentUserCanSeeCorrectAnswers` field."""
+  currentUserCanSeeCorrectAnswers: BooleanFilter
+
+  """Filter by the object’s `revealedByCurrentUser` field."""
+  revealedByCurrentUser: BooleanFilter
+
   """Checks for all expressions in this list."""
   and: [PostGameFilter!]
 
@@ -10893,6 +10951,65 @@ input PostGameRangeFilter {
 
   """Negates the expression."""
   not: PostGameRangeFilter
+}
+
+"""A connection to a list of `PostGamesCorrectAnswersRecord` values."""
+type PostGamesCorrectAnswersConnection {
+  """A list of `PostGamesCorrectAnswersRecord` objects."""
+  nodes: [PostGamesCorrectAnswersRecord]!
+
+  """
+  A list of edges which contains the `PostGamesCorrectAnswersRecord` and cursor to aid in pagination.
+  """
+  edges: [PostGamesCorrectAnswerEdge!]!
+
+  """
+  The count of *all* `PostGamesCorrectAnswersRecord` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""The return type of our `correctAnswers` query."""
+type PostGamesCorrectAnswersRecord {
+  rangeUuid: UUID
+  caseOption: GrammaticalCase
+  genderOption: GrammaticalGender
+  clozeAnswer: String
+}
+
+"""A `PostGamesCorrectAnswersRecord` edge in the connection."""
+type PostGamesCorrectAnswerEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PostGamesCorrectAnswersRecord` at the end of the edge."""
+  node: PostGamesCorrectAnswersRecord
+}
+
+"""
+A filter to be used against `PostGamesCorrectAnswersRecord` object types. All fields are combined with a logical ‘and.’
+"""
+input PostGamesCorrectAnswersRecordFilter {
+  """Filter by the object’s `rangeUuid` field."""
+  rangeUuid: UUIDFilter
+
+  """Filter by the object’s `caseOption` field."""
+  caseOption: GrammaticalCaseFilter
+
+  """Filter by the object’s `genderOption` field."""
+  genderOption: GrammaticalGenderFilter
+
+  """Filter by the object’s `clozeAnswer` field."""
+  clozeAnswer: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [PostGamesCorrectAnswersRecordFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PostGamesCorrectAnswersRecordFilter!]
+
+  """Negates the expression."""
+  not: PostGamesCorrectAnswersRecordFilter
 }
 
 """

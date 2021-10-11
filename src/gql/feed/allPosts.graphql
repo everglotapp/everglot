@@ -75,6 +75,27 @@ query AllPosts {
                                 }
                                 totalCount
                             }
+                            revealedByCurrentUser
+                            answersByCurrentUser {
+                                nodes {
+                                    caseOption
+                                    clozeAnswer
+                                    correct
+                                    genderOption
+                                    range {
+                                        uuid
+                                    }
+                                }
+                                totalCount
+                            }
+                            correctAnswers {
+                                nodes {
+                                    caseOption
+                                    clozeAnswer
+                                    genderOption
+                                    rangeUuid
+                                }
+                            }
                         }
                     }
                 }
@@ -117,6 +138,27 @@ query AllPosts {
                             uuid
                         }
                         totalCount
+                    }
+                    revealedByCurrentUser
+                    answersByCurrentUser {
+                        nodes {
+                            caseOption
+                            clozeAnswer
+                            correct
+                            genderOption
+                            range {
+                                uuid
+                            }
+                        }
+                        totalCount
+                    }
+                    correctAnswers {
+                        nodes {
+                            caseOption
+                            clozeAnswer
+                            genderOption
+                            rangeUuid
+                        }
                     }
                 }
             }

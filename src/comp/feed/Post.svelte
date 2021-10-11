@@ -732,17 +732,21 @@
                             >{#if showCorrectAnswers}<EyeOffIcon
                                     size="16"
                                     class="mr-2"
-                                /><span class="text-sm">Hide Answers</span
+                                /><span class="text-sm whitespace-nowrap"
+                                    >Hide Answers</span
                                 >{:else if !currentUserCanAnswer}<EyeIcon
                                     size="16"
                                     class="mr-2"
-                                /><span class="text-sm">Review Answers</span
+                                /><span class="text-sm whitespace-nowrap"
+                                    >Review Answers</span
                                 >{:else if anyRangeAnswered}<SendIcon
                                     size="16"
                                     class="mr-2"
-                                /><span class="text-sm">Submit</span
+                                /><span class="text-sm whitespace-nowrap"
+                                    >Submit</span
                                 >{:else}<EyeIcon size="16" class="mr-2" /><span
-                                    class="text-sm">Reveal Answers</span
+                                    class="text-sm whitespace-nowrap"
+                                    >Reveal Answers</span
                                 >{/if}</ButtonSmall
                         >
                     </div>

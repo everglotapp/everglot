@@ -15,7 +15,7 @@ describe("postSelections", () => {
         const text = "I am happy"
         const pickedRanges: PostGameRange[] = []
         expect(getBodyParts(text, pickedRanges)).toEqual([
-            { value: "I am happy", kind: BodyPartType.Text },
+            { value: "I am happy", type: BodyPartType.Text },
         ])
     })
     test("getBodyParts returns selection start body parts", () => {
@@ -24,8 +24,8 @@ describe("postSelections", () => {
             { start: 0, end: 3, uuid: UUID_1 },
         ]
         expect(getBodyParts(text, pickedRanges)).toEqual([
-            { value: "I am", kind: BodyPartType.Range, uuid: UUID_1 },
-            { value: " happy", kind: BodyPartType.Text },
+            { value: "I am", type: BodyPartType.Range, uuid: UUID_1 },
+            { value: " happy", type: BodyPartType.Text },
         ])
     })
     test("getBodyParts returns selection end body parts", () => {
@@ -34,8 +34,8 @@ describe("postSelections", () => {
             { start: 5, end: 9, uuid: UUID_1 },
         ]
         expect(getBodyParts(text, pickedRanges)).toEqual([
-            { value: "I am ", kind: BodyPartType.Text },
-            { value: "happy", kind: BodyPartType.Range, uuid: UUID_1 },
+            { value: "I am ", type: BodyPartType.Text },
+            { value: "happy", type: BodyPartType.Range, uuid: UUID_1 },
         ])
     })
     test("getBodyParts returns selection middle body parts", () => {
@@ -44,9 +44,9 @@ describe("postSelections", () => {
             { start: 2, end: 3, uuid: UUID_1 },
         ]
         expect(getBodyParts(text, pickedRanges)).toEqual([
-            { value: "I ", kind: BodyPartType.Text },
-            { value: "am", kind: BodyPartType.Range, uuid: UUID_1 },
-            { value: " happy", kind: BodyPartType.Text },
+            { value: "I ", type: BodyPartType.Text },
+            { value: "am", type: BodyPartType.Range, uuid: UUID_1 },
+            { value: " happy", type: BodyPartType.Text },
         ])
     })
     test("getBodyParts returns selection start and end body parts", () => {
@@ -56,9 +56,9 @@ describe("postSelections", () => {
             { start: 5, end: 9, uuid: UUID_2 },
         ]
         expect(getBodyParts(text, pickedRanges)).toEqual([
-            { value: "I", kind: BodyPartType.Range, uuid: UUID_1 },
-            { value: " am ", kind: BodyPartType.Text },
-            { value: "happy", kind: BodyPartType.Range, uuid: UUID_2 },
+            { value: "I", type: BodyPartType.Range, uuid: UUID_1 },
+            { value: " am ", type: BodyPartType.Text },
+            { value: "happy", type: BodyPartType.Range, uuid: UUID_2 },
         ])
     })
     test("getBodyParts returns 2 selection middle body parts", () => {
@@ -68,11 +68,11 @@ describe("postSelections", () => {
             { start: 5, end: 5, uuid: UUID_2 },
         ]
         expect(getBodyParts(text, pickedRanges)).toEqual([
-            { value: "I", kind: BodyPartType.Text },
-            { value: " am", kind: BodyPartType.Range, uuid: UUID_1 },
-            { value: " ", kind: BodyPartType.Text },
-            { value: "h", kind: BodyPartType.Range, uuid: UUID_2 },
-            { value: "appy", kind: BodyPartType.Text },
+            { value: "I", type: BodyPartType.Text },
+            { value: " am", type: BodyPartType.Range, uuid: UUID_1 },
+            { value: " ", type: BodyPartType.Text },
+            { value: "h", type: BodyPartType.Range, uuid: UUID_2 },
+            { value: "appy", type: BodyPartType.Text },
         ])
     })
 })

@@ -11,6 +11,8 @@
         ZapIcon,
         EyeOffIcon,
         EyeIcon,
+        FastForwardIcon,
+        CheckIcon,
     } from "svelte-feather-icons"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { query } from "@urql/svelte"
@@ -189,6 +191,9 @@
             : game.answersByCurrentUser.nodes
                   .filter(Boolean)
                   .map((node) => node!)
+    $: currentUserCorrectAnswers = currentUserAnswers.filter(
+        (answer) => answer.correct
+    )
     let currentUserAnswerByRangeUuid: Record<
         string,
         NonNullable<
@@ -716,22 +721,54 @@
             {/if}
             {#if game !== null && $currentUserUuid !== null && $currentUserUuid !== uuid}
                 <div
-                    class="flex flex-col sm:flex-row sm:flex-wrap pt-2 sm:justify-start justify-center items-start sm:items-center"
+                    class="flex flex-col sm:flex-row-reverse pt-2 sm:justify-end justify-center items-start sm:items-center"
                 >
                     {#if game.revealedByCurrentUser}<div
-                            class="flex text-gray-bitdark text-sm py-1 sm:py-0"
+                            class="flex items-center text-gray-bitdark font-bold text-sm py-1 sm:py-0"
                         >
-                            You skipped this game.
+                            <FastForwardIcon size="16" class="mr-1" /><span
+                                >You skipped this game.</span
+                            >
                         </div>{:else if currentUserAnswers.length}<div
-                            class="flex text-gray-bitdark text-sm py-1 sm:py-0"
+                            class="flex items-center text-gray-bitdark font-bold text-sm py-1 sm:py-0"
                         >
-                            You got {currentUserAnswers.filter(
-                                (answer) => answer.correct
-                            ).length}/{game.ranges.nodes.length} correct!
+                            {#if currentUserCorrectAnswers.length}<CheckIcon
+                                    size="18"
+                                    class="mr-1"
+                                />{:else}<svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    aria-hidden="true"
+                                    role="img"
+                                    width="22px"
+                                    height="22px"
+                                    class="mr-1"
+                                    preserveAspectRatio="xMidYMid meet"
+                                    viewBox="0 0 48 48"
+                                    ><g fill="none"
+                                        ><path
+                                            fill-rule="evenodd"
+                                            clip-rule="evenodd"
+                                            d="M24 40c8.837 0 16-7.163 16-16S32.837 8 24 8S8 15.163 8 24s7.163 16 16 16zm0 2c9.941 0 18-8.059 18-18S33.941 6 24 6S6 14.059 6 24s8.059 18 18 18z"
+                                            fill="currentColor"
+                                        /><path
+                                            fill-rule="evenodd"
+                                            clip-rule="evenodd"
+                                            d="M17.5 26c1.38 0 2.5-1.79 2.5-4s-1.12-4-2.5-4s-2.5 1.79-2.5 4s1.12 4 2.5 4zm13 0c1.38 0 2.5-1.79 2.5-4s-1.12-4-2.5-4s-2.5 1.79-2.5 4s1.12 4 2.5 4z"
+                                            fill="currentColor"
+                                        /><path
+                                            fill-rule="evenodd"
+                                            clip-rule="evenodd"
+                                            d="M21.32 34.514l-.044.035a1 1 0 0 1-1.26-1.554l.134-.108c1.184-.96 2.411-1.955 4.274-2.459c1.922-.52 4.409-.494 8.144.323a1 1 0 1 1-.428 1.954c-3.592-.786-5.715-.746-7.193-.346c-1.45.392-2.387 1.15-3.627 2.155z"
+                                            fill="currentColor"
+                                        /></g
+                                    ></svg
+                                >{/if}You got {currentUserCorrectAnswers.length}/{game
+                                .ranges.nodes.length} correct!
                         </div>{/if}
                     <div class="flex relative mr-1">
                         <ButtonSmall
-                            className="submit-answers-button flex items-center justify-center ml-0 mr-1"
+                            className="submit-answers-button flex items-center justify-center ml-0 mr-1 mt-1"
                             tag="button"
                             variant={!showCorrectAnswers &&
                             currentUserCanAnswer &&

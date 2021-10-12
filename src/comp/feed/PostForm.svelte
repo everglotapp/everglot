@@ -771,8 +771,7 @@
                 <RangeOptionsDropdown
                     id={rangeOptionsDropdownId}
                     anchor={selectionRange}
-                    container={selectionRange?.commonAncestorContainer
-                        ?.parentElement || null}
+                    container={readonlyBodyInputNode || null}
                     {locale}
                     {gameType}
                     {editedRange}

@@ -14,13 +14,10 @@
     import ko from "../../../locales/ko/app.ftl"
     import ja from "../../../locales/ja/app.ftl"
 
-    import { currentGroupLocale, feedLocale } from "../../stores/locales"
-
     import { SUPPORTED_LOCALES } from "../../constants"
     import type { SupportedLocale } from "../../constants"
 
-    export let segment: string | undefined = undefined
-    segment = segment // get rid of unused prop warning
+    export let preferredLocales: readonly string[] = []
 
     // Store all translations as a simple object which is available
     // synchronously and bundled with the rest of the code.
@@ -37,10 +34,10 @@
         ja,
     }
 
-    function* generateBundles(userLocales: readonly string[]) {
+    function* generateBundles(preferredLocales: readonly string[]) {
         // Choose locales that are best for the user.
         const currentLocales = negotiateLanguages(
-            userLocales,
+            preferredLocales,
             SUPPORTED_LOCALES,
             { defaultLocale: "en" }
         )
@@ -51,16 +48,6 @@
             yield bundle
         }
     }
-
-    $: navigatorLocales =
-        typeof navigator === "undefined" ? [] : navigator.languages
-    $: segmentIsFeed = segment === "" || segment === "/"
-    $: preferredLocales =
-        segmentIsFeed && $feedLocale !== null
-            ? [$feedLocale, ...navigatorLocales]
-            : $currentGroupLocale
-            ? [$currentGroupLocale, ...navigatorLocales]
-            : navigatorLocales
 </script>
 
 <FluentProvider bundles={generateBundles(preferredLocales)}>

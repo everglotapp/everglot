@@ -6,6 +6,9 @@ import {
     LanguageCodeMappingsQuery,
 } from "../types/generated/graphql"
 import { currentUser, currentUserStore } from "./currentUser"
+import type { Page } from "../routes/_helpers/routing"
+
+export const currentPage = writable<Page | null>(null)
 
 export const username = writable<string | null>(null)
 export const groupUuid = writable<string | null>(null)

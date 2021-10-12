@@ -61,6 +61,6 @@ export function getBodyParts(
             i += value.length
         }
     }
-    console.log({ body, pickedRanges, measuredParts })
+    // console.log({ body, pickedRanges, measuredParts })
     return measuredParts
 }

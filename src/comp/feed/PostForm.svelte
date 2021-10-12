@@ -264,6 +264,8 @@
             handleDocumentSelectionChange
         )
 
+        document.addEventListener("keyup", handleDocumentKeyup)
+
         setInterval(updateRecordingDuration, 250)
         setInterval(updateAudioTimings, 250)
     })
@@ -275,6 +277,7 @@
             "selectionchange",
             handleDocumentSelectionChange
         )
+        document.removeEventListener("keyup", handleDocumentKeyup)
     })
 
     $: bodyInputPlaceholder = $translate(
@@ -316,9 +319,24 @@
         selection = null
     }
 
-    function handleBodyKeyup(_event: Event) {
+    function handleDocumentKeyup(event: KeyboardEvent) {
+        // console.log("document keyup", {
+        //     willHandleSelect,
+        //     preventAutoSelectionHandling,
+        //     event,
+        // })
+        tryHandleBodyTextSelection()
+    }
+    function handleBodyKeyup(_event: KeyboardEvent) {
         newPostBody = writableBodyInputNode.innerHTML
-        console.log("keyup", { willHandleSelect })
+        // console.log("keyup", { willHandleSelect, preventAutoSelectionHandling })
+        tryHandleBodyTextSelection()
+    }
+    function handleBodyContextmenu(_event: MouseEvent) {
+        // console.log("contextmenu", {
+        //     willHandleSelect,
+        //     preventAutoSelectionHandling,
+        // })
         tryHandleBodyTextSelection()
     }
     const dragTypeIsForbidden = (type: string) =>
@@ -326,38 +344,42 @@
         type === "application/x-moz-nativeimage" ||
         type.startsWith("image/")
     function handleBodyDragover(event: DragEvent) {
-        console.log("dragover", { event })
+        // console.log("dragover", { event })
         const types = event.dataTransfer?.types || []
         if (types.some(dragTypeIsForbidden)) {
-            console.log("Forbidden dragover!")
+            // console.log("Forbidden dragover!")
             event.preventDefault()
         } else {
-            console.log("Allowed dragover!")
+            // console.log("Allowed dragover!")
         }
     }
     function handleBodyDrop(event: DragEvent) {
         const types = event.dataTransfer?.types || []
         if (types.some(dragTypeIsForbidden)) {
-            console.log("Forbidden drop!")
+            // console.log("Forbidden drop!")
             event.preventDefault()
         } else {
-            console.log("Allowed drop!")
+            // console.log("Allowed drop!")
         }
         setTimeout(() => (newPostBody = writableBodyInputNode.innerHTML), 50)
-        console.log("drop", { event })
+        // console.log("drop", { event })
     }
     let preventAutoSelectionHandling: boolean = false
     function handleBodyMouseup() {
-        console.log("mouseup", { willHandleSelect })
+        // console.log("mouseup", {
+        //     willHandleSelect,
+        //     preventAutoSelectionHandling,
+        // })
         preventAutoSelectionHandling = false
         if (!willHandleSelect) {
             // secondary click away handler
             clearAllSelections()
         }
+        willHandleSelect = true
         tryHandleBodyTextSelection()
     }
     function handleBodyMousedown() {
-        console.log("mousedown", { willHandleSelect })
+        // console.log("mousedown", { willHandleSelect })
         preventAutoSelectionHandling = true
         tryClearAutoSelectionTimeout()
     }
@@ -365,7 +387,6 @@
     let readonlyBodyInputNode: HTMLElement
     let gamify: boolean = false
     let willHandleSelect: boolean = false
-    let selectionParentNode: HTMLElement
     let selection: Selection | null = null
     function tryHandleBodyTextSelection() {
         if (!willHandleSelect) {
@@ -385,7 +406,7 @@
         const s = window.getSelection
             ? window.getSelection()
             : document.selection
-        console.log({ s, range: s && s.rangeCount ? s.getRangeAt(0) : null })
+        // console.log({ s, range: s && s.rangeCount ? s.getRangeAt(0) : null })
         if (s && !s.isCollapsed && s.type === "Range") {
             const { focusNode, anchorNode } = s
             if (
@@ -403,7 +424,10 @@
         willHandleSelect = false
     }
     function handleBodySelectStart() {
-        console.log("selectstart", { willHandleSelect })
+        // console.log("selectstart", {
+        //     willHandleSelect,
+        //     preventAutoSelectionHandling,
+        // })
         willHandleSelect = true
     }
     let autoSelectionTimeout: number | null = null
@@ -420,27 +444,36 @@
         if (s.type !== "Range") {
             return
         }
-        console.log("selectionchange", {
-            willHandleSelect,
-            s,
-            autoSelectionTimeout,
-        })
+        const r = s ? s.getRangeAt(0) : null
+        // console.log("selectionchange", {
+        //     willHandleSelect,
+        //     s,
+        //     selection,
+        //     autoSelectionTimeout,
+        //     preventAutoSelectionHandling,
+        //     r,
+        //     selectionRange,
+        // })
         if (
             !selection ||
+            !selectionRange ||
             s.focusNode !== selection.focusNode ||
             s.anchorNode !== selection.anchorNode ||
             s.focusOffset !== selection.focusOffset ||
-            s.anchorOffset !== selection.anchorOffset
+            s.anchorOffset !== selection.anchorOffset ||
+            (r !== null &&
+                (r.startOffset !== selectionRange.startOffset ||
+                    r.endOffset !== selectionRange.endOffset))
         ) {
-            selection = s && !s.isCollapsed && s.type === "Range" ? s : null
+            selection = s && !s.isCollapsed ? s : null
             tryClearAutoSelectionTimeout()
             if (s.rangeCount) {
                 if (!preventAutoSelectionHandling) {
                     autoSelectionTimeout = window.setTimeout(() => {
                         if (!preventAutoSelectionHandling) {
-                            console.log(
-                                "autoSelectionTimeout expired, handling"
-                            )
+                            // console.log(
+                            //     "autoSelectionTimeout expired, handling"
+                            // )
                             tryHandleBodyTextSelection()
                             autoSelectionTimeout = null
                         }
@@ -619,11 +652,11 @@
         event: CustomEvent<{ event: MouseEvent }>
     ) {
         if (!willHandleSelect && event.detail.event.button === 0) {
-            console.log("clickaway", {
-                willHandleSelect,
-                selection,
-                rangeOptionsDropdownId,
-            })
+            // console.log("clickaway", {
+            //     willHandleSelect,
+            //     selection,
+            //     rangeOptionsDropdownId,
+            // })
             clearAllSelections()
         }
     }
@@ -774,11 +807,13 @@
                 role="textbox"
                 placeholder={bodyInputPlaceholder}
                 aria-placeholder={bodyInputPlaceholder}
+                tabindex={1}
                 on:keyup={handleBodyKeyup}
                 on:mousedown={handleBodyMousedown}
                 on:mouseup={handleBodyMouseup}
                 on:selectstart={handleBodySelectStart}
                 on:selectionchange={handleDocumentSelectionChange}
+                on:contextmenu={handleBodyContextmenu}
                 on:drop|preventDefault
                 on:paste|preventDefault
             >
@@ -812,6 +847,7 @@
                 role="textbox"
                 placeholder={bodyInputPlaceholder}
                 aria-placeholder={bodyInputPlaceholder}
+                tabindex={1}
                 on:keyup={handleBodyKeyup}
                 on:dragover={handleBodyDragover}
                 on:drop={handleBodyDrop}

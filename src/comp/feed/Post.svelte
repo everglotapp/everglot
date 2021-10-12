@@ -9,8 +9,6 @@
         XIcon,
         SendIcon,
         ZapIcon,
-        ChevronUpIcon,
-        ChevronDownIcon,
         EyeOffIcon,
         EyeIcon,
     } from "svelte-feather-icons"
@@ -24,11 +22,7 @@
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
 
-    import {
-        currentUser,
-        currentUserStore,
-        currentUserUuid,
-    } from "../../stores/currentUser"
+    import { currentUserStore, currentUserUuid } from "../../stores/currentUser"
 
     import type {
         AllPostsQuery,

@@ -17,7 +17,9 @@
     import { showChatSidebarDrawer } from "../stores/chat"
     import { showSwitchCallModal } from "../stores/call"
     import { MOBILE_APP_USER_AGENTS } from "../constants"
-    import { userAgentIsMobileApp } from "../stores"
+    import { currentPage, userAgentIsMobileApp } from "../stores"
+    import { currentGroupLocale, feedLocale } from "../stores/locales"
+    import { getPage, Page } from "./_helpers/routing"
 
     setupUrql()
 
@@ -25,24 +27,26 @@
     query(allGroupsStore)
 
     const { page } = stores()
-    $: segment = $page.path
+    $: path = $page.path
 
     $: {
-        segment // dependency
+        $currentPage = getPage(path)
         handlePageChange()
     }
 
-    $: showMainNav =
-        segment !== "login" &&
-        segment !== "/login" &&
-        segment !== "join" &&
-        segment !== "/join"
-    $: noscroll = ["/chat", "chat"].includes(segment)
+    $: showMainNav = $currentPage !== Page.Join && $currentPage !== Page.Login
+    $: noscroll = $currentPage === Page.Chat
+
+    $: navigatorLocales =
+        typeof navigator === "undefined" ? [] : navigator.languages
+    $: preferredLocales =
+        $currentPage === Page.Feed && $feedLocale !== null
+            ? [$feedLocale, ...navigatorLocales]
+            : $currentGroupLocale
+            ? [$currentGroupLocale, ...navigatorLocales]
+            : navigatorLocales
 
     onMount(() => {
-        // TODO: is this really necessary?
-        segment = window.location.pathname.split("/")[1]
-
         window.addEventListener(
             "everglotGoto",
             (event: CustomEvent<{ path: string }>) => {
@@ -85,12 +89,12 @@
     }
 </script>
 
-<LocaleProvider {segment}>
+<LocaleProvider {preferredLocales}>
     <WebrtcProvider>
         <ChatProvider>
             <div id="app" class:noscroll class:with-main-nav={showMainNav}>
                 {#if showMainNav}
-                    <MainNav {segment} />
+                    <MainNav />
                 {/if}
 
                 <main>

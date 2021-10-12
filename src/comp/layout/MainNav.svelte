@@ -27,6 +27,7 @@
     import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
 
     import {
+        currentPage,
         userHasCompletedProfile,
         groupUuid,
         userAgentIsMobileApp,
@@ -41,11 +42,10 @@
         EVERGLOT_WEBSITE_BASE_URL,
         SIDEBAR_MENU_ICON_BUTTON_ID,
     } from "../../constants"
+    import { Page } from "../../routes/_helpers/routing"
 
     query(currentUserStore)
     query(allGroupsStore)
-
-    export let segment: string | undefined
 
     const webrtc = getContext<WebrtcContext>(WEBRTC_CONTEXT)
     const { joinedRoom: joinedCallRoom } = webrtc
@@ -131,7 +131,7 @@
         }
     }
 
-    $: showSidebarMenuIcon = segment === "chat"
+    $: showSidebarMenuIcon = $currentPage === Page.Chat
 </script>
 
 <div class="nav-container">
@@ -139,7 +139,7 @@
         {#if $userHasCompletedProfile}
             <div class="hidden md:flex flex-grow-0 self-center">
                 <a
-                    aria-current={segment === undefined ? "page" : undefined}
+                    role="presentation"
                     class="logo font-bold uppercase tracking-wide"
                     href="/"
                     ><img
@@ -149,7 +149,7 @@
                     /></a
                 >
             </div>
-        {:else if !$currentUserStore.fetching && $currentUserStore.data && segment !== "signup"}
+        {:else if !$currentUserStore.fetching && $currentUserStore.data && $currentPage !== Page.Signup}
             <div
                 class="flex self-center pt-1 items-center h-full justify-center"
             >
@@ -190,8 +190,7 @@
             <div class="flex justify-center">
                 <div class="flex">
                     <a
-                        aria-current={typeof segment === "undefined" ||
-                        segment === ""
+                        aria-current={$currentPage === Page.Feed
                             ? "page"
                             : undefined}
                         href="/"
@@ -216,8 +215,9 @@
                     {#if false}
                         {#if $userHasCompletedProfile}
                             <a
-                                aria-current={segment === "global" ||
-                                (segment === "chat" && $currentGroupIsGlobal)
+                                aria-current={$currentPage === Page.Global ||
+                                ($currentPage === Page.Chat &&
+                                    $currentGroupIsGlobal)
                                     ? "page"
                                     : undefined}
                                 href="/global"
@@ -278,7 +278,7 @@
                                                 <div
                                                     aria-current={group.uuid ===
                                                         $groupUuid &&
-                                                    segment === "chat"
+                                                    $currentPage === Page.Chat
                                                         ? "page"
                                                         : undefined}
                                                     class="group"
@@ -319,9 +319,10 @@
                     {/if}
                     {#if $userHasCompletedProfile && !$allGroupsStore.fetching && !$allGroupsStore.error}
                         <button
-                            aria-current={(segment === "chat" &&
+                            aria-current={($currentPage === Page.Chat &&
                                 !$currentGroupIsGlobal) ||
-                            (!$privateGroups.length && segment === "signup")
+                            (!$privateGroups.length &&
+                                $currentPage === Page.Signup)
                                 ? "page"
                                 : undefined}
                             id="groups-dropdown-clickaway"
@@ -395,7 +396,7 @@
                                             >
                                             <hr class="mt-2" />
                                         {/if}
-                                        {#if $joinedCallRoom && (segment !== "chat" || $groupUuid !== $joinedCallRoom)}
+                                        {#if $joinedCallRoom && ($currentPage === Page.Chat || $groupUuid !== $joinedCallRoom)}
                                             <div>
                                                 <ButtonSmall
                                                     variant="TEXT"

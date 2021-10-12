@@ -644,47 +644,49 @@
                                 />
                             {:else if showCorrectAnswers && displayedAnswerByRangeUuid[bodyPart.uuid]}
                                 <span
-                                    class="inline-flex border-b-2 border-gray-bitdark px-1 py-1 mx-1 relative mb-8"
+                                    class={`inline-flex border-b-2 border-gray-bitdark px-1 py-1 mx-1 relative${
+                                        currentUserCreatedGame ? "" : " mb-8"
+                                    }`}
                                     >{correctAnswerByRangeUuid[bodyPart.uuid]
-                                        .clozeAnswer}<span
-                                        class="body-part-range-answer absolute flex justify-center font-bold mr-1"
-                                        class:skipped={game.revealedByCurrentUser ||
-                                            currentUserCreatedGame}
-                                        class:correct={!game.revealedByCurrentUser &&
-                                            !currentUserCreatedGame &&
-                                            Boolean(
+                                        .clozeAnswer}{#if !currentUserCreatedGame}<span
+                                            class="body-part-range-answer absolute flex justify-center font-bold mr-1"
+                                            class:skipped={game.revealedByCurrentUser ||
+                                                currentUserCreatedGame}
+                                            class:correct={!game.revealedByCurrentUser &&
+                                                !currentUserCreatedGame &&
+                                                Boolean(
+                                                    currentUserAnswerByRangeUuid[
+                                                        bodyPart.uuid
+                                                    ]
+                                                ) &&
                                                 currentUserAnswerByRangeUuid[
                                                     bodyPart.uuid
-                                                ]
-                                            ) &&
-                                            currentUserAnswerByRangeUuid[
-                                                bodyPart.uuid
-                                            ].correct}
-                                        class:incorrect={!game.revealedByCurrentUser &&
-                                            !currentUserCreatedGame &&
-                                            (!Boolean(
-                                                currentUserAnswerByRangeUuid[
-                                                    bodyPart.uuid
-                                                ]
-                                            ) ||
-                                                !currentUserAnswerByRangeUuid[
-                                                    bodyPart.uuid
-                                                ].correct)}
-                                        style={`bottom: -2rem; left: 50%; right: 50%; z-index: ${
-                                            10 + i
-                                        };"`}
-                                        ><span class="bg-white"
-                                            ><Localized
-                                                id={displayedAnswerByRangeUuid[
-                                                    bodyPart.uuid
-                                                ].clozeAnswer
-                                                    ? displayedAnswerByRangeUuid[
-                                                          bodyPart.uuid
-                                                      ].clozeAnswer
-                                                    : ""}
-                                            /></span
-                                        ></span
-                                    ></span
+                                                ].correct}
+                                            class:incorrect={!game.revealedByCurrentUser &&
+                                                !currentUserCreatedGame &&
+                                                (!Boolean(
+                                                    currentUserAnswerByRangeUuid[
+                                                        bodyPart.uuid
+                                                    ]
+                                                ) ||
+                                                    !currentUserAnswerByRangeUuid[
+                                                        bodyPart.uuid
+                                                    ].correct)}
+                                            style={`bottom: -2rem; left: 50%; right: 50%; z-index: ${
+                                                10 + i
+                                            };"`}
+                                            ><span class="bg-white"
+                                                ><Localized
+                                                    id={displayedAnswerByRangeUuid[
+                                                        bodyPart.uuid
+                                                    ].clozeAnswer
+                                                        ? displayedAnswerByRangeUuid[
+                                                              bodyPart.uuid
+                                                          ].clozeAnswer
+                                                        : ""}
+                                                /></span
+                                            ></span
+                                        >{/if}</span
                                 >
                             {:else}
                                 <input
@@ -719,12 +721,29 @@
                 </div>
             {/if}
             {#if game !== null && $currentUserUuid !== null && $currentUserUuid !== uuid}
-                <div class="flex flex-row pt-2 justify-start items-center">
+                <div
+                    class="flex flex-col sm:flex-row sm:flex-wrap pt-2 sm:justify-start justify-center items-start sm:items-center"
+                >
+                    {#if game.revealedByCurrentUser}<div
+                            class="flex text-gray-bitdark text-sm py-1 sm:py-0"
+                        >
+                            You skipped this game.
+                        </div>{:else if currentUserAnswers.length}<div
+                            class="flex text-gray-bitdark text-sm py-1 sm:py-0"
+                        >
+                            You got {currentUserAnswers.filter(
+                                (answer) => answer.correct
+                            ).length}/{game.ranges.nodes.length} correct!
+                        </div>{/if}
                     <div class="flex relative mr-1">
                         <ButtonSmall
                             className="submit-answers-button flex items-center justify-center ml-0 mr-1"
                             tag="button"
-                            variant="OUTLINED"
+                            variant={!showCorrectAnswers &&
+                            currentUserCanAnswer &&
+                            anyRangeAnswered
+                                ? "FILLED"
+                                : "OUTLINED"}
                             color={currentUserCanAnswer && anyRangeAnswered
                                 ? "PRIMARY"
                                 : "SECONDARY"}
@@ -750,17 +769,6 @@
                                 >{/if}</ButtonSmall
                         >
                     </div>
-                    {#if game.revealedByCurrentUser}<div
-                            class="flex text-gray-bitdark text-sm"
-                        >
-                            You skipped this game.
-                        </div>{:else if currentUserAnswers.length}<div
-                            class="flex text-gray-bitdark text-sm"
-                        >
-                            You got {currentUserAnswers.filter(
-                                (answer) => answer.correct
-                            ).length}/{game.ranges.nodes.length} correct!
-                        </div>{/if}
                 </div>
             {/if}
         </div>

@@ -54,8 +54,9 @@
 
     $: navigatorLocales =
         typeof navigator === "undefined" ? [] : navigator.languages
+    $: segmentIsFeed = segment === "" || segment === "/"
     $: preferredLocales =
-        segment === "" && $feedLocale !== null
+        segmentIsFeed && $feedLocale !== null
             ? [$feedLocale, ...navigatorLocales]
             : $currentGroupLocale
             ? [$currentGroupLocale, ...navigatorLocales]

@@ -46,7 +46,9 @@ export async function post(req: Request, res: Response, next: () => void) {
     }
     for (const answer of answers as unknown[]) {
         if (
+            !answer ||
             typeof answer !== "object" ||
+            Array.isArray(answer) ||
             !(answer as object).hasOwnProperty("rangeUuid") ||
             typeof (answer as PostGameAnswerPayload).rangeUuid !== "string" ||
             !uuidValidate((answer as PostGameAnswerPayload).rangeUuid)
@@ -210,10 +212,12 @@ function isAnswerCorrect(
             return false
         }
         return (
-            answer.clozeAnswer.toLocaleLowerCase(game.post.language.alpha2) ===
-            correctAnswer.clozeAnswer.toLocaleLowerCase(
-                game.post.language.alpha2
-            )
+            answer.clozeAnswer
+                .toLocaleLowerCase(game.post.language.alpha2)
+                .trim() ===
+            correctAnswer.clozeAnswer
+                .toLocaleLowerCase(game.post.language.alpha2)
+                .trim()
         )
     }
     return null

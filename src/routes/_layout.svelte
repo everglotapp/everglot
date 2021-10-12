@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
-    import { goto } from "@sapper/app"
+    import { goto, stores } from "@sapper/app"
     import { v4 as uuidv4 } from "uuid"
 
     import { setupUrql } from "./_helpers/urql"
@@ -24,15 +24,20 @@
     query(currentUserStore)
     query(allGroupsStore)
 
-    export let segment: string | undefined = undefined
+    const { page } = stores()
+    $: segment = $page.path
 
     $: {
         segment // dependency
         handlePageChange()
     }
 
-    $: showMainNav = segment !== "login" && segment !== "join"
-    $: noscroll = segment === "chat"
+    $: showMainNav =
+        segment !== "login" &&
+        segment !== "/login" &&
+        segment !== "join" &&
+        segment !== "/join"
+    $: noscroll = ["/chat", "chat"].includes(segment)
 
     onMount(() => {
         // TODO: is this really necessary?

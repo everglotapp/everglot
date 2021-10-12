@@ -194,7 +194,9 @@ export async function post(req: Request, res: Response, _next: () => void) {
             }
             for (const range of ranges as unknown[]) {
                 if (
+                    !range ||
                     typeof range !== "object" ||
+                    Array.isArray(range) ||
                     !(range as object).hasOwnProperty("uuid") ||
                     typeof (range as PostGameRange).uuid !== "string" ||
                     !uuidValidate((range as PostGameRange).uuid) ||

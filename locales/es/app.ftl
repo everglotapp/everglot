@@ -155,3 +155,14 @@ profile-language-native-hint = (Lengua materna)
 
 ## Locales
 
+locale-en = Inglés
+locale-de = Alemán
+locale-zh = Chino
+locale-es = Español
+locale-it = Italiano
+locale-fr = Francés
+locale-ko = Coreano
+locale-ja = Japonés
+locale-ru = Ruso
+locale-ar = Árabe
+locale-pt = Portugués

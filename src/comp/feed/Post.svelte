@@ -506,7 +506,12 @@
                         </span>{/if}
                 </div>
             {/if}
-            <div id={bodyId} bind:this={bodyNode} class="body mt-1">
+            <div
+                id={bodyId}
+                bind:this={bodyNode}
+                class="body mt-1"
+                class:game={Boolean(game)}
+            >
                 {#if game && answerRangeUuid !== null && language?.alpha2}
                     <RangeOptionsDropdown
                         id={rangeOptionsDropdownId}
@@ -548,7 +553,7 @@
                             {#if currentUserCanAnswer}
                                 <span
                                     id={bodyPart.uuid}
-                                    class="body-part-range inline-flex border-b px-1 py-1 mx-1 cursor-pointer"
+                                    class="body-part-range inline-flex border-b px-1 py-1 mr-2 cursor-pointer"
                                     class:answered={answerRanges.hasOwnProperty(
                                         bodyPart.uuid
                                     ) && answerRanges[bodyPart.uuid] !== null}
@@ -562,9 +567,9 @@
                                 >
                             {:else if showCorrectAnswers && displayedAnswerByRangeUuid[bodyPart.uuid]}
                                 <span
-                                    class="inline-flex border-b-2 border-gray-bitdark px-1 py-1 mx-1 relative mb-8"
+                                    class="inline-flex border-b-2 border-gray px-1 py-1 mr-2 relative mb-8"
                                     ><span>{bodyPart.value}</span><span
-                                        class="body-part-range-answer absolute flex justify-center font-bold mr-1"
+                                        class="body-part-range-answer absolute flex justify-center font-bold mr-1 leading-7"
                                         class:skipped={game.revealedByCurrentUser ||
                                             currentUserCreatedGame}
                                         class:correct={!game.revealedByCurrentUser &&
@@ -626,8 +631,7 @@
                                     ></span
                                 >
                             {:else}
-                                <span
-                                    class="border-b-2 border-gray-bitdark pb-1 mx-1"
+                                <span class="border-b-2 border-gray pb-1 mr-2"
                                     >{bodyPart.value}</span
                                 >
                             {/if}
@@ -636,19 +640,19 @@
                                 <input
                                     id={bodyPart.uuid}
                                     type="text"
-                                    class="inline mx-1 px-1 py-1"
+                                    class="inline mr-2 px-1 py-1"
                                     bind:value={clozeAnswers[bodyPart.uuid]}
                                     name={bodyPart.uuid}
                                     style={`width: 5em;`}
                                 />
                             {:else if showCorrectAnswers && displayedAnswerByRangeUuid[bodyPart.uuid]}
                                 <span
-                                    class={`inline-flex border-b-2 border-gray-bitdark px-1 py-1 mx-1 relative${
+                                    class={`inline-flex border-b-2 border-gray px-1 py-1 mr-2 relative${
                                         currentUserCreatedGame ? "" : " mb-8"
                                     }`}
                                     >{correctAnswerByRangeUuid[bodyPart.uuid]
                                         .clozeAnswer}{#if !currentUserCreatedGame}<span
-                                            class="body-part-range-answer absolute flex justify-center font-bold mr-1"
+                                            class="body-part-range-answer absolute flex justify-center font-bold mr-1 leading-7"
                                             class:skipped={game.revealedByCurrentUser ||
                                                 currentUserCreatedGame}
                                             class:correct={!game.revealedByCurrentUser &&
@@ -691,7 +695,7 @@
                                 <input
                                     id={bodyPart.uuid}
                                     type="text"
-                                    class="inline mx-1 bg-gray-light px-0 py-1"
+                                    class="inline mr-2 bg-gray-light px-0 py-1"
                                     disabled
                                     name={bodyPart.uuid}
                                     style={`height: 2rem; width: 4.5rem;`}
@@ -924,6 +928,10 @@
 </div>
 
 <style>
+    .body.game {
+        @apply leading-8;
+    }
+
     .reply:first-child {
         @apply pt-2;
         @apply mt-2;

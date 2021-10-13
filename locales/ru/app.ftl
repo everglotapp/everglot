@@ -5,6 +5,12 @@
 
 -brand-name = Everglot
 
+## Feed page
+
+post-game-guess-gender-ru-masculine = мужской
+post-game-guess-gender-ru-feminine = женский
+post-game-guess-gender-ru-neutral = средний
+
 ## Chat page
 
 chat-browser-window-title = { -brand-name } - Учитесь вместе.

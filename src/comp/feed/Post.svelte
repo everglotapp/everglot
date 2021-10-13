@@ -565,9 +565,9 @@
                                         handleAnswerRange(bodyPart.uuid)}
                                     >{bodyPart.value}</span
                                 >
-                            {:else if showCorrectAnswers && displayedAnswerByRangeUuid[bodyPart.uuid]}
+                            {:else if showCorrectAnswers && displayedAnswerByRangeUuid[bodyPart.uuid] && language}
                                 <span
-                                    class="inline-flex border-b-2 border-gray px-1 py-1 mr-2 relative mb-8"
+                                    class="inline-flex border-b-2 border-gray px-1 pt-1 mr-2 relative mb-8"
                                     ><span>{bodyPart.value}</span><span
                                         class="body-part-range-answer absolute flex justify-center font-bold mr-1 leading-7"
                                         class:skipped={game.revealedByCurrentUser ||
@@ -594,8 +594,9 @@
                                                 ].correct)}
                                         style={`bottom: -2rem; left: 50%; right: 50%; z-index: ${
                                             10 + i
-                                        };"`}
-                                        ><span class="bg-white"
+                                        };`}
+                                        ><span
+                                            class="bg-white whitespace-nowrap"
                                             ><Localized
                                                 id={game.gameType ===
                                                     PostGameType.GuessCase &&
@@ -631,7 +632,7 @@
                                     ></span
                                 >
                             {:else}
-                                <span class="border-b-2 border-gray pb-1 mr-2"
+                                <span class="border-b-2 border-gray mr-2"
                                     >{bodyPart.value}</span
                                 >
                             {/if}
@@ -647,7 +648,7 @@
                                 />
                             {:else if showCorrectAnswers && displayedAnswerByRangeUuid[bodyPart.uuid]}
                                 <span
-                                    class={`inline-flex border-b-2 border-gray px-1 py-1 mr-2 relative${
+                                    class={`inline-flex border-b-2 border-gray px-1 pt-1 mr-2 relative${
                                         currentUserCreatedGame ? "" : " mb-8"
                                     }`}
                                     >{correctAnswerByRangeUuid[bodyPart.uuid]
@@ -677,8 +678,9 @@
                                                     ].correct)}
                                             style={`bottom: -2rem; left: 50%; right: 50%; z-index: ${
                                                 10 + i
-                                            };"`}
-                                            ><span class="bg-white"
+                                            };`}
+                                            ><span
+                                                class="bg-white whitespace-nowrap"
                                                 ><Localized
                                                     id={displayedAnswerByRangeUuid[
                                                         bodyPart.uuid
@@ -703,7 +705,7 @@
                             {/if}
                         {/if}
                     {:else if bodyPart.type === BodyPartType.Text}
-                        {bodyPart.value}
+                        <span>{bodyPart.value}</span>
                     {/if}
                 {/each}
             </div>

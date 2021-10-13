@@ -71,13 +71,20 @@ export const PROMPT_LOCALES = [
 ] as const
 export type PromptLocale = typeof PROMPT_LOCALES[number]
 
-export const GAMIFY_POST_LOCALES = ["de"] as const
+export const GAMIFY_POST_LOCALES = SUPPORTED_LOCALES
 export type GamifyPostLocale = typeof GAMIFY_POST_LOCALES[number]
 
-export const GUESS_CASE_LOCALES = ["de"] as const
+export const GUESS_CASE_LOCALES = ["en", "de", "it"] as const
 export type GuessCaseLocale = typeof GUESS_CASE_LOCALES[number]
 
-export const GUESS_GENDER_LOCALES = ["fr", "es", "it", "de"] as const
+export const GUESS_GENDER_LOCALES = [
+    "fr",
+    "es",
+    "it",
+    "pt",
+    "de",
+    "ru",
+] as const
 export type GuessGenderLocale = typeof GUESS_GENDER_LOCALES[number]
 
 export const ALPHABET: Record<HangmanLocale, readonly string[]> = {

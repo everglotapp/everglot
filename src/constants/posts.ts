@@ -16,16 +16,23 @@ export const GUESS_CASE_OPTIONS: Record<
     Partial<Record<GrammaticalCase, string>>
 > = {
     de: {
-        NOMINATIVE: "nominative",
-        GENITIVE: "genitive",
-        DATIVE: "dative",
-        ACCUSATIVE: "accusative",
+        NOMINATIVE: "de-nominative",
+        GENITIVE: "de-genitive",
+        DATIVE: "de-dative",
+        ACCUSATIVE: "de-accusative",
     },
-    // it: {
-    //     SUBJECT: "subject",
-    //     INDIRECT_OBJECT: "indirect_object",
-    //     DIRECT_OBJECT: "direct_object",
-    // },
+    en: {
+        NOMINATIVE: "en-nominative",
+        GENITIVE: "en-genitive",
+        DATIVE: "en-dative",
+        ACCUSATIVE: "en-accusative",
+    },
+    it: {
+        NOMINATIVE: "it-nominative",
+        // GENITIVE: "it-genitive",
+        DATIVE: "it-dative",
+        ACCUSATIVE: "it-accusative",
+    },
     // zh: {
     //     SUBJECT: "subject",
     //     INDIRECT_OBJECT: "indirect_object",
@@ -38,21 +45,30 @@ export const GUESS_GENDER_OPTIONS: Record<
     Partial<Record<GrammaticalGender, string>>
 > = {
     fr: {
-        MASCULINE: "masculine",
-        FEMININE: "feminine",
+        MASCULINE: "fr-masculine",
+        FEMININE: "fr-feminine",
     },
     it: {
-        MASCULINE: "masculine",
-        FEMININE: "feminine",
+        MASCULINE: "it-masculine",
+        FEMININE: "it-feminine",
     },
     es: {
-        MASCULINE: "masculine",
-        FEMININE: "feminine",
+        MASCULINE: "es-masculine",
+        FEMININE: "es-feminine",
+    },
+    pt: {
+        MASCULINE: "pt-masculine",
+        FEMININE: "pt-feminine",
     },
     de: {
-        MASCULINE: "masculine",
-        FEMININE: "feminine",
-        NEUTRAL: "neuter",
+        MASCULINE: "de-masculine",
+        FEMININE: "de-feminine",
+        NEUTRAL: "de-neutral",
+    },
+    ru: {
+        MASCULINE: "ru-masculine",
+        FEMININE: "ru-feminine",
+        NEUTRAL: "ru-neutral",
     },
 } as const
 export type GuessGenderOption = typeof GUESS_GENDER_OPTIONS[GuessGenderLocale]

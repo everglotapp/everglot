@@ -5,6 +5,11 @@
 
 -brand-name = Everglot
 
+## Feed page
+
+post-game-guess-gender-fr-masculine = Masculin
+post-game-guess-gender-fr-feminine = Féminin
+
 ## Chat page
 
 chat-browser-window-title = { -brand-name } – Apprendre ensemble.

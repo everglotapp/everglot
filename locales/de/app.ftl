@@ -7,13 +7,13 @@
 
 ## Feed page
 
-post-game-guess-case-nominative = Nominativ
-post-game-guess-case-genitive = Genitiv
-post-game-guess-case-dative = Dativ
-post-game-guess-case-accusative = Akkusativ
-post-game-guess-gender-masculine = Maskulin
-post-game-guess-gender-feminine = Feminin
-post-game-guess-gender-neuter = Neutral
+post-game-guess-case-de-nominative = Nominativ
+post-game-guess-case-de-genitive = Genitiv
+post-game-guess-case-de-dative = Dativ
+post-game-guess-case-de-accusative = Akkusativ
+post-game-guess-gender-de-masculine = Maskulin
+post-game-guess-gender-de-feminine = Feminin
+post-game-guess-gender-de-neutral = Neutral
 post-game-cloze-new-gap = Lücke erstellen
 post-game-cancel = Abbrechen
 post-game-selection-remove = Löschen

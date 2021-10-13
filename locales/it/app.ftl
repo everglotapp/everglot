@@ -5,6 +5,14 @@
 
 -brand-name = Everglot
 
+## Feed page
+
+post-game-guess-case-it-nominative = Soggetto
+post-game-guess-case-it-dative = Oggetto ind.
+post-game-guess-case-it-accusative = Oggetto dir.
+post-game-guess-gender-it-masculine = Maschile
+post-game-guess-gender-it-feminine = Femminile
+
 ## Chat page
 
 chat-browser-window-title = { -brand-name } – Impariamo Insieme.

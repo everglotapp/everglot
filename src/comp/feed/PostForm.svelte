@@ -26,7 +26,13 @@
         formatPostBody,
     } from "../../routes/_helpers/posts"
     import { getSupportedMimeTypes } from "../../routes/_helpers/posts/recording"
-    import { GAMIFY_POST_LOCALES, BodyPartType } from "../../constants"
+    import {
+        GAMIFY_POST_LOCALES,
+        BodyPartType,
+        SUPPORTED_LOCALES,
+        GUESS_CASE_LOCALES,
+        GUESS_GENDER_LOCALES,
+    } from "../../constants"
     import type {
         SupportedLocale,
         PostGameRange,
@@ -287,9 +293,42 @@
     $: gamificationSupported = locale
         ? (GAMIFY_POST_LOCALES as readonly string[]).includes(locale as string)
         : false
+    $: guessCaseSupported = locale
+        ? (GUESS_CASE_LOCALES as readonly string[]).includes(locale as string)
+        : false
+    $: guessGenderSupported = locale
+        ? (GUESS_GENDER_LOCALES as readonly string[]).includes(locale as string)
+        : false
+    $: clozeSupported = locale
+        ? (SUPPORTED_LOCALES as readonly string[]).includes(locale as string)
+        : false
 
     $: if (!gamificationSupported) {
         gamify = false
+    }
+
+    let newPostBodyByLocale: Partial<
+        Record<SupportedLocale, string | undefined>
+    > = {}
+    let previousLocale: SupportedLocale | null = null
+    $: if (locale !== previousLocale) {
+        if (previousLocale) {
+            if (!gamify) {
+                newPostBodyByLocale[previousLocale] =
+                    writableBodyInputNode.innerHTML
+            }
+            if (locale) {
+                newPostBody = newPostBodyByLocale[locale]
+                writableBodyInputNode.innerHTML = newPostBody || ""
+            } else {
+                newPostBody = undefined
+                writableBodyInputNode.innerHTML = ""
+            }
+            newPostBodyByLocale = newPostBodyByLocale
+        }
+        clearAllSelections()
+        handleCloseGamify()
+        previousLocale = locale
     }
 
     let gameType: PostGameType | null = null
@@ -691,28 +730,35 @@
                 Which kind of game to create?
             </div>
             <div class="bg-white flex flex-col items-center py-4 px-4">
-                <ButtonLarge
-                    on:click={() =>
-                        handleSelectGameType(PostGameType.GuessCase)}
-                    tag="button"
-                    variant="OUTLINED"
-                    color="PRIMARY"
-                    className="mb-2">Guess the Case</ButtonLarge
-                >
-                <ButtonLarge
-                    on:click={() =>
-                        handleSelectGameType(PostGameType.GuessGender)}
-                    tag="button"
-                    variant="OUTLINED"
-                    color="PRIMARY"
-                    className="mb-2">Guess the Gender</ButtonLarge
-                >
-                <ButtonLarge
-                    on:click={() => handleSelectGameType(PostGameType.Cloze)}
-                    tag="button"
-                    variant="OUTLINED"
-                    color="PRIMARY">Cloze</ButtonLarge
-                >
+                {#if guessCaseSupported}
+                    <ButtonLarge
+                        on:click={() =>
+                            handleSelectGameType(PostGameType.GuessCase)}
+                        tag="button"
+                        variant="OUTLINED"
+                        color="PRIMARY"
+                        className="mb-2">Guess the Case</ButtonLarge
+                    >
+                {/if}
+                {#if guessGenderSupported}
+                    <ButtonLarge
+                        on:click={() =>
+                            handleSelectGameType(PostGameType.GuessGender)}
+                        tag="button"
+                        variant="OUTLINED"
+                        color="PRIMARY"
+                        className="mb-2">Guess the Gender</ButtonLarge
+                    >
+                {/if}
+                {#if clozeSupported}
+                    <ButtonLarge
+                        on:click={() =>
+                            handleSelectGameType(PostGameType.Cloze)}
+                        tag="button"
+                        variant="OUTLINED"
+                        color="PRIMARY">Cloze</ButtonLarge
+                    >
+                {/if}
             </div>
         </div>
     </Modal>

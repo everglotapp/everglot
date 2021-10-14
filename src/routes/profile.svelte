@@ -83,6 +83,7 @@
     $: displayName = userProfile?.displayName
     $: gender = userProfile?.gender
     $: avatarUrl = userProfile?.avatarUrl
+    $: uuid = userProfile?.uuid
 
     // Hide these in mobile webviews until file uploads work.
     let hideUploadAvatarForm = false
@@ -151,6 +152,7 @@
                             newAvatarUrl
                                 ? newAvatarUrl
                                 : avatarUrl || ""}
+                            {uuid}
                             size={96}
                         />
                     </div>

@@ -578,6 +578,7 @@
                                         username={follower.username ||
                                             undefined}
                                         url={follower.avatarUrl || undefined}
+                                        uuid={follower.uuid || null}
                                         size={48}
                                     /></a
                                 >
@@ -647,6 +648,7 @@
                                             undefined}
                                         url={followedUser.avatarUrl ||
                                             undefined}
+                                        uuid={followedUser.uuid || null}
                                         size={48}
                                     /></a
                                 >

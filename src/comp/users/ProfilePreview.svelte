@@ -44,6 +44,7 @@
                     <Avatar
                         username={user.username || ""}
                         url={user.avatarUrl || ""}
+                        uuid={user.uuid || null}
                         size={64}
                     />
                     {#if activeStatus}

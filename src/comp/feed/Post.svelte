@@ -415,11 +415,16 @@
                 <a href={`/u/${author.username}`}
                     ><Avatar
                         username={author.username}
+                        uuid={author.uuid}
                         url={author.avatarUrl}
                     /></a
                 >
             {:else}
-                <Avatar username={author.username} url={author.avatarUrl} />
+                <Avatar
+                    username={author.username}
+                    url={author.avatarUrl}
+                    uuid={author.uuid}
+                />
             {/if}
         </div>
         <div class="w-full">
@@ -890,6 +895,7 @@
                             <Avatar
                                 username={reply.author.username}
                                 url={reply.author.avatarUrl}
+                                uuid={reply.author.uuid}
                                 size={36}
                             /></a
                         >

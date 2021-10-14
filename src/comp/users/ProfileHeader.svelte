@@ -177,6 +177,7 @@
                 id={avatarId}
                 username={username || ""}
                 url={shownAvatarUrl || ""}
+                uuid={userUuid}
                 size={AVATAR_SIZE}
                 on:click={() => {
                     if (shownAvatarUrl != null) {

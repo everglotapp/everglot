@@ -237,6 +237,7 @@
                 <Avatar
                     username={user.username || ""}
                     url={user.avatarUrl || ""}
+                    uuid={userUuid}
                     size={36}
                     on:click={() => (showProfilePreview = !showProfilePreview)}
                 />

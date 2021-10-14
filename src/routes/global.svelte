@@ -161,6 +161,7 @@
                                                 <Avatar
                                                     url={user.avatarUrl}
                                                     username={user.username}
+                                                    uuid={user.uuid}
                                                     showShadow={false}
                                                     size={32}
                                                 />

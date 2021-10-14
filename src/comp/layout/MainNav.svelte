@@ -632,6 +632,7 @@
                                 username={$currentUser
                                     ? $currentUser.username || ""
                                     : ""}
+                                uuid={$currentUser ? $currentUser.uuid : null}
                                 size={42}
                             />
                             {#if $joinedCallRoom}

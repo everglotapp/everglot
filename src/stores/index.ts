@@ -13,7 +13,9 @@ export const currentPage = writable<Page | null>(null)
 export const username = writable<string | null>(null)
 export const groupUuid = writable<string | null>(null)
 export const inviteToken = writable<string | null>(null)
+export const resetPasswordToken = writable<string | null>(null)
 export const userAgentIsMobileApp = writable<boolean>(false)
+export const prefillPasswordAfterReset = writable<string | null>(null)
 
 export const userHasCompletedProfile = derived(
     currentUser,

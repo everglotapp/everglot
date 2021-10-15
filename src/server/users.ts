@@ -39,6 +39,17 @@ import {
     CreateUserPreferenceMutationVariables,
     CreateUserPreferenceMutation,
     CreateUserPreference,
+    UserPasswordResetDataByEmailQuery,
+    UserPasswordResetDataByEmail,
+    UserPasswordResetDataByEmailQueryVariables,
+    UpdateUserResetPasswordTokenMutation,
+    UpdateUserResetPasswordTokenMutationVariables,
+    UpdateUserResetPasswordToken,
+    UserByResetPasswordTokenQuery,
+    UserByResetPasswordTokenQueryVariables,
+    UserByResetPasswordToken,
+    ResetUserPasswordMutationVariables,
+    ResetUserPassword,
 } from "../types/generated/graphql"
 
 export async function registerUserActivity(
@@ -242,4 +253,53 @@ export async function createUserPreference(
         return null
     }
     return res.data?.createUserPreference?.userPreference || null
+}
+
+export async function getUserPasswordResetDataByEmail(
+    vars: UserPasswordResetDataByEmailQueryVariables
+) {
+    const res = await performQuery<UserPasswordResetDataByEmailQuery>(
+        UserPasswordResetDataByEmail.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        return null
+    }
+    return res.data.userByEmail || null
+}
+
+export async function updateUserPasswordResetToken(
+    vars: UpdateUserResetPasswordTokenMutationVariables
+) {
+    const res = await performQuery<UpdateUserResetPasswordTokenMutation>(
+        UpdateUserResetPasswordToken.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        return null
+    }
+    return res.data.updateUser || null
+}
+
+export async function getUserByResetPasswordToken(
+    vars: UserByResetPasswordTokenQueryVariables
+) {
+    const res = await performQuery<UserByResetPasswordTokenQuery>(
+        UserByResetPasswordToken.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        return null
+    }
+    return res.data.userByResetPasswordToken || null
+}
+
+export async function resetUserPassword(
+    vars: ResetUserPasswordMutationVariables
+) {
+    const res = await performQuery<ResetUserPasswordMutationVariables>(
+        ResetUserPassword.loc!.source,
+        vars
+    )
+    return Boolean(!res.errors && res.data)
 }

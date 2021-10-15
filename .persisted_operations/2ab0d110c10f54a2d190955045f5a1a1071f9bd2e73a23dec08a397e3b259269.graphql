@@ -1,0 +1,11 @@
+query UserPasswordResetDataByEmail($email: String!) {
+  userByEmail(email: $email) {
+    id
+    resetPasswordToken
+    resetPasswordTokenCreatedAt
+    unconfirmedEmail
+    googleId
+    email
+    __typename
+  }
+}

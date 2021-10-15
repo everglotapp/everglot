@@ -72,35 +72,53 @@ export default function configureExpress(app: Express, pool: Pool): Express {
     return app
 }
 
+const UNPROTECTED_ROUTES = [
+    "/join",
+    "/join/",
+    "/login",
+    "/login/",
+    "/users/password/reset",
+    "/users/password/reset/",
+    "/users/password/reset/update",
+    "/users/password/reset/update/",
+    "/service-worker.js",
+    "/global.css",
+    "/favicon.ico",
+    "/manifest.json",
+    "/placeholder",
+] as const
 function pathIsProtected(req: Request): boolean {
-    const UNPROTECTED_ROUTES = [
-        "/join",
-        "/join/",
-        "/login",
-        "/login/",
-        "/service-worker.js",
-        "/global.css",
-        "/favicon.ico",
-        "/manifest.json",
-        "/placeholder",
-    ]
-    if (DEMO_TOKEN && DEMO_TOKEN.length) {
-        UNPROTECTED_ROUTES.push(`/demo/${DEMO_TOKEN}`)
-    }
-    if (DEMO2_TOKEN && DEMO2_TOKEN.length) {
-        UNPROTECTED_ROUTES.push(`/demo/${DEMO2_TOKEN}`)
-    }
-    if (UNPROTECTED_ROUTES.includes(req.path)) {
+    const method = req.method.toLowerCase()
+    const path = req.path
+
+    if ((UNPROTECTED_ROUTES as readonly string[]).includes(path)) {
         return false
     }
-    if (req.path.startsWith("/client/")) {
+    if (path.startsWith("/client/") && "get" === method) {
         // static files
         return false
     }
     if (
-        req.path.startsWith("/email/unsubscribe") &&
-        req.method.toLowerCase() === "get"
+        DEMO_TOKEN &&
+        DEMO_TOKEN.length &&
+        `/demo/${DEMO_TOKEN}` === path &&
+        "get" === method
     ) {
+        return false
+    }
+    if (
+        DEMO2_TOKEN &&
+        DEMO2_TOKEN.length &&
+        `/demo/${DEMO2_TOKEN}` === path &&
+        "get" === method
+    ) {
+        return false
+    }
+    // For tokens passed via GET in query string.
+    if (path.startsWith("/email/unsubscribe") && "get" === method) {
+        return false
+    }
+    if (path.startsWith("/users/password/reset/") && "get" === method) {
         return false
     }
     // if (dev && path === "/graphql") {

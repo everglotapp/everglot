@@ -4738,6 +4738,16 @@ export type DeleteUserByNodeIdInput = {
   nodeId: Scalars['ID'];
 };
 
+/** All input for the `deleteUserByResetPasswordToken` mutation. */
+export type DeleteUserByResetPasswordTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  resetPasswordToken: Scalars['String'];
+};
+
 /** All input for the `deleteUserByUsername` mutation. */
 export type DeleteUserByUsernameInput = {
   /**
@@ -9979,6 +9989,8 @@ export type Mutation = {
   /** Deletes a single `User` using its globally unique id. */
   deleteUserByNodeId?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
+  deleteUserByResetPasswordToken?: Maybe<DeleteUserPayload>;
+  /** Deletes a single `User` using a unique key. */
   deleteUserByUsername?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
   deleteUserByUuid?: Maybe<DeleteUserPayload>;
@@ -10281,6 +10293,8 @@ export type Mutation = {
   updateUserByEmailUnsubscribeToken?: Maybe<UpdateUserPayload>;
   /** Updates a single `User` using its globally unique id and a patch. */
   updateUserByNodeId?: Maybe<UpdateUserPayload>;
+  /** Updates a single `User` using a unique key and a patch. */
+  updateUserByResetPasswordToken?: Maybe<UpdateUserPayload>;
   /** Updates a single `User` using a unique key and a patch. */
   updateUserByUsername?: Maybe<UpdateUserPayload>;
   /** Updates a single `User` using a unique key and a patch. */
@@ -11525,6 +11539,12 @@ export type MutationDeleteUserByNodeIdArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserByResetPasswordTokenArgs = {
+  input: DeleteUserByResetPasswordTokenInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByUsernameArgs = {
   input: DeleteUserByUsernameInput;
 };
@@ -12439,6 +12459,12 @@ export type MutationUpdateUserByEmailUnsubscribeTokenArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateUserByNodeIdArgs = {
   input: UpdateUserByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserByResetPasswordTokenArgs = {
+  input: UpdateUserByResetPasswordTokenInput;
 };
 
 
@@ -15762,6 +15788,7 @@ export type Query = Node & {
   userByEmailUnsubscribeToken?: Maybe<User>;
   /** Reads a single `User` using its globally unique `ID`. */
   userByNodeId?: Maybe<User>;
+  userByResetPasswordToken?: Maybe<User>;
   userByUsername?: Maybe<User>;
   userByUuid?: Maybe<User>;
   userDevice?: Maybe<UserDevice>;
@@ -17193,6 +17220,12 @@ export type QueryUserByEmailUnsubscribeTokenArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryUserByNodeIdArgs = {
   nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserByResetPasswordTokenArgs = {
+  resetPasswordToken: Scalars['String'];
 };
 
 
@@ -20997,6 +21030,18 @@ export type UpdateUserByNodeIdInput = {
   patch: UserPatch;
 };
 
+/** All input for the `updateUserByResetPasswordToken` mutation. */
+export type UpdateUserByResetPasswordTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `User` being updated. */
+  patch: UserPatch;
+  resetPasswordToken: Scalars['String'];
+};
+
 /** All input for the `updateUserByUsername` mutation. */
 export type UpdateUserByUsernameInput = {
   /**
@@ -23124,6 +23169,7 @@ export type UpsertUserWhere = {
   email?: Maybe<Scalars['String']>;
   emailUnsubscribeToken?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
+  resetPasswordToken?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
   uuid?: Maybe<Scalars['UUID']>;
 };
@@ -23204,6 +23250,8 @@ export type User = Node & {
   preference?: Maybe<UserPreference>;
   /** Reads and enables pagination through a set of `Prompt`. */
   promptsByPostAuthorIdAndPromptId: UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection;
+  resetPasswordToken?: Maybe<Scalars['String']>;
+  resetPasswordTokenCreatedAt?: Maybe<Scalars['Datetime']>;
   /** Reads a single `InviteToken` that is related to this `User`. */
   signedUpWithToken?: Maybe<InviteToken>;
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
@@ -23648,6 +23696,10 @@ export type UserCondition = {
   locale?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `passwordHash` field. */
   passwordHash?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `resetPasswordToken` field. */
+  resetPasswordToken?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `resetPasswordTokenCreatedAt` field. */
+  resetPasswordTokenCreatedAt?: Maybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `signedUpWithTokenId` field. */
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `unconfirmedEmail` field. */
@@ -23801,6 +23853,10 @@ export type UserFilter = {
   or?: Maybe<Array<UserFilter>>;
   /** Filter by the object’s `passwordHash` field. */
   passwordHash?: Maybe<StringFilter>;
+  /** Filter by the object’s `resetPasswordToken` field. */
+  resetPasswordToken?: Maybe<StringFilter>;
+  /** Filter by the object’s `resetPasswordTokenCreatedAt` field. */
+  resetPasswordTokenCreatedAt?: Maybe<DatetimeFilter>;
   /** Filter by the object’s `signedUpWithTokenId` field. */
   signedUpWithTokenId?: Maybe<IntFilter>;
   /** Filter by the object’s `unconfirmedEmail` field. */
@@ -24074,6 +24130,8 @@ export type UserInput = {
   lastActiveAt?: Maybe<Scalars['Datetime']>;
   locale?: Maybe<Scalars['Int']>;
   passwordHash?: Maybe<Scalars['String']>;
+  resetPasswordToken?: Maybe<Scalars['String']>;
+  resetPasswordTokenCreatedAt?: Maybe<Scalars['Datetime']>;
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
   unconfirmedEmail?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
@@ -24437,6 +24495,8 @@ export type UserPatch = {
   lastActiveAt?: Maybe<Scalars['Datetime']>;
   locale?: Maybe<Scalars['Int']>;
   passwordHash?: Maybe<Scalars['String']>;
+  resetPasswordToken?: Maybe<Scalars['String']>;
+  resetPasswordTokenCreatedAt?: Maybe<Scalars['Datetime']>;
   signedUpWithTokenId?: Maybe<Scalars['Int']>;
   unconfirmedEmail?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
@@ -25092,6 +25152,10 @@ export enum UsersOrderBy {
   PasswordHashDesc = 'PASSWORD_HASH_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  ResetPasswordTokenAsc = 'RESET_PASSWORD_TOKEN_ASC',
+  ResetPasswordTokenCreatedAtAsc = 'RESET_PASSWORD_TOKEN_CREATED_AT_ASC',
+  ResetPasswordTokenCreatedAtDesc = 'RESET_PASSWORD_TOKEN_CREATED_AT_DESC',
+  ResetPasswordTokenDesc = 'RESET_PASSWORD_TOKEN_DESC',
   SignedUpWithTokenIdAsc = 'SIGNED_UP_WITH_TOKEN_ID_ASC',
   SignedUpWithTokenIdDesc = 'SIGNED_UP_WITH_TOKEN_ID_DESC',
   UnconfirmedEmailAsc = 'UNCONFIRMED_EMAIL_ASC',
@@ -25504,6 +25568,20 @@ export type UserFollowershipNotificationQueryVariables = Exact<{
 
 export type UserFollowershipNotificationQuery = { __typename?: 'Query', userFollower?: Maybe<{ __typename?: 'UserFollower', follower?: Maybe<{ __typename?: 'User', username?: Maybe<string>, displayName?: Maybe<string> }>, user?: Maybe<{ __typename?: 'User', id: number }> }> };
 
+export type UserPasswordResetEmailNotificationQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserPasswordResetEmailNotificationQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', username?: Maybe<string>, displayName?: Maybe<string>, resetPasswordToken?: Maybe<string> }> };
+
+export type UserPasswordResetSuccessEmailNotificationQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserPasswordResetSuccessEmailNotificationQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', username?: Maybe<string>, displayName?: Maybe<string> }> };
+
 export type UserByUsernamePostsQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
@@ -25555,6 +25633,14 @@ export type CurrentUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CurrentUserProfileQuery = { __typename?: 'Query', currentUser?: Maybe<{ __typename?: 'User', bio: string, email: string, gender?: Maybe<string>, username?: Maybe<string>, avatarUrl?: Maybe<string>, uuid: any, displayName?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'UserLanguage', native: boolean, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', nodeId: string, userType: UserType, joinedOn: any, group?: Maybe<{ __typename?: 'Group', uuid: any, groupName?: Maybe<string>, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }> }>> } }> };
 
+export type ResetUserPasswordMutationVariables = Exact<{
+  id: Scalars['Int'];
+  passwordHash: Scalars['String'];
+}>;
+
+
+export type ResetUserPasswordMutation = { __typename?: 'Mutation', updateUser?: Maybe<{ __typename?: 'UpdateUserPayload', user?: Maybe<{ __typename?: 'User', id: number }> }> };
+
 export type UpdateUserAvatarUrlMutationVariables = Exact<{
   avatarUrl: Scalars['String'];
   id: Scalars['Int'];
@@ -25571,6 +25657,15 @@ export type UpdateUserBioMutationVariables = Exact<{
 
 export type UpdateUserBioMutation = { __typename?: 'Mutation', updateUser?: Maybe<{ __typename?: 'UpdateUserPayload', user?: Maybe<{ __typename?: 'User', bio: string }> }> };
 
+export type UpdateUserResetPasswordTokenMutationVariables = Exact<{
+  id: Scalars['Int'];
+  resetPasswordToken: Scalars['String'];
+  resetPasswordTokenCreatedAt: Scalars['Datetime'];
+}>;
+
+
+export type UpdateUserResetPasswordTokenMutation = { __typename?: 'Mutation', updateUser?: Maybe<{ __typename?: 'UpdateUserPayload', user?: Maybe<{ __typename?: 'User', id: number, resetPasswordTokenCreatedAt?: Maybe<any>, resetPasswordToken?: Maybe<string> }> }> };
+
 export type UpsertUserPreferenceMutationVariables = Exact<{
   feedLanguageId: Scalars['Int'];
   userId: Scalars['Int'];
@@ -25578,6 +25673,13 @@ export type UpsertUserPreferenceMutationVariables = Exact<{
 
 
 export type UpsertUserPreferenceMutation = { __typename?: 'Mutation', upsertUserPreference?: Maybe<{ __typename?: 'UpsertUserPreferencePayload', userPreference?: Maybe<{ __typename?: 'UserPreference', createdAt: any, id: number, nodeId: string, feedLanguageId: number }> }> };
+
+export type UserByResetPasswordTokenQueryVariables = Exact<{
+  resetPasswordToken: Scalars['String'];
+}>;
+
+
+export type UserByResetPasswordTokenQuery = { __typename?: 'Query', userByResetPasswordToken?: Maybe<{ __typename?: 'User', resetPasswordTokenCreatedAt?: Maybe<any>, resetPasswordToken?: Maybe<string>, id: number, googleId?: Maybe<string> }> };
 
 export type UserHasCompletedProfileQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -25606,6 +25708,13 @@ export type UserLanguageInfoQueryVariables = Exact<{
 
 
 export type UserLanguageInfoQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', id: number, uuid: any, userLanguages: { __typename?: 'UserLanguagesConnection', nodes: Array<Maybe<{ __typename?: 'UserLanguage', nodeId: string, languageId: number, languageSkillLevelId?: Maybe<number>, native: boolean }>> } }> };
+
+export type UserPasswordResetDataByEmailQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type UserPasswordResetDataByEmailQuery = { __typename?: 'Query', userByEmail?: Maybe<{ __typename?: 'User', id: number, resetPasswordToken?: Maybe<string>, resetPasswordTokenCreatedAt?: Maybe<any>, unconfirmedEmail?: Maybe<string>, googleId?: Maybe<string>, email: string }> };
 
 export type UserUuidByIdQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -26648,6 +26757,23 @@ export const UserFollowershipNotification = gql`
   }
 }
     `;
+export const UserPasswordResetEmailNotification = gql`
+    query UserPasswordResetEmailNotification($id: Int!) {
+  user(id: $id) {
+    username
+    displayName
+    resetPasswordToken
+  }
+}
+    `;
+export const UserPasswordResetSuccessEmailNotification = gql`
+    query UserPasswordResetSuccessEmailNotification($id: Int!) {
+  user(id: $id) {
+    username
+    displayName
+  }
+}
+    `;
 export const UserByUsernamePosts = gql`
     query UserByUsernamePosts($username: String!) {
   userByUsername(username: $username) {
@@ -26876,6 +27002,17 @@ export const CurrentUserProfile = gql`
   }
 }
     `;
+export const ResetUserPassword = gql`
+    mutation ResetUserPassword($id: Int!, $passwordHash: String!) {
+  updateUser(
+    input: {patch: {passwordHash: $passwordHash, resetPasswordToken: null, resetPasswordTokenCreatedAt: null}, id: $id}
+  ) {
+    user {
+      id
+    }
+  }
+}
+    `;
 export const UpdateUserAvatarUrl = gql`
     mutation UpdateUserAvatarUrl($avatarUrl: String!, $id: Int!) {
   updateUser(input: {patch: {avatarUrl: $avatarUrl}, id: $id}) {
@@ -26894,6 +27031,19 @@ export const UpdateUserBio = gql`
   }
 }
     `;
+export const UpdateUserResetPasswordToken = gql`
+    mutation UpdateUserResetPasswordToken($id: Int!, $resetPasswordToken: String!, $resetPasswordTokenCreatedAt: Datetime!) {
+  updateUser(
+    input: {patch: {resetPasswordTokenCreatedAt: $resetPasswordTokenCreatedAt, resetPasswordToken: $resetPasswordToken}, id: $id}
+  ) {
+    user {
+      id
+      resetPasswordTokenCreatedAt
+      resetPasswordToken
+    }
+  }
+}
+    `;
 export const UpsertUserPreference = gql`
     mutation UpsertUserPreference($feedLanguageId: Int!, $userId: Int!) {
   upsertUserPreference(
@@ -26906,6 +27056,16 @@ export const UpsertUserPreference = gql`
       nodeId
       feedLanguageId
     }
+  }
+}
+    `;
+export const UserByResetPasswordToken = gql`
+    query UserByResetPasswordToken($resetPasswordToken: String!) {
+  userByResetPasswordToken(resetPasswordToken: $resetPasswordToken) {
+    resetPasswordTokenCreatedAt
+    resetPasswordToken
+    id
+    googleId
   }
 }
     `;
@@ -26946,6 +27106,18 @@ export const UserLanguageInfo = gql`
         native
       }
     }
+  }
+}
+    `;
+export const UserPasswordResetDataByEmail = gql`
+    query UserPasswordResetDataByEmail($email: String!) {
+  userByEmail(email: $email) {
+    id
+    resetPasswordToken
+    resetPasswordTokenCreatedAt
+    unconfirmedEmail
+    googleId
+    email
   }
 }
     `;

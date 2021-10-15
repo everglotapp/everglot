@@ -16,7 +16,7 @@ import log from "../logger"
 import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
 
-import validate from "deep-email-validator"
+import validateEmail from "deep-email-validator"
 import { OAuth2Client } from "google-auth-library"
 // import {
 //     createGroup,
@@ -24,10 +24,9 @@ import { OAuth2Client } from "google-auth-library"
 //     getUsersWithoutNativeGroup,
 // } from "../server/groups"
 
-const BCRYPT_WORK_FACTOR = 14
-
 import type { Request, Response } from "express"
 import type { Maybe } from "../types/generated/graphql"
+import { BCRYPT_WORK_FACTOR } from "../server/constants"
 
 type InvalidEmailReason = "smtp" | "regex" | "typo" | "mx" | "disposable"
 
@@ -150,7 +149,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             })
             return
         }
-        const emailValidation = await validate({
+        const emailValidation = await validateEmail({
             email,
             validateRegex: true,
             validateMx: true,

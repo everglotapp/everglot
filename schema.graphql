@@ -1808,6 +1808,7 @@ type Query implements Node {
   userByEmail(email: String!): User
   userByUuid(uuid: UUID!): User
   userByEmailUnsubscribeToken(emailUnsubscribeToken: String!): User
+  userByResetPasswordToken(resetPasswordToken: String!): User
   germanWord(id: Int!): GermanWord
   germanWordByUuid(uuid: UUID!): GermanWord
   englishWord(id: Int!): EnglishWord
@@ -2391,6 +2392,8 @@ type User implements Node {
   emailNotificationsEnabled: Boolean!
   emailUnsubscribeToken: String
   displayName: String
+  resetPasswordToken: String
+  resetPasswordTokenCreatedAt: Datetime
 
   """Reads a single `Language` that is related to this `User`."""
   languageByLocale: Language
@@ -4100,6 +4103,10 @@ enum UsersOrderBy {
   EMAIL_UNSUBSCRIBE_TOKEN_DESC
   DISPLAY_NAME_ASC
   DISPLAY_NAME_DESC
+  RESET_PASSWORD_TOKEN_ASC
+  RESET_PASSWORD_TOKEN_DESC
+  RESET_PASSWORD_TOKEN_CREATED_AT_ASC
+  RESET_PASSWORD_TOKEN_CREATED_AT_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
 }
@@ -4160,6 +4167,14 @@ input UserCondition {
 
   """Checks for equality with the object’s `displayName` field."""
   displayName: String
+
+  """Checks for equality with the object’s `resetPasswordToken` field."""
+  resetPasswordToken: String
+
+  """
+  Checks for equality with the object’s `resetPasswordTokenCreatedAt` field.
+  """
+  resetPasswordTokenCreatedAt: Datetime
 }
 
 """
@@ -4216,6 +4231,12 @@ input UserFilter {
 
   """Filter by the object’s `displayName` field."""
   displayName: StringFilter
+
+  """Filter by the object’s `resetPasswordToken` field."""
+  resetPasswordToken: StringFilter
+
+  """Filter by the object’s `resetPasswordTokenCreatedAt` field."""
+  resetPasswordTokenCreatedAt: DatetimeFilter
 
   """Filter by the object’s `followedByCurrentUser` field."""
   followedByCurrentUser: BooleanFilter
@@ -18228,6 +18249,14 @@ type Mutation {
     input: UpdateUserByEmailUnsubscribeTokenInput!
   ): UpdateUserPayload
 
+  """Updates a single `User` using a unique key and a patch."""
+  updateUserByResetPasswordToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserByResetPasswordTokenInput!
+  ): UpdateUserPayload
+
   """
   Updates a single `GermanWord` using its globally unique id and a patch.
   """
@@ -19506,6 +19535,14 @@ type Mutation {
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
     input: DeleteUserByEmailUnsubscribeTokenInput!
+  ): DeleteUserPayload
+
+  """Deletes a single `User` using a unique key."""
+  deleteUserByResetPasswordToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserByResetPasswordTokenInput!
   ): DeleteUserPayload
 
   """Deletes a single `GermanWord` using its globally unique id."""
@@ -22143,6 +22180,8 @@ input UserInput {
   emailNotificationsEnabled: Boolean
   emailUnsubscribeToken: String
   displayName: String
+  resetPasswordToken: String
+  resetPasswordTokenCreatedAt: Datetime
 }
 
 """The output of our create `GermanWord` mutation."""
@@ -25938,6 +25977,8 @@ input UserPatch {
   emailNotificationsEnabled: Boolean
   emailUnsubscribeToken: String
   displayName: String
+  resetPasswordToken: String
+  resetPasswordTokenCreatedAt: Datetime
 }
 
 """All input for the `updateUser` mutation."""
@@ -26013,6 +26054,21 @@ input UpdateUserByEmailUnsubscribeTokenInput {
   """
   patch: UserPatch!
   emailUnsubscribeToken: String!
+}
+
+"""All input for the `updateUserByResetPasswordToken` mutation."""
+input UpdateUserByResetPasswordTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `User` being updated.
+  """
+  patch: UserPatch!
+  resetPasswordToken: String!
 }
 
 """The output of our update `GermanWord` mutation."""
@@ -29704,6 +29760,16 @@ input DeleteUserByEmailUnsubscribeTokenInput {
   emailUnsubscribeToken: String!
 }
 
+"""All input for the `deleteUserByResetPasswordToken` mutation."""
+input DeleteUserByResetPasswordTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  resetPasswordToken: String!
+}
+
 """The output of our delete `GermanWord` mutation."""
 type DeleteGermanWordPayload {
   """
@@ -32374,6 +32440,7 @@ input UpsertUserWhere {
   email: String
   uuid: UUID
   emailUnsubscribeToken: String
+  resetPasswordToken: String
 }
 
 """All input for the upsert `User` mutation."""

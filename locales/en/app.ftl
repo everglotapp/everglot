@@ -243,6 +243,17 @@ users-password-reset-form-submit = Let me change my password
 users-password-reset-form-login = No, I remember my password
 users-password-reset-form-signup = I don't have an account, yet
 
+## Reset Password Updating Password page
+
+users-password-reset-token-browser-window-title = Change Password – { -brand-name }
+users-password-reset-token-form-title = Change my { -brand-name } password
+users-password-reset-token-form-password = New Password
+users-password-reset-token-form-password-confirm = New Password (again)
+users-password-reset-token-form-submit = Change my password
+users-password-reset-token-form-login = No, I remember my password
+users-password-reset-token-form-signup = I don't have an account, yet
+users-password-reset-token-form-resend = Send me another email
+
 ## User Bio component
 
 user-bio-languages-title = Languages

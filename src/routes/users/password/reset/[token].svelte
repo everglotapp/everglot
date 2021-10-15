@@ -27,10 +27,15 @@
 
     let redirectTimeout: number | null = null
     let redirectAt: Date | null = null
+    let recalculateRemainingSecondsInterval: number | null = null
     onDestroy(() => {
         if (redirectTimeout) {
             clearTimeout(redirectTimeout)
             redirectTimeout = null
+        }
+        if (recalculateRemainingSecondsInterval) {
+            clearInterval(recalculateRemainingSecondsInterval)
+            recalculateRemainingSecondsInterval = null
         }
     })
     const REDIRECT_DELAY_MS = 5000
@@ -83,9 +88,22 @@
                 REDIRECT_DELAY_MS
             )
             redirectAt = new Date(Date.now() + REDIRECT_DELAY_MS)
+            updateRemainingSeconds()
+            recalculateRemainingSecondsInterval = window.setInterval(
+                updateRemainingSeconds,
+                100
+            )
         } else {
             errorMessage = res.message
         }
+    }
+
+    let remainingSeconds: number | null = null
+    function updateRemainingSeconds() {
+        remainingSeconds =
+            redirectAt === null
+                ? null
+                : Math.round((redirectAt.getTime() - Date.now()) / 1000)
     }
 
     type UpdatePasswordBody = {
@@ -116,13 +134,14 @@
     <img src="/logo-192.png" alt="Everglot" class="mx-auto mb-8" />
 
     <PageTitle>
-        <Localized id="users-password-reset-browser-token-title" />
+        <Localized id="users-password-reset-token-form-title" />
     </PageTitle>
 
     {#if success}
         <div class="py-4 px-8 bg-green-200 text-xl font-bold font-secondary">
             Your password has been updated successfully! You will be redirected
-            in <Time timestamp={redirectAt} live={100} relative format="s" /> seconds!
+            in {remainingSeconds === null ? "?" : remainingSeconds}
+            {remainingSeconds === 1 ? "second" : "seconds"}!
         </div>
     {:else if errorMessage}
         <ErrorMessage>{errorMessage}</ErrorMessage>

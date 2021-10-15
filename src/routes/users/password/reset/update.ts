@@ -111,6 +111,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     // TODO: Send mail
     //sendResetPasswordMail()
 
+    // TODO: Clear all existing user sessions to log out any potential attackers.
     req.session.regenerate(function (err: any) {
         if (err) {
             chlog.child({ id: user.id }).error(err.message)

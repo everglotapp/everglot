@@ -37,4 +37,4 @@ export const USER_UPLOADED_RECORDINGS_ACCEPTED_CONTENT_TYPES = [
 export const RTC_TOKEN_VALID_SECONDS = 24 * 60 * 60 // 24 hours
 
 export const BCRYPT_WORK_FACTOR = 14
-export const RESET_PASSWORD_TOKEN_VALID_SECONDS = 3 * 24 * 60 * 60 // 3 days
+export const RESET_PASSWORD_TOKEN_VALID_SECONDS = 60 * 60 // 1 hour

@@ -167,8 +167,9 @@ login-title = Login to { -brand-name }
 login-form-email = Email
 login-form-password = Password
 login-form-submit = Login
-login-form-signup = I don't have an account
+login-form-signup = I don't have an account, yet
 login-form-google = Login with Google
+login-form-reset-password = I forgot my password
 
 ## Join page
 
@@ -232,6 +233,15 @@ signup-form-gender-male = Male
 signup-form-gender-other = Other
 signup-form-submit = Next
 signup-form-error-loading-language-codes = Something went wrong.
+
+## Reset Password page
+
+users-password-reset-browser-window-title = Forgot Password – { -brand-name }
+users-password-reset-form-title = I forgot my { -brand-name } password
+users-password-reset-form-email = Email
+users-password-reset-form-submit = Let me change my password
+users-password-reset-form-login = No, I remember my password
+users-password-reset-form-signup = I don't have an account, yet
 
 ## User Bio component
 

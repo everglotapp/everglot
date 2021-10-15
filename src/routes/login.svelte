@@ -191,7 +191,7 @@
         >
         <ButtonLarge
             href={resetPasswordUrl}
-            variant="OUTLINED"
+            variant="TEXT"
             color="SECONDARY"
             className="w-full justify-center"
             ><Localized id="login-form-reset-password" /></ButtonLarge

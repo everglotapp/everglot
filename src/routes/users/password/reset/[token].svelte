@@ -10,7 +10,11 @@
     import ButtonLarge from "../../../../comp/util/ButtonLarge.svelte"
 
     import { MIN_PASSWORD_LENGTH } from "../../../../users"
-    import { inviteToken, resetPasswordToken } from "../../../../stores"
+    import {
+        inviteToken,
+        prefillPasswordAfterReset,
+        resetPasswordToken,
+    } from "../../../../stores"
     import { onDestroy } from "svelte"
     const { page } = stores()
 
@@ -83,6 +87,7 @@
         }
         if (res.success === true) {
             success = true
+            $prefillPasswordAfterReset = password
             redirectTimeout = window.setTimeout(() => {
                 // TODO: Pre-enter new password in login form
                 goto(loginUrl)

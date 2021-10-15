@@ -7,6 +7,7 @@ export type TemplateEmailParamsV1 = AbstractTemplateEmailParamsV1 &
     (
         | ResetPasswordTemplateEmailParamsV1
         | ResetPasswordSuccessTemplateEmailParamsV1
+        | GroupAssignmentTemplateEmailParamsV1
     )
 
 export type ResetPasswordTemplateEmailParamsV1 = {
@@ -24,6 +25,11 @@ export type ResetPasswordSuccessTemplateEmailParamsV1 = {
         changeDetail: string
         date: string
     }
+}
+
+export type GroupAssignmentTemplateEmailParamsV1 = {
+    templateId: 10
+    templateParams: {}
 }
 
 export interface ManualTextEmailParamsV1 extends ManualEmailParamsV1 {

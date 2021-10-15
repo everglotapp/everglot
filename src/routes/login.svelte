@@ -12,7 +12,7 @@
     import GoogleAuthButton from "../comp/util/GoogleAuthButton.svelte"
 
     import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
-    import { inviteToken } from "../stores"
+    import { inviteToken, prefillPasswordAfterReset } from "../stores"
 
     let errorMessage: string | null = null
     let submitting = false
@@ -80,6 +80,10 @@
     }
 
     onMount(() => {
+        if ($prefillPasswordAfterReset) {
+            password = $prefillPasswordAfterReset
+            $prefillPasswordAfterReset = null
+        }
         const signedOut = new URL(window.location.href).searchParams.get(
             "signedout"
         )

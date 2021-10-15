@@ -26,6 +26,7 @@ import { OAuth2Client } from "google-auth-library"
 
 import type { Request, Response } from "express"
 import type { Maybe } from "../types/generated/graphql"
+import { BCRYPT_WORK_FACTOR } from "../server/constants"
 
 type InvalidEmailReason = "smtp" | "regex" | "typo" | "mx" | "disposable"
 

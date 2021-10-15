@@ -57,12 +57,16 @@
    "CreateUserLanguage": "3a91182db592a0eadaa496cec213c2884354635b0ea5d2c3d940f3b7d76639cb",
    "CreateUserPreference": "aa62fd1b52a4933e8fa9a666c104636aac4cbd6af1709db09e3a4c0dd4a08837",
    "CurrentUserProfile": "c683ccdf51d73e3f14a465160aaffc59a37b7e0e043b2d86e92396c4f47d6348",
+   "ResetUserPassword": "7f76a36e69b5f174315257118e293bebf8e1598292b085a78898c26fb74cb95e",
    "UpdateUserAvatarUrl": "5462ccf96eb3d1d0602963946d8f48734c6d1c5ddd6a31f1c8da088920be92f7",
    "UpdateUserBio": "4f8cc7afb37e79f790e0c7cb32a4e88c58718a3fc3ae9ed645dd3dda08187f95",
+   "UpdateUserResetPasswordToken": "43cd5e4d28ed7b8d83cf78471b81ac14406057b97a58446392fbeaee4dae60b4",
    "UpsertUserPreference": "b4a4bd4d44ceb8b959863999f3228ec5a10199557f01f56f5537c960dc8f0933",
+   "UserByResetPasswordToken": "c1f1a1745c7fccf11f222292e59183d5cdafeab12742e8b7ae66055c38578d7b",
    "UserHasCompletedProfile": "cd3ecbcb94dbe8bfaa3a058fe3250d2217988fc2b4e69e3d11ac2d04c5533024",
    "UserIdByEmail": "a608d762d28d2112046f058eadfd8ee987bc3fc036c5962ddd0bbffb60cb021a",
    "UserIdByUuid": "a2072dfc58f640efbb24156cd28eac9da4ed1463a00f5bae81d69c29e7471c59",
    "UserLanguageInfo": "065f2b2b82437127311f77907ef78c99f62bbb760c6e62d0cc3a24b121b43198",
+   "UserPasswordResetDataByEmail": "2ab0d110c10f54a2d190955045f5a1a1071f9bd2e73a23dec08a397e3b259269",
    "UserUuidById": "fc060ecae0283bbc43b600f0676d4d33c5d568aa50267fe2579fc63649075fcc"
 }

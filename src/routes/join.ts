@@ -16,7 +16,7 @@ import log from "../logger"
 import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
 
-import validate from "deep-email-validator"
+import validateEmail from "deep-email-validator"
 import { OAuth2Client } from "google-auth-library"
 // import {
 //     createGroup,
@@ -150,7 +150,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             })
             return
         }
-        const emailValidation = await validate({
+        const emailValidation = await validateEmail({
             email,
             validateRegex: true,
             validateMx: true,

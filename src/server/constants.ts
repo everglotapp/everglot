@@ -35,3 +35,5 @@ export const USER_UPLOADED_RECORDINGS_ACCEPTED_CONTENT_TYPES = [
 ] as const
 
 export const RTC_TOKEN_VALID_SECONDS = 24 * 60 * 60 // 24 hours
+
+export const RESET_PASSWORD_TOKEN_VALID_SECONDS = 3 * 24 * 60 * 60 // 3 days

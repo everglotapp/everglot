@@ -1,0 +1,11 @@
+mutation UpdateUserResetPasswordToken($id: Int!, $resetPasswordToken: String!, $resetPasswordTokenCreatedAt: Datetime!) {
+  updateUser(input: {patch: {resetPasswordTokenCreatedAt: $resetPasswordTokenCreatedAt, resetPasswordToken: $resetPasswordToken}, id: $id}) {
+    user {
+      id
+      resetPasswordTokenCreatedAt
+      resetPasswordToken
+      __typename
+    }
+    __typename
+  }
+}

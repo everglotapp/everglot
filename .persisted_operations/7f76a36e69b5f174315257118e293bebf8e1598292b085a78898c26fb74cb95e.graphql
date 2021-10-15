@@ -1,0 +1,9 @@
+mutation ResetUserPassword($id: Int!, $passwordHash: String!) {
+  updateUser(input: {patch: {passwordHash: $passwordHash, resetPasswordToken: null, resetPasswordTokenCreatedAt: null}, id: $id}) {
+    user {
+      id
+      __typename
+    }
+    __typename
+  }
+}

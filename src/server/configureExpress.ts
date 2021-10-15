@@ -78,6 +78,8 @@ function pathIsProtected(req: Request): boolean {
         "/join/",
         "/login",
         "/login/",
+        "/users/password/reset",
+        "/users/password/reset/",
         "/service-worker.js",
         "/global.css",
         "/favicon.ico",
@@ -93,13 +95,20 @@ function pathIsProtected(req: Request): boolean {
     if (UNPROTECTED_ROUTES.includes(req.path)) {
         return false
     }
+    const method = req.method.toLowerCase()
     if (req.path.startsWith("/client/")) {
         // static files
         return false
     }
+    if (req.path.startsWith("/email/unsubscribe") && "get" === method) {
+        return false
+    }
+    if (req.path.startsWith("/users/password/reset") && "post" === method) {
+        return false
+    }
     if (
-        req.path.startsWith("/email/unsubscribe") &&
-        req.method.toLowerCase() === "get"
+        req.path.startsWith("/users/password/reset/") &&
+        ["get", "post"].includes(method)
     ) {
         return false
     }

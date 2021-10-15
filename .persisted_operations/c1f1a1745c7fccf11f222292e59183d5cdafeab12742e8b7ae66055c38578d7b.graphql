@@ -1,0 +1,9 @@
+query UserByResetPasswordToken($resetPasswordToken: String!) {
+  userByResetPasswordToken(resetPasswordToken: $resetPasswordToken) {
+    resetPasswordTokenCreatedAt
+    resetPasswordToken
+    id
+    googleId
+    __typename
+  }
+}

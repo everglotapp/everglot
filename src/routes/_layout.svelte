@@ -34,7 +34,11 @@
         handlePageChange()
     }
 
-    $: showMainNav = $currentPage !== Page.Join && $currentPage !== Page.Login
+    $: showMainNav =
+        $currentPage !== Page.Join &&
+        $currentPage !== Page.Login &&
+        $currentPage !== Page.ResetPassword &&
+        $currentPage !== Page.ResetPasswordToken
     $: noscroll = $currentPage === Page.Chat
 
     $: navigatorLocales =

@@ -108,6 +108,8 @@
 </Localized>
 
 <div class="container px-4 mx-auto my-16 md:mt-32 max-w-sm">
+    <img src="/logo-192.png" alt="Everglot" class="mx-auto mb-8" />
+
     <PageTitle>
         <Localized id="join-title" />
     </PageTitle>

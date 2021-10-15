@@ -18,12 +18,13 @@
     let submitting = false
     let blockGoogleSignIn = false
 
+    const FORM_NAME = "login" as const
     const handleSubmit = async (_event: Event) => {
         if (submitting) {
             return
         }
         const form = document.forms[0]
-        if (form.name !== "login") {
+        if (form.name !== FORM_NAME) {
             return
         }
         // TODO: replace with JS form validation
@@ -118,6 +119,7 @@
     }
 
     $: joinUrl = $inviteToken ? `/join?token=${$inviteToken}` : "/join"
+    $: resetPasswordUrl = "/users/password/reset"
 </script>
 
 <Localized id="login-browser-window-title" let:text>
@@ -125,6 +127,8 @@
 </Localized>
 
 <div class="container px-4 mx-auto mt-16 mb-32 md:mt-32 max-w-sm">
+    <img src="/logo-192.png" alt="Everglot" class="mx-auto mb-8" />
+
     <PageTitle>
         <Localized id="login-title" />
     </PageTitle>
@@ -136,7 +140,7 @@
     <form
         on:submit|preventDefault={handleSubmit}
         method="post"
-        name="login"
+        name={FORM_NAME}
         class="bg-white my-8"
     >
         <div class="flex flex-col w-full mb-2">
@@ -178,11 +182,19 @@
             className="w-full justify-center mb-1"
             ><Localized id="login-form-google" />
         </GoogleAuthButton>
+        <hr class="my-3" />
         <ButtonLarge
             href={joinUrl}
             variant="OUTLINED"
             className="w-full justify-center"
             ><Localized id="login-form-signup" /></ButtonLarge
+        >
+        <ButtonLarge
+            href={resetPasswordUrl}
+            variant="OUTLINED"
+            color="SECONDARY"
+            className="w-full justify-center"
+            ><Localized id="login-form-reset-password" /></ButtonLarge
         >
     </form>
 </div>

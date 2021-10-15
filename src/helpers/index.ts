@@ -31,6 +31,16 @@ export function forbidden(
     })
 }
 
+export function notFound(
+    res: Response,
+    message = "The requested resource could not be found."
+) {
+    res.status(404).json({
+        success: false,
+        message,
+    })
+}
+
 const CONTENT_TYPE_JSON = "application/json"
 /**
  * Ends the response if request wasn't of type `application/json`.

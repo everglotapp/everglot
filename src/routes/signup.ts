@@ -54,10 +54,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    if (
-        !req.body.hasOwnProperty("username") ||
-        typeof req.body.username !== "string"
-    ) {
+    let username: unknown = req.body["username"]
+    if (!username || typeof username !== "string") {
         res.status(422).json({
             success: false,
             message: "Please specify a username.",
@@ -65,7 +63,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    if (req.body.username.length < MIN_USERNAME_LENGTH) {
+    if (username.length < MIN_USERNAME_LENGTH) {
         res.status(422).json({
             success: false,
             message: `Usernames must be at least ${MIN_USERNAME_LENGTH} characters long.`,
@@ -73,11 +71,13 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
+    const teachingInput: unknown = req.body["teaching"]
     if (
-        !req.body.hasOwnProperty("teaching") ||
-        !Array.isArray(req.body.teaching) ||
-        !req.body.teaching.length ||
-        req.body.teaching.length > MAX_TEACHING
+        !Array.isArray(teachingInput) ||
+        !teachingInput ||
+        !teachingInput.length ||
+        teachingInput.length > MAX_TEACHING ||
+        !teachingInput.every(isValidLocale)
     ) {
         res.status(422).json({
             success: false,
@@ -86,12 +86,15 @@ export async function post(req: Request, res: Response, _next: () => void) {
         })
         return
     }
+    const teaching = teachingInput as string[]
 
+    const learningInput: unknown = req.body["learning"]
     if (
-        !req.body.hasOwnProperty("learning") ||
-        !Array.isArray(req.body.learning) ||
-        !req.body.learning.length ||
-        req.body.learning.length > MAX_LEARNING
+        !Array.isArray(learningInput) ||
+        !learningInput ||
+        !learningInput.length ||
+        learningInput.length > MAX_LEARNING ||
+        !learningInput.every(isValidLocale)
     ) {
         res.status(422).json({
             success: false,
@@ -99,14 +102,15 @@ export async function post(req: Request, res: Response, _next: () => void) {
         })
         return
     }
+    const learning = learningInput as string[]
 
+    const cefrLevelsInput: unknown = req.body["cefrLevels"]
     if (
-        !req.body.hasOwnProperty("cefrLevels") ||
-        typeof req.body.cefrLevels !== "object" ||
-        Object.keys(req.body.cefrLevels).length !== req.body.learning.length ||
-        Object.keys(req.body.cefrLevels).some(
-            (code) => !req.body.learning.includes(code)
-        )
+        typeof cefrLevelsInput !== "object" ||
+        !cefrLevelsInput ||
+        Array.isArray(cefrLevelsInput) ||
+        Object.keys(cefrLevelsInput).length !== learning.length ||
+        Object.keys(cefrLevelsInput).some((code) => !learning.includes(code))
     ) {
         res.status(422).json({
             success: false,
@@ -115,6 +119,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         })
         return
     }
+    const cefrLevels = cefrLevelsInput as Record<string, unknown>
 
     ;(async () => {
         const client = await createDatabasePool().connect()
@@ -138,7 +143,6 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     `Failed to update username and gender of user ${userId}`
                 )
             }
-            const { teaching, learning, cefrLevels } = req.body
             for (const code of teaching) {
                 if (
                     (
@@ -181,7 +185,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             })
             let firstTargetLanguage = null
             for (const code of learning) {
-                if ((SUPPORTED_LOCALES as readonly string[]).includes(code)) {
+                if (isSupportedLocale(code)) {
                     firstTargetLanguage = code
                     break
                 }
@@ -257,3 +261,18 @@ VALUES (
     false
 )
 RETURNING id`
+
+async function isValidLocale(code: unknown): Promise<boolean> {
+    const LOCALE_LEN = 2
+    return Boolean(
+        code &&
+            typeof code === "string" &&
+            code.length === LOCALE_LEN &&
+            code === code.toLowerCase() &&
+            (await getLanguageIdByAlpha2(code)) !== null
+    )
+}
+
+function isSupportedLocale(code: string): boolean {
+    return (SUPPORTED_LOCALES as readonly string[]).includes(code)
+}

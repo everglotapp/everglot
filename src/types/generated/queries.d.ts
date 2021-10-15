@@ -521,6 +521,15 @@ declare module '*/currentUserProfile.graphql' {
 }
     
 
+declare module '*/resetUserPassword.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const ResetUserPassword: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/updateUserAvatarUrl.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -539,10 +548,28 @@ declare module '*/updateUserBio.graphql' {
 }
     
 
+declare module '*/updateUserResetPasswordToken.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UpdateUserResetPasswordToken: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/upsertUserPreference.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const UpsertUserPreference: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userByResetPasswordToken.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserByResetPasswordToken: DocumentNode;
 
   export default defaultDocument;
 }
@@ -579,6 +606,15 @@ declare module '*/userLanguageInfo.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const UserLanguageInfo: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userPasswordResetDataByEmail.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserPasswordResetDataByEmail: DocumentNode;
 
   export default defaultDocument;
 }

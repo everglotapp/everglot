@@ -301,5 +301,5 @@ export async function resetUserPassword(
         ResetUserPassword.loc!.source,
         vars
     )
-    return Boolean(res.data)
+    return Boolean(!res.errors && res.data)
 }

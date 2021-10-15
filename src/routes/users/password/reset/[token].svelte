@@ -1,6 +1,7 @@
 <script lang="ts">
     import { stores, goto } from "@sapper/app"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import Time from "svelte-time"
 
     import Spinner from "../../../../comp/util/Spinner.svelte"
     import BrowserTitle from "../../../../comp/layout/BrowserTitle.svelte"
@@ -9,9 +10,10 @@
     import ButtonLarge from "../../../../comp/util/ButtonLarge.svelte"
 
     import { MIN_PASSWORD_LENGTH } from "../../../../users"
+    import { resetPasswordToken } from "../../../../stores"
+    import { onDestroy } from "svelte"
     const { page } = stores()
 
-    let token: string = $page.params.token
     let password: string | undefined
     let passwordConfirm: string | undefined
 
@@ -19,6 +21,19 @@
     let submitting = false
     let success: boolean | null = null
 
+    $: if ($resetPasswordToken === null) {
+        $resetPasswordToken = $page.params.token || null
+    }
+
+    let redirectTimeout: number | null = null
+    let redirectAt: Date | null = null
+    onDestroy(() => {
+        if (redirectTimeout) {
+            clearTimeout(redirectTimeout)
+            redirectTimeout = null
+        }
+    })
+    const REDIRECT_DELAY_MS = 5000
     const FORM_NAME = "update-password" as const
     const handleSubmit = async (_event: Event) => {
         if (submitting) {
@@ -37,6 +52,11 @@
             errorMessage = "The two passwords don't match."
             return
         }
+        if (!$resetPasswordToken) {
+            errorMessage =
+                "Submitting won't work. Please request a new email using the button at the bottom of this page."
+            return
+        }
         const form = document.forms[0]
         if (form.name !== FORM_NAME) {
             return
@@ -49,7 +69,7 @@
         submitting = true
         errorMessage = null
         const response = await doSubmit({
-            token,
+            token: $resetPasswordToken,
             password,
         })
         const res = await response?.json()
@@ -58,7 +78,11 @@
         }
         if (res.success === true) {
             success = true
-            setTimeout(() => goto("/"), 5000)
+            redirectTimeout = window.setTimeout(
+                () => goto("/"),
+                REDIRECT_DELAY_MS
+            )
+            redirectAt = new Date(Date.now() + REDIRECT_DELAY_MS)
         } else {
             errorMessage = res.message
         }
@@ -80,6 +104,8 @@
         submitting = false
         return response
     }
+
+    const resendUrl = "/users/password/reset"
 </script>
 
 <Localized id="users-password-reset-browser-token-window-title" let:text>
@@ -95,7 +121,8 @@
 
     {#if success}
         <div class="py-4 px-8 bg-green-200 text-xl font-bold font-secondary">
-            Your password has been updated successfully!
+            Your password has been updated successfully! You will be redirected
+            in <Time timestamp={redirectAt} live={100} relative format="s" /> seconds!
         </div>
     {:else if errorMessage}
         <ErrorMessage>{errorMessage}</ErrorMessage>
@@ -141,7 +168,7 @@
                     minlength={MIN_PASSWORD_LENGTH}
                     pattern={`.{${MIN_PASSWORD_LENGTH},}`}
                     title={`${MIN_PASSWORD_LENGTH} characters minimum`}
-                    bind:value={password}
+                    bind:value={passwordConfirm}
                     required
                     class="py-2"
                 />
@@ -154,6 +181,18 @@
                 on:click={handleSubmit}
                 ><Localized
                     id="users-password-reset-token-form-submit"
+                /></ButtonLarge
+            >
+            <hr class="my-3" />
+            <ButtonLarge
+                tag="a"
+                href={resendUrl}
+                type="submit"
+                variant="TEXT"
+                color="SECONDARY"
+                className="w-full justify-center mb-1"
+                ><Localized
+                    id="users-password-reset-token-form-resend"
                 /></ButtonLarge
             >
         </form>

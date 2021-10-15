@@ -132,7 +132,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 "Email to send reset password token to not found in database"
             )
         // Don't tell user about failures / not found. Timing attacks still possible.
-        res.status(422).json({
+        res.status(200).json({
             success: true,
             message: null,
         })
@@ -159,7 +159,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 "User already has a valid password reset token, not regenerating"
             )
         // Don't tell user about failures / not found. Timing attacks still possible.
-        res.status(422).json({
+        res.status(200).json({
             success: true,
             message: null,
         })
@@ -175,11 +175,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
         // TODO: Send mail telling the user that this is is impossible
 
         // Don't tell user about failures / not found. Timing attacks still possible.
-        // res.status(422).json({
-        //     success: true,
-        //     message: null,
-        // })
-        // return
+        res.status(200).json({
+            success: true,
+            message: null,
+        })
+        return
     }
     const token = await generateResetPasswordToken()
     if (token === null) {
@@ -187,7 +187,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             .child({ email, id: oldPasswordResetData?.id })
             .debug("Failed to generate a reset password token")
         // Don't tell user about failures / not found. Timing attacks still possible.
-        res.status(422).json({
+        res.status(200).json({
             success: true,
             message: null,
         })
@@ -207,7 +207,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         chlog
             .child({ email, id: oldPasswordResetData?.id })
             .debug("Failed to store a generated reset password token")
-        res.status(422).json({
+        res.status(200).json({
             success: true,
             message: null,
         })
@@ -225,7 +225,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     //sendResetPasswordMail()
 
     // Don't tell user about failures / not found. Timing attacks still possible.
-    res.status(422).json({
+    res.status(200).json({
         success: true,
         message: null,
     })

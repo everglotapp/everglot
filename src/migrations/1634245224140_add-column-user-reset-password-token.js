@@ -22,7 +22,7 @@ exports.up = (pgm) => {
         `GRANT INSERT(reset_password_token, reset_password_token_created_at) ON app_public.users TO evg_server`
     )
     pgm.sql(
-        `GRANT UPDATE(reset_password_token, reset_password_token_created_at) ON app_public.users TO evg_server`
+        `GRANT UPDATE(reset_password_token, reset_password_token_created_at, password_hash) ON app_public.users TO evg_server`
     )
     pgm.createIndex(
         { schema: "app_public", name: "users" },
@@ -58,7 +58,7 @@ exports.down = (pgm) => {
         }
     )
     pgm.sql(
-        `REVOKE UPDATE(reset_password_token, reset_password_token_created_at) ON app_public.users FROM evg_server`
+        `REVOKE UPDATE(reset_password_token, reset_password_token_created_at, password_hash) ON app_public.users FROM evg_server`
     )
     pgm.sql(
         `REVOKE INSERT(reset_password_token, reset_password_token_created_at) ON app_public.users FROM evg_server`

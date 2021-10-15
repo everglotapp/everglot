@@ -167,6 +167,7 @@
             className="w-full justify-center mb-1"
             ><Localized id="join-form-google" />
         </GoogleAuthButton>
+        <hr class="my-3" />
         <ButtonLarge
             href={loginUrl}
             variant="TEXT"

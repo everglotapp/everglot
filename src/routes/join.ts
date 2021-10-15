@@ -24,8 +24,6 @@ import { OAuth2Client } from "google-auth-library"
 //     getUsersWithoutNativeGroup,
 // } from "../server/groups"
 
-const BCRYPT_WORK_FACTOR = 14
-
 import type { Request, Response } from "express"
 import type { Maybe } from "../types/generated/graphql"
 

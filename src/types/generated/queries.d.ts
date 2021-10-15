@@ -467,6 +467,24 @@ declare module '*/userFollowershipNotification.graphql' {
 }
     
 
+declare module '*/userPasswordResetEmailNotification.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserPasswordResetEmailNotification: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userPasswordResetSuccessEmailNotification.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserPasswordResetSuccessEmailNotification: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/userByUsernamePosts.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

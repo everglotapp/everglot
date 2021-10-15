@@ -1,5 +1,7 @@
 import path from "path"
 
+export const APP_BASE_URL = "https://app.everglot.com" as const
+
 export const MESSAGE_PREVIEW_IMAGES_DIRECTORY = path.resolve(
     __dirname,
     "../../../dynamic/images/preview"

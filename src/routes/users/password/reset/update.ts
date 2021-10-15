@@ -18,6 +18,50 @@ import {
     RESET_PASSWORD_TOKEN_VALID_SECONDS,
 } from "../../../../server/constants"
 import { MIN_PASSWORD_LENGTH } from "../../../../users"
+import { getUserPasswordResetSuccessEmailNotification } from "../../../../server/notifications/users"
+import { enqueueEmailNotification } from "../../../../server/notifications/email"
+import { NotificationParamsVersion } from "../../../../server/notifications/params"
+
+const NOTIFICATION_EXPIRY_SECONDS = 24 * 60 * 60
+const NOTIFICATION_WITHHELD_SECONDS = 3
+async function sendResetPasswordSuccessMail(userId: number, resetAt: Date) {
+    const notificationData = await getUserPasswordResetSuccessEmailNotification(
+        {
+            id: userId,
+        }
+    )
+    if (!notificationData) {
+        chlog
+            .child({ userId })
+            .error("No notification data for user password reset")
+        return
+    }
+    const { user } = notificationData
+    if (!user) {
+        chlog
+            .child({ userId, notificationData })
+            .error("Missing notification data for user password reset")
+        return
+    }
+    const expiresAt = new Date(Date.now() + NOTIFICATION_EXPIRY_SECONDS * 1000)
+    const withheldUntil = new Date(
+        Date.now() + NOTIFICATION_WITHHELD_SECONDS * 1000
+    )
+    const username =
+        user.displayName && user.displayName.length
+            ? user.displayName
+            : user.username
+
+    enqueueEmailNotification(userId, expiresAt, withheldUntil, {
+        templateId: 19,
+        templateParams: {
+            username: username || "user",
+            changeDetail: "Unknown location",
+            date: resetAt.toUTCString("en"),
+        },
+        version: NotificationParamsVersion.V1,
+    })
+}
 
 export async function post(req: Request, res: Response, _next: () => void) {
     const token = req.body["token"]
@@ -61,6 +105,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         )
         return
     }
+    const userId = user.id
     const tokenExpiresAt =
         Date.parse(user.resetPasswordTokenCreatedAt) +
         RESET_PASSWORD_TOKEN_VALID_SECONDS * 1000
@@ -69,6 +114,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         chlog
             .child({
                 token,
+                userId,
             })
             .debug("Reset password token expired")
         notFound(res)
@@ -78,7 +124,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     if (user.googleId) {
         chlog
             .child({
-                userId: user.id,
+                userId,
             })
             .warn("Reset password token valid but user has a Google account")
         unprocessableEntity(res)
@@ -87,9 +133,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
     const passwordHash = await bcrypt.hash(password, BCRYPT_WORK_FACTOR)
     if (!passwordHash) {
-        chlog
-            .child({ id: user.id })
-            .error("Failed to hash user password for reset")
+        chlog.child({ userId }).error("Failed to hash user password for reset")
         serverError(res)
         return
     }
@@ -98,30 +142,32 @@ export async function post(req: Request, res: Response, _next: () => void) {
         id: user.id,
         passwordHash,
     })
+    const resetAt = new Date()
     if (!success) {
-        chlog.child({ id: user.id }).error("Failed to reset user password")
+        chlog.child({ userId }).error("Failed to reset user password")
         serverError(res)
         return
     }
     chlog
         .child({
-            id: user.id,
+            userId,
         })
         .debug("Successfully reset user password")
-    // TODO: Send mail
-    //sendResetPasswordMail()
+
+    sendResetPasswordSuccessMail(userId, resetAt)
 
     // TODO: Clear all existing user sessions to log out any potential attackers.
-    req.session.regenerate(function (err: any) {
-        if (err) {
-            chlog.child({ id: user.id }).error(err.message)
-            serverError(res)
-        } else {
-            req.session.user_id = user.id
-            res.status(200).json({
-                success: true,
-                message: null,
-            })
-        }
+
+    /**
+     * Note that we could be logging the user in here automatically.
+     * However in case someone intercepts the reset password URL somehow, they
+     * might still not know the user's email address. In that case they will
+     * be able to change the user's password but they won't be able to login
+     * without the email address. So we're not making it easier for them.
+     */
+
+    res.status(200).json({
+        success: true,
+        message: null,
     })
 }

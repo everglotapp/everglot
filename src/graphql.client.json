@@ -51,6 +51,8 @@
    "PostReplyNotification": "a2faee9f81ce73d100cdea6c3fba996c1ef042d4cf5304942bf89df6130be46a",
    "UnsubscribeUserEmailNotifications": "1b93b73bf8b69eba780c64c6a5c496709ebf323da03f3d4f5eb16cea323f2aa0",
    "UserFollowershipNotification": "d1be01a56a0d6b8a12ea55c12c17b09cfcfee7e0a0833686617389d0daef1fe0",
+   "UserPasswordResetEmailNotification": "7e81c2d2101102cc12ff545121e7de4da7cbc99d8910d4bbaca240957df77eae",
+   "UserPasswordResetSuccessEmailNotification": "b1e1c58b479eb419d252d5ca7aef854673d718bd7cd86a5877aaf1c912061bcf",
    "UserByUsernamePosts": "1110768aa565ac49e6cc2859c0fd1c5d139b62bcf97d5a80808d1bcc796183f3",
    "UserProfile": "21f5747d0f584ef9156da87dc130ed21b26c976eb01c198ec1c1753c61b15ff2",
    "CreateUser": "0929231df4d461feddc79e097159e7e8470c4730d38c4fe70dca27a5dfc46ba3",

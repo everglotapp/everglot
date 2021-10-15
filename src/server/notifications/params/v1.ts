@@ -1,6 +1,29 @@
-export interface TemplateEmailParamsV1 extends CommonEmailParamsV1 {
-    templateId?: number
-    templateParams?: object
+interface AbstractTemplateEmailParamsV1 extends CommonEmailParamsV1 {
+    templateId: number
+    templateParams: object
+}
+
+export type TemplateEmailParamsV1 = AbstractTemplateEmailParamsV1 &
+    (
+        | ResetPasswordTemplateEmailParamsV1
+        | ResetPasswordSuccessTemplateEmailParamsV1
+    )
+
+export type ResetPasswordTemplateEmailParamsV1 = {
+    templateId: 18
+    templateParams: {
+        username: string
+        resetPasswordUrl: string
+    }
+}
+
+export type ResetPasswordSuccessTemplateEmailParamsV1 = {
+    templateId: 19
+    templateParams: {
+        username: string
+        changeDetail: string
+        date: string
+    }
 }
 
 export interface ManualTextEmailParamsV1 extends ManualEmailParamsV1 {

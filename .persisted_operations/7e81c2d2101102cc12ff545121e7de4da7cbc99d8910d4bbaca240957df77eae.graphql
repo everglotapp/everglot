@@ -1,0 +1,8 @@
+query UserPasswordResetEmailNotification($id: Int!) {
+  user(id: $id) {
+    username
+    displayName
+    resetPasswordToken
+    __typename
+  }
+}

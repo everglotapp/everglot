@@ -1,7 +1,5 @@
 import validateEmail from "deep-email-validator"
 
-import { forbidden, unprocessableEntity } from "../../../helpers"
-
 import log from "../../../logger"
 
 const chlog = log.child({
@@ -15,25 +13,30 @@ import {
 } from "../../../server/users"
 import { enqueueEmailNotification } from "../../../server/notifications/email"
 import { NotificationParamsVersion } from "../../../server/notifications/params"
-import { EmailParamsV1 } from "../../../server/notifications/params/v1"
 import { generateResetPasswordToken } from "../../../helpers/tokens"
-import { RESET_PASSWORD_TOKEN_VALID_SECONDS } from "../../../server/constants"
+import {
+    APP_BASE_URL,
+    RESET_PASSWORD_TOKEN_VALID_SECONDS,
+} from "../../../server/constants"
+import { getUserPasswordResetEmailNotification } from "../../../server/notifications/users"
 
-async function sendResetPasswordMail(u: { id: number }) {
-    const notificationData = await getUserFollowershipNotification(
-        userFollower.id
-    )
+const NOTIFICATION_EXPIRY_SECONDS = 24 * 60 * 60
+const NOTIFICATION_WITHHELD_SECONDS = 3
+async function sendResetPasswordMail(userId: number) {
+    const notificationData = await getUserPasswordResetEmailNotification({
+        id: userId,
+    })
     if (!notificationData) {
         chlog
-            .child({ userFollower })
-            .error("No notification data for user followership")
+            .child({ userId })
+            .error("No notification data for user password reset")
         return
     }
-    const { follower, user } = notificationData
-    if (!follower || !user) {
+    const { user } = notificationData
+    if (!user) {
         chlog
-            .child({ userFollower, notificationData })
-            .error("Missing notification data for user followership")
+            .child({ userId, notificationData })
+            .error("Missing notification data for user password reset")
         return
     }
     const expiresAt = new Date(Date.now() + NOTIFICATION_EXPIRY_SECONDS * 1000)
@@ -41,27 +44,17 @@ async function sendResetPasswordMail(u: { id: number }) {
         Date.now() + NOTIFICATION_WITHHELD_SECONDS * 1000
     )
     const username =
-        follower.displayName && follower.displayName.length
-            ? follower.displayName
-            : follower.username
-    enqueueEmailNotification(
-        { userId: user.id, groupId: null },
-        expiresAt,
-        withheldUntil,
-        {
-            message: {
-                notification: {
-                    title: `${
-                        username && username.length ? username : "Someone"
-                    } now follows you`,
-                },
-                data: {
-                    type: EmailMessageParamsDataTypeV1.ResetPassword,
-                },
-            },
-            version: NotificationParamsVersion.V1,
-        }
-    )
+        user.displayName && user.displayName.length
+            ? user.displayName
+            : user.username
+    enqueueEmailNotification(userId, expiresAt, withheldUntil, {
+        templateId: 18,
+        templateParams: {
+            username: username || "user",
+            resetPasswordUrl: `${APP_BASE_URL}/users/password/reset/${user.resetPasswordToken}`,
+        },
+        version: NotificationParamsVersion.V1,
+    })
 }
 
 type InvalidEmailReason = "regex"
@@ -121,7 +114,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         })
         return
     }
-    // TODO: Find user by email
+
     const oldPasswordResetData = await getUserPasswordResetDataByEmail({
         email,
     })
@@ -138,6 +131,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
         })
         return
     }
+    const userId = oldPasswordResetData?.id
 
     let userHasValidToken: boolean = false
     if (oldPasswordResetData.resetPasswordTokenCreatedAt) {
@@ -154,7 +148,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     // instead of preventing a regeneration simply because it hasn't expired
     if (userHasValidToken) {
         chlog
-            .child({ email, id: oldPasswordResetData?.id })
+            .child({ email, userId })
             .debug(
                 "User already has a valid password reset token, not regenerating"
             )
@@ -167,7 +161,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
     if (oldPasswordResetData.googleId) {
         chlog
-            .child({ email, id: oldPasswordResetData?.id })
+            .child({ email, userId })
             .debug(
                 "User has signed up via Google, they cannot reset their password"
             )
@@ -184,7 +178,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
     const token = await generateResetPasswordToken()
     if (token === null) {
         chlog
-            .child({ email, id: oldPasswordResetData?.id })
+            .child({ email, userId })
             .debug("Failed to generate a reset password token")
         // Don't tell user about failures / not found. Timing attacks still possible.
         res.status(200).json({
@@ -194,18 +188,18 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
     chlog
-        .child({ email, id: oldPasswordResetData?.id })
+        .child({ email, id: userId })
         .debug("Successfully generated a reset password token")
 
     const newPasswordResetData = await updateUserPasswordResetToken({
-        id: oldPasswordResetData?.id,
+        id: userId,
         resetPasswordToken: token,
         resetPasswordTokenCreatedAt: new Date().toISOString(),
     })
     if (newPasswordResetData === null) {
         // Don't tell user about failures / not found. Timing attacks still possible.
         chlog
-            .child({ email, id: oldPasswordResetData?.id })
+            .child({ email, userId })
             .debug("Failed to store a generated reset password token")
         res.status(200).json({
             success: true,
@@ -216,13 +210,15 @@ export async function post(req: Request, res: Response, _next: () => void) {
     chlog
         .child({
             email,
-            id: oldPasswordResetData?.id,
+            userId,
             resetPasswordTokenCreatedAt:
                 newPasswordResetData?.user?.resetPasswordTokenCreatedAt || null,
         })
         .debug("Successfully saved a reset password token")
-    // TODO: Send mail
-    //sendResetPasswordMail()
+
+    setTimeout(() => {
+        sendResetPasswordMail(userId)
+    }, 200)
 
     // Don't tell user about failures / not found. Timing attacks still possible.
     res.status(200).json({

@@ -10,7 +10,7 @@
     import ButtonLarge from "../../../../comp/util/ButtonLarge.svelte"
 
     import { MIN_PASSWORD_LENGTH } from "../../../../users"
-    import { resetPasswordToken } from "../../../../stores"
+    import { inviteToken, resetPasswordToken } from "../../../../stores"
     import { onDestroy } from "svelte"
     const { page } = stores()
 
@@ -83,10 +83,10 @@
         }
         if (res.success === true) {
             success = true
-            redirectTimeout = window.setTimeout(
-                () => goto("/"),
-                REDIRECT_DELAY_MS
-            )
+            redirectTimeout = window.setTimeout(() => {
+                // TODO: Pre-enter new password in login form
+                goto(loginUrl)
+            }, REDIRECT_DELAY_MS)
             redirectAt = new Date(Date.now() + REDIRECT_DELAY_MS)
             updateRemainingSeconds()
             recalculateRemainingSecondsInterval = window.setInterval(
@@ -124,6 +124,7 @@
     }
 
     const resendUrl = "/users/password/reset"
+    $: loginUrl = $inviteToken ? `/login?token=${$inviteToken}` : "/login"
 </script>
 
 <Localized id="users-password-reset-browser-token-window-title" let:text>

@@ -25568,6 +25568,20 @@ export type UserFollowershipNotificationQueryVariables = Exact<{
 
 export type UserFollowershipNotificationQuery = { __typename?: 'Query', userFollower?: Maybe<{ __typename?: 'UserFollower', follower?: Maybe<{ __typename?: 'User', username?: Maybe<string>, displayName?: Maybe<string> }>, user?: Maybe<{ __typename?: 'User', id: number }> }> };
 
+export type UserPasswordResetEmailNotificationQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserPasswordResetEmailNotificationQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', username?: Maybe<string>, displayName?: Maybe<string>, resetPasswordToken?: Maybe<string> }> };
+
+export type UserPasswordResetSuccessEmailNotificationQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserPasswordResetSuccessEmailNotificationQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', username?: Maybe<string>, displayName?: Maybe<string> }> };
+
 export type UserByUsernamePostsQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
@@ -26740,6 +26754,23 @@ export const UserFollowershipNotification = gql`
     user {
       id
     }
+  }
+}
+    `;
+export const UserPasswordResetEmailNotification = gql`
+    query UserPasswordResetEmailNotification($id: Int!) {
+  user(id: $id) {
+    username
+    displayName
+    resetPasswordToken
+  }
+}
+    `;
+export const UserPasswordResetSuccessEmailNotification = gql`
+    query UserPasswordResetSuccessEmailNotification($id: Int!) {
+  user(id: $id) {
+    username
+    displayName
   }
 }
     `;

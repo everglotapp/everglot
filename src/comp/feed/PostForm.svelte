@@ -14,7 +14,7 @@
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import { v4 as uuidv4 } from "uuid"
 
-    import RangeOptionsDropdown from "./RangeOptionsDropdown.svelte"
+    import GameRangeDropdown from "./GameRangeDropdown.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
     import Modal from "../util/Modal.svelte"
@@ -783,23 +783,18 @@
             >
                 <span class="flex items-center">
                     <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        aria-hidden="true"
-                        class="mr-2"
-                        role="img"
                         width="18"
                         height="18"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 16 16"
-                        ><g fill="currentColor"
-                            ><path
-                                d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zM3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"
-                            /><path
-                                d="M5.5 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm-4-4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0z"
-                            /></g
-                        ></svg
-                    >Gamify: Select parts of your post.</span
+                        viewBox="0 0 40 40"
+                        fill="none"
+                        class="mr-2"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M31.8 11C30.6 9 28.4 8 26 8H14C11.6 8 9.4 9 8.2 11C3.6 18 2.6 28.6 5.8 30.8C9 33 16.2 23.4 20 23.4C23.8 23.4 30.8 33 34.2 30.8C37.4 28.6 36.4 18 31.8 11ZM16 18H14V20H12V18H10V16H12V14H14V16H16V18ZM26.8 19C26.8 20 26 20.8 25 20.8C24 20.8 23.2 20 23.2 19C23.2 18 24 17.2 25 17.2C26 17.2 26.8 18 26.8 19ZM30.6 15C30.6 16 29.8 16.8 28.8 16.8C27.8 16.8 27 16 27 15C27 14 27.8 13.2 28.8 13.2C29.8 13.2 30.6 14 30.6 15Z"
+                            fill="currentColor"
+                        />
+                    </svg>Gamify: Select parts of your post.</span
                 >
                 <ButtonSmall
                     tag="button"
@@ -814,7 +809,7 @@
         {/if}
         <div class="w-full">
             {#if showSelectionDropdown && locale !== null && gameType !== null}
-                <RangeOptionsDropdown
+                <GameRangeDropdown
                     id={rangeOptionsDropdownId}
                     anchor={selectionRange}
                     container={readonlyBodyInputNode || null}
@@ -907,23 +902,18 @@
                         variant="OUTLINED"
                         on:click={() => (gamify = true)}
                         ><svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                            aria-hidden="true"
+                            width="22"
+                            height="22"
+                            viewBox="0 0 40 40"
                             class="mr-2"
-                            role="img"
-                            width="18"
-                            height="18"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 16 16"
-                            ><g fill="currentColor"
-                                ><path
-                                    d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zM3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"
-                                /><path
-                                    d="M5.5 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm-4-4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0z"
-                                /></g
-                            ></svg
-                        >Gamify</ButtonLarge
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M31.8 11C30.6 9 28.4 8 26 8H14C11.6 8 9.4 9 8.2 11C3.6 18 2.6 28.6 5.8 30.8C9 33 16.2 23.4 20 23.4C23.8 23.4 30.8 33 34.2 30.8C37.4 28.6 36.4 18 31.8 11ZM16 18H14V20H12V18H10V16H12V14H14V16H16V18ZM26.8 19C26.8 20 26 20.8 25 20.8C24 20.8 23.2 20 23.2 19C23.2 18 24 17.2 25 17.2C26 17.2 26.8 18 26.8 19ZM30.6 15C30.6 16 29.8 16.8 28.8 16.8C27.8 16.8 27 16 27 15C27 14 27.8 13.2 28.8 13.2C29.8 13.2 30.6 14 30.6 15Z"
+                                fill="currentColor"
+                            />
+                        </svg>Gamify</ButtonLarge
                     >
                 {/if}
                 <ButtonLarge

@@ -13,11 +13,12 @@
         EyeIcon,
         FastForwardIcon,
         CheckIcon,
+        Edit3Icon,
     } from "svelte-feather-icons"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { query } from "@urql/svelte"
 
-    import RangeOptionsDropdown from "./RangeOptionsDropdown.svelte"
+    import GameRangeDropdown from "./GameRangeDropdown.svelte"
     import Avatar from "../users/Avatar.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
@@ -156,6 +157,12 @@
     }
     let tmpLiked = false
     let tmpUnliked = false
+
+    let showCorrections: boolean = false
+    async function handleCorrect() {
+        // TODO
+        showCorrections = !showCorrections
+    }
 
     $: game = games.nodes.length ? games.nodes[0] : null
     $: currentUserCreatedGame =
@@ -473,28 +480,43 @@
                     {/if}
                 </div>
             {/if}
-            {#if game}
+            {#if showCorrections}
+                <div
+                    class="corrections-note flex flex-nowrap items-center text-sm text-gray font-bold"
+                >
+                    <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 40 40"
+                        fill="none"
+                        class="mr-2 self-start"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M31.8 11C30.6 9 28.4 8 26 8H14C11.6 8 9.4 9 8.2 11C3.6 18 2.6 28.6 5.8 30.8C9 33 16.2 23.4 20 23.4C23.8 23.4 30.8 33 34.2 30.8C37.4 28.6 36.4 18 31.8 11ZM16 18H14V20H12V18H10V16H12V14H14V16H16V18ZM26.8 19C26.8 20 26 20.8 25 20.8C24 20.8 23.2 20 23.2 19C23.2 18 24 17.2 25 17.2C26 17.2 26.8 18 26.8 19ZM30.6 15C30.6 16 29.8 16.8 28.8 16.8C27.8 16.8 27 16 27 15C27 14 27.8 13.2 28.8 13.2C29.8 13.2 30.6 14 30.6 15Z"
+                            fill="currentColor"
+                        />
+                    </svg><span
+                        ><Localized id="post-game-corrections-note" /></span
+                    >
+                </div>
+            {:else if game}
                 <div
                     class="game-note flex flex-nowrap items-center text-sm text-gray font-bold"
                 >
                     <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        aria-hidden="true"
-                        class="mr-2"
-                        role="img"
                         width="18"
                         height="18"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 16 16"
-                        ><g fill="currentColor"
-                            ><path
-                                d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zM3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"
-                            /><path
-                                d="M5.5 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm-4-4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0z"
-                            /></g
-                        ></svg
-                    >{#if currentUserCreatedGame}<span
+                        viewBox="0 0 40 40"
+                        fill="none"
+                        class="mr-2 self-start"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M31.8 11C30.6 9 28.4 8 26 8H14C11.6 8 9.4 9 8.2 11C3.6 18 2.6 28.6 5.8 30.8C9 33 16.2 23.4 20 23.4C23.8 23.4 30.8 33 34.2 30.8C37.4 28.6 36.4 18 31.8 11ZM16 18H14V20H12V18H10V16H12V14H14V16H16V18ZM26.8 19C26.8 20 26 20.8 25 20.8C24 20.8 23.2 20 23.2 19C23.2 18 24 17.2 25 17.2C26 17.2 26.8 18 26.8 19ZM30.6 15C30.6 16 29.8 16.8 28.8 16.8C27.8 16.8 27 16 27 15C27 14 27.8 13.2 28.8 13.2C29.8 13.2 30.6 14 30.6 15Z"
+                            fill="currentColor"
+                        />
+                    </svg>{#if currentUserCreatedGame}<span
                             ><Localized
                                 id="post-game-note-own"
                                 args={{ gameType: game.gameType }}
@@ -518,7 +540,7 @@
                 class:game={Boolean(game)}
             >
                 {#if game && answerRangeUuid !== null && language?.alpha2}
-                    <RangeOptionsDropdown
+                    <GameRangeDropdown
                         id={rangeOptionsDropdownId}
                         anchor={answerRangeElement}
                         container={bodyNode || null}
@@ -554,7 +576,9 @@
                     {#if bodyPart.type === BodyPartType.LineBreak}
                         <br />
                     {:else if bodyPart.type === BodyPartType.Range && bodyPart.uuid}
-                        {#if game && (game.gameType === PostGameType.GuessCase || game.gameType === PostGameType.GuessGender)}
+                        {#if showCorrections}
+                            <span>{bodyPart.value}</span>
+                        {:else if game && (game.gameType === PostGameType.GuessCase || game.gameType === PostGameType.GuessGender)}
                             {#if currentUserCanAnswer}
                                 <span
                                     id={bodyPart.uuid}
@@ -730,7 +754,7 @@
                     />
                 </div>
             {/if}
-            {#if game !== null && $currentUserUuid !== null && $currentUserUuid !== uuid}
+            {#if game !== null && $currentUserUuid !== null && $currentUserUuid !== uuid && !showCorrections}
                 <div
                     class="flex flex-col sm:flex-row-reverse pt-2 sm:justify-end justify-center items-start sm:items-center"
                 >
@@ -816,32 +840,18 @@
         </div>
     </div>
     <div class="flex flex-row pt-1 justify-end items-center">
-        <div class="flex relative mr-1">
-            {#if showReplies || forceShowReplies}
-                <div
-                    contenteditable
-                    bind:textContent={newReplyBody}
-                    placeholder="Reply"
-                    class="border border-gray-bitlight rounded-lg py-1 pl-2 pr-12 origin-right"
-                    style="min-width: min(48vw, 417px);"
-                    in:scale={{ duration: 150 }}
-                    out:scale={{ duration: 150 }}
-                />
-                <div
-                    class="absolute right-0 top-0 bottom-0 flex items-center origin-right"
-                    in:scale={{ duration: 150 }}
-                    out:scale={{ duration: 150 }}
-                >
-                    <ButtonSmall
-                        tag="button"
-                        variant="TEXT"
-                        className="reply-send-button"
-                        on:click={() => handleReply()}
-                        ><SendIcon size="16" /></ButtonSmall
-                    >
-                </div>
-            {/if}
-        </div>
+        <ButtonLarge
+            className="correct-button flex items-center justify-center cursor-pointer rounded-lg bg-gray-lightest ml-0 mr-1"
+            on:click={() => handleCorrect()}
+            tag="button"
+            variant="OUTLINED"
+            color="SECONDARY"
+        >
+            <Edit3Icon size="18" />
+            <span class="text-sm font-bold text-gray-bitdark select-none"
+                >corrections</span
+            >
+        </ButtonLarge>
         {#if !forceShowReplies}
             {#if showReplies}
                 <ButtonSmall
@@ -879,6 +889,29 @@
         </ButtonLarge>
     </div>
     {#if showReplies || forceShowReplies}
+        <div class="flex relative ml-8 mt-2">
+            <div
+                contenteditable
+                bind:textContent={newReplyBody}
+                placeholder="Reply"
+                class="border border-gray-bitlight rounded-lg py-1 pl-2 pr-12 w-full origin-top-right"
+                in:scale={{ duration: 150 }}
+                out:scale={{ duration: 150 }}
+            />
+            <div
+                class="absolute right-0 top-0 bottom-0 flex items-center origin-top-right"
+                in:scale={{ duration: 150 }}
+                out:scale={{ duration: 150 }}
+            >
+                <ButtonSmall
+                    tag="button"
+                    variant="TEXT"
+                    className="reply-send-button"
+                    on:click={() => handleReply()}
+                    ><SendIcon size="16" /></ButtonSmall
+                >
+            </div>
+        </div>
         <div
             class="origin-top-right"
             class:pb-4={replies?.totalCount && replies?.totalCount > 0}
@@ -1031,6 +1064,16 @@
     :global(.reply-send-button:focus) {
         @apply border-transparent !important;
         @apply bg-transparent !important;
+    }
+
+    :global(.correct-button) {
+        @apply px-2 !important;
+
+        min-width: 64px;
+    }
+
+    :global(.correct-button svg) {
+        @apply mr-2;
     }
 
     @keyframes like-animation {

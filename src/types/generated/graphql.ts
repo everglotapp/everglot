@@ -1513,6 +1513,43 @@ export type CreatePortugueseWouldYouRatherQuestionPayloadPortugueseWouldYouRathe
   orderBy?: Maybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
 };
 
+/** All input for the create `PostCorrection` mutation. */
+export type CreatePostCorrectionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostCorrection` to be created by this mutation. */
+  postCorrection: PostCorrectionInput;
+};
+
+/** The output of our create `PostCorrection` mutation. */
+export type CreatePostCorrectionPayload = {
+  __typename?: 'CreatePostCorrectionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Post` that is related to this `PostCorrection`. */
+  post?: Maybe<Post>;
+  /** The `PostCorrection` that was created by this mutation. */
+  postCorrection?: Maybe<PostCorrection>;
+  /** An edge for our `PostCorrection`. May be used by Relay 1. */
+  postCorrectionEdge?: Maybe<PostCorrectionsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostCorrection`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our create `PostCorrection` mutation. */
+export type CreatePostCorrectionPayloadPostCorrectionEdgeArgs = {
+  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+};
+
 /** All input for the create `PostGameAnswer` mutation. */
 export type CreatePostGameAnswerInput = {
   /**
@@ -3992,6 +4029,64 @@ export type DeletePostByUuidInput = {
    */
   clientMutationId?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
+};
+
+/** All input for the `deletePostCorrectionByNodeId` mutation. */
+export type DeletePostCorrectionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `PostCorrection` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deletePostCorrectionByUuid` mutation. */
+export type DeletePostCorrectionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deletePostCorrection` mutation. */
+export type DeletePostCorrectionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `PostCorrection` mutation. */
+export type DeletePostCorrectionPayload = {
+  __typename?: 'DeletePostCorrectionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  deletedPostCorrectionNodeId?: Maybe<Scalars['ID']>;
+  /** Reads a single `Post` that is related to this `PostCorrection`. */
+  post?: Maybe<Post>;
+  /** The `PostCorrection` that was deleted by this mutation. */
+  postCorrection?: Maybe<PostCorrection>;
+  /** An edge for our `PostCorrection`. May be used by Relay 1. */
+  postCorrectionEdge?: Maybe<PostCorrectionsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostCorrection`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our delete `PostCorrection` mutation. */
+export type DeletePostCorrectionPayloadPostCorrectionEdgeArgs = {
+  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
 };
 
 /** All input for the `deletePostGameAnswerByNodeId` mutation. */
@@ -9682,6 +9777,8 @@ export type Mutation = {
   createPortugueseWouldYouRatherQuestion?: Maybe<CreatePortugueseWouldYouRatherQuestionPayload>;
   /** Creates a single `Post`. */
   createPost?: Maybe<CreatePostPayload>;
+  /** Creates a single `PostCorrection`. */
+  createPostCorrection?: Maybe<CreatePostCorrectionPayload>;
   /** Creates a single `PostGame`. */
   createPostGame?: Maybe<CreatePostGamePayload>;
   /** Creates a single `PostGameAnswer`. */
@@ -9910,6 +10007,12 @@ export type Mutation = {
   deletePostBySnowflakeId?: Maybe<DeletePostPayload>;
   /** Deletes a single `Post` using a unique key. */
   deletePostByUuid?: Maybe<DeletePostPayload>;
+  /** Deletes a single `PostCorrection` using a unique key. */
+  deletePostCorrection?: Maybe<DeletePostCorrectionPayload>;
+  /** Deletes a single `PostCorrection` using its globally unique id. */
+  deletePostCorrectionByNodeId?: Maybe<DeletePostCorrectionPayload>;
+  /** Deletes a single `PostCorrection` using a unique key. */
+  deletePostCorrectionByUuid?: Maybe<DeletePostCorrectionPayload>;
   /** Deletes a single `PostGame` using a unique key. */
   deletePostGame?: Maybe<DeletePostGamePayload>;
   /** Deletes a single `PostGameAnswer` using a unique key. */
@@ -10215,6 +10318,12 @@ export type Mutation = {
   updatePostBySnowflakeId?: Maybe<UpdatePostPayload>;
   /** Updates a single `Post` using a unique key and a patch. */
   updatePostByUuid?: Maybe<UpdatePostPayload>;
+  /** Updates a single `PostCorrection` using a unique key and a patch. */
+  updatePostCorrection?: Maybe<UpdatePostCorrectionPayload>;
+  /** Updates a single `PostCorrection` using its globally unique id and a patch. */
+  updatePostCorrectionByNodeId?: Maybe<UpdatePostCorrectionPayload>;
+  /** Updates a single `PostCorrection` using a unique key and a patch. */
+  updatePostCorrectionByUuid?: Maybe<UpdatePostCorrectionPayload>;
   /** Updates a single `PostGame` using a unique key and a patch. */
   updatePostGame?: Maybe<UpdatePostGamePayload>;
   /** Updates a single `PostGameAnswer` using a unique key and a patch. */
@@ -10389,6 +10498,8 @@ export type Mutation = {
   upsertPortugueseWouldYouRatherQuestion?: Maybe<UpsertPortugueseWouldYouRatherQuestionPayload>;
   /** Upserts a single `Post`. */
   upsertPost?: Maybe<UpsertPostPayload>;
+  /** Upserts a single `PostCorrection`. */
+  upsertPostCorrection?: Maybe<UpsertPostCorrectionPayload>;
   /** Upserts a single `PostGame`. */
   upsertPostGame?: Maybe<UpsertPostGamePayload>;
   /** Upserts a single `PostGameAnswer`. */
@@ -10617,6 +10728,12 @@ export type MutationCreatePortugueseWouldYouRatherQuestionArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreatePostArgs = {
   input: CreatePostInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreatePostCorrectionArgs = {
+  input: CreatePostCorrectionInput;
 };
 
 
@@ -11301,6 +11418,24 @@ export type MutationDeletePostBySnowflakeIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeletePostByUuidArgs = {
   input: DeletePostByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostCorrectionArgs = {
+  input: DeletePostCorrectionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostCorrectionByNodeIdArgs = {
+  input: DeletePostCorrectionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostCorrectionByUuidArgs = {
+  input: DeletePostCorrectionByUuidInput;
 };
 
 
@@ -12229,6 +12364,24 @@ export type MutationUpdatePostByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostCorrectionArgs = {
+  input: UpdatePostCorrectionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostCorrectionByNodeIdArgs = {
+  input: UpdatePostCorrectionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostCorrectionByUuidArgs = {
+  input: UpdatePostCorrectionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdatePostGameArgs = {
   input: UpdatePostGameInput;
 };
@@ -12779,6 +12932,13 @@ export type MutationUpsertPortugueseWouldYouRatherQuestionArgs = {
 export type MutationUpsertPostArgs = {
   input: UpsertPostInput;
   where?: Maybe<UpsertPostWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertPostCorrectionArgs = {
+  input: UpsertPostCorrectionInput;
+  where?: Maybe<UpsertPostCorrectionWhere>;
 };
 
 
@@ -13674,6 +13834,8 @@ export type Post = Node & {
   /** Reads a single `Post` that is related to this `Post`. */
   parentPost?: Maybe<Post>;
   parentPostId?: Maybe<Scalars['Int']>;
+  /** Reads and enables pagination through a set of `PostCorrection`. */
+  postCorrections: PostCorrectionsConnection;
   /** Reads a single `Prompt` that is related to this `Post`. */
   prompt?: Maybe<Prompt>;
   promptId?: Maybe<Scalars['Int']>;
@@ -13684,6 +13846,8 @@ export type Post = Node & {
   /** Reads and enables pagination through a set of `Post`. */
   replies: PostsConnection;
   snowflakeId: Scalars['BigInt'];
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostCorrectionPostIdAndUserId: PostUsersByPostCorrectionPostIdAndUserIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByPostLikePostIdAndUserId: PostUsersByPostLikePostIdAndUserIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
@@ -13730,6 +13894,18 @@ export type PostLikesArgs = {
 };
 
 
+export type PostPostCorrectionsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostCorrectionCondition>;
+  filter?: Maybe<PostCorrectionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+};
+
+
 export type PostPromptsByPostParentPostIdAndPromptIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   before?: Maybe<Scalars['Cursor']>;
@@ -13763,6 +13939,18 @@ export type PostRepliesArgs = {
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<PostsOrderBy>>;
+};
+
+
+export type PostUsersByPostCorrectionPostIdAndUserIdArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
 };
 
 
@@ -13822,6 +14010,145 @@ export type PostCondition = {
   /** Checks for equality with the object’s `uuid` field. */
   uuid?: Maybe<Scalars['UUID']>;
 };
+
+export type PostCorrection = Node & {
+  __typename?: 'PostCorrection';
+  body: Scalars['String'];
+  createdAt: Scalars['Datetime'];
+  endIndex: Scalars['Int'];
+  id: Scalars['Int'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  /** Reads a single `Post` that is related to this `PostCorrection`. */
+  post?: Maybe<Post>;
+  postId: Scalars['Int'];
+  startIndex: Scalars['Int'];
+  /** Reads a single `User` that is related to this `PostCorrection`. */
+  user?: Maybe<User>;
+  /** Author of the correction */
+  userId: Scalars['Int'];
+  uuid: Scalars['UUID'];
+};
+
+/**
+ * A condition to be used against `PostCorrection` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type PostCorrectionCondition = {
+  /** Checks for equality with the object’s `body` field. */
+  body?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `endIndex` field. */
+  endIndex?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `postId` field. */
+  postId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `startIndex` field. */
+  startIndex?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** A filter to be used against `PostCorrection` object types. All fields are combined with a logical ‘and.’ */
+export type PostCorrectionFilter = {
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<PostCorrectionFilter>>;
+  /** Filter by the object’s `body` field. */
+  body?: Maybe<StringFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `endIndex` field. */
+  endIndex?: Maybe<IntFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Negates the expression. */
+  not?: Maybe<PostCorrectionFilter>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<PostCorrectionFilter>>;
+  /** Filter by the object’s `postId` field. */
+  postId?: Maybe<IntFilter>;
+  /** Filter by the object’s `startIndex` field. */
+  startIndex?: Maybe<IntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+};
+
+/** An input for mutations affecting `PostCorrection` */
+export type PostCorrectionInput = {
+  body: Scalars['String'];
+  createdAt?: Maybe<Scalars['Datetime']>;
+  endIndex: Scalars['Int'];
+  id?: Maybe<Scalars['Int']>;
+  postId: Scalars['Int'];
+  startIndex: Scalars['Int'];
+  /** Author of the correction */
+  userId: Scalars['Int'];
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** Represents an update to a `PostCorrection`. Fields that are set will be updated. */
+export type PostCorrectionPatch = {
+  body?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+  endIndex?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  postId?: Maybe<Scalars['Int']>;
+  startIndex?: Maybe<Scalars['Int']>;
+  /** Author of the correction */
+  userId?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** A connection to a list of `PostCorrection` values. */
+export type PostCorrectionsConnection = {
+  __typename?: 'PostCorrectionsConnection';
+  /** A list of edges which contains the `PostCorrection` and cursor to aid in pagination. */
+  edges: Array<PostCorrectionsEdge>;
+  /** A list of `PostCorrection` objects. */
+  nodes: Array<Maybe<PostCorrection>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `PostCorrection` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `PostCorrection` edge in the connection. */
+export type PostCorrectionsEdge = {
+  __typename?: 'PostCorrectionsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `PostCorrection` at the end of the edge. */
+  node?: Maybe<PostCorrection>;
+};
+
+/** Methods to use when ordering `PostCorrection`. */
+export enum PostCorrectionsOrderBy {
+  BodyAsc = 'BODY_ASC',
+  BodyDesc = 'BODY_DESC',
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  EndIndexAsc = 'END_INDEX_ASC',
+  EndIndexDesc = 'END_INDEX_DESC',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  Natural = 'NATURAL',
+  PostIdAsc = 'POST_ID_ASC',
+  PostIdDesc = 'POST_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  StartIndexAsc = 'START_INDEX_ASC',
+  StartIndexDesc = 'START_INDEX_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC'
+}
 
 /** A filter to be used against `Post` object types. All fields are combined with a logical ‘and.’ */
 export type PostFilter = {
@@ -14941,6 +15268,43 @@ export enum PostRecordingsOrderBy {
   UuidDesc = 'UUID_DESC'
 }
 
+/** A connection to a list of `User` values, with data from `PostCorrection`. */
+export type PostUsersByPostCorrectionPostIdAndUserIdManyToManyConnection = {
+  __typename?: 'PostUsersByPostCorrectionPostIdAndUserIdManyToManyConnection';
+  /** A list of edges which contains the `User`, info from the `PostCorrection`, and the cursor to aid in pagination. */
+  edges: Array<PostUsersByPostCorrectionPostIdAndUserIdManyToManyEdge>;
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `PostCorrection`. */
+export type PostUsersByPostCorrectionPostIdAndUserIdManyToManyEdge = {
+  __typename?: 'PostUsersByPostCorrectionPostIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `PostCorrection`. */
+  postCorrections: PostCorrectionsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `PostCorrection`. */
+export type PostUsersByPostCorrectionPostIdAndUserIdManyToManyEdgePostCorrectionsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostCorrectionCondition>;
+  filter?: Maybe<PostCorrectionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+};
+
 /** A connection to a list of `User` values, with data from `PostLike`. */
 export type PostUsersByPostLikePostIdAndUserIdManyToManyConnection = {
   __typename?: 'PostUsersByPostLikePostIdAndUserIdManyToManyConnection';
@@ -15705,6 +16069,12 @@ export type Query = Node & {
   postByNodeId?: Maybe<Post>;
   postBySnowflakeId?: Maybe<Post>;
   postByUuid?: Maybe<Post>;
+  postCorrection?: Maybe<PostCorrection>;
+  /** Reads a single `PostCorrection` using its globally unique `ID`. */
+  postCorrectionByNodeId?: Maybe<PostCorrection>;
+  postCorrectionByUuid?: Maybe<PostCorrection>;
+  /** Reads and enables pagination through a set of `PostCorrection`. */
+  postCorrections?: Maybe<PostCorrectionsConnection>;
   postGame?: Maybe<PostGame>;
   postGameAnswer?: Maybe<PostGameAnswer>;
   /** Reads a single `PostGameAnswer` using its globally unique `ID`. */
@@ -16817,6 +17187,37 @@ export type QueryPostBySnowflakeIdArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryPostByUuidArgs = {
   uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostCorrectionArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostCorrectionByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostCorrectionByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostCorrectionsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostCorrectionCondition>;
+  filter?: Maybe<PostCorrectionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
 };
 
 
@@ -20221,6 +20622,69 @@ export type UpdatePostByUuidInput = {
   uuid: Scalars['UUID'];
 };
 
+/** All input for the `updatePostCorrectionByNodeId` mutation. */
+export type UpdatePostCorrectionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `PostCorrection` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `PostCorrection` being updated. */
+  patch: PostCorrectionPatch;
+};
+
+/** All input for the `updatePostCorrectionByUuid` mutation. */
+export type UpdatePostCorrectionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `PostCorrection` being updated. */
+  patch: PostCorrectionPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updatePostCorrection` mutation. */
+export type UpdatePostCorrectionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  /** An object where the defined keys will be set on the `PostCorrection` being updated. */
+  patch: PostCorrectionPatch;
+};
+
+/** The output of our update `PostCorrection` mutation. */
+export type UpdatePostCorrectionPayload = {
+  __typename?: 'UpdatePostCorrectionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Post` that is related to this `PostCorrection`. */
+  post?: Maybe<Post>;
+  /** The `PostCorrection` that was updated by this mutation. */
+  postCorrection?: Maybe<PostCorrection>;
+  /** An edge for our `PostCorrection`. May be used by Relay 1. */
+  postCorrectionEdge?: Maybe<PostCorrectionsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostCorrection`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our update `PostCorrection` mutation. */
+export type UpdatePostCorrectionPayloadPostCorrectionEdgeArgs = {
+  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+};
+
 /** All input for the `updatePostGameAnswerByNodeId` mutation. */
 export type UpdatePostGameAnswerByNodeIdInput = {
   /**
@@ -22483,6 +22947,43 @@ export type UpsertPortugueseWouldYouRatherQuestionWhere = {
   uuid?: Maybe<Scalars['UUID']>;
 };
 
+/** All input for the upsert `PostCorrection` mutation. */
+export type UpsertPostCorrectionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostCorrection` to be upserted by this mutation. */
+  postCorrection: PostCorrectionInput;
+};
+
+/** The output of our upsert `PostCorrection` mutation. */
+export type UpsertPostCorrectionPayload = {
+  __typename?: 'UpsertPostCorrectionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Post` that is related to this `PostCorrection`. */
+  post?: Maybe<Post>;
+  /** The `PostCorrection` that was upserted by this mutation. */
+  postCorrection?: Maybe<PostCorrection>;
+  /** An edge for our `PostCorrection`. May be used by Relay 1. */
+  postCorrectionEdge?: Maybe<PostCorrectionsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostCorrection`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our upsert `PostCorrection` mutation. */
+export type UpsertPostCorrectionPayloadPostCorrectionEdgeArgs = {
+  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `PostCorrection` mutation. */
+export type UpsertPostCorrectionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
 /** All input for the upsert `PostGameAnswer` mutation. */
 export type UpsertPostGameAnswerInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
@@ -23230,6 +23731,8 @@ export type User = Node & {
   /** Reads and enables pagination through a set of `Notification`. */
   notificationsByRecipientId: NotificationsConnection;
   passwordHash?: Maybe<Scalars['String']>;
+  /** Reads and enables pagination through a set of `PostCorrection`. */
+  postCorrections: PostCorrectionsConnection;
   /** Reads and enables pagination through a set of `PostGameAnswer`. */
   postGameAnswers: PostGameAnswersConnection;
   /** Reads and enables pagination through a set of `PostGameRange`. */
@@ -23242,6 +23745,8 @@ export type User = Node & {
   postRecordings: PostRecordingsConnection;
   /** Reads and enables pagination through a set of `Post`. */
   postsByPostAuthorIdAndParentPostId: UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByPostCorrectionUserIdAndPostId: UserPostsByPostCorrectionUserIdAndPostIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Post`. */
   postsByPostLikeUserIdAndPostId: UserPostsByPostLikeUserIdAndPostIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Post`. */
@@ -23489,6 +23994,18 @@ export type UserNotificationsByRecipientIdArgs = {
 };
 
 
+export type UserPostCorrectionsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostCorrectionCondition>;
+  filter?: Maybe<PostCorrectionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+};
+
+
 export type UserPostGameAnswersArgs = {
   after?: Maybe<Scalars['Cursor']>;
   before?: Maybe<Scalars['Cursor']>;
@@ -23550,6 +24067,18 @@ export type UserPostRecordingsArgs = {
 
 
 export type UserPostsByPostAuthorIdAndParentPostIdArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+};
+
+
+export type UserPostsByPostCorrectionUserIdAndPostIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   before?: Maybe<Scalars['Cursor']>;
   condition?: Maybe<PostCondition>;
@@ -24612,6 +25141,43 @@ export type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdgeRepliesArgs = {
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<PostsOrderBy>>;
+};
+
+/** A connection to a list of `Post` values, with data from `PostCorrection`. */
+export type UserPostsByPostCorrectionUserIdAndPostIdManyToManyConnection = {
+  __typename?: 'UserPostsByPostCorrectionUserIdAndPostIdManyToManyConnection';
+  /** A list of edges which contains the `Post`, info from the `PostCorrection`, and the cursor to aid in pagination. */
+  edges: Array<UserPostsByPostCorrectionUserIdAndPostIdManyToManyEdge>;
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection, with data from `PostCorrection`. */
+export type UserPostsByPostCorrectionUserIdAndPostIdManyToManyEdge = {
+  __typename?: 'UserPostsByPostCorrectionUserIdAndPostIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `PostCorrection`. */
+  postCorrections: PostCorrectionsConnection;
+};
+
+
+/** A `Post` edge in the connection, with data from `PostCorrection`. */
+export type UserPostsByPostCorrectionUserIdAndPostIdManyToManyEdgePostCorrectionsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostCorrectionCondition>;
+  filter?: Maybe<PostCorrectionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
 };
 
 /** A connection to a list of `Post` values, with data from `PostLike`. */

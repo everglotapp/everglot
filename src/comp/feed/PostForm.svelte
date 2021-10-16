@@ -20,6 +20,7 @@
     import Modal from "../util/Modal.svelte"
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
+    import selectable from "../util/selectable"
     import {
         createPost,
         createPostRecording,
@@ -265,13 +266,6 @@
         bodyInputId = uuidv4()
         rangeOptionsDropdownId = uuidv4()
 
-        document.addEventListener(
-            "selectionchange",
-            handleDocumentSelectionChange
-        )
-
-        document.addEventListener("keyup", handleDocumentKeyup)
-
         setInterval(updateRecordingDuration, 250)
         setInterval(updateAudioTimings, 250)
     })
@@ -279,11 +273,6 @@
     onDestroy(() => {
         clearUpdateRecordingDurationInterval()
         clearUpdateAudioTimingsInterval()
-        document.removeEventListener(
-            "selectionchange",
-            handleDocumentSelectionChange
-        )
-        document.removeEventListener("keyup", handleDocumentKeyup)
     })
 
     $: bodyInputPlaceholder = $translate(
@@ -339,15 +328,14 @@
     function handleCloseGamify() {
         gamify = false
         gameType = null
-        selection = null
         gameRanges = []
+        clearAllSelections()
     }
     function clearAllSelections() {
         const s = window.getSelection
             ? window.getSelection()
             : document.selection
         if (!s) {
-            selection = null
             return
         }
         if (s.removeAllRanges) {
@@ -355,29 +343,32 @@
         } else if (s.empty) {
             s.empty()
         }
-        selection = null
     }
 
-    function handleDocumentKeyup(event: KeyboardEvent) {
-        // console.log("document keyup", {
-        //     willHandleSelect,
-        //     preventAutoSelectionHandling,
-        //     event,
-        // })
-        tryHandleBodyTextSelection()
-    }
     function handleBodyKeyup(_event: KeyboardEvent) {
         newPostBody = writableBodyInputNode.innerHTML
-        // console.log("keyup", { willHandleSelect, preventAutoSelectionHandling })
-        tryHandleBodyTextSelection()
     }
-    function handleBodyContextmenu(_event: MouseEvent) {
-        // console.log("contextmenu", {
-        //     willHandleSelect,
-        //     preventAutoSelectionHandling,
-        // })
-        tryHandleBodyTextSelection()
+
+    let selectedText: string | null = null
+    let selectionStart: number | null = null
+    let selectionEnd: number | null = null
+    let selectionRange: Range | null = null
+    function handleSelectionchanged(
+        event: CustomEvent<{
+            selection: Selection | null
+            start: number | null
+            end: number | null
+            text: string | null
+            range: Range | null
+        }>
+    ) {
+        console.log("selection changed", event.detail)
+        selectionStart = event.detail.start
+        selectionEnd = event.detail.end
+        selectedText = event.detail.text
+        selectionRange = event.detail.range
     }
+
     const dragTypeIsForbidden = (type: string) =>
         type === "text/uri-list" ||
         type === "application/x-moz-nativeimage" ||
@@ -403,153 +394,10 @@
         setTimeout(() => (newPostBody = writableBodyInputNode.innerHTML), 50)
         // console.log("drop", { event })
     }
-    let preventAutoSelectionHandling: boolean = false
-    function handleBodyMouseup() {
-        // console.log("mouseup", {
-        //     willHandleSelect,
-        //     preventAutoSelectionHandling,
-        // })
-        preventAutoSelectionHandling = false
-        if (!willHandleSelect) {
-            // secondary click away handler
-            clearAllSelections()
-        }
-        willHandleSelect = true
-        tryHandleBodyTextSelection()
-    }
-    function handleBodyMousedown() {
-        // console.log("mousedown", { willHandleSelect })
-        preventAutoSelectionHandling = true
-        tryClearAutoSelectionTimeout()
-    }
     let writableBodyInputNode: HTMLElement
     let readonlyBodyInputNode: HTMLElement
     let gamify: boolean = false
-    let willHandleSelect: boolean = false
-    let selection: Selection | null = null
-    function tryHandleBodyTextSelection() {
-        if (!willHandleSelect) {
-            return
-        }
-        if (
-            !gamify ||
-            gameType === null ||
-            ![
-                PostGameType.GuessCase,
-                PostGameType.GuessGender,
-                PostGameType.Cloze,
-            ].includes(gameType)
-        ) {
-            return
-        }
-        const s = window.getSelection
-            ? window.getSelection()
-            : document.selection
-        // console.log({ s, range: s && s.rangeCount ? s.getRangeAt(0) : null })
-        if (s && !s.isCollapsed && s.type === "Range") {
-            const { focusNode, anchorNode } = s
-            if (
-                editBodyPartUuid !== null &&
-                (focusNode !== anchorNode ||
-                    !focusNode ||
-                    focusNode.id !== editBodyPartUuid)
-            ) {
-                editBodyPartUuid = null
-            }
-            selection = s
-        } else {
-            selection = null
-        }
-        willHandleSelect = false
-    }
-    function handleBodySelectStart() {
-        // console.log("selectstart", {
-        //     willHandleSelect,
-        //     preventAutoSelectionHandling,
-        // })
-        willHandleSelect = true
-    }
-    let autoSelectionTimeout: number | null = null
-    function handleDocumentSelectionChange() {
-        if (typeof window === "undefined") {
-            return
-        }
-        const s = window.getSelection
-            ? window.getSelection()
-            : document.selection
-        if (!s) {
-            return
-        }
-        if (s.type !== "Range") {
-            return
-        }
-        const r = s ? s.getRangeAt(0) : null
-        // console.log("selectionchange", {
-        //     willHandleSelect,
-        //     s,
-        //     selection,
-        //     autoSelectionTimeout,
-        //     preventAutoSelectionHandling,
-        //     r,
-        //     selectionRange,
-        // })
-        if (
-            !selection ||
-            !selectionRange ||
-            s.focusNode !== selection.focusNode ||
-            s.anchorNode !== selection.anchorNode ||
-            s.focusOffset !== selection.focusOffset ||
-            s.anchorOffset !== selection.anchorOffset ||
-            (r !== null &&
-                (r.startOffset !== selectionRange.startOffset ||
-                    r.endOffset !== selectionRange.endOffset))
-        ) {
-            selection = s && !s.isCollapsed ? s : null
-            tryClearAutoSelectionTimeout()
-            if (s.rangeCount) {
-                if (!preventAutoSelectionHandling) {
-                    autoSelectionTimeout = window.setTimeout(() => {
-                        if (!preventAutoSelectionHandling) {
-                            // console.log(
-                            //     "autoSelectionTimeout expired, handling"
-                            // )
-                            tryHandleBodyTextSelection()
-                            autoSelectionTimeout = null
-                        }
-                    }, 500)
-                }
-            }
-        }
-    }
-    function tryClearAutoSelectionTimeout() {
-        if (!autoSelectionTimeout) {
-            return
-        }
-        window.clearTimeout(autoSelectionTimeout)
-        autoSelectionTimeout = null
-    }
-    $: selectionRange =
-        gamify && selection !== null && selection.rangeCount
-            ? selection.getRangeAt(0)
-            : null
-    $: selectedText = selectionRange ? selectionRange.toString() : null
-    let rangeBeforeCaret: Range | null = null
-    $: if (selectionRange && readonlyBodyInputNode) {
-        rangeBeforeCaret = selectionRange.cloneRange()
-        rangeBeforeCaret.selectNodeContents(readonlyBodyInputNode)
-        rangeBeforeCaret.setEnd(
-            selectionRange.endContainer,
-            selectionRange.endOffset
-        )
-    } else {
-        rangeBeforeCaret = null
-    }
-    $: textBeforeCaret = rangeBeforeCaret?.toString() || null
-    $: selectionStart =
-        textBeforeCaret && selectedText
-            ? textBeforeCaret.length - selectedText.length
-            : null
-    $: selectionEnd = textBeforeCaret ? textBeforeCaret.length - 1 : null
+
     $: selectionOverlapsPickedRange =
         selectionStart !== null && selectionEnd !== null
             ? gameRanges.some(
@@ -600,7 +448,9 @@
         const bodyPartNode = document.getElementById(uuid)
         if (bodyPartNode) {
             clearAllSelections()
+            // @ts-ignore
             if (document.body.createTextRange) {
+                // @ts-ignore
                 const range = document.body.createTextRange()
                 range.moveToElementText(bodyPartNode)
                 range.select()
@@ -687,15 +537,28 @@
         clearAllSelections()
     }
 
+    let ignoringSelectionChanges: boolean | null = null
+    function handleIgnoringSelectionChangesUpdated(
+        event: CustomEvent<boolean>
+    ) {
+        console.log("handleIgnoringSelectionChangesUpdated", {
+            event,
+        })
+        ignoringSelectionChanges = event.detail
+    }
+
     function handleRangeOptionsDropdownClickaway(
         event: CustomEvent<{ event: MouseEvent }>
     ) {
-        if (!willHandleSelect && event.detail.event.button === 0) {
-            // console.log("clickaway", {
-            //     willHandleSelect,
-            //     selection,
-            //     rangeOptionsDropdownId,
-            // })
+        if (ignoringSelectionChanges && event.detail.event.button === 0) {
+            console.log("clickaway", {
+                ignoringSelectionChanges,
+                selectionRange,
+                selectionStart,
+                selectionEnd,
+                selectedText,
+                rangeOptionsDropdownId,
+            })
             clearAllSelections()
         }
     }
@@ -848,12 +711,19 @@
                 placeholder={bodyInputPlaceholder}
                 aria-placeholder={bodyInputPlaceholder}
                 tabindex={1}
+                use:selectable={{
+                    disabled:
+                        !gamify ||
+                        gameType === null ||
+                        ![
+                            PostGameType.GuessCase,
+                            PostGameType.GuessGender,
+                            PostGameType.Cloze,
+                        ].includes(gameType),
+                }}
+                on:selectionchanged={handleSelectionchanged}
+                on:ignoringSelectionChangesUpdated={handleIgnoringSelectionChangesUpdated}
                 on:keyup={handleBodyKeyup}
-                on:mousedown={handleBodyMousedown}
-                on:mouseup={handleBodyMouseup}
-                on:selectstart={handleBodySelectStart}
-                on:selectionchange={handleDocumentSelectionChange}
-                on:contextmenu={handleBodyContextmenu}
                 on:drop|preventDefault
                 on:paste|preventDefault
             >

@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-    const DEFAULT_BACKGROUND_COLOR = "#e0e6ed" as const
+    const DEFAULT_BACKGROUND_COLOR = "#fff" as const
     const BACKGROUND_COLORS = [
         "#CEE5D0",
         "#F3F0D7",
@@ -56,10 +56,12 @@
     $: initial = username.charAt(0)
     $: showImage = url?.startsWith("https://") || url?.startsWith("/")
     let backgroundColor: string = DEFAULT_BACKGROUND_COLOR
-    $: if (uuid) {
+    $: if (uuid && !showImage) {
         calculateBackgroundColor(uuid).then(
             (color) => (backgroundColor = color)
         )
+    } else {
+        backgroundColor = DEFAULT_BACKGROUND_COLOR
     }
 </script>
 

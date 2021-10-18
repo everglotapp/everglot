@@ -9559,7 +9559,7 @@ type Post implements Node {
   ): PostGamesConnection!
 
   """Reads and enables pagination through a set of `PostCorrection`."""
-  postCorrections(
+  corrections(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -17187,7 +17187,7 @@ type UserPostsByPostCorrectionUserIdAndPostIdManyToManyEdge {
   node: Post
 
   """Reads and enables pagination through a set of `PostCorrection`."""
-  postCorrections(
+  corrections(
     """Only read the first `n` values of the set."""
     first: Int
 

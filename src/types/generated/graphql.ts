@@ -13818,6 +13818,8 @@ export type Post = Node & {
   author?: Maybe<User>;
   authorId?: Maybe<Scalars['Int']>;
   body: Scalars['String'];
+  /** Reads and enables pagination through a set of `PostCorrection`. */
+  corrections: PostCorrectionsConnection;
   createdAt: Scalars['Datetime'];
   /** Reads and enables pagination through a set of `PostGame`. */
   games: PostGamesConnection;
@@ -13834,8 +13836,6 @@ export type Post = Node & {
   /** Reads a single `Post` that is related to this `Post`. */
   parentPost?: Maybe<Post>;
   parentPostId?: Maybe<Scalars['Int']>;
-  /** Reads and enables pagination through a set of `PostCorrection`. */
-  postCorrections: PostCorrectionsConnection;
   /** Reads a single `Prompt` that is related to this `Post`. */
   prompt?: Maybe<Prompt>;
   promptId?: Maybe<Scalars['Int']>;
@@ -13855,6 +13855,18 @@ export type Post = Node & {
   /** Reads and enables pagination through a set of `User`. */
   usersByPostRecordingPostIdAndUserId: PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection;
   uuid: Scalars['UUID'];
+};
+
+
+export type PostCorrectionsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostCorrectionCondition>;
+  filter?: Maybe<PostCorrectionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
 };
 
 
@@ -13891,18 +13903,6 @@ export type PostLikesArgs = {
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<PostLikesOrderBy>>;
-};
-
-
-export type PostPostCorrectionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCorrectionCondition>;
-  filter?: Maybe<PostCorrectionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
 };
 
 
@@ -25159,17 +25159,17 @@ export type UserPostsByPostCorrectionUserIdAndPostIdManyToManyConnection = {
 /** A `Post` edge in the connection, with data from `PostCorrection`. */
 export type UserPostsByPostCorrectionUserIdAndPostIdManyToManyEdge = {
   __typename?: 'UserPostsByPostCorrectionUserIdAndPostIdManyToManyEdge';
+  /** Reads and enables pagination through a set of `PostCorrection`. */
+  corrections: PostCorrectionsConnection;
   /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `Post` at the end of the edge. */
   node?: Maybe<Post>;
-  /** Reads and enables pagination through a set of `PostCorrection`. */
-  postCorrections: PostCorrectionsConnection;
 };
 
 
 /** A `Post` edge in the connection, with data from `PostCorrection`. */
-export type UserPostsByPostCorrectionUserIdAndPostIdManyToManyEdgePostCorrectionsArgs = {
+export type UserPostsByPostCorrectionUserIdAndPostIdManyToManyEdgeCorrectionsArgs = {
   after?: Maybe<Scalars['Cursor']>;
   before?: Maybe<Scalars['Cursor']>;
   condition?: Maybe<PostCorrectionCondition>;
@@ -25791,7 +25791,7 @@ export type RegisterUserActivityMutation = { __typename?: 'Mutation', registerUs
 export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }>, games: { __typename?: 'PostGamesConnection', nodes: Array<Maybe<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: Maybe<boolean>, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: Maybe<{ __typename?: 'PostGameAnswer', id: number }> }> } }>> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameAnswer', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, correct?: Maybe<boolean>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }> }>> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<Maybe<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, rangeUuid?: Maybe<any> }>> } }>> } }>> }> };
+export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }>, games: { __typename?: 'PostGamesConnection', nodes: Array<Maybe<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: Maybe<boolean>, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: Maybe<{ __typename?: 'PostGameAnswer', id: number }> }> } }>> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameAnswer', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, correct?: Maybe<boolean>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }> }>> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<Maybe<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, rangeUuid?: Maybe<any> }>> } }>> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<Maybe<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }> }>> } }>> }> };
 
 export type CreatePostMutationVariables = Exact<{
   authorId: Scalars['Int'];
@@ -25803,6 +25803,18 @@ export type CreatePostMutationVariables = Exact<{
 
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost?: Maybe<{ __typename?: 'CreatePostPayload', clientMutationId?: Maybe<string>, post?: Maybe<{ __typename?: 'Post', body: string, createdAt: any, id: number, uuid: any, nodeId: string }> }> };
+
+export type CreatePostCorrectionMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  postId: Scalars['Int'];
+  body: Scalars['String'];
+  endIndex: Scalars['Int'];
+  startIndex: Scalars['Int'];
+  uuid: Scalars['UUID'];
+}>;
+
+
+export type CreatePostCorrectionMutation = { __typename?: 'Mutation', createPostCorrection?: Maybe<{ __typename?: 'CreatePostCorrectionPayload', postCorrection?: Maybe<{ __typename?: 'PostCorrection', id: number, postId: number, userId: number, nodeId: string, createdAt: any, endIndex: number, startIndex: number, uuid: any, body: string }> }> };
 
 export type CreatePostGameMutationVariables = Exact<{
   postId: Scalars['Int'];
@@ -26558,6 +26570,21 @@ export const AllPosts = gql`
           }
         }
       }
+      corrections {
+        nodes {
+          body
+          endIndex
+          createdAt
+          startIndex
+          uuid
+          user {
+            uuid
+            username
+            avatarUrl
+            displayName
+          }
+        }
+      }
     }
   }
 }
@@ -26574,6 +26601,25 @@ export const CreatePost = gql`
       id
       uuid
       nodeId
+    }
+  }
+}
+    `;
+export const CreatePostCorrection = gql`
+    mutation CreatePostCorrection($userId: Int!, $postId: Int!, $body: String!, $endIndex: Int!, $startIndex: Int!, $uuid: UUID!) {
+  createPostCorrection(
+    input: {postCorrection: {postId: $postId, userId: $userId, body: $body, endIndex: $endIndex, startIndex: $startIndex, uuid: $uuid}}
+  ) {
+    postCorrection {
+      id
+      postId
+      userId
+      nodeId
+      createdAt
+      endIndex
+      startIndex
+      uuid
+      body
     }
   }
 }

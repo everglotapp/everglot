@@ -214,6 +214,9 @@
     function handlePostGameAnswerSuccess() {
         refreshPosts()
     }
+    function handlePostCorrectSuccess() {
+        refreshPosts()
+    }
 </script>
 
 <Localized id="index-browser-window-title" let:text>
@@ -367,6 +370,7 @@
                         replies={post.replies}
                         games={post.games}
                         recordings={post.recordings}
+                        corrections={post.corrections}
                         createdAt={post.createdAt}
                         prompt={post.prompt}
                         language={post.language}
@@ -374,6 +378,7 @@
                         on:likeSuccess={handlePostLikeSuccess}
                         on:unlikeSuccess={handlePostUnlikeSuccess}
                         on:gameAnswerSuccess={handlePostGameAnswerSuccess}
+                        on:correctSuccess={handlePostCorrectSuccess}
                     />
                 </div>
             {/if}

@@ -43,6 +43,10 @@ exports.up = (pgm) => {
             },
         }
     )
+    pgm.sql(`
+        COMMENT ON CONSTRAINT post_corrections_post_id_fkey on app_public.post_corrections is
+        E'@postId correctionsByPostId\n@foreignFieldName corrections\nCorrections that users have given for this post.';
+    `)
     pgm.createIndex(
         { schema: "app_public", name: "post_corrections" },
         "post_id"

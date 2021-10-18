@@ -34,7 +34,10 @@
         GrammaticalGender,
     } from "../../types/generated/graphql"
     import { PromptType, PostGameType } from "../../types/generated/graphql"
-    import { createPost } from "../../routes/_helpers/posts"
+    import {
+        createPost,
+        createPostCorrection,
+    } from "../../routes/_helpers/posts"
     import {
         BodyPartType,
         GuessCaseOption,
@@ -43,13 +46,16 @@
         GuessGenderRange,
         GUESS_CASE_OPTIONS,
         GUESS_GENDER_OPTIONS,
+        PostCorrectionRange,
         PostGameRange,
         SupportedLocale,
     } from "../../constants"
     import { USER_UPLOADED_RECORDINGS_BASE_PATH } from "../../constants"
     import { getBodyParts } from "../../routes/_helpers/posts/selections"
     import { createPostGameAnswer } from "../../routes/_helpers/posts/games"
-    import CorrectionRangeDropdown from "./CorrectionRangeDropdown.svelte"
+    import CorrectionRangeDropdown, {
+        CreatePostCorrectionEvent,
+    } from "./CorrectionRangeDropdown.svelte"
 
     query(currentUserStore)
 
@@ -65,6 +71,7 @@
     export let prompt: PostNode["prompt"]
     export let language: PostNode["language"]
     export let games: PostNode["games"]
+    export let corrections: PostNode["corrections"]
     export let linkToAuthorProfile: boolean = true
     export let forceShowReplies: boolean = false
 
@@ -80,7 +87,8 @@
         correctionRangeDropdownId = uuidv4()
     })
 
-    $: replyNodes = replies.nodes.filter(Boolean).map((reply) => reply!)
+    $: replyNodes = replies.nodes.filter(Boolean).map((node) => node!)
+    $: correctionNodes = corrections.nodes.filter(Boolean).map((node) => node!)
 
     $: liked =
         likes &&
@@ -161,12 +169,6 @@
     }
     let tmpLiked = false
     let tmpUnliked = false
-
-    let showCorrections: boolean = false
-    async function handleCorrect() {
-        // TODO
-        showCorrections = !showCorrections
-    }
 
     $: game = games.nodes.length ? games.nodes[0] : null
     $: currentUserCreatedGame =
@@ -413,6 +415,37 @@
             : null
     let showCorrectAnswers: boolean = false
 
+    let showCorrections: boolean = false
+    async function handleToggleCorrections() {
+        showCorrections = !showCorrections
+    }
+
+    async function handleCreateCorrection(event: CreatePostCorrectionEvent) {
+        if (!correctionStart || !correctionEnd) {
+            return
+        }
+        const res = await createPostCorrection({
+            postUuid: uuid,
+            range: {
+                uuid: uuidv4(),
+                start: correctionStart,
+                end: correctionEnd,
+            } as PostCorrectionRange,
+            ...event.detail,
+        })
+        if (res.status === 200) {
+            const response = await res.json()
+            if (response.success) {
+                // success
+                dispatch("correctSuccess")
+            } else {
+                dispatch("correctFailure")
+            }
+        } else {
+            dispatch("correctFailure")
+        }
+    }
+
     let correctionText: string | null = null
     let correctionStart: number | null = null
     let correctionEnd: number | null = null
@@ -470,6 +503,10 @@
     $: {
         showCorrections
         forceRecalculateDropdownPosition = true
+    }
+    $: {
+        showCorrections
+        clearAllSelections()
     }
 </script>
 
@@ -591,6 +628,9 @@
                     container={bodyNode || null}
                     locale={language.alpha2}
                     editedRange={null}
+                    selectedText={correctionText}
+                    corrections={correctionNodes}
+                    on:create={handleCreateCorrection}
                     on:cancel={() => clearAllSelections()}
                     forceRecalculatePosition={forceRecalculateDropdownPosition}
                     on:positionRecalculated={() =>
@@ -914,7 +954,7 @@
     <div class="flex flex-row pt-1 justify-end items-center">
         <ButtonLarge
             className="correct-button flex items-center justify-center cursor-pointer rounded-lg bg-gray-lightest ml-0 mr-1"
-            on:click={() => handleCorrect()}
+            on:click={() => handleToggleCorrections()}
             tag="button"
             variant="OUTLINED"
             color="SECONDARY"
@@ -973,7 +1013,8 @@
             <div
                 contenteditable
                 bind:textContent={newReplyBody}
-                placeholder="Reply"
+                placeholder="Reply …"
+                aria-placeholder="Reply …"
                 class="border border-gray-bitlight rounded-lg py-1 pl-2 pr-12 w-full origin-top-right"
                 in:scale={{ duration: 150 }}
                 out:scale={{ duration: 150 }}
@@ -1154,6 +1195,16 @@
 
     :global(.correct-button svg) {
         @apply mr-2;
+    }
+
+    [placeholder]:empty::before {
+        content: attr(placeholder);
+
+        @apply text-gray;
+    }
+
+    [placeholder]:empty:focus::before {
+        content: "";
     }
 
     @keyframes like-animation {

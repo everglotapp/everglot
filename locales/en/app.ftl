@@ -38,6 +38,7 @@ post-game-note-game-action = { $gameType ->
 post-game-note-own = You have challenged the others to { post-game-note-game-action }.
 post-game-note-other = { $username } is challenging you to { post-game-note-game-action }!
 post-corrections-note = Select parts of the post to correct it. (Press and hold.)
+post-correction-selection-cancel = Close
 
 ## Chat page
 

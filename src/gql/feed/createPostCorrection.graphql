@@ -1,0 +1,33 @@
+mutation CreatePostCorrection(
+    $userId: Int!
+    $postId: Int!
+    $body: String!
+    $endIndex: Int!
+    $startIndex: Int!
+    $uuid: UUID!
+) {
+    createPostCorrection(
+        input: {
+            postCorrection: {
+                postId: $postId
+                userId: $userId
+                body: $body
+                endIndex: $endIndex
+                startIndex: $startIndex
+                uuid: $uuid
+            }
+        }
+    ) {
+        postCorrection {
+            id
+            postId
+            userId
+            nodeId
+            createdAt
+            endIndex
+            startIndex
+            uuid
+            body
+        }
+    }
+}

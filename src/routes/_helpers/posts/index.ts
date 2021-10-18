@@ -1,4 +1,7 @@
-import { USER_CREATE_POST_RECORDING_FILE_FORM_FIELD } from "../../../constants"
+import {
+    PostCorrectionRange,
+    USER_CREATE_POST_RECORDING_FILE_FORM_FIELD,
+} from "../../../constants"
 import type { SupportedLocale, PostGameRange } from "../../../constants"
 
 import { decode as decodeHTML } from "he"
@@ -52,5 +55,28 @@ export async function createPostRecording(postUuid: string, recording: Blob) {
     return await fetch(`/posts/${postUuid}/recordings/create`, {
         method: "post",
         body: formData,
+    })
+}
+
+export async function createPostCorrection({
+    postUuid,
+    body,
+    range,
+}: {
+    postUuid: string
+    body: string
+    range: PostCorrectionRange
+}) {
+    const endpoint = `/posts/${postUuid}/corrections/create`
+    return await fetch(endpoint, {
+        method: "post",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            body: formatPostBody(body),
+            ...range,
+        }),
     })
 }

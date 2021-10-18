@@ -26,6 +26,8 @@ import {
     CurrentUserHasAnsweredOrRevealedPostGameQueryVariables,
     CurrentUserHasAnsweredOrRevealedPostGame,
     CurrentUserHasAnsweredOrRevealedPostGameQuery,
+    CreatePostCorrectionMutationVariables,
+    CreatePostCorrectionMutation,
 } from "../types/generated/graphql"
 import {
     CreatePost,
@@ -37,6 +39,7 @@ import {
     PostIdByUuid,
     PostLikeIdByPostIdAndUserId,
     DeletePostLike,
+    CreatePostCorrection,
 } from "../types/generated/graphql"
 
 const chlog = log.child({ namespace: "posts" })
@@ -237,4 +240,23 @@ export async function currentUserHasAnsweredOrRevealedPostGame(
         return null
     }
     return answersByCurrentUser.totalCount > 0
+}
+
+export async function createPostCorrection(
+    vars: CreatePostCorrectionMutationVariables
+): Promise<
+    | NonNullable<
+          CreatePostCorrectionMutation["createPostCorrection"]
+      >["postCorrection"]
+    | null
+> {
+    const res = await performQuery<CreatePostCorrectionMutation>(
+        CreatePostCorrection.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        chlog.child({ res }).error("Failed to create post correction")
+        return null
+    }
+    return res.data?.createPostCorrection?.postCorrection || null
 }

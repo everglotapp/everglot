@@ -587,7 +587,7 @@
             <div
                 class="py-4 pl-8 pr-16 font-bold text-gray-dark border-gray-light border-b font-secondary"
             >
-                Which kind of game to create?
+                <Localized id="post-game-create-modal-title" />
             </div>
             <div class="bg-white flex flex-col items-center py-4 px-4">
                 {#if guessCaseSupported}
@@ -597,7 +597,10 @@
                         tag="button"
                         variant="OUTLINED"
                         color="PRIMARY"
-                        className="mb-2">Guess the Case</ButtonLarge
+                        className="mb-2"
+                        ><Localized
+                            id="post-game-create-modal-guess-case"
+                        /></ButtonLarge
                     >
                 {/if}
                 {#if guessGenderSupported}
@@ -607,7 +610,10 @@
                         tag="button"
                         variant="OUTLINED"
                         color="PRIMARY"
-                        className="mb-2">Guess the Gender</ButtonLarge
+                        className="mb-2"
+                        ><Localized
+                            id="post-game-create-modal-guess-gender"
+                        /></ButtonLarge
                     >
                 {/if}
                 {#if clozeSupported}
@@ -616,7 +622,10 @@
                             handleSelectGameType(PostGameType.Cloze)}
                         tag="button"
                         variant="OUTLINED"
-                        color="PRIMARY">Cloze</ButtonLarge
+                        color="PRIMARY"
+                        ><Localized
+                            id="post-game-create-modal-cloze"
+                        /></ButtonLarge
                     >
                 {/if}
             </div>

@@ -120,6 +120,21 @@ query SinglePost($snowflakeId: BigInt!) {
                     }
                 }
             }
+            corrections {
+                nodes {
+                    body
+                    endIndex
+                    createdAt
+                    startIndex
+                    uuid
+                    user {
+                        uuid
+                        username
+                        avatarUrl
+                        displayName
+                    }
+                }
+            }
         }
     }
 }

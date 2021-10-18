@@ -148,6 +148,24 @@ query SinglePost($snowflakeId: BigInt!) {
         }
         __typename
       }
+      corrections {
+        nodes {
+          body
+          endIndex
+          createdAt
+          startIndex
+          uuid
+          user {
+            uuid
+            username
+            avatarUrl
+            displayName
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
       __typename
     }
     __typename

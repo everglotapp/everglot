@@ -224,6 +224,12 @@
     function handleUnfollowSuccess() {
         refreshFollowerships()
     }
+    function handlePostGameAnswerSuccess() {
+        refreshPosts()
+    }
+    function handlePostCorrectSuccess() {
+        refreshPosts()
+    }
 
     let editBio: boolean = false
     let newBio: string | null = null
@@ -546,11 +552,14 @@
                                 createdAt={post.createdAt}
                                 prompt={post.prompt}
                                 games={post.games}
+                                corrections={post.corrections}
                                 language={post.language}
                                 linkToAuthorProfile={false}
                                 on:replySuccess={handlePostReplySuccess}
                                 on:likeSuccess={handlePostLikeSuccess}
                                 on:unlikeSuccess={handlePostUnlikeSuccess}
+                                on:gameAnswerSuccess={handlePostGameAnswerSuccess}
+                                on:correctSuccess={handlePostCorrectSuccess}
                             />
                         </div>
                     {/if}

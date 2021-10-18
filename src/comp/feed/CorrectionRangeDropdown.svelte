@@ -36,6 +36,7 @@
             >
         >
     })[] = []
+    export let linkToCorrectionAuthorProfile: boolean = true
 
     let newBody: string | undefined
 
@@ -152,32 +153,53 @@
                                     class="flex flex-row py-2 w-full max-w-full"
                                 >
                                     <div class="pr-2 sm:pr-3">
-                                        <a
-                                            href={`/u/${correction.user.username}`}
-                                            ><Avatar
+                                        {#if linkToCorrectionAuthorProfile}
+                                            <a
+                                                href={`/u/${correction.user.username}`}
+                                                ><Avatar
+                                                    username={correction.user
+                                                        .username}
+                                                    uuid={correction.user.uuid}
+                                                    url={correction.user
+                                                        .avatarUrl}
+                                                    size={36}
+                                                /></a
+                                            >
+                                        {:else}
+                                            <Avatar
                                                 username={correction.user
                                                     .username}
                                                 uuid={correction.user.uuid}
                                                 url={correction.user.avatarUrl}
                                                 size={36}
-                                            /></a
-                                        >
+                                            />
+                                        {/if}
                                     </div>
                                     <div class="px-1 w-full max-w-full">
                                         <div
                                             class="flex items-center justify-between w-full text-sm"
                                         >
-                                            <a
-                                                href={`/u/${correction.user.username}`}
-                                                class="m-0"
-                                                ><span
-                                                    class="text-gray-bitdark font-bold"
+                                            {#if linkToCorrectionAuthorProfile}
+                                                <a
+                                                    href={`/u/${correction.user.username}`}
+                                                    class="m-0"
+                                                    ><span
+                                                        class="text-gray-bitdark font-bold"
+                                                        >{correction.user
+                                                            .displayName ||
+                                                            correction.user
+                                                                .username}</span
+                                                    ></a
+                                                >
+                                            {:else}
+                                                <span
+                                                    class="text-gray-bitdark font-bold m-0"
                                                     >{correction.user
                                                         .displayName ||
                                                         correction.user
                                                             .username}</span
-                                                ></a
-                                            >
+                                                >
+                                            {/if}
                                             <time
                                                 use:svelteTime={{
                                                     timestamp:

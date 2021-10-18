@@ -630,6 +630,7 @@
                     editedRange={null}
                     selectedText={correctionText}
                     corrections={correctionNodes}
+                    linkToCorrectionAuthorProfile={linkToAuthorProfile}
                     on:create={handleCreateCorrection}
                     on:cancel={() => clearAllSelections()}
                     forceRecalculatePosition={forceRecalculateDropdownPosition}

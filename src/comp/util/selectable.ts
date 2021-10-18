@@ -187,6 +187,7 @@ export function selectable(node: HTMLElement, opts?: SelectableOpts) {
             // selection = isValid && isWithinNode ? s : null
             // afterUpdateSelection()
             ignoreSelectionChanges = false
+            afterUpdateIgnoreSelectionChanges()
             maybeUpdateSelection()
             tryClearAutoSelectionTimeout()
             if (s.rangeCount && isWithinNode) {

@@ -30,8 +30,6 @@
 
     onMount(() => {
         recalculateBoundingRects()
-        // setTimeout(recalculateBoundingRects, 100)
-        // setTimeout(recalculateBoundingRects, 1000)
         window.addEventListener("resize", handleWindowResize)
     })
 
@@ -51,9 +49,6 @@
     }
     $: if (dirtyPosition) {
         recalculateBoundingRects()
-        // ;[100, 250, 500, 1000].forEach((delay) =>
-        //     setTimeout(recalculateBoundingRects, delay)
-        // )
         dirtyPosition = false
     }
     function handleWindowResize() {

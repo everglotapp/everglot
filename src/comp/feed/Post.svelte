@@ -49,6 +49,7 @@
     import { USER_UPLOADED_RECORDINGS_BASE_PATH } from "../../constants"
     import { getBodyParts } from "../../routes/_helpers/posts/selections"
     import { createPostGameAnswer } from "../../routes/_helpers/posts/games"
+    import CorrectionRangeDropdown from "./CorrectionRangeDropdown.svelte"
 
     query(currentUserStore)
 
@@ -72,9 +73,11 @@
     let bodyNode: HTMLElement
     let bodyId: string
     let rangeOptionsDropdownId: string
+    let correctionRangeDropdownId: string
     onMount(() => {
         bodyId = uuidv4()
         rangeOptionsDropdownId = uuidv4()
+        correctionRangeDropdownId = uuidv4()
     })
 
     $: replyNodes = replies.nodes.filter(Boolean).map((reply) => reply!)
@@ -410,7 +413,64 @@
             : null
     let showCorrectAnswers: boolean = false
 
-    function handleSelection(event: SelectionEvent) {}
+    let correctionText: string | null = null
+    let correctionStart: number | null = null
+    let correctionEnd: number | null = null
+    let correctionRange: Range | null = null
+    function handleSelection(event: SelectionEvent) {
+        correctionStart = event.detail.start
+        correctionEnd = event.detail.end
+        correctionText = event.detail.text
+        correctionRange = event.detail.range
+    }
+    function clearAllSelections() {
+        correctionStart = null
+        correctionEnd = null
+        correctionText = null
+        correctionRange = null
+        const s = window.getSelection
+            ? window.getSelection()
+            : document.selection
+        if (!s) {
+            return
+        }
+        if (s.removeAllRanges) {
+            s.removeAllRanges()
+        } else if (s.empty) {
+            s.empty()
+        }
+    }
+
+    let ignoringCorrectionChanges: boolean | null = null
+    function handleIgnoringCorrectionChangesUpdated(
+        event: CustomEvent<boolean>
+    ) {
+        // console.log("handleIgnoringCorrectionChangesUpdated", {
+        //     ignoring: event.detail,
+        // })
+        ignoringCorrectionChanges = event.detail
+    }
+
+    function handleCorrectionRangeDropdownClickaway(
+        event: CustomEvent<{ event: MouseEvent }>
+    ) {
+        // console.log("clickaway", {
+        //     ignoringCorrectionChanges,
+        //     correctionRange,
+        //     correctionStart,
+        //     correctionEnd,
+        //     correctionText,
+        //     correctionRangeDropdownId,
+        // })
+        if (ignoringCorrectionChanges && event.detail.event.button === 0) {
+            clearAllSelections()
+        }
+    }
+    let forceRecalculateDropdownPosition = false
+    $: {
+        showCorrections
+        forceRecalculateDropdownPosition = true
+    }
 </script>
 
 <div
@@ -524,6 +584,24 @@
                         </span>{/if}
                 </div>
             {/if}
+            {#if showCorrections && language}
+                <CorrectionRangeDropdown
+                    id={correctionRangeDropdownId}
+                    anchor={correctionRange}
+                    container={bodyNode || null}
+                    locale={language.alpha2}
+                    editedRange={null}
+                    on:cancel={() => clearAllSelections()}
+                    forceRecalculatePosition={forceRecalculateDropdownPosition}
+                    on:positionRecalculated={() =>
+                        (forceRecalculateDropdownPosition = false)}
+                />
+                <ClickAwayListener
+                    elementId={[bodyId, correctionRangeDropdownId]}
+                    on:clickaway={handleCorrectionRangeDropdownClickaway}
+                />
+                <EscapeKeyListener on:keydown={() => clearAllSelections()} />
+            {/if}
             <div
                 id={bodyId}
                 bind:this={bodyNode}
@@ -531,6 +609,7 @@
                 class:game={Boolean(game)}
                 use:selectable={{ disabled: !showCorrections }}
                 on:selection={handleSelection}
+                on:ignoringSelectionChangesUpdated={handleIgnoringCorrectionChangesUpdated}
             >
                 {#if game && answerRangeUuid !== null && language?.alpha2}
                     <GameRangeDropdown

@@ -86,6 +86,12 @@ export interface GuessCaseRange extends PostGameRange {
     option: keyof GuessCaseOption
 }
 
+export interface PostCorrectionRange {
+    uuid: string
+    start: number
+    end: number
+}
+
 export const enum BodyPartType {
     Text = "TEXT",
     LineBreak = "LINEBREAK",

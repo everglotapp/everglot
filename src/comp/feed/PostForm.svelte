@@ -20,7 +20,7 @@
     import Modal from "../util/Modal.svelte"
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
-    import selectable from "../util/selectable"
+    import selectable, { SelectionEvent } from "../util/selectable"
     import {
         createPost,
         createPostRecording,
@@ -332,6 +332,10 @@
         clearAllSelections()
     }
     function clearAllSelections() {
+        selectionStart = null
+        selectionEnd = null
+        selectedText = null
+        selectionRange = null
         const s = window.getSelection
             ? window.getSelection()
             : document.selection
@@ -353,16 +357,8 @@
     let selectionStart: number | null = null
     let selectionEnd: number | null = null
     let selectionRange: Range | null = null
-    function handleSelectionchanged(
-        event: CustomEvent<{
-            selection: Selection | null
-            start: number | null
-            end: number | null
-            text: string | null
-            range: Range | null
-        }>
-    ) {
-        console.log("selection changed", event.detail)
+    function handleSelection(event: SelectionEvent) {
+        // console.log("selection changed", event.detail)
         selectionStart = event.detail.start
         selectionEnd = event.detail.end
         selectedText = event.detail.text
@@ -443,6 +439,7 @@
     }
 
     function handleEditBodyPart(uuid: string) {
+        // console.log("handleEditBodyPart", { uuid })
         editBodyPartUuid = uuid
         // Highlight picked body part that is being edited.
         const bodyPartNode = document.getElementById(uuid)
@@ -541,24 +538,24 @@
     function handleIgnoringSelectionChangesUpdated(
         event: CustomEvent<boolean>
     ) {
-        console.log("handleIgnoringSelectionChangesUpdated", {
-            event,
-        })
+        // console.log("handleIgnoringSelectionChangesUpdated", {
+        //     event,
+        // })
         ignoringSelectionChanges = event.detail
     }
 
-    function handleRangeOptionsDropdownClickaway(
+    function handleGameRangeDropdownClickaway(
         event: CustomEvent<{ event: MouseEvent }>
     ) {
+        // console.log("clickaway", {
+        //     ignoringSelectionChanges,
+        //     selectionRange,
+        //     selectionStart,
+        //     selectionEnd,
+        //     selectedText,
+        //     rangeOptionsDropdownId,
+        // })
         if (ignoringSelectionChanges && event.detail.event.button === 0) {
-            console.log("clickaway", {
-                ignoringSelectionChanges,
-                selectionRange,
-                selectionStart,
-                selectionEnd,
-                selectedText,
-                rangeOptionsDropdownId,
-            })
             clearAllSelections()
         }
     }
@@ -697,7 +694,7 @@
                 />
                 <ClickAwayListener
                     elementId={[bodyInputId, rangeOptionsDropdownId]}
-                    on:clickaway={handleRangeOptionsDropdownClickaway}
+                    on:clickaway={handleGameRangeDropdownClickaway}
                 />
                 <EscapeKeyListener on:keydown={() => clearAllSelections()} />
             {/if}
@@ -721,7 +718,7 @@
                             PostGameType.Cloze,
                         ].includes(gameType),
                 }}
-                on:selectionchanged={handleSelectionchanged}
+                on:selection={handleSelection}
                 on:ignoringSelectionChangesUpdated={handleIgnoringSelectionChangesUpdated}
                 on:keyup={handleBodyKeyup}
                 on:drop|preventDefault

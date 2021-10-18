@@ -1,8 +1,17 @@
+export type SelectionEvent = CustomEvent<{
+    selection: Selection | null
+    range: Range | null
+    text: string | null
+    start: number | null
+    end: number | null
+}>
+
 type SelectableOpts = {
     disabled?: boolean
 }
 
 export function selectable(node: HTMLElement, opts?: SelectableOpts) {
+    let myOpts: SelectableOpts | undefined = opts
     let ignoreSelectionChanges: boolean = true
     let preventAutoSelectionHandling: boolean = false
     let autoSelectionTimeout: number | null = null
@@ -17,6 +26,9 @@ export function selectable(node: HTMLElement, opts?: SelectableOpts) {
     let selectionEnd: number | null = null
 
     const afterUpdateSelection = () => {
+        ignoreSelectionChanges = true
+        afterUpdateIgnoreSelectionChanges()
+
         selectionRange =
             selection !== null && selection.rangeCount
                 ? selection.getRangeAt(0)
@@ -39,7 +51,7 @@ export function selectable(node: HTMLElement, opts?: SelectableOpts) {
                 : null
         selectionEnd = textBeforeCaret ? textBeforeCaret.length - 1 : null
         node.dispatchEvent(
-            new CustomEvent("selectionchanged", {
+            new CustomEvent("selection", {
                 detail: {
                     selection,
                     range: selectionRange,
@@ -47,10 +59,8 @@ export function selectable(node: HTMLElement, opts?: SelectableOpts) {
                     start: selectionStart,
                     end: selectionEnd,
                 },
-            })
+            }) as SelectionEvent
         )
-        ignoreSelectionChanges = true
-        afterUpdateIgnoreSelectionChanges()
     }
     const afterUpdateIgnoreSelectionChanges = () => {
         node.dispatchEvent(
@@ -82,19 +92,48 @@ export function selectable(node: HTMLElement, opts?: SelectableOpts) {
         maybeUpdateSelection()
     }
 
+    function selectionIsWithinNode(s: Selection) {
+        let cur: Node | null = s.anchorNode
+        while (cur) {
+            if (cur === node) {
+                return true
+            }
+            cur = cur.parentNode
+        }
+        cur = s.focusNode
+        while (cur) {
+            if (cur === node) {
+                return true
+            }
+            cur = cur.parentNode
+        }
+        return false
+    }
+
     function maybeUpdateSelection() {
-        const disabled = !Boolean(opts?.disabled)
+        const disabled = Boolean(myOpts?.disabled)
         if (disabled) {
+            // console.log("maybeUpdateSelection disabled")
             return
         }
         if (ignoreSelectionChanges) {
+            // console.log("maybeUpdateSelection ignoring selection changes")
             return
         }
         const s = window.getSelection
             ? window.getSelection()
             : document.selection
-        // console.log({ s, range: s && s.rangeCount ? s.getRangeAt(0) : null })
-        if (s && !s.isCollapsed && s.type === "Range") {
+        // console.log("maybeUpdateSelection", {
+        //     s,
+        //     range: s && s.rangeCount ? s.getRangeAt(0) : null,
+        //     isWithinNode: s ? selectionIsWithinNode(s) : null,
+        // })
+        if (
+            s &&
+            !s.isCollapsed &&
+            s.type === "Range" &&
+            selectionIsWithinNode(s)
+        ) {
             selection = s
         } else {
             selection = null
@@ -143,10 +182,14 @@ export function selectable(node: HTMLElement, opts?: SelectableOpts) {
                 (r.startOffset !== selectionRange.startOffset ||
                     r.endOffset !== selectionRange.endOffset))
         ) {
-            selection = s && !s.isCollapsed ? s : null
-            afterUpdateSelection()
+            // const isValid = !s.isCollapsed && s.type === "Range"
+            const isWithinNode = selectionIsWithinNode(s)
+            // selection = isValid && isWithinNode ? s : null
+            // afterUpdateSelection()
+            ignoreSelectionChanges = false
+            maybeUpdateSelection()
             tryClearAutoSelectionTimeout()
-            if (s.rangeCount) {
+            if (s.rangeCount && isWithinNode) {
                 if (!preventAutoSelectionHandling) {
                     autoSelectionTimeout = window.setTimeout(() => {
                         if (!preventAutoSelectionHandling) {
@@ -180,17 +223,15 @@ export function selectable(node: HTMLElement, opts?: SelectableOpts) {
         //     preventAutoSelectionHandling,
         // })
         preventAutoSelectionHandling = false
-        if (ignoreSelectionChanges) {
-            // secondary click away handler
-            selection = null
-            afterUpdateSelection()
-        }
         ignoreSelectionChanges = false
         afterUpdateIgnoreSelectionChanges()
         maybeUpdateSelection()
     }
     function handleMousedown() {
-        // console.log("mousedown", { willHandleSelect })
+        // console.log("mousedown", {
+        //     ignoreSelectionChanges,
+        //     preventAutoSelectionHandling,
+        // })
         preventAutoSelectionHandling = true
         tryClearAutoSelectionTimeout()
     }
@@ -207,7 +248,7 @@ export function selectable(node: HTMLElement, opts?: SelectableOpts) {
 
     return {
         update(newOpts?: SelectableOpts) {
-            opts = newOpts
+            myOpts = newOpts
         },
         destroy() {
             tryClearAutoSelectionTimeout()

@@ -24,6 +24,7 @@
     import ButtonLarge from "../util/ButtonLarge.svelte"
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
+    import selectable, { SelectionEvent } from "../util/selectable"
 
     import { currentUserStore, currentUserUuid } from "../../stores/currentUser"
 
@@ -408,6 +409,8 @@
               )
             : null
     let showCorrectAnswers: boolean = false
+
+    function handleSelection(event: SelectionEvent) {}
 </script>
 
 <div
@@ -484,20 +487,8 @@
                 <div
                     class="corrections-note flex flex-nowrap items-center text-sm text-gray font-bold"
                 >
-                    <svg
-                        width="18"
-                        height="18"
-                        viewBox="0 0 40 40"
-                        fill="none"
-                        class="mr-2 self-start"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            d="M31.8 11C30.6 9 28.4 8 26 8H14C11.6 8 9.4 9 8.2 11C3.6 18 2.6 28.6 5.8 30.8C9 33 16.2 23.4 20 23.4C23.8 23.4 30.8 33 34.2 30.8C37.4 28.6 36.4 18 31.8 11ZM16 18H14V20H12V18H10V16H12V14H14V16H16V18ZM26.8 19C26.8 20 26 20.8 25 20.8C24 20.8 23.2 20 23.2 19C23.2 18 24 17.2 25 17.2C26 17.2 26.8 18 26.8 19ZM30.6 15C30.6 16 29.8 16.8 28.8 16.8C27.8 16.8 27 16 27 15C27 14 27.8 13.2 28.8 13.2C29.8 13.2 30.6 14 30.6 15Z"
-                            fill="currentColor"
-                        />
-                    </svg><span
-                        ><Localized id="post-game-corrections-note" /></span
+                    <Edit3Icon size="18" class="mr-2 self-start" /><span
+                        ><Localized id="post-corrections-note" /></span
                     >
                 </div>
             {:else if game}
@@ -505,8 +496,8 @@
                     class="game-note flex flex-nowrap items-center text-sm text-gray font-bold"
                 >
                     <svg
-                        width="18"
-                        height="18"
+                        width="20"
+                        height="20"
                         viewBox="0 0 40 40"
                         fill="none"
                         class="mr-2 self-start"
@@ -538,6 +529,8 @@
                 bind:this={bodyNode}
                 class="body mt-1"
                 class:game={Boolean(game)}
+                use:selectable={{ disabled: !showCorrections }}
+                on:selection={handleSelection}
             >
                 {#if game && answerRangeUuid !== null && language?.alpha2}
                     <GameRangeDropdown
@@ -847,10 +840,17 @@
             variant="OUTLINED"
             color="SECONDARY"
         >
-            <Edit3Icon size="18" />
-            <span class="text-sm font-bold text-gray-bitdark select-none"
-                >corrections</span
-            >
+            {#if showCorrections}
+                <XIcon size="16" /><span
+                    class="text-sm font-bold text-gray-bitdark select-none"
+                    >close</span
+                >
+            {:else}
+                <Edit3Icon size="18" /><span
+                    class="text-sm font-bold text-gray-bitdark select-none"
+                    >corrections</span
+                >
+            {/if}
         </ButtonLarge>
         {#if !forceShowReplies}
             {#if showReplies}
@@ -860,7 +860,7 @@
                     variant="TEXT"
                     color="SECONDARY"
                     on:click={() => (showReplies = !showReplies)}
-                    ><XIcon size="16" /><span>Close</span></ButtonSmall
+                    ><XIcon size="16" /><span>close</span></ButtonSmall
                 >
             {:else}
                 <ButtonLarge
@@ -871,7 +871,8 @@
                     on:click={() => (showReplies = !showReplies)}
                     ><MessageCircleIcon size="16" /><span
                         class="text-sm text-gray-bitdark font-bold select-none rounded-lg"
-                        >{replies?.totalCount || 0} replies</span
+                        >{replies?.totalCount || 0}
+                        {#if (replies?.totalCount || 0) === 1}reply{:else}replies{/if}</span
                     ></ButtonLarge
                 >
             {/if}

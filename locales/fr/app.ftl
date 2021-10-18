@@ -125,7 +125,7 @@ signup-success-download-app-android = Télécharger Everglot pour Android
 
 ## Invite Modal
 
-invite-modal-msg = Envoyer ce lien vers tes amis pour les inviter a rejoindre { -brand-name }
+invite-modal-msg = Envoie ce lien vers tes amis pour les inviter a rejoindre { -brand-name }
 invite-modal-close = Fermer
 invite-modal-copy = Copier lien
 invite-modal-copy-success = Copié
@@ -170,10 +170,10 @@ signup-form-difficult-msg =
     </p>
 signup-form-not-supported-msg =
     <p data-l10n-name="sorry">
-        Désolé,{ $learnCount ->
+        Désolé, { $learnCount ->
         [one] { $lang1 } est
        *[other] { $lang1 } et { $lang2 } ne sont
-    }pas encore supporté(s).
+    } pas encore supporté(s).
     </p>
     <p data-l10n-name="no-worries">
         Ne t'inquiète pas, nous t'ajouterons

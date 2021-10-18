@@ -124,6 +124,21 @@ query UserByUsernamePosts($username: String!) {
                         }
                     }
                 }
+                corrections {
+                    nodes {
+                        body
+                        endIndex
+                        createdAt
+                        startIndex
+                        uuid
+                        user {
+                            uuid
+                            username
+                            avatarUrl
+                            displayName
+                        }
+                    }
+                }
             }
         }
     }

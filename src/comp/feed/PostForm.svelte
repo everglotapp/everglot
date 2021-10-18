@@ -14,12 +14,13 @@
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import { v4 as uuidv4 } from "uuid"
 
-    import RangeOptionsDropdown from "./RangeOptionsDropdown.svelte"
+    import GameRangeDropdown from "./GameRangeDropdown.svelte"
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import ButtonLarge from "../util/ButtonLarge.svelte"
     import Modal from "../util/Modal.svelte"
     import ClickAwayListener from "../util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../util/EscapeKeyListener.svelte"
+    import selectable, { SelectionEvent } from "../util/selectable"
     import {
         createPost,
         createPostRecording,
@@ -265,13 +266,6 @@
         bodyInputId = uuidv4()
         rangeOptionsDropdownId = uuidv4()
 
-        document.addEventListener(
-            "selectionchange",
-            handleDocumentSelectionChange
-        )
-
-        document.addEventListener("keyup", handleDocumentKeyup)
-
         setInterval(updateRecordingDuration, 250)
         setInterval(updateAudioTimings, 250)
     })
@@ -279,11 +273,6 @@
     onDestroy(() => {
         clearUpdateRecordingDurationInterval()
         clearUpdateAudioTimingsInterval()
-        document.removeEventListener(
-            "selectionchange",
-            handleDocumentSelectionChange
-        )
-        document.removeEventListener("keyup", handleDocumentKeyup)
     })
 
     $: bodyInputPlaceholder = $translate(
@@ -339,15 +328,18 @@
     function handleCloseGamify() {
         gamify = false
         gameType = null
-        selection = null
         gameRanges = []
+        clearAllSelections()
     }
     function clearAllSelections() {
+        selectionStart = null
+        selectionEnd = null
+        selectedText = null
+        selectionRange = null
         const s = window.getSelection
             ? window.getSelection()
             : document.selection
         if (!s) {
-            selection = null
             return
         }
         if (s.removeAllRanges) {
@@ -355,29 +347,24 @@
         } else if (s.empty) {
             s.empty()
         }
-        selection = null
     }
 
-    function handleDocumentKeyup(event: KeyboardEvent) {
-        // console.log("document keyup", {
-        //     willHandleSelect,
-        //     preventAutoSelectionHandling,
-        //     event,
-        // })
-        tryHandleBodyTextSelection()
-    }
     function handleBodyKeyup(_event: KeyboardEvent) {
         newPostBody = writableBodyInputNode.innerHTML
-        // console.log("keyup", { willHandleSelect, preventAutoSelectionHandling })
-        tryHandleBodyTextSelection()
     }
-    function handleBodyContextmenu(_event: MouseEvent) {
-        // console.log("contextmenu", {
-        //     willHandleSelect,
-        //     preventAutoSelectionHandling,
-        // })
-        tryHandleBodyTextSelection()
+
+    let selectedText: string | null = null
+    let selectionStart: number | null = null
+    let selectionEnd: number | null = null
+    let selectionRange: Range | null = null
+    function handleSelection(event: SelectionEvent) {
+        // console.log("selection changed", event.detail)
+        selectionStart = event.detail.start
+        selectionEnd = event.detail.end
+        selectedText = event.detail.text
+        selectionRange = event.detail.range
     }
+
     const dragTypeIsForbidden = (type: string) =>
         type === "text/uri-list" ||
         type === "application/x-moz-nativeimage" ||
@@ -403,153 +390,10 @@
         setTimeout(() => (newPostBody = writableBodyInputNode.innerHTML), 50)
         // console.log("drop", { event })
     }
-    let preventAutoSelectionHandling: boolean = false
-    function handleBodyMouseup() {
-        // console.log("mouseup", {
-        //     willHandleSelect,
-        //     preventAutoSelectionHandling,
-        // })
-        preventAutoSelectionHandling = false
-        if (!willHandleSelect) {
-            // secondary click away handler
-            clearAllSelections()
-        }
-        willHandleSelect = true
-        tryHandleBodyTextSelection()
-    }
-    function handleBodyMousedown() {
-        // console.log("mousedown", { willHandleSelect })
-        preventAutoSelectionHandling = true
-        tryClearAutoSelectionTimeout()
-    }
     let writableBodyInputNode: HTMLElement
     let readonlyBodyInputNode: HTMLElement
     let gamify: boolean = false
-    let willHandleSelect: boolean = false
-    let selection: Selection | null = null
-    function tryHandleBodyTextSelection() {
-        if (!willHandleSelect) {
-            return
-        }
-        if (
-            !gamify ||
-            gameType === null ||
-            ![
-                PostGameType.GuessCase,
-                PostGameType.GuessGender,
-                PostGameType.Cloze,
-            ].includes(gameType)
-        ) {
-            return
-        }
-        const s = window.getSelection
-            ? window.getSelection()
-            : document.selection
-        // console.log({ s, range: s && s.rangeCount ? s.getRangeAt(0) : null })
-        if (s && !s.isCollapsed && s.type === "Range") {
-            const { focusNode, anchorNode } = s
-            if (
-                editBodyPartUuid !== null &&
-                (focusNode !== anchorNode ||
-                    !focusNode ||
-                    focusNode.id !== editBodyPartUuid)
-            ) {
-                editBodyPartUuid = null
-            }
-            selection = s
-        } else {
-            selection = null
-        }
-        willHandleSelect = false
-    }
-    function handleBodySelectStart() {
-        // console.log("selectstart", {
-        //     willHandleSelect,
-        //     preventAutoSelectionHandling,
-        // })
-        willHandleSelect = true
-    }
-    let autoSelectionTimeout: number | null = null
-    function handleDocumentSelectionChange() {
-        if (typeof window === "undefined") {
-            return
-        }
-        const s = window.getSelection
-            ? window.getSelection()
-            : document.selection
-        if (!s) {
-            return
-        }
-        if (s.type !== "Range") {
-            return
-        }
-        const r = s ? s.getRangeAt(0) : null
-        // console.log("selectionchange", {
-        //     willHandleSelect,
-        //     s,
-        //     selection,
-        //     autoSelectionTimeout,
-        //     preventAutoSelectionHandling,
-        //     r,
-        //     selectionRange,
-        // })
-        if (
-            !selection ||
-            !selectionRange ||
-            s.focusNode !== selection.focusNode ||
-            s.anchorNode !== selection.anchorNode ||
-            s.focusOffset !== selection.focusOffset ||
-            s.anchorOffset !== selection.anchorOffset ||
-            (r !== null &&
-                (r.startOffset !== selectionRange.startOffset ||
-                    r.endOffset !== selectionRange.endOffset))
-        ) {
-            selection = s && !s.isCollapsed ? s : null
-            tryClearAutoSelectionTimeout()
-            if (s.rangeCount) {
-                if (!preventAutoSelectionHandling) {
-                    autoSelectionTimeout = window.setTimeout(() => {
-                        if (!preventAutoSelectionHandling) {
-                            // console.log(
-                            //     "autoSelectionTimeout expired, handling"
-                            // )
-                            tryHandleBodyTextSelection()
-                            autoSelectionTimeout = null
-                        }
-                    }, 500)
-                }
-            }
-        }
-    }
-    function tryClearAutoSelectionTimeout() {
-        if (!autoSelectionTimeout) {
-            return
-        }
-        window.clearTimeout(autoSelectionTimeout)
-        autoSelectionTimeout = null
-    }
-    $: selectionRange =
-        gamify && selection !== null && selection.rangeCount
-            ? selection.getRangeAt(0)
-            : null
-    $: selectedText = selectionRange ? selectionRange.toString() : null
-    let rangeBeforeCaret: Range | null = null
-    $: if (selectionRange && readonlyBodyInputNode) {
-        rangeBeforeCaret = selectionRange.cloneRange()
-        rangeBeforeCaret.selectNodeContents(readonlyBodyInputNode)
-        rangeBeforeCaret.setEnd(
-            selectionRange.endContainer,
-            selectionRange.endOffset
-        )
-    } else {
-        rangeBeforeCaret = null
-    }
-    $: textBeforeCaret = rangeBeforeCaret?.toString() || null
-    $: selectionStart =
-        textBeforeCaret && selectedText
-            ? textBeforeCaret.length - selectedText.length
-            : null
-    $: selectionEnd = textBeforeCaret ? textBeforeCaret.length - 1 : null
+
     $: selectionOverlapsPickedRange =
         selectionStart !== null && selectionEnd !== null
             ? gameRanges.some(
@@ -595,12 +439,15 @@
     }
 
     function handleEditBodyPart(uuid: string) {
+        // console.log("handleEditBodyPart", { uuid })
         editBodyPartUuid = uuid
         // Highlight picked body part that is being edited.
         const bodyPartNode = document.getElementById(uuid)
         if (bodyPartNode) {
             clearAllSelections()
+            // @ts-ignore
             if (document.body.createTextRange) {
+                // @ts-ignore
                 const range = document.body.createTextRange()
                 range.moveToElementText(bodyPartNode)
                 range.select()
@@ -687,15 +534,28 @@
         clearAllSelections()
     }
 
-    function handleRangeOptionsDropdownClickaway(
+    let ignoringSelectionChanges: boolean | null = null
+    function handleIgnoringSelectionChangesUpdated(
+        event: CustomEvent<boolean>
+    ) {
+        // console.log("handleIgnoringSelectionChangesUpdated", {
+        //     event,
+        // })
+        ignoringSelectionChanges = event.detail
+    }
+
+    function handleGameRangeDropdownClickaway(
         event: CustomEvent<{ event: MouseEvent }>
     ) {
-        if (!willHandleSelect && event.detail.event.button === 0) {
-            // console.log("clickaway", {
-            //     willHandleSelect,
-            //     selection,
-            //     rangeOptionsDropdownId,
-            // })
+        // console.log("clickaway", {
+        //     ignoringSelectionChanges,
+        //     selectionRange,
+        //     selectionStart,
+        //     selectionEnd,
+        //     selectedText,
+        //     rangeOptionsDropdownId,
+        // })
+        if (ignoringSelectionChanges && event.detail.event.button === 0) {
             clearAllSelections()
         }
     }
@@ -727,7 +587,7 @@
             <div
                 class="py-4 pl-8 pr-16 font-bold text-gray-dark border-gray-light border-b font-secondary"
             >
-                Which kind of game to create?
+                <Localized id="post-game-create-modal-title" />
             </div>
             <div class="bg-white flex flex-col items-center py-4 px-4">
                 {#if guessCaseSupported}
@@ -737,7 +597,10 @@
                         tag="button"
                         variant="OUTLINED"
                         color="PRIMARY"
-                        className="mb-2">Guess the Case</ButtonLarge
+                        className="mb-2"
+                        ><Localized
+                            id="post-game-create-modal-guess-case"
+                        /></ButtonLarge
                     >
                 {/if}
                 {#if guessGenderSupported}
@@ -747,7 +610,10 @@
                         tag="button"
                         variant="OUTLINED"
                         color="PRIMARY"
-                        className="mb-2">Guess the Gender</ButtonLarge
+                        className="mb-2"
+                        ><Localized
+                            id="post-game-create-modal-guess-gender"
+                        /></ButtonLarge
                     >
                 {/if}
                 {#if clozeSupported}
@@ -756,7 +622,10 @@
                             handleSelectGameType(PostGameType.Cloze)}
                         tag="button"
                         variant="OUTLINED"
-                        color="PRIMARY">Cloze</ButtonLarge
+                        color="PRIMARY"
+                        ><Localized
+                            id="post-game-create-modal-cloze"
+                        /></ButtonLarge
                     >
                 {/if}
             </div>
@@ -783,23 +652,18 @@
             >
                 <span class="flex items-center">
                     <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        aria-hidden="true"
-                        class="mr-2"
-                        role="img"
                         width="18"
                         height="18"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 16 16"
-                        ><g fill="currentColor"
-                            ><path
-                                d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zM3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"
-                            /><path
-                                d="M5.5 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm-4-4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0z"
-                            /></g
-                        ></svg
-                    >Gamify: Select parts of your post.</span
+                        viewBox="0 0 40 40"
+                        fill="none"
+                        class="mr-2"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M31.8 11C30.6 9 28.4 8 26 8H14C11.6 8 9.4 9 8.2 11C3.6 18 2.6 28.6 5.8 30.8C9 33 16.2 23.4 20 23.4C23.8 23.4 30.8 33 34.2 30.8C37.4 28.6 36.4 18 31.8 11ZM16 18H14V20H12V18H10V16H12V14H14V16H16V18ZM26.8 19C26.8 20 26 20.8 25 20.8C24 20.8 23.2 20 23.2 19C23.2 18 24 17.2 25 17.2C26 17.2 26.8 18 26.8 19ZM30.6 15C30.6 16 29.8 16.8 28.8 16.8C27.8 16.8 27 16 27 15C27 14 27.8 13.2 28.8 13.2C29.8 13.2 30.6 14 30.6 15Z"
+                            fill="currentColor"
+                        />
+                    </svg>Gamify: Select parts of your post.</span
                 >
                 <ButtonSmall
                     tag="button"
@@ -814,7 +678,7 @@
         {/if}
         <div class="w-full">
             {#if showSelectionDropdown && locale !== null && gameType !== null}
-                <RangeOptionsDropdown
+                <GameRangeDropdown
                     id={rangeOptionsDropdownId}
                     anchor={selectionRange}
                     container={readonlyBodyInputNode || null}
@@ -839,7 +703,7 @@
                 />
                 <ClickAwayListener
                     elementId={[bodyInputId, rangeOptionsDropdownId]}
-                    on:clickaway={handleRangeOptionsDropdownClickaway}
+                    on:clickaway={handleGameRangeDropdownClickaway}
                 />
                 <EscapeKeyListener on:keydown={() => clearAllSelections()} />
             {/if}
@@ -853,12 +717,19 @@
                 placeholder={bodyInputPlaceholder}
                 aria-placeholder={bodyInputPlaceholder}
                 tabindex={1}
+                use:selectable={{
+                    disabled:
+                        !gamify ||
+                        gameType === null ||
+                        ![
+                            PostGameType.GuessCase,
+                            PostGameType.GuessGender,
+                            PostGameType.Cloze,
+                        ].includes(gameType),
+                }}
+                on:selection={handleSelection}
+                on:ignoringSelectionChangesUpdated={handleIgnoringSelectionChangesUpdated}
                 on:keyup={handleBodyKeyup}
-                on:mousedown={handleBodyMousedown}
-                on:mouseup={handleBodyMouseup}
-                on:selectstart={handleBodySelectStart}
-                on:selectionchange={handleDocumentSelectionChange}
-                on:contextmenu={handleBodyContextmenu}
                 on:drop|preventDefault
                 on:paste|preventDefault
             >
@@ -907,23 +778,18 @@
                         variant="OUTLINED"
                         on:click={() => (gamify = true)}
                         ><svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                            aria-hidden="true"
+                            width="22"
+                            height="22"
+                            viewBox="0 0 40 40"
                             class="mr-2"
-                            role="img"
-                            width="18"
-                            height="18"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 16 16"
-                            ><g fill="currentColor"
-                                ><path
-                                    d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zM3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"
-                                /><path
-                                    d="M5.5 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm-4-4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0z"
-                                /></g
-                            ></svg
-                        >Gamify</ButtonLarge
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M31.8 11C30.6 9 28.4 8 26 8H14C11.6 8 9.4 9 8.2 11C3.6 18 2.6 28.6 5.8 30.8C9 33 16.2 23.4 20 23.4C23.8 23.4 30.8 33 34.2 30.8C37.4 28.6 36.4 18 31.8 11ZM16 18H14V20H12V18H10V16H12V14H14V16H16V18ZM26.8 19C26.8 20 26 20.8 25 20.8C24 20.8 23.2 20 23.2 19C23.2 18 24 17.2 25 17.2C26 17.2 26.8 18 26.8 19ZM30.6 15C30.6 16 29.8 16.8 28.8 16.8C27.8 16.8 27 16 27 15C27 14 27.8 13.2 28.8 13.2C29.8 13.2 30.6 14 30.6 15Z"
+                                fill="currentColor"
+                            />
+                        </svg>Gamify</ButtonLarge
                     >
                 {/if}
                 <ButtonLarge

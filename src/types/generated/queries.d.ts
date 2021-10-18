@@ -80,6 +80,15 @@ declare module '*/createPost.graphql' {
 }
     
 
+declare module '*/createPostCorrection.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostCorrection: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createPostGame.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

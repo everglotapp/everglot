@@ -4,6 +4,11 @@
 ## Global terms and phrases
 
 -brand-name = Everglot
+-post-game-type = { $type ->
+       *[guess_case] Fall erraten
+        [guess_gender] Geschlecht erraten
+        [cloze] Lückentext
+    }
 
 ## Feed page
 

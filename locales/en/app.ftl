@@ -7,7 +7,7 @@
 -post-game-type = { $type ->
        *[guess_case] Guess the Case
         [guess_gender] Guess the Gender
-        [cloze] Cloze
+        [cloze] Fill in the Gaps
     }
 
 ## Feed page
@@ -21,6 +21,10 @@ index-prompt-instruction-word = Use this word in a sentence.
 index-post-form-record-button = Record
 index-post-form-post-button = Post
 index-post-form-body-input-placeholder = Squeek your mind …
+post-game-create-modal-title = Pick a game
+post-game-create-modal-guess-case = { -post-game-type(type: "guess_case") }
+post-game-create-modal-guess-gender = { -post-game-type(type: "guess_gender") }
+post-game-create-modal-cloze = { -post-game-type(type: "cloze") }
 post-game-guess-case-en-nominative = Subject
 post-game-guess-case-en-genitive = Possessive
 post-game-guess-case-en-dative = Ind. Object
@@ -30,13 +34,15 @@ post-game-cancel = Cancel
 post-game-selection-remove = Remove
 post-game-selection-cancel = Cancel
 post-prompt-note-word = Make a sentence with "{ $word }".
-post-game-note-gane-action = { $gameType ->
+post-game-note-game-action = { $gameType ->
        *[GUESS_CASE] guess the case
         [GUESS_GENDER] guess the gender
-        [CLOZE] a cloze game
+        [CLOZE] fill in the gaps
     }
-post-game-note-own = You have challenged the others to { post-game-note-gane-action }.
-post-game-note-other = { $username } is challenging you to { post-game-note-gane-action }!
+post-game-note-own = You have challenged the others to { post-game-note-game-action }.
+post-game-note-other = { $username } is challenging you to { post-game-note-game-action }!
+post-corrections-note = Select parts of the post to correct it. (Press and hold.)
+post-correction-selection-cancel = Close
 
 ## Chat page
 

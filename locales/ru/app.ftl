@@ -255,7 +255,7 @@ email-unsubscribe-failure-contact-us = Пожалуйста, свяжитесь 
 
 ## Locales
 
-locale-en = Английский язык
+locale-en = Английский
 locale-de = Немецкий
 locale-zh = Китайский
 locale-es = Испанский
@@ -264,5 +264,5 @@ locale-fr = Французский
 locale-ko = Корейский
 locale-ja = Японский
 locale-ru = Русский
-locale-ar = Арабский язык
+locale-ar = Арабский
 locale-pt = Португа́льский

@@ -55,6 +55,12 @@
     function handlePostUnlikeSuccess() {
         refreshPost()
     }
+    function handlePostGameAnswerSuccess() {
+        refreshPost()
+    }
+    function handlePostCorrectSuccess() {
+        refreshPost()
+    }
 </script>
 
 {#if snowflakeId}
@@ -84,11 +90,14 @@
                         recordings={post.recordings}
                         createdAt={post.createdAt}
                         prompt={post.prompt}
+                        corrections={post.corrections}
                         language={post.language}
                         forceShowReplies={true}
                         on:replySuccess={handlePostReplySuccess}
                         on:likeSuccess={handlePostLikeSuccess}
                         on:unlikeSuccess={handlePostUnlikeSuccess}
+                        on:gameAnswerSuccess={handlePostGameAnswerSuccess}
+                        on:correctSuccess={handlePostCorrectSuccess}
                     />
                 </div>
             {/if}

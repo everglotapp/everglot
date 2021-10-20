@@ -121,7 +121,7 @@ export async function post(req: Request, res: Response, next: () => void) {
     }
     // TODO: Check this against actual post body length
     const startIndex = Number(req.body["start"])
-    if (startIndex < 0 || startIndex > MAX_POST_BODY_LENGTH) {
+    if (startIndex < 0 || startIndex >= MAX_POST_BODY_LENGTH) {
         chlog
             .child({ userId, uuid, postUuid, startIndex })
             .debug("Invalid start")
@@ -131,7 +131,7 @@ export async function post(req: Request, res: Response, next: () => void) {
     const endIndex = Number(req.body["end"])
     if (
         endIndex < 0 ||
-        startIndex > MAX_POST_BODY_LENGTH ||
+        endIndex >= MAX_POST_BODY_LENGTH ||
         endIndex < startIndex
     ) {
         chlog

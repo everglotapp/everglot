@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount, createEventDispatcher } from "svelte"
+    import { onMount, createEventDispatcher, onDestroy } from "svelte"
     import { scale } from "svelte/transition"
     import { svelteTime } from "svelte-time"
     import { v4 as uuidv4 } from "uuid"
@@ -85,16 +85,27 @@
     let bodyId: string
     let rangeOptionsDropdownId: string
     let correctionRangeDropdownId: string
+    let scrollHandlerTimeout: number | null = null
     onMount(() => {
         bodyId = uuidv4()
         rangeOptionsDropdownId = uuidv4()
         correctionRangeDropdownId = uuidv4()
+        document.addEventListener("scroll", handleDocumentScroll)
+    })
+
+    onDestroy(() => {
+        document.removeEventListener("scroll", handleDocumentScroll)
+        if (scrollHandlerTimeout) {
+            window.clearTimeout(scrollHandlerTimeout)
+            scrollHandlerTimeout = null
+        }
     })
 
     $: replyNodes = replies.nodes.filter(Boolean).map((node) => node!)
     $: correctionNodes = corrections.nodes.filter(Boolean).map((node) => node!)
-    $: viewedCorrectionNode = viewedCorrection
-        ? correctionNodes.find((node) => node.uuid === viewedCorrection) || null
+    $: viewedCorrectionNode = viewedCorrectionUuid
+        ? correctionNodes.find((node) => node.uuid === viewedCorrectionUuid) ||
+          null
         : null
     $: currentCorrectionNodes =
         viewedCorrectionNode === null
@@ -107,15 +118,13 @@
                       )
                   )
             : correctionNodes.filter(({ startIndex, endIndex }) =>
-                  viewedCorrectionNode === null
-                      ? true
-                      : rangesOverlapAnywhere(
-                            { start: startIndex, end: endIndex },
-                            {
-                                start: viewedCorrectionNode.startIndex,
-                                end: viewedCorrectionNode.endIndex,
-                            }
-                        )
+                  rangesOverlapAnywhere(
+                      { start: startIndex, end: endIndex },
+                      {
+                          start: viewedCorrectionNode!.startIndex,
+                          end: viewedCorrectionNode!.endIndex,
+                      }
+                  )
               )
 
     $: liked =
@@ -550,6 +559,7 @@
         // })
         if (ignoringCorrectionChanges && event.detail.event.button === 0) {
             clearAllSelections()
+            viewedCorrectionUuid = null
         }
     }
     let forceRecalculateDropdownPosition = false
@@ -683,9 +693,9 @@
     $: displayedBodyParts = showCorrections
         ? displayedCorrectionsBodyParts
         : bodyParts
-    let viewedCorrection: string | null = null
+    let viewedCorrectionUuid: string | null = null
     function handleViewCorrection(uuid: string) {
-        viewedCorrection = uuid
+        viewedCorrectionUuid = uuid
         // Highlight picked body part that is being edited.
         const bodyPartNode = document.getElementById(uuid)
         if (bodyPartNode) {
@@ -706,6 +716,16 @@
                 }
             }
         }
+    }
+
+    function handleDocumentScroll() {
+        if (scrollHandlerTimeout) {
+            return
+        }
+        scrollHandlerTimeout = window.setTimeout(() => {
+            forceRecalculateDropdownPosition = true
+            scrollHandlerTimeout = null
+        }, 30)
     }
 </script>
 
@@ -843,6 +863,15 @@
                         (correctionInputFocussed = false)}
                 />
                 <ClickAwayListener
+                    elementId={[
+                        viewedCorrectionUuid,
+                        correctionRangeDropdownId,
+                    ]}
+                    on:clickaway={() => {
+                        viewedCorrectionUuid = null
+                    }}
+                />
+                <ClickAwayListener
                     elementId={[bodyId, correctionRangeDropdownId]}
                     on:clickaway={handleCorrectionRangeDropdownClickaway}
                 />
@@ -894,7 +923,7 @@
                     {:else if bodyPart.type === BodyPartType.Ranges && bodyPart.uuid}
                         {#if showCorrections}<span
                                 id={bodyPart.uuid}
-                                class="bg-primary-lightest border-primary border-b px-1 py-1 cursor-pointer"
+                                class="bg-danger-lightest border-danger border-b px-1 py-1 cursor-pointer"
                                 style="margin-left: 1px; margin-right: 1px;"
                                 on:click={() =>
                                     bodyPart.uuid &&
@@ -905,7 +934,7 @@
                     {:else if bodyPart.type === BodyPartType.Range && bodyPart.uuid}
                         {#if showCorrections}<span
                                 id={bodyPart.uuid}
-                                class="bg-primary-lightest border-primary border-b px-1 py-1 cursor-pointer"
+                                class="bg-danger-lightest border-danger border-b px-1 py-1 cursor-pointer"
                                 style="margin-left: 1px; margin-right: 1px;"
                                 on:click={() =>
                                     bodyPart.uuid &&
@@ -1183,9 +1212,9 @@
                 color="SECONDARY"
             >
                 {#if showCorrections}
-                    <XIcon size="16" /><span
+                    <Edit3Icon size="16" /><span
                         class="text-sm font-bold text-gray-bitdark select-none"
-                        >close</span
+                        >cancel</span
                     >
                 {:else}
                     <Edit3Icon size="18" /><span
@@ -1203,7 +1232,8 @@
                     variant="TEXT"
                     color="SECONDARY"
                     on:click={() => (showReplies = !showReplies)}
-                    ><XIcon size="16" /><span>close</span></ButtonSmall
+                    ><MessageCircleIcon size="16" /><span>close</span
+                    ></ButtonSmall
                 >
             {:else}
                 <ButtonLarge

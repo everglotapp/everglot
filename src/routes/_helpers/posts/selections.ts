@@ -20,14 +20,13 @@ export function getBodyParts(body: string, ranges: PostRange[]): BodyPart[] {
     for (const part of parts) {
         if (part.type === BodyPartType.LineBreak) {
             measuredParts.push(part)
-            i += 1
         } else if (part.type === BodyPartType.Text) {
             let currentParts: BodyPart[] = []
             const value = part.value!
             const start = i
             const end = i + value.length - 1
-            const overlappingRanges = ranges.filter(
-                (range) => range.start >= start && range.end <= end
+            const overlappingRanges = ranges.filter((range) =>
+                rangesOverlapAnywhere(range, { start, end })
             )
             let j = start
             let overlappingRange = overlappingRanges.shift()
@@ -82,25 +81,31 @@ export function getBodyPartsWithOverlaps(
         return [part, { type: BodyPartType.LineBreak }]
     })
     let i = 0
-    let rangeIdx = 0
     const measuredParts: BodyPart[] = []
+    let mergedRanges: number[] = []
     for (const part of parts) {
         if (part.type === BodyPartType.LineBreak) {
             measuredParts.push(part)
-            i += 1
         } else if (part.type === BodyPartType.Text) {
             let currentParts: BodyPart[] = []
             const value = part.value!
             const start = i
             const end = i + value.length - 1
-            const overlappingRanges = ranges.filter(
-                (range) => range.start >= start && range.end <= end
+            const nonMergedRanges = ranges.filter(
+                (_, rIdx) => !mergedRanges.includes(rIdx)
+            )
+            const overlappingRanges = nonMergedRanges.filter((range) =>
+                rangesOverlapAnywhere(range, { start, end })
             )
             let j = start
             let overlappingRange = overlappingRanges.shift()
+            let curMergedRanges: number[] = [] // indexes of merged ranges
 
             while (j <= end) {
                 if (overlappingRange) {
+                    const curRangeIdx = ranges.findIndex(
+                        (r) => r.uuid === overlappingRange!.uuid
+                    )
                     if (j < overlappingRange.start) {
                         currentParts.push({
                             type: BodyPartType.Text,
@@ -108,17 +113,28 @@ export function getBodyPartsWithOverlaps(
                         })
                         j = overlappingRange.start
                     } else {
-                        let range2Idx = rangeIdx + 1
+                        let nextRangeIdx = curRangeIdx + 1
                         while (
-                            allOverlappingRanges[rangeIdx].includes(range2Idx)
+                            allOverlappingRanges[curRangeIdx].includes(
+                                nextRangeIdx
+                            ) ||
+                            curMergedRanges.some((mergedRangeIdx) =>
+                                allOverlappingRanges[mergedRangeIdx].includes(
+                                    nextRangeIdx
+                                )
+                            )
                         ) {
-                            range2Idx += 1
+                            curMergedRanges.push(nextRangeIdx)
+                            nextRangeIdx += 1
                         }
+                        if (curMergedRanges.length) {
+                            curMergedRanges.unshift(curRangeIdx)
+                        }
+                        mergedRanges = [...mergedRanges, ...curMergedRanges]
                         const curRanges: PostRange[] = [
                             overlappingRange,
-                            ...overlappingRanges.splice(
-                                0,
-                                range2Idx - rangeIdx - 1
+                            ...curMergedRanges.map(
+                                (mergedRangeIdx) => ranges[mergedRangeIdx]
                             ),
                         ]
                         if (curRanges.length > 1) {
@@ -138,7 +154,6 @@ export function getBodyPartsWithOverlaps(
                                 // ranges: curRanges,
                             })
                             j = furthestEnd + 1
-                            rangeIdx += curRanges.length
                             overlappingRange = overlappingRanges.shift()
                         } else {
                             currentParts.push({
@@ -150,7 +165,6 @@ export function getBodyPartsWithOverlaps(
                                 ),
                             })
                             j = overlappingRange.end + 1
-                            rangeIdx += 1
                             overlappingRange = overlappingRanges.shift()
                         }
                     }
@@ -203,5 +217,5 @@ export function rangesOverlapAnywhere(
     { start: x, end: y }: Pick<PostRange, "start" | "end">,
     { start: a, end: b }: Pick<PostRange, "start" | "end">
 ): boolean {
-    return (x >= a && x <= b) || (y >= a && y >= b) || (x < a && y > b)
+    return (x >= a && x <= b) || (y >= a && y <= b) || (x < a && y > b)
 }

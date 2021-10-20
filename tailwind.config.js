@@ -60,6 +60,7 @@ module.exports = {
                 },
                 danger: {
                     DEFAULT: "#d23b41",
+                    lightest: "#ffcdcf",
                 },
             },
         },

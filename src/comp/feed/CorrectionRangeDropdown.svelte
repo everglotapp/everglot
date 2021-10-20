@@ -6,6 +6,7 @@
 
 <script lang="ts">
     import { onDestroy, onMount, createEventDispatcher } from "svelte"
+    import { scale } from "svelte/transition"
     import { XIcon, SendIcon } from "svelte-feather-icons"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import { svelteTime } from "svelte-time"
@@ -14,7 +15,6 @@
     import Avatar from "../users/Avatar.svelte"
     import type { PostCorrectionRange } from "../../constants"
     import type { Maybe, PostCorrection } from "../../types/generated/graphql"
-    import { rangesOverlapAnywhere } from "../../routes/_helpers/posts/selections"
 
     export let id: string
     export let locale: string
@@ -77,9 +77,9 @@
     $: top =
         containerBoundingRect !== null && anchorBoundingRect !== null
             ? Math.min(
-                  containerBoundingRect.height,
+                  Math.max(36, containerBoundingRect.height),
                   Math.max(
-                      32,
+                      36,
                       4 + anchorBoundingRect.bottom - containerBoundingRect.top
                   )
               )
@@ -158,7 +158,9 @@
                         {#each corrections as correction (correction.uuid)}
                             {#if correction.user}
                                 <div
-                                    class="flex flex-row py-2 w-full max-w-full"
+                                    class="flex flex-row py-2 w-full max-w-full origin-center"
+                                    in:scale|local={{ duration: 100 }}
+                                    out:scale|local={{ duration: 100 }}
                                 >
                                     <div class="pr-2 sm:pr-3">
                                         {#if linkToCorrectionAuthorProfile}

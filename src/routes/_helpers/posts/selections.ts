@@ -4,6 +4,7 @@ import { BodyPartType } from "../../../constants/posts"
 import type { BodyPart, PostRange } from "../../../constants/posts"
 
 export function getBodyParts(body: string, ranges: PostRange[]): BodyPart[] {
+    ranges = [...ranges].sort((rangeA, rangeB) => rangeA.start - rangeB.start)
     let parts: BodyPart[] = body
         .split("\n")
         .map((text) => ({ type: BodyPartType.Text, value: text }))
@@ -25,9 +26,9 @@ export function getBodyParts(body: string, ranges: PostRange[]): BodyPart[] {
             const value = part.value!
             const start = i
             const end = i + value.length - 1
-            const overlappingRanges = ranges
-                .filter((range) => range.start >= start && range.end <= end)
-                .sort((rangeA, rangeB) => rangeA.start - rangeB.start)
+            const overlappingRanges = ranges.filter(
+                (range) => range.start >= start && range.end <= end
+            )
             let j = start
             let overlappingRange = overlappingRanges.shift()
 
@@ -60,7 +61,7 @@ export function getBodyParts(body: string, ranges: PostRange[]): BodyPart[] {
             i += value.length
         }
     }
-    // console.log({ body, pickedRanges, measuredParts })
+    // console.log({ body, ranges, measuredParts })
     return measuredParts
 }
 
@@ -68,6 +69,7 @@ export function getBodyPartsWithOverlaps(
     body: string,
     ranges: PostRange[]
 ): BodyPart[] {
+    ranges = [...ranges].sort((rangeA, rangeB) => rangeA.start - rangeB.start)
     const allOverlappingRanges = getAllOverlappingRanges(ranges)
     let parts: BodyPart[] = body
         .split("\n")
@@ -91,9 +93,9 @@ export function getBodyPartsWithOverlaps(
             const value = part.value!
             const start = i
             const end = i + value.length - 1
-            const overlappingRanges = ranges
-                .filter((range) => range.start >= start && range.end <= end)
-                .sort((rangeA, rangeB) => rangeA.start - rangeB.start)
+            const overlappingRanges = ranges.filter(
+                (range) => range.start >= start && range.end <= end
+            )
             let j = start
             let overlappingRange = overlappingRanges.shift()
 
@@ -119,24 +121,23 @@ export function getBodyPartsWithOverlaps(
                                 range2Idx - rangeIdx - 1
                             ),
                         ]
-                        console.log({
-                            i,
-                            j,
-                            rangeIdx,
-                            range2Idx,
-                            overlappingRange,
-                            overlappingRanges,
-                            curRanges,
-                        })
                         if (curRanges.length > 1) {
-                            const lastCurRange = curRanges[curRanges.length - 1]
+                            let furthestEnd: number = 0
+                            for (const range of curRanges) {
+                                if (
+                                    furthestEnd === null ||
+                                    range.end > furthestEnd
+                                ) {
+                                    furthestEnd = range.end
+                                }
+                            }
                             currentParts.push({
                                 uuid: uuidv4(),
                                 type: BodyPartType.Ranges,
-                                value: value.substring(j, lastCurRange.end + 1),
-                                ranges: curRanges,
+                                value: value.substring(j, furthestEnd + 1),
+                                // ranges: curRanges,
                             })
-                            j = lastCurRange.end + 1
+                            j = furthestEnd + 1
                             rangeIdx += curRanges.length
                             overlappingRange = overlappingRanges.shift()
                         } else {
@@ -165,7 +166,7 @@ export function getBodyPartsWithOverlaps(
             i += value.length
         }
     }
-    // console.log({ body, pickedRanges, measuredParts })
+    // console.log({ body, ranges, measuredParts })
     return measuredParts
 }
 

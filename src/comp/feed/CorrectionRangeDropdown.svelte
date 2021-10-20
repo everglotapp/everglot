@@ -102,21 +102,14 @@
         : "Your correction …"
 
     function handleCreate() {
+        if (!newBody || !newBody.length) {
+            return
+        }
         dispatch("create", {
             body: newBody,
         })
         newBody = undefined
     }
-
-    $: displayedCorrections =
-        selectionStart !== null && selectionEnd !== null
-            ? corrections.filter(({ startIndex, endIndex }) =>
-                  rangesOverlapAnywhere(
-                      { start: startIndex, end: endIndex },
-                      { start: selectionStart!, end: selectionEnd! }
-                  )
-              )
-            : []
 </script>
 
 {#if top !== null && right !== null}
@@ -157,12 +150,12 @@
                     </div>
                 </div>
                 <hr class="w-full" />
-                {#if displayedCorrections.length}
+                {#if corrections.length}
                     <div
                         class="px-3 overflow-y-scroll overflow-x-hidden relative w-full max-w-full"
                         style="max-height: 20vh;"
                     >
-                        {#each displayedCorrections as correction (correction.uuid)}
+                        {#each corrections as correction (correction.uuid)}
                             {#if correction.user}
                                 <div
                                     class="flex flex-row py-2 w-full max-w-full"

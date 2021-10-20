@@ -54,6 +54,7 @@
     import {
         getBodyParts,
         getBodyPartsWithOverlaps,
+        rangesOverlapAnywhere,
     } from "../../routes/_helpers/posts/selections"
     import { createPostGameAnswer } from "../../routes/_helpers/posts/games"
     import CorrectionRangeDropdown, {
@@ -92,6 +93,30 @@
 
     $: replyNodes = replies.nodes.filter(Boolean).map((node) => node!)
     $: correctionNodes = corrections.nodes.filter(Boolean).map((node) => node!)
+    $: viewedCorrectionNode = viewedCorrection
+        ? correctionNodes.find((node) => node.uuid === viewedCorrection) || null
+        : null
+    $: currentCorrectionNodes =
+        viewedCorrectionNode === null
+            ? correctionStart === null || correctionEnd === null
+                ? []
+                : correctionNodes.filter(({ startIndex, endIndex }) =>
+                      rangesOverlapAnywhere(
+                          { start: startIndex, end: endIndex },
+                          { start: correctionStart!, end: correctionEnd! }
+                      )
+                  )
+            : correctionNodes.filter(({ startIndex, endIndex }) =>
+                  viewedCorrectionNode === null
+                      ? true
+                      : rangesOverlapAnywhere(
+                            { start: startIndex, end: endIndex },
+                            {
+                                start: viewedCorrectionNode.startIndex,
+                                end: viewedCorrectionNode.endIndex,
+                            }
+                        )
+              )
 
     $: liked =
         likes &&
@@ -446,7 +471,7 @@
     }
 
     async function handleCreateCorrection(event: CreatePostCorrectionEvent) {
-        if (!correctionStart || !correctionEnd) {
+        if (correctionStart === null || correctionEnd === null) {
             return
         }
         const res = await createPostCorrection({
@@ -471,20 +496,20 @@
         }
     }
 
-    let correctionSelection: Selection | null = null
+    // let correctionSelection: Selection | null = null
     let correctionText: string | null = null
     let correctionStart: number | null = null
     let correctionEnd: number | null = null
     let correctionRange: Range | null = null
     function handleSelection(event: SelectionEvent) {
-        correctionSelection = event.detail.selection
+        // correctionSelection = event.detail.selection
         correctionStart = event.detail.start
         correctionEnd = event.detail.end
         correctionText = event.detail.text
         correctionRange = event.detail.range
     }
     function clearAllSelections() {
-        correctionSelection = null
+        // correctionSelection = null
         correctionStart = null
         correctionEnd = null
         correctionText = null
@@ -537,22 +562,105 @@
         clearAllSelections()
     }
 
-    $: if (correctionInputFocussed && correctionRange !== null) {
-        // // @ts-ignore
-        // if (document.body.createTextRange) {
+    $: if (
+        correctionInputFocussed &&
+        correctionStart !== null &&
+        correctionEnd !== null
+    ) {
         //     // @ts-ignore
-        //     const range = document.body.createTextRange()
-        //     range.moveToElementText(bodyNode)
-        //     range.select()
-        // } else if (window.getSelection) {
-        //     const s = window.getSelection()
-        //     if (s) {
-        //         const range = document.createRange()
-        //         range.setStart(bodyNode, 0)
-        //         range.setStart(bodyNode, 6)
-        //         s.removeAllRanges()
-        //         s.addRange(range)
-        //     }
+        //     if (document.body.createTextRange) {
+        //         // @ts-ignore
+        //         const range = document.body.createTextRange()
+        //         range.moveToElementText(bodyNode)
+        //         range.select()
+        //     } else if (window.getSelection) {
+        //         const s = window.getSelection()
+        //         if (s) {
+        //             // Mark text that's being corrected
+        //             setTimeout(() => {
+        //                 if (
+        //                     correctionStart === null ||
+        //                     correctionEnd === null
+        //                 ) {
+        //                     return
+        //                 }
+        //                 const range = document.createRange()
+        //                 let i = 0
+        //                 let curNode: ChildNode | null = bodyNode.childNodes[0]
+        //                 let startFound = false
+        //                 while (i <= correctionStart) {
+        //                     if (!curNode || curNode.textContent === null) {
+        //                         console.error(
+        //                             "no start node with text content",
+        //                             {
+        //                                 curNode,
+        //                             }
+        //                         )
+        //                         return
+        //                     }
+        //                     const endOfNode = i + curNode.textContent.length - 1
+        //                     if (correctionStart <= endOfNode) {
+        //                         console.log({
+        //                             start: curNode,
+        //                             i,
+        //                             correctionStart,
+        //                             startIdx: correctionStart - i,
+        //                             correctionRange,
+        //                         })
+        //                         if (!curNode.firstChild) {
+        //                             console.error("invalid first child")
+        //                             return
+        //                         }
+        //                         range.setStart(
+        //                             curNode.firstChild,
+        //                             correctionStart - i
+        //                         )
+        //                         startFound = true
+        //                         break
+        //                     } else {
+        //                         i = endOfNode + 1
+        //                         curNode = curNode.nextSibling
+        //                     }
+        //                 }
+        //                 if (!startFound) {
+        //                     console.error("no start found")
+        //                     return
+        //                 }
+        //                 while (i <= correctionEnd) {
+        //                     if (!curNode || curNode.textContent === null) {
+        //                         console.error("no end node with text content", {
+        //                             curNode,
+        //                         })
+        //                         return
+        //                     }
+        //                     const endOfNode = i + curNode.textContent.length - 1
+        //                     if (correctionEnd <= endOfNode) {
+        //                         console.log({
+        //                             end: curNode,
+        //                             i,
+        //                             correctionEnd,
+        //                             endIdx: correctionEnd - i,
+        //                             correctionRange,
+        //                         })
+        //                         if (!curNode.firstChild) {
+        //                             console.error("invalid first child")
+        //                             return
+        //                         }
+        //                         range.setEnd(
+        //                             curNode.firstChild,
+        //                             correctionEnd - i + 1
+        //                         )
+        //                         break
+        //                     } else {
+        //                         i = endOfNode + 1
+        //                         curNode = curNode.nextSibling
+        //                     }
+        //                 }
+        //                 console.log({ correctionStart, correctionEnd })
+        //                 s.removeAllRanges()
+        //                 s.addRange(range)
+        //             }, 50)
+        //         }
         // }
     }
 
@@ -571,13 +679,10 @@
                   uuid: correction.uuid,
               }))
           )
-        : null
+        : []
     $: displayedBodyParts = showCorrections
         ? displayedCorrectionsBodyParts
         : bodyParts
-    $: if (displayedCorrectionsBodyParts) {
-        console.log(displayedCorrectionsBodyParts)
-    }
     let viewedCorrection: string | null = null
     function handleViewCorrection(uuid: string) {
         viewedCorrection = uuid
@@ -725,7 +830,7 @@
                     selectedText={correctionText}
                     selectionStart={correctionStart}
                     selectionEnd={correctionEnd}
-                    corrections={correctionNodes}
+                    corrections={currentCorrectionNodes}
                     linkToCorrectionAuthorProfile={linkToAuthorProfile}
                     on:create={handleCreateCorrection}
                     on:cancel={() => clearAllSelections()}
@@ -784,13 +889,10 @@
                     <EscapeKeyListener
                         on:keydown={() => (answerRangeUuid = null)}
                     />
-                {/if}
-                {#each displayedBodyParts as bodyPart, i}
-                    {#if bodyPart.type === BodyPartType.LineBreak}
+                {/if}{#each displayedBodyParts as bodyPart, i}{#if bodyPart.type === BodyPartType.LineBreak}
                         <br />
                     {:else if bodyPart.type === BodyPartType.Ranges && bodyPart.uuid}
-                        {#if showCorrections}
-                            <span
+                        {#if showCorrections}<span
                                 id={bodyPart.uuid}
                                 class="bg-primary-lightest border-primary border-b px-1 py-1 cursor-pointer"
                                 style="margin-left: 1px; margin-right: 1px;"
@@ -801,8 +903,7 @@
                             >
                         {/if}
                     {:else if bodyPart.type === BodyPartType.Range && bodyPart.uuid}
-                        {#if showCorrections}
-                            <span
+                        {#if showCorrections}<span
                                 id={bodyPart.uuid}
                                 class="bg-primary-lightest border-primary border-b px-1 py-1 cursor-pointer"
                                 style="margin-left: 1px; margin-right: 1px;"

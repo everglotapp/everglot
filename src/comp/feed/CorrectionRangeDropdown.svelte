@@ -14,6 +14,7 @@
     import Avatar from "../users/Avatar.svelte"
     import type { PostCorrectionRange } from "../../constants"
     import type { Maybe, PostCorrection } from "../../types/generated/graphql"
+    import { rangesOverlapAnywhere } from "../../routes/_helpers/posts/selections"
 
     export let id: string
     export let locale: string
@@ -25,6 +26,8 @@
     export let forceRecalculatePosition: boolean = false
     export let editedRange: PostCorrectionRange | null
     export let selectedText: string | null
+    export let selectionStart: number | null
+    export let selectionEnd: number | null
     export let corrections: (Pick<
         PostCorrection,
         "uuid" | "body" | "endIndex" | "startIndex"
@@ -99,6 +102,9 @@
         : "Your correction …"
 
     function handleCreate() {
+        if (!newBody || !newBody.length) {
+            return
+        }
         dispatch("create", {
             body: newBody,
         })
@@ -127,6 +133,8 @@
                         bind:textContent={newBody}
                         {placeholder}
                         aria-placeholder={placeholder}
+                        on:focus={() => dispatch("correctionInputFocus")}
+                        on:blur={() => dispatch("correctionInputBlur")}
                         class="border border-gray-bitlight rounded-lg py-1 pl-2 pr-12 w-full"
                     />
                     <div

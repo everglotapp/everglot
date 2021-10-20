@@ -14,6 +14,7 @@ import { enqueueFcmNotification } from "../../../../server/notifications/fcm"
 import { NotificationParamsVersion } from "../../../../server/notifications/params"
 import { userHasCompletedProfile } from "../../../../server/users"
 import { FcmMessageParamsDataTypeV1 } from "../../../../server/notifications/params/v1"
+import { MAX_POST_BODY_LENGTH } from "../../../../server/constants"
 
 const NOTIFICATION_EXPIRY_SECONDS = 60 * 60
 /**
@@ -79,6 +80,11 @@ async function notifyAuthor(
     )
 }
 
+const MAX_CORRECTION_BODY_LENGTH = 128
+function sanitizeBody(body: string) {
+    return body.trim().substr(0, MAX_POST_BODY_LENGTH)
+}
+
 export async function post(req: Request, res: Response, next: () => void) {
     const { user_id: userId } = req.session
     if (!userId) {
@@ -91,7 +97,7 @@ export async function post(req: Request, res: Response, next: () => void) {
     }
     const postUuid = req.params["uuid"]
     if (!uuidValidate(postUuid)) {
-        chlog.child({ userId, postUuid }).debug("Invalid UUID")
+        chlog.child({ userId, postUuid }).debug("Invalid post UUID")
         next()
         return
     }
@@ -103,14 +109,42 @@ export async function post(req: Request, res: Response, next: () => void) {
     }
     // TODO: Validate these inputs
     const body = req.body["body"]
+    if (!body || typeof body !== "string") {
+        unprocessableEntity(res, "Invalid body")
+        return
+    }
     const uuid = req.body["uuid"]
+    if (!uuidValidate(uuid)) {
+        chlog.child({ userId, uuid, postUuid }).debug("Invalid UUID")
+        unprocessableEntity(res, "Invalid UUID")
+        return
+    }
+    // TODO: Check this against actual post body length
     const startIndex = Number(req.body["start"])
+    if (startIndex < 0 || startIndex >= MAX_POST_BODY_LENGTH) {
+        chlog
+            .child({ userId, uuid, postUuid, startIndex })
+            .debug("Invalid start")
+        unprocessableEntity(res, "Start index out of bounds")
+        return
+    }
     const endIndex = Number(req.body["end"])
+    if (
+        endIndex < 0 ||
+        endIndex >= MAX_POST_BODY_LENGTH ||
+        endIndex < startIndex
+    ) {
+        chlog
+            .child({ userId, uuid, postUuid, startIndex, endIndex })
+            .debug("Invalid end")
+        unprocessableEntity(res, "End index out of bounds")
+        return
+    }
     const correction = await createPostCorrection({
         postId,
         userId,
         uuid,
-        body,
+        body: sanitizeBody(body),
         startIndex,
         endIndex,
     })

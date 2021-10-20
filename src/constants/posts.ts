@@ -72,11 +72,14 @@ export const GUESS_GENDER_OPTIONS: Record<
     },
 } as const
 export type GuessGenderOption = typeof GUESS_GENDER_OPTIONS[GuessGenderLocale]
-export interface PostGameRange {
+
+export interface PostRange {
     uuid: string
     start: number
     end: number
 }
+
+export interface PostGameRange extends PostRange {}
 
 export interface GuessGenderRange extends PostGameRange {
     option: keyof GuessGenderOption
@@ -86,16 +89,13 @@ export interface GuessCaseRange extends PostGameRange {
     option: keyof GuessCaseOption
 }
 
-export interface PostCorrectionRange {
-    uuid: string
-    start: number
-    end: number
-}
+export interface PostCorrectionRange extends PostRange {}
 
 export const enum BodyPartType {
     Text = "TEXT",
     LineBreak = "LINEBREAK",
     Range = "RANGE",
+    Ranges = "RANGES",
 }
 export type BodyPart = {
     uuid?: string

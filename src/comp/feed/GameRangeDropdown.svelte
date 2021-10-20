@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onDestroy, onMount, createEventDispatcher } from "svelte"
+    import { onMount, createEventDispatcher } from "svelte"
     import { XIcon, TrashIcon } from "svelte-feather-icons"
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
@@ -30,11 +30,6 @@
 
     onMount(() => {
         recalculateBoundingRects()
-        window.addEventListener("resize", handleWindowResize)
-    })
-
-    onDestroy(() => {
-        window.removeEventListener("resize", handleWindowResize)
     })
 
     $: anchorBoundingRect = anchor?.getBoundingClientRect() || null
@@ -90,7 +85,20 @@
                   )
               )
             : null
+
+    let scrollHandlerTimeout: number | null = null
+    function handleWindowScroll() {
+        if (scrollHandlerTimeout !== null) {
+            return
+        }
+        scrollHandlerTimeout = window.setTimeout(() => {
+            dirtyPosition = true
+            scrollHandlerTimeout = null
+        }, 30)
+    }
 </script>
+
+<svelte:window on:resize={handleWindowResize} on:scroll={handleWindowScroll} />
 
 {#if top !== null && right !== null}
     <div {id} class="relative w-full">

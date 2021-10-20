@@ -6,7 +6,6 @@
     import {
         HeartIcon,
         MessageCircleIcon,
-        XIcon,
         SendIcon,
         ZapIcon,
         EyeOffIcon,
@@ -85,16 +84,13 @@
     let bodyId: string
     let rangeOptionsDropdownId: string
     let correctionRangeDropdownId: string
-    let scrollHandlerTimeout: number | null = null
     onMount(() => {
         bodyId = uuidv4()
         rangeOptionsDropdownId = uuidv4()
         correctionRangeDropdownId = uuidv4()
-        document.addEventListener("scroll", handleDocumentScroll)
     })
 
     onDestroy(() => {
-        document.removeEventListener("scroll", handleDocumentScroll)
         if (scrollHandlerTimeout) {
             window.clearTimeout(scrollHandlerTimeout)
             scrollHandlerTimeout = null
@@ -716,16 +712,6 @@
                 }
             }
         }
-    }
-
-    function handleDocumentScroll() {
-        if (scrollHandlerTimeout) {
-            return
-        }
-        scrollHandlerTimeout = window.setTimeout(() => {
-            forceRecalculateDropdownPosition = true
-            scrollHandlerTimeout = null
-        }, 30)
     }
 </script>
 

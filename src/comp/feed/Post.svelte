@@ -51,7 +51,10 @@
         SupportedLocale,
     } from "../../constants"
     import { USER_UPLOADED_RECORDINGS_BASE_PATH } from "../../constants"
-    import { getBodyParts } from "../../routes/_helpers/posts/selections"
+    import {
+        getBodyParts,
+        getBodyPartsWithOverlaps,
+    } from "../../routes/_helpers/posts/selections"
     import { createPostGameAnswer } from "../../routes/_helpers/posts/games"
     import CorrectionRangeDropdown, {
         CreatePostCorrectionEvent,
@@ -277,12 +280,33 @@
     let answerRanges: Record<string, PostGameRange | null> = {}
     function handleAnswerRange(uuid: string) {
         answerRangeUuid = uuid
+        // Highlight picked body part that is being edited.
+        const bodyPartNode = document.getElementById(uuid)
+        if (bodyPartNode) {
+            clearAllSelections()
+            // @ts-ignore
+            if (document.body.createTextRange) {
+                // @ts-ignore
+                const range = document.body.createTextRange()
+                range.moveToElementText(bodyPartNode)
+                range.select()
+            } else if (window.getSelection) {
+                const s = window.getSelection()
+                if (s) {
+                    const range = document.createRange()
+                    range.selectNodeContents(bodyPartNode)
+                    s.removeAllRanges()
+                    s.addRange(range)
+                }
+            }
+        }
     }
     function handlePickAnswer(range: PostGameRange) {
         if (answerRangeUuid === null) {
             return
         }
         answerRanges[answerRangeUuid] = range
+        clearAllSelections()
     }
     function handleRemoveAnswer() {
         if (answerRangeUuid === null) {
@@ -290,6 +314,7 @@
         }
         delete answerRanges[answerRangeUuid]
         answerRanges = answerRanges
+        clearAllSelections()
     }
     $: answerRangeElement =
         answerRangeUuid === null
@@ -446,17 +471,20 @@
         }
     }
 
+    let correctionSelection: Selection | null = null
     let correctionText: string | null = null
     let correctionStart: number | null = null
     let correctionEnd: number | null = null
     let correctionRange: Range | null = null
     function handleSelection(event: SelectionEvent) {
+        correctionSelection = event.detail.selection
         correctionStart = event.detail.start
         correctionEnd = event.detail.end
         correctionText = event.detail.text
         correctionRange = event.detail.range
     }
     function clearAllSelections() {
+        correctionSelection = null
         correctionStart = null
         correctionEnd = null
         correctionText = null
@@ -507,6 +535,72 @@
     $: {
         showCorrections
         clearAllSelections()
+    }
+
+    $: if (correctionInputFocussed && correctionRange !== null) {
+        // // @ts-ignore
+        // if (document.body.createTextRange) {
+        //     // @ts-ignore
+        //     const range = document.body.createTextRange()
+        //     range.moveToElementText(bodyNode)
+        //     range.select()
+        // } else if (window.getSelection) {
+        //     const s = window.getSelection()
+        //     if (s) {
+        //         const range = document.createRange()
+        //         range.setStart(bodyNode, 0)
+        //         range.setStart(bodyNode, 6)
+        //         s.removeAllRanges()
+        //         s.addRange(range)
+        //     }
+        // }
+    }
+
+    let correctionInputFocussed = false
+
+    $: displayedCorrectionsBodyParts = showCorrections
+        ? getBodyPartsWithOverlaps(
+              body,
+              (
+                  corrections.nodes.filter(Boolean) as NonNullable<
+                      typeof corrections.nodes[0]
+                  >[]
+              ).map((correction) => ({
+                  start: correction.startIndex,
+                  end: correction.endIndex,
+                  uuid: correction.uuid,
+              }))
+          )
+        : null
+    $: displayedBodyParts = showCorrections
+        ? displayedCorrectionsBodyParts
+        : bodyParts
+    $: if (displayedCorrectionsBodyParts) {
+        console.log(displayedCorrectionsBodyParts)
+    }
+    let viewedCorrection: string | null = null
+    function handleViewCorrection(uuid: string) {
+        viewedCorrection = uuid
+        // Highlight picked body part that is being edited.
+        const bodyPartNode = document.getElementById(uuid)
+        if (bodyPartNode) {
+            clearAllSelections()
+            // @ts-ignore
+            if (document.body.createTextRange) {
+                // @ts-ignore
+                const range = document.body.createTextRange()
+                range.moveToElementText(bodyPartNode)
+                range.select()
+            } else if (window.getSelection) {
+                const s = window.getSelection()
+                if (s) {
+                    const range = document.createRange()
+                    range.selectNodeContents(bodyPartNode)
+                    s.removeAllRanges()
+                    s.addRange(range)
+                }
+            }
+        }
     }
 </script>
 
@@ -629,6 +723,8 @@
                     locale={language.alpha2}
                     editedRange={null}
                     selectedText={correctionText}
+                    selectionStart={correctionStart}
+                    selectionEnd={correctionEnd}
                     corrections={correctionNodes}
                     linkToCorrectionAuthorProfile={linkToAuthorProfile}
                     on:create={handleCreateCorrection}
@@ -636,6 +732,10 @@
                     forceRecalculatePosition={forceRecalculateDropdownPosition}
                     on:positionRecalculated={() =>
                         (forceRecalculateDropdownPosition = false)}
+                    on:correctionInputFocus={() =>
+                        (correctionInputFocussed = true)}
+                    on:correctionInputBlur={() =>
+                        (correctionInputFocussed = false)}
                 />
                 <ClickAwayListener
                     elementId={[bodyId, correctionRangeDropdownId]}
@@ -685,12 +785,32 @@
                         on:keydown={() => (answerRangeUuid = null)}
                     />
                 {/if}
-                {#each bodyParts as bodyPart, i}
+                {#each displayedBodyParts as bodyPart, i}
                     {#if bodyPart.type === BodyPartType.LineBreak}
                         <br />
+                    {:else if bodyPart.type === BodyPartType.Ranges && bodyPart.uuid}
+                        {#if showCorrections}
+                            <span
+                                id={bodyPart.uuid}
+                                class="bg-primary-lightest border-primary border-b px-1 py-1 cursor-pointer"
+                                style="margin-left: 1px; margin-right: 1px;"
+                                on:click={() =>
+                                    bodyPart.uuid &&
+                                    handleViewCorrection(bodyPart.uuid)}
+                                >{bodyPart.value}</span
+                            >
+                        {/if}
                     {:else if bodyPart.type === BodyPartType.Range && bodyPart.uuid}
                         {#if showCorrections}
-                            <span>{bodyPart.value}</span>
+                            <span
+                                id={bodyPart.uuid}
+                                class="bg-primary-lightest border-primary border-b px-1 py-1 cursor-pointer"
+                                style="margin-left: 1px; margin-right: 1px;"
+                                on:click={() =>
+                                    bodyPart.uuid &&
+                                    handleViewCorrection(bodyPart.uuid)}
+                                >{bodyPart.value}</span
+                            >
                         {:else if game && (game.gameType === PostGameType.GuessCase || game.gameType === PostGameType.GuessGender)}
                             {#if currentUserCanAnswer}
                                 <span
@@ -953,25 +1073,27 @@
         </div>
     </div>
     <div class="flex flex-row pt-1 justify-end items-center">
-        <ButtonLarge
-            className="correct-button flex items-center justify-center cursor-pointer rounded-lg bg-gray-lightest ml-0 mr-1"
-            on:click={() => handleToggleCorrections()}
-            tag="button"
-            variant="OUTLINED"
-            color="SECONDARY"
-        >
-            {#if showCorrections}
-                <XIcon size="16" /><span
-                    class="text-sm font-bold text-gray-bitdark select-none"
-                    >close</span
-                >
-            {:else}
-                <Edit3Icon size="18" /><span
-                    class="text-sm font-bold text-gray-bitdark select-none"
-                    >corrections</span
-                >
-            {/if}
-        </ButtonLarge>
+        {#if !game || game.gameType !== PostGameType.Cloze || !currentUserCanAnswer}
+            <ButtonLarge
+                className="correct-button flex items-center justify-center cursor-pointer rounded-lg bg-gray-lightest ml-0 mr-1"
+                on:click={() => handleToggleCorrections()}
+                tag="button"
+                variant="OUTLINED"
+                color="SECONDARY"
+            >
+                {#if showCorrections}
+                    <XIcon size="16" /><span
+                        class="text-sm font-bold text-gray-bitdark select-none"
+                        >close</span
+                    >
+                {:else}
+                    <Edit3Icon size="18" /><span
+                        class="text-sm font-bold text-gray-bitdark select-none"
+                        >corrections</span
+                    >
+                {/if}
+            </ButtonLarge>
+        {/if}
         {#if !forceShowReplies}
             {#if showReplies}
                 <ButtonSmall

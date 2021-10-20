@@ -14,6 +14,7 @@
     import Avatar from "../users/Avatar.svelte"
     import type { PostCorrectionRange } from "../../constants"
     import type { Maybe, PostCorrection } from "../../types/generated/graphql"
+    import { rangesOverlapAnywhere } from "../../routes/_helpers/posts/selections"
 
     export let id: string
     export let locale: string
@@ -25,6 +26,8 @@
     export let forceRecalculatePosition: boolean = false
     export let editedRange: PostCorrectionRange | null
     export let selectedText: string | null
+    export let selectionStart: number | null
+    export let selectionEnd: number | null
     export let corrections: (Pick<
         PostCorrection,
         "uuid" | "body" | "endIndex" | "startIndex"
@@ -104,6 +107,16 @@
         })
         newBody = undefined
     }
+
+    $: displayedCorrections =
+        selectionStart !== null && selectionEnd !== null
+            ? corrections.filter(({ startIndex, endIndex }) =>
+                  rangesOverlapAnywhere(
+                      { start: startIndex, end: endIndex },
+                      { start: selectionStart!, end: selectionEnd! }
+                  )
+              )
+            : []
 </script>
 
 {#if top !== null && right !== null}
@@ -127,6 +140,8 @@
                         bind:textContent={newBody}
                         {placeholder}
                         aria-placeholder={placeholder}
+                        on:focus={() => dispatch("correctionInputFocus")}
+                        on:blur={() => dispatch("correctionInputBlur")}
                         class="border border-gray-bitlight rounded-lg py-1 pl-2 pr-12 w-full"
                     />
                     <div
@@ -142,12 +157,12 @@
                     </div>
                 </div>
                 <hr class="w-full" />
-                {#if corrections.length}
+                {#if displayedCorrections.length}
                     <div
                         class="px-3 overflow-y-scroll overflow-x-hidden relative w-full max-w-full"
                         style="max-height: 20vh;"
                     >
-                        {#each corrections as correction (correction.uuid)}
+                        {#each displayedCorrections as correction (correction.uuid)}
                             {#if correction.user}
                                 <div
                                     class="flex flex-row py-2 w-full max-w-full"

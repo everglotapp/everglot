@@ -38,8 +38,7 @@ import {
     GrammaticalGender,
     PostGameType,
 } from "../../types/generated/graphql"
-
-const MAX_BODY_LENGTH = 2048
+import { MAX_POST_BODY_LENGTH } from "../../server/constants"
 
 const REPLY_NOTIFICATION_EXPIRY_SECONDS = 60 * 60
 
@@ -97,7 +96,7 @@ export async function notifyOriginalAuthorAfterReply(
 }
 
 function sanitizeBody(body: string) {
-    return body.trim().substr(0, MAX_BODY_LENGTH)
+    return body.trim().substr(0, MAX_POST_BODY_LENGTH)
 }
 
 export async function post(req: Request, res: Response, _next: () => void) {

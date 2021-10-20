@@ -40,3 +40,5 @@ export const RTC_TOKEN_VALID_SECONDS = 24 * 60 * 60 // 24 hours
 
 export const BCRYPT_WORK_FACTOR = 14
 export const RESET_PASSWORD_TOKEN_VALID_SECONDS = 60 * 60 // 1 hour
+
+export const MAX_POST_BODY_LENGTH = 2048

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount, createEventDispatcher, onDestroy } from "svelte"
+    import { onMount, createEventDispatcher } from "svelte"
     import { scale } from "svelte/transition"
     import { svelteTime } from "svelte-time"
     import { v4 as uuidv4 } from "uuid"
@@ -88,13 +88,6 @@
         bodyId = uuidv4()
         rangeOptionsDropdownId = uuidv4()
         correctionRangeDropdownId = uuidv4()
-    })
-
-    onDestroy(() => {
-        if (scrollHandlerTimeout) {
-            window.clearTimeout(scrollHandlerTimeout)
-            scrollHandlerTimeout = null
-        }
     })
 
     $: replyNodes = replies.nodes.filter(Boolean).map((node) => node!)

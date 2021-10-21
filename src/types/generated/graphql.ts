@@ -15910,6 +15910,8 @@ export type Query = Node & {
   englishWouldYouRatherQuestionByUuid?: Maybe<EnglishWouldYouRatherQuestion>;
   /** Reads and enables pagination through a set of `EnglishWouldYouRatherQuestion`. */
   englishWouldYouRatherQuestions?: Maybe<EnglishWouldYouRatherQuestionsConnection>;
+  /** Reads and enables pagination through a set of `Post`. */
+  feedPosts?: Maybe<PostsConnection>;
   frenchRandomQuestion?: Maybe<FrenchRandomQuestion>;
   /** Reads a single `FrenchRandomQuestion` using its globally unique `ID`. */
   frenchRandomQuestionByNodeId?: Maybe<FrenchRandomQuestion>;
@@ -16382,6 +16384,18 @@ export type QueryEnglishWouldYouRatherQuestionsArgs = {
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryFeedPostsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  filter?: Maybe<PostFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  locale?: Maybe<Scalars['String']>;
+  offset?: Maybe<Scalars['Int']>;
 };
 
 
@@ -25737,7 +25751,7 @@ export type ChatUserQueryVariables = Exact<{
 }>;
 
 
-export type ChatUserQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', id: number, username?: Maybe<string>, uuid: any, avatarUrl?: Maybe<string> }> };
+export type ChatUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: number, username?: string | null | undefined, uuid: any, avatarUrl?: string | null | undefined } | null | undefined };
 
 export type CreateMessageMutationVariables = Exact<{
   parentMessageId?: Maybe<Scalars['Int']>;
@@ -25749,7 +25763,7 @@ export type CreateMessageMutationVariables = Exact<{
 }>;
 
 
-export type CreateMessageMutation = { __typename?: 'Mutation', createMessage?: Maybe<{ __typename?: 'CreateMessagePayload', sender?: Maybe<{ __typename?: 'User', uuid: any }>, message?: Maybe<{ __typename?: 'Message', id: number, uuid: any, createdAt: any }> }> };
+export type CreateMessageMutation = { __typename?: 'Mutation', createMessage?: { __typename?: 'CreateMessagePayload', sender?: { __typename?: 'User', uuid: any } | null | undefined, message?: { __typename?: 'Message', id: number, uuid: any, createdAt: any } | null | undefined } | null | undefined };
 
 export type CreateMessagePreviewMutationVariables = Exact<{
   messageId: Scalars['Int'];
@@ -25759,14 +25773,14 @@ export type CreateMessagePreviewMutationVariables = Exact<{
 }>;
 
 
-export type CreateMessagePreviewMutation = { __typename?: 'Mutation', createMessagePreview?: Maybe<{ __typename?: 'CreateMessagePreviewPayload', messagePreview?: Maybe<{ __typename?: 'MessagePreview', id: number }> }> };
+export type CreateMessagePreviewMutation = { __typename?: 'Mutation', createMessagePreview?: { __typename?: 'CreateMessagePreviewPayload', messagePreview?: { __typename?: 'MessagePreview', id: number } | null | undefined } | null | undefined };
 
 export type GroupChatQueryVariables = Exact<{
   groupUuid: Scalars['UUID'];
 }>;
 
 
-export type GroupChatQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', groupName?: Maybe<string>, uuid: any, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string>, nodeId: string }>, usersByGroupUserGroupIdAndUserId: { __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection', nodes: Array<Maybe<{ __typename?: 'User', bio: string, avatarUrl?: Maybe<string>, uuid: any, username?: Maybe<string>, lastActiveAt: any, userLanguages: { __typename?: 'UserLanguagesConnection', nodes: Array<Maybe<{ __typename?: 'UserLanguage', nodeId: string, language?: Maybe<{ __typename?: 'Language', englishName: string }> }>> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', userType: UserType, nodeId: string, group?: Maybe<{ __typename?: 'Group', uuid: any, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }> }>> } }>> } }> };
+export type GroupChatQuery = { __typename?: 'Query', groupByUuid?: { __typename?: 'Group', groupName?: string | null | undefined, uuid: any, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined, nodeId: string } | null | undefined, usersByGroupUserGroupIdAndUserId: { __typename?: 'GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection', nodes: Array<{ __typename?: 'User', bio: string, avatarUrl?: string | null | undefined, uuid: any, username?: string | null | undefined, lastActiveAt: any, userLanguages: { __typename?: 'UserLanguagesConnection', nodes: Array<{ __typename?: 'UserLanguage', nodeId: string, language?: { __typename?: 'Language', englishName: string } | null | undefined } | null | undefined> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<{ __typename?: 'GroupUser', userType: UserType, nodeId: string, group?: { __typename?: 'Group', uuid: any, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined> } } | null | undefined> } } | null | undefined };
 
 export type GroupChatMessagesQueryVariables = Exact<{
   groupUuid: Scalars['UUID'];
@@ -25774,24 +25788,19 @@ export type GroupChatMessagesQueryVariables = Exact<{
 }>;
 
 
-export type GroupChatMessagesQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', messagesByRecipientGroupId: { __typename?: 'MessagesConnection', edges: Array<{ __typename?: 'MessagesEdge', node?: Maybe<{ __typename?: 'Message', body: string, createdAt: any, uuid: any, sender?: Maybe<{ __typename?: 'User', uuid: any }>, messagePreviews: { __typename?: 'MessagePreviewsConnection', nodes: Array<Maybe<{ __typename?: 'MessagePreview', uuid: any, filename: string, extension?: Maybe<string> }>> } }> }>, pageInfo: { __typename?: 'PageInfo', startCursor?: Maybe<any>, hasPreviousPage: boolean } } }> };
+export type GroupChatMessagesQuery = { __typename?: 'Query', groupByUuid?: { __typename?: 'Group', messagesByRecipientGroupId: { __typename?: 'MessagesConnection', edges: Array<{ __typename?: 'MessagesEdge', node?: { __typename?: 'Message', body: string, createdAt: any, uuid: any, sender?: { __typename?: 'User', uuid: any } | null | undefined, messagePreviews: { __typename?: 'MessagePreviewsConnection', nodes: Array<{ __typename?: 'MessagePreview', uuid: any, filename: string, extension?: string | null | undefined } | null | undefined> } } | null | undefined }>, pageInfo: { __typename?: 'PageInfo', startCursor?: any | null | undefined, hasPreviousPage: boolean } } } | null | undefined };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: Maybe<{ __typename?: 'User', bio: string, email: string, gender?: Maybe<string>, username?: Maybe<string>, uuid: any, avatarUrl?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number }, languageByLocale?: Maybe<{ __typename?: 'Language', alpha2: string }>, inviteTokens: { __typename?: 'InviteTokensConnection', nodes: Array<Maybe<{ __typename?: 'InviteToken', inviteToken: string }>> }, preference?: Maybe<{ __typename?: 'UserPreference', feedLanguage?: Maybe<{ __typename?: 'Language', alpha2: string }> }> }> };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', bio: string, email: string, gender?: string | null | undefined, username?: string | null | undefined, uuid: any, avatarUrl?: string | null | undefined, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number }, languageByLocale?: { __typename?: 'Language', alpha2: string } | null | undefined, inviteTokens: { __typename?: 'InviteTokensConnection', nodes: Array<{ __typename?: 'InviteToken', inviteToken: string } | null | undefined> }, preference?: { __typename?: 'UserPreference', feedLanguage?: { __typename?: 'Language', alpha2: string } | null | undefined } | null | undefined } | null | undefined };
 
 export type RegisterUserActivityMutationVariables = Exact<{
   userId: Scalars['Int'];
 }>;
 
 
-export type RegisterUserActivityMutation = { __typename?: 'Mutation', registerUserActivity?: Maybe<{ __typename?: 'RegisterUserActivityPayload', datetime?: Maybe<any> }> };
-
-export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type AllPostsQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }>, games: { __typename?: 'PostGamesConnection', nodes: Array<Maybe<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: Maybe<boolean>, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: Maybe<{ __typename?: 'PostGameAnswer', id: number }> }> } }>> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameAnswer', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, correct?: Maybe<boolean>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }> }>> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<Maybe<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, rangeUuid?: Maybe<any> }>> } }>> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<Maybe<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }> }>> } }>> }> };
+export type RegisterUserActivityMutation = { __typename?: 'Mutation', registerUserActivity?: { __typename?: 'RegisterUserActivityPayload', datetime?: any | null | undefined } | null | undefined };
 
 export type CreatePostMutationVariables = Exact<{
   authorId: Scalars['Int'];
@@ -25802,7 +25811,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost?: Maybe<{ __typename?: 'CreatePostPayload', clientMutationId?: Maybe<string>, post?: Maybe<{ __typename?: 'Post', body: string, createdAt: any, id: number, uuid: any, nodeId: string }> }> };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'CreatePostPayload', clientMutationId?: string | null | undefined, post?: { __typename?: 'Post', body: string, createdAt: any, id: number, uuid: any, nodeId: string } | null | undefined } | null | undefined };
 
 export type CreatePostCorrectionMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -25814,7 +25823,7 @@ export type CreatePostCorrectionMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostCorrectionMutation = { __typename?: 'Mutation', createPostCorrection?: Maybe<{ __typename?: 'CreatePostCorrectionPayload', postCorrection?: Maybe<{ __typename?: 'PostCorrection', id: number, postId: number, userId: number, nodeId: string, createdAt: any, endIndex: number, startIndex: number, uuid: any, body: string }> }> };
+export type CreatePostCorrectionMutation = { __typename?: 'Mutation', createPostCorrection?: { __typename?: 'CreatePostCorrectionPayload', postCorrection?: { __typename?: 'PostCorrection', id: number, postId: number, userId: number, nodeId: string, createdAt: any, endIndex: number, startIndex: number, uuid: any, body: string } | null | undefined } | null | undefined };
 
 export type CreatePostGameMutationVariables = Exact<{
   postId: Scalars['Int'];
@@ -25822,7 +25831,7 @@ export type CreatePostGameMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostGameMutation = { __typename?: 'Mutation', createPostGame?: Maybe<{ __typename?: 'CreatePostGamePayload', postGame?: Maybe<{ __typename?: 'PostGame', id: number, postId: number, nodeId: string, createdAt: any }> }> };
+export type CreatePostGameMutation = { __typename?: 'Mutation', createPostGame?: { __typename?: 'CreatePostGamePayload', postGame?: { __typename?: 'PostGame', id: number, postId: number, nodeId: string, createdAt: any } | null | undefined } | null | undefined };
 
 export type CreatePostGameAnswerMutationVariables = Exact<{
   genderOption?: Maybe<GrammaticalGender>;
@@ -25835,7 +25844,7 @@ export type CreatePostGameAnswerMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostGameAnswerMutation = { __typename?: 'Mutation', createPostGameAnswer?: Maybe<{ __typename?: 'CreatePostGameAnswerPayload', postGameAnswer?: Maybe<{ __typename?: 'PostGameAnswer', id: number, nodeId: string, createdAt: any, caseOption?: Maybe<GrammaticalCase>, uuid: any, correct?: Maybe<boolean>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }>, game?: Maybe<{ __typename?: 'PostGame', uuid: any }> }> }> };
+export type CreatePostGameAnswerMutation = { __typename?: 'Mutation', createPostGameAnswer?: { __typename?: 'CreatePostGameAnswerPayload', postGameAnswer?: { __typename?: 'PostGameAnswer', id: number, nodeId: string, createdAt: any, caseOption?: GrammaticalCase | null | undefined, uuid: any, correct?: boolean | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, range?: { __typename?: 'PostGameRange', uuid: any } | null | undefined, game?: { __typename?: 'PostGame', uuid: any } | null | undefined } | null | undefined } | null | undefined };
 
 export type CreatePostGameRangeMutationVariables = Exact<{
   gameId: Scalars['Int'];
@@ -25847,7 +25856,7 @@ export type CreatePostGameRangeMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostGameRangeMutation = { __typename?: 'Mutation', createPostGameRange?: Maybe<{ __typename?: 'CreatePostGameRangePayload', postGameRange?: Maybe<{ __typename?: 'PostGameRange', id: number, gameId: number, nodeId: string, createdAt: any, caseOption?: Maybe<GrammaticalCase>, endIndex: number, startIndex: number, uuid: any }> }> };
+export type CreatePostGameRangeMutation = { __typename?: 'Mutation', createPostGameRange?: { __typename?: 'CreatePostGameRangePayload', postGameRange?: { __typename?: 'PostGameRange', id: number, gameId: number, nodeId: string, createdAt: any, caseOption?: GrammaticalCase | null | undefined, endIndex: number, startIndex: number, uuid: any } | null | undefined } | null | undefined };
 
 export type CreatePostLikeMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -25855,7 +25864,7 @@ export type CreatePostLikeMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostLikeMutation = { __typename?: 'Mutation', createPostLike?: Maybe<{ __typename?: 'CreatePostLikePayload', postLike?: Maybe<{ __typename?: 'PostLike', id: number, postId: number, userId: number, nodeId: string, createdAt: any }> }> };
+export type CreatePostLikeMutation = { __typename?: 'Mutation', createPostLike?: { __typename?: 'CreatePostLikePayload', postLike?: { __typename?: 'PostLike', id: number, postId: number, userId: number, nodeId: string, createdAt: any } | null | undefined } | null | undefined };
 
 export type CreatePostRecordingMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -25865,42 +25874,50 @@ export type CreatePostRecordingMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostRecordingMutation = { __typename?: 'Mutation', createPostRecording?: Maybe<{ __typename?: 'CreatePostRecordingPayload', postRecording?: Maybe<{ __typename?: 'PostRecording', createdAt: any, extension?: Maybe<string>, filename: string, uuid: any, nodeId: string }> }> };
+export type CreatePostRecordingMutation = { __typename?: 'Mutation', createPostRecording?: { __typename?: 'CreatePostRecordingPayload', postRecording?: { __typename?: 'PostRecording', createdAt: any, extension?: string | null | undefined, filename: string, uuid: any, nodeId: string } | null | undefined } | null | undefined };
 
 export type CurrentUserHasAnsweredOrRevealedPostGameQueryVariables = Exact<{
   gameId: Scalars['Int'];
 }>;
 
 
-export type CurrentUserHasAnsweredOrRevealedPostGameQuery = { __typename?: 'Query', postGame?: Maybe<{ __typename?: 'PostGame', revealedByCurrentUser?: Maybe<boolean>, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number } }> };
+export type CurrentUserHasAnsweredOrRevealedPostGameQuery = { __typename?: 'Query', postGame?: { __typename?: 'PostGame', revealedByCurrentUser?: boolean | null | undefined, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number } } | null | undefined };
 
 export type DeletePostLikeMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeletePostLikeMutation = { __typename?: 'Mutation', deletePostLike?: Maybe<{ __typename?: 'DeletePostLikePayload', postLike?: Maybe<{ __typename?: 'PostLike', postId: number, userId: number, nodeId: string, createdAt: any }> }> };
+export type DeletePostLikeMutation = { __typename?: 'Mutation', deletePostLike?: { __typename?: 'DeletePostLikePayload', postLike?: { __typename?: 'PostLike', postId: number, userId: number, nodeId: string, createdAt: any } | null | undefined } | null | undefined };
+
+export type FeedPostsQueryVariables = Exact<{
+  locale: Scalars['String'];
+  before?: Maybe<Scalars['Cursor']>;
+}>;
+
+
+export type FeedPostsQuery = { __typename?: 'Query', feedPosts?: { __typename?: 'PostsConnection', edges: Array<{ __typename?: 'PostsEdge', node?: { __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined } | null | undefined> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<{ __typename?: 'PostRecording', filename: string, extension?: string | null | undefined, uuid: any, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: boolean | null | undefined, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: { __typename?: 'PostGameAnswer', id: number } | null | undefined }> } } | null | undefined> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameAnswer', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, correct?: boolean | null | undefined, genderOption?: GrammaticalGender | null | undefined, range?: { __typename?: 'PostGameRange', uuid: any } | null | undefined } | null | undefined> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, rangeUuid?: any | null | undefined } | null | undefined> } } | null | undefined> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined }>, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, startCursor?: any | null | undefined, hasNextPage: boolean, endCursor?: any | null | undefined } } | null | undefined };
 
 export type PostGameByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
 }>;
 
 
-export type PostGameByUuidQuery = { __typename?: 'Query', postGameByUuid?: Maybe<{ __typename?: 'PostGame', id: number, nodeId: string, gameType: PostGameType, ranges: { __typename?: 'PostGameRangesConnection', nodes: Array<Maybe<{ __typename?: 'PostGameRange', uuid: any, id: number, caseOption?: Maybe<GrammaticalCase>, genderOption?: Maybe<GrammaticalGender>, startIndex: number, endIndex: number }>> }, post?: Maybe<{ __typename?: 'Post', authorId?: Maybe<number>, language?: Maybe<{ __typename?: 'Language', alpha2: string }> }>, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<Maybe<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, rangeUuid?: Maybe<any> }>> } }> };
+export type PostGameByUuidQuery = { __typename?: 'Query', postGameByUuid?: { __typename?: 'PostGame', id: number, nodeId: string, gameType: PostGameType, ranges: { __typename?: 'PostGameRangesConnection', nodes: Array<{ __typename?: 'PostGameRange', uuid: any, id: number, caseOption?: GrammaticalCase | null | undefined, genderOption?: GrammaticalGender | null | undefined, startIndex: number, endIndex: number } | null | undefined> }, post?: { __typename?: 'Post', authorId?: number | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined } | null | undefined, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, rangeUuid?: any | null | undefined } | null | undefined> } } | null | undefined };
 
 export type PostGameIdByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
 }>;
 
 
-export type PostGameIdByUuidQuery = { __typename?: 'Query', postGameByUuid?: Maybe<{ __typename?: 'PostGame', id: number, nodeId: string }> };
+export type PostGameIdByUuidQuery = { __typename?: 'Query', postGameByUuid?: { __typename?: 'PostGame', id: number, nodeId: string } | null | undefined };
 
 export type PostIdByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
 }>;
 
 
-export type PostIdByUuidQuery = { __typename?: 'Query', postByUuid?: Maybe<{ __typename?: 'Post', id: number, nodeId: string }> };
+export type PostIdByUuidQuery = { __typename?: 'Query', postByUuid?: { __typename?: 'Post', id: number, nodeId: string } | null | undefined };
 
 export type PostLikeIdByPostIdAndUserIdQueryVariables = Exact<{
   postId: Scalars['Int'];
@@ -25908,21 +25925,21 @@ export type PostLikeIdByPostIdAndUserIdQueryVariables = Exact<{
 }>;
 
 
-export type PostLikeIdByPostIdAndUserIdQuery = { __typename?: 'Query', postLikes?: Maybe<{ __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', id: number, nodeId: string }>> }> };
+export type PostLikeIdByPostIdAndUserIdQuery = { __typename?: 'Query', postLikes?: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', id: number, nodeId: string } | null | undefined> } | null | undefined };
 
 export type PromptIdByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
 }>;
 
 
-export type PromptIdByUuidQuery = { __typename?: 'Query', promptByUuid?: Maybe<{ __typename?: 'Prompt', id: number, nodeId: string }> };
+export type PromptIdByUuidQuery = { __typename?: 'Query', promptByUuid?: { __typename?: 'Prompt', id: number, nodeId: string } | null | undefined };
 
 export type SinglePostQueryVariables = Exact<{
   snowflakeId: Scalars['BigInt'];
 }>;
 
 
-export type SinglePostQuery = { __typename?: 'Query', posts?: Maybe<{ __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }>, games: { __typename?: 'PostGamesConnection', nodes: Array<Maybe<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: Maybe<boolean>, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: Maybe<{ __typename?: 'PostGameAnswer', id: number }> }> } }>> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameAnswer', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, correct?: Maybe<boolean>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }> }>> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<Maybe<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, rangeUuid?: Maybe<any> }>> } }>> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<Maybe<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }> }>> } }>> }> };
+export type SinglePostQuery = { __typename?: 'Query', posts?: { __typename?: 'PostsConnection', nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined } | null | undefined> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<{ __typename?: 'PostRecording', filename: string, extension?: string | null | undefined, uuid: any, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: boolean | null | undefined, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: { __typename?: 'PostGameAnswer', id: number } | null | undefined }> } } | null | undefined> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameAnswer', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, correct?: boolean | null | undefined, genderOption?: GrammaticalGender | null | undefined, range?: { __typename?: 'PostGameRange', uuid: any } | null | undefined } | null | undefined> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, rangeUuid?: any | null | undefined } | null | undefined> } } | null | undefined> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined> } | null | undefined };
 
 export type CreateUserFollowershipMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -25930,21 +25947,21 @@ export type CreateUserFollowershipMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserFollowershipMutation = { __typename?: 'Mutation', createUserFollower?: Maybe<{ __typename?: 'CreateUserFollowerPayload', userFollower?: Maybe<{ __typename?: 'UserFollower', id: number, userId: number, followerId: number, nodeId: string, createdAt: any }> }> };
+export type CreateUserFollowershipMutation = { __typename?: 'Mutation', createUserFollower?: { __typename?: 'CreateUserFollowerPayload', userFollower?: { __typename?: 'UserFollower', id: number, userId: number, followerId: number, nodeId: string, createdAt: any } | null | undefined } | null | undefined };
 
 export type DeleteUserFollowershipMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteUserFollowershipMutation = { __typename?: 'Mutation', deleteUserFollower?: Maybe<{ __typename?: 'DeleteUserFollowerPayload', userFollower?: Maybe<{ __typename?: 'UserFollower', followerId: number, userId: number, nodeId: string, createdAt: any }> }> };
+export type DeleteUserFollowershipMutation = { __typename?: 'Mutation', deleteUserFollower?: { __typename?: 'DeleteUserFollowerPayload', userFollower?: { __typename?: 'UserFollower', followerId: number, userId: number, nodeId: string, createdAt: any } | null | undefined } | null | undefined };
 
 export type UserByUsernameFollowershipsQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type UserByUsernameFollowershipsQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', followers: { __typename?: 'UserFollowersConnection', nodes: Array<Maybe<{ __typename?: 'UserFollower', follower?: Maybe<{ __typename?: 'User', uuid: any, avatarUrl?: Maybe<string>, bio: string, displayName?: Maybe<string>, username?: Maybe<string>, followedByCurrentUser?: Maybe<boolean> }> }>> }, followedUsers: { __typename?: 'UserFollowersConnection', nodes: Array<Maybe<{ __typename?: 'UserFollower', user?: Maybe<{ __typename?: 'User', avatarUrl?: Maybe<string>, bio: string, displayName?: Maybe<string>, uuid: any, followedByCurrentUser?: Maybe<boolean>, username?: Maybe<string> }> }>> } }> };
+export type UserByUsernameFollowershipsQuery = { __typename?: 'Query', userByUsername?: { __typename?: 'User', followers: { __typename?: 'UserFollowersConnection', nodes: Array<{ __typename?: 'UserFollower', follower?: { __typename?: 'User', uuid: any, avatarUrl?: string | null | undefined, bio: string, displayName?: string | null | undefined, username?: string | null | undefined, followedByCurrentUser?: boolean | null | undefined } | null | undefined } | null | undefined> }, followedUsers: { __typename?: 'UserFollowersConnection', nodes: Array<{ __typename?: 'UserFollower', user?: { __typename?: 'User', avatarUrl?: string | null | undefined, bio: string, displayName?: string | null | undefined, uuid: any, followedByCurrentUser?: boolean | null | undefined, username?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
 
 export type UserFollowershipIdByUserIdAndFollowerIdQueryVariables = Exact<{
   followerId: Scalars['Int'];
@@ -25952,7 +25969,7 @@ export type UserFollowershipIdByUserIdAndFollowerIdQueryVariables = Exact<{
 }>;
 
 
-export type UserFollowershipIdByUserIdAndFollowerIdQuery = { __typename?: 'Query', userFollowers?: Maybe<{ __typename?: 'UserFollowersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'UserFollower', id: number, nodeId: string }>> }> };
+export type UserFollowershipIdByUserIdAndFollowerIdQuery = { __typename?: 'Query', userFollowers?: { __typename?: 'UserFollowersConnection', totalCount: number, nodes: Array<{ __typename?: 'UserFollower', id: number, nodeId: string } | null | undefined> } | null | undefined };
 
 export type CreateGroupUserMutationVariables = Exact<{
   userType: UserType;
@@ -25961,21 +25978,21 @@ export type CreateGroupUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateGroupUserMutation = { __typename?: 'Mutation', createGroupUser?: Maybe<{ __typename?: 'CreateGroupUserPayload', groupUser?: Maybe<{ __typename?: 'GroupUser', id: number }> }> };
+export type CreateGroupUserMutation = { __typename?: 'Mutation', createGroupUser?: { __typename?: 'CreateGroupUserPayload', groupUser?: { __typename?: 'GroupUser', id: number } | null | undefined } | null | undefined };
 
 export type JoinGlobalGroupMutationVariables = Exact<{
   groupUuid: Scalars['UUID'];
 }>;
 
 
-export type JoinGlobalGroupMutation = { __typename?: 'Mutation', joinGlobalGroup?: Maybe<{ __typename?: 'JoinGlobalGroupPayload', groupUser?: Maybe<{ __typename?: 'GroupUser', nodeId: string, group?: Maybe<{ __typename?: 'Group', uuid: any }>, user?: Maybe<{ __typename?: 'User', uuid: any }> }> }> };
+export type JoinGlobalGroupMutation = { __typename?: 'Mutation', joinGlobalGroup?: { __typename?: 'JoinGlobalGroupPayload', groupUser?: { __typename?: 'GroupUser', nodeId: string, group?: { __typename?: 'Group', uuid: any } | null | undefined, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined } | null | undefined };
 
 export type UserGroupMembershipsQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserGroupMembershipsQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', groupUsers: { __typename?: 'GroupUsersConnection', edges: Array<{ __typename?: 'GroupUsersEdge', node?: Maybe<{ __typename?: 'GroupUser', userType: UserType, group?: Maybe<{ __typename?: 'Group', global: boolean, uuid: any, groupName?: Maybe<string>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }> }> }> } }> };
+export type UserGroupMembershipsQuery = { __typename?: 'Query', user?: { __typename?: 'User', groupUsers: { __typename?: 'GroupUsersConnection', edges: Array<{ __typename?: 'GroupUsersEdge', node?: { __typename?: 'GroupUser', userType: UserType, group?: { __typename?: 'Group', global: boolean, uuid: any, groupName?: string | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined }> } } | null | undefined };
 
 export type UserIsInGroupQueryVariables = Exact<{
   userId: Scalars['Int'];
@@ -25983,7 +26000,7 @@ export type UserIsInGroupQueryVariables = Exact<{
 }>;
 
 
-export type UserIsInGroupQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', groupUsers: { __typename?: 'GroupUsersConnection', totalCount: number } }> };
+export type UserIsInGroupQuery = { __typename?: 'Query', groupByUuid?: { __typename?: 'Group', groupUsers: { __typename?: 'GroupUsersConnection', totalCount: number } } | null | undefined };
 
 export type UsersWithoutLearnerGroupQueryVariables = Exact<{
   lid: Scalars['Int'];
@@ -25992,7 +26009,7 @@ export type UsersWithoutLearnerGroupQueryVariables = Exact<{
 }>;
 
 
-export type UsersWithoutLearnerGroupQuery = { __typename?: 'Query', usersWithoutLearnerGroup?: Maybe<{ __typename?: 'UsersConnection', nodes: Array<Maybe<{ __typename?: 'User', id: number }>> }> };
+export type UsersWithoutLearnerGroupQuery = { __typename?: 'Query', usersWithoutLearnerGroup?: { __typename?: 'UsersConnection', nodes: Array<{ __typename?: 'User', id: number } | null | undefined> } | null | undefined };
 
 export type UsersWithoutNativeGroupQueryVariables = Exact<{
   lid: Scalars['Int'];
@@ -26000,17 +26017,17 @@ export type UsersWithoutNativeGroupQueryVariables = Exact<{
 }>;
 
 
-export type UsersWithoutNativeGroupQuery = { __typename?: 'Query', usersWithoutNativeGroup?: Maybe<{ __typename?: 'UsersConnection', nodes: Array<Maybe<{ __typename?: 'User', id: number }>> }> };
+export type UsersWithoutNativeGroupQuery = { __typename?: 'Query', usersWithoutNativeGroup?: { __typename?: 'UsersConnection', nodes: Array<{ __typename?: 'User', id: number } | null | undefined> } | null | undefined };
 
 export type AllGroupUuidsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllGroupUuidsQuery = { __typename?: 'Query', groups?: Maybe<{ __typename?: 'GroupsConnection', nodes: Array<Maybe<{ __typename?: 'Group', uuid: any }>> }> };
+export type AllGroupUuidsQuery = { __typename?: 'Query', groups?: { __typename?: 'GroupsConnection', nodes: Array<{ __typename?: 'Group', uuid: any } | null | undefined> } | null | undefined };
 
 export type AllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllGroupsQuery = { __typename?: 'Query', groups?: Maybe<{ __typename?: 'GroupsConnection', nodes: Array<Maybe<{ __typename?: 'Group', uuid: any, groupName?: Maybe<string>, global: boolean, language?: Maybe<{ __typename?: 'Language', alpha2: string, englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string>, nodeId: string }>, groupUsers: { __typename?: 'GroupUsersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'GroupUser', joinedOn: any, user?: Maybe<{ __typename?: 'User', avatarUrl?: Maybe<string>, username?: Maybe<string>, uuid: any }> }>> } }>> }> };
+export type AllGroupsQuery = { __typename?: 'Query', groups?: { __typename?: 'GroupsConnection', nodes: Array<{ __typename?: 'Group', uuid: any, groupName?: string | null | undefined, global: boolean, language?: { __typename?: 'Language', alpha2: string, englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined, nodeId: string } | null | undefined, groupUsers: { __typename?: 'GroupUsersConnection', totalCount: number, nodes: Array<{ __typename?: 'GroupUser', joinedOn: any, user?: { __typename?: 'User', avatarUrl?: string | null | undefined, username?: string | null | undefined, uuid: any } | null | undefined } | null | undefined> } } | null | undefined> } | null | undefined };
 
 export type CreateGroupMutationVariables = Exact<{
   global: Scalars['Boolean'];
@@ -26021,40 +26038,40 @@ export type CreateGroupMutationVariables = Exact<{
 }>;
 
 
-export type CreateGroupMutation = { __typename?: 'Mutation', createGroup?: Maybe<{ __typename?: 'CreateGroupPayload', group?: Maybe<{ __typename?: 'Group', id: number, uuid: any }> }> };
+export type CreateGroupMutation = { __typename?: 'Mutation', createGroup?: { __typename?: 'CreateGroupPayload', group?: { __typename?: 'Group', id: number, uuid: any } | null | undefined } | null | undefined };
 
 export type GroupIdByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
 }>;
 
 
-export type GroupIdByUuidQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', id: number }> };
+export type GroupIdByUuidQuery = { __typename?: 'Query', groupByUuid?: { __typename?: 'Group', id: number } | null | undefined };
 
 export type GroupLanguageByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
 }>;
 
 
-export type GroupLanguageByUuidQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', uuid: any, language?: Maybe<{ __typename?: 'Language', alpha2: string }> }> };
+export type GroupLanguageByUuidQuery = { __typename?: 'Query', groupByUuid?: { __typename?: 'Group', uuid: any, language?: { __typename?: 'Language', alpha2: string } | null | undefined } | null | undefined };
 
 export type LanguageCodeMappingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LanguageCodeMappingsQuery = { __typename?: 'Query', languages?: Maybe<{ __typename?: 'LanguagesConnection', nodes: Array<Maybe<{ __typename?: 'Language', alpha2: string, englishName: string }>> }> };
+export type LanguageCodeMappingsQuery = { __typename?: 'Query', languages?: { __typename?: 'LanguagesConnection', nodes: Array<{ __typename?: 'Language', alpha2: string, englishName: string } | null | undefined> } | null | undefined };
 
 export type LanguageIdByAlpha2QueryVariables = Exact<{
   alpha2: Scalars['String'];
 }>;
 
 
-export type LanguageIdByAlpha2Query = { __typename?: 'Query', languageByAlpha2?: Maybe<{ __typename?: 'Language', id: number }> };
+export type LanguageIdByAlpha2Query = { __typename?: 'Query', languageByAlpha2?: { __typename?: 'Language', id: number } | null | undefined };
 
 export type AdminEmailsFcmTokensQueryVariables = Exact<{
   in: Array<Scalars['String']> | Scalars['String'];
 }>;
 
 
-export type AdminEmailsFcmTokensQuery = { __typename?: 'Query', users?: Maybe<{ __typename?: 'UsersConnection', nodes: Array<Maybe<{ __typename?: 'User', userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }>> }> };
+export type AdminEmailsFcmTokensQuery = { __typename?: 'Query', users?: { __typename?: 'UsersConnection', nodes: Array<{ __typename?: 'User', userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<{ __typename?: 'UserDevice', fcmToken?: string | null | undefined } | null | undefined> } } | null | undefined> } | null | undefined };
 
 export type CreateNotificationMutationVariables = Exact<{
   channelId: Scalars['Int'];
@@ -26067,7 +26084,7 @@ export type CreateNotificationMutationVariables = Exact<{
 }>;
 
 
-export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification?: Maybe<{ __typename?: 'CreateNotificationPayload', clientMutationId?: Maybe<string>, notification?: Maybe<{ __typename?: 'Notification', createdAt: any, expiresAt?: Maybe<any>, withheldUntil?: Maybe<any>, id: number }> }> };
+export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification?: { __typename?: 'CreateNotificationPayload', clientMutationId?: string | null | undefined, notification?: { __typename?: 'Notification', createdAt: any, expiresAt?: any | null | undefined, withheldUntil?: any | null | undefined, id: number } | null | undefined } | null | undefined };
 
 export type CreateUserDeviceMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -26075,14 +26092,14 @@ export type CreateUserDeviceMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserDeviceMutation = { __typename?: 'Mutation', createUserDevice?: Maybe<{ __typename?: 'CreateUserDevicePayload', userDevice?: Maybe<{ __typename?: 'UserDevice', uuid: any, fcmToken?: Maybe<string>, id: number }> }> };
+export type CreateUserDeviceMutation = { __typename?: 'Mutation', createUserDevice?: { __typename?: 'CreateUserDevicePayload', userDevice?: { __typename?: 'UserDevice', uuid: any, fcmToken?: string | null | undefined, id: number } | null | undefined } | null | undefined };
 
 export type DeleteInvalidFcmTokenMutationVariables = Exact<{
   fcmToken: Scalars['String'];
 }>;
 
 
-export type DeleteInvalidFcmTokenMutation = { __typename?: 'Mutation', deleteUserDeviceByFcmToken?: Maybe<{ __typename?: 'DeleteUserDevicePayload', clientMutationId?: Maybe<string>, userDevice?: Maybe<{ __typename?: 'UserDevice', userId?: Maybe<number>, fcmToken?: Maybe<string>, id: number }> }> };
+export type DeleteInvalidFcmTokenMutation = { __typename?: 'Mutation', deleteUserDeviceByFcmToken?: { __typename?: 'DeleteUserDevicePayload', clientMutationId?: string | null | undefined, userDevice?: { __typename?: 'UserDevice', userId?: number | null | undefined, fcmToken?: string | null | undefined, id: number } | null | undefined } | null | undefined };
 
 export type GroupMessageNotificationQueryVariables = Exact<{
   groupUuid: Scalars['UUID'];
@@ -26090,7 +26107,7 @@ export type GroupMessageNotificationQueryVariables = Exact<{
 }>;
 
 
-export type GroupMessageNotificationQuery = { __typename?: 'Query', groupByUuid?: Maybe<{ __typename?: 'Group', groupName?: Maybe<string>, uuid: any, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', user?: Maybe<{ __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>, userByUuid?: Maybe<{ __typename?: 'User', username?: Maybe<string> }> };
+export type GroupMessageNotificationQuery = { __typename?: 'Query', groupByUuid?: { __typename?: 'Group', groupName?: string | null | undefined, uuid: any, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<{ __typename?: 'GroupUser', user?: { __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<{ __typename?: 'UserDevice', fcmToken?: string | null | undefined } | null | undefined> } } | null | undefined } | null | undefined> }, language?: { __typename?: 'Language', alpha2: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined, userByUuid?: { __typename?: 'User', username?: string | null | undefined } | null | undefined };
 
 export type MarkNotificationAsSentMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -26098,38 +26115,38 @@ export type MarkNotificationAsSentMutationVariables = Exact<{
 }>;
 
 
-export type MarkNotificationAsSentMutation = { __typename?: 'Mutation', updateNotification?: Maybe<{ __typename?: 'UpdateNotificationPayload', notification?: Maybe<{ __typename?: 'Notification', id: number, sentAt?: Maybe<any> }> }> };
+export type MarkNotificationAsSentMutation = { __typename?: 'Mutation', updateNotification?: { __typename?: 'UpdateNotificationPayload', notification?: { __typename?: 'Notification', id: number, sentAt?: any | null | undefined } | null | undefined } | null | undefined };
 
 export type NotificationChannelByNameQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
 
 
-export type NotificationChannelByNameQuery = { __typename?: 'Query', notificationChannelByName?: Maybe<{ __typename?: 'NotificationChannel', id: number }> };
+export type NotificationChannelByNameQuery = { __typename?: 'Query', notificationChannelByName?: { __typename?: 'NotificationChannel', id: number } | null | undefined };
 
 export type OutstandingEmailNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OutstandingEmailNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: Maybe<{ __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<Maybe<{ __typename?: 'Notification', id: number, params?: Maybe<any>, expiresAt?: Maybe<any>, withheldUntil?: Maybe<any>, recipient?: Maybe<{ __typename?: 'User', email: string, emailNotificationsEnabled: boolean, username?: Maybe<string>, unconfirmedEmail?: Maybe<string> }> }>> } }> };
+export type OutstandingEmailNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: { __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<{ __typename?: 'Notification', id: number, params?: any | null | undefined, expiresAt?: any | null | undefined, withheldUntil?: any | null | undefined, recipient?: { __typename?: 'User', email: string, emailNotificationsEnabled: boolean, username?: string | null | undefined, unconfirmedEmail?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
 
 export type OutstandingFcmNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OutstandingFcmNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: Maybe<{ __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<Maybe<{ __typename?: 'Notification', id: number, params?: Maybe<any>, expiresAt?: Maybe<any>, withheldUntil?: Maybe<any>, recipient?: Maybe<{ __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }>, recipientGroup?: Maybe<{ __typename?: 'Group', uuid: any, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', user?: Maybe<{ __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<Maybe<{ __typename?: 'UserDevice', fcmToken?: Maybe<string> }>> } }> }>> } }> }>> } }> };
+export type OutstandingFcmNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: { __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<{ __typename?: 'Notification', id: number, params?: any | null | undefined, expiresAt?: any | null | undefined, withheldUntil?: any | null | undefined, recipient?: { __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<{ __typename?: 'UserDevice', fcmToken?: string | null | undefined } | null | undefined> } } | null | undefined, recipientGroup?: { __typename?: 'Group', uuid: any, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<{ __typename?: 'GroupUser', user?: { __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<{ __typename?: 'UserDevice', fcmToken?: string | null | undefined } | null | undefined> } } | null | undefined } | null | undefined> } } | null | undefined } | null | undefined> } } | null | undefined };
 
 export type PostLikeNotificationQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type PostLikeNotificationQuery = { __typename?: 'Query', postLike?: Maybe<{ __typename?: 'PostLike', post?: Maybe<{ __typename?: 'Post', authorId?: Maybe<number>, body: string, parentPostId?: Maybe<number> }>, user?: Maybe<{ __typename?: 'User', id: number, username?: Maybe<string>, displayName?: Maybe<string> }> }> };
+export type PostLikeNotificationQuery = { __typename?: 'Query', postLike?: { __typename?: 'PostLike', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, parentPostId?: number | null | undefined } | null | undefined, user?: { __typename?: 'User', id: number, username?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined };
 
 export type PostReplyNotificationQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type PostReplyNotificationQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', authorId?: Maybe<number>, body: string, createdAt: any, parentPost?: Maybe<{ __typename?: 'Post', authorId?: Maybe<number> }>, author?: Maybe<{ __typename?: 'User', displayName?: Maybe<string>, username?: Maybe<string> }> }> };
+export type PostReplyNotificationQuery = { __typename?: 'Query', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, createdAt: any, parentPost?: { __typename?: 'Post', authorId?: number | null | undefined } | null | undefined, author?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined } | null | undefined } | null | undefined };
 
 export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
   token: Scalars['String'];
@@ -26137,42 +26154,42 @@ export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
 }>;
 
 
-export type UnsubscribeUserEmailNotificationsMutation = { __typename?: 'Mutation', updateUserByEmailUnsubscribeToken?: Maybe<{ __typename?: 'UpdateUserPayload', clientMutationId?: Maybe<string>, user?: Maybe<{ __typename?: 'User', email: string, uuid: any, username?: Maybe<string> }> }> };
+export type UnsubscribeUserEmailNotificationsMutation = { __typename?: 'Mutation', updateUserByEmailUnsubscribeToken?: { __typename?: 'UpdateUserPayload', clientMutationId?: string | null | undefined, user?: { __typename?: 'User', email: string, uuid: any, username?: string | null | undefined } | null | undefined } | null | undefined };
 
 export type UserFollowershipNotificationQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserFollowershipNotificationQuery = { __typename?: 'Query', userFollower?: Maybe<{ __typename?: 'UserFollower', follower?: Maybe<{ __typename?: 'User', username?: Maybe<string>, displayName?: Maybe<string> }>, user?: Maybe<{ __typename?: 'User', id: number }> }> };
+export type UserFollowershipNotificationQuery = { __typename?: 'Query', userFollower?: { __typename?: 'UserFollower', follower?: { __typename?: 'User', username?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, user?: { __typename?: 'User', id: number } | null | undefined } | null | undefined };
 
 export type UserPasswordResetEmailNotificationQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserPasswordResetEmailNotificationQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', username?: Maybe<string>, displayName?: Maybe<string>, resetPasswordToken?: Maybe<string> }> };
+export type UserPasswordResetEmailNotificationQuery = { __typename?: 'Query', user?: { __typename?: 'User', username?: string | null | undefined, displayName?: string | null | undefined, resetPasswordToken?: string | null | undefined } | null | undefined };
 
 export type UserPasswordResetSuccessEmailNotificationQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserPasswordResetSuccessEmailNotificationQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', username?: Maybe<string>, displayName?: Maybe<string> }> };
+export type UserPasswordResetSuccessEmailNotificationQuery = { __typename?: 'Query', user?: { __typename?: 'User', username?: string | null | undefined, displayName?: string | null | undefined } | null | undefined };
 
 export type UserByUsernamePostsQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type UserByUsernamePostsQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', authoredPosts: { __typename?: 'PostsConnection', nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string> }>, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostLike', user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, parentPost?: Maybe<{ __typename?: 'Post', uuid: any }>, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }> }>> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostRecording', filename: string, extension?: Maybe<string>, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any }> }>> }, language?: Maybe<{ __typename?: 'Language', alpha2: string }>, prompt?: Maybe<{ __typename?: 'Prompt', content?: Maybe<string>, uuid: any, type: PromptType }>, games: { __typename?: 'PostGamesConnection', nodes: Array<Maybe<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: Maybe<boolean>, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: Maybe<{ __typename?: 'PostGameAnswer', id: number }> }> } }>> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'PostGameAnswer', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, correct?: Maybe<boolean>, genderOption?: Maybe<GrammaticalGender>, range?: Maybe<{ __typename?: 'PostGameRange', uuid: any }> }>> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<Maybe<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: Maybe<GrammaticalCase>, clozeAnswer?: Maybe<string>, genderOption?: Maybe<GrammaticalGender>, rangeUuid?: Maybe<any> }>> } }>> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<Maybe<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: Maybe<{ __typename?: 'User', uuid: any, username?: Maybe<string>, avatarUrl?: Maybe<string>, displayName?: Maybe<string> }> }>> } }>> } }> };
+export type UserByUsernamePostsQuery = { __typename?: 'Query', userByUsername?: { __typename?: 'User', authoredPosts: { __typename?: 'PostsConnection', nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined } | null | undefined> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<{ __typename?: 'PostRecording', filename: string, extension?: string | null | undefined, uuid: any, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: boolean | null | undefined, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: { __typename?: 'PostGameAnswer', id: number } | null | undefined }> } } | null | undefined> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameAnswer', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, correct?: boolean | null | undefined, genderOption?: GrammaticalGender | null | undefined, range?: { __typename?: 'PostGameRange', uuid: any } | null | undefined } | null | undefined> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, rangeUuid?: any | null | undefined } | null | undefined> } } | null | undefined> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined> } } | null | undefined };
 
 export type UserProfileQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type UserProfileQuery = { __typename?: 'Query', userByUsername?: Maybe<{ __typename?: 'User', bio: string, gender?: Maybe<string>, username?: Maybe<string>, avatarUrl?: Maybe<string>, uuid: any, displayName?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'UserLanguage', native: boolean, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>> } }> };
+export type UserProfileQuery = { __typename?: 'Query', userByUsername?: { __typename?: 'User', bio: string, gender?: string | null | undefined, username?: string | null | undefined, avatarUrl?: string | null | undefined, uuid: any, displayName?: string | null | undefined, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<{ __typename?: 'UserLanguage', native: boolean, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
 
 export type CreateUserMutationVariables = Exact<{
   email: Scalars['String'];
@@ -26186,7 +26203,7 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser?: Maybe<{ __typename?: 'CreateUserPayload', user?: Maybe<{ __typename?: 'User', id: number }> }> };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'CreateUserPayload', user?: { __typename?: 'User', id: number } | null | undefined } | null | undefined };
 
 export type CreateUserLanguageMutationVariables = Exact<{
   languageId: Scalars['Int'];
@@ -26196,7 +26213,7 @@ export type CreateUserLanguageMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserLanguageMutation = { __typename?: 'Mutation', createUserLanguage?: Maybe<{ __typename?: 'CreateUserLanguagePayload', userLanguage?: Maybe<{ __typename?: 'UserLanguage', id: number }> }> };
+export type CreateUserLanguageMutation = { __typename?: 'Mutation', createUserLanguage?: { __typename?: 'CreateUserLanguagePayload', userLanguage?: { __typename?: 'UserLanguage', id: number } | null | undefined } | null | undefined };
 
 export type CreateUserPreferenceMutationVariables = Exact<{
   feedLanguageId: Scalars['Int'];
@@ -26204,12 +26221,12 @@ export type CreateUserPreferenceMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserPreferenceMutation = { __typename?: 'Mutation', createUserPreference?: Maybe<{ __typename?: 'CreateUserPreferencePayload', userPreference?: Maybe<{ __typename?: 'UserPreference', createdAt: any, id: number, nodeId: string, feedLanguageId: number }> }> };
+export type CreateUserPreferenceMutation = { __typename?: 'Mutation', createUserPreference?: { __typename?: 'CreateUserPreferencePayload', userPreference?: { __typename?: 'UserPreference', createdAt: any, id: number, nodeId: string, feedLanguageId: number } | null | undefined } | null | undefined };
 
 export type CurrentUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserProfileQuery = { __typename?: 'Query', currentUser?: Maybe<{ __typename?: 'User', bio: string, email: string, gender?: Maybe<string>, username?: Maybe<string>, avatarUrl?: Maybe<string>, uuid: any, displayName?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<Maybe<{ __typename?: 'UserLanguage', native: boolean, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }>> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<Maybe<{ __typename?: 'GroupUser', nodeId: string, userType: UserType, joinedOn: any, group?: Maybe<{ __typename?: 'Group', uuid: any, groupName?: Maybe<string>, language?: Maybe<{ __typename?: 'Language', englishName: string }>, languageSkillLevel?: Maybe<{ __typename?: 'LanguageSkillLevel', name?: Maybe<string> }> }> }>> } }> };
+export type CurrentUserProfileQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', bio: string, email: string, gender?: string | null | undefined, username?: string | null | undefined, avatarUrl?: string | null | undefined, uuid: any, displayName?: string | null | undefined, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<{ __typename?: 'UserLanguage', native: boolean, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<{ __typename?: 'GroupUser', nodeId: string, userType: UserType, joinedOn: any, group?: { __typename?: 'Group', uuid: any, groupName?: string | null | undefined, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
 
 export type ResetUserPasswordMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -26217,7 +26234,7 @@ export type ResetUserPasswordMutationVariables = Exact<{
 }>;
 
 
-export type ResetUserPasswordMutation = { __typename?: 'Mutation', updateUser?: Maybe<{ __typename?: 'UpdateUserPayload', user?: Maybe<{ __typename?: 'User', id: number }> }> };
+export type ResetUserPasswordMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'UpdateUserPayload', user?: { __typename?: 'User', id: number } | null | undefined } | null | undefined };
 
 export type UpdateUserAvatarUrlMutationVariables = Exact<{
   avatarUrl: Scalars['String'];
@@ -26225,7 +26242,7 @@ export type UpdateUserAvatarUrlMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserAvatarUrlMutation = { __typename?: 'Mutation', updateUser?: Maybe<{ __typename?: 'UpdateUserPayload', user?: Maybe<{ __typename?: 'User', avatarUrl?: Maybe<string> }> }> };
+export type UpdateUserAvatarUrlMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'UpdateUserPayload', user?: { __typename?: 'User', avatarUrl?: string | null | undefined } | null | undefined } | null | undefined };
 
 export type UpdateUserBioMutationVariables = Exact<{
   bio: Scalars['String'];
@@ -26233,7 +26250,7 @@ export type UpdateUserBioMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserBioMutation = { __typename?: 'Mutation', updateUser?: Maybe<{ __typename?: 'UpdateUserPayload', user?: Maybe<{ __typename?: 'User', bio: string }> }> };
+export type UpdateUserBioMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'UpdateUserPayload', user?: { __typename?: 'User', bio: string } | null | undefined } | null | undefined };
 
 export type UpdateUserResetPasswordTokenMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -26242,7 +26259,7 @@ export type UpdateUserResetPasswordTokenMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserResetPasswordTokenMutation = { __typename?: 'Mutation', updateUser?: Maybe<{ __typename?: 'UpdateUserPayload', user?: Maybe<{ __typename?: 'User', id: number, resetPasswordTokenCreatedAt?: Maybe<any>, resetPasswordToken?: Maybe<string> }> }> };
+export type UpdateUserResetPasswordTokenMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'UpdateUserPayload', user?: { __typename?: 'User', id: number, resetPasswordTokenCreatedAt?: any | null | undefined, resetPasswordToken?: string | null | undefined } | null | undefined } | null | undefined };
 
 export type UpsertUserPreferenceMutationVariables = Exact<{
   feedLanguageId: Scalars['Int'];
@@ -26250,56 +26267,56 @@ export type UpsertUserPreferenceMutationVariables = Exact<{
 }>;
 
 
-export type UpsertUserPreferenceMutation = { __typename?: 'Mutation', upsertUserPreference?: Maybe<{ __typename?: 'UpsertUserPreferencePayload', userPreference?: Maybe<{ __typename?: 'UserPreference', createdAt: any, id: number, nodeId: string, feedLanguageId: number }> }> };
+export type UpsertUserPreferenceMutation = { __typename?: 'Mutation', upsertUserPreference?: { __typename?: 'UpsertUserPreferencePayload', userPreference?: { __typename?: 'UserPreference', createdAt: any, id: number, nodeId: string, feedLanguageId: number } | null | undefined } | null | undefined };
 
 export type UserByResetPasswordTokenQueryVariables = Exact<{
   resetPasswordToken: Scalars['String'];
 }>;
 
 
-export type UserByResetPasswordTokenQuery = { __typename?: 'Query', userByResetPasswordToken?: Maybe<{ __typename?: 'User', resetPasswordTokenCreatedAt?: Maybe<any>, resetPasswordToken?: Maybe<string>, id: number, googleId?: Maybe<string> }> };
+export type UserByResetPasswordTokenQuery = { __typename?: 'Query', userByResetPasswordToken?: { __typename?: 'User', resetPasswordTokenCreatedAt?: any | null | undefined, resetPasswordToken?: string | null | undefined, id: number, googleId?: string | null | undefined } | null | undefined };
 
 export type UserHasCompletedProfileQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserHasCompletedProfileQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', username?: Maybe<string>, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number } }> };
+export type UserHasCompletedProfileQuery = { __typename?: 'Query', user?: { __typename?: 'User', username?: string | null | undefined, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number } } | null | undefined };
 
 export type UserIdByEmailQueryVariables = Exact<{
   email: Scalars['String'];
 }>;
 
 
-export type UserIdByEmailQuery = { __typename?: 'Query', userByEmail?: Maybe<{ __typename?: 'User', id: number }> };
+export type UserIdByEmailQuery = { __typename?: 'Query', userByEmail?: { __typename?: 'User', id: number } | null | undefined };
 
 export type UserIdByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
 }>;
 
 
-export type UserIdByUuidQuery = { __typename?: 'Query', userByUuid?: Maybe<{ __typename?: 'User', id: number }> };
+export type UserIdByUuidQuery = { __typename?: 'Query', userByUuid?: { __typename?: 'User', id: number } | null | undefined };
 
 export type UserLanguageInfoQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserLanguageInfoQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', id: number, uuid: any, userLanguages: { __typename?: 'UserLanguagesConnection', nodes: Array<Maybe<{ __typename?: 'UserLanguage', nodeId: string, languageId: number, languageSkillLevelId?: Maybe<number>, native: boolean }>> } }> };
+export type UserLanguageInfoQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: number, uuid: any, userLanguages: { __typename?: 'UserLanguagesConnection', nodes: Array<{ __typename?: 'UserLanguage', nodeId: string, languageId: number, languageSkillLevelId?: number | null | undefined, native: boolean } | null | undefined> } } | null | undefined };
 
 export type UserPasswordResetDataByEmailQueryVariables = Exact<{
   email: Scalars['String'];
 }>;
 
 
-export type UserPasswordResetDataByEmailQuery = { __typename?: 'Query', userByEmail?: Maybe<{ __typename?: 'User', id: number, resetPasswordToken?: Maybe<string>, resetPasswordTokenCreatedAt?: Maybe<any>, unconfirmedEmail?: Maybe<string>, googleId?: Maybe<string>, email: string }> };
+export type UserPasswordResetDataByEmailQuery = { __typename?: 'Query', userByEmail?: { __typename?: 'User', id: number, resetPasswordToken?: string | null | undefined, resetPasswordTokenCreatedAt?: any | null | undefined, unconfirmedEmail?: string | null | undefined, googleId?: string | null | undefined, email: string } | null | undefined };
 
 export type UserUuidByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserUuidByIdQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', uuid: any }> };
+export type UserUuidByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', uuid: any } | null | undefined };
 
 
 export const ChatUser = gql`
@@ -26450,145 +26467,6 @@ export const RegisterUserActivity = gql`
   }
 }
     `;
-export const AllPosts = gql`
-    query AllPosts {
-  posts(orderBy: CREATED_AT_DESC, condition: {parentPostId: null}) {
-    nodes {
-      uuid
-      nodeId
-      createdAt
-      author {
-        uuid
-        username
-        avatarUrl
-        displayName
-      }
-      body
-      likes {
-        totalCount
-        nodes {
-          user {
-            uuid
-          }
-        }
-      }
-      parentPost {
-        uuid
-      }
-      replies(orderBy: CREATED_AT_ASC, filter: {not: {parentPostId: {isNull: true}}}) {
-        totalCount
-        nodes {
-          uuid
-          nodeId
-          createdAt
-          author {
-            uuid
-            username
-            avatarUrl
-          }
-          likes {
-            totalCount
-            nodes {
-              user {
-                uuid
-              }
-            }
-          }
-          body
-          parentPost {
-            uuid
-          }
-          language {
-            alpha2
-          }
-          prompt {
-            content
-            uuid
-            type
-          }
-        }
-      }
-      recordings {
-        totalCount
-        nodes {
-          filename
-          extension
-          uuid
-          user {
-            uuid
-          }
-        }
-      }
-      language {
-        alpha2
-      }
-      prompt {
-        content
-        uuid
-        type
-      }
-      snowflakeId
-      games {
-        nodes {
-          gameType
-          uuid
-          ranges {
-            nodes {
-              answers {
-                edges {
-                  node {
-                    id
-                  }
-                }
-              }
-              endIndex
-              startIndex
-              uuid
-            }
-            totalCount
-          }
-          revealedByCurrentUser
-          answersByCurrentUser {
-            nodes {
-              caseOption
-              clozeAnswer
-              correct
-              genderOption
-              range {
-                uuid
-              }
-            }
-            totalCount
-          }
-          correctAnswers {
-            nodes {
-              caseOption
-              clozeAnswer
-              genderOption
-              rangeUuid
-            }
-          }
-        }
-      }
-      corrections {
-        nodes {
-          body
-          endIndex
-          createdAt
-          startIndex
-          uuid
-          user {
-            uuid
-            username
-            avatarUrl
-            displayName
-          }
-        }
-      }
-    }
-  }
-}
-    `;
 export const CreatePost = gql`
     mutation CreatePost($authorId: Int!, $body: String!, $parentPostId: Int, $languageId: Int!, $promptId: Int) {
   createPost(
@@ -26724,6 +26602,153 @@ export const DeletePostLike = gql`
       userId
       nodeId
       createdAt
+    }
+  }
+}
+    `;
+export const FeedPosts = gql`
+    query FeedPosts($locale: String!, $before: Cursor) {
+  feedPosts(locale: $locale, before: $before) {
+    edges {
+      node {
+        uuid
+        nodeId
+        createdAt
+        author {
+          uuid
+          username
+          avatarUrl
+          displayName
+        }
+        body
+        likes {
+          totalCount
+          nodes {
+            user {
+              uuid
+            }
+          }
+        }
+        parentPost {
+          uuid
+        }
+        replies(orderBy: CREATED_AT_ASC, filter: {not: {parentPostId: {isNull: true}}}) {
+          totalCount
+          nodes {
+            uuid
+            nodeId
+            createdAt
+            author {
+              uuid
+              username
+              avatarUrl
+            }
+            likes {
+              totalCount
+              nodes {
+                user {
+                  uuid
+                }
+              }
+            }
+            body
+            parentPost {
+              uuid
+            }
+            language {
+              alpha2
+            }
+            prompt {
+              content
+              uuid
+              type
+            }
+          }
+        }
+        recordings {
+          totalCount
+          nodes {
+            filename
+            extension
+            uuid
+            user {
+              uuid
+            }
+          }
+        }
+        language {
+          alpha2
+        }
+        prompt {
+          content
+          uuid
+          type
+        }
+        snowflakeId
+        games {
+          nodes {
+            gameType
+            uuid
+            ranges {
+              nodes {
+                answers {
+                  edges {
+                    node {
+                      id
+                    }
+                  }
+                }
+                endIndex
+                startIndex
+                uuid
+              }
+              totalCount
+            }
+            revealedByCurrentUser
+            answersByCurrentUser {
+              nodes {
+                caseOption
+                clozeAnswer
+                correct
+                genderOption
+                range {
+                  uuid
+                }
+              }
+              totalCount
+            }
+            correctAnswers {
+              nodes {
+                caseOption
+                clozeAnswer
+                genderOption
+                rangeUuid
+              }
+            }
+          }
+        }
+        corrections {
+          nodes {
+            body
+            endIndex
+            createdAt
+            startIndex
+            uuid
+            user {
+              uuid
+              username
+              avatarUrl
+              displayName
+            }
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      startCursor
+      hasNextPage
+      endCursor
     }
   }
 }

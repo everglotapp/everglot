@@ -1,14 +1,31 @@
 import { derived } from "svelte/store"
 import { operationStore } from "@urql/svelte"
 
-import { AllPosts } from "../types/generated/graphql"
-import type { AllPostsQuery } from "../types/generated/graphql"
+import {
+    FeedPosts,
+    FeedPostsQuery,
+    FeedPostsQueryVariables,
+} from "../types/generated/graphql"
 
-export const allPostsStore = operationStore<AllPostsQuery>(AllPosts)
+export const feedPostsStore = operationStore<
+    FeedPostsQuery,
+    FeedPostsQueryVariables
+>(
+    FeedPosts,
+    {
+        locale: "",
+        before: null,
+    },
+    { pause: true, requestPolicy: "network-only" }
+)
 
-export const allPosts = derived(
-    allPostsStore,
-    ($allPostsStore) =>
-        $allPostsStore.data ? $allPostsStore.data?.posts?.nodes || null : null,
+export const feedPosts = derived(
+    feedPostsStore,
+    ($feedPostsStore) =>
+        $feedPostsStore.data
+            ? $feedPostsStore.data?.feedPosts?.edges
+                  .map((edge) => edge.node)
+                  .filter(Boolean) || null
+            : null,
     null
 )

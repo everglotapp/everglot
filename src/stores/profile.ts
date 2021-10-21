@@ -12,7 +12,7 @@ export const userFollowershipsStore =
     operationStore<UserByUsernameFollowershipsQuery>(
         UserByUsernameFollowerships
     )
-userFollowershipsStore.context = { paused: true }
+userFollowershipsStore.context = { pause: true }
 
 export const currentUserProfileStore =
     operationStore<CurrentUserProfileQuery>(CurrentUserProfile)

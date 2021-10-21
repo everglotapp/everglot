@@ -37,11 +37,11 @@
     const refreshPost = () => {
         $singlePostStore.context = {
             ...$singlePostStore.context,
-            paused: true,
+            pause: true,
         }
         $singlePostStore.context = {
             ...$singlePostStore.context,
-            paused: false,
+            pause: false,
         }
     }
 

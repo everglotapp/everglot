@@ -13,7 +13,7 @@
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
     import { userHasCompletedProfile } from "../stores"
-    import { allPostsStore, allPosts } from "../stores/feed"
+    import { feedPostsStore, feedPosts } from "../stores/feed"
     import { currentUser, currentUserStore } from "../stores/currentUser"
 
     import Post from "../comp/feed/Post.svelte"
@@ -32,7 +32,7 @@
 
     query(languageCodeMappings)
 
-    query(allPostsStore)
+    query(feedPostsStore)
     query(currentUserStore)
 
     let languageButtonFocused: boolean = false
@@ -105,16 +105,7 @@
         clearRedirectTimeout()
     })
 
-    $: posts = $allPosts
-        ? $allPosts
-              .filter((post) => post && !post.parentPost)
-              .filter((post) =>
-                  pickedLocale
-                      ? post!.language && post!.language.alpha2 === pickedLocale
-                      : true
-              )
-              .map((post) => post!)
-        : []
+    $: posts = $feedPosts ? $feedPosts.map((post) => post!) : []
 
     let feedLocaleInitialized = false
     $: if (
@@ -188,14 +179,24 @@
         }
     }
     const refreshPosts = () => {
-        $allPostsStore.context = {
-            ...$allPostsStore.context,
-            paused: true,
+        $feedPostsStore.context = {
+            ...$feedPostsStore.context,
+            pause: true,
         }
-        $allPostsStore.context = {
-            ...$allPostsStore.context,
-            paused: false,
+        $feedPostsStore.variables = {
+            locale: $feedLocale || "",
+            before: null,
         }
+        if ($feedLocale !== null) {
+            $feedPostsStore.context = {
+                ...$feedPostsStore.context,
+                pause: false,
+            }
+        }
+    }
+    // Refresh posts whenever user changes locale.
+    $: if (feedLocaleInitialized && $feedLocale) {
+        refreshPosts()
     }
 
     function handlePostSuccess() {

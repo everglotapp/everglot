@@ -28,7 +28,7 @@
     import { currentUserStore, currentUserUuid } from "../../stores/currentUser"
 
     import type {
-        AllPostsQuery,
+        FeedPostsQuery,
         GrammaticalCase,
         GrammaticalGender,
     } from "../../types/generated/graphql"
@@ -62,7 +62,9 @@
 
     query(currentUserStore)
 
-    type PostNode = NonNullable<NonNullable<AllPostsQuery["posts"]>["nodes"][0]>
+    type PostNode = NonNullable<
+        NonNullable<FeedPostsQuery["feedPosts"]>["edges"][number]["node"]
+    >
 
     export let uuid: string
     export let body: string

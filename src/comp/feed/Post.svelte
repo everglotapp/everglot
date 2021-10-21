@@ -780,7 +780,7 @@
             {/if}
             {#if showCorrections}
                 <div
-                    class="corrections-note flex flex-nowrap items-center text-sm text-gray font-bold"
+                    class="corrections-note flex flex-nowrap items-center text-sm text-black font-bold"
                 >
                     <Edit3Icon size="18" class="mr-2 self-start" /><span
                         ><Localized id="post-corrections-note" /></span
@@ -1184,10 +1184,12 @@
     <div class="flex flex-row pt-1 justify-end items-center">
         {#if !game || game.gameType !== PostGameType.Cloze || !currentUserCanAnswer}
             <ButtonLarge
-                className="correct-button flex items-center justify-center cursor-pointer rounded-lg bg-gray-lightest ml-0 mr-1"
+                className={`correct-button flex items-center justify-center cursor-pointer rounded-l ml-0 mr-1 ${
+                    showCorrections ? "shown" : "not-shown"
+                }`}
                 on:click={() => handleToggleCorrections()}
                 tag="button"
-                variant="OUTLINED"
+                variant="TEXT"
                 color="SECONDARY"
             >
                 {#if showCorrections}
@@ -1198,7 +1200,7 @@
                 {:else}
                     <Edit3Icon size="18" /><span
                         class="text-sm font-bold text-gray-bitdark select-none"
-                        >corrections</span
+                        >{correctionNodes.length}</span
                     >
                 {/if}
             </ButtonLarge>
@@ -1216,15 +1218,14 @@
                 >
             {:else}
                 <ButtonLarge
-                    className="reply-button items-center justify-center ml-0 mr-1"
+                    className="reply-button items-center justify-center ml-0 mr-1 bg-gray-lightest"
                     tag="button"
-                    variant="OUTLINED"
+                    variant="TEXT"
                     color="PRIMARY"
                     on:click={() => (showReplies = !showReplies)}
                     ><MessageCircleIcon size="16" /><span
                         class="text-sm text-gray-bitdark font-bold select-none rounded-lg"
-                        >{replies?.totalCount || 0}
-                        {#if (replies?.totalCount || 0) === 1}reply{:else}replies{/if}</span
+                        >{replies?.totalCount || 0}</span
                     ></ButtonLarge
                 >
             {/if}
@@ -1340,6 +1341,10 @@
         min-width: 18px;
     }
 
+    .corrections-note :global(svg) {
+        min-width: 18px;
+    }
+
     .body-part-range.answered {
         @apply border-primary;
         @apply border-b-2;
@@ -1369,7 +1374,7 @@
     :global(.reply-button) {
         min-width: 50px;
 
-        @apply px-2 !important;
+        @apply px-3 !important;
     }
 
     :global(.reply-button svg) {
@@ -1390,7 +1395,7 @@
     }
 
     :global(.like-button) {
-        @apply px-2 !important;
+        @apply px-3 !important;
 
         min-width: 54px;
     }
@@ -1421,9 +1426,13 @@
     }
 
     :global(.correct-button) {
-        @apply px-2 !important;
+        @apply px-3 !important;
 
         min-width: 64px;
+    }
+
+    :global(.correct-button.not-shown) {
+        @apply bg-gray-lightest;
     }
 
     :global(.correct-button svg) {

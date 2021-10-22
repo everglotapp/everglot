@@ -13,7 +13,12 @@
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
     import { userHasCompletedProfile } from "../stores"
-    import { feedPostsStore, feedPosts } from "../stores/feed"
+    import {
+        feedPostsStore,
+        feedPosts,
+        singlePostStore,
+        singlePost,
+    } from "../stores/feed"
     import { currentUser, currentUserStore } from "../stores/currentUser"
 
     import Post from "../comp/feed/Post.svelte"
@@ -36,6 +41,7 @@
     query(languageCodeMappings)
 
     query(feedPostsStore)
+    query(singlePostStore)
     query(currentUserStore)
 
     let languageButtonFocused: boolean = false
@@ -262,24 +268,61 @@
         fetchFeedPosts()
     }
 
-    function handlePostSuccess() {
-        fetchFeedPosts()
+    function refreshSinglePost(snowflakeId: string) {
+        $singlePostStore.context = {
+            pause: true,
+        }
+        $singlePostStore.variables = {
+            snowflakeId,
+        }
+        $singlePostStore.context = {
+            pause: false,
+        }
+    }
+    $: if (
+        !$singlePostStore.fetching &&
+        $singlePost &&
+        $singlePost.language?.alpha2 &&
+        (SUPPORTED_LOCALES as readonly string[]).includes(
+            $singlePost.language.alpha2
+        )
+    ) {
+        const fetchedForLocale = $singlePost.language.alpha2 as SupportedLocale
+        const previous = postsByLocale[fetchedForLocale] || []
+        const arriving = $singlePost
+
+        const next = [...previous]
+        const idxToReplace = previous.findIndex(
+            (previousPost) => previousPost.uuid === arriving.uuid
+        )
+        if (idxToReplace === -1) {
+            next.unshift(arriving)
+        } else {
+            next[idxToReplace] = arriving
+        }
+        postsByLocale[fetchedForLocale] = next
+    }
+
+    type PostEvent = CustomEvent<{ post: { snowflakeId: string } }>
+
+    function handlePostSuccess(event: PostEvent) {
+        refreshSinglePost(event.detail.post.snowflakeId)
         unsetPrompt()
     }
-    function handlePostReplySuccess() {
-        fetchFeedPosts()
+    function handlePostReplySuccess(event: PostEvent) {
+        refreshSinglePost(event.detail.post.snowflakeId)
     }
-    function handlePostLikeSuccess() {
-        fetchFeedPosts()
+    function handlePostLikeSuccess(event: PostEvent) {
+        refreshSinglePost(event.detail.post.snowflakeId)
     }
-    function handlePostUnlikeSuccess() {
-        fetchFeedPosts()
+    function handlePostUnlikeSuccess(event: PostEvent) {
+        refreshSinglePost(event.detail.post.snowflakeId)
     }
-    function handlePostGameAnswerSuccess() {
-        fetchFeedPosts()
+    function handlePostGameAnswerSuccess(event: PostEvent) {
+        refreshSinglePost(event.detail.post.snowflakeId)
     }
-    function handlePostCorrectSuccess() {
-        fetchFeedPosts()
+    function handlePostCorrectSuccess(event: PostEvent) {
+        refreshSinglePost(event.detail.post.snowflakeId)
     }
 
     $: lastUuid = posts.length ? posts[posts.length - 1].uuid : null
@@ -467,6 +510,7 @@
                 <div class="post">
                     <Post
                         uuid={post.uuid}
+                        snowflakeId={post.snowflakeId}
                         body={post.body}
                         author={post.author}
                         likes={post.likes}

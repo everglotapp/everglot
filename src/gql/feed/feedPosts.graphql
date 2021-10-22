@@ -57,6 +57,7 @@ query FeedPosts($locale: String!, $afterUuid: UUID) {
                             uuid
                             type
                         }
+                        snowflakeId
                     }
                 }
                 recordings {

@@ -65,6 +65,7 @@ query SinglePost($snowflakeId: BigInt!) {
             type
             __typename
           }
+          snowflakeId
           __typename
         }
         __typename

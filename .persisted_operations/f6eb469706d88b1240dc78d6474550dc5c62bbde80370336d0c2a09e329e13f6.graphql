@@ -1,7 +1,7 @@
-query UserByUsernamePosts($username: String!) {
-  userByUsername(username: $username) {
-    authoredPosts(orderBy: CREATED_AT_DESC, condition: {parentPostId: null}) {
-      nodes {
+query FeedPosts($locale: String!, $afterUuid: UUID) {
+  feedPosts(locale: $locale, afterUuid: $afterUuid) {
+    edges {
+      node {
         uuid
         nodeId
         createdAt
@@ -66,6 +66,7 @@ query UserByUsernamePosts($username: String!) {
               type
               __typename
             }
+            snowflakeId
             __typename
           }
           __typename

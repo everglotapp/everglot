@@ -60,6 +60,7 @@ query UserByUsernamePosts($username: String!) {
                             uuid
                             type
                         }
+                        snowflakeId
                     }
                 }
                 recordings {

@@ -64,6 +64,10 @@
         userFollowershipsStore.context = {
             pause: false,
         }
+        refreshProfile()
+        if ($currentUser && username === $currentUser.username) {
+            refreshCurrentUserProfile()
+        }
     } else {
         userFollowershipsStore.context = {
             pause: true,
@@ -76,9 +80,6 @@
         if (username) {
             preventRefreshBio = false
             newBio = null
-            userProfileStore.variables = {
-                username,
-            }
             userPostsStore.variables = {
                 username,
             }
@@ -167,6 +168,9 @@
         $userProfileStore.context = {
             ...$userProfileStore.context,
             pause: true,
+        }
+        $userProfileStore.variables = {
+            username,
         }
         $userProfileStore.context = {
             ...$userProfileStore.context,
@@ -544,6 +548,7 @@
                         <div class="post">
                             <Post
                                 uuid={post.uuid}
+                                snowflakeId={post.snowflakeId}
                                 body={post.body}
                                 author={post.author}
                                 likes={post.likes}

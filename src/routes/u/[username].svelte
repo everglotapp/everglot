@@ -36,13 +36,13 @@
     let username: string = $page.params.username
 
     const userProfileStore = operationStore<UserProfileQuery>(UserProfile)
-    userProfileStore.context = { paused: true }
+    userProfileStore.context = { pause: true }
     userProfileStore.variables = {
         username,
     }
     query(userProfileStore)
 
-    currentUserProfileStore.context = { paused: true }
+    currentUserProfileStore.context = { pause: true }
     query(currentUserProfileStore)
 
     const userPostsStore =
@@ -56,17 +56,21 @@
     query(userFollowershipsStore)
     $: if (username) {
         userFollowershipsStore.context = {
-            paused: true,
+            pause: true,
         }
         userFollowershipsStore.variables = {
             username,
         }
         userFollowershipsStore.context = {
-            paused: false,
+            pause: false,
+        }
+        refreshProfile()
+        if ($currentUser && username === $currentUser.username) {
+            refreshCurrentUserProfile()
         }
     } else {
         userFollowershipsStore.context = {
-            paused: true,
+            pause: true,
         }
     }
 
@@ -76,9 +80,6 @@
         if (username) {
             preventRefreshBio = false
             newBio = null
-            userProfileStore.variables = {
-                username,
-            }
             userPostsStore.variables = {
                 username,
             }
@@ -166,44 +167,47 @@
     const refreshProfile = () => {
         $userProfileStore.context = {
             ...$userProfileStore.context,
-            paused: true,
+            pause: true,
+        }
+        $userProfileStore.variables = {
+            username,
         }
         $userProfileStore.context = {
             ...$userProfileStore.context,
-            paused: false,
+            pause: false,
         }
     }
 
     const refreshCurrentUserProfile = () => {
         $currentUserProfileStore.context = {
             ...$currentUserProfileStore.context,
-            paused: true,
+            pause: true,
         }
         $currentUserProfileStore.context = {
             ...$currentUserProfileStore.context,
-            paused: false,
+            pause: false,
         }
     }
 
     const refreshPosts = () => {
         $userPostsStore.context = {
             ...$userPostsStore.context,
-            paused: true,
+            pause: true,
         }
         $userPostsStore.context = {
             ...$userPostsStore.context,
-            paused: false,
+            pause: false,
         }
     }
 
     const refreshFollowerships = () => {
         $userFollowershipsStore.context = {
             ...$userFollowershipsStore.context,
-            paused: true,
+            pause: true,
         }
         $userFollowershipsStore.context = {
             ...$userFollowershipsStore.context,
-            paused: false,
+            pause: false,
         }
     }
 
@@ -544,6 +548,7 @@
                         <div class="post">
                             <Post
                                 uuid={post.uuid}
+                                snowflakeId={post.snowflakeId}
                                 body={post.body}
                                 author={post.author}
                                 likes={post.likes}

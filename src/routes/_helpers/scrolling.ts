@@ -27,7 +27,17 @@ const scroll = (el: HTMLElement, scrollTop?: number): void => {
 }
 
 /**
+ * Get distance in pixels that the scroll position is away from the element's bottom.
+ * @param el Element
+ */
+export const scrollDistanceFromBottom = (el: HTMLElement): number => {
+    const bottomScrollTop = el.scrollHeight - el.clientHeight
+    return bottomScrollTop - el.scrollTop
+}
+
+/**
  * Whether the element is scrolled to the specified position.
+ * @param el Element
  * @param scrollTop Position to check against, bottom if null.
  */
 const isScrolledToOrLower = (

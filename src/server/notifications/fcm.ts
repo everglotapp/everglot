@@ -30,7 +30,7 @@ import {
 } from "./utils"
 import type { NotificationParams } from "./params"
 import type { FcmParamsV1 } from "./params/v1"
-import type { messaging } from "firebase-admin"
+import type { MulticastMessage } from "firebase-admin/messaging"
 
 let handleNotifications = false
 let notificationHandler: NodeJS.Timeout | undefined
@@ -115,7 +115,7 @@ async function sendNextFcmNotification() {
         sendNextFcmNotificationAfterDelay()
         return
     }
-    const message: messaging.MulticastMessage = {
+    const message: MulticastMessage = {
         tokens,
         ...messageParams,
     }

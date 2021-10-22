@@ -23,6 +23,7 @@ mutation CreatePost(
             id
             uuid
             nodeId
+            snowflakeId
         }
     }
 }

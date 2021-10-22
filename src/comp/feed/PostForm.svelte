@@ -227,7 +227,7 @@
                     writableBodyInputNode.innerHTML = ""
                 }
                 handleCloseGamify()
-                dispatch("postSuccess")
+                dispatch("postSuccess", response.meta)
                 if (recordedBlob) {
                     const res2 = await createPostRecording(
                         response.meta.post.uuid,

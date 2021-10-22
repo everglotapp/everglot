@@ -62,15 +62,6 @@ declare module '*/registerUserActivity.graphql' {
 }
     
 
-declare module '*/allPosts.graphql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const AllPosts: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
 declare module '*/createPost.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -147,6 +138,15 @@ declare module '*/deletePostLike.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const DeletePostLike: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/feedPosts.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const FeedPosts: DocumentNode;
 
   export default defaultDocument;
 }

@@ -28,7 +28,7 @@
     import { currentUserStore, currentUserUuid } from "../../stores/currentUser"
 
     import type {
-        AllPostsQuery,
+        FeedPostsQuery,
         GrammaticalCase,
         GrammaticalGender,
     } from "../../types/generated/graphql"
@@ -62,9 +62,12 @@
 
     query(currentUserStore)
 
-    type PostNode = NonNullable<NonNullable<AllPostsQuery["posts"]>["nodes"][0]>
+    type PostNode = NonNullable<
+        NonNullable<FeedPostsQuery["feedPosts"]>["edges"][number]["node"]
+    >
 
     export let uuid: string
+    export let snowflakeId: string
     export let body: string
     export let createdAt: Date
     export let author: NonNullable<PostNode["author"]>
@@ -143,12 +146,12 @@
             if (response.success) {
                 // success
                 newReplyBody = ""
-                dispatch("replySuccess")
+                dispatch("replySuccess", { post: { snowflakeId } })
             } else {
-                dispatch("replyFailure")
+                dispatch("replyFailure", { post: { snowflakeId } })
             }
         } else {
-            dispatch("replyFailure")
+            dispatch("replyFailure", { post: { snowflakeId } })
         }
     }
     let showReplies: boolean = false
@@ -172,9 +175,13 @@
             },
         })
         const onSuccess = () =>
-            dispatch(tmpLiked ? "likeSuccess" : "unlikeSuccess")
+            dispatch(tmpLiked ? "likeSuccess" : "unlikeSuccess", {
+                post: { snowflakeId },
+            })
         const onFailure = () =>
-            dispatch(tmpLiked ? "likeFailure" : "unlikeFailure")
+            dispatch(tmpLiked ? "likeFailure" : "unlikeFailure", {
+                post: { snowflakeId },
+            })
         if (res.status === 200) {
             const response = await res.json()
             if (response.success) {
@@ -431,9 +438,10 @@
         } else {
             return
         }
-        const onSuccess = () => dispatch("gameAnswerSuccess")
+        const onSuccess = () =>
+            dispatch("gameAnswerSuccess", { post: { snowflakeId } })
         const onFailure = () => {
-            dispatch("gameAnswerFailure")
+            dispatch("gameAnswerFailure", { post: { snowflakeId } })
             if (showCorrectAnswers) {
                 showCorrectAnswers = false
             }
@@ -485,12 +493,12 @@
             const response = await res.json()
             if (response.success) {
                 // success
-                dispatch("correctSuccess")
+                dispatch("correctSuccess", { post: { snowflakeId } })
             } else {
-                dispatch("correctFailure")
+                dispatch("correctFailure", { post: { snowflakeId } })
             }
         } else {
-            dispatch("correctFailure")
+            dispatch("correctFailure", { post: { snowflakeId } })
         }
     }
 

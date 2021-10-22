@@ -1,28 +1,28 @@
 <script lang="ts">
+    import { onMount } from "svelte"
     import { stores } from "@sapper/app"
-    import { operationStore, query } from "@urql/svelte"
+    import { query } from "@urql/svelte"
 
     import Post from "../../comp/feed/Post.svelte"
     import Spinner from "../../comp/util/Spinner.svelte"
     import ErrorMessage from "../../comp/util/ErrorMessage.svelte"
 
-    import { SinglePost } from "../../types/generated/graphql"
-    import type { SinglePostQuery } from "../../types/generated/graphql"
+    import { singlePost, singlePostStore } from "../../stores/feed"
 
     const { page } = stores()
 
     let snowflakeId: string = $page.params.snowflakeId
 
-    const singlePostStore = operationStore<SinglePostQuery>(SinglePost)
-    singlePostStore.variables = {
-        snowflakeId,
-    }
     query(singlePostStore)
 
-    $: post =
-        $singlePostStore.data && !$singlePostStore.error
-            ? $singlePostStore.data.posts?.nodes[0] || null
-            : null
+    onMount(() => {
+        $singlePostStore.variables = {
+            snowflakeId,
+        }
+        refreshPost()
+    })
+
+    $: post = $singlePost
 
     $: if ($page.params.snowflakeId !== snowflakeId) {
         snowflakeId = $page.params.snowflakeId
@@ -37,11 +37,11 @@
     const refreshPost = () => {
         $singlePostStore.context = {
             ...$singlePostStore.context,
-            paused: true,
+            pause: true,
         }
         $singlePostStore.context = {
             ...$singlePostStore.context,
-            paused: false,
+            pause: false,
         }
     }
 
@@ -82,6 +82,7 @@
                 <div class="post">
                     <Post
                         uuid={post.uuid}
+                        snowflakeId={post.snowflakeId}
                         body={post.body}
                         author={post.author}
                         likes={post.likes}

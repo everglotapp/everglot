@@ -363,6 +363,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             post: {
                 uuid: post.uuid,
                 nodeId: post.nodeId,
+                snowflakeId: post.snowflakeId,
             },
         },
     })

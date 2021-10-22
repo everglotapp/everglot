@@ -1,0 +1,143 @@
+query FeedPosts($locale: String!, $afterUuid: UUID) {
+    feedPosts(locale: $locale, afterUuid: $afterUuid) {
+        edges {
+            node {
+                uuid
+                nodeId
+                createdAt
+                author {
+                    uuid
+                    username
+                    avatarUrl
+                    displayName
+                }
+                body
+                likes {
+                    totalCount
+                    nodes {
+                        user {
+                            uuid
+                        }
+                    }
+                }
+                parentPost {
+                    uuid
+                }
+                replies(
+                    orderBy: CREATED_AT_ASC
+                    filter: { not: { parentPostId: { isNull: true } } }
+                ) {
+                    totalCount
+                    nodes {
+                        uuid
+                        nodeId
+                        createdAt
+                        author {
+                            uuid
+                            username
+                            avatarUrl
+                        }
+                        likes {
+                            totalCount
+                            nodes {
+                                user {
+                                    uuid
+                                }
+                            }
+                        }
+                        body
+                        parentPost {
+                            uuid
+                        }
+                        language {
+                            alpha2
+                        }
+                        prompt {
+                            content
+                            uuid
+                            type
+                        }
+                        snowflakeId
+                    }
+                }
+                recordings {
+                    totalCount
+                    nodes {
+                        filename
+                        extension
+                        uuid
+                        user {
+                            uuid
+                        }
+                    }
+                }
+                language {
+                    alpha2
+                }
+                prompt {
+                    content
+                    uuid
+                    type
+                }
+                snowflakeId
+                games {
+                    nodes {
+                        gameType
+                        uuid
+                        ranges {
+                            nodes {
+                                answers {
+                                    edges {
+                                        node {
+                                            id
+                                        }
+                                    }
+                                }
+                                endIndex
+                                startIndex
+                                uuid
+                            }
+                            totalCount
+                        }
+                        revealedByCurrentUser
+                        answersByCurrentUser {
+                            nodes {
+                                caseOption
+                                clozeAnswer
+                                correct
+                                genderOption
+                                range {
+                                    uuid
+                                }
+                            }
+                            totalCount
+                        }
+                        correctAnswers {
+                            nodes {
+                                caseOption
+                                clozeAnswer
+                                genderOption
+                                rangeUuid
+                            }
+                        }
+                    }
+                }
+                corrections {
+                    nodes {
+                        body
+                        endIndex
+                        createdAt
+                        startIndex
+                        uuid
+                        user {
+                            uuid
+                            username
+                            avatarUrl
+                            displayName
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -13,7 +13,12 @@
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
     import { userHasCompletedProfile } from "../stores"
-    import { allPostsStore, allPosts } from "../stores/feed"
+    import {
+        feedPostsStore,
+        feedPosts,
+        singlePostStore,
+        singlePost,
+    } from "../stores/feed"
     import { currentUser, currentUserStore } from "../stores/currentUser"
 
     import Post from "../comp/feed/Post.svelte"
@@ -23,7 +28,10 @@
     import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
 
-    import { PromptType } from "../types/generated/graphql"
+    import {
+        FeedPostsQueryVariables,
+        PromptType,
+    } from "../types/generated/graphql"
     import type { Language } from "../types/generated/graphql"
     import { languageCodeMappings } from "../stores"
     import { SUPPORTED_LOCALES, PROMPT_LOCALES } from "../constants"
@@ -32,7 +40,8 @@
 
     query(languageCodeMappings)
 
-    query(allPostsStore)
+    query(feedPostsStore)
+    query(singlePostStore)
     query(currentUserStore)
 
     let languageButtonFocused: boolean = false
@@ -45,9 +54,9 @@
     let languages: Pick<Language, "englishName" | "alpha2">[] = []
     $: if (!$languageCodeMappings.fetching && $languageCodeMappings.data) {
         languages =
-            $languageCodeMappings.data?.languages?.nodes
-                .filter(Boolean)
-                .map((node) => node!) || []
+            ($languageCodeMappings.data?.languages?.nodes.filter(
+                Boolean
+            ) as Pick<Language, "englishName" | "alpha2">[]) || []
     }
     type LanguageItem = { value: SupportedLocale; label: string }
     let items: LanguageItem[] = []
@@ -105,16 +114,60 @@
         clearRedirectTimeout()
     })
 
-    $: posts = $allPosts
-        ? $allPosts
-              .filter((post) => post && !post.parentPost)
-              .filter((post) =>
-                  pickedLocale
-                      ? post!.language && post!.language.alpha2 === pickedLocale
-                      : true
-              )
-              .map((post) => post!)
-        : []
+    let postsFetchedBeforeByLocale: Partial<Record<SupportedLocale, boolean>> =
+        {}
+    $: postsFetchedBeforeForLocale =
+        $feedLocale === null
+            ? false
+            : Boolean(postsFetchedBeforeByLocale[$feedLocale])
+    $: if (
+        !$feedPostsStore.fetching &&
+        $feedPostsStore.data &&
+        $feedPostsStore.variables?.locale === $feedLocale &&
+        !postsFetchedBeforeByLocale[$feedLocale]
+    ) {
+        postsFetchedBeforeByLocale[$feedLocale] = true
+    }
+    const postsByLocale: Partial<
+        Record<SupportedLocale, NonNullable<typeof $feedPosts>>
+    > = {}
+    $: if (
+        $feedPosts &&
+        !$feedPostsStore.fetching &&
+        $feedPostsStore.variables?.locale &&
+        (SUPPORTED_LOCALES as readonly string[]).includes(
+            $feedPostsStore.variables.locale
+        )
+    ) {
+        const fetchedForLocale = $feedPostsStore.variables
+            .locale as SupportedLocale
+        const previous = postsByLocale[fetchedForLocale] || []
+        const arriving = $feedPosts
+
+        let dirty = false
+        const next = []
+        for (const post of previous) {
+            const idxToReplace = arriving.findIndex(
+                (arrivingPost) => arrivingPost.uuid === post!.uuid
+            )
+            if (idxToReplace !== -1) {
+                next.push(arriving[idxToReplace])
+                arriving.splice(idxToReplace, 1)
+                dirty = true
+            } else {
+                next.push(post)
+            }
+        }
+        for (const post of arriving) {
+            dirty = true
+            next.push(post)
+        }
+
+        if (dirty) {
+            postsByLocale[fetchedForLocale] = next
+        }
+    }
+    $: posts = $feedLocale === null ? [] : postsByLocale[$feedLocale] || []
 
     let feedLocaleInitialized = false
     $: if (
@@ -148,6 +201,12 @@
         })
         previouslyPickedLocale = pickedLocale
         $feedLocale = pickedLocale
+        if ($feedLocale !== null) {
+            // just for good measure, initialize this
+            if (!postsFetchedBeforeByLocale.hasOwnProperty($feedLocale)) {
+                postsFetchedBeforeByLocale[$feedLocale] = false
+            }
+        }
     }
     function handlePickLocale(locale: SupportedLocale) {
         pickedLocale = locale
@@ -187,37 +246,124 @@
             prompt[pickedLocale] = null
         }
     }
-    const refreshPosts = () => {
-        $allPostsStore.context = {
-            ...$allPostsStore.context,
-            paused: true,
+    const fetchFeedPosts = (variables?: Partial<FeedPostsQueryVariables>) => {
+        $feedPostsStore.context = {
+            ...$feedPostsStore.context,
+            pause: true,
         }
-        $allPostsStore.context = {
-            ...$allPostsStore.context,
-            paused: false,
+        $feedPostsStore.variables = {
+            locale: $feedLocale || "",
+            afterUuid: null,
+            ...(variables || {}),
         }
+        if ($feedLocale !== null) {
+            $feedPostsStore.context = {
+                ...$feedPostsStore.context,
+                pause: false,
+            }
+        }
+    }
+    // Refresh posts whenever user changes locale.
+    $: if (feedLocaleInitialized && $feedLocale) {
+        fetchFeedPosts()
     }
 
-    function handlePostSuccess() {
-        refreshPosts()
+    function refreshSinglePost(snowflakeId: string) {
+        $singlePostStore.context = {
+            pause: true,
+        }
+        $singlePostStore.variables = {
+            snowflakeId,
+        }
+        $singlePostStore.context = {
+            pause: false,
+        }
+    }
+    $: if (
+        !$singlePostStore.fetching &&
+        $singlePost &&
+        $singlePost.language?.alpha2 &&
+        (SUPPORTED_LOCALES as readonly string[]).includes(
+            $singlePost.language.alpha2
+        )
+    ) {
+        const fetchedForLocale = $singlePost.language.alpha2 as SupportedLocale
+        const previous = postsByLocale[fetchedForLocale] || []
+        const arriving = $singlePost
+
+        const next = [...previous]
+        const idxToReplace = previous.findIndex(
+            (previousPost) => previousPost.uuid === arriving.uuid
+        )
+        if (idxToReplace === -1) {
+            next.unshift(arriving)
+        } else {
+            next[idxToReplace] = arriving
+        }
+        postsByLocale[fetchedForLocale] = next
+    }
+
+    type PostEvent = CustomEvent<{ post: { snowflakeId: string } }>
+
+    function handlePostSuccess(event: PostEvent) {
+        refreshSinglePost(event.detail.post.snowflakeId)
         unsetPrompt()
     }
-    function handlePostReplySuccess() {
-        refreshPosts()
+    function handlePostReplySuccess(event: PostEvent) {
+        refreshSinglePost(event.detail.post.snowflakeId)
     }
-    function handlePostLikeSuccess() {
-        refreshPosts()
+    function handlePostLikeSuccess(event: PostEvent) {
+        refreshSinglePost(event.detail.post.snowflakeId)
     }
-    function handlePostUnlikeSuccess() {
-        refreshPosts()
+    function handlePostUnlikeSuccess(event: PostEvent) {
+        refreshSinglePost(event.detail.post.snowflakeId)
     }
-    function handlePostGameAnswerSuccess() {
-        refreshPosts()
+    function handlePostGameAnswerSuccess(event: PostEvent) {
+        refreshSinglePost(event.detail.post.snowflakeId)
     }
-    function handlePostCorrectSuccess() {
-        refreshPosts()
+    function handlePostCorrectSuccess(event: PostEvent) {
+        refreshSinglePost(event.detail.post.snowflakeId)
+    }
+
+    $: lastUuid = posts.length ? posts[posts.length - 1].uuid : null
+    const fetchOlderPosts = () => fetchFeedPosts({ afterUuid: lastUuid })
+
+    // Older posts don't exist if posts fetched and empty
+    // Older posts exist if posts havent been fetched yet
+    $: olderPostsCouldExistForLocale =
+        !postsFetchedBeforeForLocale ||
+        (postsFetchedBeforeForLocale && lastUuid !== null)
+
+    let scrollY: number
+    let innerHeight: number
+    const FETCH_OLDER_MAX_SCROLL_BOTTOM_PX = 500
+    let fetchOlderPostsTimeout: number | undefined
+    const fetchOlderPostsIfNecessary = () => {
+        if (olderPostsCouldExistForLocale) {
+            fetchOlderPosts()
+        }
+        fetchOlderPostsTimeout = undefined
+    }
+    const debounceFetchOlderPostsIfNecessary = () => {
+        window.clearTimeout(fetchOlderPostsTimeout)
+        fetchOlderPostsTimeout = window.setTimeout(
+            fetchOlderPostsIfNecessary,
+            250
+        )
+    }
+    function handleWindowScroll() {
+        setTimeout(() => {
+            const { scrollHeight } = document.body
+            const windowScrollTop = scrollY + innerHeight
+            const scrollDistanceFromBottom = scrollHeight - windowScrollTop
+            if (scrollDistanceFromBottom < FETCH_OLDER_MAX_SCROLL_BOTTOM_PX) {
+                debounceFetchOlderPostsIfNecessary()
+            }
+        }, 15)
     }
 </script>
+
+<svelte:window bind:scrollY bind:innerHeight on:scroll={handleWindowScroll} />
 
 <Localized id="index-browser-window-title" let:text>
     <BrowserTitle title={text} />
@@ -364,6 +510,7 @@
                 <div class="post">
                     <Post
                         uuid={post.uuid}
+                        snowflakeId={post.snowflakeId}
                         body={post.body}
                         author={post.author}
                         likes={post.likes}

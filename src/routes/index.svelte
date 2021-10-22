@@ -157,7 +157,6 @@
             next.push(post)
         }
 
-        console.log({ previous, arriving, fetchedForLocale, dirty, next })
         if (dirty) {
             postsByLocale[fetchedForLocale] = next
         }

@@ -1,5 +1,5 @@
-query FeedPosts($locale: String!, $before: Cursor) {
-    feedPosts(locale: $locale, before: $before) {
+query FeedPosts($locale: String!, $afterUuid: UUID) {
+    feedPosts(locale: $locale, afterUuid: $afterUuid) {
         edges {
             node {
                 uuid
@@ -137,12 +137,6 @@ query FeedPosts($locale: String!, $before: Cursor) {
                     }
                 }
             }
-        }
-        pageInfo {
-            hasPreviousPage
-            startCursor
-            hasNextPage
-            endCursor
         }
     }
 }

@@ -16390,6 +16390,7 @@ export type QueryEnglishWouldYouRatherQuestionsArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryFeedPostsArgs = {
   after?: Maybe<Scalars['Cursor']>;
+  afterUuid?: Maybe<Scalars['UUID']>;
   before?: Maybe<Scalars['Cursor']>;
   filter?: Maybe<PostFilter>;
   first?: Maybe<Scalars['Int']>;
@@ -25892,11 +25893,11 @@ export type DeletePostLikeMutation = { __typename?: 'Mutation', deletePostLike?:
 
 export type FeedPostsQueryVariables = Exact<{
   locale: Scalars['String'];
-  before?: Maybe<Scalars['Cursor']>;
+  afterUuid?: Maybe<Scalars['UUID']>;
 }>;
 
 
-export type FeedPostsQuery = { __typename?: 'Query', feedPosts?: { __typename?: 'PostsConnection', edges: Array<{ __typename?: 'PostsEdge', node?: { __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined } | null | undefined> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<{ __typename?: 'PostRecording', filename: string, extension?: string | null | undefined, uuid: any, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: boolean | null | undefined, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: { __typename?: 'PostGameAnswer', id: number } | null | undefined }> } } | null | undefined> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameAnswer', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, correct?: boolean | null | undefined, genderOption?: GrammaticalGender | null | undefined, range?: { __typename?: 'PostGameRange', uuid: any } | null | undefined } | null | undefined> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, rangeUuid?: any | null | undefined } | null | undefined> } } | null | undefined> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined }>, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, startCursor?: any | null | undefined, hasNextPage: boolean, endCursor?: any | null | undefined } } | null | undefined };
+export type FeedPostsQuery = { __typename?: 'Query', feedPosts?: { __typename?: 'PostsConnection', edges: Array<{ __typename?: 'PostsEdge', node?: { __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined } | null | undefined> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<{ __typename?: 'PostRecording', filename: string, extension?: string | null | undefined, uuid: any, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: boolean | null | undefined, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: { __typename?: 'PostGameAnswer', id: number } | null | undefined }> } } | null | undefined> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameAnswer', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, correct?: boolean | null | undefined, genderOption?: GrammaticalGender | null | undefined, range?: { __typename?: 'PostGameRange', uuid: any } | null | undefined } | null | undefined> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, rangeUuid?: any | null | undefined } | null | undefined> } } | null | undefined> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined }> } | null | undefined };
 
 export type PostGameByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
@@ -26607,8 +26608,8 @@ export const DeletePostLike = gql`
 }
     `;
 export const FeedPosts = gql`
-    query FeedPosts($locale: String!, $before: Cursor) {
-  feedPosts(locale: $locale, before: $before) {
+    query FeedPosts($locale: String!, $afterUuid: UUID) {
+  feedPosts(locale: $locale, afterUuid: $afterUuid) {
     edges {
       node {
         uuid
@@ -26743,12 +26744,6 @@ export const FeedPosts = gql`
           }
         }
       }
-    }
-    pageInfo {
-      hasPreviousPage
-      startCursor
-      hasNextPage
-      endCursor
     }
   }
 }

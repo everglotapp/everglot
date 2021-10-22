@@ -5,6 +5,7 @@ import {
     FeedPosts,
     FeedPostsQuery,
     FeedPostsQueryVariables,
+    Post,
 } from "../types/generated/graphql"
 
 export const feedPostsStore = operationStore<
@@ -14,7 +15,7 @@ export const feedPostsStore = operationStore<
     FeedPosts,
     {
         locale: "",
-        before: null,
+        afterUuid: null,
     },
     { pause: true, requestPolicy: "network-only" }
 )
@@ -23,9 +24,9 @@ export const feedPosts = derived(
     feedPostsStore,
     ($feedPostsStore) =>
         $feedPostsStore.data
-            ? $feedPostsStore.data?.feedPosts?.edges
+            ? ($feedPostsStore.data?.feedPosts?.edges
                   .map((edge) => edge.node)
-                  .filter(Boolean) || null
+                  .filter(Boolean) as Post[]) || null
             : null,
     null
 )

@@ -1885,6 +1885,7 @@ type Query implements Node {
   """Reads and enables pagination through a set of `Post`."""
   feedPosts(
     locale: String
+    afterUuid: UUID
 
     """Only read the first `n` values of the set."""
     first: Int

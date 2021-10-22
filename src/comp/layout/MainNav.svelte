@@ -102,7 +102,7 @@
     const reset = () => (copiedInviteLink = null)
     const debounceReset = () => {
         clearTimeout(resetCopiedTimeout)
-        setTimeout(reset, 5000)
+        resetCopiedTimeout = window.setTimeout(reset, 5000)
     }
     async function handleCopyClipboard(event: MouseEvent): Promise<void> {
         event.preventDefault()

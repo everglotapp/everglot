@@ -23,7 +23,10 @@
     import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
 
-    import { PromptType } from "../types/generated/graphql"
+    import {
+        FeedPostsQueryVariables,
+        PromptType,
+    } from "../types/generated/graphql"
     import type { Language } from "../types/generated/graphql"
     import { languageCodeMappings } from "../stores"
     import { SUPPORTED_LOCALES, PROMPT_LOCALES } from "../constants"
@@ -45,9 +48,9 @@
     let languages: Pick<Language, "englishName" | "alpha2">[] = []
     $: if (!$languageCodeMappings.fetching && $languageCodeMappings.data) {
         languages =
-            $languageCodeMappings.data?.languages?.nodes
-                .filter(Boolean)
-                .map((node) => node!) || []
+            ($languageCodeMappings.data?.languages?.nodes.filter(
+                Boolean
+            ) as Pick<Language, "englishName" | "alpha2">[]) || []
     }
     type LanguageItem = { value: SupportedLocale; label: string }
     let items: LanguageItem[] = []
@@ -105,7 +108,61 @@
         clearRedirectTimeout()
     })
 
-    $: posts = $feedPosts ? $feedPosts.map((post) => post!) : []
+    let postsFetchedBeforeByLocale: Partial<Record<SupportedLocale, boolean>> =
+        {}
+    $: postsFetchedBeforeForLocale =
+        $feedLocale === null
+            ? false
+            : Boolean(postsFetchedBeforeByLocale[$feedLocale])
+    $: if (
+        !$feedPostsStore.fetching &&
+        $feedPostsStore.data &&
+        $feedPostsStore.variables?.locale === $feedLocale &&
+        !postsFetchedBeforeByLocale[$feedLocale]
+    ) {
+        postsFetchedBeforeByLocale[$feedLocale] = true
+    }
+    const postsByLocale: Partial<
+        Record<SupportedLocale, NonNullable<typeof $feedPosts>>
+    > = {}
+    $: if (
+        $feedPosts &&
+        !$feedPostsStore.fetching &&
+        $feedPostsStore.variables?.locale &&
+        (SUPPORTED_LOCALES as readonly string[]).includes(
+            $feedPostsStore.variables.locale
+        )
+    ) {
+        const fetchedForLocale = $feedPostsStore.variables
+            .locale as SupportedLocale
+        const previous = postsByLocale[fetchedForLocale] || []
+        const arriving = $feedPosts
+
+        let dirty = false
+        const next = []
+        for (const post of previous) {
+            const idxToReplace = arriving.findIndex(
+                (arrivingPost) => arrivingPost.uuid === post!.uuid
+            )
+            if (idxToReplace !== -1) {
+                next.push(arriving[idxToReplace])
+                arriving.splice(idxToReplace, 1)
+                dirty = true
+            } else {
+                next.push(post)
+            }
+        }
+        for (const post of arriving) {
+            dirty = true
+            next.push(post)
+        }
+
+        console.log({ previous, arriving, fetchedForLocale, dirty, next })
+        if (dirty) {
+            postsByLocale[fetchedForLocale] = next
+        }
+    }
+    $: posts = $feedLocale === null ? [] : postsByLocale[$feedLocale] || []
 
     let feedLocaleInitialized = false
     $: if (
@@ -139,6 +196,12 @@
         })
         previouslyPickedLocale = pickedLocale
         $feedLocale = pickedLocale
+        if ($feedLocale !== null) {
+            // just for good measure, initialize this
+            if (!postsFetchedBeforeByLocale.hasOwnProperty($feedLocale)) {
+                postsFetchedBeforeByLocale[$feedLocale] = false
+            }
+        }
     }
     function handlePickLocale(locale: SupportedLocale) {
         pickedLocale = locale
@@ -178,14 +241,15 @@
             prompt[pickedLocale] = null
         }
     }
-    const refreshPosts = () => {
+    const fetchFeedPosts = (variables?: Partial<FeedPostsQueryVariables>) => {
         $feedPostsStore.context = {
             ...$feedPostsStore.context,
             pause: true,
         }
         $feedPostsStore.variables = {
             locale: $feedLocale || "",
-            before: null,
+            afterUuid: null,
+            ...(variables || {}),
         }
         if ($feedLocale !== null) {
             $feedPostsStore.context = {
@@ -196,29 +260,68 @@
     }
     // Refresh posts whenever user changes locale.
     $: if (feedLocaleInitialized && $feedLocale) {
-        refreshPosts()
+        fetchFeedPosts()
     }
 
     function handlePostSuccess() {
-        refreshPosts()
+        fetchFeedPosts()
         unsetPrompt()
     }
     function handlePostReplySuccess() {
-        refreshPosts()
+        fetchFeedPosts()
     }
     function handlePostLikeSuccess() {
-        refreshPosts()
+        fetchFeedPosts()
     }
     function handlePostUnlikeSuccess() {
-        refreshPosts()
+        fetchFeedPosts()
     }
     function handlePostGameAnswerSuccess() {
-        refreshPosts()
+        fetchFeedPosts()
     }
     function handlePostCorrectSuccess() {
-        refreshPosts()
+        fetchFeedPosts()
+    }
+
+    $: lastUuid = posts.length ? posts[posts.length - 1].uuid : null
+    const fetchOlderPosts = () => fetchFeedPosts({ afterUuid: lastUuid })
+
+    // Older posts don't exist if posts fetched and empty
+    // Older posts exist if posts havent been fetched yet
+    $: olderPostsCouldExistForLocale =
+        !postsFetchedBeforeForLocale ||
+        (postsFetchedBeforeForLocale && lastUuid !== null)
+
+    let scrollY: number
+    let innerHeight: number
+    const FETCH_OLDER_MAX_SCROLL_BOTTOM_PX = 500
+    let fetchOlderPostsTimeout: number | undefined
+    const fetchOlderPostsIfNecessary = () => {
+        if (olderPostsCouldExistForLocale) {
+            fetchOlderPosts()
+        }
+        fetchOlderPostsTimeout = undefined
+    }
+    const debounceFetchOlderPostsIfNecessary = () => {
+        window.clearTimeout(fetchOlderPostsTimeout)
+        fetchOlderPostsTimeout = window.setTimeout(
+            fetchOlderPostsIfNecessary,
+            250
+        )
+    }
+    function handleWindowScroll() {
+        setTimeout(() => {
+            const { scrollHeight } = document.body
+            const windowScrollTop = scrollY + innerHeight
+            const scrollDistanceFromBottom = scrollHeight - windowScrollTop
+            if (scrollDistanceFromBottom < FETCH_OLDER_MAX_SCROLL_BOTTOM_PX) {
+                debounceFetchOlderPostsIfNecessary()
+            }
+        }, 15)
     }
 </script>
+
+<svelte:window bind:scrollY bind:innerHeight on:scroll={handleWindowScroll} />
 
 <Localized id="index-browser-window-title" let:text>
     <BrowserTitle title={text} />

@@ -123,6 +123,9 @@ query UserByUsernamePosts($username: String!) {
                                 rangeUuid
                             }
                         }
+                        answerers {
+                            totalCount
+                        }
                     }
                 }
                 corrections {

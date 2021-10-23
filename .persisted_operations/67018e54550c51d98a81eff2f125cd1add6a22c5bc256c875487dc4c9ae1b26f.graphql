@@ -146,6 +146,10 @@ query UserByUsernamePosts($username: String!) {
               }
               __typename
             }
+            answerers {
+              totalCount
+              __typename
+            }
             __typename
           }
           __typename

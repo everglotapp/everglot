@@ -1011,7 +1011,7 @@
                                     ></span
                                 >
                             {:else}
-                                <span class="border-b-2 border-gray mr-2"
+                                <span class="border-b-2 border-gray"
                                     >{bodyPart.value}</span
                                 >
                             {/if}
@@ -1020,7 +1020,7 @@
                                 <input
                                     id={bodyPart.uuid}
                                     type="text"
-                                    class="inline mr-2 px-1 py-1"
+                                    class="inline mr-1 px-1 py-1"
                                     bind:value={clozeAnswers[bodyPart.uuid]}
                                     name={bodyPart.uuid}
                                     style={`width: 5em;`}
@@ -1111,7 +1111,7 @@
                     <div
                         class="flex xl:absolute xl:right-0 xl:max-w-xs mr-1 text-sm text-gray font-bold"
                     >
-                        <div class="pl-4" style="max-width: 14rem;">
+                        <div class="pl-0 xl:pl-4" style="max-width: 14rem;">
                             {#if currentUserCanAnswer}
                                 {#if game.answerers.totalCount > 1}
                                     {game.answerers.totalCount} people have played.

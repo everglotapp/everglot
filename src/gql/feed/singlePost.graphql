@@ -119,6 +119,9 @@ query SinglePost($snowflakeId: BigInt!) {
                             rangeUuid
                         }
                     }
+                    answerers {
+                        totalCount
+                    }
                 }
             }
             corrections {

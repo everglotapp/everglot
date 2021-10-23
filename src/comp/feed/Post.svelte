@@ -932,7 +932,7 @@
                             {#if currentUserCanAnswer}
                                 <span
                                     id={bodyPart.uuid}
-                                    class="body-part-range inline-flex border-b px-1 py-1 mr-2 cursor-pointer"
+                                    class="body-part-range inline-flex border-b px-1 py-1 cursor-pointer"
                                     class:answered={answerRanges.hasOwnProperty(
                                         bodyPart.uuid
                                     ) && answerRanges[bodyPart.uuid] !== null}
@@ -946,7 +946,7 @@
                                 >
                             {:else if showCorrectAnswers && displayedAnswerByRangeUuid[bodyPart.uuid] && language}
                                 <span
-                                    class="inline-flex border-b-2 border-gray px-1 pt-1 mr-2 relative mb-8"
+                                    class="inline-flex border-b-2 border-gray px-1 pt-1 relative mb-8"
                                     ><span>{bodyPart.value}</span><span
                                         class="body-part-range-answer absolute flex justify-center font-bold mr-1 leading-7"
                                         class:skipped={game.revealedByCurrentUser ||
@@ -971,11 +971,11 @@
                                                 !currentUserAnswerByRangeUuid[
                                                     bodyPart.uuid
                                                 ].correct)}
-                                        style={`bottom: -2rem; left: 50%; right: 50%; z-index: ${
+                                        style={`bottom: -1.5rem; left: 50%; right: 50%; z-index: ${
                                             10 + i
                                         };`}
                                         ><span
-                                            class="bg-white whitespace-nowrap"
+                                            class="bg-white whitespace-nowrap text-sm"
                                             ><Localized
                                                 id={game.gameType ===
                                                     PostGameType.GuessCase &&
@@ -1027,7 +1027,7 @@
                                 />
                             {:else if showCorrectAnswers && displayedAnswerByRangeUuid[bodyPart.uuid]}
                                 <span
-                                    class={`inline-flex border-b-2 border-gray px-1 pt-1 mr-2 relative${
+                                    class={`inline-flex border-b-2 border-gray px-1 pt-1 relative${
                                         currentUserCreatedGame ? "" : " mb-8"
                                     }`}
                                     >{correctAnswerByRangeUuid[bodyPart.uuid]
@@ -1055,11 +1055,11 @@
                                                     !currentUserAnswerByRangeUuid[
                                                         bodyPart.uuid
                                                     ].correct)}
-                                            style={`bottom: -2rem; left: 50%; right: 50%; z-index: ${
+                                            style={`bottom: -1.5rem; left: 50%; right: 50%; z-index: ${
                                                 10 + i
                                             };`}
                                             ><span
-                                                class="bg-white whitespace-nowrap"
+                                                class="bg-white whitespace-nowrap text-sm"
                                                 ><Localized
                                                     id={displayedAnswerByRangeUuid[
                                                         bodyPart.uuid
@@ -1076,7 +1076,7 @@
                                 <input
                                     id={bodyPart.uuid}
                                     type="text"
-                                    class="inline mr-2 bg-gray-light px-0 py-1"
+                                    class="inline mr-1 bg-gray-light px-0 py-1"
                                     disabled
                                     name={bodyPart.uuid}
                                     style={`height: 2rem; width: 4.5rem;`}
@@ -1104,10 +1104,40 @@
                     />
                 </div>
             {/if}
-            {#if game !== null && $currentUserUuid !== null && $currentUserUuid !== uuid && !showCorrections}
+            {#if game && $currentUserUuid !== null && $currentUserUuid !== uuid && !showCorrections}
                 <div
-                    class="flex flex-col sm:flex-row-reverse pt-2 sm:justify-end justify-center items-start sm:items-center"
+                    class="relative flex flex-col sm:flex-row-reverse pt-2 sm:justify-end justify-center items-start sm:items-center"
                 >
+                    <div
+                        class="flex xl:absolute xl:right-0 xl:max-w-xs mr-1 text-sm text-gray font-bold"
+                    >
+                        <div class="pl-4" style="max-width: 14rem;">
+                            {#if currentUserCanAnswer}
+                                {#if game.answerers.totalCount > 1}
+                                    {game.answerers.totalCount} people have played.
+                                {:else if game.answerers.totalCount == 1}
+                                    1 person has played.
+                                {:else}
+                                    Nobody has played so far.
+                                {/if}
+                            {:else if currentUserCreatedGame || game.revealedByCurrentUser}
+                                {#if game.answerers.totalCount > 1}
+                                    {game.answerers.totalCount} people have played.
+                                {:else if game.answerers.totalCount == 1}
+                                    1 person has played.
+                                {:else}
+                                    Nobody has played so far.
+                                {/if}
+                            {:else if game.answerers.totalCount > 2}
+                                You and {game.answerers.totalCount - 1} others have
+                                played.
+                            {:else if game.answerers.totalCount == 2}
+                                You and one other person have played.
+                            {:else}
+                                Only you have played.
+                            {/if}
+                        </div>
+                    </div>
                     {#if game.revealedByCurrentUser}<div
                             class="flex items-center text-gray-bitdark font-bold text-sm py-1 sm:py-0"
                         >
@@ -1333,7 +1363,7 @@
 
 <style>
     .body.game {
-        @apply leading-8;
+        @apply leading-6;
     }
 
     .reply:first-child {

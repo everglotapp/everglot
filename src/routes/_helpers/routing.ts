@@ -23,9 +23,8 @@ const ROUTE_TO_PAGE: Record<string, Page> = {
     "/global": Page.Global,
     "/privacy": Page.Privacy,
     "/datenschutz": Page.Datenschutz,
-    "/s": Page.Squeek,
-    "/u": Page.OtherUserProfile,
     "/signup": Page.Signup,
+    "/signup/success": Page.SignupSuccess,
     "/profile": Page.Profile,
     "/users/password/reset": Page.ResetPassword,
 } as const
@@ -35,6 +34,12 @@ export function getPage(path: string): Page | null {
     if (typeof page === "undefined") {
         if (path.startsWith("/users/password/reset/")) {
             return Page.ResetPasswordToken
+        }
+        if (path.startsWith("/u/")) {
+            return Page.OtherUserProfile
+        }
+        if (path.startsWith("/s/")) {
+            return Page.Squeek
         }
         return null
     }

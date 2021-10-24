@@ -92,9 +92,11 @@ async function sendNextFcmNotification() {
     const { message: messageParams, excludeUserUuids = [] } = params
     let tokens: string[] = []
     if (recipient) {
-        if (!excludeUserUuids.includes(recipient.uuid)) {
-            tokens = userDevicesToFcmTokens(recipient.userDevices)
+        const { uuid, userDevices } = recipient
+        if (!excludeUserUuids.includes(uuid)) {
+            tokens = userDevicesToFcmTokens(userDevices)
         }
+        chlog.child({ notification, tokens }).debug("test")
     } else if (recipientGroup) {
         for (const userNode of recipientGroup.groupUsers.nodes) {
             if (!userNode || !userNode.user) {
@@ -121,7 +123,21 @@ async function sendNextFcmNotification() {
     }
     // Only actually try to send the message and confirm if we have tokens to send it to.
     if (!tokens.length) {
-        // TODO: Try next notifications in queue until one has target tokens.
+        // Consider this notification sent even if there are no target tokens.
+        chlog
+            .child({ message, notification })
+            .debug("Skipping an FCM message as there are no device tokens.")
+        const markedAsSent = await markNotificationAsJustSent(notification.id)
+        if (!markedAsSent) {
+            chlog
+                .child({ message, notification, markedAsSent })
+                .error(
+                    "After skipping an FCM message could not mark its corresponding notification as sent, aborting FCM notification listener"
+                )
+            // We need to abort here to prevent the same message from being sent repeatedly.
+            stop()
+            return
+        }
         sendNextFcmNotificationAfterDelay()
         return
     }

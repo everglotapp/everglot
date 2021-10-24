@@ -1106,41 +1106,8 @@
             {/if}
             {#if game && $currentUserUuid !== null && $currentUserUuid !== uuid && !showCorrections}
                 <div
-                    class="relative flex flex-col sm:flex-row-reverse pt-2 sm:justify-end justify-center items-start sm:items-center"
+                    class="flex flex-col sm:flex-row-reverse pt-2 sm:justify-end justify-center items-start sm:items-center"
                 >
-                    <div
-                        class="flex xl:absolute xl:right-0 xl:max-w-xs mr-1 text-sm text-gray font-bold"
-                    >
-                        <div
-                            class="pl-0 xl:pl-4 text-right"
-                            style="max-width: 14rem;"
-                        >
-                            {#if currentUserCanAnswer}
-                                {#if game.answerers.totalCount > 1}
-                                    {game.answerers.totalCount} people have played.
-                                {:else if game.answerers.totalCount == 1}
-                                    1 person has played.
-                                {:else}
-                                    Nobody has played so far.
-                                {/if}
-                            {:else if currentUserCreatedGame || game.revealedByCurrentUser}
-                                {#if game.answerers.totalCount > 1}
-                                    {game.answerers.totalCount} people have played.
-                                {:else if game.answerers.totalCount == 1}
-                                    1 person has played.
-                                {:else}
-                                    Nobody has played so far.
-                                {/if}
-                            {:else if game.answerers.totalCount > 2}
-                                You and {game.answerers.totalCount - 1} others have
-                                played.
-                            {:else if game.answerers.totalCount == 2}
-                                You and one other person have played.
-                            {:else}
-                                Only you have played.
-                            {/if}
-                        </div>
-                    </div>
                     {#if game.revealedByCurrentUser}<div
                             class="flex items-center text-gray-bitdark font-bold text-sm py-1 sm:py-0"
                         >
@@ -1219,6 +1186,33 @@
                         >
                     </div>
                 </div>
+                <div class="flex mr-1 text-xs pt-1 text-gray font-bold">
+                    <div class="text-right">
+                        {#if currentUserCanAnswer}
+                            {#if game.answerers.totalCount > 1}
+                                {game.answerers.totalCount} people have played.
+                            {:else if game.answerers.totalCount == 1}
+                                1 person has played.
+                            {:else}
+                                Nobody has played so far.
+                            {/if}
+                        {:else if currentUserCreatedGame || game.revealedByCurrentUser}
+                            {#if game.answerers.totalCount > 1}
+                                {game.answerers.totalCount} people have played.
+                            {:else if game.answerers.totalCount == 1}
+                                1 person has played.
+                            {:else}
+                                Nobody has played so far.
+                            {/if}
+                        {:else if game.answerers.totalCount > 2}
+                            You and {game.answerers.totalCount - 1} others have played.
+                        {:else if game.answerers.totalCount == 2}
+                            You and one other person have played.
+                        {:else}
+                            Only you have played.
+                        {/if}
+                    </div>
+                </div>
             {/if}
         </div>
     </div>
@@ -1292,12 +1286,12 @@
                 aria-placeholder="Reply …"
                 class="border border-gray-bitlight rounded-lg py-1 pl-2 pr-12 w-full origin-top-right"
                 in:scale={{ duration: 150 }}
-                out:scale={{ duration: 150 }}
+                out:scale|local={{ duration: 150 }}
             />
             <div
                 class="absolute right-0 top-0 bottom-0 flex items-center origin-top-right"
                 in:scale={{ duration: 150 }}
-                out:scale={{ duration: 150 }}
+                out:scale|local={{ duration: 150 }}
             >
                 <ButtonSmall
                     tag="button"
@@ -1312,7 +1306,7 @@
             class="origin-top-right"
             class:pb-4={replies?.totalCount && replies?.totalCount > 0}
             in:scale={{ duration: 150 }}
-            out:scale={{ duration: 150 }}
+            out:scale|local={{ duration: 150 }}
         >
             {#each replyNodes as reply (reply.uuid)}
                 <div

@@ -88,6 +88,7 @@ export async function notifyOriginalAuthorAfterReply(
                 },
                 data: {
                     type: FcmMessageParamsDataTypeV1.PostReply,
+                    parentPostSnowflakeId: parentPost.snowflakeId,
                 },
             },
             version: NotificationParamsVersion.V1,

@@ -26152,14 +26152,14 @@ export type PostLikeNotificationQueryVariables = Exact<{
 }>;
 
 
-export type PostLikeNotificationQuery = { __typename?: 'Query', postLike?: { __typename?: 'PostLike', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, parentPostId?: number | null | undefined } | null | undefined, user?: { __typename?: 'User', id: number, username?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined };
+export type PostLikeNotificationQuery = { __typename?: 'Query', postLike?: { __typename?: 'PostLike', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, parentPostId?: number | null | undefined, snowflakeId: any } | null | undefined, user?: { __typename?: 'User', id: number, username?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined };
 
 export type PostReplyNotificationQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type PostReplyNotificationQuery = { __typename?: 'Query', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, createdAt: any, parentPost?: { __typename?: 'Post', authorId?: number | null | undefined } | null | undefined, author?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined } | null | undefined } | null | undefined };
+export type PostReplyNotificationQuery = { __typename?: 'Query', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, createdAt: any, snowflakeId: any, parentPost?: { __typename?: 'Post', authorId?: number | null | undefined, snowflakeId: any } | null | undefined, author?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined } | null | undefined } | null | undefined };
 
 export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
   token: Scalars['String'];
@@ -27410,6 +27410,7 @@ export const PostLikeNotification = gql`
       authorId
       body
       parentPostId
+      snowflakeId
     }
     user {
       id
@@ -27425,6 +27426,7 @@ export const PostReplyNotification = gql`
     authorId
     parentPost {
       authorId
+      snowflakeId
     }
     body
     createdAt
@@ -27432,6 +27434,7 @@ export const PostReplyNotification = gql`
       displayName
       username
     }
+    snowflakeId
   }
 }
     `;

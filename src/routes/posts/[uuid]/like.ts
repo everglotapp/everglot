@@ -72,6 +72,7 @@ async function notifyAuthor(
                 },
                 data: {
                     type: FcmMessageParamsDataTypeV1.PostLike,
+                    postSnowflakeId: post.snowflakeId,
                 },
             },
             version: NotificationParamsVersion.V1,

@@ -1,11 +1,12 @@
 <script lang="ts">
     import { onMount } from "svelte"
-    import { stores } from "@sapper/app"
+    import { stores, goto } from "@sapper/app"
     import { query } from "@urql/svelte"
 
     import Post from "../../comp/feed/Post.svelte"
     import Spinner from "../../comp/util/Spinner.svelte"
     import ErrorMessage from "../../comp/util/ErrorMessage.svelte"
+    import ButtonSmall from "../../comp/util/ButtonSmall.svelte"
 
     import { singlePost, singlePostStore } from "../../stores/feed"
 
@@ -15,11 +16,13 @@
 
     query(singlePostStore)
 
+    let initialized = false
     onMount(() => {
         $singlePostStore.variables = {
             snowflakeId,
         }
         refreshPost()
+        initialized = true
     })
 
     $: post = $singlePost
@@ -64,20 +67,30 @@
 </script>
 
 {#if snowflakeId}
+    <div class="container max-w-2xl pt-4 pb-2 px-2">
+        <ButtonSmall
+            tag="a"
+            href="/"
+            color="PRIMARY"
+            variant="OUTLINED"
+            on:click={() => goto("/", { replaceState: false })}
+            >Back</ButtonSmall
+        >
+    </div>
     {#if post === null}
-        {#if $singlePostStore.fetching}
+        {#if !initialized || $singlePostStore.fetching}
             <div
                 class="container max-w-2xl my-16 flex items-center justify-center"
             >
                 <Spinner />
             </div>
-        {:else}
+        {:else if !$singlePostStore.data || $singlePostStore.error}
             <div class="container max-w-2xl my-4">
                 <ErrorMessage>Post not found.</ErrorMessage>
             </div>
         {/if}
     {:else}
-        <div class="container max-w-2xl pt-4 sm:py-8 px-3 sm:px-0 gap-y-1">
+        <div class="container max-w-2xl pt-4 px-3 sm:px-0 gap-y-1">
             {#if post.author}
                 <div class="post">
                     <Post

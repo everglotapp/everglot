@@ -105,8 +105,11 @@
                     {#key transitionId}
                         <div
                             class="main-inner"
-                            in:scale={{ duration: timeout, delay: timeout }}
-                            out:scale={{ duration: timeout }}
+                            in:scale|local={{
+                                duration: timeout,
+                                delay: timeout,
+                            }}
+                            out:scale|local={{ duration: timeout }}
                         >
                             <slot />
                         </div>

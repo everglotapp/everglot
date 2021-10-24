@@ -3,6 +3,7 @@ query PostReplyNotification($id: Int!) {
         authorId
         parentPost {
             authorId
+            snowflakeId
         }
         body
         createdAt
@@ -10,5 +11,6 @@ query PostReplyNotification($id: Int!) {
             displayName
             username
         }
+        snowflakeId
     }
 }

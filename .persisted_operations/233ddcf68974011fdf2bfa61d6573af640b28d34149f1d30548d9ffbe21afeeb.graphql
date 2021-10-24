@@ -4,6 +4,7 @@ query PostLikeNotification($id: Int!) {
       authorId
       body
       parentPostId
+      snowflakeId
       __typename
     }
     user {

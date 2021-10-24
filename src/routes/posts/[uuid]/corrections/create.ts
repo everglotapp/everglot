@@ -72,7 +72,8 @@ async function notifyAuthor(
                     body: `${post.body.substr(0, 64)}`,
                 },
                 data: {
-                    type: FcmMessageParamsDataTypeV1.PostLike,
+                    type: FcmMessageParamsDataTypeV1.PostCorrection,
+                    postSnowflakeId: post.snowflakeId,
                 },
             },
             version: NotificationParamsVersion.V1,

@@ -3,6 +3,7 @@ query PostReplyNotification($id: Int!) {
     authorId
     parentPost {
       authorId
+      snowflakeId
       __typename
     }
     body
@@ -12,6 +13,7 @@ query PostReplyNotification($id: Int!) {
       username
       __typename
     }
+    snowflakeId
     __typename
   }
 }

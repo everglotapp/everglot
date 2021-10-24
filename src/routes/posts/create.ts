@@ -30,7 +30,10 @@ import { getPromptIdByUuid } from "../../server/prompts"
 import { getPostReplyNotification } from "../../server/notifications/posts"
 import { enqueueFcmNotification } from "../../server/notifications/fcm"
 import { NotificationParamsVersion } from "../../server/notifications/params"
-import { userHasCompletedProfile } from "../../server/users"
+import {
+    getUsernameMentions,
+    userHasCompletedProfile,
+} from "../../server/users"
 import { FcmMessageParamsDataTypeV1 } from "../../server/notifications/params/v1"
 
 import {
@@ -357,6 +360,12 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 return
             }
         }
+    }
+    if (parentPostId) {
+        // TODO: parse body for @username mentions
+        const mentionRanges = getUsernameMentions(body)
+        // TODO: create post user mentions for each mention
+        // TODO: create notifications for each mention
     }
     res.json({
         success: true,

@@ -303,3 +303,23 @@ export async function resetUserPassword(
     )
     return Boolean(!res.errors && res.data)
 }
+
+const USERNAME_MENTION_REGEX = /(\@\w{1,50})/g
+export function getUsernameMentions(body: string) {
+    const matches = [...body.matchAll(USERNAME_MENTION_REGEX)]
+    for (const match of matches) {
+        if (typeof match.index === "undefined") {
+            chlog
+                .child({ match, matches, body })
+                .error("invalid username match")
+            return []
+        }
+    }
+    return [...matches].map((match) => {
+        const atWithUsername = match[0]
+        const username = atWithUsername.slice(1)
+        const startIndex = match.index!
+        const endIndex = match.index! + atWithUsername.length - 1
+        return { username, startIndex, endIndex }
+    })
+}

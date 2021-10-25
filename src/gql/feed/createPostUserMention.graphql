@@ -1,0 +1,28 @@
+mutation CreatePostUserMention(
+    $userId: Int!
+    $postId: Int!
+    $endIndex: Int!
+    $startIndex: Int!
+) {
+    createPostUserMention(
+        input: {
+            postUserMention: {
+                postId: $postId
+                userId: $userId
+                endIndex: $endIndex
+                startIndex: $startIndex
+            }
+        }
+    ) {
+        postUserMention {
+            id
+            postId
+            userId
+            nodeId
+            createdAt
+            endIndex
+            startIndex
+            uuid
+        }
+    }
+}

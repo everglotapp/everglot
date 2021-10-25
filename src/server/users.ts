@@ -50,6 +50,8 @@ import {
     UserByResetPasswordToken,
     ResetUserPasswordMutationVariables,
     ResetUserPassword,
+    UserIdByUsername,
+    UserIdByUsernameQuery,
 } from "../types/generated/graphql"
 
 export async function registerUserActivity(
@@ -157,6 +159,19 @@ export async function getUserIdByUuid(uuid: string): Promise<number | null> {
         return null
     }
     return res.data?.userByUuid?.id || null
+}
+
+export async function getUserIdByUsername(
+    username: User["username"]
+): Promise<number | null> {
+    const res = await performQuery<UserIdByUsernameQuery>(
+        UserIdByUsername.loc!.source,
+        { username }
+    )
+    if (!res.data) {
+        return null
+    }
+    return res.data.userByUsername?.id || null
 }
 
 export async function createUserFollowership(
@@ -305,7 +320,7 @@ export async function resetUserPassword(
 }
 
 const USERNAME_MENTION_REGEX = /(\@\w{1,50})/g
-export function getUsernameMentions(body: string) {
+export function findPotentialUsernameMentions(body: string) {
     const matches = [...body.matchAll(USERNAME_MENTION_REGEX)]
     for (const match of matches) {
         if (typeof match.index === "undefined") {
@@ -315,9 +330,10 @@ export function getUsernameMentions(body: string) {
             return []
         }
     }
-    return [...matches].map((match) => {
+    return matches.map((match) => {
         const atWithUsername = match[0]
         const username = atWithUsername.slice(1)
+        // TODO: try to find username
         const startIndex = match.index!
         const endIndex = match.index! + atWithUsername.length - 1
         return { username, startIndex, endIndex }

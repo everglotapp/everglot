@@ -125,6 +125,15 @@ declare module '*/createPostRecording.graphql' {
 }
     
 
+declare module '*/createPostUserMention.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreatePostUserMention: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/currentUserHasAnsweredOrRevealedPostGame.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -458,6 +467,15 @@ declare module '*/postReplyNotification.graphql' {
 }
     
 
+declare module '*/postUserMentionNotification.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const PostUserMentionNotification: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/unsubscribeUserEmailNotifications.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -615,6 +633,15 @@ declare module '*/userIdByEmail.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const UserIdByEmail: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userIdByUsername.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserIdByUsername: DocumentNode;
 
   export default defaultDocument;
 }

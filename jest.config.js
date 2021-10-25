@@ -42,4 +42,19 @@ module.exports = {
     //     "^src/(.*)": "<rootDir>/src/$1",
     // },
     //preset: "@babel/preset-typescript",
+    collectCoverage: true,
+    collectCoverageFrom: ["*.js", "*/*.js", "*[^\\.d].ts", "*/*[^\\.d].ts"],
+    coveragePathIgnorePatterns: [
+        "src/__tests__/*",
+        "(.)*\\.config\\.js",
+        "\\.eslintrc\\.js",
+    ],
+    coverageThreshold: {
+        global: {
+            branches: 98,
+            functions: 100,
+            lines: 100,
+            statements: 99,
+        },
+    },
 }

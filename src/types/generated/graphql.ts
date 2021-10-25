@@ -26446,6 +26446,16 @@ export type CreatePostRecordingMutationVariables = Exact<{
 
 export type CreatePostRecordingMutation = { __typename?: 'Mutation', createPostRecording?: { __typename?: 'CreatePostRecordingPayload', postRecording?: { __typename?: 'PostRecording', createdAt: any, extension?: string | null | undefined, filename: string, uuid: any, nodeId: string } | null | undefined } | null | undefined };
 
+export type CreatePostUserMentionMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  postId: Scalars['Int'];
+  endIndex: Scalars['Int'];
+  startIndex: Scalars['Int'];
+}>;
+
+
+export type CreatePostUserMentionMutation = { __typename?: 'Mutation', createPostUserMention?: { __typename?: 'CreatePostUserMentionPayload', postUserMention?: { __typename?: 'PostUserMention', id: number, postId: number, userId: number, nodeId: string, createdAt: any, endIndex: number, startIndex: number, uuid: any } | null | undefined } | null | undefined };
+
 export type CurrentUserHasAnsweredOrRevealedPostGameQueryVariables = Exact<{
   gameId: Scalars['Int'];
 }>;
@@ -26718,6 +26728,13 @@ export type PostReplyNotificationQueryVariables = Exact<{
 
 export type PostReplyNotificationQuery = { __typename?: 'Query', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, createdAt: any, snowflakeId: any, parentPost?: { __typename?: 'Post', authorId?: number | null | undefined, snowflakeId: any } | null | undefined, author?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined } | null | undefined } | null | undefined };
 
+export type PostUserMentionNotificationQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type PostUserMentionNotificationQuery = { __typename?: 'Query', postUserMention?: { __typename?: 'PostUserMention', userId: number, postId: number, post?: { __typename?: 'Post', body: string, parentPost?: { __typename?: 'Post', authorId?: number | null | undefined, snowflakeId: any } | null | undefined, author?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined };
+
 export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
   token: Scalars['String'];
   lastActiveAt: Scalars['Datetime'];
@@ -26859,6 +26876,13 @@ export type UserIdByEmailQueryVariables = Exact<{
 
 
 export type UserIdByEmailQuery = { __typename?: 'Query', userByEmail?: { __typename?: 'User', id: number } | null | undefined };
+
+export type UserIdByUsernameQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type UserIdByUsernameQuery = { __typename?: 'Query', userByUsername?: { __typename?: 'User', id: number } | null | undefined };
 
 export type UserIdByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
@@ -27151,6 +27175,24 @@ export const CreatePostRecording = gql`
       filename
       uuid
       nodeId
+    }
+  }
+}
+    `;
+export const CreatePostUserMention = gql`
+    mutation CreatePostUserMention($userId: Int!, $postId: Int!, $endIndex: Int!, $startIndex: Int!) {
+  createPostUserMention(
+    input: {postUserMention: {postId: $postId, userId: $userId, endIndex: $endIndex, startIndex: $startIndex}}
+  ) {
+    postUserMention {
+      id
+      postId
+      userId
+      nodeId
+      createdAt
+      endIndex
+      startIndex
+      uuid
     }
   }
 }
@@ -27995,6 +28037,25 @@ export const PostReplyNotification = gql`
   }
 }
     `;
+export const PostUserMentionNotification = gql`
+    query PostUserMentionNotification($id: Int!) {
+  postUserMention(id: $id) {
+    userId
+    postId
+    post {
+      parentPost {
+        authorId
+        snowflakeId
+      }
+      body
+      author {
+        displayName
+        username
+      }
+    }
+  }
+}
+    `;
 export const UnsubscribeUserEmailNotifications = gql`
     mutation UnsubscribeUserEmailNotifications($token: String!, $lastActiveAt: Datetime!) {
   updateUserByEmailUnsubscribeToken(
@@ -28366,6 +28427,13 @@ export const UserHasCompletedProfile = gql`
 export const UserIdByEmail = gql`
     query UserIdByEmail($email: String!) {
   userByEmail(email: $email) {
+    id
+  }
+}
+    `;
+export const UserIdByUsername = gql`
+    query UserIdByUsername($username: String!) {
+  userByUsername(username: $username) {
     id
   }
 }

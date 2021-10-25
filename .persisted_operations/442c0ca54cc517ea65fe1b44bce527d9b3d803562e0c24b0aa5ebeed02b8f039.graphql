@@ -1,0 +1,6 @@
+query UserIdByUsername($username: String!) {
+  userByUsername(username: $username) {
+    id
+    __typename
+  }
+}

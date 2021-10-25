@@ -6,14 +6,17 @@ import {
     MAX_TEACHING,
 } from "../users"
 
-import { userHasCompletedProfile, createUserPreference } from "../server/users"
+import {
+    userHasCompletedProfile,
+    createUserPreference,
+    sanitizeUsername,
+} from "../server/users"
 
 import type { Request, Response } from "express"
 import { ensureJson, serverError } from "../helpers"
 
 import { createDatabasePool } from "../server/db"
 import { notifyAdminsOfSignUp } from "../server/notifications/admin"
-import { SUPPORTED_LOCALES } from "../constants"
 import { getLanguageIdByAlpha2 } from "../server/locales"
 import { localeIsSupported } from "../helpers/locales"
 
@@ -55,8 +58,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    let username: unknown = req.body["username"]
-    if (!username || typeof username !== "string") {
+    let usernameInput: unknown = req.body["username"]
+    if (!usernameInput || typeof usernameInput !== "string") {
         res.status(422).json({
             success: false,
             message: "Please specify a username.",
@@ -64,12 +67,19 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
-    if (username.length < MIN_USERNAME_LENGTH) {
+    if (usernameInput.length < MIN_USERNAME_LENGTH) {
         res.status(422).json({
             success: false,
             message: `Usernames must be at least ${MIN_USERNAME_LENGTH} characters long.`,
         })
         return
+    }
+
+    let displayName: null | string = null
+    const sanitizedUsername = sanitizeUsername(usernameInput)
+    const username = sanitizedUsername
+    if (sanitizedUsername !== usernameInput) {
+        displayName = usernameInput
     }
 
     const teachingInput: unknown = req.body["teaching"]
@@ -136,7 +146,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 !(
                     await client.query({
                         text: SQL_UPDATE_USER_ATTRIBUTES,
-                        values: [userId, req.body.username, gender],
+                        values: [userId, username, displayName, gender],
                     })
                 )?.fields.length
             ) {
@@ -200,7 +210,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     userId,
                 })
             }
-            notifyAdminsOfSignUp(req.body.username)
+            notifyAdminsOfSignUp(username)
         } catch (e) {
             await client.query("ROLLBACK")
             throw e
@@ -216,7 +226,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
 const SQL_UPDATE_USER_ATTRIBUTES = `
 UPDATE app_public.users SET
     username = $2,
-    gender = $3,
+    display_name = $3,
+    gender = $4,
     last_active_at = NOW()
 WHERE id = $1
 RETURNING id`

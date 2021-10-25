@@ -339,3 +339,7 @@ export function findPotentialUsernameMentions(body: string) {
         return { username, startIndex, endIndex }
     })
 }
+
+export function sanitizeUsername(username: string) {
+    return username.replace(/[^a-zA-Z0-9_]/g, "_")
+}

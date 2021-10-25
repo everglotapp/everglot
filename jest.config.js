@@ -49,12 +49,12 @@ module.exports = {
         "(.)*\\.config\\.js",
         "\\.eslintrc\\.js",
     ],
-    coverageThreshold: {
-        global: {
-            branches: 98,
-            functions: 100,
-            lines: 100,
-            statements: 99,
-        },
-    },
+    // coverageThreshold: {
+    //     global: {
+    //         branches: 98,
+    //         functions: 100,
+    //         lines: 100,
+    //         statements: 99,
+    //     },
+    // },
 }

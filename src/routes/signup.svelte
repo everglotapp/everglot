@@ -31,6 +31,7 @@
     import { ArrowRightIcon, ClockIcon } from "svelte-feather-icons"
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import { SUPPORTED_LOCALES } from "../constants"
+    import { localeIsSupported } from "../helpers/locales"
     const { translate } = fluentStores()!
 
     query(languageCodeMappings)
@@ -69,12 +70,8 @@
     let items: LanguageItem[] = []
     $: items = languages
         .sort((a, b) =>
-            (SUPPORTED_LOCALES as readonly string[]).includes(
-                b.alpha2.toLowerCase()
-            ) &&
-            !(SUPPORTED_LOCALES as readonly string[]).includes(
-                a.alpha2.toLowerCase()
-            )
+            localeIsSupported(b.alpha2.toLowerCase()) &&
+            !localeIsSupported(a.alpha2.toLowerCase())
                 ? 1
                 : a.alpha2.localeCompare(b.alpha2)
         )
@@ -94,7 +91,7 @@
     $: totalLearning = learning.length
 
     $: notSupportedLearning = learning.filter(
-        ({ value }) => !(SUPPORTED_LOCALES as readonly string[]).includes(value)
+        ({ value }) => !localeIsSupported(value)
     )
 
     $: learningCodes = learning.map((item) => item.value)

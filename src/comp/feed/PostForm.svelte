@@ -30,7 +30,6 @@
     import {
         GAMIFY_POST_LOCALES,
         BodyPartType,
-        SUPPORTED_LOCALES,
         GUESS_CASE_LOCALES,
         GUESS_GENDER_LOCALES,
     } from "../../constants"
@@ -44,6 +43,12 @@
     } from "../../constants"
     import { getBodyParts } from "../../routes/_helpers/posts/selections"
     import { PostGameType } from "../../types/generated/graphql"
+    import {
+        localeIsSupported,
+        localeSupportsGuessCaseGames,
+        localeSupportsGuessGenderGames,
+        localeSupportsPostGamification,
+    } from "../../helpers/locales"
 
     export let shownPromptUuid: string | null
     export let locale: SupportedLocale | null
@@ -280,17 +285,15 @@
     )
 
     $: gamificationSupported = locale
-        ? (GAMIFY_POST_LOCALES as readonly string[]).includes(locale as string)
+        ? localeSupportsPostGamification(locale)
         : false
     $: guessCaseSupported = locale
-        ? (GUESS_CASE_LOCALES as readonly string[]).includes(locale as string)
+        ? localeSupportsGuessCaseGames(locale)
         : false
     $: guessGenderSupported = locale
-        ? (GUESS_GENDER_LOCALES as readonly string[]).includes(locale as string)
+        ? localeSupportsGuessGenderGames(locale)
         : false
-    $: clozeSupported = locale
-        ? (SUPPORTED_LOCALES as readonly string[]).includes(locale as string)
-        : false
+    $: clozeSupported = locale ? localeIsSupported(locale) : false
 
     $: if (!gamificationSupported) {
         gamify = false

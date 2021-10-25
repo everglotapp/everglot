@@ -15,6 +15,7 @@ import { createDatabasePool } from "../server/db"
 import { notifyAdminsOfSignUp } from "../server/notifications/admin"
 import { SUPPORTED_LOCALES } from "../constants"
 import { getLanguageIdByAlpha2 } from "../server/locales"
+import { localeIsSupported } from "../helpers/locales"
 
 export async function get(req: Request, res: Response, next: () => void) {
     if (!req.session.user_id) {
@@ -185,7 +186,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             })
             let firstTargetLanguage = null
             for (const code of learning) {
-                if (isSupportedLocale(code)) {
+                if (localeIsSupported(code)) {
                     firstTargetLanguage = code
                     break
                 }
@@ -271,8 +272,4 @@ async function isValidLocale(code: unknown): Promise<boolean> {
             code === code.toLowerCase() &&
             (await getLanguageIdByAlpha2(code)) !== null
     )
-}
-
-function isSupportedLocale(code: string): boolean {
-    return (SUPPORTED_LOCALES as readonly string[]).includes(code)
 }

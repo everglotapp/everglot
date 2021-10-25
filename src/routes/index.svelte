@@ -1,5 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte"
+    import { scale } from "svelte/transition"
     import { goto } from "@sapper/app"
 
     import { query } from "@urql/svelte"
@@ -26,6 +27,7 @@
     import ButtonSmall from "../comp/util/ButtonSmall.svelte"
     import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
     import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
+    import Spinner from "../comp/util/Spinner.svelte"
     import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
 
     import {
@@ -37,6 +39,7 @@
     import { SUPPORTED_LOCALES, PROMPT_LOCALES } from "../constants"
     import type { SupportedLocale } from "../constants"
     import { feedLocale } from "../stores/locales"
+    import { localeIsSupported } from "../helpers/locales"
 
     query(languageCodeMappings)
 
@@ -61,11 +64,7 @@
     type LanguageItem = { value: SupportedLocale; label: string }
     let items: LanguageItem[] = []
     $: items = languages
-        .filter((language) =>
-            (SUPPORTED_LOCALES as readonly string[]).includes(
-                language.alpha2.toLowerCase()
-            )
-        )
+        .filter(({ alpha2 }) => localeIsSupported(alpha2.toLowerCase()))
         .map(({ alpha2, englishName }) => ({
             value: alpha2 as SupportedLocale,
             label: englishName,
@@ -135,9 +134,7 @@
         $feedPosts &&
         !$feedPostsStore.fetching &&
         $feedPostsStore.variables?.locale &&
-        (SUPPORTED_LOCALES as readonly string[]).includes(
-            $feedPostsStore.variables.locale
-        )
+        localeIsSupported($feedPostsStore.variables.locale)
     ) {
         const fetchedForLocale = $feedPostsStore.variables
             .locale as SupportedLocale
@@ -177,9 +174,7 @@
     ) {
         if ($currentUser.preference?.feedLanguage?.alpha2) {
             if (
-                (SUPPORTED_LOCALES as readonly string[]).includes(
-                    $currentUser.preference.feedLanguage.alpha2
-                )
+                localeIsSupported($currentUser.preference.feedLanguage.alpha2)
             ) {
                 pickedLocale = $currentUser.preference.feedLanguage
                     .alpha2 as SupportedLocale
@@ -283,9 +278,7 @@
         !$singlePostStore.fetching &&
         $singlePost &&
         $singlePost.language?.alpha2 &&
-        (SUPPORTED_LOCALES as readonly string[]).includes(
-            $singlePost.language.alpha2
-        )
+        localeIsSupported($singlePost.language?.alpha2)
     ) {
         const fetchedForLocale = $singlePost.language.alpha2 as SupportedLocale
         const previous = postsByLocale[fetchedForLocale] || []
@@ -336,7 +329,7 @@
 
     let scrollY: number
     let innerHeight: number
-    const FETCH_OLDER_MAX_SCROLL_BOTTOM_PX = 500
+    const FETCH_OLDER_MAX_SCROLL_BOTTOM_PX = 1500
     let fetchOlderPostsTimeout: number | undefined
     const fetchOlderPostsIfNecessary = () => {
         if (olderPostsCouldExistForLocale) {
@@ -530,6 +523,19 @@
                 </div>
             {/if}
         {/each}
+        {#if $feedPostsStore.fetching}
+            <div
+                class={`flex items-center justify-center py-2${
+                    $feedLocale === null ||
+                    postsFetchedBeforeByLocale[$feedLocale]
+                        ? ""
+                        : " md:py-8"
+                }`}
+                in:scale={{ duration: 100 }}
+            >
+                <Spinner />
+            </div>
+        {/if}
     </div>
 {/if}
 

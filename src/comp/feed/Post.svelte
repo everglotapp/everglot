@@ -127,6 +127,12 @@
             (node) => node && node.user && $currentUserUuid === node.user.uuid
         )
 
+    let replyBodyInputNode: HTMLElement
+    let newReplyBody: string | null = null
+    function handleReplyBodyKeyup(_event: KeyboardEvent) {
+        newReplyBody = replyBodyInputNode.textContent
+    }
+
     async function handleReply() {
         if (!newReplyBody || !newReplyBody.length) {
             return
@@ -146,7 +152,8 @@
             const response = await res.json()
             if (response.success) {
                 // success
-                newReplyBody = ""
+                replyBodyInputNode.innerHTML = ""
+                newReplyBody = null
                 dispatch("replySuccess", { post: { snowflakeId } })
             } else {
                 dispatch("replyFailure", { post: { snowflakeId } })
@@ -156,7 +163,6 @@
         }
     }
     let showReplies: boolean = false
-    let newReplyBody: string | undefined
 
     async function handleLike() {
         if (tmpLiked || tmpUnliked) {
@@ -1334,12 +1340,13 @@
         <div class="flex relative ml-8 mt-2">
             <div
                 contenteditable
-                bind:textContent={newReplyBody}
                 placeholder="Reply …"
                 aria-placeholder="Reply …"
-                class="border border-gray-bitlight rounded-lg py-1 pl-2 pr-12 w-full origin-top-right"
+                class="border border-gray-bitlight rounded-lg py-1 pl-2 pr-12 w-full origin-top-right whitespace-pre"
                 in:scale={{ duration: 150 }}
                 out:scale|local={{ duration: 150 }}
+                on:keyup={handleReplyBodyKeyup}
+                bind:this={replyBodyInputNode}
             />
             <div
                 class="absolute right-0 top-0 bottom-0 flex items-center origin-top-right"
@@ -1362,68 +1369,129 @@
             out:scale|local={{ duration: 150 }}
         >
             {#each replyNodes as reply (reply.uuid)}
-                <div
-                    class="reply flex flex-row ml-8 pl-4 pt-4 border-l-2 border-gray-verylight"
-                    in:scale|local={{ duration: 200 }}
-                >
-                    <div class="pr-3 sm:pr-4">
-                        <a href={`/u/${reply.author.username}`}>
-                            <Avatar
-                                username={reply.author.username}
-                                url={reply.author.avatarUrl}
-                                uuid={reply.author.uuid}
-                                size={36}
-                            /></a
-                        >
-                    </div>
-                    <div class="w-full">
-                        <div class="mb-1 flex items-center justify-between">
-                            <a href={`/u/${reply.author.username}`}
-                                ><span class="text-gray-bitdark font-bold"
-                                    >{reply.author.username}</span
-                                ></a
+                {#if reply.author}
+                    <div
+                        class="reply flex flex-row ml-8 pl-4 pt-4 border-l-2 border-gray-verylight"
+                        in:scale|local={{ duration: 200 }}
+                    >
+                        <div class="pr-3 sm:pr-4">
+                            <a href={`/u/${reply.author.username}`}>
+                                <Avatar
+                                    username={reply.author.username}
+                                    url={reply.author.avatarUrl}
+                                    uuid={reply.author.uuid}
+                                    size={36}
+                                /></a
                             >
-                            <time
-                                use:svelteTime={{
-                                    timestamp: reply.createdAt,
-                                    format:
-                                        new Date(reply.createdAt).getDate() ===
-                                        new Date().getDate()
-                                            ? "h:mm A"
-                                            : new Date(
-                                                  reply.createdAt
-                                              ).getFullYear() ===
-                                              new Date().getFullYear()
-                                            ? "D MMM h:mm A"
-                                            : "D MMM YYYY h:mm A",
-                                }}
-                                title={reply.createdAt.toLocaleString()}
-                                class="text-sm text-gray-bitdark"
-                            />
                         </div>
-                        <div>
-                            {#each displayedReplyBodyParts[reply.uuid] as replyBodyPart}
-                                {#if replyBodyPart.type === BodyPartType.Text}<span
-                                        >{replyBodyPart.value}</span
-                                    >{:else if replyBodyPart.type === BodyPartType.Range}{#if replyBodyPart.uuid != null && userMentionNodesByUuid[replyBodyPart.uuid] && userMentionNodesByUuid[replyBodyPart.uuid].user}<a
-                                            id={replyBodyPart.uuid}
-                                            href={`/u/${
-                                                userMentionNodesByUuid[
-                                                    replyBodyPart.uuid
-                                                ].user.username
-                                            }`}
-                                            class="font-bold text-gray-bitdark cursor-pointer"
-                                            >{replyBodyPart.value}</a
-                                        >{:else}<span
-                                            id={replyBodyPart.uuid}
-                                            class="font-bold text-gray-bitdark"
-                                            >{replyBodyPart.value}</span
-                                        >{/if}
-                                {/if}
-                            {/each}
+                        <div class="w-full">
+                            <div class="mb-1 flex items-center justify-between">
+                                <a href={`/u/${reply.author.username}`}
+                                    ><span class="text-gray-bitdark font-bold"
+                                        >{reply.author.username}</span
+                                    ></a
+                                >
+                                <time
+                                    use:svelteTime={{
+                                        timestamp: reply.createdAt,
+                                        format:
+                                            new Date(
+                                                reply.createdAt
+                                            ).getDate() === new Date().getDate()
+                                                ? "h:mm A"
+                                                : new Date(
+                                                      reply.createdAt
+                                                  ).getFullYear() ===
+                                                  new Date().getFullYear()
+                                                ? "D MMM h:mm A"
+                                                : "D MMM YYYY h:mm A",
+                                    }}
+                                    title={reply.createdAt.toLocaleString()}
+                                    class="text-sm text-gray-bitdark"
+                                />
+                            </div>
+                            <div
+                                class="relative pr-12 grid"
+                                style="grid-template-columns: auto 3rem;"
+                            >
+                                <div style="word-wrap: anywhere;">
+                                    {#each displayedReplyBodyParts[reply.uuid] as replyBodyPart}
+                                        {#if replyBodyPart.type === BodyPartType.Text}<span
+                                                >{replyBodyPart.value}</span
+                                            >{:else if replyBodyPart.type === BodyPartType.Range}{#if replyBodyPart.uuid != null && userMentionNodesByUuid[replyBodyPart.uuid] && userMentionNodesByUuid[replyBodyPart.uuid].user}<a
+                                                    id={replyBodyPart.uuid}
+                                                    href={`/u/${
+                                                        userMentionNodesByUuid[
+                                                            replyBodyPart.uuid
+                                                        ].user.username
+                                                    }`}
+                                                    class="font-bold text-gray-bitdark cursor-pointer"
+                                                    >{replyBodyPart.value}</a
+                                                >{:else}<span
+                                                    id={replyBodyPart.uuid}
+                                                    class="font-bold text-gray-bitdark"
+                                                    >{replyBodyPart.value}</span
+                                                >{/if}
+                                        {/if}
+                                    {/each}
+                                </div>
+                                <div>
+                                    <ButtonSmall
+                                        className="absolute right-0 bottom-0 items-center justify-center ml-0 mr-1"
+                                        tag="button"
+                                        variant="TEXT"
+                                        color="SECONDARY"
+                                        on:click={() => {
+                                            const authorTag = `@${reply.author.username}`
+                                            replyBodyInputNode.innerHTML =
+                                                newReplyBody
+                                                    ? `${newReplyBody}${authorTag}&nbsp;`
+                                                    : `${authorTag}&nbsp;`
+                                            newReplyBody =
+                                                replyBodyInputNode.innerHTML
+                                            setTimeout(() => {
+                                                replyBodyInputNode.focus()
+                                                const r = document.createRange()
+                                                const s = window.getSelection()
+                                                if (s) {
+                                                    r.setStart(
+                                                        replyBodyInputNode,
+                                                        1
+                                                    )
+                                                    r.collapse(true)
+                                                    s.removeAllRanges()
+                                                    s.addRange(r)
+                                                }
+                                            }, 30)
+                                        }}
+                                        ><svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            aria-hidden="true"
+                                            role="img"
+                                            width="1em"
+                                            height="1em"
+                                            preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 16 16"
+                                            ><rect
+                                                x="0"
+                                                y="0"
+                                                width="16"
+                                                height="16"
+                                                fill="none"
+                                                stroke="none"
+                                            /><g fill="currentColor"
+                                                ><path
+                                                    d="M5.921 11.9L1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8c-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"
+                                                /></g
+                                            ></svg
+                                        ></ButtonSmall
+                                    >
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {/if}
             {/each}
         </div>
     {/if}

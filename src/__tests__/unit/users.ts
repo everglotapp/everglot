@@ -23,11 +23,11 @@ describe("users", () => {
     })
 
     test("replacing username characters works", async () => {
-        expect(sanitizeUsername("Jane Doe")).toEqual("Jane_Doe")
-        expect(sanitizeUsername(" Jane Doe ")).toEqual("_Jane_Doe_")
-        expect(sanitizeUsername("  Jane Doe")).toEqual("__Jane_Doe")
-        expect(sanitizeUsername("Jane Doe  ")).toEqual("Jane_Doe__")
-        expect(sanitizeUsername("Jane")).toEqual("Jane")
+        expect(sanitizeUsername("Jane Doe")).toEqual("jane_doe")
+        expect(sanitizeUsername(" Jane Doe ")).toEqual("_jane_doe_")
+        expect(sanitizeUsername("  Jane Doe")).toEqual("__jane_doe")
+        expect(sanitizeUsername("Jane Doe  ")).toEqual("jane_doe__")
+        expect(sanitizeUsername("Jane")).toEqual("jane")
         expect(sanitizeUsername("jane")).toEqual("jane")
         expect(sanitizeUsername("jane12")).toEqual("jane12")
         expect(sanitizeUsername("12jane")).toEqual("12jane")
@@ -36,6 +36,7 @@ describe("users", () => {
         expect(sanitizeUsername("*_54öjanü!_#*_*`^°")).toEqual(
             "__54_jan__________"
         )
+        expect(sanitizeUsername("JANEDOE")).toEqual("janedoe")
         expect(sanitizeUsername("")).toEqual("")
     })
 })

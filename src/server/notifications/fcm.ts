@@ -96,7 +96,6 @@ async function sendNextFcmNotification() {
         if (!excludeUserUuids.includes(uuid)) {
             tokens = userDevicesToFcmTokens(userDevices)
         }
-        chlog.child({ notification, tokens }).debug("test")
     } else if (recipientGroup) {
         for (const userNode of recipientGroup.groupUsers.nodes) {
             if (!userNode || !userNode.user) {
@@ -275,7 +274,7 @@ async function deleteInvalidFcmToken(
 function userDevicesToFcmTokens({
     nodes,
 }: {
-    nodes: Maybe<Pick<UserDevice, "fcmToken">>[]
+    nodes: (Maybe<Pick<UserDevice, "fcmToken">> | undefined)[]
 }): string[] {
     return (
         nodes

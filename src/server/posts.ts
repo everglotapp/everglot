@@ -28,6 +28,9 @@ import {
     CurrentUserHasAnsweredOrRevealedPostGameQuery,
     CreatePostCorrectionMutationVariables,
     CreatePostCorrectionMutation,
+    CreatePostUserMentionMutation,
+    CreatePostUserMentionMutationVariables,
+    CreatePostUserMention,
 } from "../types/generated/graphql"
 import {
     CreatePost,
@@ -259,4 +262,23 @@ export async function createPostCorrection(
         return null
     }
     return res.data?.createPostCorrection?.postCorrection || null
+}
+
+export async function createPostUserMention(
+    vars: CreatePostUserMentionMutationVariables
+): Promise<
+    | NonNullable<
+          CreatePostUserMentionMutation["createPostUserMention"]
+      >["postUserMention"]
+    | null
+> {
+    const res = await performQuery<CreatePostUserMentionMutation>(
+        CreatePostUserMention.loc!.source,
+        vars
+    )
+    if (!res.data) {
+        chlog.child({ res }).error("Failed to create post user mention")
+        return null
+    }
+    return res.data?.createPostUserMention?.postUserMention || null
 }

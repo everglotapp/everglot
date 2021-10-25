@@ -1774,6 +1774,43 @@ export type CreatePostRecordingPayloadPostRecordingEdgeArgs = {
   orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
 };
 
+/** All input for the create `PostUserMention` mutation. */
+export type CreatePostUserMentionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostUserMention` to be created by this mutation. */
+  postUserMention: PostUserMentionInput;
+};
+
+/** The output of our create `PostUserMention` mutation. */
+export type CreatePostUserMentionPayload = {
+  __typename?: 'CreatePostUserMentionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Post` that is related to this `PostUserMention`. */
+  post?: Maybe<Post>;
+  /** The `PostUserMention` that was created by this mutation. */
+  postUserMention?: Maybe<PostUserMention>;
+  /** An edge for our `PostUserMention`. May be used by Relay 1. */
+  postUserMentionEdge?: Maybe<PostUserMentionsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostUserMention`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our create `PostUserMention` mutation. */
+export type CreatePostUserMentionPayloadPostUserMentionEdgeArgs = {
+  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+};
+
 /** All input for the create `Prompt` mutation. */
 export type CreatePromptInput = {
   /**
@@ -4406,6 +4443,64 @@ export type DeletePostRecordingPayload = {
 /** The output of our delete `PostRecording` mutation. */
 export type DeletePostRecordingPayloadPostRecordingEdgeArgs = {
   orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+};
+
+/** All input for the `deletePostUserMentionByNodeId` mutation. */
+export type DeletePostUserMentionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `PostUserMention` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deletePostUserMentionByUuid` mutation. */
+export type DeletePostUserMentionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `deletePostUserMention` mutation. */
+export type DeletePostUserMentionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `PostUserMention` mutation. */
+export type DeletePostUserMentionPayload = {
+  __typename?: 'DeletePostUserMentionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  deletedPostUserMentionNodeId?: Maybe<Scalars['ID']>;
+  /** Reads a single `Post` that is related to this `PostUserMention`. */
+  post?: Maybe<Post>;
+  /** The `PostUserMention` that was deleted by this mutation. */
+  postUserMention?: Maybe<PostUserMention>;
+  /** An edge for our `PostUserMention`. May be used by Relay 1. */
+  postUserMentionEdge?: Maybe<PostUserMentionsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostUserMention`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our delete `PostUserMention` mutation. */
+export type DeletePostUserMentionPayloadPostUserMentionEdgeArgs = {
+  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
 };
 
 /** All input for the `deletePromptByNodeId` mutation. */
@@ -9789,6 +9884,8 @@ export type Mutation = {
   createPostLike?: Maybe<CreatePostLikePayload>;
   /** Creates a single `PostRecording`. */
   createPostRecording?: Maybe<CreatePostRecordingPayload>;
+  /** Creates a single `PostUserMention`. */
+  createPostUserMention?: Maybe<CreatePostUserMentionPayload>;
   /** Creates a single `Prompt`. */
   createPrompt?: Maybe<CreatePromptPayload>;
   /** Creates a single `RussianRandomQuestion`. */
@@ -10041,6 +10138,12 @@ export type Mutation = {
   deletePostRecordingByNodeId?: Maybe<DeletePostRecordingPayload>;
   /** Deletes a single `PostRecording` using a unique key. */
   deletePostRecordingByUuid?: Maybe<DeletePostRecordingPayload>;
+  /** Deletes a single `PostUserMention` using a unique key. */
+  deletePostUserMention?: Maybe<DeletePostUserMentionPayload>;
+  /** Deletes a single `PostUserMention` using its globally unique id. */
+  deletePostUserMentionByNodeId?: Maybe<DeletePostUserMentionPayload>;
+  /** Deletes a single `PostUserMention` using a unique key. */
+  deletePostUserMentionByUuid?: Maybe<DeletePostUserMentionPayload>;
   /** Deletes a single `Prompt` using a unique key. */
   deletePrompt?: Maybe<DeletePromptPayload>;
   /** Deletes a single `Prompt` using its globally unique id. */
@@ -10352,6 +10455,12 @@ export type Mutation = {
   updatePostRecordingByNodeId?: Maybe<UpdatePostRecordingPayload>;
   /** Updates a single `PostRecording` using a unique key and a patch. */
   updatePostRecordingByUuid?: Maybe<UpdatePostRecordingPayload>;
+  /** Updates a single `PostUserMention` using a unique key and a patch. */
+  updatePostUserMention?: Maybe<UpdatePostUserMentionPayload>;
+  /** Updates a single `PostUserMention` using its globally unique id and a patch. */
+  updatePostUserMentionByNodeId?: Maybe<UpdatePostUserMentionPayload>;
+  /** Updates a single `PostUserMention` using a unique key and a patch. */
+  updatePostUserMentionByUuid?: Maybe<UpdatePostUserMentionPayload>;
   /** Updates a single `Prompt` using a unique key and a patch. */
   updatePrompt?: Maybe<UpdatePromptPayload>;
   /** Updates a single `Prompt` using its globally unique id and a patch. */
@@ -10510,6 +10619,8 @@ export type Mutation = {
   upsertPostLike?: Maybe<UpsertPostLikePayload>;
   /** Upserts a single `PostRecording`. */
   upsertPostRecording?: Maybe<UpsertPostRecordingPayload>;
+  /** Upserts a single `PostUserMention`. */
+  upsertPostUserMention?: Maybe<UpsertPostUserMentionPayload>;
   /** Upserts a single `Prompt`. */
   upsertPrompt?: Maybe<UpsertPromptPayload>;
   /** Upserts a single `RussianRandomQuestion`. */
@@ -10764,6 +10875,12 @@ export type MutationCreatePostLikeArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreatePostRecordingArgs = {
   input: CreatePostRecordingInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreatePostUserMentionArgs = {
+  input: CreatePostUserMentionInput;
 };
 
 
@@ -11520,6 +11637,24 @@ export type MutationDeletePostRecordingByNodeIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeletePostRecordingByUuidArgs = {
   input: DeletePostRecordingByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostUserMentionArgs = {
+  input: DeletePostUserMentionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostUserMentionByNodeIdArgs = {
+  input: DeletePostUserMentionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostUserMentionByUuidArgs = {
+  input: DeletePostUserMentionByUuidInput;
 };
 
 
@@ -12466,6 +12601,24 @@ export type MutationUpdatePostRecordingByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostUserMentionArgs = {
+  input: UpdatePostUserMentionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostUserMentionByNodeIdArgs = {
+  input: UpdatePostUserMentionByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostUserMentionByUuidArgs = {
+  input: UpdatePostUserMentionByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdatePromptArgs = {
   input: UpdatePromptInput;
 };
@@ -12974,6 +13127,13 @@ export type MutationUpsertPostLikeArgs = {
 export type MutationUpsertPostRecordingArgs = {
   input: UpsertPostRecordingInput;
   where?: Maybe<UpsertPostRecordingWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertPostUserMentionArgs = {
+  input: UpsertPostUserMentionInput;
+  where?: Maybe<UpsertPostUserMentionWhere>;
 };
 
 
@@ -13846,6 +14006,8 @@ export type Post = Node & {
   /** Reads and enables pagination through a set of `Post`. */
   replies: PostsConnection;
   snowflakeId: Scalars['BigInt'];
+  /** Reads and enables pagination through a set of `PostUserMention`. */
+  userMentions: PostUserMentionsConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByPostCorrectionPostIdAndUserId: PostUsersByPostCorrectionPostIdAndUserIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
@@ -13854,6 +14016,8 @@ export type Post = Node & {
   usersByPostParentPostIdAndAuthorId: PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByPostRecordingPostIdAndUserId: PostUsersByPostRecordingPostIdAndUserIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByPostUserMentionPostIdAndUserId: PostUsersByPostUserMentionPostIdAndUserIdManyToManyConnection;
   uuid: Scalars['UUID'];
 };
 
@@ -13942,6 +14106,18 @@ export type PostRepliesArgs = {
 };
 
 
+export type PostUserMentionsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostUserMentionCondition>;
+  filter?: Maybe<PostUserMentionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+};
+
+
 export type PostUsersByPostCorrectionPostIdAndUserIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   before?: Maybe<Scalars['Cursor']>;
@@ -13979,6 +14155,18 @@ export type PostUsersByPostParentPostIdAndAuthorIdArgs = {
 
 
 export type PostUsersByPostRecordingPostIdAndUserIdArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
+};
+
+
+export type PostUsersByPostUserMentionPostIdAndUserIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   before?: Maybe<Scalars['Cursor']>;
   condition?: Maybe<UserCondition>;
@@ -15280,6 +15468,136 @@ export enum PostRecordingsOrderBy {
   UuidDesc = 'UUID_DESC'
 }
 
+export type PostUserMention = Node & {
+  __typename?: 'PostUserMention';
+  createdAt: Scalars['Datetime'];
+  endIndex: Scalars['Int'];
+  id: Scalars['Int'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  /** Reads a single `Post` that is related to this `PostUserMention`. */
+  post?: Maybe<Post>;
+  postId: Scalars['Int'];
+  startIndex: Scalars['Int'];
+  /** Reads a single `User` that is related to this `PostUserMention`. */
+  user?: Maybe<User>;
+  /** Mentioned user */
+  userId: Scalars['Int'];
+  uuid: Scalars['UUID'];
+};
+
+/**
+ * A condition to be used against `PostUserMention` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type PostUserMentionCondition = {
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `endIndex` field. */
+  endIndex?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `postId` field. */
+  postId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `startIndex` field. */
+  startIndex?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `uuid` field. */
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** A filter to be used against `PostUserMention` object types. All fields are combined with a logical ‘and.’ */
+export type PostUserMentionFilter = {
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<PostUserMentionFilter>>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `endIndex` field. */
+  endIndex?: Maybe<IntFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Negates the expression. */
+  not?: Maybe<PostUserMentionFilter>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<PostUserMentionFilter>>;
+  /** Filter by the object’s `postId` field. */
+  postId?: Maybe<IntFilter>;
+  /** Filter by the object’s `startIndex` field. */
+  startIndex?: Maybe<IntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+  /** Filter by the object’s `uuid` field. */
+  uuid?: Maybe<UuidFilter>;
+};
+
+/** An input for mutations affecting `PostUserMention` */
+export type PostUserMentionInput = {
+  createdAt?: Maybe<Scalars['Datetime']>;
+  endIndex: Scalars['Int'];
+  id?: Maybe<Scalars['Int']>;
+  postId: Scalars['Int'];
+  startIndex: Scalars['Int'];
+  /** Mentioned user */
+  userId: Scalars['Int'];
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** Represents an update to a `PostUserMention`. Fields that are set will be updated. */
+export type PostUserMentionPatch = {
+  createdAt?: Maybe<Scalars['Datetime']>;
+  endIndex?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  postId?: Maybe<Scalars['Int']>;
+  startIndex?: Maybe<Scalars['Int']>;
+  /** Mentioned user */
+  userId?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
+/** A connection to a list of `PostUserMention` values. */
+export type PostUserMentionsConnection = {
+  __typename?: 'PostUserMentionsConnection';
+  /** A list of edges which contains the `PostUserMention` and cursor to aid in pagination. */
+  edges: Array<PostUserMentionsEdge>;
+  /** A list of `PostUserMention` objects. */
+  nodes: Array<Maybe<PostUserMention>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `PostUserMention` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `PostUserMention` edge in the connection. */
+export type PostUserMentionsEdge = {
+  __typename?: 'PostUserMentionsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `PostUserMention` at the end of the edge. */
+  node?: Maybe<PostUserMention>;
+};
+
+/** Methods to use when ordering `PostUserMention`. */
+export enum PostUserMentionsOrderBy {
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  EndIndexAsc = 'END_INDEX_ASC',
+  EndIndexDesc = 'END_INDEX_DESC',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  Natural = 'NATURAL',
+  PostIdAsc = 'POST_ID_ASC',
+  PostIdDesc = 'POST_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  StartIndexAsc = 'START_INDEX_ASC',
+  StartIndexDesc = 'START_INDEX_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC',
+  UuidAsc = 'UUID_ASC',
+  UuidDesc = 'UUID_DESC'
+}
+
 /** A connection to a list of `User` values, with data from `PostCorrection`. */
 export type PostUsersByPostCorrectionPostIdAndUserIdManyToManyConnection = {
   __typename?: 'PostUsersByPostCorrectionPostIdAndUserIdManyToManyConnection';
@@ -15426,6 +15744,43 @@ export type PostUsersByPostRecordingPostIdAndUserIdManyToManyEdgePostRecordingsA
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+};
+
+/** A connection to a list of `User` values, with data from `PostUserMention`. */
+export type PostUsersByPostUserMentionPostIdAndUserIdManyToManyConnection = {
+  __typename?: 'PostUsersByPostUserMentionPostIdAndUserIdManyToManyConnection';
+  /** A list of edges which contains the `User`, info from the `PostUserMention`, and the cursor to aid in pagination. */
+  edges: Array<PostUsersByPostUserMentionPostIdAndUserIdManyToManyEdge>;
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `PostUserMention`. */
+export type PostUsersByPostUserMentionPostIdAndUserIdManyToManyEdge = {
+  __typename?: 'PostUsersByPostUserMentionPostIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `PostUserMention`. */
+  postUserMentions: PostUserMentionsConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `PostUserMention`. */
+export type PostUsersByPostUserMentionPostIdAndUserIdManyToManyEdgePostUserMentionsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostUserMentionCondition>;
+  filter?: Maybe<PostUserMentionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
 };
 
 /** A connection to a list of `Post` values. */
@@ -16118,6 +16473,12 @@ export type Query = Node & {
   postRecordingByUuid?: Maybe<PostRecording>;
   /** Reads and enables pagination through a set of `PostRecording`. */
   postRecordings?: Maybe<PostRecordingsConnection>;
+  postUserMention?: Maybe<PostUserMention>;
+  /** Reads a single `PostUserMention` using its globally unique `ID`. */
+  postUserMentionByNodeId?: Maybe<PostUserMention>;
+  postUserMentionByUuid?: Maybe<PostUserMention>;
+  /** Reads and enables pagination through a set of `PostUserMention`. */
+  postUserMentions?: Maybe<PostUserMentionsConnection>;
   /** Reads and enables pagination through a set of `Post`. */
   posts?: Maybe<PostsConnection>;
   prompt?: Maybe<Prompt>;
@@ -17394,6 +17755,37 @@ export type QueryPostRecordingsArgs = {
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostUserMentionArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostUserMentionByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostUserMentionByUuidArgs = {
+  uuid: Scalars['UUID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPostUserMentionsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostUserMentionCondition>;
+  filter?: Maybe<PostUserMentionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
 };
 
 
@@ -21055,6 +21447,69 @@ export type UpdatePostRecordingPayloadPostRecordingEdgeArgs = {
   orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
 };
 
+/** All input for the `updatePostUserMentionByNodeId` mutation. */
+export type UpdatePostUserMentionByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `PostUserMention` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `PostUserMention` being updated. */
+  patch: PostUserMentionPatch;
+};
+
+/** All input for the `updatePostUserMentionByUuid` mutation. */
+export type UpdatePostUserMentionByUuidInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `PostUserMention` being updated. */
+  patch: PostUserMentionPatch;
+  uuid: Scalars['UUID'];
+};
+
+/** All input for the `updatePostUserMention` mutation. */
+export type UpdatePostUserMentionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  /** An object where the defined keys will be set on the `PostUserMention` being updated. */
+  patch: PostUserMentionPatch;
+};
+
+/** The output of our update `PostUserMention` mutation. */
+export type UpdatePostUserMentionPayload = {
+  __typename?: 'UpdatePostUserMentionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Post` that is related to this `PostUserMention`. */
+  post?: Maybe<Post>;
+  /** The `PostUserMention` that was updated by this mutation. */
+  postUserMention?: Maybe<PostUserMention>;
+  /** An edge for our `PostUserMention`. May be used by Relay 1. */
+  postUserMentionEdge?: Maybe<PostUserMentionsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostUserMention`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our update `PostUserMention` mutation. */
+export type UpdatePostUserMentionPayloadPostUserMentionEdgeArgs = {
+  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+};
+
 /** All input for the `updatePromptByNodeId` mutation. */
 export type UpdatePromptByNodeIdInput = {
   /**
@@ -23228,6 +23683,43 @@ export type UpsertPostRecordingWhere = {
   uuid?: Maybe<Scalars['UUID']>;
 };
 
+/** All input for the upsert `PostUserMention` mutation. */
+export type UpsertPostUserMentionInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `PostUserMention` to be upserted by this mutation. */
+  postUserMention: PostUserMentionInput;
+};
+
+/** The output of our upsert `PostUserMention` mutation. */
+export type UpsertPostUserMentionPayload = {
+  __typename?: 'UpsertPostUserMentionPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Post` that is related to this `PostUserMention`. */
+  post?: Maybe<Post>;
+  /** The `PostUserMention` that was upserted by this mutation. */
+  postUserMention?: Maybe<PostUserMention>;
+  /** An edge for our `PostUserMention`. May be used by Relay 1. */
+  postUserMentionEdge?: Maybe<PostUserMentionsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `PostUserMention`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our upsert `PostUserMention` mutation. */
+export type UpsertPostUserMentionPayloadPostUserMentionEdgeArgs = {
+  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+};
+
+/** Where conditions for the upsert `PostUserMention` mutation. */
+export type UpsertPostUserMentionWhere = {
+  id?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['UUID']>;
+};
+
 /** Where conditions for the upsert `Post` mutation. */
 export type UpsertPostWhere = {
   id?: Maybe<Scalars['Int']>;
@@ -23770,6 +24262,8 @@ export type User = Node & {
   postLikes: PostLikesConnection;
   /** Reads and enables pagination through a set of `PostRecording`. */
   postRecordings: PostRecordingsConnection;
+  /** Reads and enables pagination through a set of `PostUserMention`. */
+  postUserMentions: PostUserMentionsConnection;
   /** Reads and enables pagination through a set of `Post`. */
   postsByPostAuthorIdAndParentPostId: UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Post`. */
@@ -23778,6 +24272,8 @@ export type User = Node & {
   postsByPostLikeUserIdAndPostId: UserPostsByPostLikeUserIdAndPostIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Post`. */
   postsByPostRecordingUserIdAndPostId: UserPostsByPostRecordingUserIdAndPostIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Post`. */
+  postsByPostUserMentionUserIdAndPostId: UserPostsByPostUserMentionUserIdAndPostIdManyToManyConnection;
   /** Reads a single `UserPreference` that is related to this `User`. */
   preference?: Maybe<UserPreference>;
   /** Reads and enables pagination through a set of `Prompt`. */
@@ -24093,6 +24589,18 @@ export type UserPostRecordingsArgs = {
 };
 
 
+export type UserPostUserMentionsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostUserMentionCondition>;
+  filter?: Maybe<PostUserMentionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+};
+
+
 export type UserPostsByPostAuthorIdAndParentPostIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   before?: Maybe<Scalars['Cursor']>;
@@ -24130,6 +24638,18 @@ export type UserPostsByPostLikeUserIdAndPostIdArgs = {
 
 
 export type UserPostsByPostRecordingUserIdAndPostIdArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+};
+
+
+export type UserPostsByPostUserMentionUserIdAndPostIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   before?: Maybe<Scalars['Cursor']>;
   condition?: Maybe<PostCondition>;
@@ -25281,6 +25801,43 @@ export type UserPostsByPostRecordingUserIdAndPostIdManyToManyEdgeRecordingsArgs 
   orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
 };
 
+/** A connection to a list of `Post` values, with data from `PostUserMention`. */
+export type UserPostsByPostUserMentionUserIdAndPostIdManyToManyConnection = {
+  __typename?: 'UserPostsByPostUserMentionUserIdAndPostIdManyToManyConnection';
+  /** A list of edges which contains the `Post`, info from the `PostUserMention`, and the cursor to aid in pagination. */
+  edges: Array<UserPostsByPostUserMentionUserIdAndPostIdManyToManyEdge>;
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection, with data from `PostUserMention`. */
+export type UserPostsByPostUserMentionUserIdAndPostIdManyToManyEdge = {
+  __typename?: 'UserPostsByPostUserMentionUserIdAndPostIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `PostUserMention`. */
+  userMentions: PostUserMentionsConnection;
+};
+
+
+/** A `Post` edge in the connection, with data from `PostUserMention`. */
+export type UserPostsByPostUserMentionUserIdAndPostIdManyToManyEdgeUserMentionsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostUserMentionCondition>;
+  filter?: Maybe<PostUserMentionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+};
+
 export type UserPreference = Node & {
   __typename?: 'UserPreference';
   createdAt: Scalars['Datetime'];
@@ -25889,6 +26446,16 @@ export type CreatePostRecordingMutationVariables = Exact<{
 
 export type CreatePostRecordingMutation = { __typename?: 'Mutation', createPostRecording?: { __typename?: 'CreatePostRecordingPayload', postRecording?: { __typename?: 'PostRecording', createdAt: any, extension?: string | null | undefined, filename: string, uuid: any, nodeId: string } | null | undefined } | null | undefined };
 
+export type CreatePostUserMentionMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  postId: Scalars['Int'];
+  endIndex: Scalars['Int'];
+  startIndex: Scalars['Int'];
+}>;
+
+
+export type CreatePostUserMentionMutation = { __typename?: 'Mutation', createPostUserMention?: { __typename?: 'CreatePostUserMentionPayload', postUserMention?: { __typename?: 'PostUserMention', id: number, postId: number, userId: number, nodeId: string, createdAt: any, endIndex: number, startIndex: number, uuid: any } | null | undefined } | null | undefined };
+
 export type CurrentUserHasAnsweredOrRevealedPostGameQueryVariables = Exact<{
   gameId: Scalars['Int'];
 }>;
@@ -26161,6 +26728,13 @@ export type PostReplyNotificationQueryVariables = Exact<{
 
 export type PostReplyNotificationQuery = { __typename?: 'Query', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, createdAt: any, snowflakeId: any, parentPost?: { __typename?: 'Post', authorId?: number | null | undefined, snowflakeId: any } | null | undefined, author?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined } | null | undefined } | null | undefined };
 
+export type PostUserMentionNotificationQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type PostUserMentionNotificationQuery = { __typename?: 'Query', postUserMention?: { __typename?: 'PostUserMention', userId: number, postId: number, post?: { __typename?: 'Post', body: string, parentPost?: { __typename?: 'Post', authorId?: number | null | undefined, snowflakeId: any } | null | undefined, author?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined };
+
 export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
   token: Scalars['String'];
   lastActiveAt: Scalars['Datetime'];
@@ -26302,6 +26876,13 @@ export type UserIdByEmailQueryVariables = Exact<{
 
 
 export type UserIdByEmailQuery = { __typename?: 'Query', userByEmail?: { __typename?: 'User', id: number } | null | undefined };
+
+export type UserIdByUsernameQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type UserIdByUsernameQuery = { __typename?: 'Query', userByUsername?: { __typename?: 'User', id: number } | null | undefined };
 
 export type UserIdByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
@@ -26594,6 +27175,24 @@ export const CreatePostRecording = gql`
       filename
       uuid
       nodeId
+    }
+  }
+}
+    `;
+export const CreatePostUserMention = gql`
+    mutation CreatePostUserMention($userId: Int!, $postId: Int!, $endIndex: Int!, $startIndex: Int!) {
+  createPostUserMention(
+    input: {postUserMention: {postId: $postId, userId: $userId, endIndex: $endIndex, startIndex: $startIndex}}
+  ) {
+    postUserMention {
+      id
+      postId
+      userId
+      nodeId
+      createdAt
+      endIndex
+      startIndex
+      uuid
     }
   }
 }
@@ -27438,6 +28037,25 @@ export const PostReplyNotification = gql`
   }
 }
     `;
+export const PostUserMentionNotification = gql`
+    query PostUserMentionNotification($id: Int!) {
+  postUserMention(id: $id) {
+    userId
+    postId
+    post {
+      parentPost {
+        authorId
+        snowflakeId
+      }
+      body
+      author {
+        displayName
+        username
+      }
+    }
+  }
+}
+    `;
 export const UnsubscribeUserEmailNotifications = gql`
     mutation UnsubscribeUserEmailNotifications($token: String!, $lastActiveAt: Datetime!) {
   updateUserByEmailUnsubscribeToken(
@@ -27809,6 +28427,13 @@ export const UserHasCompletedProfile = gql`
 export const UserIdByEmail = gql`
     query UserIdByEmail($email: String!) {
   userByEmail(email: $email) {
+    id
+  }
+}
+    `;
+export const UserIdByUsername = gql`
+    query UserIdByUsername($username: String!) {
+  userByUsername(username: $username) {
     id
   }
 }

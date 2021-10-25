@@ -6,6 +6,8 @@ const chlog = log.child({ namespace: "notifications-posts" })
 import {
     PostReplyNotification,
     PostLikeNotification,
+    PostUserMentionNotificationQuery,
+    PostUserMentionNotification,
 } from "../../types/generated/graphql"
 import type {
     PostReplyNotificationQuery,
@@ -38,4 +40,22 @@ export async function getPostLikeNotification(postLikeId: number) {
         return null
     }
     return res.data?.postLike || null
+}
+
+export async function getPostUserMentionNotification(
+    postUserMentionId: number
+) {
+    const res = await performQuery<PostUserMentionNotificationQuery>(
+        PostUserMentionNotification.loc!.source,
+        { id: postUserMentionId }
+    )
+    if (!res.data) {
+        chlog
+            .child({ res, postUserMentionId })
+            .error(
+                "Failed to get mention notification data by post user mention ID"
+            )
+        return null
+    }
+    return res.data || null
 }

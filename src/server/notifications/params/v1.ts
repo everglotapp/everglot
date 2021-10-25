@@ -82,5 +82,6 @@ export enum FcmMessageParamsDataTypeV1 {
     PostReply = "POST_REPLY",
     PostCorrection = "POST_CORRECTION",
     PostGameAnswer = "POST_GAME_ANSWER",
+    PostUserMention = "POST_USER_MENTION",
     UserFollowership = "USER_FOLLOWERSHIP",
 }

@@ -12,6 +12,7 @@ import {
     createPost,
     createPostGame,
     createPostGameRange,
+    createPostUserMention,
     getPostIdByUuid,
 } from "../../server/posts"
 import { getLanguageIdByAlpha2 } from "../../server/locales"
@@ -27,16 +28,24 @@ import {
     SUPPORTED_LOCALES,
 } from "../../constants"
 import { getPromptIdByUuid } from "../../server/prompts"
-import { getPostReplyNotification } from "../../server/notifications/posts"
+import {
+    getPostReplyNotification,
+    getPostUserMentionNotification,
+} from "../../server/notifications/posts"
 import { enqueueFcmNotification } from "../../server/notifications/fcm"
 import { NotificationParamsVersion } from "../../server/notifications/params"
-import { userHasCompletedProfile } from "../../server/users"
+import {
+    findPotentialUsernameMentions,
+    getUserIdByUsername,
+    userHasCompletedProfile,
+} from "../../server/users"
 import { FcmMessageParamsDataTypeV1 } from "../../server/notifications/params/v1"
 
 import {
     GrammaticalCase,
     GrammaticalGender,
     PostGameType,
+    PostUserMention,
 } from "../../types/generated/graphql"
 import { MAX_POST_BODY_LENGTH } from "../../server/constants"
 
@@ -88,6 +97,68 @@ export async function notifyOriginalAuthorAfterReply(
                 },
                 data: {
                     type: FcmMessageParamsDataTypeV1.PostReply,
+                    parentPostSnowflakeId: parentPost.snowflakeId,
+                },
+            },
+            version: NotificationParamsVersion.V1,
+        }
+    )
+}
+
+const MENTION_NOTIFICATION_EXPIRY_SECONDS = 60 * 60
+export async function notifyMentionedUser(
+    userMentionId: number,
+    currentUserId: number
+) {
+    const notificationData = await getPostUserMentionNotification(userMentionId)
+    if (!notificationData) {
+        chlog
+            .child({ userMentionId, currentUserId })
+            .error("No notification data for post user mention")
+        return
+    }
+    const { postUserMention } = notificationData
+    if (
+        !postUserMention ||
+        !postUserMention.userId ||
+        !postUserMention.post ||
+        !postUserMention.post.author ||
+        !postUserMention.post.parentPost
+    ) {
+        chlog
+            .child({ notificationData, postUserMention, currentUserId })
+            .error("Missing notification data for post user mention")
+        return
+    }
+    const {
+        post: { author, parentPost, body },
+    } = postUserMention
+    if (postUserMention.userId === currentUserId) {
+        // Don't notify if the author mentions themselves in their own post.
+        return
+    }
+    const expiresAt = new Date(
+        Date.now() + MENTION_NOTIFICATION_EXPIRY_SECONDS * 1000
+    )
+    const withheldUntil = null
+    const username =
+        author.displayName && author.displayName.length
+            ? author.displayName
+            : author.username
+    enqueueFcmNotification(
+        { userId: postUserMention.userId, groupId: null },
+        expiresAt,
+        withheldUntil,
+        {
+            message: {
+                notification: {
+                    title: `${
+                        username && username.length ? username : "Someone"
+                    } mentioned you in a comment`,
+                    body: `${body.substr(0, 64)}`,
+                },
+                data: {
+                    type: FcmMessageParamsDataTypeV1.PostUserMention,
                     parentPostSnowflakeId: parentPost.snowflakeId,
                 },
             },
@@ -296,7 +367,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             gameType: gameType as PostGameType,
         })
         if (!game) {
-            // TODO: Delete post
+            // TODO: Delete post (cascade) and return error
             chlog
                 .child({
                     userId,
@@ -342,7 +413,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 })
             }
             if (!createdRange) {
-                // TODO: Delete post
+                // TODO: Delete post (cascade) and return error
                 chlog
                     .child({
                         userId,
@@ -356,6 +427,78 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 unprocessableEntity(res, "Failed to create game")
                 return
             }
+        }
+    }
+    if (parentPostId) {
+        const mentionRanges = findPotentialUsernameMentions(body)
+        const userMentionsToInsert: Pick<
+            PostUserMention,
+            "userId" | "postId" | "startIndex" | "endIndex"
+        >[] = []
+        for (const mentionRange of mentionRanges) {
+            const mentionedUserId = await getUserIdByUsername(
+                mentionRange.username
+            )
+            if (mentionedUserId === null) {
+                chlog
+                    .child({
+                        mentionRange,
+                        body,
+                        userId,
+                    })
+                    .debug(
+                        "Potential username mention did not match any user in database"
+                    )
+                continue
+            }
+            userMentionsToInsert.push({
+                userId: mentionedUserId,
+                postId: post.id,
+                startIndex: mentionRange.startIndex,
+                endIndex: mentionRange.endIndex,
+            })
+        }
+        if (userMentionsToInsert.length) {
+            chlog
+                .child({
+                    count: userMentionsToInsert.length,
+                    userMentionsToInsert,
+                    body,
+                    userId,
+                })
+                .debug("Found username mentions in this post")
+        }
+        // Create post user mentions for each mention
+        const notificationsToInsert: { userId: number; mentionId: number }[] =
+            []
+        for (const userMentionToInsert of userMentionsToInsert) {
+            const userMention = await createPostUserMention(userMentionToInsert)
+            if (!userMention) {
+                chlog
+                    .child({
+                        userMentionToInsert,
+                        body,
+                        userId,
+                    })
+                    .error("Failed to create post user mention")
+                // TODO: Delete post (cascade) and return error instead
+                continue
+            }
+            // Only notify each mentioned user once.
+            if (
+                !notificationsToInsert.some(
+                    ({ userId }) => userId === userMention.userId
+                )
+            ) {
+                notificationsToInsert.push({
+                    mentionId: userMention.id,
+                    userId: userMention.userId,
+                })
+            }
+        }
+        // Create notifications for each mentioned user
+        for (const notificationToInsert of notificationsToInsert) {
+            notifyMentionedUser(notificationToInsert.mentionId, userId)
         }
     }
     res.json({

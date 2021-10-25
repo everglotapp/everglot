@@ -1444,14 +1444,32 @@
                                             color="SECONDARY"
                                             on:click={() => {
                                                 const authorTag = `@${reply.author.username}`
-                                                replyBodyInputNode.innerHTML =
-                                                    newReplyBody
-                                                        ? `${newReplyBody}${authorTag}&nbsp;`
-                                                        : `${authorTag}&nbsp;`
-                                                newReplyBody =
-                                                    replyBodyInputNode.innerHTML
+                                                if (
+                                                    !(
+                                                        newReplyBody || ""
+                                                    ).includes(authorTag)
+                                                ) {
+                                                    replyBodyInputNode.innerHTML =
+                                                        newReplyBody
+                                                            ? `${newReplyBody}${authorTag}&nbsp;`
+                                                            : `${authorTag}&nbsp;`
+                                                    newReplyBody =
+                                                        replyBodyInputNode.innerHTML
+                                                }
                                                 setTimeout(() => {
                                                     replyBodyInputNode.focus()
+                                                    replyBodyInputNode.click()
+                                                    const y = Math.max(
+                                                        0,
+                                                        replyBodyInputNode.getBoundingClientRect()
+                                                            .top +
+                                                            window.scrollY -
+                                                            150
+                                                    )
+                                                    window.scroll({
+                                                        top: y,
+                                                        behavior: "smooth",
+                                                    })
                                                     const r =
                                                         document.createRange()
                                                     const s =

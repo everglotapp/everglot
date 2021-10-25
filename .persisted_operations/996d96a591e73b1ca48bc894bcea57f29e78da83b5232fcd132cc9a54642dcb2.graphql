@@ -67,6 +67,21 @@ query UserByUsernamePosts($username: String!) {
               __typename
             }
             snowflakeId
+            userMentions {
+              nodes {
+                startIndex
+                user {
+                  displayName
+                  username
+                  uuid
+                  __typename
+                }
+                endIndex
+                uuid
+                __typename
+              }
+              __typename
+            }
             __typename
           }
           __typename

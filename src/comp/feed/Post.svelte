@@ -38,6 +38,7 @@
         createPostCorrection,
     } from "../../routes/_helpers/posts"
     import {
+        BodyPart,
         BodyPartType,
         GuessCaseOption,
         GuessCaseRange,
@@ -714,6 +715,58 @@
             }
         }
     }
+
+    $: replyUserMentionNodes = replyNodes.reduce(
+        (map, reply) => ({
+            ...map,
+            [reply.uuid]: reply.userMentions.nodes
+                .filter(Boolean)
+                .map((node) => node!),
+        }),
+        {} as Record<
+            string,
+            NonNullable<
+                typeof replyNodes[number]["userMentions"]["nodes"][number]
+            >[]
+        >
+    )
+    $: replyUserMentionRanges = replyNodes.reduce(
+        (map, reply) => ({
+            ...map,
+            [reply.uuid]: replyUserMentionNodes[reply.uuid].map(
+                ({ uuid, startIndex: start, endIndex: end }) => ({
+                    uuid,
+                    start,
+                    end,
+                })
+            ),
+        }),
+        {} as Record<string, { uuid: string; start: number; end: number }[]>
+    )
+    $: userMentionNodesByUuid = Object.values(replyUserMentionNodes).reduce(
+        (map, mentionNodes) => {
+            for (const mention of mentionNodes) {
+                map[mention.uuid] = mention
+            }
+            return map
+        },
+        {} as Record<
+            string,
+            NonNullable<
+                typeof replyNodes[number]["userMentions"]["nodes"][number]
+            >
+        >
+    )
+    $: displayedReplyBodyParts = replyNodes.reduce(
+        (map, reply) => ({
+            ...map,
+            [reply.uuid]: getBodyParts(
+                reply.body,
+                replyUserMentionRanges[reply.uuid]
+            ),
+        }),
+        {} as Record<string, BodyPart[]>
+    )
 </script>
 
 <div
@@ -1349,7 +1402,25 @@
                             />
                         </div>
                         <div>
-                            {reply.body}
+                            {#each displayedReplyBodyParts[reply.uuid] as replyBodyPart}
+                                {#if replyBodyPart.type === BodyPartType.Text}<span
+                                        >{replyBodyPart.value}</span
+                                    >{:else if replyBodyPart.type === BodyPartType.Range}{#if replyBodyPart.uuid != null && userMentionNodesByUuid[replyBodyPart.uuid] && userMentionNodesByUuid[replyBodyPart.uuid].user}<a
+                                            id={replyBodyPart.uuid}
+                                            href={`/u/${
+                                                userMentionNodesByUuid[
+                                                    replyBodyPart.uuid
+                                                ].user.username
+                                            }`}
+                                            class="font-bold text-gray-bitdark cursor-pointer"
+                                            >{replyBodyPart.value}</a
+                                        >{:else}<span
+                                            id={replyBodyPart.uuid}
+                                            class="font-bold text-gray-bitdark"
+                                            >{replyBodyPart.value}</span
+                                        >{/if}
+                                {/if}
+                            {/each}
                         </div>
                     </div>
                 </div>

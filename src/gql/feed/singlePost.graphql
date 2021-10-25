@@ -57,6 +57,18 @@ query SinglePost($snowflakeId: BigInt!) {
                         type
                     }
                     snowflakeId
+                    userMentions {
+                        nodes {
+                            startIndex
+                            user {
+                                displayName
+                                username
+                                uuid
+                            }
+                            endIndex
+                            uuid
+                        }
+                    }
                 }
             }
             recordings {

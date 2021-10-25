@@ -59,7 +59,8 @@ export async function notifyOriginalAuthorAfterReply(
         uuid: any
         nodeId: string
     },
-    currentUserId: number
+    currentUserId: number,
+    mentionedUserIds: number[]
 ) {
     const notificationData = await getPostReplyNotification(post.id)
     if (!notificationData) {
@@ -73,6 +74,10 @@ export async function notifyOriginalAuthorAfterReply(
     }
     if (parentPost.authorId === currentUserId) {
         // Don't notify if the author replies to their own post.
+        return
+    }
+    if (mentionedUserIds.includes(parentPost.authorId)) {
+        // Don't notify if the author is already being notified that they have been mentioned.
         return
     }
     const expiresAt = new Date(
@@ -429,6 +434,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
             }
         }
     }
+    // Create post user mentions for each mention
+    const postUserMentionNotificationsToInsert: {
+        userId: number
+        mentionId: number
+    }[] = []
     if (parentPostId) {
         const mentionRanges = findPotentialUsernameMentions(body)
         const userMentionsToInsert: Pick<
@@ -468,9 +478,6 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 })
                 .debug("Found username mentions in this post")
         }
-        // Create post user mentions for each mention
-        const notificationsToInsert: { userId: number; mentionId: number }[] =
-            []
         for (const userMentionToInsert of userMentionsToInsert) {
             const userMention = await createPostUserMention(userMentionToInsert)
             if (!userMention) {
@@ -486,18 +493,18 @@ export async function post(req: Request, res: Response, _next: () => void) {
             }
             // Only notify each mentioned user once.
             if (
-                !notificationsToInsert.some(
+                !postUserMentionNotificationsToInsert.some(
                     ({ userId }) => userId === userMention.userId
                 )
             ) {
-                notificationsToInsert.push({
+                postUserMentionNotificationsToInsert.push({
                     mentionId: userMention.id,
                     userId: userMention.userId,
                 })
             }
         }
         // Create notifications for each mentioned user
-        for (const notificationToInsert of notificationsToInsert) {
+        for (const notificationToInsert of postUserMentionNotificationsToInsert) {
             notifyMentionedUser(notificationToInsert.mentionId, userId)
         }
     }
@@ -512,6 +519,10 @@ export async function post(req: Request, res: Response, _next: () => void) {
         },
     })
     if (parentPostId) {
-        notifyOriginalAuthorAfterReply(post, userId)
+        notifyOriginalAuthorAfterReply(
+            post,
+            userId,
+            postUserMentionNotificationsToInsert.map(({ userId }) => userId)
+        )
     }
 }

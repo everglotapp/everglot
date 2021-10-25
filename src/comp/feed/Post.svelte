@@ -1436,57 +1436,61 @@
                                     {/each}
                                 </div>
                                 <div>
-                                    <ButtonSmall
-                                        className="absolute right-0 bottom-0 items-center justify-center ml-0 mr-1"
-                                        tag="button"
-                                        variant="TEXT"
-                                        color="SECONDARY"
-                                        on:click={() => {
-                                            const authorTag = `@${reply.author.username}`
-                                            replyBodyInputNode.innerHTML =
-                                                newReplyBody
-                                                    ? `${newReplyBody}${authorTag}&nbsp;`
-                                                    : `${authorTag}&nbsp;`
-                                            newReplyBody =
-                                                replyBodyInputNode.innerHTML
-                                            setTimeout(() => {
-                                                replyBodyInputNode.focus()
-                                                const r = document.createRange()
-                                                const s = window.getSelection()
-                                                if (s) {
-                                                    r.setStart(
-                                                        replyBodyInputNode,
-                                                        1
-                                                    )
-                                                    r.collapse(true)
-                                                    s.removeAllRanges()
-                                                    s.addRange(r)
-                                                }
-                                            }, 30)
-                                        }}
-                                        ><svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            aria-hidden="true"
-                                            role="img"
-                                            width="1em"
-                                            height="1em"
-                                            preserveAspectRatio="xMidYMid meet"
-                                            viewBox="0 0 16 16"
-                                            ><rect
-                                                x="0"
-                                                y="0"
-                                                width="16"
-                                                height="16"
-                                                fill="none"
-                                                stroke="none"
-                                            /><g fill="currentColor"
-                                                ><path
-                                                    d="M5.921 11.9L1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8c-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"
-                                                /></g
-                                            ></svg
-                                        ></ButtonSmall
-                                    >
+                                    {#if $currentUserUuid === null || reply.author.uuid !== $currentUserUuid}
+                                        <ButtonSmall
+                                            className="absolute right-0 bottom-0 items-center justify-center ml-0 mr-1"
+                                            tag="button"
+                                            variant="TEXT"
+                                            color="SECONDARY"
+                                            on:click={() => {
+                                                const authorTag = `@${reply.author.username}`
+                                                replyBodyInputNode.innerHTML =
+                                                    newReplyBody
+                                                        ? `${newReplyBody}${authorTag}&nbsp;`
+                                                        : `${authorTag}&nbsp;`
+                                                newReplyBody =
+                                                    replyBodyInputNode.innerHTML
+                                                setTimeout(() => {
+                                                    replyBodyInputNode.focus()
+                                                    const r =
+                                                        document.createRange()
+                                                    const s =
+                                                        window.getSelection()
+                                                    if (s) {
+                                                        r.setStart(
+                                                            replyBodyInputNode,
+                                                            1
+                                                        )
+                                                        r.collapse(true)
+                                                        s.removeAllRanges()
+                                                        s.addRange(r)
+                                                    }
+                                                }, 30)
+                                            }}
+                                            ><svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                aria-hidden="true"
+                                                role="img"
+                                                width="1em"
+                                                height="1em"
+                                                preserveAspectRatio="xMidYMid meet"
+                                                viewBox="0 0 16 16"
+                                                ><rect
+                                                    x="0"
+                                                    y="0"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="none"
+                                                    stroke="none"
+                                                /><g fill="currentColor"
+                                                    ><path
+                                                        d="M5.921 11.9L1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8c-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"
+                                                    /></g
+                                                ></svg
+                                            ></ButtonSmall
+                                        >
+                                    {/if}
                                 </div>
                             </div>
                         </div>

@@ -227,8 +227,10 @@
             {/if}
         </div>
     {/key}
-    <div class="flex flex-wrap items-center flex-grow">
-        <div class="flex flex-col flex-grow">
+    <div
+        class="flex flex-wrap items-center flex-grow overflow-hidden overflow-ellipsis whitespace-nowrap"
+    >
+        <div class="flex flex-col flex-grow w-full">
             <div class="flex flex-wrap items-center">
                 {#if displayName}
                     <span

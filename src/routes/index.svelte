@@ -128,7 +128,20 @@
         postsFetchedBeforeByLocale[$feedLocale] = true
     }
     const postsByLocale: Partial<
-        Record<SupportedLocale, NonNullable<typeof $feedPosts>>
+        Record<
+            SupportedLocale,
+            NonNullable<
+                NonNullable<
+                    NonNullable<
+                        NonNullable<
+                            NonNullable<
+                                typeof $feedPostsStore["data"]
+                            >["feedPosts"]
+                        >["edges"][number]
+                    >["node"]
+                >[]
+            >
+        >
     > = {}
     $: if (
         $feedPosts &&

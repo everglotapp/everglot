@@ -1,0 +1,8 @@
+{
+  "ignore": {
+    "@nubolab-ffwd/svelte-fluent": {
+      "versions": "^0.4",
+      "reason": "prevents access to internal translation function"
+    }
+  }
+}

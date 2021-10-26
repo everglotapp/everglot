@@ -497,7 +497,7 @@
         locale={pickedLocale || null}
         on:postSuccess={handlePostSuccess}
     />
-    <div class="container max-w-2xl py-2 px-3 sm:px-0 gap-y-1">
+    <div class="container max-w-2xl py-2 pl-3 pr-2 sm:px-0 gap-y-1">
         {#each posts as post (post.uuid)}
             {#if post.author}
                 <div class="post">

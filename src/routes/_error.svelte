@@ -14,7 +14,11 @@
 <div class="container px-4 mx-auto mt-16 mb-32 max-w-sm">
     <PageTitle>{status}</PageTitle>
 
-    <ErrorMessage>{error.message}</ErrorMessage>
+    <ErrorMessage
+        >{typeof error.message === "undefined"
+            ? error.message
+            : "Something's not working. Maybe try refreshing?"}</ErrorMessage
+    >
 
     {#if dev && error.stack}
         <pre>{error.stack}</pre>

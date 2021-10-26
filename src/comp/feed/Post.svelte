@@ -799,7 +799,7 @@
                 />
             {/if}
         </div>
-        <div class="w-full">
+        <div class="w-full" style="word-wrap: anywhere;">
             <div class="flex items-center justify-between">
                 {#if linkToAuthorProfile}
                     <a href={`/u/${author.username}`}

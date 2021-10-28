@@ -21,12 +21,12 @@
         MIN_USERNAME_LENGTH,
     } from "../users"
 
-    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
-    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
-    import ButtonSmall from "../comp/util/ButtonSmall.svelte"
-    import GroupSelect from "../comp/util/GroupSelect.svelte"
-    import ErrorMessage from "../comp/util/ErrorMessage.svelte"
-    import PageTitle from "../comp/typography/PageTitle.svelte"
+    import BrowserTitle from "../components/layout/BrowserTitle.svelte"
+    import ButtonLarge from "../components/util/ButtonLarge.svelte"
+    import ButtonSmall from "../components/util/ButtonSmall.svelte"
+    import GroupSelect from "../components/util/GroupSelect.svelte"
+    import ErrorMessage from "../components/util/ErrorMessage.svelte"
+    import PageTitle from "../components/typography/PageTitle.svelte"
 
     import { ArrowRightIcon, ClockIcon } from "svelte-feather-icons"
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"

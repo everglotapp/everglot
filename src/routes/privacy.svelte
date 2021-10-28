@@ -1,5 +1,5 @@
 <script lang="ts">
-    import PageTitle from "../comp/typography/PageTitle.svelte"
+    import PageTitle from "../components/typography/PageTitle.svelte"
 </script>
 
 <svelte:head>

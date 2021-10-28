@@ -85,3 +85,16 @@ export enum FcmMessageParamsDataTypeV1 {
     PostUserMention = "POST_USER_MENTION",
     UserFollowership = "USER_FOLLOWERSHIP",
 }
+
+export type InAppParamsV1 = {
+    type: InAppParamsTypeV1
+}
+
+export enum InAppParamsTypeV1 {
+    PostLike = "POST_LIKE",
+    PostReply = "POST_REPLY",
+    PostCorrection = "POST_CORRECTION",
+    PostGameAnswer = "POST_GAME_ANSWER",
+    PostUserMention = "POST_USER_MENTION",
+    UserFollowership = "USER_FOLLOWERSHIP",
+}

@@ -127,6 +127,7 @@ main-nav-download-app-ios = iOS-App
 main-nav-download-app-android = Android-App
 main-nav-feedback = Feedback geben
 main-nav-continue = Weiter
+main-nav-notifications = Neues
 
 ## Signup successful page
 

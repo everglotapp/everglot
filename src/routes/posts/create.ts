@@ -39,7 +39,10 @@ import {
     getUserIdByUsername,
     userHasCompletedProfile,
 } from "../../server/users"
-import { FcmMessageParamsDataTypeV1 } from "../../server/notifications/params/v1"
+import {
+    FcmMessageParamsDataTypeV1,
+    InAppParamsTypeV1,
+} from "../../server/notifications/params/v1"
 
 import {
     GrammaticalCase,
@@ -48,6 +51,7 @@ import {
     PostUserMention,
 } from "../../types/generated/graphql"
 import { MAX_POST_BODY_LENGTH } from "../../server/constants"
+import { enqueueInAppNotification } from "../../server/notifications/inApp"
 
 const REPLY_NOTIFICATION_EXPIRY_SECONDS = 60 * 60
 
@@ -106,6 +110,15 @@ export async function notifyOriginalAuthorAfterReply(
                 },
             },
             version: NotificationParamsVersion.V1,
+        }
+    )
+    enqueueInAppNotification(
+        { userId: parentPost.authorId, groupId: null },
+        null,
+        null,
+        {
+            version: NotificationParamsVersion.V1,
+            type: InAppParamsTypeV1.PostReply,
         }
     )
 }

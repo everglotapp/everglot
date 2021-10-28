@@ -1,0 +1,113 @@
+<script lang="ts">
+    import { Localized } from "@nubolab-ffwd/svelte-fluent"
+    import { ChevronRightIcon } from "svelte-feather-icons"
+
+    import { chatUsers } from "../../stores/chat"
+    import { getActiveStatus } from "../../users"
+    import ButtonSmall from "../util/ButtonSmall.svelte"
+
+    import Avatar from "./Avatar.svelte"
+
+    export let userUuid: string | null
+
+    $: user = userUuid
+        ? $chatUsers.find((u) => u?.uuid === userUuid) || null
+        : null
+
+    $: languages = user
+        ? [
+              ...new Set(
+                  user.userLanguages.nodes
+                      .map(
+                          (userLanguage) =>
+                              userLanguage?.language?.englishName || null
+                      )
+                      .filter(Boolean)
+              ),
+          ]
+        : []
+
+    $: activeStatus = user ? getActiveStatus(new Date(user.lastActiveAt)) : null
+</script>
+
+<div class="wrapper">
+    {#if !user}
+        <span class="text-sm italic"><Localized id="user-bio-error" /></span>
+    {:else}
+        <div class="flex flex-row font-medium gap-x-6">
+            <div class="relative">
+                <span class="font-bold text-gray-bitdark">{user.username}</span>
+                <div
+                    class="mx-auto mt-1 relative"
+                    style="width: 64px; height: 64px;"
+                >
+                    <Avatar
+                        username={user.username || ""}
+                        url={user.avatarUrl || ""}
+                        uuid={user.uuid || null}
+                        size={64}
+                    />
+                    {#if activeStatus}
+                        <div class={`active-status ${activeStatus}`} />
+                    {/if}
+                </div>
+            </div>
+            <div class="pt-8">
+                <span><Localized id="user-bio-languages-title" /></span>
+                <div class="pl-2 pt-1">
+                    {#each languages as language}
+                        <div class="text-primary">{language}</div>
+                    {/each}
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-center pt-4">
+            <ButtonSmall
+                href={`/u/${user.username}`}
+                tag="a"
+                color="PRIMARY"
+                variant="OUTLINED"
+                className="mb-0 flex items-center"
+                ><span>Go to Profile</span><ChevronRightIcon
+                    class="ml-2"
+                    size="18"
+                /></ButtonSmall
+            >
+        </div>
+    {/if}
+</div>
+
+<style>
+    .wrapper {
+        text-align: initial;
+        cursor: initial;
+        color: initial;
+
+        @apply text-base;
+        @apply py-4;
+        @apply px-3;
+    }
+
+    .active-status {
+        border-radius: 50%;
+        height: 14px;
+        width: 14px;
+        right: 3px;
+        top: 2px;
+        border: 1px solid white;
+
+        @apply absolute;
+    }
+
+    .active-status.online {
+        background: #82ed93;
+    }
+
+    .active-status.idle {
+        background: #f9ef0a;
+    }
+
+    .active-status.offline {
+        background: #ccc;
+    }
+</style>

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
-    import ErrorMessage from "../../../comp/util/ErrorMessage.svelte"
+    import ErrorMessage from "../../../components/util/ErrorMessage.svelte"
 </script>
 
 <div class="container py-8 md:py-16 max-w-xl text-center">

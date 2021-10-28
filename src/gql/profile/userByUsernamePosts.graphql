@@ -38,6 +38,7 @@ query UserByUsernamePosts($username: String!) {
                         author {
                             uuid
                             username
+                            displayName
                             avatarUrl
                         }
                         likes {

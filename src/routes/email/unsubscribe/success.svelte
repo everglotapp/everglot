@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
-    import Headline1 from "../../../comp/typography/Headline1.svelte"
+    import Headline1 from "../../../components/typography/Headline1.svelte"
 </script>
 
 <div class="container py-8 md:py-16 max-w-xl text-center">

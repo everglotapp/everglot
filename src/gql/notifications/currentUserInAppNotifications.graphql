@@ -1,0 +1,11 @@
+query CurrentUserInAppNotifications {
+    currentUser {
+        inAppNotifications(afterUuid: null) {
+            nodes {
+                uuid
+                createdAt
+                params
+            }
+        }
+    }
+}

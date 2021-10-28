@@ -4,17 +4,17 @@
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
-    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
-    import ButtonSmall from "../comp/util/ButtonSmall.svelte"
-    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
-    import ErrorMessage from "../comp/util/ErrorMessage.svelte"
-    import PageTitle from "../comp/typography/PageTitle.svelte"
+    import BrowserTitle from "../components/layout/BrowserTitle.svelte"
+    import ButtonSmall from "../components/util/ButtonSmall.svelte"
+    import ButtonLarge from "../components/util/ButtonLarge.svelte"
+    import ErrorMessage from "../components/util/ErrorMessage.svelte"
+    import PageTitle from "../components/typography/PageTitle.svelte"
 
     import { query, operationStore } from "@urql/svelte"
     import { CurrentUserProfile, UserType } from "../types/generated/graphql"
     import type { CurrentUserProfileQuery } from "../types/generated/graphql"
     import { Gender } from "../users"
-    import Avatar from "../comp/users/Avatar.svelte"
+    import Avatar from "../components/users/Avatar.svelte"
     import { currentUserStore } from "../stores/currentUser"
     import {
         ANDROID_WEBVIEW_USER_AGENT,

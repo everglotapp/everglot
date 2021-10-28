@@ -3,10 +3,10 @@
     import { stores, goto } from "@sapper/app"
     import { query } from "@urql/svelte"
 
-    import Post from "../../comp/feed/Post.svelte"
-    import Spinner from "../../comp/util/Spinner.svelte"
-    import ErrorMessage from "../../comp/util/ErrorMessage.svelte"
-    import ButtonSmall from "../../comp/util/ButtonSmall.svelte"
+    import Post from "../../components/feed/Post.svelte"
+    import Spinner from "../../components/util/Spinner.svelte"
+    import ErrorMessage from "../../components/util/ErrorMessage.svelte"
+    import ButtonSmall from "../../components/util/ButtonSmall.svelte"
 
     import { singlePost, singlePostStore } from "../../stores/feed"
 

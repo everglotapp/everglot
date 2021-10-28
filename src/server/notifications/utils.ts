@@ -14,16 +14,17 @@ import { performQuery } from "../gql"
 import log from "../../logger"
 import type { NotificationParams } from "./params"
 
-const EMAIL_NOTIFICATION_CHANNEL_NAME = "Email"
-const FCM_NOTIFICATION_CHANNEL_NAME = "Firebase Cloud Messaging"
+const EMAIL_NOTIFICATION_CHANNEL_NAME = "Email" as const
+const FCM_NOTIFICATION_CHANNEL_NAME = "Firebase Cloud Messaging" as const
+const IN_APP_NOTIFICATION_CHANNEL_NAME = "In-app" as const
 
 const chlog = log.child({ namespace: "notifications-utils" })
 
-type NotificationUserRecipient = {
+export type NotificationUserRecipient = {
     groupId: null
     userId: number
 }
-type NotificationGroupRecipient = {
+export type NotificationGroupRecipient = {
     groupId: number
     userId: null
 }
@@ -44,7 +45,7 @@ export async function enqueueNotification(
             channelId,
             recipientId: recipient.userId,
             recipientGroupId: recipient.groupId,
-            params: JSON.stringify(params),
+            params: params === null ? null : JSON.stringify(params),
             sentAt: null,
             expiresAt: expiresAt?.toISOString() || null,
             withheldUntil: withheldUntil?.toISOString() || null,
@@ -75,6 +76,10 @@ export async function getEmailNotificationChannelId() {
 
 export async function getFcmNotificationChannelId() {
     return getNotificationChannelIdByName(FCM_NOTIFICATION_CHANNEL_NAME)
+}
+
+export async function getInAppNotificationChannelId() {
+    return getNotificationChannelIdByName(IN_APP_NOTIFICATION_CHANNEL_NAME)
 }
 
 async function getNotificationChannelIdByName(name: string) {

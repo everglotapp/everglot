@@ -1,9 +1,9 @@
 <script lang="ts">
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
-    import BrowserTitle from "../../comp/layout/BrowserTitle.svelte"
-    import Headline1 from "../../comp/typography/Headline1.svelte"
-    import ButtonLarge from "../../comp/util/ButtonLarge.svelte"
+    import BrowserTitle from "../../components/layout/BrowserTitle.svelte"
+    import Headline1 from "../../components/typography/Headline1.svelte"
+    import ButtonLarge from "../../components/util/ButtonLarge.svelte"
     import {
         ANDROID_WEBVIEW_USER_AGENT,
         IOS_WEBVIEW_USER_AGENT,

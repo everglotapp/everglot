@@ -22,13 +22,13 @@
     } from "../stores/feed"
     import { currentUser, currentUserStore } from "../stores/currentUser"
 
-    import Post from "../comp/feed/Post.svelte"
-    import PostForm from "../comp/feed/PostForm.svelte"
-    import ButtonSmall from "../comp/util/ButtonSmall.svelte"
-    import ClickAwayListener from "../comp/util/ClickAwayListener.svelte"
-    import EscapeKeyListener from "../comp/util/EscapeKeyListener.svelte"
-    import Spinner from "../comp/util/Spinner.svelte"
-    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
+    import Post from "../components/feed/Post.svelte"
+    import PostForm from "../components/feed/PostForm.svelte"
+    import ButtonSmall from "../components/util/ButtonSmall.svelte"
+    import ClickAwayListener from "../components/util/ClickAwayListener.svelte"
+    import EscapeKeyListener from "../components/util/EscapeKeyListener.svelte"
+    import Spinner from "../components/util/Spinner.svelte"
+    import BrowserTitle from "../components/layout/BrowserTitle.svelte"
 
     import {
         FeedPostsQueryVariables,

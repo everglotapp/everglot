@@ -395,6 +395,15 @@ declare module '*/createUserDevice.graphql' {
 }
     
 
+declare module '*/currentUserInAppNotifications.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CurrentUserInAppNotifications: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/deleteInvalidFcmToken.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

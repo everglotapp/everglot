@@ -13,6 +13,7 @@ export const enum Page {
     Squeek,
     ResetPassword,
     ResetPasswordToken,
+    Notifications,
 }
 
 const ROUTE_TO_PAGE: Record<string, Page> = {
@@ -27,6 +28,7 @@ const ROUTE_TO_PAGE: Record<string, Page> = {
     "/signup/success": Page.SignupSuccess,
     "/profile": Page.Profile,
     "/users/password/reset": Page.ResetPassword,
+    "/notifications": Page.Notifications,
 } as const
 
 export function getPage(path: string): Page | null {

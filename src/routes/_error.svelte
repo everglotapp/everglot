@@ -1,6 +1,6 @@
 <script lang="ts">
-    import PageTitle from "../comp/typography/PageTitle.svelte"
-    import ErrorMessage from "../comp/util/ErrorMessage.svelte"
+    import PageTitle from "../components/typography/PageTitle.svelte"
+    import ErrorMessage from "../components/util/ErrorMessage.svelte"
     export let status: number
     export let error: Error
 

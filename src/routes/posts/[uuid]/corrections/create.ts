@@ -9,7 +9,7 @@ const chlog = log.child({
 
 import type { Request, Response } from "express"
 import { createPostCorrection, getPostIdByUuid } from "../../../../server/posts"
-import { getPostLikeNotification } from "../../../../server/notifications/posts"
+import { getPostCorrectionNotification } from "../../../../server/notifications/posts"
 import { enqueueFcmNotification } from "../../../../server/notifications/fcm"
 import { NotificationParamsVersion } from "../../../../server/notifications/params"
 import { userHasCompletedProfile } from "../../../../server/users"
@@ -21,30 +21,28 @@ const NOTIFICATION_EXPIRY_SECONDS = 60 * 60
  * Allows user to cancel the notification
  * by unliking within this timeframe.
  */
-const NOTIFICATION_WITHHELD_SECONDS = 10
+const NOTIFICATION_WITHHELD_SECONDS = 0
 
 async function notifyAuthor(
-    postLike: {
+    correction: {
         id: number
-        postId: number
-        userId: number
-        nodeId: string
-        createdAt: any
     },
     currentUserId: number
 ) {
-    const notificationData = await getPostLikeNotification(postLike.id)
-    if (!notificationData) {
+    const notificationData = await getPostCorrectionNotification(correction.id)
+    if (!notificationData || !notificationData.postCorrection) {
         chlog
-            .child({ postLike, currentUserId })
-            .error("No notification data for post like")
+            .child({ correction, notificationData, currentUserId })
+            .error("No notification data for post correction")
         return
     }
-    const { post, user } = notificationData
+    const {
+        postCorrection: { post, user },
+    } = notificationData
     if (!post || !post.authorId || !user) {
         chlog
-            .child({ postLike, currentUserId })
-            .error("Missing notification data for post like")
+            .child({ correction, currentUserId })
+            .error("Missing notification data for post correction")
         return
     }
     if (post.authorId === currentUserId) {
@@ -68,7 +66,7 @@ async function notifyAuthor(
                 notification: {
                     title: `${
                         username && username.length ? username : "Someone"
-                    } likes your ${post.parentPostId ? "comment" : "post"}`,
+                    } corrected your post`,
                     body: `${post.body.substr(0, 64)}`,
                 },
                 data: {
@@ -81,7 +79,6 @@ async function notifyAuthor(
     )
 }
 
-const MAX_CORRECTION_BODY_LENGTH = 128
 function sanitizeBody(body: string) {
     return body.trim().substr(0, MAX_POST_BODY_LENGTH)
 }
@@ -154,7 +151,7 @@ export async function post(req: Request, res: Response, next: () => void) {
         res.json({
             success: true,
         })
-        // notifyAuthor(postLike, userId)
+        notifyAuthor(correction, userId)
     } else {
         chlog
             .child({ correction, postId, userId })

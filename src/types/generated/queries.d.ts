@@ -449,6 +449,15 @@ declare module '*/outstandingFcmNotifications.graphql' {
 }
     
 
+declare module '*/postCorrectionNotification.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const PostCorrectionNotification: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/postLikeNotification.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

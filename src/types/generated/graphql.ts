@@ -26714,6 +26714,13 @@ export type OutstandingFcmNotificationsQueryVariables = Exact<{ [key: string]: n
 
 export type OutstandingFcmNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: { __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<{ __typename?: 'Notification', id: number, params?: any | null | undefined, expiresAt?: any | null | undefined, withheldUntil?: any | null | undefined, recipient?: { __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<{ __typename?: 'UserDevice', fcmToken?: string | null | undefined } | null | undefined> } } | null | undefined, recipientGroup?: { __typename?: 'Group', uuid: any, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<{ __typename?: 'GroupUser', user?: { __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<{ __typename?: 'UserDevice', fcmToken?: string | null | undefined } | null | undefined> } } | null | undefined } | null | undefined> } } | null | undefined } | null | undefined> } } | null | undefined };
 
+export type PostCorrectionNotificationQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type PostCorrectionNotificationQuery = { __typename?: 'Query', postCorrection?: { __typename?: 'PostCorrection', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, parentPostId?: number | null | undefined, snowflakeId: any } | null | undefined, user?: { __typename?: 'User', id: number, username?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined };
+
 export type PostLikeNotificationQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -27985,6 +27992,23 @@ export const OutstandingFcmNotifications = gql`
           }
         }
       }
+    }
+  }
+}
+    `;
+export const PostCorrectionNotification = gql`
+    query PostCorrectionNotification($id: Int!) {
+  postCorrection(id: $id) {
+    post {
+      authorId
+      body
+      parentPostId
+      snowflakeId
+    }
+    user {
+      id
+      username
+      displayName
     }
   }
 }

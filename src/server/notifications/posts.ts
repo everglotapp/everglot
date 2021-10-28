@@ -8,6 +8,8 @@ import {
     PostLikeNotification,
     PostUserMentionNotificationQuery,
     PostUserMentionNotification,
+    PostCorrectionNotification,
+    PostCorrectionNotificationQuery,
 } from "../../types/generated/graphql"
 import type {
     PostReplyNotificationQuery,
@@ -54,6 +56,22 @@ export async function getPostUserMentionNotification(
             .child({ res, postUserMentionId })
             .error(
                 "Failed to get mention notification data by post user mention ID"
+            )
+        return null
+    }
+    return res.data || null
+}
+
+export async function getPostCorrectionNotification(postCorrectionId: number) {
+    const res = await performQuery<PostCorrectionNotificationQuery>(
+        PostCorrectionNotification.loc!.source,
+        { id: postCorrectionId }
+    )
+    if (!res.data) {
+        chlog
+            .child({ res, postCorrectionId })
+            .error(
+                "Failed to get correction notification data by post correction ID"
             )
         return null
     }

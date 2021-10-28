@@ -50,6 +50,13 @@
             ? [$currentGroupLocale, ...navigatorLocales]
             : navigatorLocales
 
+    $: siteLocale = preferredLocales[0] || "en"
+    $: {
+        if (typeof document !== "undefined") {
+            document.documentElement.setAttribute("lang", siteLocale)
+        }
+    }
+
     onMount(() => {
         window.addEventListener(
             "everglotGoto",

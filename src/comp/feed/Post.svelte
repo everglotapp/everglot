@@ -776,7 +776,9 @@
 </script>
 
 <div
-    class="root py-3 sm:py-4 sm:px-3 gap-y-1"
+    class={`root py-3 sm:py-4 sm:px-3 gap-y-1${
+        language ? ` font-locale-${language.alpha2}` : ""
+    }`}
     class:liked={liked || tmpLiked}
     class:not-liked={!liked || tmpUnliked}
     in:scale={{ duration: 200 }}

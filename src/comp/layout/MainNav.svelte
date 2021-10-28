@@ -715,9 +715,7 @@
                 >
                     <div
                         class={`flex relative items-center font-secondary ${
-                            copiedInviteLink
-                                ? "text-primary"
-                                : "text-primary-dark"
+                            copiedInviteLink ? "text-primary" : "text-danger"
                         }`}
                     >
                         {#if copiedInviteLink}

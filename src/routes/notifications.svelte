@@ -133,7 +133,7 @@
                         {/if}
                     {:else if notification.type === InAppParamsTypeV1.PostUserMention}
                         {#if notification.metadata && notification.metadata.post && notification.metadata.post.parentPost}
-                            tagged you in a comment under <a
+                            tagged you in a comment under a <a
                                 href={`/s/${notification.metadata.post.parentPost.snowflakeId}`}
                                 class="text-gray-bitdark">squeek</a
                             >{#if notification.metadata.post.parentPost.language}
@@ -148,7 +148,7 @@
                         started following you
                     {/if}
                 </div>
-                <div style="flex: 1;">
+                <div style="flex: 1; min-width: 146px;">
                     <time
                         use:svelteTime={{
                             timestamp: notification.createdAt,

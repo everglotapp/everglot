@@ -1,0 +1,20 @@
+query PostCorrectionNotification($id: Int!) {
+  postCorrection(id: $id) {
+    post {
+      authorId
+      body
+      parentPostId
+      snowflakeId
+      uuid
+      __typename
+    }
+    user {
+      id
+      username
+      uuid
+      displayName
+      __typename
+    }
+    __typename
+  }
+}

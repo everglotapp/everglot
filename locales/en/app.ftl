@@ -9,6 +9,8 @@
         [guess_gender] Guess the Gender
         [cloze] Fill in the Gaps
     }
+user-follow = Follow
+user-unfollow = Unfollow
 
 ## Feed page
 
@@ -148,6 +150,7 @@ main-nav-download-app-ios = iOS App
 main-nav-download-app-android = Android App
 main-nav-feedback = Give Feedback
 main-nav-continue = Continue
+main-nav-notifications = Activities
 
 ## Signup successful page
 

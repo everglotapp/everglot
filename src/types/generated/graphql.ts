@@ -914,6 +914,45 @@ export type CreateGroupUserPayloadGroupUserEdgeArgs = {
   orderBy?: Maybe<Array<GroupUsersOrderBy>>;
 };
 
+/** All input for the create `InAppNotificationMetadatum` mutation. */
+export type CreateInAppNotificationMetadatumInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `InAppNotificationMetadatum` to be created by this mutation. */
+  inAppNotificationMetadatum: InAppNotificationMetadatumInput;
+};
+
+/** The output of our create `InAppNotificationMetadatum` mutation. */
+export type CreateInAppNotificationMetadatumPayload = {
+  __typename?: 'CreateInAppNotificationMetadatumPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `InAppNotificationMetadatum` that was created by this mutation. */
+  inAppNotificationMetadatum?: Maybe<InAppNotificationMetadatum>;
+  /** An edge for our `InAppNotificationMetadatum`. May be used by Relay 1. */
+  inAppNotificationMetadatumEdge?: Maybe<InAppNotificationMetadataEdge>;
+  /** Reads a single `Notification` that is related to this `InAppNotificationMetadatum`. */
+  notification?: Maybe<Notification>;
+  /** Reads a single `Post` that is related to this `InAppNotificationMetadatum`. */
+  post?: Maybe<Post>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `InAppNotificationMetadatum`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our create `InAppNotificationMetadatum` mutation. */
+export type CreateInAppNotificationMetadatumPayloadInAppNotificationMetadatumEdgeArgs = {
+  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+};
+
 /** All input for the create `InviteToken` mutation. */
 export type CreateInviteTokenInput = {
   /**
@@ -3078,6 +3117,45 @@ export type DeleteGroupUserPayload = {
 /** The output of our delete `GroupUser` mutation. */
 export type DeleteGroupUserPayloadGroupUserEdgeArgs = {
   orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+};
+
+/** All input for the `deleteInAppNotificationMetadatumByNotificationId` mutation. */
+export type DeleteInAppNotificationMetadatumByNotificationIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  notificationId: Scalars['Int'];
+};
+
+/** The output of our delete `InAppNotificationMetadatum` mutation. */
+export type DeleteInAppNotificationMetadatumPayload = {
+  __typename?: 'DeleteInAppNotificationMetadatumPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  deletedInAppNotificationMetadatumNodeId?: Maybe<Scalars['ID']>;
+  /** The `InAppNotificationMetadatum` that was deleted by this mutation. */
+  inAppNotificationMetadatum?: Maybe<InAppNotificationMetadatum>;
+  /** An edge for our `InAppNotificationMetadatum`. May be used by Relay 1. */
+  inAppNotificationMetadatumEdge?: Maybe<InAppNotificationMetadataEdge>;
+  /** Reads a single `Notification` that is related to this `InAppNotificationMetadatum`. */
+  notification?: Maybe<Notification>;
+  /** Reads a single `Post` that is related to this `InAppNotificationMetadatum`. */
+  post?: Maybe<Post>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `InAppNotificationMetadatum`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our delete `InAppNotificationMetadatum` mutation. */
+export type DeleteInAppNotificationMetadatumPayloadInAppNotificationMetadatumEdgeArgs = {
+  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
 };
 
 /** All input for the `deleteInviteTokenByNodeId` mutation. */
@@ -7028,6 +7106,105 @@ export enum GroupsOrderBy {
   UuidDesc = 'UUID_DESC'
 }
 
+/** A connection to a list of `InAppNotificationMetadatum` values. */
+export type InAppNotificationMetadataConnection = {
+  __typename?: 'InAppNotificationMetadataConnection';
+  /** A list of edges which contains the `InAppNotificationMetadatum` and cursor to aid in pagination. */
+  edges: Array<InAppNotificationMetadataEdge>;
+  /** A list of `InAppNotificationMetadatum` objects. */
+  nodes: Array<Maybe<InAppNotificationMetadatum>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `InAppNotificationMetadatum` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `InAppNotificationMetadatum` edge in the connection. */
+export type InAppNotificationMetadataEdge = {
+  __typename?: 'InAppNotificationMetadataEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `InAppNotificationMetadatum` at the end of the edge. */
+  node?: Maybe<InAppNotificationMetadatum>;
+};
+
+/** Methods to use when ordering `InAppNotificationMetadatum`. */
+export enum InAppNotificationMetadataOrderBy {
+  Natural = 'NATURAL',
+  NotificationIdAsc = 'NOTIFICATION_ID_ASC',
+  NotificationIdDesc = 'NOTIFICATION_ID_DESC',
+  PostIdAsc = 'POST_ID_ASC',
+  PostIdDesc = 'POST_ID_DESC',
+  RecipientIdAsc = 'RECIPIENT_ID_ASC',
+  RecipientIdDesc = 'RECIPIENT_ID_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC'
+}
+
+/** Metadata for in-app notifications. */
+export type InAppNotificationMetadatum = {
+  __typename?: 'InAppNotificationMetadatum';
+  /** Reads a single `Notification` that is related to this `InAppNotificationMetadatum`. */
+  notification?: Maybe<Notification>;
+  notificationId?: Maybe<Scalars['Int']>;
+  /** Reads a single `Post` that is related to this `InAppNotificationMetadatum`. */
+  post?: Maybe<Post>;
+  postId?: Maybe<Scalars['Int']>;
+  recipientId?: Maybe<Scalars['Int']>;
+  /** Reads a single `User` that is related to this `InAppNotificationMetadatum`. */
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['Int']>;
+};
+
+/**
+ * A condition to be used against `InAppNotificationMetadatum` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type InAppNotificationMetadatumCondition = {
+  /** Checks for equality with the object’s `notificationId` field. */
+  notificationId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `postId` field. */
+  postId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `recipientId` field. */
+  recipientId?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `InAppNotificationMetadatum` object types. All fields are combined with a logical ‘and.’ */
+export type InAppNotificationMetadatumFilter = {
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<InAppNotificationMetadatumFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<InAppNotificationMetadatumFilter>;
+  /** Filter by the object’s `notificationId` field. */
+  notificationId?: Maybe<IntFilter>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<InAppNotificationMetadatumFilter>>;
+  /** Filter by the object’s `postId` field. */
+  postId?: Maybe<IntFilter>;
+  /** Filter by the object’s `recipientId` field. */
+  recipientId?: Maybe<IntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+};
+
+/** An input for mutations affecting `InAppNotificationMetadatum` */
+export type InAppNotificationMetadatumInput = {
+  notificationId?: Maybe<Scalars['Int']>;
+  postId?: Maybe<Scalars['Int']>;
+  recipientId?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+};
+
+/** Represents an update to a `InAppNotificationMetadatum`. Fields that are set will be updated. */
+export type InAppNotificationMetadatumPatch = {
+  notificationId?: Maybe<Scalars['Int']>;
+  postId?: Maybe<Scalars['Int']>;
+  recipientId?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+};
+
 /** A filter to be used against Int fields. All fields are combined with a logical ‘and.’ */
 export type IntFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
@@ -7576,6 +7753,42 @@ export enum ItalianWouldYouRatherQuestionsOrderBy {
   UuidAsc = 'UUID_ASC',
   UuidDesc = 'UUID_DESC'
 }
+
+/** A filter to be used against JSON fields. All fields are combined with a logical ‘and.’ */
+export type JsonFilter = {
+  /** Contained by the specified JSON. */
+  containedBy?: Maybe<Scalars['JSON']>;
+  /** Contains the specified JSON. */
+  contains?: Maybe<Scalars['JSON']>;
+  /** Contains all of the specified keys. */
+  containsAllKeys?: Maybe<Array<Scalars['String']>>;
+  /** Contains any of the specified keys. */
+  containsAnyKeys?: Maybe<Array<Scalars['String']>>;
+  /** Contains the specified key. */
+  containsKey?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['JSON']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['JSON']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['JSON']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['JSON']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['JSON']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['JSON']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['JSON']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['JSON']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['JSON']>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['JSON']>>;
+};
 
 export type JapaneseRandomQuestion = Node & {
   __typename?: 'JapaneseRandomQuestion';
@@ -9836,6 +10049,8 @@ export type Mutation = {
   createGroup?: Maybe<CreateGroupPayload>;
   /** Creates a single `GroupUser`. */
   createGroupUser?: Maybe<CreateGroupUserPayload>;
+  /** Creates a single `InAppNotificationMetadatum`. */
+  createInAppNotificationMetadatum?: Maybe<CreateInAppNotificationMetadatumPayload>;
   /** Creates a single `InviteToken`. */
   createInviteToken?: Maybe<CreateInviteTokenPayload>;
   /** Creates a single `ItalianRandomQuestion`. */
@@ -9994,6 +10209,8 @@ export type Mutation = {
   deleteGroupUser?: Maybe<DeleteGroupUserPayload>;
   /** Deletes a single `GroupUser` using its globally unique id. */
   deleteGroupUserByNodeId?: Maybe<DeleteGroupUserPayload>;
+  /** Deletes a single `InAppNotificationMetadatum` using a unique key. */
+  deleteInAppNotificationMetadatumByNotificationId?: Maybe<DeleteInAppNotificationMetadatumPayload>;
   /** Deletes a single `InviteToken` using a unique key. */
   deleteInviteToken?: Maybe<DeleteInviteTokenPayload>;
   /** Deletes a single `InviteToken` using its globally unique id. */
@@ -10311,6 +10528,8 @@ export type Mutation = {
   updateGroupUser?: Maybe<UpdateGroupUserPayload>;
   /** Updates a single `GroupUser` using its globally unique id and a patch. */
   updateGroupUserByNodeId?: Maybe<UpdateGroupUserPayload>;
+  /** Updates a single `InAppNotificationMetadatum` using a unique key and a patch. */
+  updateInAppNotificationMetadatumByNotificationId?: Maybe<UpdateInAppNotificationMetadatumPayload>;
   /** Updates a single `InviteToken` using a unique key and a patch. */
   updateInviteToken?: Maybe<UpdateInviteTokenPayload>;
   /** Updates a single `InviteToken` using its globally unique id and a patch. */
@@ -10571,6 +10790,8 @@ export type Mutation = {
   upsertGroup?: Maybe<UpsertGroupPayload>;
   /** Upserts a single `GroupUser`. */
   upsertGroupUser?: Maybe<UpsertGroupUserPayload>;
+  /** Upserts a single `InAppNotificationMetadatum`. */
+  upsertInAppNotificationMetadatum?: Maybe<UpsertInAppNotificationMetadatumPayload>;
   /** Upserts a single `InviteToken`. */
   upsertInviteToken?: Maybe<UpsertInviteTokenPayload>;
   /** Upserts a single `ItalianRandomQuestion`. */
@@ -10731,6 +10952,12 @@ export type MutationCreateGroupArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateGroupUserArgs = {
   input: CreateGroupUserInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateInAppNotificationMetadatumArgs = {
+  input: CreateInAppNotificationMetadatumInput;
 };
 
 
@@ -11205,6 +11432,12 @@ export type MutationDeleteGroupUserArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGroupUserByNodeIdArgs = {
   input: DeleteGroupUserByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteInAppNotificationMetadatumByNotificationIdArgs = {
+  input: DeleteInAppNotificationMetadatumByNotificationIdInput;
 };
 
 
@@ -12169,6 +12402,12 @@ export type MutationUpdateGroupUserByNodeIdArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateInAppNotificationMetadatumByNotificationIdArgs = {
+  input: UpdateInAppNotificationMetadatumByNotificationIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateInviteTokenArgs = {
   input: UpdateInviteTokenInput;
 };
@@ -12963,6 +13202,13 @@ export type MutationUpsertGroupUserArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertInAppNotificationMetadatumArgs = {
+  input: UpsertInAppNotificationMetadatumInput;
+  where?: Maybe<UpsertInAppNotificationMetadatumWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertInviteTokenArgs = {
   input: UpsertInviteTokenInput;
   where?: Maybe<UpsertInviteTokenWhere>;
@@ -13241,6 +13487,8 @@ export type Notification = Node & {
   createdAt: Scalars['Datetime'];
   expiresAt?: Maybe<Scalars['Datetime']>;
   id: Scalars['Int'];
+  /** Reads a single `InAppNotificationMetadatum` that is related to this `Notification`. */
+  metadata?: Maybe<InAppNotificationMetadatum>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   params?: Maybe<Scalars['JSON']>;
@@ -13252,6 +13500,7 @@ export type Notification = Node & {
   recipientGroupId?: Maybe<Scalars['Int']>;
   recipientId?: Maybe<Scalars['Int']>;
   sentAt?: Maybe<Scalars['Datetime']>;
+  type?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
   withheldUntil?: Maybe<Scalars['Datetime']>;
 };
@@ -13513,6 +13762,8 @@ export type NotificationFilter = {
   not?: Maybe<NotificationFilter>;
   /** Checks for any expressions in this list. */
   or?: Maybe<Array<NotificationFilter>>;
+  /** Filter by the object’s `params` field. */
+  params?: Maybe<JsonFilter>;
   /** Filter by the object’s `readAt` field. */
   readAt?: Maybe<DatetimeFilter>;
   /** Filter by the object’s `recipientGroupId` field. */
@@ -13521,6 +13772,8 @@ export type NotificationFilter = {
   recipientId?: Maybe<IntFilter>;
   /** Filter by the object’s `sentAt` field. */
   sentAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `type` field. */
+  type?: Maybe<StringFilter>;
   /** Filter by the object’s `uuid` field. */
   uuid?: Maybe<UuidFilter>;
   /** Filter by the object’s `withheldUntil` field. */
@@ -14003,11 +14256,15 @@ export type Post = Node & {
   promptsByPostParentPostIdAndPromptId: PostPromptsByPostParentPostIdAndPromptIdManyToManyConnection;
   /** Reads and enables pagination through a set of `PostRecording`. */
   recordings: PostRecordingsConnection;
+  /** Reads and enables pagination through a set of `InAppNotificationMetadatum`. */
+  relatedInAppNotifications: InAppNotificationMetadataConnection;
   /** Reads and enables pagination through a set of `Post`. */
   replies: PostsConnection;
   snowflakeId: Scalars['BigInt'];
   /** Reads and enables pagination through a set of `PostUserMention`. */
   userMentions: PostUserMentionsConnection;
+  /** Reads and enables pagination through a set of `User`. */
+  usersByInAppNotificationMetadatumPostIdAndUserId: PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
   usersByPostCorrectionPostIdAndUserId: PostUsersByPostCorrectionPostIdAndUserIdManyToManyConnection;
   /** Reads and enables pagination through a set of `User`. */
@@ -14094,6 +14351,18 @@ export type PostRecordingsArgs = {
 };
 
 
+export type PostRelatedInAppNotificationsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<InAppNotificationMetadatumCondition>;
+  filter?: Maybe<InAppNotificationMetadatumFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+};
+
+
 export type PostRepliesArgs = {
   after?: Maybe<Scalars['Cursor']>;
   before?: Maybe<Scalars['Cursor']>;
@@ -14115,6 +14384,18 @@ export type PostUserMentionsArgs = {
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+};
+
+
+export type PostUsersByInAppNotificationMetadatumPostIdAndUserIdArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<UserCondition>;
+  filter?: Maybe<UserFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<UsersOrderBy>>;
 };
 
 
@@ -15598,6 +15879,43 @@ export enum PostUserMentionsOrderBy {
   UuidDesc = 'UUID_DESC'
 }
 
+/** A connection to a list of `User` values, with data from `InAppNotificationMetadatum`. */
+export type PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyConnection = {
+  __typename?: 'PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyConnection';
+  /** A list of edges which contains the `User`, info from the `InAppNotificationMetadatum`, and the cursor to aid in pagination. */
+  edges: Array<PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyEdge>;
+  /** A list of `User` objects. */
+  nodes: Array<Maybe<User>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `User` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `User` edge in the connection, with data from `InAppNotificationMetadatum`. */
+export type PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyEdge = {
+  __typename?: 'PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `User` at the end of the edge. */
+  node?: Maybe<User>;
+  /** Reads and enables pagination through a set of `InAppNotificationMetadatum`. */
+  relatedInAppNotifications: InAppNotificationMetadataConnection;
+};
+
+
+/** A `User` edge in the connection, with data from `InAppNotificationMetadatum`. */
+export type PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyEdgeRelatedInAppNotificationsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<InAppNotificationMetadatumCondition>;
+  filter?: Maybe<InAppNotificationMetadatumFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+};
+
 /** A connection to a list of `User` values, with data from `PostCorrection`. */
 export type PostUsersByPostCorrectionPostIdAndUserIdManyToManyConnection = {
   __typename?: 'PostUsersByPostCorrectionPostIdAndUserIdManyToManyConnection';
@@ -16327,6 +16645,10 @@ export type Query = Node & {
   groupUsers?: Maybe<GroupUsersConnection>;
   /** Reads and enables pagination through a set of `Group`. */
   groups?: Maybe<GroupsConnection>;
+  inAppNotificationChannelId?: Maybe<Scalars['BigInt']>;
+  /** Reads and enables pagination through a set of `InAppNotificationMetadatum`. */
+  inAppNotificationMetadata?: Maybe<InAppNotificationMetadataConnection>;
+  inAppNotificationMetadatumByNotificationId?: Maybe<InAppNotificationMetadatum>;
   inviteToken?: Maybe<InviteToken>;
   /** Reads a single `InviteToken` using its globally unique `ID`. */
   inviteTokenByNodeId?: Maybe<InviteToken>;
@@ -17018,6 +17340,25 @@ export type QueryGroupsArgs = {
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<GroupsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryInAppNotificationMetadataArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<InAppNotificationMetadatumCondition>;
+  filter?: Maybe<InAppNotificationMetadatumFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryInAppNotificationMetadatumByNotificationIdArgs = {
+  notificationId: Scalars['Int'];
 };
 
 
@@ -19962,6 +20303,46 @@ export type UpdateGroupUserPayloadGroupUserEdgeArgs = {
   orderBy?: Maybe<Array<GroupUsersOrderBy>>;
 };
 
+/** All input for the `updateInAppNotificationMetadatumByNotificationId` mutation. */
+export type UpdateInAppNotificationMetadatumByNotificationIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  notificationId: Scalars['Int'];
+  /** An object where the defined keys will be set on the `InAppNotificationMetadatum` being updated. */
+  patch: InAppNotificationMetadatumPatch;
+};
+
+/** The output of our update `InAppNotificationMetadatum` mutation. */
+export type UpdateInAppNotificationMetadatumPayload = {
+  __typename?: 'UpdateInAppNotificationMetadatumPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `InAppNotificationMetadatum` that was updated by this mutation. */
+  inAppNotificationMetadatum?: Maybe<InAppNotificationMetadatum>;
+  /** An edge for our `InAppNotificationMetadatum`. May be used by Relay 1. */
+  inAppNotificationMetadatumEdge?: Maybe<InAppNotificationMetadataEdge>;
+  /** Reads a single `Notification` that is related to this `InAppNotificationMetadatum`. */
+  notification?: Maybe<Notification>;
+  /** Reads a single `Post` that is related to this `InAppNotificationMetadatum`. */
+  post?: Maybe<Post>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `InAppNotificationMetadatum`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our update `InAppNotificationMetadatum` mutation. */
+export type UpdateInAppNotificationMetadatumPayloadInAppNotificationMetadatumEdgeArgs = {
+  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+};
+
 /** All input for the `updateInviteTokenByNodeId` mutation. */
 export type UpdateInviteTokenByNodeIdInput = {
   /**
@@ -22830,6 +23211,44 @@ export type UpsertGroupWhere = {
   uuid?: Maybe<Scalars['UUID']>;
 };
 
+/** All input for the upsert `InAppNotificationMetadatum` mutation. */
+export type UpsertInAppNotificationMetadatumInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `InAppNotificationMetadatum` to be upserted by this mutation. */
+  inAppNotificationMetadatum: InAppNotificationMetadatumInput;
+};
+
+/** The output of our upsert `InAppNotificationMetadatum` mutation. */
+export type UpsertInAppNotificationMetadatumPayload = {
+  __typename?: 'UpsertInAppNotificationMetadatumPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `InAppNotificationMetadatum` that was upserted by this mutation. */
+  inAppNotificationMetadatum?: Maybe<InAppNotificationMetadatum>;
+  /** An edge for our `InAppNotificationMetadatum`. May be used by Relay 1. */
+  inAppNotificationMetadatumEdge?: Maybe<InAppNotificationMetadataEdge>;
+  /** Reads a single `Notification` that is related to this `InAppNotificationMetadatum`. */
+  notification?: Maybe<Notification>;
+  /** Reads a single `Post` that is related to this `InAppNotificationMetadatum`. */
+  post?: Maybe<Post>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `User` that is related to this `InAppNotificationMetadatum`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our upsert `InAppNotificationMetadatum` mutation. */
+export type UpsertInAppNotificationMetadatumPayloadInAppNotificationMetadatumEdgeArgs = {
+  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+};
+
+/** Where conditions for the upsert `InAppNotificationMetadatum` mutation. */
+export type UpsertInAppNotificationMetadatumWhere = {
+  notificationId?: Maybe<Scalars['Int']>;
+};
+
 /** All input for the upsert `InviteToken` mutation. */
 export type UpsertInviteTokenInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
@@ -24223,6 +24642,8 @@ export type User = Node & {
   /** Reads and enables pagination through a set of `Group`. */
   groupsByNotificationRecipientIdAndRecipientGroupId: UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyConnection;
   id: Scalars['Int'];
+  /** Reads and enables pagination through a set of `Notification`. */
+  inAppNotifications: NotificationsConnection;
   /** Reads and enables pagination through a set of `InviteToken`. */
   inviteTokens: InviteTokensConnection;
   /** Reads a single `Language` that is related to this `User`. */
@@ -24265,6 +24686,8 @@ export type User = Node & {
   /** Reads and enables pagination through a set of `PostUserMention`. */
   postUserMentions: PostUserMentionsConnection;
   /** Reads and enables pagination through a set of `Post`. */
+  postsByInAppNotificationMetadatumUserIdAndPostId: UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `Post`. */
   postsByPostAuthorIdAndParentPostId: UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection;
   /** Reads and enables pagination through a set of `Post`. */
   postsByPostCorrectionUserIdAndPostId: UserPostsByPostCorrectionUserIdAndPostIdManyToManyConnection;
@@ -24278,6 +24701,8 @@ export type User = Node & {
   preference?: Maybe<UserPreference>;
   /** Reads and enables pagination through a set of `Prompt`. */
   promptsByPostAuthorIdAndPromptId: UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `InAppNotificationMetadatum`. */
+  relatedInAppNotifications: InAppNotificationMetadataConnection;
   resetPasswordToken?: Maybe<Scalars['String']>;
   resetPasswordTokenCreatedAt?: Maybe<Scalars['Datetime']>;
   /** Reads a single `InviteToken` that is related to this `User`. */
@@ -24394,6 +24819,17 @@ export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdArgs = {
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<GroupsOrderBy>>;
+};
+
+
+export type UserInAppNotificationsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  afterUuid?: Maybe<Scalars['UUID']>;
+  before?: Maybe<Scalars['Cursor']>;
+  filter?: Maybe<NotificationFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
 };
 
 
@@ -24601,6 +25037,18 @@ export type UserPostUserMentionsArgs = {
 };
 
 
+export type UserPostsByInAppNotificationMetadatumUserIdAndPostIdArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<PostCondition>;
+  filter?: Maybe<PostFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<PostsOrderBy>>;
+};
+
+
 export type UserPostsByPostAuthorIdAndParentPostIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   before?: Maybe<Scalars['Cursor']>;
@@ -24670,6 +25118,18 @@ export type UserPromptsByPostAuthorIdAndPromptIdArgs = {
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<PromptsOrderBy>>;
+};
+
+
+export type UserRelatedInAppNotificationsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<InAppNotificationMetadatumCondition>;
+  filter?: Maybe<InAppNotificationMetadatumFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
 };
 
 
@@ -25653,6 +26113,43 @@ export type UserPostGamesByPostGameAnswerUserIdAndGameIdManyToManyEdgeAnswerReve
   orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
 };
 
+/** A connection to a list of `Post` values, with data from `InAppNotificationMetadatum`. */
+export type UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyConnection = {
+  __typename?: 'UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyConnection';
+  /** A list of edges which contains the `Post`, info from the `InAppNotificationMetadatum`, and the cursor to aid in pagination. */
+  edges: Array<UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyEdge>;
+  /** A list of `Post` objects. */
+  nodes: Array<Maybe<Post>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Post` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Post` edge in the connection, with data from `InAppNotificationMetadatum`. */
+export type UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyEdge = {
+  __typename?: 'UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Post` at the end of the edge. */
+  node?: Maybe<Post>;
+  /** Reads and enables pagination through a set of `InAppNotificationMetadatum`. */
+  relatedInAppNotifications: InAppNotificationMetadataConnection;
+};
+
+
+/** A `Post` edge in the connection, with data from `InAppNotificationMetadatum`. */
+export type UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyEdgeRelatedInAppNotificationsArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<InAppNotificationMetadatumCondition>;
+  filter?: Maybe<InAppNotificationMetadatumFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+};
+
 /** A connection to a list of `Post` values, with data from `Post`. */
 export type UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection = {
   __typename?: 'UserPostsByPostAuthorIdAndParentPostIdManyToManyConnection';
@@ -26476,7 +26973,7 @@ export type FeedPostsQueryVariables = Exact<{
 }>;
 
 
-export type FeedPostsQuery = { __typename?: 'Query', feedPosts?: { __typename?: 'PostsConnection', edges: Array<{ __typename?: 'PostsEdge', node?: { __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, userMentions: { __typename?: 'PostUserMentionsConnection', nodes: Array<{ __typename?: 'PostUserMention', startIndex: number, endIndex: number, uuid: any, user?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined, uuid: any } | null | undefined } | null | undefined> } } | null | undefined> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<{ __typename?: 'PostRecording', filename: string, extension?: string | null | undefined, uuid: any, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: boolean | null | undefined, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: { __typename?: 'PostGameAnswer', id: number } | null | undefined }> } } | null | undefined> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameAnswer', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, correct?: boolean | null | undefined, genderOption?: GrammaticalGender | null | undefined, range?: { __typename?: 'PostGameRange', uuid: any } | null | undefined } | null | undefined> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, rangeUuid?: any | null | undefined } | null | undefined> }, answerers: { __typename?: 'UsersConnection', totalCount: number } } | null | undefined> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined }> } | null | undefined };
+export type FeedPostsQuery = { __typename?: 'Query', feedPosts?: { __typename?: 'PostsConnection', edges: Array<{ __typename?: 'PostsEdge', node?: { __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, displayName?: string | null | undefined, avatarUrl?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, userMentions: { __typename?: 'PostUserMentionsConnection', nodes: Array<{ __typename?: 'PostUserMention', startIndex: number, endIndex: number, uuid: any, user?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined, uuid: any } | null | undefined } | null | undefined> } } | null | undefined> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<{ __typename?: 'PostRecording', filename: string, extension?: string | null | undefined, uuid: any, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: boolean | null | undefined, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: { __typename?: 'PostGameAnswer', id: number } | null | undefined }> } } | null | undefined> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameAnswer', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, correct?: boolean | null | undefined, genderOption?: GrammaticalGender | null | undefined, range?: { __typename?: 'PostGameRange', uuid: any } | null | undefined } | null | undefined> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, rangeUuid?: any | null | undefined } | null | undefined> }, answerers: { __typename?: 'UsersConnection', totalCount: number } } | null | undefined> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined }> } | null | undefined };
 
 export type PostGameByUuidQueryVariables = Exact<{
   uuid: Scalars['UUID'];
@@ -26519,7 +27016,7 @@ export type SinglePostQueryVariables = Exact<{
 }>;
 
 
-export type SinglePostQuery = { __typename?: 'Query', posts?: { __typename?: 'PostsConnection', nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, userMentions: { __typename?: 'PostUserMentionsConnection', nodes: Array<{ __typename?: 'PostUserMention', startIndex: number, endIndex: number, uuid: any, user?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined, uuid: any } | null | undefined } | null | undefined> } } | null | undefined> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<{ __typename?: 'PostRecording', filename: string, extension?: string | null | undefined, uuid: any, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: boolean | null | undefined, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: { __typename?: 'PostGameAnswer', id: number } | null | undefined }> } } | null | undefined> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameAnswer', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, correct?: boolean | null | undefined, genderOption?: GrammaticalGender | null | undefined, range?: { __typename?: 'PostGameRange', uuid: any } | null | undefined } | null | undefined> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, rangeUuid?: any | null | undefined } | null | undefined> }, answerers: { __typename?: 'UsersConnection', totalCount: number } } | null | undefined> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined> } | null | undefined };
+export type SinglePostQuery = { __typename?: 'Query', posts?: { __typename?: 'PostsConnection', nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, displayName?: string | null | undefined, avatarUrl?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, userMentions: { __typename?: 'PostUserMentionsConnection', nodes: Array<{ __typename?: 'PostUserMention', startIndex: number, endIndex: number, uuid: any, user?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined, uuid: any } | null | undefined } | null | undefined> } } | null | undefined> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<{ __typename?: 'PostRecording', filename: string, extension?: string | null | undefined, uuid: any, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: boolean | null | undefined, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: { __typename?: 'PostGameAnswer', id: number } | null | undefined }> } } | null | undefined> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameAnswer', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, correct?: boolean | null | undefined, genderOption?: GrammaticalGender | null | undefined, range?: { __typename?: 'PostGameRange', uuid: any } | null | undefined } | null | undefined> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, rangeUuid?: any | null | undefined } | null | undefined> }, answerers: { __typename?: 'UsersConnection', totalCount: number } } | null | undefined> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined> } | null | undefined };
 
 export type CreateUserFollowershipMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -26674,6 +27171,11 @@ export type CreateUserDeviceMutationVariables = Exact<{
 
 export type CreateUserDeviceMutation = { __typename?: 'Mutation', createUserDevice?: { __typename?: 'CreateUserDevicePayload', userDevice?: { __typename?: 'UserDevice', uuid: any, fcmToken?: string | null | undefined, id: number } | null | undefined } | null | undefined };
 
+export type CurrentUserInAppNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserInAppNotificationsQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', inAppNotifications: { __typename?: 'NotificationsConnection', nodes: Array<{ __typename?: 'Notification', uuid: any, createdAt: any, type?: string | null | undefined, metadata?: { __typename?: 'InAppNotificationMetadatum', user?: { __typename?: 'User', uuid: any, avatarUrl?: string | null | undefined, displayName?: string | null | undefined, username?: string | null | undefined, followedByCurrentUser?: boolean | null | undefined } | null | undefined, post?: { __typename?: 'Post', uuid: any, snowflakeId: any, parentPost?: { __typename?: 'Post', uuid: any, snowflakeId: any, language?: { __typename?: 'Language', alpha2: string } | null | undefined } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined } | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
+
 export type DeleteInvalidFcmTokenMutationVariables = Exact<{
   fcmToken: Scalars['String'];
 }>;
@@ -26719,28 +27221,28 @@ export type PostCorrectionNotificationQueryVariables = Exact<{
 }>;
 
 
-export type PostCorrectionNotificationQuery = { __typename?: 'Query', postCorrection?: { __typename?: 'PostCorrection', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, parentPostId?: number | null | undefined, snowflakeId: any } | null | undefined, user?: { __typename?: 'User', id: number, username?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined };
+export type PostCorrectionNotificationQuery = { __typename?: 'Query', postCorrection?: { __typename?: 'PostCorrection', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, parentPostId?: number | null | undefined, snowflakeId: any, uuid: any } | null | undefined, user?: { __typename?: 'User', id: number, username?: string | null | undefined, uuid: any, displayName?: string | null | undefined } | null | undefined } | null | undefined };
 
 export type PostLikeNotificationQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type PostLikeNotificationQuery = { __typename?: 'Query', postLike?: { __typename?: 'PostLike', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, parentPostId?: number | null | undefined, snowflakeId: any } | null | undefined, user?: { __typename?: 'User', id: number, username?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined };
+export type PostLikeNotificationQuery = { __typename?: 'Query', postLike?: { __typename?: 'PostLike', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, parentPostId?: number | null | undefined, snowflakeId: any, uuid: any } | null | undefined, user?: { __typename?: 'User', id: number, username?: string | null | undefined, uuid: any, displayName?: string | null | undefined } | null | undefined } | null | undefined };
 
 export type PostReplyNotificationQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type PostReplyNotificationQuery = { __typename?: 'Query', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, createdAt: any, snowflakeId: any, parentPost?: { __typename?: 'Post', authorId?: number | null | undefined, snowflakeId: any } | null | undefined, author?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined } | null | undefined } | null | undefined };
+export type PostReplyNotificationQuery = { __typename?: 'Query', post?: { __typename?: 'Post', authorId?: number | null | undefined, body: string, createdAt: any, snowflakeId: any, parentPost?: { __typename?: 'Post', authorId?: number | null | undefined, snowflakeId: any } | null | undefined, author?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined, uuid: any } | null | undefined } | null | undefined };
 
 export type PostUserMentionNotificationQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type PostUserMentionNotificationQuery = { __typename?: 'Query', postUserMention?: { __typename?: 'PostUserMention', userId: number, postId: number, post?: { __typename?: 'Post', body: string, parentPost?: { __typename?: 'Post', authorId?: number | null | undefined, snowflakeId: any } | null | undefined, author?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined };
+export type PostUserMentionNotificationQuery = { __typename?: 'Query', postUserMention?: { __typename?: 'PostUserMention', userId: number, postId: number, user?: { __typename?: 'User', uuid: any } | null | undefined, post?: { __typename?: 'Post', body: string, uuid: any, author?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined, uuid: any } | null | undefined, parentPost?: { __typename?: 'Post', authorId?: number | null | undefined, snowflakeId: any } | null | undefined } | null | undefined } | null | undefined };
 
 export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
   token: Scalars['String'];
@@ -26755,7 +27257,7 @@ export type UserFollowershipNotificationQueryVariables = Exact<{
 }>;
 
 
-export type UserFollowershipNotificationQuery = { __typename?: 'Query', userFollower?: { __typename?: 'UserFollower', follower?: { __typename?: 'User', username?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, user?: { __typename?: 'User', id: number } | null | undefined } | null | undefined };
+export type UserFollowershipNotificationQuery = { __typename?: 'Query', userFollower?: { __typename?: 'UserFollower', follower?: { __typename?: 'User', uuid: any, username?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, user?: { __typename?: 'User', id: number } | null | undefined } | null | undefined };
 
 export type UserPasswordResetEmailNotificationQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -26776,7 +27278,7 @@ export type UserByUsernamePostsQueryVariables = Exact<{
 }>;
 
 
-export type UserByUsernamePostsQuery = { __typename?: 'Query', userByUsername?: { __typename?: 'User', authoredPosts: { __typename?: 'PostsConnection', nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, userMentions: { __typename?: 'PostUserMentionsConnection', nodes: Array<{ __typename?: 'PostUserMention', startIndex: number, endIndex: number, uuid: any, user?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined, uuid: any } | null | undefined } | null | undefined> } } | null | undefined> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<{ __typename?: 'PostRecording', filename: string, extension?: string | null | undefined, uuid: any, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: boolean | null | undefined, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: { __typename?: 'PostGameAnswer', id: number } | null | undefined }> } } | null | undefined> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameAnswer', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, correct?: boolean | null | undefined, genderOption?: GrammaticalGender | null | undefined, range?: { __typename?: 'PostGameRange', uuid: any } | null | undefined } | null | undefined> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, rangeUuid?: any | null | undefined } | null | undefined> }, answerers: { __typename?: 'UsersConnection', totalCount: number } } | null | undefined> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined> } } | null | undefined };
+export type UserByUsernamePostsQuery = { __typename?: 'Query', userByUsername?: { __typename?: 'User', authoredPosts: { __typename?: 'PostsConnection', nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, replies: { __typename?: 'PostsConnection', totalCount: number, nodes: Array<{ __typename?: 'Post', uuid: any, nodeId: string, createdAt: any, body: string, snowflakeId: any, author?: { __typename?: 'User', uuid: any, username?: string | null | undefined, displayName?: string | null | undefined, avatarUrl?: string | null | undefined } | null | undefined, likes: { __typename?: 'PostLikesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostLike', user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, parentPost?: { __typename?: 'Post', uuid: any } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, userMentions: { __typename?: 'PostUserMentionsConnection', nodes: Array<{ __typename?: 'PostUserMention', startIndex: number, endIndex: number, uuid: any, user?: { __typename?: 'User', displayName?: string | null | undefined, username?: string | null | undefined, uuid: any } | null | undefined } | null | undefined> } } | null | undefined> }, recordings: { __typename?: 'PostRecordingsConnection', totalCount: number, nodes: Array<{ __typename?: 'PostRecording', filename: string, extension?: string | null | undefined, uuid: any, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> }, language?: { __typename?: 'Language', alpha2: string } | null | undefined, prompt?: { __typename?: 'Prompt', content?: string | null | undefined, uuid: any, type: PromptType } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', gameType: PostGameType, uuid: any, revealedByCurrentUser?: boolean | null | undefined, ranges: { __typename?: 'PostGameRangesConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameRange', endIndex: number, startIndex: number, uuid: any, answers: { __typename?: 'PostGameAnswersConnection', edges: Array<{ __typename?: 'PostGameAnswersEdge', node?: { __typename?: 'PostGameAnswer', id: number } | null | undefined }> } } | null | undefined> }, answersByCurrentUser: { __typename?: 'PostGameAnswersConnection', totalCount: number, nodes: Array<{ __typename?: 'PostGameAnswer', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, correct?: boolean | null | undefined, genderOption?: GrammaticalGender | null | undefined, range?: { __typename?: 'PostGameRange', uuid: any } | null | undefined } | null | undefined> }, correctAnswers: { __typename?: 'PostGamesCorrectAnswersConnection', nodes: Array<{ __typename?: 'PostGamesCorrectAnswersRecord', caseOption?: GrammaticalCase | null | undefined, clozeAnswer?: string | null | undefined, genderOption?: GrammaticalGender | null | undefined, rangeUuid?: any | null | undefined } | null | undefined> }, answerers: { __typename?: 'UsersConnection', totalCount: number } } | null | undefined> }, corrections: { __typename?: 'PostCorrectionsConnection', nodes: Array<{ __typename?: 'PostCorrection', body: string, endIndex: number, createdAt: any, startIndex: number, uuid: any, user?: { __typename?: 'User', uuid: any, username?: string | null | undefined, avatarUrl?: string | null | undefined, displayName?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined> } } | null | undefined };
 
 export type UserProfileQueryVariables = Exact<{
   username: Scalars['String'];
@@ -27261,6 +27763,7 @@ export const FeedPosts = gql`
             author {
               uuid
               username
+              displayName
               avatarUrl
             }
             likes {
@@ -27485,6 +27988,7 @@ export const SinglePost = gql`
           author {
             uuid
             username
+            displayName
             avatarUrl
           }
           likes {
@@ -27875,6 +28379,42 @@ export const CreateUserDevice = gql`
   }
 }
     `;
+export const CurrentUserInAppNotifications = gql`
+    query CurrentUserInAppNotifications {
+  currentUser {
+    inAppNotifications(afterUuid: null) {
+      nodes {
+        uuid
+        createdAt
+        metadata {
+          user {
+            uuid
+            avatarUrl
+            displayName
+            username
+            followedByCurrentUser
+          }
+          post {
+            uuid
+            snowflakeId
+            parentPost {
+              uuid
+              snowflakeId
+              language {
+                alpha2
+              }
+            }
+            language {
+              alpha2
+            }
+          }
+        }
+        type
+      }
+    }
+  }
+}
+    `;
 export const DeleteInvalidFcmToken = gql`
     mutation DeleteInvalidFcmToken($fcmToken: String!) {
   deleteUserDeviceByFcmToken(input: {fcmToken: $fcmToken}) {
@@ -28004,10 +28544,12 @@ export const PostCorrectionNotification = gql`
       body
       parentPostId
       snowflakeId
+      uuid
     }
     user {
       id
       username
+      uuid
       displayName
     }
   }
@@ -28021,10 +28563,12 @@ export const PostLikeNotification = gql`
       body
       parentPostId
       snowflakeId
+      uuid
     }
     user {
       id
       username
+      uuid
       displayName
     }
   }
@@ -28043,6 +28587,7 @@ export const PostReplyNotification = gql`
     author {
       displayName
       username
+      uuid
     }
     snowflakeId
   }
@@ -28052,17 +28597,22 @@ export const PostUserMentionNotification = gql`
     query PostUserMentionNotification($id: Int!) {
   postUserMention(id: $id) {
     userId
+    user {
+      uuid
+    }
     postId
     post {
+      author {
+        displayName
+        username
+        uuid
+      }
+      body
       parentPost {
         authorId
         snowflakeId
       }
-      body
-      author {
-        displayName
-        username
-      }
+      uuid
     }
   }
 }
@@ -28085,6 +28635,7 @@ export const UserFollowershipNotification = gql`
     query UserFollowershipNotification($id: Int!) {
   userFollower(id: $id) {
     follower {
+      uuid
       username
       displayName
     }
@@ -28146,6 +28697,7 @@ export const UserByUsernamePosts = gql`
             author {
               uuid
               username
+              displayName
               avatarUrl
             }
             likes {

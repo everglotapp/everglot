@@ -13,7 +13,11 @@ import { getPostLikeNotification } from "../../../server/notifications/posts"
 import { enqueueFcmNotification } from "../../../server/notifications/fcm"
 import { NotificationParamsVersion } from "../../../server/notifications/params"
 import { userHasCompletedProfile } from "../../../server/users"
-import { FcmMessageParamsDataTypeV1 } from "../../../server/notifications/params/v1"
+import {
+    FcmMessageParamsDataTypeV1,
+    InAppParamsTypeV1,
+} from "../../../server/notifications/params/v1"
+import { enqueueInAppNotification } from "../../../server/notifications/inApp"
 
 const NOTIFICATION_EXPIRY_SECONDS = 60 * 60
 /**
@@ -76,6 +80,19 @@ async function notifyAuthor(
                 },
             },
             version: NotificationParamsVersion.V1,
+        }
+    )
+    enqueueInAppNotification(
+        { userId: post.authorId, groupId: null },
+        null,
+        null,
+        {
+            version: NotificationParamsVersion.V1,
+            type: InAppParamsTypeV1.PostLike,
+            data: {
+                userUuid: user.uuid,
+                postUuid: post.uuid,
+            },
         }
     )
 }

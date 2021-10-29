@@ -16,7 +16,7 @@ import {
     getEmailNotificationChannelId,
     markNotificationAsJustSent,
 } from "./utils"
-import type { NotificationParamsV1 } from "./params"
+import type { BaseNotificationParams, NotificationParamsV1 } from "./params"
 import type {
     EmailParamsV1,
     ManualHtmlEmailParamsV1,
@@ -231,7 +231,7 @@ export async function enqueueEmailNotification(
     userId: number,
     expiresAt: Date | null,
     withheldUntil: Date | null,
-    params: NotificationParamsV1 | null
+    params: (BaseNotificationParams & EmailParamsV1) | null
 ) {
     const channelId = await getEmailNotificationChannelId()
     if (!channelId) {

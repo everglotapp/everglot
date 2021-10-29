@@ -4,12 +4,12 @@
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
-    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
-    import PageTitle from "../comp/typography/PageTitle.svelte"
-    import ErrorMessage from "../comp/util/ErrorMessage.svelte"
-    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
+    import BrowserTitle from "../components/layout/BrowserTitle.svelte"
+    import PageTitle from "../components/typography/PageTitle.svelte"
+    import ErrorMessage from "../components/util/ErrorMessage.svelte"
+    import ButtonLarge from "../components/util/ButtonLarge.svelte"
 
-    import GoogleAuthButton from "../comp/util/GoogleAuthButton.svelte"
+    import GoogleAuthButton from "../components/util/GoogleAuthButton.svelte"
 
     import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
     import { inviteToken, prefillPasswordAfterReset } from "../stores"

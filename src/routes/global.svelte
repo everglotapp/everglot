@@ -6,13 +6,13 @@
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
-    import BrowserTitle from "../comp/layout/BrowserTitle.svelte"
-    import ButtonLarge from "../comp/util/ButtonLarge.svelte"
-    import ErrorMessage from "../comp/util/ErrorMessage.svelte"
-    import Spinner from "../comp/util/Spinner.svelte"
-    import Headline3 from "../comp/typography/Headline3.svelte"
-    import RedirectOnce from "../comp/layout/RedirectOnce.svelte"
-    import Avatar from "../comp/users/Avatar.svelte"
+    import BrowserTitle from "../components/layout/BrowserTitle.svelte"
+    import ButtonLarge from "../components/util/ButtonLarge.svelte"
+    import ErrorMessage from "../components/util/ErrorMessage.svelte"
+    import Spinner from "../components/util/Spinner.svelte"
+    import Headline3 from "../components/typography/Headline3.svelte"
+    import RedirectOnce from "../components/layout/RedirectOnce.svelte"
+    import Avatar from "../components/users/Avatar.svelte"
 
     import {
         allGroupsStore,

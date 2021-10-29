@@ -13,8 +13,12 @@ import { getPostCorrectionNotification } from "../../../../server/notifications/
 import { enqueueFcmNotification } from "../../../../server/notifications/fcm"
 import { NotificationParamsVersion } from "../../../../server/notifications/params"
 import { userHasCompletedProfile } from "../../../../server/users"
-import { FcmMessageParamsDataTypeV1 } from "../../../../server/notifications/params/v1"
+import {
+    FcmMessageParamsDataTypeV1,
+    InAppParamsTypeV1,
+} from "../../../../server/notifications/params/v1"
 import { MAX_POST_BODY_LENGTH } from "../../../../server/constants"
+import { enqueueInAppNotification } from "../../../../server/notifications/inApp"
 
 const NOTIFICATION_EXPIRY_SECONDS = 60 * 60
 /**
@@ -46,7 +50,7 @@ async function notifyAuthor(
         return
     }
     if (post.authorId === currentUserId) {
-        // Don't notify if the author likes their own post.
+        // Don't notify if the author corrects their own post.
         return
     }
     const expiresAt = new Date(Date.now() + NOTIFICATION_EXPIRY_SECONDS * 1000)
@@ -75,6 +79,19 @@ async function notifyAuthor(
                 },
             },
             version: NotificationParamsVersion.V1,
+        }
+    )
+    enqueueInAppNotification(
+        { userId: post.authorId, groupId: null },
+        null,
+        null,
+        {
+            version: NotificationParamsVersion.V1,
+            type: InAppParamsTypeV1.PostCorrection,
+            data: {
+                userUuid: user.uuid,
+                postUuid: post.uuid,
+            },
         }
     )
 }

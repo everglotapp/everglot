@@ -28,7 +28,7 @@ import {
     markNotificationAsJustSent,
     NotificationRecipient,
 } from "./utils"
-import type { NotificationParams } from "./params"
+import type { BaseNotificationParams, NotificationParams } from "./params"
 import type { FcmParamsV1 } from "./params/v1"
 import type { MulticastMessage } from "firebase-admin/messaging"
 
@@ -223,7 +223,7 @@ export async function enqueueFcmNotification(
     recipient: NotificationRecipient,
     expiresAt: Date | null,
     withheldUntil: Date | null,
-    params: NotificationParams | null
+    params: (BaseNotificationParams & FcmParamsV1) | null
 ) {
     const channelId = await getFcmNotificationChannelId()
     if (!channelId) {

@@ -1,11 +1,11 @@
 <script lang="ts">
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
-    import BrowserTitle from "../../../comp/layout/BrowserTitle.svelte"
-    import PageTitle from "../../../comp/typography/PageTitle.svelte"
-    import ErrorMessage from "../../../comp/util/ErrorMessage.svelte"
-    import Spinner from "../../../comp/util/Spinner.svelte"
-    import ButtonLarge from "../../../comp/util/ButtonLarge.svelte"
+    import BrowserTitle from "../../../components/layout/BrowserTitle.svelte"
+    import PageTitle from "../../../components/typography/PageTitle.svelte"
+    import ErrorMessage from "../../../components/util/ErrorMessage.svelte"
+    import Spinner from "../../../components/util/Spinner.svelte"
+    import ButtonLarge from "../../../components/util/ButtonLarge.svelte"
     import { inviteToken } from "../../../stores"
 
     let email: string | undefined

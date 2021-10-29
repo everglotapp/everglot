@@ -4,10 +4,10 @@
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
-    import BrowserTitle from "../../comp/layout/BrowserTitle.svelte"
-    import ProfileHeader from "../../comp/users/ProfileHeader.svelte"
-    import Post from "../../comp/feed/Post.svelte"
-    import Avatar from "../../comp/users/Avatar.svelte"
+    import BrowserTitle from "../../components/layout/BrowserTitle.svelte"
+    import ProfileHeader from "../../components/users/ProfileHeader.svelte"
+    import Post from "../../components/feed/Post.svelte"
+    import Avatar from "../../components/users/Avatar.svelte"
 
     import { query, operationStore } from "@urql/svelte"
     import { XIcon, CheckIcon } from "svelte-feather-icons"
@@ -22,14 +22,15 @@
         UserProfileQuery,
     } from "../../types/generated/graphql"
     import { currentUser, currentUserUuid } from "../../stores/currentUser"
-    import ErrorMessage from "../../comp/util/ErrorMessage.svelte"
-    import ButtonSmall from "../../comp/util/ButtonSmall.svelte"
-    import ButtonLarge from "../../comp/util/ButtonLarge.svelte"
-    import Spinner from "../../comp/util/Spinner.svelte"
+    import ErrorMessage from "../../components/util/ErrorMessage.svelte"
+    import ButtonSmall from "../../components/util/ButtonSmall.svelte"
+    import ButtonLarge from "../../components/util/ButtonLarge.svelte"
+    import Spinner from "../../components/util/Spinner.svelte"
     import {
         currentUserProfileStore,
         userFollowershipsStore,
     } from "../../stores/profile"
+    import { toggleFollow } from "../_helpers/users"
 
     const { page } = stores()
 
@@ -299,17 +300,7 @@
         if (!user.uuid) {
             return
         }
-        const endpoint = user.followedByCurrentUser
-            ? `/u/${user.uuid}/unfollow`
-            : `/u/${user.uuid}/follow`
-
-        const res = await fetch(endpoint, {
-            method: "post",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
+        const res = await toggleFollow(user)
         const onSuccess = () => {
             refreshFollowerships()
         }
@@ -628,9 +619,9 @@
                                         className="flex items-center"
                                     >
                                         {#if follower.followedByCurrentUser}
-                                            Unfollow
+                                            <Localized id="user-unfollow" />
                                         {:else}
-                                            Follow
+                                            <Localized id="user-follow" />
                                         {/if}
                                     </ButtonSmall>
                                 </div>

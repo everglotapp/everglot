@@ -3,12 +3,13 @@
     import { stores, goto } from "@sapper/app"
     import { query } from "@urql/svelte"
 
-    import Post from "../../comp/feed/Post.svelte"
-    import Spinner from "../../comp/util/Spinner.svelte"
-    import ErrorMessage from "../../comp/util/ErrorMessage.svelte"
-    import ButtonSmall from "../../comp/util/ButtonSmall.svelte"
+    import Post from "../../components/feed/Post.svelte"
+    import Spinner from "../../components/util/Spinner.svelte"
+    import ErrorMessage from "../../components/util/ErrorMessage.svelte"
+    import ButtonSmall from "../../components/util/ButtonSmall.svelte"
 
     import { singlePost, singlePostStore } from "../../stores/feed"
+    import { previousPage } from "../../stores"
 
     const { page } = stores()
 
@@ -64,17 +65,23 @@
     function handlePostCorrectSuccess() {
         refreshPost()
     }
+
+    function handleBack() {
+        if ($previousPage === null) {
+            goto("/", { replaceState: false })
+            return
+        }
+        window.history.back()
+    }
 </script>
 
 {#if snowflakeId}
     <div class="container max-w-2xl pt-4 pb-2 px-2">
         <ButtonSmall
-            tag="a"
-            href="/"
+            tag="button"
             color="PRIMARY"
             variant="OUTLINED"
-            on:click={() => goto("/", { replaceState: false })}
-            >Back</ButtonSmall
+            on:click={handleBack}>Back</ButtonSmall
         >
     </div>
     {#if post === null}
@@ -86,7 +93,7 @@
             </div>
         {:else if !$singlePostStore.data || $singlePostStore.error}
             <div class="container max-w-2xl my-4">
-                <ErrorMessage>Post not found.</ErrorMessage>
+                <ErrorMessage>Squeek not found.</ErrorMessage>
             </div>
         {/if}
     {:else}

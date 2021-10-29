@@ -37,9 +37,13 @@ import { NotificationParamsVersion } from "../../server/notifications/params"
 import {
     findPotentialUsernameMentions,
     getUserIdByUsername,
+    getUserUuidById,
     userHasCompletedProfile,
 } from "../../server/users"
-import { FcmMessageParamsDataTypeV1 } from "../../server/notifications/params/v1"
+import {
+    FcmMessageParamsDataTypeV1,
+    InAppParamsTypeV1,
+} from "../../server/notifications/params/v1"
 
 import {
     GrammaticalCase,
@@ -48,6 +52,7 @@ import {
     PostUserMention,
 } from "../../types/generated/graphql"
 import { MAX_POST_BODY_LENGTH } from "../../server/constants"
+import { enqueueInAppNotification } from "../../server/notifications/inApp"
 
 const REPLY_NOTIFICATION_EXPIRY_SECONDS = 60 * 60
 
@@ -108,6 +113,19 @@ export async function notifyOriginalAuthorAfterReply(
             version: NotificationParamsVersion.V1,
         }
     )
+    enqueueInAppNotification(
+        { userId: parentPost.authorId, groupId: null },
+        null,
+        null,
+        {
+            version: NotificationParamsVersion.V1,
+            type: InAppParamsTypeV1.PostReply,
+            data: {
+                userUuid: author.uuid,
+                postUuid: post.uuid,
+            },
+        }
+    )
 }
 
 const MENTION_NOTIFICATION_EXPIRY_SECONDS = 60 * 60
@@ -136,7 +154,8 @@ export async function notifyMentionedUser(
         return
     }
     const {
-        post: { author, parentPost, body },
+        post: { author, parentPost, body, uuid: postUuid },
+        user: mentionedUser,
     } = postUserMention
     if (postUserMention.userId === currentUserId) {
         // Don't notify if the author mentions themselves in their own post.
@@ -168,6 +187,27 @@ export async function notifyMentionedUser(
                 },
             },
             version: NotificationParamsVersion.V1,
+        }
+    )
+    if (!parentPost || !parentPost.authorId || !mentionedUser) {
+        chlog
+            .child({ postUserMention, notificationData, currentUserId })
+            .error(
+                "Missing data to enqueue in-app notification for a post reply"
+            )
+        return
+    }
+    enqueueInAppNotification(
+        { userId: parentPost.authorId, groupId: null },
+        null,
+        null,
+        {
+            version: NotificationParamsVersion.V1,
+            type: InAppParamsTypeV1.PostUserMention,
+            data: {
+                userUuid: mentionedUser.uuid,
+                postUuid,
+            },
         }
     )
 }

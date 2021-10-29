@@ -10,14 +10,14 @@
     import { currentUserStore } from "../stores/currentUser"
     import { allGroupsStore } from "../stores/groups"
 
-    import LocaleProvider from "../comp/util/LocaleProvider.svelte"
-    import MainNav from "../comp/layout/MainNav.svelte"
-    import WebrtcProvider from "../comp/util/WebrtcProvider.svelte"
-    import ChatProvider from "../comp/util/ChatProvider.svelte"
+    import LocaleProvider from "../components/util/LocaleProvider.svelte"
+    import MainNav from "../components/layout/MainNav.svelte"
+    import WebrtcProvider from "../components/util/WebrtcProvider.svelte"
+    import ChatProvider from "../components/util/ChatProvider.svelte"
     import { showChatSidebarDrawer } from "../stores/chat"
     import { showSwitchCallModal } from "../stores/call"
     import { MOBILE_APP_USER_AGENTS } from "../constants"
-    import { currentPage, userAgentIsMobileApp } from "../stores"
+    import { currentPage, previousPage, userAgentIsMobileApp } from "../stores"
     import { currentGroupLocale, feedLocale } from "../stores/locales"
     import { getPage, Page } from "./_helpers/routing"
 
@@ -30,8 +30,12 @@
     $: path = $page.path
 
     $: {
-        $currentPage = getPage(path)
-        handlePageChange()
+        const newPage = getPage(path)
+        if (newPage !== $currentPage) {
+            $previousPage = $currentPage
+            $currentPage = getPage(path)
+            handlePageChange()
+        }
     }
 
     $: showMainNav =

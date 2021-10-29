@@ -34,6 +34,7 @@ query SinglePost($snowflakeId: BigInt!) {
                     author {
                         uuid
                         username
+                        displayName
                         avatarUrl
                     }
                     likes {

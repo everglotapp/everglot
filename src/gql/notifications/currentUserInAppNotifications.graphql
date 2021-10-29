@@ -1,0 +1,34 @@
+query CurrentUserInAppNotifications {
+    currentUser {
+        inAppNotifications(afterUuid: null) {
+            nodes {
+                uuid
+                createdAt
+                metadata {
+                    user {
+                        uuid
+                        avatarUrl
+                        displayName
+                        username
+                        followedByCurrentUser
+                    }
+                    post {
+                        uuid
+                        snowflakeId
+                        parentPost {
+                            uuid
+                            snowflakeId
+                            language {
+                                alpha2
+                            }
+                        }
+                        language {
+                            alpha2
+                        }
+                    }
+                }
+                type
+            }
+        }
+    }
+}

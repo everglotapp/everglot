@@ -35,6 +35,7 @@ query FeedPosts($locale: String!, $afterUuid: UUID) {
                         author {
                             uuid
                             username
+                            displayName
                             avatarUrl
                         }
                         likes {

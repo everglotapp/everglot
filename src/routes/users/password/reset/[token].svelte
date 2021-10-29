@@ -3,11 +3,11 @@
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
     import Time from "svelte-time"
 
-    import Spinner from "../../../../comp/util/Spinner.svelte"
-    import BrowserTitle from "../../../../comp/layout/BrowserTitle.svelte"
-    import PageTitle from "../../../../comp/typography/PageTitle.svelte"
-    import ErrorMessage from "../../../../comp/util/ErrorMessage.svelte"
-    import ButtonLarge from "../../../../comp/util/ButtonLarge.svelte"
+    import Spinner from "../../../../components/util/Spinner.svelte"
+    import BrowserTitle from "../../../../components/layout/BrowserTitle.svelte"
+    import PageTitle from "../../../../components/typography/PageTitle.svelte"
+    import ErrorMessage from "../../../../components/util/ErrorMessage.svelte"
+    import ButtonLarge from "../../../../components/util/ButtonLarge.svelte"
 
     import { MIN_PASSWORD_LENGTH } from "../../../../users"
     import {

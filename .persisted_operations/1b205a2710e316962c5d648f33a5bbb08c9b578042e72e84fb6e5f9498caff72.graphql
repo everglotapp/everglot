@@ -1,0 +1,20 @@
+query PostReplyNotification($id: Int!) {
+  post(id: $id) {
+    authorId
+    parentPost {
+      authorId
+      snowflakeId
+      __typename
+    }
+    body
+    createdAt
+    author {
+      displayName
+      username
+      uuid
+      __typename
+    }
+    snowflakeId
+    __typename
+  }
+}

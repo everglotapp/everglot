@@ -5,10 +5,12 @@ query PostLikeNotification($id: Int!) {
             body
             parentPostId
             snowflakeId
+            uuid
         }
         user {
             id
             username
+            uuid
             displayName
         }
     }

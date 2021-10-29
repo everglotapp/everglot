@@ -37,6 +37,7 @@ import { NotificationParamsVersion } from "../../server/notifications/params"
 import {
     findPotentialUsernameMentions,
     getUserIdByUsername,
+    getUserUuidById,
     userHasCompletedProfile,
 } from "../../server/users"
 import {
@@ -119,6 +120,10 @@ export async function notifyOriginalAuthorAfterReply(
         {
             version: NotificationParamsVersion.V1,
             type: InAppParamsTypeV1.PostReply,
+            data: {
+                userUuid: author.uuid,
+                postUuid: post.uuid,
+            },
         }
     )
 }
@@ -149,7 +154,8 @@ export async function notifyMentionedUser(
         return
     }
     const {
-        post: { author, parentPost, body },
+        post: { author, parentPost, body, uuid: postUuid },
+        user: mentionedUser,
     } = postUserMention
     if (postUserMention.userId === currentUserId) {
         // Don't notify if the author mentions themselves in their own post.
@@ -181,6 +187,27 @@ export async function notifyMentionedUser(
                 },
             },
             version: NotificationParamsVersion.V1,
+        }
+    )
+    if (!parentPost || !parentPost.authorId || !mentionedUser) {
+        chlog
+            .child({ postUserMention, notificationData, currentUserId })
+            .error(
+                "Missing data to enqueue in-app notification for a post reply"
+            )
+        return
+    }
+    enqueueInAppNotification(
+        { userId: parentPost.authorId, groupId: null },
+        null,
+        null,
+        {
+            version: NotificationParamsVersion.V1,
+            type: InAppParamsTypeV1.PostUserMention,
+            data: {
+                userUuid: mentionedUser.uuid,
+                postUuid,
+            },
         }
     )
 }

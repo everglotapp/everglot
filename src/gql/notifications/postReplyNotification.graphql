@@ -10,6 +10,7 @@ query PostReplyNotification($id: Int!) {
         author {
             displayName
             username
+            uuid
         }
         snowflakeId
     }

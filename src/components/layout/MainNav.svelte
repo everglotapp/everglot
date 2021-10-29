@@ -198,7 +198,10 @@
                                 : undefined}
                             href="/"
                             class="nav-item-with-icon"
-                            ><span><Localized id="main-nav-feed" /></span>
+                            ><span
+                                style="margin-top: -3px; margin-bottom: -2px;"
+                                ><Localized id="main-nav-feed" /></span
+                            >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -347,7 +350,9 @@
                             : undefined}
                         href="/notifications"
                         class="nav-item-with-icon text-primary"
-                        ><span><Localized id="main-nav-notifications" /></span>
+                        ><span style="margin-top: -3px; margin-bottom: -2px;"
+                            ><Localized id="main-nav-notifications" /></span
+                        >
                         <BellIcon size="24" />
                     </a>
                     {#if showSettingsDropdown}

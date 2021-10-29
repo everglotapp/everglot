@@ -4,7 +4,30 @@ query CurrentUserInAppNotifications {
             nodes {
                 uuid
                 createdAt
-                params
+                metadata {
+                    user {
+                        uuid
+                        avatarUrl
+                        displayName
+                        username
+                        followedByCurrentUser
+                    }
+                    post {
+                        uuid
+                        snowflakeId
+                        parentPost {
+                            uuid
+                            snowflakeId
+                            language {
+                                alpha2
+                            }
+                        }
+                        language {
+                            alpha2
+                        }
+                    }
+                }
+                type
             }
         }
     }

@@ -22,6 +22,7 @@
         UserByUsernameFollowershipsQuery,
     } from "../../types/generated/graphql"
     import { currentUserUuid } from "../../stores/currentUser"
+    import { toggleFollow } from "../../routes/_helpers/users"
 
     export let displayName: Maybe<string>
     export let username: Maybe<string>
@@ -73,20 +74,14 @@
         if (!userUuid) {
             return
         }
-        const endpoint = currentUserIsFollowing
-            ? `/u/${userUuid}/unfollow`
-            : `/u/${userUuid}/follow`
         if (currentUserIsFollowing) {
             tmpUnfollowed = true
         } else {
             tmpFollowed = true
         }
-        const res = await fetch(endpoint, {
-            method: "post",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
+        const res = await toggleFollow({
+            uuid: userUuid,
+            followedByCurrentUser: currentUserIsFollowing,
         })
         const onSuccess = () => {
             dispatch(tmpFollowed ? "followSuccess" : "unfollowSuccess")

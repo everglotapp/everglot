@@ -17,7 +17,7 @@
     import { showChatSidebarDrawer } from "../stores/chat"
     import { showSwitchCallModal } from "../stores/call"
     import { MOBILE_APP_USER_AGENTS } from "../constants"
-    import { currentPage, userAgentIsMobileApp } from "../stores"
+    import { currentPage, previousPage, userAgentIsMobileApp } from "../stores"
     import { currentGroupLocale, feedLocale } from "../stores/locales"
     import { getPage, Page } from "./_helpers/routing"
 
@@ -30,8 +30,12 @@
     $: path = $page.path
 
     $: {
-        $currentPage = getPage(path)
-        handlePageChange()
+        const newPage = getPage(path)
+        if (newPage !== $currentPage) {
+            $previousPage = $currentPage
+            $currentPage = getPage(path)
+            handlePageChange()
+        }
     }
 
     $: showMainNav =

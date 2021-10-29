@@ -13,7 +13,11 @@ import { getUserFollowershipNotification } from "../../../server/notifications/f
 import { enqueueFcmNotification } from "../../../server/notifications/fcm"
 import { NotificationParamsVersion } from "../../../server/notifications/params"
 import { userHasCompletedProfile } from "../../../server/users"
-import { FcmMessageParamsDataTypeV1 } from "../../../server/notifications/params/v1"
+import {
+    FcmMessageParamsDataTypeV1,
+    InAppParamsTypeV1,
+} from "../../../server/notifications/params/v1"
+import { enqueueInAppNotification } from "../../../server/notifications/inApp"
 
 const NOTIFICATION_EXPIRY_SECONDS = 60 * 60
 /**
@@ -65,6 +69,13 @@ async function notifyFollowedUser(userFollower: { id: number }) {
             version: NotificationParamsVersion.V1,
         }
     )
+    enqueueInAppNotification({ userId: user.id, groupId: null }, null, null, {
+        version: NotificationParamsVersion.V1,
+        type: InAppParamsTypeV1.UserFollowership,
+        data: {
+            userUuid: follower.uuid,
+        },
+    })
 }
 
 export async function post(req: Request, res: Response, next: () => void) {

@@ -1,17 +1,22 @@
 query PostUserMentionNotification($id: Int!) {
     postUserMention(id: $id) {
         userId
+        user {
+            uuid
+        }
         postId
         post {
+            author {
+                displayName
+                username
+                uuid
+            }
+            body
             parentPost {
                 authorId
                 snowflakeId
             }
-            body
-            author {
-                displayName
-                username
-            }
+            uuid
         }
     }
 }

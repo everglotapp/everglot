@@ -30,6 +30,7 @@
         currentUserProfileStore,
         userFollowershipsStore,
     } from "../../stores/profile"
+    import { toggleFollow } from "../_helpers/users"
 
     const { page } = stores()
 
@@ -299,17 +300,7 @@
         if (!user.uuid) {
             return
         }
-        const endpoint = user.followedByCurrentUser
-            ? `/u/${user.uuid}/unfollow`
-            : `/u/${user.uuid}/follow`
-
-        const res = await fetch(endpoint, {
-            method: "post",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
+        const res = await toggleFollow(user)
         const onSuccess = () => {
             refreshFollowerships()
         }
@@ -628,9 +619,9 @@
                                         className="flex items-center"
                                     >
                                         {#if follower.followedByCurrentUser}
-                                            Unfollow
+                                            <Localized id="user-unfollow" />
                                         {:else}
-                                            Follow
+                                            <Localized id="user-follow" />
                                         {/if}
                                     </ButtonSmall>
                                 </div>

@@ -50,7 +50,6 @@ export async function post(req: Request, res: Response, next: () => void) {
         res.json({
             success: false,
         })
-        next()
         return
     }
     const userFollowership = await deleteUserFollowership({

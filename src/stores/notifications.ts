@@ -19,14 +19,21 @@ export const currentUserInAppNotificationsStore = operationStore<
     { pause: true, requestPolicy: "network-only" }
 )
 
+type CurrentUserInAppNotificationNode = NonNullable<
+    NonNullable<
+        NonNullable<
+            NonNullable<CurrentUserInAppNotificationsQuery["currentUser"]>
+        >["inAppNotifications"]
+    >["nodes"][number]
+>
+
 export const inAppNotifications = derived(
     currentUserInAppNotificationsStore,
     ($currentUserInAppNotificationsStore) =>
         $currentUserInAppNotificationsStore.data
             ? ($currentUserInAppNotificationsStore.data?.currentUser?.inAppNotifications?.nodes.filter(
                   Boolean
-              ) as { uuid: string; createdAt: Date; params: {} | null }[]) ||
-              null
+              ) as CurrentUserInAppNotificationNode[]) || null
             : null,
     null
 )

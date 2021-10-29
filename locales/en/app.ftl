@@ -9,6 +9,8 @@
         [guess_gender] Guess the Gender
         [cloze] Fill in the Gaps
     }
+user-follow = Follow
+user-unfollow = Unfollow
 
 ## Feed page
 

@@ -9,6 +9,8 @@
         [guess_gender] Geschlecht erraten
         [cloze] Lückentext
     }
+user-follow = Folgen
+user-unfollow = Entfolgen
 
 ## Feed page
 

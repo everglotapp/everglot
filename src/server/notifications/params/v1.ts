@@ -81,20 +81,69 @@ export enum FcmMessageParamsDataTypeV1 {
     PostLike = "POST_LIKE",
     PostReply = "POST_REPLY",
     PostCorrection = "POST_CORRECTION",
-    PostGameAnswer = "POST_GAME_ANSWER",
+    // PostGameAnswer = "POST_GAME_ANSWER",
     PostUserMention = "POST_USER_MENTION",
     UserFollowership = "USER_FOLLOWERSHIP",
 }
 
-export type InAppParamsV1 = {
+interface AbstractInAppParamsV1 {
     type: InAppParamsTypeV1
+    data: object | null
 }
+
+export type PostReplyInAppParamsV1 = {
+    type: InAppParamsTypeV1.PostReply
+    data: {
+        userUuid: string
+        postUuid: string
+    }
+}
+
+export type PostLikeInAppParamsV1 = {
+    type: InAppParamsTypeV1.PostLike
+    data: {
+        userUuid: string
+        postUuid: string
+    }
+}
+
+export type PostCorrectionInAppParamsV1 = {
+    type: InAppParamsTypeV1.PostCorrection
+    data: {
+        userUuid: string
+        postUuid: string
+    }
+}
+
+export type PostUserMentionInAppParamsV1 = {
+    type: InAppParamsTypeV1.PostUserMention
+    data: {
+        userUuid: string
+        postUuid: string
+    }
+}
+
+export type UserFollowershipInAppParamsV1 = {
+    type: InAppParamsTypeV1.UserFollowership
+    data: {
+        userUuid: string
+    }
+}
+
+export type InAppParamsV1 = AbstractInAppParamsV1 &
+    (
+        | PostReplyInAppParamsV1
+        | PostLikeInAppParamsV1
+        | PostCorrectionInAppParamsV1
+        | PostUserMentionInAppParamsV1
+        | UserFollowershipInAppParamsV1
+    )
 
 export enum InAppParamsTypeV1 {
     PostLike = "POST_LIKE",
     PostReply = "POST_REPLY",
     PostCorrection = "POST_CORRECTION",
-    PostGameAnswer = "POST_GAME_ANSWER",
+    // PostGameAnswer = "POST_GAME_ANSWER",
     PostUserMention = "POST_USER_MENTION",
     UserFollowership = "USER_FOLLOWERSHIP",
 }

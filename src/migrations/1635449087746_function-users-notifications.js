@@ -39,6 +39,7 @@ exports.up = (pgm) => {
           )
         )
       )
+      ORDER BY created_at DESC
     $$ language sql stable;`
     )
     pgm.sql(`GRANT SELECT ON app_public.notifications TO evg_client`)

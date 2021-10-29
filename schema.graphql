@@ -121,6 +121,42 @@ type Query implements Node {
     filter: ChineseGuessCharacterQuestionFilter
   ): ChineseGuessCharacterQuestionsConnection
 
+  """
+  Reads and enables pagination through a set of `InAppNotificationMetadatum`.
+  """
+  inAppNotificationMetadata(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `InAppNotificationMetadatum`."""
+    orderBy: [InAppNotificationMetadataOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: InAppNotificationMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: InAppNotificationMetadatumFilter
+  ): InAppNotificationMetadataConnection
+
   """Reads and enables pagination through a set of `InviteToken`."""
   inviteTokens(
     """Only read the first `n` values of the set."""
@@ -1815,6 +1851,7 @@ type Query implements Node {
   groupByUuid(uuid: UUID!): Group
   chineseGuessCharacterQuestion(id: Int!): ChineseGuessCharacterQuestion
   chineseGuessCharacterQuestionByUuid(uuid: UUID!): ChineseGuessCharacterQuestion
+  inAppNotificationMetadatumByNotificationId(notificationId: Int!): InAppNotificationMetadatum
   inviteToken(id: Int!): InviteToken
   languageSkillLevel(id: Int!): LanguageSkillLevel
   language(id: Int!): Language
@@ -3031,6 +3068,42 @@ type User implements Node {
     """
     filter: PostUserMentionFilter
   ): PostUserMentionsConnection!
+
+  """
+  Reads and enables pagination through a set of `InAppNotificationMetadatum`.
+  """
+  relatedInAppNotifications(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `InAppNotificationMetadatum`."""
+    orderBy: [InAppNotificationMetadataOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: InAppNotificationMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: InAppNotificationMetadatumFilter
+  ): InAppNotificationMetadataConnection!
   followedByCurrentUser: Boolean
 
   """Reads and enables pagination through a set of `Notification`."""
@@ -3808,6 +3881,40 @@ type User implements Node {
     """
     filter: PostFilter
   ): UserPostsByPostUserMentionUserIdAndPostIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Post`."""
+  postsByInAppNotificationMetadatumUserIdAndPostId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyConnection!
 }
 
 """
@@ -7374,6 +7481,12 @@ type Notification implements Node {
 
   """Reads a single `Group` that is related to this `Notification`."""
   recipientGroup: Group
+
+  """
+  Reads a single `InAppNotificationMetadatum` that is related to this `Notification`.
+  """
+  metadata: InAppNotificationMetadatum
+  type: String
 }
 
 """
@@ -7578,6 +7691,9 @@ input NotificationFilter {
   """Filter by the object’s `channelId` field."""
   channelId: IntFilter
 
+  """Filter by the object’s `params` field."""
+  params: JSONFilter
+
   """Filter by the object’s `sentAt` field."""
   sentAt: DatetimeFilter
 
@@ -7596,6 +7712,9 @@ input NotificationFilter {
   """Filter by the object’s `recipientGroupId` field."""
   recipientGroupId: IntFilter
 
+  """Filter by the object’s `type` field."""
+  type: StringFilter
+
   """Checks for all expressions in this list."""
   and: [NotificationFilter!]
 
@@ -7604,6 +7723,63 @@ input NotificationFilter {
 
   """Negates the expression."""
   not: NotificationFilter
+}
+
+"""
+A filter to be used against JSON fields. All fields are combined with a logical ‘and.’
+"""
+input JSONFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: JSON
+
+  """Not equal to the specified value."""
+  notEqualTo: JSON
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: JSON
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: JSON
+
+  """Included in the specified list."""
+  in: [JSON!]
+
+  """Not included in the specified list."""
+  notIn: [JSON!]
+
+  """Less than the specified value."""
+  lessThan: JSON
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: JSON
+
+  """Greater than the specified value."""
+  greaterThan: JSON
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: JSON
+
+  """Contains the specified JSON."""
+  contains: JSON
+
+  """Contains the specified key."""
+  containsKey: String
+
+  """Contains all of the specified keys."""
+  containsAllKeys: [String!]
+
+  """Contains any of the specified keys."""
+  containsAnyKeys: [String!]
+
+  """Contained by the specified JSON."""
+  containedBy: JSON
 }
 
 """
@@ -7730,1839 +7906,27 @@ type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToMa
   ): NotificationsConnection!
 }
 
-"""A `Notification` edge in the connection."""
-type NotificationsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
+"""Metadata for in-app notifications."""
+type InAppNotificationMetadatum {
+  notificationId: Int
+  recipientId: Int
+  postId: Int
+  userId: Int
 
-  """The `Notification` at the end of the edge."""
-  node: Notification
-}
-
-"""A connection to a list of `User` values, with data from `GroupUser`."""
-type GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection {
-  """A list of `User` objects."""
-  nodes: [User]!
-
-  """
-  A list of edges which contains the `User`, info from the `GroupUser`, and the cursor to aid in pagination.
-  """
-  edges: [GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `User` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `User` edge in the connection, with data from `GroupUser`."""
-type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `User` at the end of the edge."""
-  node: User
-
-  """Reads and enables pagination through a set of `GroupUser`."""
-  groupUsers(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `GroupUser`."""
-    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: GroupUserCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: GroupUserFilter
-  ): GroupUsersConnection!
-}
-
-"""A connection to a list of `User` values, with data from `Message`."""
-type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyConnection {
-  """A list of `User` objects."""
-  nodes: [User]!
-
-  """
-  A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination.
-  """
-  edges: [GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `User` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `User` edge in the connection, with data from `Message`."""
-type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `User` at the end of the edge."""
-  node: User
-
-  """Reads and enables pagination through a set of `Message`."""
-  messagesBySenderId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Message`."""
-    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: MessageCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: MessageFilter
-  ): MessagesConnection!
-}
-
-"""A connection to a list of `User` values, with data from `Message`."""
-type GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyConnection {
-  """A list of `User` objects."""
-  nodes: [User]!
-
-  """
-  A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination.
-  """
-  edges: [GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `User` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `User` edge in the connection, with data from `Message`."""
-type GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `User` at the end of the edge."""
-  node: User
-
-  """Reads and enables pagination through a set of `Message`."""
-  messagesByRecipientId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Message`."""
-    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: MessageCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: MessageFilter
-  ): MessagesConnection!
-}
-
-"""A connection to a list of `Message` values, with data from `Message`."""
-type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyConnection {
-  """A list of `Message` objects."""
-  nodes: [Message]!
-
-  """
-  A list of edges which contains the `Message`, info from the `Message`, and the cursor to aid in pagination.
-  """
-  edges: [GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Message` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `Message` edge in the connection, with data from `Message`."""
-type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Message` at the end of the edge."""
-  node: Message
-
-  """Reads and enables pagination through a set of `Message`."""
-  messagesByParentMessageId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Message`."""
-    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: MessageCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: MessageFilter
-  ): MessagesConnection!
-}
-
-"""
-A connection to a list of `User` values, with data from `Notification`.
-"""
-type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyConnection {
-  """A list of `User` objects."""
-  nodes: [User]!
-
-  """
-  A list of edges which contains the `User`, info from the `Notification`, and the cursor to aid in pagination.
-  """
-  edges: [GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `User` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `User` edge in the connection, with data from `Notification`."""
-type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `User` at the end of the edge."""
-  node: User
-
-  """Reads and enables pagination through a set of `Notification`."""
-  notificationsByRecipientId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Notification`."""
-    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: NotificationCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: NotificationFilter
-  ): NotificationsConnection!
-}
-
-"""
-A connection to a list of `NotificationChannel` values, with data from `Notification`.
-"""
-type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyConnection {
-  """A list of `NotificationChannel` objects."""
-  nodes: [NotificationChannel]!
-
-  """
-  A list of edges which contains the `NotificationChannel`, info from the `Notification`, and the cursor to aid in pagination.
-  """
-  edges: [GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `NotificationChannel` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-"""
-A `NotificationChannel` edge in the connection, with data from `Notification`.
-"""
-type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `NotificationChannel` at the end of the edge."""
-  node: NotificationChannel
-
-  """Reads and enables pagination through a set of `Notification`."""
-  notificationsByChannelId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Notification`."""
-    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: NotificationCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: NotificationFilter
-  ): NotificationsConnection!
-}
-
-"""Methods to use when ordering `NotificationChannel`."""
-enum NotificationChannelsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  NAME_ASC
-  NAME_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `NotificationChannel` object types. All fields
-are tested for equality and combined with a logical ‘and.’
-"""
-input NotificationChannelCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `name` field."""
-  name: String
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `NotificationChannel` object types. All fields are combined with a logical ‘and.’
-"""
-input NotificationChannelFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `name` field."""
-  name: StringFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [NotificationChannelFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [NotificationChannelFilter!]
-
-  """Negates the expression."""
-  not: NotificationChannelFilter
-}
-
-"""A `Group` edge in the connection."""
-type GroupsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Group` at the end of the edge."""
-  node: Group
-}
-
-"""A connection to a list of `EnglishWord` values."""
-type EnglishWordsConnection {
-  """A list of `EnglishWord` objects."""
-  nodes: [EnglishWord]!
-
-  """
-  A list of edges which contains the `EnglishWord` and cursor to aid in pagination.
-  """
-  edges: [EnglishWordsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `EnglishWord` you could get from the connection."""
-  totalCount: Int!
-}
-
-type EnglishWord implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  word: String!
-
-  """Ranges from 0 to 1 (higher is more frequent)"""
-  frequency: Float!
-  length: Int
-  recommendedSkillLevelId: Int
-  createdAt: Datetime!
-
-  """
-  Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`.
-  """
-  recommendedSkillLevel: LanguageSkillLevel
-}
-
-"""A `EnglishWord` edge in the connection."""
-type EnglishWordsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `EnglishWord` at the end of the edge."""
-  node: EnglishWord
-}
-
-"""Methods to use when ordering `EnglishWord`."""
-enum EnglishWordsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  WORD_ASC
-  WORD_DESC
-  FREQUENCY_ASC
-  FREQUENCY_DESC
-  LENGTH_ASC
-  LENGTH_DESC
-  RECOMMENDED_SKILL_LEVEL_ID_ASC
-  RECOMMENDED_SKILL_LEVEL_ID_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `EnglishWord` object types. All fields are tested
-for equality and combined with a logical ‘and.’
-"""
-input EnglishWordCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `word` field."""
-  word: String
-
-  """Checks for equality with the object’s `frequency` field."""
-  frequency: Float
-
-  """Checks for equality with the object’s `length` field."""
-  length: Int
-
-  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: Int
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `EnglishWord` object types. All fields are combined with a logical ‘and.’
-"""
-input EnglishWordFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `word` field."""
-  word: StringFilter
-
-  """Filter by the object’s `frequency` field."""
-  frequency: FloatFilter
-
-  """Filter by the object’s `length` field."""
-  length: IntFilter
-
-  """Filter by the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: IntFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [EnglishWordFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [EnglishWordFilter!]
-
-  """Negates the expression."""
-  not: EnglishWordFilter
-}
-
-"""
-A filter to be used against Float fields. All fields are combined with a logical ‘and.’
-"""
-input FloatFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Float
-
-  """Not equal to the specified value."""
-  notEqualTo: Float
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Float
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Float
-
-  """Included in the specified list."""
-  in: [Float!]
-
-  """Not included in the specified list."""
-  notIn: [Float!]
-
-  """Less than the specified value."""
-  lessThan: Float
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Float
-
-  """Greater than the specified value."""
-  greaterThan: Float
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Float
-}
-
-"""A connection to a list of `GermanWord` values."""
-type GermanWordsConnection {
-  """A list of `GermanWord` objects."""
-  nodes: [GermanWord]!
-
-  """
-  A list of edges which contains the `GermanWord` and cursor to aid in pagination.
-  """
-  edges: [GermanWordsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `GermanWord` you could get from the connection."""
-  totalCount: Int!
-}
-
-type GermanWord implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  word: String!
-
-  """Ranges from 0 to 1 (higher is more frequent)"""
-  frequency: Float!
-  length: Int
-  recommendedSkillLevelId: Int
-  createdAt: Datetime!
-
-  """
-  Reads a single `LanguageSkillLevel` that is related to this `GermanWord`.
-  """
-  recommendedSkillLevel: LanguageSkillLevel
-}
-
-"""A `GermanWord` edge in the connection."""
-type GermanWordsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `GermanWord` at the end of the edge."""
-  node: GermanWord
-}
-
-"""Methods to use when ordering `GermanWord`."""
-enum GermanWordsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  WORD_ASC
-  WORD_DESC
-  FREQUENCY_ASC
-  FREQUENCY_DESC
-  LENGTH_ASC
-  LENGTH_DESC
-  RECOMMENDED_SKILL_LEVEL_ID_ASC
-  RECOMMENDED_SKILL_LEVEL_ID_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `GermanWord` object types. All fields are tested
-for equality and combined with a logical ‘and.’
-"""
-input GermanWordCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `word` field."""
-  word: String
-
-  """Checks for equality with the object’s `frequency` field."""
-  frequency: Float
-
-  """Checks for equality with the object’s `length` field."""
-  length: Int
-
-  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: Int
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `GermanWord` object types. All fields are combined with a logical ‘and.’
-"""
-input GermanWordFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `word` field."""
-  word: StringFilter
-
-  """Filter by the object’s `frequency` field."""
-  frequency: FloatFilter
-
-  """Filter by the object’s `length` field."""
-  length: IntFilter
-
-  """Filter by the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: IntFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [GermanWordFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [GermanWordFilter!]
-
-  """Negates the expression."""
-  not: GermanWordFilter
-}
-
-"""A connection to a list of `EnglishRandomQuestion` values."""
-type EnglishRandomQuestionsConnection {
-  """A list of `EnglishRandomQuestion` objects."""
-  nodes: [EnglishRandomQuestion]!
-
-  """
-  A list of edges which contains the `EnglishRandomQuestion` and cursor to aid in pagination.
-  """
-  edges: [EnglishRandomQuestionsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `EnglishRandomQuestion` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-type EnglishRandomQuestion implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  question: String!
-  recommendedSkillLevelId: Int
-  createdAt: Datetime!
-
-  """
-  Reads a single `LanguageSkillLevel` that is related to this `EnglishRandomQuestion`.
-  """
-  recommendedSkillLevel: LanguageSkillLevel
-}
-
-"""A `EnglishRandomQuestion` edge in the connection."""
-type EnglishRandomQuestionsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `EnglishRandomQuestion` at the end of the edge."""
-  node: EnglishRandomQuestion
-}
-
-"""Methods to use when ordering `EnglishRandomQuestion`."""
-enum EnglishRandomQuestionsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  QUESTION_ASC
-  QUESTION_DESC
-  RECOMMENDED_SKILL_LEVEL_ID_ASC
-  RECOMMENDED_SKILL_LEVEL_ID_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `EnglishRandomQuestion` object types. All fields
-are tested for equality and combined with a logical ‘and.’
-"""
-input EnglishRandomQuestionCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `question` field."""
-  question: String
-
-  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: Int
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `EnglishRandomQuestion` object types. All fields are combined with a logical ‘and.’
-"""
-input EnglishRandomQuestionFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `question` field."""
-  question: StringFilter
-
-  """Filter by the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: IntFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [EnglishRandomQuestionFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [EnglishRandomQuestionFilter!]
-
-  """Negates the expression."""
-  not: EnglishRandomQuestionFilter
-}
-
-"""A connection to a list of `GermanRandomQuestion` values."""
-type GermanRandomQuestionsConnection {
-  """A list of `GermanRandomQuestion` objects."""
-  nodes: [GermanRandomQuestion]!
-
-  """
-  A list of edges which contains the `GermanRandomQuestion` and cursor to aid in pagination.
-  """
-  edges: [GermanRandomQuestionsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `GermanRandomQuestion` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-type GermanRandomQuestion implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  question: String!
-  recommendedSkillLevelId: Int
-  createdAt: Datetime!
-
-  """
-  Reads a single `LanguageSkillLevel` that is related to this `GermanRandomQuestion`.
-  """
-  recommendedSkillLevel: LanguageSkillLevel
-}
-
-"""A `GermanRandomQuestion` edge in the connection."""
-type GermanRandomQuestionsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `GermanRandomQuestion` at the end of the edge."""
-  node: GermanRandomQuestion
-}
-
-"""Methods to use when ordering `GermanRandomQuestion`."""
-enum GermanRandomQuestionsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  QUESTION_ASC
-  QUESTION_DESC
-  RECOMMENDED_SKILL_LEVEL_ID_ASC
-  RECOMMENDED_SKILL_LEVEL_ID_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `GermanRandomQuestion` object types. All fields
-are tested for equality and combined with a logical ‘and.’
-"""
-input GermanRandomQuestionCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `question` field."""
-  question: String
-
-  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: Int
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `GermanRandomQuestion` object types. All fields are combined with a logical ‘and.’
-"""
-input GermanRandomQuestionFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `question` field."""
-  question: StringFilter
-
-  """Filter by the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: IntFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [GermanRandomQuestionFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [GermanRandomQuestionFilter!]
-
-  """Negates the expression."""
-  not: GermanRandomQuestionFilter
-}
-
-"""A connection to a list of `EnglishWouldYouRatherQuestion` values."""
-type EnglishWouldYouRatherQuestionsConnection {
-  """A list of `EnglishWouldYouRatherQuestion` objects."""
-  nodes: [EnglishWouldYouRatherQuestion]!
-
-  """
-  A list of edges which contains the `EnglishWouldYouRatherQuestion` and cursor to aid in pagination.
-  """
-  edges: [EnglishWouldYouRatherQuestionsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `EnglishWouldYouRatherQuestion` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-type EnglishWouldYouRatherQuestion implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  question: String!
-  answers: [String]!
-  recommendedSkillLevelId: Int
-  createdAt: Datetime!
-
-  """
-  Reads a single `LanguageSkillLevel` that is related to this `EnglishWouldYouRatherQuestion`.
-  """
-  recommendedSkillLevel: LanguageSkillLevel
-}
-
-"""A `EnglishWouldYouRatherQuestion` edge in the connection."""
-type EnglishWouldYouRatherQuestionsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `EnglishWouldYouRatherQuestion` at the end of the edge."""
-  node: EnglishWouldYouRatherQuestion
-}
-
-"""Methods to use when ordering `EnglishWouldYouRatherQuestion`."""
-enum EnglishWouldYouRatherQuestionsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  QUESTION_ASC
-  QUESTION_DESC
-  ANSWERS_ASC
-  ANSWERS_DESC
-  RECOMMENDED_SKILL_LEVEL_ID_ASC
-  RECOMMENDED_SKILL_LEVEL_ID_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `EnglishWouldYouRatherQuestion` object types. All
-fields are tested for equality and combined with a logical ‘and.’
-"""
-input EnglishWouldYouRatherQuestionCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `question` field."""
-  question: String
-
-  """Checks for equality with the object’s `answers` field."""
-  answers: [String]
-
-  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: Int
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `EnglishWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’
-"""
-input EnglishWouldYouRatherQuestionFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `question` field."""
-  question: StringFilter
-
-  """Filter by the object’s `answers` field."""
-  answers: StringListFilter
-
-  """Filter by the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: IntFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [EnglishWouldYouRatherQuestionFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [EnglishWouldYouRatherQuestionFilter!]
-
-  """Negates the expression."""
-  not: EnglishWouldYouRatherQuestionFilter
-}
-
-"""
-A filter to be used against String List fields. All fields are combined with a logical ‘and.’
-"""
-input StringListFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: [String]
-
-  """Not equal to the specified value."""
-  notEqualTo: [String]
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: [String]
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: [String]
-
-  """Less than the specified value."""
-  lessThan: [String]
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: [String]
-
-  """Greater than the specified value."""
-  greaterThan: [String]
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: [String]
-
-  """Contains the specified list of values."""
-  contains: [String]
-
-  """Contained by the specified list of values."""
-  containedBy: [String]
-
-  """Overlaps the specified list of values."""
-  overlaps: [String]
-
-  """Any array item is equal to the specified value."""
-  anyEqualTo: String
-
-  """Any array item is not equal to the specified value."""
-  anyNotEqualTo: String
-
-  """Any array item is less than the specified value."""
-  anyLessThan: String
-
-  """Any array item is less than or equal to the specified value."""
-  anyLessThanOrEqualTo: String
-
-  """Any array item is greater than the specified value."""
-  anyGreaterThan: String
-
-  """Any array item is greater than or equal to the specified value."""
-  anyGreaterThanOrEqualTo: String
-}
-
-"""A connection to a list of `GermanWouldYouRatherQuestion` values."""
-type GermanWouldYouRatherQuestionsConnection {
-  """A list of `GermanWouldYouRatherQuestion` objects."""
-  nodes: [GermanWouldYouRatherQuestion]!
-
-  """
-  A list of edges which contains the `GermanWouldYouRatherQuestion` and cursor to aid in pagination.
-  """
-  edges: [GermanWouldYouRatherQuestionsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `GermanWouldYouRatherQuestion` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-type GermanWouldYouRatherQuestion implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  question: String!
-  answers: [String]!
-  recommendedSkillLevelId: Int
-  createdAt: Datetime!
-
-  """
-  Reads a single `LanguageSkillLevel` that is related to this `GermanWouldYouRatherQuestion`.
-  """
-  recommendedSkillLevel: LanguageSkillLevel
-}
-
-"""A `GermanWouldYouRatherQuestion` edge in the connection."""
-type GermanWouldYouRatherQuestionsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `GermanWouldYouRatherQuestion` at the end of the edge."""
-  node: GermanWouldYouRatherQuestion
-}
-
-"""Methods to use when ordering `GermanWouldYouRatherQuestion`."""
-enum GermanWouldYouRatherQuestionsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  QUESTION_ASC
-  QUESTION_DESC
-  ANSWERS_ASC
-  ANSWERS_DESC
-  RECOMMENDED_SKILL_LEVEL_ID_ASC
-  RECOMMENDED_SKILL_LEVEL_ID_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `GermanWouldYouRatherQuestion` object types. All
-fields are tested for equality and combined with a logical ‘and.’
-"""
-input GermanWouldYouRatherQuestionCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `question` field."""
-  question: String
-
-  """Checks for equality with the object’s `answers` field."""
-  answers: [String]
-
-  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: Int
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `GermanWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’
-"""
-input GermanWouldYouRatherQuestionFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `question` field."""
-  question: StringFilter
-
-  """Filter by the object’s `answers` field."""
-  answers: StringListFilter
-
-  """Filter by the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: IntFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [GermanWouldYouRatherQuestionFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [GermanWouldYouRatherQuestionFilter!]
-
-  """Negates the expression."""
-  not: GermanWouldYouRatherQuestionFilter
-}
-
-"""A connection to a list of `ChineseRandomQuestion` values."""
-type ChineseRandomQuestionsConnection {
-  """A list of `ChineseRandomQuestion` objects."""
-  nodes: [ChineseRandomQuestion]!
-
-  """
-  A list of edges which contains the `ChineseRandomQuestion` and cursor to aid in pagination.
-  """
-  edges: [ChineseRandomQuestionsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `ChineseRandomQuestion` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-type ChineseRandomQuestion implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  question: String!
-  recommendedSkillLevelId: Int
-  createdAt: Datetime!
-
-  """
-  Reads a single `LanguageSkillLevel` that is related to this `ChineseRandomQuestion`.
-  """
-  recommendedSkillLevel: LanguageSkillLevel
-}
-
-"""A `ChineseRandomQuestion` edge in the connection."""
-type ChineseRandomQuestionsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `ChineseRandomQuestion` at the end of the edge."""
-  node: ChineseRandomQuestion
-}
-
-"""Methods to use when ordering `ChineseRandomQuestion`."""
-enum ChineseRandomQuestionsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  QUESTION_ASC
-  QUESTION_DESC
-  RECOMMENDED_SKILL_LEVEL_ID_ASC
-  RECOMMENDED_SKILL_LEVEL_ID_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `ChineseRandomQuestion` object types. All fields
-are tested for equality and combined with a logical ‘and.’
-"""
-input ChineseRandomQuestionCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `question` field."""
-  question: String
-
-  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: Int
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `ChineseRandomQuestion` object types. All fields are combined with a logical ‘and.’
-"""
-input ChineseRandomQuestionFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `question` field."""
-  question: StringFilter
-
-  """Filter by the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: IntFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [ChineseRandomQuestionFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [ChineseRandomQuestionFilter!]
-
-  """Negates the expression."""
-  not: ChineseRandomQuestionFilter
-}
-
-"""A connection to a list of `ChineseWouldYouRatherQuestion` values."""
-type ChineseWouldYouRatherQuestionsConnection {
-  """A list of `ChineseWouldYouRatherQuestion` objects."""
-  nodes: [ChineseWouldYouRatherQuestion]!
-
-  """
-  A list of edges which contains the `ChineseWouldYouRatherQuestion` and cursor to aid in pagination.
-  """
-  edges: [ChineseWouldYouRatherQuestionsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `ChineseWouldYouRatherQuestion` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-type ChineseWouldYouRatherQuestion implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  question: String!
-  answers: [String]!
-  recommendedSkillLevelId: Int
-  createdAt: Datetime!
-
-  """
-  Reads a single `LanguageSkillLevel` that is related to this `ChineseWouldYouRatherQuestion`.
-  """
-  recommendedSkillLevel: LanguageSkillLevel
-}
-
-"""A `ChineseWouldYouRatherQuestion` edge in the connection."""
-type ChineseWouldYouRatherQuestionsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `ChineseWouldYouRatherQuestion` at the end of the edge."""
-  node: ChineseWouldYouRatherQuestion
-}
-
-"""Methods to use when ordering `ChineseWouldYouRatherQuestion`."""
-enum ChineseWouldYouRatherQuestionsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  QUESTION_ASC
-  QUESTION_DESC
-  ANSWERS_ASC
-  ANSWERS_DESC
-  RECOMMENDED_SKILL_LEVEL_ID_ASC
-  RECOMMENDED_SKILL_LEVEL_ID_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `ChineseWouldYouRatherQuestion` object types. All
-fields are tested for equality and combined with a logical ‘and.’
-"""
-input ChineseWouldYouRatherQuestionCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `question` field."""
-  question: String
-
-  """Checks for equality with the object’s `answers` field."""
-  answers: [String]
-
-  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: Int
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `ChineseWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’
-"""
-input ChineseWouldYouRatherQuestionFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `question` field."""
-  question: StringFilter
-
-  """Filter by the object’s `answers` field."""
-  answers: StringListFilter
-
-  """Filter by the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: IntFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [ChineseWouldYouRatherQuestionFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [ChineseWouldYouRatherQuestionFilter!]
-
-  """Negates the expression."""
-  not: ChineseWouldYouRatherQuestionFilter
-}
-
-"""A connection to a list of `ChineseGuessCharacterQuestion` values."""
-type ChineseGuessCharacterQuestionsConnection {
-  """A list of `ChineseGuessCharacterQuestion` objects."""
-  nodes: [ChineseGuessCharacterQuestion]!
-
-  """
-  A list of edges which contains the `ChineseGuessCharacterQuestion` and cursor to aid in pagination.
-  """
-  edges: [ChineseGuessCharacterQuestionsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `ChineseGuessCharacterQuestion` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-type ChineseGuessCharacterQuestion implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  character: String!
-  hint: String!
-  recommendedSkillLevelId: Int
-  createdAt: Datetime!
-
-  """
-  Reads a single `LanguageSkillLevel` that is related to this `ChineseGuessCharacterQuestion`.
-  """
-  recommendedSkillLevel: LanguageSkillLevel
-}
-
-"""A `ChineseGuessCharacterQuestion` edge in the connection."""
-type ChineseGuessCharacterQuestionsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `ChineseGuessCharacterQuestion` at the end of the edge."""
-  node: ChineseGuessCharacterQuestion
-}
-
-"""Methods to use when ordering `ChineseGuessCharacterQuestion`."""
-enum ChineseGuessCharacterQuestionsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  UUID_ASC
-  UUID_DESC
-  CHARACTER_ASC
-  CHARACTER_DESC
-  HINT_ASC
-  HINT_DESC
-  RECOMMENDED_SKILL_LEVEL_ID_ASC
-  RECOMMENDED_SKILL_LEVEL_ID_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `ChineseGuessCharacterQuestion` object types. All
-fields are tested for equality and combined with a logical ‘and.’
-"""
-input ChineseGuessCharacterQuestionCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `uuid` field."""
-  uuid: UUID
-
-  """Checks for equality with the object’s `character` field."""
-  character: String
-
-  """Checks for equality with the object’s `hint` field."""
-  hint: String
-
-  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: Int
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `ChineseGuessCharacterQuestion` object types. All fields are combined with a logical ‘and.’
-"""
-input ChineseGuessCharacterQuestionFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `uuid` field."""
-  uuid: UUIDFilter
-
-  """Filter by the object’s `character` field."""
-  character: StringFilter
-
-  """Filter by the object’s `hint` field."""
-  hint: StringFilter
-
-  """Filter by the object’s `recommendedSkillLevelId` field."""
-  recommendedSkillLevelId: IntFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [ChineseGuessCharacterQuestionFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [ChineseGuessCharacterQuestionFilter!]
-
-  """Negates the expression."""
-  not: ChineseGuessCharacterQuestionFilter
-}
-
-"""A connection to a list of `Prompt` values."""
-type PromptsConnection {
-  """A list of `Prompt` objects."""
-  nodes: [Prompt]!
-
   """
-  A list of edges which contains the `Prompt` and cursor to aid in pagination.
+  Reads a single `Post` that is related to this `InAppNotificationMetadatum`.
   """
-  edges: [PromptsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Prompt` you could get from the connection."""
-  totalCount: Int!
-}
+  post: Post
 
-type Prompt implements Node {
   """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  Reads a single `User` that is related to this `InAppNotificationMetadatum`.
   """
-  nodeId: ID!
-  id: Int!
-  uuid: UUID!
-  languageId: Int!
-  recommendedSkillLevelId: Int
-  type: PromptType!
-  contentEn: String
-  contentDe: String
-  contentZh: String
-  createdAt: Datetime!
-  contentEs: String
-  contentFr: String
-  contentPt: String
-  contentRu: String
-  contentJa: String
-  contentKo: String
-  contentIt: String
-
-  """Reads a single `Language` that is related to this `Prompt`."""
-  language: Language
-
-  """Reads a single `LanguageSkillLevel` that is related to this `Prompt`."""
-  recommendedSkillLevel: LanguageSkillLevel
-
-  """Reads and enables pagination through a set of `Post`."""
-  posts(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Post`."""
-    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+  user: User
 
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PostCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PostFilter
-  ): PostsConnection!
-  content: String
-
-  """Reads and enables pagination through a set of `User`."""
-  usersByPostPromptIdAndAuthorId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `User`."""
-    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: UserCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: UserFilter
-  ): PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection!
-
-  """Reads and enables pagination through a set of `Post`."""
-  postsByPostPromptIdAndParentPostId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Post`."""
-    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PostCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PostFilter
-  ): PromptPostsByPostPromptIdAndParentPostIdManyToManyConnection!
-
-  """Reads and enables pagination through a set of `Language`."""
-  languagesByPostPromptIdAndLanguageId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Language`."""
-    orderBy: [LanguagesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: LanguageCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: LanguageFilter
-  ): PromptLanguagesByPostPromptIdAndLanguageIdManyToManyConnection!
-}
-
-enum PromptType {
-  QUESTION
-  WORD
-}
-
-"""A connection to a list of `Post` values."""
-type PostsConnection {
-  """A list of `Post` objects."""
-  nodes: [Post]!
-
   """
-  A list of edges which contains the `Post` and cursor to aid in pagination.
+  Reads a single `Notification` that is related to this `InAppNotificationMetadatum`.
   """
-  edges: [PostsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Post` you could get from the connection."""
-  totalCount: Int!
+  notification: Notification
 }
 
 type Post implements Node {
@@ -9795,6 +8159,42 @@ type Post implements Node {
     """
     filter: PostUserMentionFilter
   ): PostUserMentionsConnection!
+
+  """
+  Reads and enables pagination through a set of `InAppNotificationMetadatum`.
+  """
+  relatedInAppNotifications(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `InAppNotificationMetadatum`."""
+    orderBy: [InAppNotificationMetadataOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: InAppNotificationMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: InAppNotificationMetadatumFilter
+  ): InAppNotificationMetadataConnection!
 
   """Reads and enables pagination through a set of `User`."""
   usersByPostParentPostIdAndAuthorId(
@@ -10033,6 +8433,40 @@ type Post implements Node {
     """
     filter: UserFilter
   ): PostUsersByPostUserMentionPostIdAndUserIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByInAppNotificationMetadatumPostIdAndUserId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyConnection!
 }
 
 """
@@ -10041,6 +8475,203 @@ max value for a JavaScript number. Therefore all big integers will be output as
 strings and not numbers.
 """
 scalar BigInt
+
+type Prompt implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  languageId: Int!
+  recommendedSkillLevelId: Int
+  type: PromptType!
+  contentEn: String
+  contentDe: String
+  contentZh: String
+  createdAt: Datetime!
+  contentEs: String
+  contentFr: String
+  contentPt: String
+  contentRu: String
+  contentJa: String
+  contentKo: String
+  contentIt: String
+
+  """Reads a single `Language` that is related to this `Prompt`."""
+  language: Language
+
+  """Reads a single `LanguageSkillLevel` that is related to this `Prompt`."""
+  recommendedSkillLevel: LanguageSkillLevel
+
+  """Reads and enables pagination through a set of `Post`."""
+  posts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+  content: String
+
+  """Reads and enables pagination through a set of `User`."""
+  usersByPostPromptIdAndAuthorId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+  ): PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Post`."""
+  postsByPostPromptIdAndParentPostId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PromptPostsByPostPromptIdAndParentPostIdManyToManyConnection!
+
+  """Reads and enables pagination through a set of `Language`."""
+  languagesByPostPromptIdAndLanguageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Language`."""
+    orderBy: [LanguagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: LanguageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: LanguageFilter
+  ): PromptLanguagesByPostPromptIdAndLanguageIdManyToManyConnection!
+}
+
+enum PromptType {
+  QUESTION
+  WORD
+}
+
+"""A connection to a list of `Post` values."""
+type PostsConnection {
+  """A list of `Post` objects."""
+  nodes: [Post]!
+
+  """
+  A list of edges which contains the `Post` and cursor to aid in pagination.
+  """
+  edges: [PostsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Post` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Post` edge in the connection."""
+type PostsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Post` at the end of the edge."""
+  node: Post
+}
 
 """Methods to use when ordering `Post`."""
 enum PostsOrderBy {
@@ -10180,6 +8811,245 @@ input BigIntFilter {
 
   """Greater than or equal to the specified value."""
   greaterThanOrEqualTo: BigInt
+}
+
+"""A connection to a list of `User` values, with data from `Post`."""
+type PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Post`."""
+type PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Post`."""
+  authoredPosts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""A connection to a list of `Post` values, with data from `Post`."""
+type PromptPostsByPostPromptIdAndParentPostIdManyToManyConnection {
+  """A list of `Post` objects."""
+  nodes: [Post]!
+
+  """
+  A list of edges which contains the `Post`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Post` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Post` edge in the connection, with data from `Post`."""
+type PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Post` at the end of the edge."""
+  node: Post
+
+  """Reads and enables pagination through a set of `Post`."""
+  replies(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""A connection to a list of `Language` values, with data from `Post`."""
+type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyConnection {
+  """A list of `Language` objects."""
+  nodes: [Language]!
+
+  """
+  A list of edges which contains the `Language`, info from the `Post`, and the cursor to aid in pagination.
+  """
+  edges: [PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Language` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Language` edge in the connection, with data from `Post`."""
+type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Language` at the end of the edge."""
+  node: Language
+
+  """Reads and enables pagination through a set of `Post`."""
+  posts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Post`."""
+    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PostCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PostFilter
+  ): PostsConnection!
+}
+
+"""Methods to use when ordering `Language`."""
+enum LanguagesOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  ALPHA2_ASC
+  ALPHA2_DESC
+  ENGLISH_NAME_ASC
+  ENGLISH_NAME_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Language` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input LanguageCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `alpha2` field."""
+  alpha2: String
+
+  """Checks for equality with the object’s `englishName` field."""
+  englishName: String
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `Language` object types. All fields are combined with a logical ‘and.’
+"""
+input LanguageFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `alpha2` field."""
+  alpha2: StringFilter
+
+  """Filter by the object’s `englishName` field."""
+  englishName: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [LanguageFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [LanguageFilter!]
+
+  """Negates the expression."""
+  not: LanguageFilter
 }
 
 """A connection to a list of `PostLike` values."""
@@ -11885,6 +10755,91 @@ input PostUserMentionFilter {
   not: PostUserMentionFilter
 }
 
+"""A connection to a list of `InAppNotificationMetadatum` values."""
+type InAppNotificationMetadataConnection {
+  """A list of `InAppNotificationMetadatum` objects."""
+  nodes: [InAppNotificationMetadatum]!
+
+  """
+  A list of edges which contains the `InAppNotificationMetadatum` and cursor to aid in pagination.
+  """
+  edges: [InAppNotificationMetadataEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `InAppNotificationMetadatum` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""A `InAppNotificationMetadatum` edge in the connection."""
+type InAppNotificationMetadataEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `InAppNotificationMetadatum` at the end of the edge."""
+  node: InAppNotificationMetadatum
+}
+
+"""Methods to use when ordering `InAppNotificationMetadatum`."""
+enum InAppNotificationMetadataOrderBy {
+  NATURAL
+  NOTIFICATION_ID_ASC
+  NOTIFICATION_ID_DESC
+  RECIPIENT_ID_ASC
+  RECIPIENT_ID_DESC
+  POST_ID_ASC
+  POST_ID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+}
+
+"""
+A condition to be used against `InAppNotificationMetadatum` object types. All
+fields are tested for equality and combined with a logical ‘and.’
+"""
+input InAppNotificationMetadatumCondition {
+  """Checks for equality with the object’s `notificationId` field."""
+  notificationId: Int
+
+  """Checks for equality with the object’s `recipientId` field."""
+  recipientId: Int
+
+  """Checks for equality with the object’s `postId` field."""
+  postId: Int
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+}
+
+"""
+A filter to be used against `InAppNotificationMetadatum` object types. All fields are combined with a logical ‘and.’
+"""
+input InAppNotificationMetadatumFilter {
+  """Filter by the object’s `notificationId` field."""
+  notificationId: IntFilter
+
+  """Filter by the object’s `recipientId` field."""
+  recipientId: IntFilter
+
+  """Filter by the object’s `postId` field."""
+  postId: IntFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Checks for all expressions in this list."""
+  and: [InAppNotificationMetadatumFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [InAppNotificationMetadatumFilter!]
+
+  """Negates the expression."""
+  not: InAppNotificationMetadatumFilter
+}
+
 """A connection to a list of `User` values, with data from `Post`."""
 type PostUsersByPostParentPostIdAndAuthorIdManyToManyConnection {
   """A list of `User` objects."""
@@ -12003,65 +10958,6 @@ type PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdge {
     """
     filter: PostFilter
   ): PostsConnection!
-}
-
-"""Methods to use when ordering `Language`."""
-enum LanguagesOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  ALPHA2_ASC
-  ALPHA2_DESC
-  ENGLISH_NAME_ASC
-  ENGLISH_NAME_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `Language` object types. All fields are tested
-for equality and combined with a logical ‘and.’
-"""
-input LanguageCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: Int
-
-  """Checks for equality with the object’s `alpha2` field."""
-  alpha2: String
-
-  """Checks for equality with the object’s `englishName` field."""
-  englishName: String
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-}
-
-"""
-A filter to be used against `Language` object types. All fields are combined with a logical ‘and.’
-"""
-input LanguageFilter {
-  """Filter by the object’s `id` field."""
-  id: IntFilter
-
-  """Filter by the object’s `alpha2` field."""
-  alpha2: StringFilter
-
-  """Filter by the object’s `englishName` field."""
-  englishName: StringFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Checks for all expressions in this list."""
-  and: [LanguageFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [LanguageFilter!]
-
-  """Negates the expression."""
-  not: LanguageFilter
 }
 
 """A connection to a list of `Prompt` values, with data from `Post`."""
@@ -12569,24 +11465,17 @@ type PostUsersByPostUserMentionPostIdAndUserIdManyToManyEdge {
   ): PostUserMentionsConnection!
 }
 
-"""A `Post` edge in the connection."""
-type PostsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Post` at the end of the edge."""
-  node: Post
-}
-
-"""A connection to a list of `User` values, with data from `Post`."""
-type PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection {
+"""
+A connection to a list of `User` values, with data from `InAppNotificationMetadatum`.
+"""
+type PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyConnection {
   """A list of `User` objects."""
   nodes: [User]!
 
   """
-  A list of edges which contains the `User`, info from the `Post`, and the cursor to aid in pagination.
+  A list of edges which contains the `User`, info from the `InAppNotificationMetadatum`, and the cursor to aid in pagination.
   """
-  edges: [PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge!]!
+  edges: [PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyEdge!]!
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
@@ -12595,16 +11484,20 @@ type PromptUsersByPostPromptIdAndAuthorIdManyToManyConnection {
   totalCount: Int!
 }
 
-"""A `User` edge in the connection, with data from `Post`."""
-type PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge {
+"""
+A `User` edge in the connection, with data from `InAppNotificationMetadatum`.
+"""
+type PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyEdge {
   """A cursor for use in pagination."""
   cursor: Cursor
 
   """The `User` at the end of the edge."""
   node: User
 
-  """Reads and enables pagination through a set of `Post`."""
-  authoredPosts(
+  """
+  Reads and enables pagination through a set of `InAppNotificationMetadatum`.
+  """
+  relatedInAppNotifications(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -12623,48 +11516,57 @@ type PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `Post`."""
-    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+    """The method to use when ordering `InAppNotificationMetadatum`."""
+    orderBy: [InAppNotificationMetadataOrderBy!] = [NATURAL]
 
     """
     A condition to be used in determining which values should be returned by the collection.
     """
-    condition: PostCondition
+    condition: InAppNotificationMetadatumCondition
 
     """
     A filter to be used in determining which values should be returned by the collection.
     """
-    filter: PostFilter
-  ): PostsConnection!
+    filter: InAppNotificationMetadatumFilter
+  ): InAppNotificationMetadataConnection!
 }
 
-"""A connection to a list of `Post` values, with data from `Post`."""
-type PromptPostsByPostPromptIdAndParentPostIdManyToManyConnection {
-  """A list of `Post` objects."""
-  nodes: [Post]!
+"""A `Notification` edge in the connection."""
+type NotificationsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Notification` at the end of the edge."""
+  node: Notification
+}
+
+"""A connection to a list of `User` values, with data from `GroupUser`."""
+type GroupUsersByGroupUserGroupIdAndUserIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
 
   """
-  A list of edges which contains the `Post`, info from the `Post`, and the cursor to aid in pagination.
+  A list of edges which contains the `User`, info from the `GroupUser`, and the cursor to aid in pagination.
   """
-  edges: [PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge!]!
+  edges: [GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge!]!
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  """The count of *all* `Post` you could get from the connection."""
+  """The count of *all* `User` you could get from the connection."""
   totalCount: Int!
 }
 
-"""A `Post` edge in the connection, with data from `Post`."""
-type PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge {
+"""A `User` edge in the connection, with data from `GroupUser`."""
+type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge {
   """A cursor for use in pagination."""
   cursor: Cursor
 
-  """The `Post` at the end of the edge."""
-  node: Post
+  """The `User` at the end of the edge."""
+  node: User
 
-  """Reads and enables pagination through a set of `Post`."""
-  replies(
+  """Reads and enables pagination through a set of `GroupUser`."""
+  groupUsers(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -12683,48 +11585,48 @@ type PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `Post`."""
-    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+    """The method to use when ordering `GroupUser`."""
+    orderBy: [GroupUsersOrderBy!] = [PRIMARY_KEY_ASC]
 
     """
     A condition to be used in determining which values should be returned by the collection.
     """
-    condition: PostCondition
+    condition: GroupUserCondition
 
     """
     A filter to be used in determining which values should be returned by the collection.
     """
-    filter: PostFilter
-  ): PostsConnection!
+    filter: GroupUserFilter
+  ): GroupUsersConnection!
 }
 
-"""A connection to a list of `Language` values, with data from `Post`."""
-type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyConnection {
-  """A list of `Language` objects."""
-  nodes: [Language]!
+"""A connection to a list of `User` values, with data from `Message`."""
+type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
 
   """
-  A list of edges which contains the `Language`, info from the `Post`, and the cursor to aid in pagination.
+  A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination.
   """
-  edges: [PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge!]!
+  edges: [GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdge!]!
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  """The count of *all* `Language` you could get from the connection."""
+  """The count of *all* `User` you could get from the connection."""
   totalCount: Int!
 }
 
-"""A `Language` edge in the connection, with data from `Post`."""
-type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge {
+"""A `User` edge in the connection, with data from `Message`."""
+type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdge {
   """A cursor for use in pagination."""
   cursor: Cursor
 
-  """The `Language` at the end of the edge."""
-  node: Language
+  """The `User` at the end of the edge."""
+  node: User
 
-  """Reads and enables pagination through a set of `Post`."""
-  posts(
+  """Reads and enables pagination through a set of `Message`."""
+  messagesBySenderId(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -12743,19 +11645,1537 @@ type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `Post`."""
-    orderBy: [PostsOrderBy!] = [PRIMARY_KEY_ASC]
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
 
     """
     A condition to be used in determining which values should be returned by the collection.
     """
-    condition: PostCondition
+    condition: MessageCondition
 
     """
     A filter to be used in determining which values should be returned by the collection.
     """
-    filter: PostFilter
-  ): PostsConnection!
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""A connection to a list of `User` values, with data from `Message`."""
+type GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Message`."""
+type GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""A connection to a list of `Message` values, with data from `Message`."""
+type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyConnection {
+  """A list of `Message` objects."""
+  nodes: [Message]!
+
+  """
+  A list of edges which contains the `Message`, info from the `Message`, and the cursor to aid in pagination.
+  """
+  edges: [GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Message` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Message` edge in the connection, with data from `Message`."""
+type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Message` at the end of the edge."""
+  node: Message
+
+  """Reads and enables pagination through a set of `Message`."""
+  messagesByParentMessageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Message`."""
+    orderBy: [MessagesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: MessageCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: MessageFilter
+  ): MessagesConnection!
+}
+
+"""
+A connection to a list of `User` values, with data from `Notification`.
+"""
+type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyConnection {
+  """A list of `User` objects."""
+  nodes: [User]!
+
+  """
+  A list of edges which contains the `User`, info from the `Notification`, and the cursor to aid in pagination.
+  """
+  edges: [GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection, with data from `Notification`."""
+type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User
+
+  """Reads and enables pagination through a set of `Notification`."""
+  notificationsByRecipientId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
+}
+
+"""
+A connection to a list of `NotificationChannel` values, with data from `Notification`.
+"""
+type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyConnection {
+  """A list of `NotificationChannel` objects."""
+  nodes: [NotificationChannel]!
+
+  """
+  A list of edges which contains the `NotificationChannel`, info from the `Notification`, and the cursor to aid in pagination.
+  """
+  edges: [GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `NotificationChannel` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+A `NotificationChannel` edge in the connection, with data from `Notification`.
+"""
+type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `NotificationChannel` at the end of the edge."""
+  node: NotificationChannel
+
+  """Reads and enables pagination through a set of `Notification`."""
+  notificationsByChannelId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Notification`."""
+    orderBy: [NotificationsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NotificationCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NotificationFilter
+  ): NotificationsConnection!
+}
+
+"""Methods to use when ordering `NotificationChannel`."""
+enum NotificationChannelsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  NAME_ASC
+  NAME_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `NotificationChannel` object types. All fields
+are tested for equality and combined with a logical ‘and.’
+"""
+input NotificationChannelCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `NotificationChannel` object types. All fields are combined with a logical ‘and.’
+"""
+input NotificationChannelFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [NotificationChannelFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [NotificationChannelFilter!]
+
+  """Negates the expression."""
+  not: NotificationChannelFilter
+}
+
+"""A `Group` edge in the connection."""
+type GroupsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Group` at the end of the edge."""
+  node: Group
+}
+
+"""A connection to a list of `EnglishWord` values."""
+type EnglishWordsConnection {
+  """A list of `EnglishWord` objects."""
+  nodes: [EnglishWord]!
+
+  """
+  A list of edges which contains the `EnglishWord` and cursor to aid in pagination.
+  """
+  edges: [EnglishWordsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `EnglishWord` you could get from the connection."""
+  totalCount: Int!
+}
+
+type EnglishWord implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  word: String!
+
+  """Ranges from 0 to 1 (higher is more frequent)"""
+  frequency: Float!
+  length: Int
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `EnglishWord` edge in the connection."""
+type EnglishWordsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `EnglishWord` at the end of the edge."""
+  node: EnglishWord
+}
+
+"""Methods to use when ordering `EnglishWord`."""
+enum EnglishWordsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  WORD_ASC
+  WORD_DESC
+  FREQUENCY_ASC
+  FREQUENCY_DESC
+  LENGTH_ASC
+  LENGTH_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `EnglishWord` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input EnglishWordCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `word` field."""
+  word: String
+
+  """Checks for equality with the object’s `frequency` field."""
+  frequency: Float
+
+  """Checks for equality with the object’s `length` field."""
+  length: Int
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `EnglishWord` object types. All fields are combined with a logical ‘and.’
+"""
+input EnglishWordFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `word` field."""
+  word: StringFilter
+
+  """Filter by the object’s `frequency` field."""
+  frequency: FloatFilter
+
+  """Filter by the object’s `length` field."""
+  length: IntFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [EnglishWordFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [EnglishWordFilter!]
+
+  """Negates the expression."""
+  not: EnglishWordFilter
+}
+
+"""
+A filter to be used against Float fields. All fields are combined with a logical ‘and.’
+"""
+input FloatFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Float
+
+  """Not equal to the specified value."""
+  notEqualTo: Float
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Float
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Float
+
+  """Included in the specified list."""
+  in: [Float!]
+
+  """Not included in the specified list."""
+  notIn: [Float!]
+
+  """Less than the specified value."""
+  lessThan: Float
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Float
+
+  """Greater than the specified value."""
+  greaterThan: Float
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Float
+}
+
+"""A connection to a list of `GermanWord` values."""
+type GermanWordsConnection {
+  """A list of `GermanWord` objects."""
+  nodes: [GermanWord]!
+
+  """
+  A list of edges which contains the `GermanWord` and cursor to aid in pagination.
+  """
+  edges: [GermanWordsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `GermanWord` you could get from the connection."""
+  totalCount: Int!
+}
+
+type GermanWord implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  word: String!
+
+  """Ranges from 0 to 1 (higher is more frequent)"""
+  frequency: Float!
+  length: Int
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanWord`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `GermanWord` edge in the connection."""
+type GermanWordsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GermanWord` at the end of the edge."""
+  node: GermanWord
+}
+
+"""Methods to use when ordering `GermanWord`."""
+enum GermanWordsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  WORD_ASC
+  WORD_DESC
+  FREQUENCY_ASC
+  FREQUENCY_DESC
+  LENGTH_ASC
+  LENGTH_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `GermanWord` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input GermanWordCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `word` field."""
+  word: String
+
+  """Checks for equality with the object’s `frequency` field."""
+  frequency: Float
+
+  """Checks for equality with the object’s `length` field."""
+  length: Int
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `GermanWord` object types. All fields are combined with a logical ‘and.’
+"""
+input GermanWordFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `word` field."""
+  word: StringFilter
+
+  """Filter by the object’s `frequency` field."""
+  frequency: FloatFilter
+
+  """Filter by the object’s `length` field."""
+  length: IntFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [GermanWordFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GermanWordFilter!]
+
+  """Negates the expression."""
+  not: GermanWordFilter
+}
+
+"""A connection to a list of `EnglishRandomQuestion` values."""
+type EnglishRandomQuestionsConnection {
+  """A list of `EnglishRandomQuestion` objects."""
+  nodes: [EnglishRandomQuestion]!
+
+  """
+  A list of edges which contains the `EnglishRandomQuestion` and cursor to aid in pagination.
+  """
+  edges: [EnglishRandomQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `EnglishRandomQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type EnglishRandomQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  question: String!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `EnglishRandomQuestion` edge in the connection."""
+type EnglishRandomQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `EnglishRandomQuestion` at the end of the edge."""
+  node: EnglishRandomQuestion
+}
+
+"""Methods to use when ordering `EnglishRandomQuestion`."""
+enum EnglishRandomQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  QUESTION_ASC
+  QUESTION_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `EnglishRandomQuestion` object types. All fields
+are tested for equality and combined with a logical ‘and.’
+"""
+input EnglishRandomQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `question` field."""
+  question: String
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `EnglishRandomQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input EnglishRandomQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `question` field."""
+  question: StringFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [EnglishRandomQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [EnglishRandomQuestionFilter!]
+
+  """Negates the expression."""
+  not: EnglishRandomQuestionFilter
+}
+
+"""A connection to a list of `GermanRandomQuestion` values."""
+type GermanRandomQuestionsConnection {
+  """A list of `GermanRandomQuestion` objects."""
+  nodes: [GermanRandomQuestion]!
+
+  """
+  A list of edges which contains the `GermanRandomQuestion` and cursor to aid in pagination.
+  """
+  edges: [GermanRandomQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `GermanRandomQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type GermanRandomQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  question: String!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `GermanRandomQuestion` edge in the connection."""
+type GermanRandomQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GermanRandomQuestion` at the end of the edge."""
+  node: GermanRandomQuestion
+}
+
+"""Methods to use when ordering `GermanRandomQuestion`."""
+enum GermanRandomQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  QUESTION_ASC
+  QUESTION_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `GermanRandomQuestion` object types. All fields
+are tested for equality and combined with a logical ‘and.’
+"""
+input GermanRandomQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `question` field."""
+  question: String
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `GermanRandomQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input GermanRandomQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `question` field."""
+  question: StringFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [GermanRandomQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GermanRandomQuestionFilter!]
+
+  """Negates the expression."""
+  not: GermanRandomQuestionFilter
+}
+
+"""A connection to a list of `EnglishWouldYouRatherQuestion` values."""
+type EnglishWouldYouRatherQuestionsConnection {
+  """A list of `EnglishWouldYouRatherQuestion` objects."""
+  nodes: [EnglishWouldYouRatherQuestion]!
+
+  """
+  A list of edges which contains the `EnglishWouldYouRatherQuestion` and cursor to aid in pagination.
+  """
+  edges: [EnglishWouldYouRatherQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `EnglishWouldYouRatherQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type EnglishWouldYouRatherQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  question: String!
+  answers: [String]!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `EnglishWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `EnglishWouldYouRatherQuestion` edge in the connection."""
+type EnglishWouldYouRatherQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `EnglishWouldYouRatherQuestion` at the end of the edge."""
+  node: EnglishWouldYouRatherQuestion
+}
+
+"""Methods to use when ordering `EnglishWouldYouRatherQuestion`."""
+enum EnglishWouldYouRatherQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  QUESTION_ASC
+  QUESTION_DESC
+  ANSWERS_ASC
+  ANSWERS_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `EnglishWouldYouRatherQuestion` object types. All
+fields are tested for equality and combined with a logical ‘and.’
+"""
+input EnglishWouldYouRatherQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `question` field."""
+  question: String
+
+  """Checks for equality with the object’s `answers` field."""
+  answers: [String]
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `EnglishWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input EnglishWouldYouRatherQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `question` field."""
+  question: StringFilter
+
+  """Filter by the object’s `answers` field."""
+  answers: StringListFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [EnglishWouldYouRatherQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [EnglishWouldYouRatherQuestionFilter!]
+
+  """Negates the expression."""
+  not: EnglishWouldYouRatherQuestionFilter
+}
+
+"""
+A filter to be used against String List fields. All fields are combined with a logical ‘and.’
+"""
+input StringListFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: [String]
+
+  """Not equal to the specified value."""
+  notEqualTo: [String]
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: [String]
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: [String]
+
+  """Less than the specified value."""
+  lessThan: [String]
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: [String]
+
+  """Greater than the specified value."""
+  greaterThan: [String]
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: [String]
+
+  """Contains the specified list of values."""
+  contains: [String]
+
+  """Contained by the specified list of values."""
+  containedBy: [String]
+
+  """Overlaps the specified list of values."""
+  overlaps: [String]
+
+  """Any array item is equal to the specified value."""
+  anyEqualTo: String
+
+  """Any array item is not equal to the specified value."""
+  anyNotEqualTo: String
+
+  """Any array item is less than the specified value."""
+  anyLessThan: String
+
+  """Any array item is less than or equal to the specified value."""
+  anyLessThanOrEqualTo: String
+
+  """Any array item is greater than the specified value."""
+  anyGreaterThan: String
+
+  """Any array item is greater than or equal to the specified value."""
+  anyGreaterThanOrEqualTo: String
+}
+
+"""A connection to a list of `GermanWouldYouRatherQuestion` values."""
+type GermanWouldYouRatherQuestionsConnection {
+  """A list of `GermanWouldYouRatherQuestion` objects."""
+  nodes: [GermanWouldYouRatherQuestion]!
+
+  """
+  A list of edges which contains the `GermanWouldYouRatherQuestion` and cursor to aid in pagination.
+  """
+  edges: [GermanWouldYouRatherQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `GermanWouldYouRatherQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type GermanWouldYouRatherQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  question: String!
+  answers: [String]!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `GermanWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `GermanWouldYouRatherQuestion` edge in the connection."""
+type GermanWouldYouRatherQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GermanWouldYouRatherQuestion` at the end of the edge."""
+  node: GermanWouldYouRatherQuestion
+}
+
+"""Methods to use when ordering `GermanWouldYouRatherQuestion`."""
+enum GermanWouldYouRatherQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  QUESTION_ASC
+  QUESTION_DESC
+  ANSWERS_ASC
+  ANSWERS_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `GermanWouldYouRatherQuestion` object types. All
+fields are tested for equality and combined with a logical ‘and.’
+"""
+input GermanWouldYouRatherQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `question` field."""
+  question: String
+
+  """Checks for equality with the object’s `answers` field."""
+  answers: [String]
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `GermanWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input GermanWouldYouRatherQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `question` field."""
+  question: StringFilter
+
+  """Filter by the object’s `answers` field."""
+  answers: StringListFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [GermanWouldYouRatherQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GermanWouldYouRatherQuestionFilter!]
+
+  """Negates the expression."""
+  not: GermanWouldYouRatherQuestionFilter
+}
+
+"""A connection to a list of `ChineseRandomQuestion` values."""
+type ChineseRandomQuestionsConnection {
+  """A list of `ChineseRandomQuestion` objects."""
+  nodes: [ChineseRandomQuestion]!
+
+  """
+  A list of edges which contains the `ChineseRandomQuestion` and cursor to aid in pagination.
+  """
+  edges: [ChineseRandomQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `ChineseRandomQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type ChineseRandomQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  question: String!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseRandomQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `ChineseRandomQuestion` edge in the connection."""
+type ChineseRandomQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ChineseRandomQuestion` at the end of the edge."""
+  node: ChineseRandomQuestion
+}
+
+"""Methods to use when ordering `ChineseRandomQuestion`."""
+enum ChineseRandomQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  QUESTION_ASC
+  QUESTION_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `ChineseRandomQuestion` object types. All fields
+are tested for equality and combined with a logical ‘and.’
+"""
+input ChineseRandomQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `question` field."""
+  question: String
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `ChineseRandomQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input ChineseRandomQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `question` field."""
+  question: StringFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [ChineseRandomQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ChineseRandomQuestionFilter!]
+
+  """Negates the expression."""
+  not: ChineseRandomQuestionFilter
+}
+
+"""A connection to a list of `ChineseWouldYouRatherQuestion` values."""
+type ChineseWouldYouRatherQuestionsConnection {
+  """A list of `ChineseWouldYouRatherQuestion` objects."""
+  nodes: [ChineseWouldYouRatherQuestion]!
+
+  """
+  A list of edges which contains the `ChineseWouldYouRatherQuestion` and cursor to aid in pagination.
+  """
+  edges: [ChineseWouldYouRatherQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `ChineseWouldYouRatherQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type ChineseWouldYouRatherQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  question: String!
+  answers: [String]!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseWouldYouRatherQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `ChineseWouldYouRatherQuestion` edge in the connection."""
+type ChineseWouldYouRatherQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ChineseWouldYouRatherQuestion` at the end of the edge."""
+  node: ChineseWouldYouRatherQuestion
+}
+
+"""Methods to use when ordering `ChineseWouldYouRatherQuestion`."""
+enum ChineseWouldYouRatherQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  QUESTION_ASC
+  QUESTION_DESC
+  ANSWERS_ASC
+  ANSWERS_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `ChineseWouldYouRatherQuestion` object types. All
+fields are tested for equality and combined with a logical ‘and.’
+"""
+input ChineseWouldYouRatherQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `question` field."""
+  question: String
+
+  """Checks for equality with the object’s `answers` field."""
+  answers: [String]
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `ChineseWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input ChineseWouldYouRatherQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `question` field."""
+  question: StringFilter
+
+  """Filter by the object’s `answers` field."""
+  answers: StringListFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [ChineseWouldYouRatherQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ChineseWouldYouRatherQuestionFilter!]
+
+  """Negates the expression."""
+  not: ChineseWouldYouRatherQuestionFilter
+}
+
+"""A connection to a list of `ChineseGuessCharacterQuestion` values."""
+type ChineseGuessCharacterQuestionsConnection {
+  """A list of `ChineseGuessCharacterQuestion` objects."""
+  nodes: [ChineseGuessCharacterQuestion]!
+
+  """
+  A list of edges which contains the `ChineseGuessCharacterQuestion` and cursor to aid in pagination.
+  """
+  edges: [ChineseGuessCharacterQuestionsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `ChineseGuessCharacterQuestion` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type ChineseGuessCharacterQuestion implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  uuid: UUID!
+  character: String!
+  hint: String!
+  recommendedSkillLevelId: Int
+  createdAt: Datetime!
+
+  """
+  Reads a single `LanguageSkillLevel` that is related to this `ChineseGuessCharacterQuestion`.
+  """
+  recommendedSkillLevel: LanguageSkillLevel
+}
+
+"""A `ChineseGuessCharacterQuestion` edge in the connection."""
+type ChineseGuessCharacterQuestionsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ChineseGuessCharacterQuestion` at the end of the edge."""
+  node: ChineseGuessCharacterQuestion
+}
+
+"""Methods to use when ordering `ChineseGuessCharacterQuestion`."""
+enum ChineseGuessCharacterQuestionsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  UUID_ASC
+  UUID_DESC
+  CHARACTER_ASC
+  CHARACTER_DESC
+  HINT_ASC
+  HINT_DESC
+  RECOMMENDED_SKILL_LEVEL_ID_ASC
+  RECOMMENDED_SKILL_LEVEL_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `ChineseGuessCharacterQuestion` object types. All
+fields are tested for equality and combined with a logical ‘and.’
+"""
+input ChineseGuessCharacterQuestionCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `uuid` field."""
+  uuid: UUID
+
+  """Checks for equality with the object’s `character` field."""
+  character: String
+
+  """Checks for equality with the object’s `hint` field."""
+  hint: String
+
+  """Checks for equality with the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: Int
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `ChineseGuessCharacterQuestion` object types. All fields are combined with a logical ‘and.’
+"""
+input ChineseGuessCharacterQuestionFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `uuid` field."""
+  uuid: UUIDFilter
+
+  """Filter by the object’s `character` field."""
+  character: StringFilter
+
+  """Filter by the object’s `hint` field."""
+  hint: StringFilter
+
+  """Filter by the object’s `recommendedSkillLevelId` field."""
+  recommendedSkillLevelId: IntFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [ChineseGuessCharacterQuestionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ChineseGuessCharacterQuestionFilter!]
+
+  """Negates the expression."""
+  not: ChineseGuessCharacterQuestionFilter
+}
+
+"""A connection to a list of `Prompt` values."""
+type PromptsConnection {
+  """A list of `Prompt` objects."""
+  nodes: [Prompt]!
+
+  """
+  A list of edges which contains the `Prompt` and cursor to aid in pagination.
+  """
+  edges: [PromptsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Prompt` you could get from the connection."""
+  totalCount: Int!
 }
 
 """A `Prompt` edge in the connection."""
@@ -17742,6 +18162,72 @@ type UserPostsByPostUserMentionUserIdAndPostIdManyToManyEdge {
   ): PostUserMentionsConnection!
 }
 
+"""
+A connection to a list of `Post` values, with data from `InAppNotificationMetadatum`.
+"""
+type UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyConnection {
+  """A list of `Post` objects."""
+  nodes: [Post]!
+
+  """
+  A list of edges which contains the `Post`, info from the `InAppNotificationMetadatum`, and the cursor to aid in pagination.
+  """
+  edges: [UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Post` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""
+A `Post` edge in the connection, with data from `InAppNotificationMetadatum`.
+"""
+type UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Post` at the end of the edge."""
+  node: Post
+
+  """
+  Reads and enables pagination through a set of `InAppNotificationMetadatum`.
+  """
+  relatedInAppNotifications(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `InAppNotificationMetadatum`."""
+    orderBy: [InAppNotificationMetadataOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: InAppNotificationMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: InAppNotificationMetadatumFilter
+  ): InAppNotificationMetadataConnection!
+}
+
 """A `GroupUser` edge in the connection."""
 type GroupUsersEdge {
   """A cursor for use in pagination."""
@@ -17953,6 +18439,14 @@ type Mutation {
     """
     input: CreateChineseGuessCharacterQuestionInput!
   ): CreateChineseGuessCharacterQuestionPayload
+
+  """Creates a single `InAppNotificationMetadatum`."""
+  createInAppNotificationMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateInAppNotificationMetadatumInput!
+  ): CreateInAppNotificationMetadatumPayload
 
   """Creates a single `InviteToken`."""
   createInviteToken(
@@ -18415,6 +18909,16 @@ type Mutation {
     """
     input: UpdateChineseGuessCharacterQuestionByUuidInput!
   ): UpdateChineseGuessCharacterQuestionPayload
+
+  """
+  Updates a single `InAppNotificationMetadatum` using a unique key and a patch.
+  """
+  updateInAppNotificationMetadatumByNotificationId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateInAppNotificationMetadatumByNotificationIdInput!
+  ): UpdateInAppNotificationMetadatumPayload
 
   """
   Updates a single `InviteToken` using its globally unique id and a patch.
@@ -19838,6 +20342,14 @@ type Mutation {
     input: DeleteChineseGuessCharacterQuestionByUuidInput!
   ): DeleteChineseGuessCharacterQuestionPayload
 
+  """Deletes a single `InAppNotificationMetadatum` using a unique key."""
+  deleteInAppNotificationMetadatumByNotificationId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteInAppNotificationMetadatumByNotificationIdInput!
+  ): DeleteInAppNotificationMetadatumPayload
+
   """Deletes a single `InviteToken` using its globally unique id."""
   deleteInviteTokenByNodeId(
     """
@@ -21106,6 +21618,16 @@ type Mutation {
     input: UpsertChineseGuessCharacterQuestionInput!
   ): UpsertChineseGuessCharacterQuestionPayload
 
+  """Upserts a single `InAppNotificationMetadatum`."""
+  upsertInAppNotificationMetadatum(
+    where: UpsertInAppNotificationMetadatumWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertInAppNotificationMetadatumInput!
+  ): UpsertInAppNotificationMetadatumPayload
+
   """Upserts a single `InviteToken`."""
   upsertInviteToken(
     where: UpsertInviteTokenWhere
@@ -21750,6 +22272,64 @@ input ChineseGuessCharacterQuestionInput {
   hint: String!
   recommendedSkillLevelId: Int
   createdAt: Datetime
+}
+
+"""The output of our create `InAppNotificationMetadatum` mutation."""
+type CreateInAppNotificationMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `InAppNotificationMetadatum` that was created by this mutation."""
+  inAppNotificationMetadatum: InAppNotificationMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `Post` that is related to this `InAppNotificationMetadatum`.
+  """
+  post: Post
+
+  """
+  Reads a single `User` that is related to this `InAppNotificationMetadatum`.
+  """
+  user: User
+
+  """
+  Reads a single `Notification` that is related to this `InAppNotificationMetadatum`.
+  """
+  notification: Notification
+
+  """An edge for our `InAppNotificationMetadatum`. May be used by Relay 1."""
+  inAppNotificationMetadatumEdge(
+    """The method to use when ordering `InAppNotificationMetadatum`."""
+    orderBy: [InAppNotificationMetadataOrderBy!] = [NATURAL]
+  ): InAppNotificationMetadataEdge
+}
+
+"""All input for the create `InAppNotificationMetadatum` mutation."""
+input CreateInAppNotificationMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `InAppNotificationMetadatum` to be created by this mutation."""
+  inAppNotificationMetadatum: InAppNotificationMetadatumInput!
+}
+
+"""An input for mutations affecting `InAppNotificationMetadatum`"""
+input InAppNotificationMetadatumInput {
+  notificationId: Int
+  recipientId: Int
+  postId: Int
+  userId: Int
 }
 
 """The output of our create `InviteToken` mutation."""
@@ -24548,6 +25128,71 @@ input UpdateChineseGuessCharacterQuestionByUuidInput {
   """
   patch: ChineseGuessCharacterQuestionPatch!
   uuid: UUID!
+}
+
+"""The output of our update `InAppNotificationMetadatum` mutation."""
+type UpdateInAppNotificationMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `InAppNotificationMetadatum` that was updated by this mutation."""
+  inAppNotificationMetadatum: InAppNotificationMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `Post` that is related to this `InAppNotificationMetadatum`.
+  """
+  post: Post
+
+  """
+  Reads a single `User` that is related to this `InAppNotificationMetadatum`.
+  """
+  user: User
+
+  """
+  Reads a single `Notification` that is related to this `InAppNotificationMetadatum`.
+  """
+  notification: Notification
+
+  """An edge for our `InAppNotificationMetadatum`. May be used by Relay 1."""
+  inAppNotificationMetadatumEdge(
+    """The method to use when ordering `InAppNotificationMetadatum`."""
+    orderBy: [InAppNotificationMetadataOrderBy!] = [NATURAL]
+  ): InAppNotificationMetadataEdge
+}
+
+"""
+All input for the `updateInAppNotificationMetadatumByNotificationId` mutation.
+"""
+input UpdateInAppNotificationMetadatumByNotificationIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `InAppNotificationMetadatum` being updated.
+  """
+  patch: InAppNotificationMetadatumPatch!
+  notificationId: Int!
+}
+
+"""
+Represents an update to a `InAppNotificationMetadatum`. Fields that are set will be updated.
+"""
+input InAppNotificationMetadatumPatch {
+  notificationId: Int
+  recipientId: Int
+  postId: Int
+  userId: Int
 }
 
 """The output of our update `InviteToken` mutation."""
@@ -29247,6 +29892,57 @@ input DeleteChineseGuessCharacterQuestionByUuidInput {
   uuid: UUID!
 }
 
+"""The output of our delete `InAppNotificationMetadatum` mutation."""
+type DeleteInAppNotificationMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `InAppNotificationMetadatum` that was deleted by this mutation."""
+  inAppNotificationMetadatum: InAppNotificationMetadatum
+  deletedInAppNotificationMetadatumNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `Post` that is related to this `InAppNotificationMetadatum`.
+  """
+  post: Post
+
+  """
+  Reads a single `User` that is related to this `InAppNotificationMetadatum`.
+  """
+  user: User
+
+  """
+  Reads a single `Notification` that is related to this `InAppNotificationMetadatum`.
+  """
+  notification: Notification
+
+  """An edge for our `InAppNotificationMetadatum`. May be used by Relay 1."""
+  inAppNotificationMetadatumEdge(
+    """The method to use when ordering `InAppNotificationMetadatum`."""
+    orderBy: [InAppNotificationMetadataOrderBy!] = [NATURAL]
+  ): InAppNotificationMetadataEdge
+}
+
+"""
+All input for the `deleteInAppNotificationMetadatumByNotificationId` mutation.
+"""
+input DeleteInAppNotificationMetadatumByNotificationIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  notificationId: Int!
+}
+
 """The output of our delete `InviteToken` mutation."""
 type DeleteInviteTokenPayload {
   """
@@ -32647,6 +33343,59 @@ input UpsertChineseGuessCharacterQuestionInput {
 
   """The `ChineseGuessCharacterQuestion` to be upserted by this mutation."""
   chineseGuessCharacterQuestion: ChineseGuessCharacterQuestionInput!
+}
+
+"""The output of our upsert `InAppNotificationMetadatum` mutation."""
+type UpsertInAppNotificationMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `InAppNotificationMetadatum` that was upserted by this mutation."""
+  inAppNotificationMetadatum: InAppNotificationMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  Reads a single `Post` that is related to this `InAppNotificationMetadatum`.
+  """
+  post: Post
+
+  """
+  Reads a single `User` that is related to this `InAppNotificationMetadatum`.
+  """
+  user: User
+
+  """
+  Reads a single `Notification` that is related to this `InAppNotificationMetadatum`.
+  """
+  notification: Notification
+
+  """An edge for our `InAppNotificationMetadatum`. May be used by Relay 1."""
+  inAppNotificationMetadatumEdge(
+    """The method to use when ordering `InAppNotificationMetadatum`."""
+    orderBy: [InAppNotificationMetadataOrderBy!] = [NATURAL]
+  ): InAppNotificationMetadataEdge
+}
+
+"""Where conditions for the upsert `InAppNotificationMetadatum` mutation."""
+input UpsertInAppNotificationMetadatumWhere {
+  notificationId: Int
+}
+
+"""All input for the upsert `InAppNotificationMetadatum` mutation."""
+input UpsertInAppNotificationMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `InAppNotificationMetadatum` to be upserted by this mutation."""
+  inAppNotificationMetadatum: InAppNotificationMetadatumInput!
 }
 
 """The output of our upsert `InviteToken` mutation."""

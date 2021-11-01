@@ -40,7 +40,7 @@
     }
 </script>
 
-<div class="container max-w-4xl py-8">
+<div class="container max-w-4xl sm:py-8">
     {#if $inAppNotifications}
         {#each $inAppNotifications as notification (notification.uuid)}
             <div

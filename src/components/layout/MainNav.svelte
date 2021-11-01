@@ -136,7 +136,7 @@
     $: showSidebarMenuIcon = $currentPage === Page.Chat
 </script>
 
-<div class="nav-container">
+<div class="wrapper">
     <nav class="flex container mx-auto px-2">
         {#if $userHasCompletedProfile}
             <div class="hidden md:flex flex-grow-0 self-center">
@@ -729,10 +729,13 @@
 {/if}
 
 <style>
-    .nav-container {
+    .wrapper {
         @apply shadow-md;
         @apply bg-white;
-        @apply relative;
+        @apply sticky;
+        @apply top-0;
+        @apply left-0;
+        @apply right-0;
         @apply z-30;
 
         max-height: 58px;

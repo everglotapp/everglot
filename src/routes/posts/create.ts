@@ -37,7 +37,6 @@ import { NotificationParamsVersion } from "../../server/notifications/params"
 import {
     findPotentialUsernameMentions,
     getUserIdByUsername,
-    getUserUuidById,
     userHasCompletedProfile,
 } from "../../server/users"
 import {

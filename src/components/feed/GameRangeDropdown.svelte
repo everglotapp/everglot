@@ -110,6 +110,7 @@
         >
             <div
                 class="bg-white shadow-lg border border-gray-light rounded-lg z-20 flex flex-col items-center"
+                style="min-width: 148px;"
             >
                 {#if gameType === PostGameType.GuessCase}
                     {#each availableGuessCaseOptions as option}

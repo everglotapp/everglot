@@ -264,9 +264,8 @@
                                 on:keydown={() => (showGroupsDropdown = false)}
                             />
                             <div
-                                class="relative"
                                 aria-label={`Groups`}
-                                style="top: 100%; height: 0; width: 0;"
+                                class="groups-dropdown-wrapper"
                             >
                                 <div
                                     class="dropdown groups-dropdown"
@@ -355,6 +354,37 @@
                         >
                         <BellIcon size="24" />
                     </a>
+                    <button
+                        on:click={() =>
+                            (showSettingsDropdown = !showSettingsDropdown)}
+                        class="nav-item-with-icon justify-center cursor-pointer relative"
+                        id="settings-dropdown-clickaway"
+                    >
+                        {#if !$currentUserStore.fetching}
+                            <Avatar
+                                url={$currentUser
+                                    ? $currentUser.avatarUrl || ""
+                                    : ""}
+                                username={$currentUser
+                                    ? $currentUser.username || ""
+                                    : ""}
+                                uuid={$currentUser ? $currentUser.uuid : null}
+                                size={42}
+                            />
+                            {#if $joinedCallRoom}
+                                <MicIcon
+                                    size="18"
+                                    class="text-primary absolute mic-icon"
+                                    strokeWidth={3}
+                                />
+                            {/if}
+                        {:else}
+                            <div
+                                class="bg-gray-lightest"
+                                style="border-radius: 50%; width: 50px; height: 50px;"
+                            />
+                        {/if}</button
+                    >
                     {#if showSettingsDropdown}
                         <ClickAwayListener
                             elementId="settings-dropdown-clickaway"
@@ -370,7 +400,7 @@
                         >
                             <div
                                 class="dropdown settings-dropdown"
-                                style="top: 2px;"
+                                style="top: 2px; right: 4px; left: auto; min-width: 180px;"
                             >
                                 <div
                                     class="dropdown-inner settings-dropdown-inner"
@@ -608,37 +638,6 @@
                             </div>
                         </div>
                     {/if}
-                    <button
-                        on:click={() =>
-                            (showSettingsDropdown = !showSettingsDropdown)}
-                        class="nav-item-with-icon justify-center cursor-pointer relative"
-                        id="settings-dropdown-clickaway"
-                    >
-                        {#if !$currentUserStore.fetching}
-                            <Avatar
-                                url={$currentUser
-                                    ? $currentUser.avatarUrl || ""
-                                    : ""}
-                                username={$currentUser
-                                    ? $currentUser.username || ""
-                                    : ""}
-                                uuid={$currentUser ? $currentUser.uuid : null}
-                                size={42}
-                            />
-                            {#if $joinedCallRoom}
-                                <MicIcon
-                                    size="18"
-                                    class="text-primary absolute mic-icon"
-                                    strokeWidth={3}
-                                />
-                            {/if}
-                        {:else}
-                            <div
-                                class="bg-gray-lightest"
-                                style="border-radius: 50%; width: 50px; height: 50px;"
-                            />
-                        {/if}</button
-                    >
                 </div>
             </div>
         </div>
@@ -840,11 +839,10 @@
     }
 
     .dropdown > div {
-        @apply fixed;
+        @apply relative;
         @apply bg-white;
         @apply shadow-lg;
         @apply rounded-md;
-        @apply right-2;
 
         @screen md {
             right: unset;
@@ -857,6 +855,25 @@
 
     .dropdown-inner :global(a) {
         margin: 0;
+    }
+
+    .groups-dropdown-wrapper {
+        @apply absolute;
+        @apply w-full;
+        @apply flex;
+        @apply justify-center;
+        @apply left-0;
+        @apply right-0;
+
+        top: 100%;
+    }
+
+    .groups-dropdown {
+        @screen md {
+            min-width: 500px;
+            display: flex;
+            justify-content: flex-end;
+        }
     }
 
     .groups-dropdown-inner {

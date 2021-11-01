@@ -59,37 +59,18 @@
                         /></a
                     >
                     <div style="min-width: 200px; flex: 2;">
-                        <div class="flex flex-col font-bold items-start">
+                        <div class="flex flex-col font-bold items-center">
                             <a
                                 href={`/u/${notification.metadata.user.username}`}
                                 class="text-gray-bitdark mb-1"
                                 >{notification.metadata.user.displayName ||
                                     notification.metadata.user.username}</a
                             >
-                            <ButtonSmall
-                                tag="button"
-                                on:click={() =>
-                                    notification.metadata &&
-                                    notification.metadata.user &&
-                                    handleFollow(notification.metadata.user)}
-                                variant="OUTLINED"
-                                color={notification.metadata.user
-                                    .followedByCurrentUser
-                                    ? "SECONDARY"
-                                    : "PRIMARY"}
-                                className="flex items-center"
-                            >
-                                {#if notification.metadata.user.followedByCurrentUser}
-                                    <Localized id="user-unfollow" />
-                                {:else}
-                                    <Localized id="user-follow" />
-                                {/if}
-                            </ButtonSmall>
                         </div>
                     </div>
                 {/if}
                 <div
-                    class="font-bold text-gray px-8"
+                    class="font-bold text-gray sm:px-8"
                     style="min-width: 320px; flex: 4;"
                 >
                     {#if notification.type === InAppParamsTypeV1.PostReply}

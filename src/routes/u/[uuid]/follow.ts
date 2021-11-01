@@ -64,6 +64,7 @@ async function notifyFollowedUser(userFollower: { id: number }) {
                 },
                 data: {
                     type: FcmMessageParamsDataTypeV1.UserFollowership,
+                    followerUsername: username || "",
                 },
             },
             version: NotificationParamsVersion.V1,

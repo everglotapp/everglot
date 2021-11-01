@@ -107,11 +107,15 @@
 <LocaleProvider {preferredLocales}>
     <WebrtcProvider>
         <ChatProvider>
-            <div id="app" class:noscroll class:with-main-nav={showMainNav}>
+            <div
+                id="app"
+                class:noscroll
+                class:with-main-nav={showMainNav}
+                class="flex flex-col-reverse sm:flex-col"
+            >
                 {#if showMainNav}
                     <MainNav />
                 {/if}
-
                 <main>
                     {#key transitionId}
                         <div
@@ -138,6 +142,11 @@
         left: 0;
         right: 0;
         bottom: 0;
+        padding-bottom: 58px;
+
+        @screen sm {
+            padding-bottom: 0;
+        }
 
         @screen md {
             font-size: 18px;

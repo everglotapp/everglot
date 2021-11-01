@@ -13,6 +13,7 @@
     } from "svelte-feather-icons"
     import { ChatBot24 } from "carbon-icons-svelte"
     import { query } from "@urql/svelte"
+    import { createPopperActions } from "svelte-popperjs"
 
     import { Localized } from "@nubolab-ffwd/svelte-fluent"
 
@@ -134,9 +135,16 @@
     }
 
     $: showSidebarMenuIcon = $currentPage === Page.Chat
+
+    const [settingsDropdownPopperRef, settingsDropdownPopperContent] =
+        createPopperActions()
+    const settingsDropdownPopperOptions = {
+        placement: "top",
+        modifiers: [{ name: "offset", options: { offset: [0, 8] } }],
+    }
 </script>
 
-<div class="nav-container">
+<div class="wrapper">
     <nav class="flex container mx-auto px-2">
         {#if $userHasCompletedProfile}
             <div class="hidden md:flex flex-grow-0 self-center">
@@ -264,14 +272,10 @@
                                 on:keydown={() => (showGroupsDropdown = false)}
                             />
                             <div
-                                class="relative"
+                                class="dropdown-wrapper groups-dropdown-wrapper"
                                 aria-label={`Groups`}
-                                style="top: 100%; height: 0; width: 0;"
                             >
-                                <div
-                                    class="dropdown groups-dropdown"
-                                    style="top: 2px;"
-                                >
+                                <div class="dropdown groups-dropdown">
                                     <div
                                         class="dropdown-inner groups-dropdown-inner"
                                         in:scale={{ duration: 200, delay: 0 }}
@@ -355,6 +359,38 @@
                         >
                         <BellIcon size="24" />
                     </a>
+                    <button
+                        on:click={() =>
+                            (showSettingsDropdown = !showSettingsDropdown)}
+                        class="nav-item-with-icon justify-center cursor-pointer relative"
+                        id="settings-dropdown-clickaway"
+                        use:settingsDropdownPopperRef
+                    >
+                        {#if !$currentUserStore.fetching}
+                            <Avatar
+                                url={$currentUser
+                                    ? $currentUser.avatarUrl || ""
+                                    : ""}
+                                username={$currentUser
+                                    ? $currentUser.username || ""
+                                    : ""}
+                                uuid={$currentUser ? $currentUser.uuid : null}
+                                size={42}
+                            />
+                            {#if $joinedCallRoom}
+                                <MicIcon
+                                    size="18"
+                                    class="text-primary absolute mic-icon"
+                                    strokeWidth={3}
+                                />
+                            {/if}
+                        {:else}
+                            <div
+                                class="bg-gray-lightest"
+                                style="border-radius: 50%; width: 50px; height: 50px;"
+                            />
+                        {/if}</button
+                    >
                     {#if showSettingsDropdown}
                         <ClickAwayListener
                             elementId="settings-dropdown-clickaway"
@@ -364,14 +400,11 @@
                             on:keydown={() => (showSettingsDropdown = false)}
                         />
                         <div
-                            class="relative"
+                            class="dropdown-wrapper settings-dropdown-wrapper"
                             aria-label={`Settings`}
-                            style="top: 100%; height: 0; width: 0;"
+                            use:settingsDropdownPopperContent={settingsDropdownPopperOptions}
                         >
-                            <div
-                                class="dropdown settings-dropdown"
-                                style="top: 2px;"
-                            >
+                            <div class="dropdown settings-dropdown">
                                 <div
                                     class="dropdown-inner settings-dropdown-inner"
                                     in:scale={{ duration: 200, delay: 0 }}
@@ -608,37 +641,6 @@
                             </div>
                         </div>
                     {/if}
-                    <button
-                        on:click={() =>
-                            (showSettingsDropdown = !showSettingsDropdown)}
-                        class="nav-item-with-icon justify-center cursor-pointer relative"
-                        id="settings-dropdown-clickaway"
-                    >
-                        {#if !$currentUserStore.fetching}
-                            <Avatar
-                                url={$currentUser
-                                    ? $currentUser.avatarUrl || ""
-                                    : ""}
-                                username={$currentUser
-                                    ? $currentUser.username || ""
-                                    : ""}
-                                uuid={$currentUser ? $currentUser.uuid : null}
-                                size={42}
-                            />
-                            {#if $joinedCallRoom}
-                                <MicIcon
-                                    size="18"
-                                    class="text-primary absolute mic-icon"
-                                    strokeWidth={3}
-                                />
-                            {/if}
-                        {:else}
-                            <div
-                                class="bg-gray-lightest"
-                                style="border-radius: 50%; width: 50px; height: 50px;"
-                            />
-                        {/if}</button
-                    >
                 </div>
             </div>
         </div>
@@ -729,13 +731,25 @@
 {/if}
 
 <style>
-    .nav-container {
-        @apply shadow-md;
+    .wrapper {
         @apply bg-white;
-        @apply relative;
         @apply z-30;
+        @apply fixed;
+        @apply bottom-0;
+        @apply left-0;
+        @apply right-0;
 
         max-height: 58px;
+        box-shadow: -10px 15px 3px rgba(0, 0, 0, 0.1),
+            4px -6px 2px rgba(0, 0, 0, 0.05);
+
+        @screen sm {
+            @apply relative;
+            @apply bottom-auto;
+            @apply left-auto;
+            @apply right-auto;
+            @apply shadow-md;
+        }
 
         @screen md {
             max-height: 76px;
@@ -819,7 +833,10 @@
 
     .nav-item-with-icon span {
         @apply hidden;
-        @apply md:inline;
+
+        @screen md {
+            @apply inline;
+        }
     }
 
     .nav-item-with-icon :global(svg) {
@@ -832,8 +849,27 @@
         }
     }
 
+    .dropdown-wrapper {
+        @apply relative;
+
+        bottom: 100%;
+        height: 0;
+        width: 0;
+
+        @screen sm {
+            top: 100%;
+            bottom: auto;
+        }
+    }
+
     .dropdown {
         @apply absolute;
+
+        bottom: 2px;
+
+        @screen sm {
+            top: 2px;
+        }
     }
 
     .dropdown > div {
@@ -857,7 +893,11 @@
     }
 
     .groups-dropdown-inner {
-        transform-origin: top right;
+        transform-origin: bottom right;
+
+        @screen sm {
+            transform-origin: top right;
+        }
 
         @screen md {
             transform-origin: top left;
@@ -865,7 +905,11 @@
     }
 
     .settings-dropdown-inner {
-        transform-origin: top right;
+        transform-origin: bottom right;
+
+        @screen sm {
+            transform-origin: top right;
+        }
 
         @screen md {
             transform-origin: top left;

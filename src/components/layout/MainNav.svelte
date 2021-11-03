@@ -400,7 +400,7 @@
                         >
                             <div
                                 class="dropdown settings-dropdown"
-                                style="top: 2px; right: 4px; left: auto; min-width: 180px;"
+                                style="top: 2px; right: 4px; left: auto; min-width: 200px;"
                             >
                                 <div
                                     class="dropdown-inner settings-dropdown-inner"

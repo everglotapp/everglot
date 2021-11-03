@@ -92,6 +92,10 @@ export function makeMiddleware(pool: Pool) {
             secure: true, // Require HTTPS connection for signing in.
         }
     }
+    sess.cookie = {
+        ...sess.cookie,
+        sameSite: "strict", // Do not send this cookie to other origins.
+    }
     middleware = session(sess)
     return middleware
 }

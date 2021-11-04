@@ -115,6 +115,7 @@ export async function findRefreshTokenByUserIdAndJti(
 
 export async function generateRefreshToken(jti: string, userUuid: string) {
     const { key, jwk } = await getRefreshTokenPrivateKey()
+    const epoch = (date: Date) => Math.floor(date.getTime() / 1000)
     return await new SignJWT({
         userUuid,
     } as RefreshTokenPayload)
@@ -122,7 +123,7 @@ export async function generateRefreshToken(jti: string, userUuid: string) {
         .setIssuedAt()
         .setIssuer(REFRESH_TOKEN_ISSUER)
         .setAudience(REFRESH_TOKEN_AUDIENCE)
-        .setExpirationTime(Date.now() + REFRESH_TOKEN_EXPIRATION_SECS * 1000)
+        .setExpirationTime(epoch(new Date()) + REFRESH_TOKEN_EXPIRATION_SECS)
         .setJti(jti)
         .sign(key)
 }

@@ -1,7 +1,4 @@
 import { jwtVerify, SignJWT, JWTVerifyResult, importJWK } from "jose"
-const {
-    base64url: { decode },
-} = require("jose")
 
 import type {
     FlattenedJWSInput,

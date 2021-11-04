@@ -20,6 +20,8 @@ jobs:
                   echo "SESSION_COOKIE_VALIDATION_SECRETS=[\"MySecretCookieValidationSecret123\"]" >> .env
                   echo "AGORA_APP_CERTIFICATE=whatever" >> .env
                   echo "SENDINBLUE_API_KEY=whatever" >> .env
+                  echo "REFRESH_TOKEN_SECRET_KEY={"crv":"Ed25519","d":"6DP9P6p05zwmBEkKWf9V-6UIQySu-hGQjPMrrX6AsrA","x":"htZAKmONXOeoTirYdzme8b29RkS1FdvLRtRplB8exVY","kty":"OKP","kid":"b02ae71f-8d61-4435-85ea-0de3d223f3bd"}" >> .env
+                  echo "REFRESH_TOKEN_JWKS={"keys":[{"crv":"Ed25519","x":"htZAKmONXOeoTirYdzme8b29RkS1FdvLRtRplB8exVY","kty":"OKP","kid":"b02ae71f-8d61-4435-85ea-0de3d223f3bd"}]}" >> .env
             - name: "Setup server-side Firebase credentials file"
               run: |
                   echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON_BASE64 }}" | base64 -d > src/firebaseServiceAccount.json

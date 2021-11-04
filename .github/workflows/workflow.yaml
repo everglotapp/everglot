@@ -96,6 +96,10 @@ jobs:
                   kubectl create secret generic demo2useremail --from-literal=demo2-user-email='${{ secrets.DEMO2_USER_EMAIL }}'
                   kubectl delete secret demo2token --ignore-not-found
                   kubectl create secret generic demo2token --from-literal=demo2-token='${{ secrets.DEMO2_TOKEN }}'
+                  kubectl delete secret refreshtokensecretkey --ignore-not-found
+                  kubectl create secret generic refreshtokensecretkey --from-literal=refresh-token-secret-key='${{ secrets.REFRESH_TOKEN_SECRET_KEY }}'
+                  kubectl delete secret refreshtokenjwks --ignore-not-found
+                  kubectl create secret generic refreshtokenjwks --from-literal=refresh-token-jwks='${{ secrets.REFRESH_TOKEN_JWKS }}'
 
             - name: Deploy Config to DigitalOcean Kubernetes
               run: kubectl apply -f $GITHUB_WORKSPACE/k8s-setup/everglot/service-deployment.yml

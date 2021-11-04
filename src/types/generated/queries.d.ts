@@ -1,4 +1,31 @@
 
+declare module '*/createRefreshToken.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CreateRefreshToken: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/invalidateRefreshToken.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const InvalidateRefreshToken: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userRefreshTokens.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserRefreshTokens: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/chatUser.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

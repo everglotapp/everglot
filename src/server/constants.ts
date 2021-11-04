@@ -1,5 +1,8 @@
 import path from "path"
 
+const { NODE_ENV } = process.env
+export const ENV_DEV = NODE_ENV === "development"
+
 export const APP_BASE_URL = "https://app.everglot.com" as const
 
 export const MESSAGE_PREVIEW_IMAGES_DIRECTORY = path.resolve(

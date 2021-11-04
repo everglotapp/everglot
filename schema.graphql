@@ -1045,6 +1045,40 @@ type Query implements Node {
     filter: ChineseRandomQuestionFilter
   ): ChineseRandomQuestionsConnection
 
+  """Reads and enables pagination through a set of `RefreshToken`."""
+  refreshTokens(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `RefreshToken`."""
+    orderBy: [RefreshTokensOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: RefreshTokenCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: RefreshTokenFilter
+  ): RefreshTokensConnection
+
   """Reads and enables pagination through a set of `UserDevice`."""
   userDevices(
     """Only read the first `n` values of the set."""
@@ -1904,6 +1938,7 @@ type Query implements Node {
   russianRandomQuestionByUuid(uuid: UUID!): RussianRandomQuestion
   chineseRandomQuestion(id: Int!): ChineseRandomQuestion
   chineseRandomQuestionByUuid(uuid: UUID!): ChineseRandomQuestion
+  refreshToken(id: Int!): RefreshToken
   userDevice(id: Int!): UserDevice
   userDeviceByUuid(uuid: UUID!): UserDevice
   userDeviceByFcmToken(fcmToken: String!): UserDevice
@@ -2265,6 +2300,14 @@ type Query implements Node {
     """
     nodeId: ID!
   ): ChineseRandomQuestion
+
+  """Reads a single `RefreshToken` using its globally unique `ID`."""
+  refreshTokenByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `RefreshToken`.
+    """
+    nodeId: ID!
+  ): RefreshToken
 
   """Reads a single `UserDevice` using its globally unique `ID`."""
   userDeviceByNodeId(
@@ -3068,6 +3111,40 @@ type User implements Node {
     """
     filter: PostUserMentionFilter
   ): PostUserMentionsConnection!
+
+  """Reads and enables pagination through a set of `RefreshToken`."""
+  refreshTokens(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `RefreshToken`."""
+    orderBy: [RefreshTokensOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: RefreshTokenCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: RefreshTokenFilter
+  ): RefreshTokensConnection!
 
   """
   Reads and enables pagination through a set of `InAppNotificationMetadatum`.
@@ -16810,6 +16887,114 @@ input UserFollowerFilter {
   not: UserFollowerFilter
 }
 
+"""A connection to a list of `RefreshToken` values."""
+type RefreshTokensConnection {
+  """A list of `RefreshToken` objects."""
+  nodes: [RefreshToken]!
+
+  """
+  A list of edges which contains the `RefreshToken` and cursor to aid in pagination.
+  """
+  edges: [RefreshTokensEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `RefreshToken` you could get from the connection."""
+  totalCount: Int!
+}
+
+type RefreshToken implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  userId: Int
+  jti: String!
+  usedAt: Datetime
+  createdAt: Datetime!
+
+  """Reads a single `User` that is related to this `RefreshToken`."""
+  user: User
+}
+
+"""A `RefreshToken` edge in the connection."""
+type RefreshTokensEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `RefreshToken` at the end of the edge."""
+  node: RefreshToken
+}
+
+"""Methods to use when ordering `RefreshToken`."""
+enum RefreshTokensOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  JTI_ASC
+  JTI_DESC
+  USED_AT_ASC
+  USED_AT_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `RefreshToken` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input RefreshTokenCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: Int
+
+  """Checks for equality with the object’s `jti` field."""
+  jti: String
+
+  """Checks for equality with the object’s `usedAt` field."""
+  usedAt: Datetime
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""
+A filter to be used against `RefreshToken` object types. All fields are combined with a logical ‘and.’
+"""
+input RefreshTokenFilter {
+  """Filter by the object’s `id` field."""
+  id: IntFilter
+
+  """Filter by the object’s `userId` field."""
+  userId: IntFilter
+
+  """Filter by the object’s `jti` field."""
+  jti: StringFilter
+
+  """Filter by the object’s `usedAt` field."""
+  usedAt: DatetimeFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Checks for all expressions in this list."""
+  and: [RefreshTokenFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [RefreshTokenFilter!]
+
+  """Negates the expression."""
+  not: RefreshTokenFilter
+}
+
 """
 A connection to a list of `Language` values, with data from `UserLanguage`.
 """
@@ -18656,6 +18841,14 @@ type Mutation {
     input: CreateChineseRandomQuestionInput!
   ): CreateChineseRandomQuestionPayload
 
+  """Creates a single `RefreshToken`."""
+  createRefreshToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateRefreshTokenInput!
+  ): CreateRefreshTokenPayload
+
   """Creates a single `UserDevice`."""
   createUserDevice(
     """
@@ -19623,6 +19816,24 @@ type Mutation {
     """
     input: UpdateChineseRandomQuestionByUuidInput!
   ): UpdateChineseRandomQuestionPayload
+
+  """
+  Updates a single `RefreshToken` using its globally unique id and a patch.
+  """
+  updateRefreshTokenByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateRefreshTokenByNodeIdInput!
+  ): UpdateRefreshTokenPayload
+
+  """Updates a single `RefreshToken` using a unique key and a patch."""
+  updateRefreshToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateRefreshTokenInput!
+  ): UpdateRefreshTokenPayload
 
   """
   Updates a single `UserDevice` using its globally unique id and a patch.
@@ -20978,6 +21189,22 @@ type Mutation {
     input: DeleteChineseRandomQuestionByUuidInput!
   ): DeleteChineseRandomQuestionPayload
 
+  """Deletes a single `RefreshToken` using its globally unique id."""
+  deleteRefreshTokenByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteRefreshTokenByNodeIdInput!
+  ): DeleteRefreshTokenPayload
+
+  """Deletes a single `RefreshToken` using a unique key."""
+  deleteRefreshToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteRefreshTokenInput!
+  ): DeleteRefreshTokenPayload
+
   """Deletes a single `UserDevice` using its globally unique id."""
   deleteUserDeviceByNodeId(
     """
@@ -21887,6 +22114,16 @@ type Mutation {
     """
     input: UpsertChineseRandomQuestionInput!
   ): UpsertChineseRandomQuestionPayload
+
+  """Upserts a single `RefreshToken`."""
+  upsertRefreshToken(
+    where: UpsertRefreshTokenWhere
+
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpsertRefreshTokenInput!
+  ): UpsertRefreshTokenPayload
 
   """Upserts a single `UserDevice`."""
   upsertUserDevice(
@@ -23663,6 +23900,53 @@ input ChineseRandomQuestionInput {
   uuid: UUID
   question: String!
   recommendedSkillLevelId: Int
+  createdAt: Datetime
+}
+
+"""The output of our create `RefreshToken` mutation."""
+type CreateRefreshTokenPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `RefreshToken` that was created by this mutation."""
+  refreshToken: RefreshToken
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `RefreshToken`."""
+  user: User
+
+  """An edge for our `RefreshToken`. May be used by Relay 1."""
+  refreshTokenEdge(
+    """The method to use when ordering `RefreshToken`."""
+    orderBy: [RefreshTokensOrderBy!] = [PRIMARY_KEY_ASC]
+  ): RefreshTokensEdge
+}
+
+"""All input for the create `RefreshToken` mutation."""
+input CreateRefreshTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `RefreshToken` to be created by this mutation."""
+  refreshToken: RefreshTokenInput!
+}
+
+"""An input for mutations affecting `RefreshToken`"""
+input RefreshTokenInput {
+  id: Int
+  userId: Int
+  jti: String!
+  usedAt: Datetime
   createdAt: Datetime
 }
 
@@ -27541,6 +27825,77 @@ input UpdateChineseRandomQuestionByUuidInput {
   """
   patch: ChineseRandomQuestionPatch!
   uuid: UUID!
+}
+
+"""The output of our update `RefreshToken` mutation."""
+type UpdateRefreshTokenPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `RefreshToken` that was updated by this mutation."""
+  refreshToken: RefreshToken
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `RefreshToken`."""
+  user: User
+
+  """An edge for our `RefreshToken`. May be used by Relay 1."""
+  refreshTokenEdge(
+    """The method to use when ordering `RefreshToken`."""
+    orderBy: [RefreshTokensOrderBy!] = [PRIMARY_KEY_ASC]
+  ): RefreshTokensEdge
+}
+
+"""All input for the `updateRefreshTokenByNodeId` mutation."""
+input UpdateRefreshTokenByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `RefreshToken` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `RefreshToken` being updated.
+  """
+  patch: RefreshTokenPatch!
+}
+
+"""
+Represents an update to a `RefreshToken`. Fields that are set will be updated.
+"""
+input RefreshTokenPatch {
+  id: Int
+  userId: Int
+  jti: String
+  usedAt: Datetime
+  createdAt: Datetime
+}
+
+"""All input for the `updateRefreshToken` mutation."""
+input UpdateRefreshTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `RefreshToken` being updated.
+  """
+  patch: RefreshTokenPatch!
+  id: Int!
 }
 
 """The output of our update `UserDevice` mutation."""
@@ -31591,6 +31946,57 @@ input DeleteChineseRandomQuestionByUuidInput {
   uuid: UUID!
 }
 
+"""The output of our delete `RefreshToken` mutation."""
+type DeleteRefreshTokenPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `RefreshToken` that was deleted by this mutation."""
+  refreshToken: RefreshToken
+  deletedRefreshTokenNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `RefreshToken`."""
+  user: User
+
+  """An edge for our `RefreshToken`. May be used by Relay 1."""
+  refreshTokenEdge(
+    """The method to use when ordering `RefreshToken`."""
+    orderBy: [RefreshTokensOrderBy!] = [PRIMARY_KEY_ASC]
+  ): RefreshTokensEdge
+}
+
+"""All input for the `deleteRefreshTokenByNodeId` mutation."""
+input DeleteRefreshTokenByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `RefreshToken` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteRefreshToken` mutation."""
+input DeleteRefreshTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}
+
 """The output of our delete `UserDevice` mutation."""
 type DeleteUserDevicePayload {
   """
@@ -34548,6 +34954,47 @@ input UpsertChineseRandomQuestionInput {
 
   """The `ChineseRandomQuestion` to be upserted by this mutation."""
   chineseRandomQuestion: ChineseRandomQuestionInput!
+}
+
+"""The output of our upsert `RefreshToken` mutation."""
+type UpsertRefreshTokenPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `RefreshToken` that was upserted by this mutation."""
+  refreshToken: RefreshToken
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `RefreshToken`."""
+  user: User
+
+  """An edge for our `RefreshToken`. May be used by Relay 1."""
+  refreshTokenEdge(
+    """The method to use when ordering `RefreshToken`."""
+    orderBy: [RefreshTokensOrderBy!] = [PRIMARY_KEY_ASC]
+  ): RefreshTokensEdge
+}
+
+"""Where conditions for the upsert `RefreshToken` mutation."""
+input UpsertRefreshTokenWhere {
+  id: Int
+}
+
+"""All input for the upsert `RefreshToken` mutation."""
+input UpsertRefreshTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `RefreshToken` to be upserted by this mutation."""
+  refreshToken: RefreshTokenInput!
 }
 
 """The output of our upsert `UserDevice` mutation."""

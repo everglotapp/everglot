@@ -13,9 +13,15 @@ POSTGRES_DB=everglot_app_db
 SESSION_COOKIE_VALIDATION_SECRETS=["SomeVeryLongRandomSecret123"]
 AGORA_APP_CERTIFICATE=inserthere
 SENDINBLUE_API_KEY=inserthere
+REFRESH_TOKEN_SECRET_KEY=some_secret_EdDSA_jwk
+REFRESH_TOKEN_JWKS=some_EdDSA_jwks
 ```
 
-In development you should keep the first three variables as they are. Definitely change the cookie validation secret(s).
+In development you should keep the first three variables as they are.
+
+Definitely change the cookie validation secret(s) and the refresh token EdDSA secret key and the JSON Web Key set (JWKS) containing all valid public keys (this is to enable rotation of secret keys while retaining their validity for token verification).
+
+You can generate a keypair for JSON Web Tokens by running `node scripts/generateKeyPair.mjs`.
 
 ## Development
 

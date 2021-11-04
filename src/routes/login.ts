@@ -1,3 +1,8 @@
+import validate from "deep-email-validator"
+import { OAuth2Client } from "google-auth-library"
+
+import bcrypt from "bcrypt"
+
 import { db } from "../server/db"
 import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import { ensureJson, serverError } from "../helpers"
@@ -7,12 +12,14 @@ import {
 } from "../constants"
 import log from "../logger"
 
-import validate from "deep-email-validator"
-import { OAuth2Client } from "google-auth-library"
-
-import bcrypt from "bcrypt"
-
 import type { Request, Response } from "express"
+import {
+    createRefreshToken,
+    generateRefreshToken,
+    REFRESH_TOKEN_JTI_GENERATOR,
+} from "../server/auth/refreshTokens"
+import { getUserUuidById } from "../server/users"
+const chlog = log.child({ namespace: "login" })
 
 const LOGIN_FAILED_MESSAGE =
     "That didn't work. Did you enter the correct password?"
@@ -89,7 +96,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 email = payload.email
             }
         } catch (e: any) {
-            log.error(e.stack)
+            chlog.error(e.stack)
             res.status(422).json({
                 success: false,
                 message:
@@ -121,16 +128,18 @@ export async function post(req: Request, res: Response, _next: () => void) {
             // TODO: How to inform user that id token does not exist? Privacy issue?
             // Maybe not because payload was signed by Google?
             // Could be relayed by a different server but that might not matter. Threat model required.
-            log.child({ idToken, email }).info(
-                `User tried to login with an id token that does not exist`
-            )
+            chlog
+                .child({ idToken, email })
+                .info(
+                    `User tried to login with an id token that does not exist`
+                )
             res.redirect("/join")
             return
         }
 
         const user = queryResult?.rows[0]!
         userId = user.id
-        log.child({ userId, googleId }).info(`Successful login via Google`)
+        chlog.child({ userId, googleId }).info(`Successful login via Google`)
     } else if (authMethod === AuthMethod.EMAIL) {
         email = req?.body?.email
         password = req?.body?.password
@@ -189,9 +198,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
         const userExists = Boolean(queryResult?.rowCount === 1)
         if (!userExists) {
             // TODO: How to inform user that email does not exist? Privacy issue.
-            log.child({ email }).info(
-                `User tried to login with an email address that does not exist`
-            )
+            chlog
+                .child({ email })
+                .info(
+                    `User tried to login with an email address that does not exist`
+                )
             serverError(res, LOGIN_FAILED_MESSAGE)
             return
         }
@@ -202,9 +213,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
         /** Avoid comparing null/undefined/empty string */
         if (!storedPasswordHash || !storedPasswordHash.length) {
-            log.child({ email }).error(
-                `User stored password hash is empty. This should never happen!`
-            )
+            chlog
+                .child({ email })
+                .error(
+                    `User stored password hash is empty. This should never happen!`
+                )
             serverError(res, LOGIN_FAILED_MESSAGE)
             return
         }
@@ -215,26 +228,60 @@ export async function post(req: Request, res: Response, _next: () => void) {
         )
 
         if (!passwordCorrect) {
-            log.info(
+            chlog.info(
                 `User tried to login with incorrect password. Email: ${email}`
             )
             serverError(res, LOGIN_FAILED_MESSAGE)
             return
         }
 
-        log.child({ userId, email }).info(`Successful login via email`)
+        chlog.child({ userId, email }).info(`Successful login via email`)
     } else {
         // this should never get called due to the check above
         throw new Error(`Unknown auth method ${authMethod}`)
     }
 
+    const refreshTokenRequested = Boolean(
+        req?.body?.generateRefreshToken && req.body.generateRefreshToken === "1"
+    )
+    let refreshToken: string | undefined
+    if (refreshTokenRequested) {
+        // Generate new refresh token
+        const jti = await REFRESH_TOKEN_JTI_GENERATOR.generate().catch(
+            () => null
+        )
+        if (!jti) {
+            chlog.child({ userId }).error("Failed to generate JTI (JWT ID)")
+            serverError(res)
+            return
+        }
+        const userUuid = await getUserUuidById(userId)
+        if (!userUuid) {
+            chlog
+                .child({ userId })
+                .error(
+                    "Failed to get user UUID by ID to generate refresh token"
+                )
+            serverError(res)
+            return
+        }
+        refreshToken = await generateRefreshToken(jti, userUuid)
+        const newDatabaseToken = await createRefreshToken({ jti, userId })
+        if (!newDatabaseToken) {
+            chlog
+                .child({ jti, userUuid })
+                .error("Failed to insert new refresh token")
+            serverError(res)
+            return
+        }
+    }
     req.session.regenerate(function (err: any) {
         if (err) {
-            log.info("Failed to (re)generate session: %s", err.message)
+            chlog.error("Failed to (re)generate session: %s", err.message)
             serverError(res)
         } else {
             req.session.user_id = userId!
-            res.status(200).json({ success: true })
+            res.status(200).json({ success: true, refreshToken })
         }
     })
 }

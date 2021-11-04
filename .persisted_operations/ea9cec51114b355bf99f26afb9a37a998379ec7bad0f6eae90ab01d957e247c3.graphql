@@ -1,0 +1,16 @@
+query UserRefreshTokens($userId: Int!) {
+  refreshTokens(condition: {userId: $userId}, orderBy: CREATED_AT_DESC) {
+    nodes {
+      createdAt
+      jti
+      id
+      usedAt
+      user {
+        uuid
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

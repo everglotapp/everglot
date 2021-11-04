@@ -6,7 +6,7 @@ import type { User, InviteToken, Maybe } from "../types/generated/graphql"
 
 const chlog = log.child({ namespace: "inviteTokens" })
 
-export async function createToken({
+export async function createInviteToken({
     userId,
     token,
 }: {
@@ -36,7 +36,7 @@ export async function createToken({
     return tokenId || null
 }
 
-export async function getTokenIdByToken(
+export async function getInviteTokenIdByToken(
     token: String
 ): Promise<Maybe<InviteToken["id"]>> {
     const res = await db?.query<{ id: InviteToken["id"] }>({

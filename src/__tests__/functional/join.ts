@@ -1,4 +1,4 @@
-import { createToken } from "../../server/inviteTokens"
+import { createInviteToken } from "../../server/inviteTokens"
 import { AuthMethod } from "../../users"
 import {
     fetch,
@@ -25,7 +25,7 @@ describe("join route", () => {
     const INVALID_TOKEN = "InvalidToken123"
 
     const createExampleToken = async () => {
-        return await createToken({
+        return await createInviteToken({
             userId: null,
             token: EXAMPLE_TOKEN,
         })

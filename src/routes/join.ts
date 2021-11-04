@@ -1,7 +1,16 @@
+import bcrypt from "bcrypt"
+import { v4 as uuidv4 } from "uuid"
+
+import validateEmail from "deep-email-validator"
+import { OAuth2Client } from "google-auth-library"
+
 import { db } from "../server/db"
 
 import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
-import { createToken, getTokenIdByToken } from "../server/inviteTokens"
+import {
+    createInviteToken,
+    getInviteTokenIdByToken,
+} from "../server/inviteTokens"
 import { ensureJson, serverError } from "../helpers"
 import {
     generateInviteToken,
@@ -13,20 +22,22 @@ import {
 } from "../constants"
 
 import log from "../logger"
-import bcrypt from "bcrypt"
-import { v4 as uuidv4 } from "uuid"
-
-import validateEmail from "deep-email-validator"
-import { OAuth2Client } from "google-auth-library"
 // import {
 //     createGroup,
 //     getUsersWithoutLearnerGroup,
 //     getUsersWithoutNativeGroup,
 // } from "../server/groups"
 
+const chlog = log.child({ namespace: "join" })
+
 import type { Request, Response } from "express"
 import type { Maybe } from "../types/generated/graphql"
 import { BCRYPT_WORK_FACTOR } from "../server/constants"
+import {
+    createRefreshToken,
+    generateRefreshToken,
+    REFRESH_TOKEN_JTI_GENERATOR,
+} from "../server/auth/refreshTokens"
 
 type InvalidEmailReason = "smtp" | "regex" | "typo" | "mx" | "disposable"
 
@@ -34,7 +45,7 @@ async function resolveInviteTokenId(token: unknown) {
     if (!token || typeof token !== "string") {
         return null
     }
-    return (await getTokenIdByToken(token)) || null
+    return (await getInviteTokenIdByToken(token)) || null
 }
 
 export function get(req: Request, res: Response, next: () => void) {
@@ -165,11 +176,14 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 validators.hasOwnProperty(reason) &&
                 validators[reason as InvalidEmailReason]
             ) {
-                log.child({
-                    email,
-                    reason: validators[reason as InvalidEmailReason]!.reason,
-                    emailValidation,
-                }).debug("User provided an invalid email")
+                chlog
+                    .child({
+                        email,
+                        reason: validators[reason as InvalidEmailReason]!
+                            .reason,
+                        emailValidation,
+                    })
+                    .debug("User provided an invalid email")
                 invalidEmailMsg = {
                     smtp: "It looks like the email address you provided does not exist.",
                     regex: "That email address looks wrong to us.",
@@ -178,10 +192,12 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     typo: "Did you misspell the email address by accident?",
                 }[reason as InvalidEmailReason]
             } else {
-                log.child({
-                    email,
-                    emailValidation,
-                }).debug("User provided an invalid email")
+                chlog
+                    .child({
+                        email,
+                        emailValidation,
+                    })
+                    .debug("User provided an invalid email")
             }
             res.status(422).json({
                 success: false,
@@ -212,9 +228,9 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
     const emailUnsubscribeToken = await generateEmailUnsubscribeToken()
     if (!emailUnsubscribeToken) {
-        log.child({ emailUnsubscribeToken }).error(
-            `Email unsubscribe token generation failed`
-        )
+        chlog
+            .child({ emailUnsubscribeToken })
+            .error(`Email unsubscribe token generation failed`)
         serverError(res)
         return
     }
@@ -264,46 +280,72 @@ export async function post(req: Request, res: Response, _next: () => void) {
         ],
     })
     const userId = queryResult?.rows[0]?.id
-    log.child({ userId }).trace("Tried to insert new user")
+    chlog.child({ userId }).trace("Tried to insert new user")
     let success = queryResult?.rowCount === 1
     if (!success) {
-        log.child({
-            queryResult,
-            username,
-            email,
-            hash,
-            uuid,
-            googleId,
-            avatarUrl,
-            locale,
-            inviteTokenId,
-        }).info(`User insertion failed`)
+        chlog
+            .child({
+                queryResult,
+                username,
+                email,
+                hash,
+                uuid,
+                googleId,
+                avatarUrl,
+                locale,
+                inviteTokenId,
+            })
+            .info(`User insertion failed`)
         serverError(res)
         return
     }
 
     const newInviteToken = await generateInviteToken()
     if (!newInviteToken) {
-        log.child({ newInviteToken }).error(`Invite token generation failed`)
+        chlog.child({ newInviteToken }).error(`Invite token generation failed`)
         serverError(res)
         return
     }
 
-    if (!(await createToken({ userId, token: newInviteToken }))) {
-        log.child({ newInviteToken }).error(
-            `Failed to insert token for new user`
+    if (!(await createInviteToken({ userId, token: newInviteToken }))) {
+        chlog
+            .child({ newInviteToken })
+            .error(`Failed to insert token for new user`)
+        serverError(res)
+        return
+    }
+
+    const refreshTokenRequested = Boolean(
+        req?.body?.generateRefreshToken && req.body.generateRefreshToken === "1"
+    )
+    let refreshToken: string | undefined
+    if (refreshTokenRequested) {
+        // Generate new refresh token
+        const jti = await REFRESH_TOKEN_JTI_GENERATOR.generate().catch(
+            () => null
         )
-        serverError(res)
-        return
+        if (!jti) {
+            chlog.child({ userId }).error("Failed to generate JTI (JWT ID)")
+            serverError(res)
+            return
+        }
+        refreshToken = await generateRefreshToken(jti, uuid)
+        const newDatabaseToken = await createRefreshToken({ jti, userId })
+        if (!newDatabaseToken) {
+            chlog
+                .child({ jti, userUuid: uuid })
+                .error("Failed to insert new refresh token")
+            serverError(res)
+            return
+        }
     }
-
     req.session.regenerate(function (err: any) {
         if (err) {
-            console.error(err.message)
+            chlog.error("Failed to (re)generate session: %s", err.message)
             serverError(res)
         } else {
             req.session.user_id = userId
-            res.status(200).json({ success: true })
+            res.status(200).json({ success: true, refreshToken })
         }
     })
 }

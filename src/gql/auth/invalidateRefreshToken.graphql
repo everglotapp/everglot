@@ -1,0 +1,8 @@
+mutation InvalidateRefreshToken($id: Int!, $usedAt: Datetime!) {
+    updateRefreshToken(input: { patch: { usedAt: $usedAt }, id: $id }) {
+        refreshToken {
+            usedAt
+            id
+        }
+    }
+}

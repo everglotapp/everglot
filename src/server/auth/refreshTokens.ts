@@ -1,4 +1,7 @@
 import { jwtVerify, SignJWT, JWTVerifyResult, importJWK } from "jose"
+const {
+    base64url: { decode },
+} = require("jose")
 
 import type {
     FlattenedJWSInput,
@@ -34,7 +37,7 @@ export const REFRESH_TOKEN_JTI_GENERATOR = new UIDGenerator(
     UIDGenerator.BASE66
 )
 
-const REFRESH_TOKEN_ALGORITHM = "EDDSA"
+const REFRESH_TOKEN_ALGORITHM = "EdDSA"
 
 type RefreshTokenPayload = JWTPayload & {
     userUuid: string
@@ -42,7 +45,7 @@ type RefreshTokenPayload = JWTPayload & {
 
 const REFRESH_TOKEN_ISSUER = "urn:everglot:app.everglot.com"
 const REFRESH_TOKEN_AUDIENCE = "urn:everglot:app.everglot.com"
-export const REFRESH_TOKEN_EXPIRATION_SECS = 60 * 60 * 24 * 15 // 15 days in seconds
+const REFRESH_TOKEN_EXPIRATION_SECS = 60 * 60 * 24 * 15 // 15 days in seconds
 
 export async function verifyRefreshTokenIntegrity(token: string) {
     let payload: RefreshTokenPayload | undefined
@@ -64,10 +67,12 @@ export async function verifyRefreshTokenIntegrity(token: string) {
             payload = verifyResult.payload as RefreshTokenPayload
             protectedHeader = verifyResult.protectedHeader
         }
-    } catch (e) {
-        chlog.info(
-            "A refresh token's integrity could not be verified (likely no matching public key was found)"
-        )
+    } catch (err: any) {
+        chlog
+            .child({ message: err.message })
+            .info(
+                "A refresh token's integrity could not be verified (likely no matching public key was found)"
+            )
     }
     if (!valid || !payload || !protectedHeader) {
         return null
@@ -120,7 +125,7 @@ export async function generateRefreshToken(jti: string, userUuid: string) {
         .setIssuedAt()
         .setIssuer(REFRESH_TOKEN_ISSUER)
         .setAudience(REFRESH_TOKEN_AUDIENCE)
-        .setExpirationTime(REFRESH_TOKEN_EXPIRATION_SECS)
+        .setExpirationTime(Date.now() + REFRESH_TOKEN_EXPIRATION_SECS * 1000)
         .setJti(jti)
         .sign(key)
 }
@@ -224,7 +229,7 @@ async function getRefreshTokenPrivateKey() {
 
 async function getMatchingRefreshTokenPublicKey(
     protectedHeader: JWSHeaderParameters,
-    _token: FlattenedJWSInput
+    _token?: FlattenedJWSInput | undefined
 ) {
     return await getRefreshTokenPublicJWKS().getKey(protectedHeader)
 }

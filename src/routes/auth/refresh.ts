@@ -24,8 +24,8 @@ import {
  * sees if signature matches the one for the user,
  * regenerates refresh token and signs user in.
  */
-export async function get(req: Request, res: Response, _next: () => void) {
-    const token = req.query["token"]
+export async function post(req: Request, res: Response, _next: () => void) {
+    const token = req.body["refreshToken"]
     if (!token || typeof token !== "string" || !token.length) {
         chlog.debug("Empty or non-string refresh token")
         unprocessableEntity(res, "Token required")

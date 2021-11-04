@@ -79,6 +79,8 @@ const UNPROTECTED_ROUTES = [
     "/join/",
     "/login",
     "/login/",
+    "/auth/refresh",
+    "/auth/refresh/",
     "/users/password/reset",
     "/users/password/reset/",
     "/users/password/reset/update",

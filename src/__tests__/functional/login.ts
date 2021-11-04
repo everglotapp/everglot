@@ -24,7 +24,7 @@ describe("login route", () => {
 
     const signIn = async () => {
         expect(exampleUser).toBeTruthy()
-        sessionCookie = await login(exampleUser!)
+        sessionCookie = (await login(exampleUser!)).sessionCookie
         expect(sessionCookie).toBeTruthy()
     }
 
@@ -189,5 +189,27 @@ describe("login route", () => {
             redirect: "manual",
         })
         expect(res.status).toBe(200)
+    })
+
+    test("POST with generateRefreshToken returns refresh token", async () => {
+        const body = JSON.stringify({
+            method: AuthMethod.EMAIL,
+            email: exampleUser!.email,
+            password: exampleUser!.password,
+            generateRefreshToken: true,
+        })
+        const res = await fetch("/login", {
+            method: "POST",
+            body,
+            headers: { "content-type": "application/json" },
+            redirect: "manual",
+        })
+        expect(res.status).toBe(200)
+        expect(res.body).toBeTruthy()
+        const result = await res.json()
+        expect(typeof result).toBe("object")
+        expect(result.success).toBeTruthy()
+        expect(result.refreshToken).toBeTruthy()
+        expect(typeof result.refreshToken).toBe("string")
     })
 })

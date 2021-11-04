@@ -184,6 +184,7 @@ export async function doTruncateNonLookupTables(db: Pool) {
     try {
         await client.query("begin")
         await client.query(`set role to everglot_app_user`)
+        await client.query(`delete from app_public.refresh_tokens where true`)
         await client.query(`delete from app_public.user_languages where true`)
         await client.query(`delete from app_public.group_users where true`)
         await client.query(`delete from app_public.messages where true`)
@@ -253,11 +254,15 @@ export async function seedDatabase(db: Pool) {
     }
 }
 
-export async function login(user: TestUser): Promise<Maybe<string>> {
+export async function login(
+    user: TestUser,
+    opts?: { generateRefreshToken: boolean }
+): Promise<{ sessionCookie: Maybe<string>; res: Response }> {
     const body = JSON.stringify({
         method: AuthMethod.EMAIL,
         email: user.email,
         password: user.password,
+        ...(opts || {}),
     })
     const res = await fetch("/login", {
         method: "POST",
@@ -265,6 +270,7 @@ export async function login(user: TestUser): Promise<Maybe<string>> {
         headers: { "content-type": "application/json" },
         redirect: "manual",
     })
+    const clonedRes = res.clone()
     chlog
         .child({
             text: await res.text(),
@@ -272,7 +278,7 @@ export async function login(user: TestUser): Promise<Maybe<string>> {
         })
         .trace("Attempted to sign in during test")
     expect(res.status).toBe(200)
-    return getSessionCookieValue(res)
+    return { res: clonedRes, sessionCookie: getSessionCookieValue(res) }
 }
 
 export function sessionCookieHeader(sessionCookie: Maybe<string>) {
@@ -283,7 +289,7 @@ export function sessionCookieHeader(sessionCookie: Maybe<string>) {
 }
 
 // Adapted from https://stackoverflow.com/a/55680330/9926795
-function getSessionCookieValue(res: Response) {
+export function getSessionCookieValue(res: Response) {
     const cookies: string[] = res.headers.raw()["set-cookie"] || []
     const headerToCookie = (header: string) => {
         const [name, value] = header.split("=")

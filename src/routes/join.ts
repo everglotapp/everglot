@@ -316,7 +316,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
 
     const refreshTokenRequested = Boolean(
-        req?.body?.generateRefreshToken && req.body.generateRefreshToken === "1"
+        req?.body?.generateRefreshToken &&
+            req.body.generateRefreshToken === true
     )
     let refreshToken: string | undefined
     if (refreshTokenRequested) {

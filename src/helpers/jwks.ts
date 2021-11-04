@@ -29,7 +29,7 @@ export class JWKSet {
             throw new Error("First load the jwks using JWKSet.load(jsonStr)")
         }
 
-        const candidates = this._jwks!.keys.filter((jwk) => {
+        const candidates = this._jwks.keys.filter((jwk) => {
             // filter keys based on the mapping of signature algorithms to Key Type
             let candidate = jwk.kty === getKtyFromAlg(protectedHeader.alg)
 
@@ -81,7 +81,6 @@ export class JWKSet {
         })
 
         const { 0: jwk, length } = candidates
-
         if (length === 0) {
             throw new Error("No matching key")
         } else if (length !== 1) {
@@ -105,7 +104,6 @@ export class JWKSet {
 
             cached[protectedHeader.alg!] = keyObject
         }
-
         return cached[protectedHeader.alg!]
     }
 

@@ -37,7 +37,7 @@ describe("join route", () => {
 
     const signIn = async () => {
         expect(existingUser).toBeTruthy()
-        sessionCookie = await login(existingUser!)
+        sessionCookie = (await login(existingUser!)).sessionCookie
         expect(sessionCookie).toBeTruthy()
     }
 
@@ -145,5 +145,27 @@ describe("join route", () => {
             headers: { "content-type": "application/json" },
         })
         expect(res.status).toBe(200)
+    })
+
+    test("POST with generateRefreshToken returns refresh token", async () => {
+        const body = JSON.stringify({
+            method: AuthMethod.EMAIL,
+            email: EXAMPLE_USER.email,
+            password: EXAMPLE_USER.password,
+            token: EXAMPLE_TOKEN,
+            generateRefreshToken: true,
+        })
+        const res = await fetch("/join", {
+            method: "POST",
+            body,
+            headers: { "content-type": "application/json" },
+        })
+        expect(res.status).toBe(200)
+        expect(res.body).toBeTruthy()
+        const result = await res.json()
+        expect(typeof result).toBe("object")
+        expect(result.success).toBeTruthy()
+        expect(result.refreshToken).toBeTruthy()
+        expect(typeof result.refreshToken).toBe("string")
     })
 })

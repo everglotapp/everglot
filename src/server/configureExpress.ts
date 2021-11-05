@@ -1,6 +1,7 @@
 import compression from "compression"
 import sirv from "sirv"
 import { json } from "express"
+import cookieParser from "cookie-parser"
 
 import * as sapper from "@sapper/server"
 
@@ -28,7 +29,8 @@ export default function configureExpress(app: Express, pool: Pool): Express {
         compression({ threshold: 0 }),
         sirv("static", { dev }),
         sirv("dynamic", { dev: true }),
-        json()
+        json(),
+        cookieParser()
     )
 
     if (!dev) {
@@ -77,6 +79,8 @@ const UNPROTECTED_ROUTES = [
     "/join/",
     "/login",
     "/login/",
+    "/auth/refresh",
+    "/auth/refresh/",
     "/users/password/reset",
     "/users/password/reset/",
     "/users/password/reset/update",

@@ -26,7 +26,7 @@ describe("index route", () => {
 
     const signIn = async () => {
         expect(exampleUser).toBeTruthy()
-        sessionCookie = await login(exampleUser!)
+        sessionCookie = (await login(exampleUser!)).sessionCookie
         expect(sessionCookie).toBeTruthy()
     }
 

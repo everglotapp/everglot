@@ -1,0 +1,13 @@
+mutation CreateRefreshToken($jti: String!, $userId: Int!) {
+  createRefreshToken(input: {refreshToken: {jti: $jti, userId: $userId}}) {
+    refreshToken {
+      id
+      jti
+      userId
+      createdAt
+      usedAt
+      __typename
+    }
+    __typename
+  }
+}

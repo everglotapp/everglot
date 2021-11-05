@@ -20,6 +20,8 @@ jobs:
                   echo "SESSION_COOKIE_VALIDATION_SECRETS=[\"MySecretCookieValidationSecret123\"]" >> .env
                   echo "AGORA_APP_CERTIFICATE=whatever" >> .env
                   echo "SENDINBLUE_API_KEY=whatever" >> .env
+                  echo 'REFRESH_TOKEN_SECRET_KEY={"crv":"Ed25519","d":"6DP9P6p05zwmBEkKWf9V-6UIQySu-hGQjPMrrX6AsrA","x":"htZAKmONXOeoTirYdzme8b29RkS1FdvLRtRplB8exVY","kty":"OKP","kid":"b02ae71f-8d61-4435-85ea-0de3d223f3bd"}' >> .env
+                  echo 'REFRESH_TOKEN_JWKS={"keys":[{"crv":"Ed25519","x":"htZAKmONXOeoTirYdzme8b29RkS1FdvLRtRplB8exVY","kty":"OKP","kid":"b02ae71f-8d61-4435-85ea-0de3d223f3bd"}]}' >> .env
             - name: "Setup server-side Firebase credentials file"
               run: |
                   echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON_BASE64 }}" | base64 -d > src/firebaseServiceAccount.json
@@ -94,6 +96,10 @@ jobs:
                   kubectl create secret generic demo2useremail --from-literal=demo2-user-email='${{ secrets.DEMO2_USER_EMAIL }}'
                   kubectl delete secret demo2token --ignore-not-found
                   kubectl create secret generic demo2token --from-literal=demo2-token='${{ secrets.DEMO2_TOKEN }}'
+                  kubectl delete secret refreshtokensecretkey --ignore-not-found
+                  kubectl create secret generic refreshtokensecretkey --from-literal=refresh-token-secret-key='${{ secrets.REFRESH_TOKEN_SECRET_KEY }}'
+                  kubectl delete secret refreshtokenjwks --ignore-not-found
+                  kubectl create secret generic refreshtokenjwks --from-literal=refresh-token-jwks='${{ secrets.REFRESH_TOKEN_JWKS }}'
 
             - name: Deploy Config to DigitalOcean Kubernetes
               run: kubectl apply -f $GITHUB_WORKSPACE/k8s-setup/everglot/service-deployment.yml

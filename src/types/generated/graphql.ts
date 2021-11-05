@@ -1887,6 +1887,41 @@ export type CreatePromptPayloadPromptEdgeArgs = {
   orderBy?: Maybe<Array<PromptsOrderBy>>;
 };
 
+/** All input for the create `RefreshToken` mutation. */
+export type CreateRefreshTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `RefreshToken` to be created by this mutation. */
+  refreshToken: RefreshTokenInput;
+};
+
+/** The output of our create `RefreshToken` mutation. */
+export type CreateRefreshTokenPayload = {
+  __typename?: 'CreateRefreshTokenPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** The `RefreshToken` that was created by this mutation. */
+  refreshToken?: Maybe<RefreshToken>;
+  /** An edge for our `RefreshToken`. May be used by Relay 1. */
+  refreshTokenEdge?: Maybe<RefreshTokensEdge>;
+  /** Reads a single `User` that is related to this `RefreshToken`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our create `RefreshToken` mutation. */
+export type CreateRefreshTokenPayloadRefreshTokenEdgeArgs = {
+  orderBy?: Maybe<Array<RefreshTokensOrderBy>>;
+};
+
 /** All input for the create `RussianRandomQuestion` mutation. */
 export type CreateRussianRandomQuestionInput = {
   /**
@@ -4637,6 +4672,52 @@ export type DeletePromptPayload = {
 /** The output of our delete `Prompt` mutation. */
 export type DeletePromptPayloadPromptEdgeArgs = {
   orderBy?: Maybe<Array<PromptsOrderBy>>;
+};
+
+/** All input for the `deleteRefreshTokenByNodeId` mutation. */
+export type DeleteRefreshTokenByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `RefreshToken` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteRefreshToken` mutation. */
+export type DeleteRefreshTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+/** The output of our delete `RefreshToken` mutation. */
+export type DeleteRefreshTokenPayload = {
+  __typename?: 'DeleteRefreshTokenPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  deletedRefreshTokenNodeId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** The `RefreshToken` that was deleted by this mutation. */
+  refreshToken?: Maybe<RefreshToken>;
+  /** An edge for our `RefreshToken`. May be used by Relay 1. */
+  refreshTokenEdge?: Maybe<RefreshTokensEdge>;
+  /** Reads a single `User` that is related to this `RefreshToken`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our delete `RefreshToken` mutation. */
+export type DeleteRefreshTokenPayloadRefreshTokenEdgeArgs = {
+  orderBy?: Maybe<Array<RefreshTokensOrderBy>>;
 };
 
 /** All input for the `deleteRussianRandomQuestionByNodeId` mutation. */
@@ -10103,6 +10184,8 @@ export type Mutation = {
   createPostUserMention?: Maybe<CreatePostUserMentionPayload>;
   /** Creates a single `Prompt`. */
   createPrompt?: Maybe<CreatePromptPayload>;
+  /** Creates a single `RefreshToken`. */
+  createRefreshToken?: Maybe<CreateRefreshTokenPayload>;
   /** Creates a single `RussianRandomQuestion`. */
   createRussianRandomQuestion?: Maybe<CreateRussianRandomQuestionPayload>;
   /** Creates a single `RussianWord`. */
@@ -10367,6 +10450,10 @@ export type Mutation = {
   deletePromptByNodeId?: Maybe<DeletePromptPayload>;
   /** Deletes a single `Prompt` using a unique key. */
   deletePromptByUuid?: Maybe<DeletePromptPayload>;
+  /** Deletes a single `RefreshToken` using a unique key. */
+  deleteRefreshToken?: Maybe<DeleteRefreshTokenPayload>;
+  /** Deletes a single `RefreshToken` using its globally unique id. */
+  deleteRefreshTokenByNodeId?: Maybe<DeleteRefreshTokenPayload>;
   /** Deletes a single `RussianRandomQuestion` using a unique key. */
   deleteRussianRandomQuestion?: Maybe<DeleteRussianRandomQuestionPayload>;
   /** Deletes a single `RussianRandomQuestion` using its globally unique id. */
@@ -10686,6 +10773,10 @@ export type Mutation = {
   updatePromptByNodeId?: Maybe<UpdatePromptPayload>;
   /** Updates a single `Prompt` using a unique key and a patch. */
   updatePromptByUuid?: Maybe<UpdatePromptPayload>;
+  /** Updates a single `RefreshToken` using a unique key and a patch. */
+  updateRefreshToken?: Maybe<UpdateRefreshTokenPayload>;
+  /** Updates a single `RefreshToken` using its globally unique id and a patch. */
+  updateRefreshTokenByNodeId?: Maybe<UpdateRefreshTokenPayload>;
   /** Updates a single `RussianRandomQuestion` using a unique key and a patch. */
   updateRussianRandomQuestion?: Maybe<UpdateRussianRandomQuestionPayload>;
   /** Updates a single `RussianRandomQuestion` using its globally unique id and a patch. */
@@ -10844,6 +10935,8 @@ export type Mutation = {
   upsertPostUserMention?: Maybe<UpsertPostUserMentionPayload>;
   /** Upserts a single `Prompt`. */
   upsertPrompt?: Maybe<UpsertPromptPayload>;
+  /** Upserts a single `RefreshToken`. */
+  upsertRefreshToken?: Maybe<UpsertRefreshTokenPayload>;
   /** Upserts a single `RussianRandomQuestion`. */
   upsertRussianRandomQuestion?: Maybe<UpsertRussianRandomQuestionPayload>;
   /** Upserts a single `RussianWord`. */
@@ -11114,6 +11207,12 @@ export type MutationCreatePostUserMentionArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreatePromptArgs = {
   input: CreatePromptInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateRefreshTokenArgs = {
+  input: CreateRefreshTokenInput;
 };
 
 
@@ -11906,6 +12005,18 @@ export type MutationDeletePromptByNodeIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeletePromptByUuidArgs = {
   input: DeletePromptByUuidInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteRefreshTokenArgs = {
+  input: DeleteRefreshTokenInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteRefreshTokenByNodeIdArgs = {
+  input: DeleteRefreshTokenByNodeIdInput;
 };
 
 
@@ -12876,6 +12987,18 @@ export type MutationUpdatePromptByUuidArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateRefreshTokenArgs = {
+  input: UpdateRefreshTokenInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateRefreshTokenByNodeIdArgs = {
+  input: UpdateRefreshTokenByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateRussianRandomQuestionArgs = {
   input: UpdateRussianRandomQuestionInput;
 };
@@ -13387,6 +13510,13 @@ export type MutationUpsertPostUserMentionArgs = {
 export type MutationUpsertPromptArgs = {
   input: UpsertPromptInput;
   where?: Maybe<UpsertPromptWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertRefreshTokenArgs = {
+  input: UpsertRefreshTokenInput;
+  where?: Maybe<UpsertRefreshTokenWhere>;
 };
 
 
@@ -16814,6 +16944,11 @@ export type Query = Node & {
    * which can only query top level fields if they are in a particular form.
    */
   query: Query;
+  refreshToken?: Maybe<RefreshToken>;
+  /** Reads a single `RefreshToken` using its globally unique `ID`. */
+  refreshTokenByNodeId?: Maybe<RefreshToken>;
+  /** Reads and enables pagination through a set of `RefreshToken`. */
+  refreshTokens?: Maybe<RefreshTokensConnection>;
   russianRandomQuestion?: Maybe<RussianRandomQuestion>;
   /** Reads a single `RussianRandomQuestion` using its globally unique `ID`. */
   russianRandomQuestionByNodeId?: Maybe<RussianRandomQuestion>;
@@ -18175,6 +18310,31 @@ export type QueryPromptsArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryRefreshTokenArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryRefreshTokenByNodeIdArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryRefreshTokensArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<RefreshTokenCondition>;
+  filter?: Maybe<RefreshTokenFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<RefreshTokensOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryRussianRandomQuestionArgs = {
   id: Scalars['Int'];
 };
@@ -18587,6 +18747,113 @@ export type QueryUsersWithoutNativeGroupArgs = {
   lid?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
 };
+
+export type RefreshToken = Node & {
+  __typename?: 'RefreshToken';
+  createdAt: Scalars['Datetime'];
+  id: Scalars['Int'];
+  jti: Scalars['String'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  usedAt?: Maybe<Scalars['Datetime']>;
+  /** Reads a single `User` that is related to this `RefreshToken`. */
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['Int']>;
+};
+
+/**
+ * A condition to be used against `RefreshToken` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type RefreshTokenCondition = {
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `id` field. */
+  id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `jti` field. */
+  jti?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `usedAt` field. */
+  usedAt?: Maybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `userId` field. */
+  userId?: Maybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `RefreshToken` object types. All fields are combined with a logical ‘and.’ */
+export type RefreshTokenFilter = {
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<RefreshTokenFilter>>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: Maybe<IntFilter>;
+  /** Filter by the object’s `jti` field. */
+  jti?: Maybe<StringFilter>;
+  /** Negates the expression. */
+  not?: Maybe<RefreshTokenFilter>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<RefreshTokenFilter>>;
+  /** Filter by the object’s `usedAt` field. */
+  usedAt?: Maybe<DatetimeFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: Maybe<IntFilter>;
+};
+
+/** An input for mutations affecting `RefreshToken` */
+export type RefreshTokenInput = {
+  createdAt?: Maybe<Scalars['Datetime']>;
+  id?: Maybe<Scalars['Int']>;
+  jti: Scalars['String'];
+  usedAt?: Maybe<Scalars['Datetime']>;
+  userId?: Maybe<Scalars['Int']>;
+};
+
+/** Represents an update to a `RefreshToken`. Fields that are set will be updated. */
+export type RefreshTokenPatch = {
+  createdAt?: Maybe<Scalars['Datetime']>;
+  id?: Maybe<Scalars['Int']>;
+  jti?: Maybe<Scalars['String']>;
+  usedAt?: Maybe<Scalars['Datetime']>;
+  userId?: Maybe<Scalars['Int']>;
+};
+
+/** A connection to a list of `RefreshToken` values. */
+export type RefreshTokensConnection = {
+  __typename?: 'RefreshTokensConnection';
+  /** A list of edges which contains the `RefreshToken` and cursor to aid in pagination. */
+  edges: Array<RefreshTokensEdge>;
+  /** A list of `RefreshToken` objects. */
+  nodes: Array<Maybe<RefreshToken>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `RefreshToken` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `RefreshToken` edge in the connection. */
+export type RefreshTokensEdge = {
+  __typename?: 'RefreshTokensEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `RefreshToken` at the end of the edge. */
+  node?: Maybe<RefreshToken>;
+};
+
+/** Methods to use when ordering `RefreshToken`. */
+export enum RefreshTokensOrderBy {
+  CreatedAtAsc = 'CREATED_AT_ASC',
+  CreatedAtDesc = 'CREATED_AT_DESC',
+  IdAsc = 'ID_ASC',
+  IdDesc = 'ID_DESC',
+  JtiAsc = 'JTI_ASC',
+  JtiDesc = 'JTI_DESC',
+  Natural = 'NATURAL',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  UsedAtAsc = 'USED_AT_ASC',
+  UsedAtDesc = 'USED_AT_DESC',
+  UserIdAsc = 'USER_ID_ASC',
+  UserIdDesc = 'USER_ID_DESC'
+}
 
 /** All input for the `registerUserActivity` mutation. */
 export type RegisterUserActivityInput = {
@@ -21954,6 +22221,55 @@ export type UpdatePromptPayloadPromptEdgeArgs = {
   orderBy?: Maybe<Array<PromptsOrderBy>>;
 };
 
+/** All input for the `updateRefreshTokenByNodeId` mutation. */
+export type UpdateRefreshTokenByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `RefreshToken` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `RefreshToken` being updated. */
+  patch: RefreshTokenPatch;
+};
+
+/** All input for the `updateRefreshToken` mutation. */
+export type UpdateRefreshTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  /** An object where the defined keys will be set on the `RefreshToken` being updated. */
+  patch: RefreshTokenPatch;
+};
+
+/** The output of our update `RefreshToken` mutation. */
+export type UpdateRefreshTokenPayload = {
+  __typename?: 'UpdateRefreshTokenPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** The `RefreshToken` that was updated by this mutation. */
+  refreshToken?: Maybe<RefreshToken>;
+  /** An edge for our `RefreshToken`. May be used by Relay 1. */
+  refreshTokenEdge?: Maybe<RefreshTokensEdge>;
+  /** Reads a single `User` that is related to this `RefreshToken`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our update `RefreshToken` mutation. */
+export type UpdateRefreshTokenPayloadRefreshTokenEdgeArgs = {
+  orderBy?: Maybe<Array<RefreshTokensOrderBy>>;
+};
+
 /** All input for the `updateRussianRandomQuestionByNodeId` mutation. */
 export type UpdateRussianRandomQuestionByNodeIdInput = {
   /**
@@ -24183,6 +24499,40 @@ export type UpsertPromptWhere = {
   uuid?: Maybe<Scalars['UUID']>;
 };
 
+/** All input for the upsert `RefreshToken` mutation. */
+export type UpsertRefreshTokenInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `RefreshToken` to be upserted by this mutation. */
+  refreshToken: RefreshTokenInput;
+};
+
+/** The output of our upsert `RefreshToken` mutation. */
+export type UpsertRefreshTokenPayload = {
+  __typename?: 'UpsertRefreshTokenPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** The `RefreshToken` that was upserted by this mutation. */
+  refreshToken?: Maybe<RefreshToken>;
+  /** An edge for our `RefreshToken`. May be used by Relay 1. */
+  refreshTokenEdge?: Maybe<RefreshTokensEdge>;
+  /** Reads a single `User` that is related to this `RefreshToken`. */
+  user?: Maybe<User>;
+};
+
+
+/** The output of our upsert `RefreshToken` mutation. */
+export type UpsertRefreshTokenPayloadRefreshTokenEdgeArgs = {
+  orderBy?: Maybe<Array<RefreshTokensOrderBy>>;
+};
+
+/** Where conditions for the upsert `RefreshToken` mutation. */
+export type UpsertRefreshTokenWhere = {
+  id?: Maybe<Scalars['Int']>;
+};
+
 /** All input for the upsert `RussianRandomQuestion` mutation. */
 export type UpsertRussianRandomQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
@@ -24701,6 +25051,8 @@ export type User = Node & {
   preference?: Maybe<UserPreference>;
   /** Reads and enables pagination through a set of `Prompt`. */
   promptsByPostAuthorIdAndPromptId: UserPromptsByPostAuthorIdAndPromptIdManyToManyConnection;
+  /** Reads and enables pagination through a set of `RefreshToken`. */
+  refreshTokens: RefreshTokensConnection;
   /** Reads and enables pagination through a set of `InAppNotificationMetadatum`. */
   relatedInAppNotifications: InAppNotificationMetadataConnection;
   resetPasswordToken?: Maybe<Scalars['String']>;
@@ -25118,6 +25470,18 @@ export type UserPromptsByPostAuthorIdAndPromptIdArgs = {
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<PromptsOrderBy>>;
+};
+
+
+export type UserRefreshTokensArgs = {
+  after?: Maybe<Scalars['Cursor']>;
+  before?: Maybe<Scalars['Cursor']>;
+  condition?: Maybe<RefreshTokenCondition>;
+  filter?: Maybe<RefreshTokenFilter>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<RefreshTokensOrderBy>>;
 };
 
 
@@ -26813,6 +27177,29 @@ export enum UsersOrderBy {
   UuidDesc = 'UUID_DESC'
 }
 
+export type CreateRefreshTokenMutationVariables = Exact<{
+  jti: Scalars['String'];
+  userId: Scalars['Int'];
+}>;
+
+
+export type CreateRefreshTokenMutation = { __typename?: 'Mutation', createRefreshToken?: { __typename?: 'CreateRefreshTokenPayload', refreshToken?: { __typename?: 'RefreshToken', id: number, jti: string, userId?: number | null | undefined, createdAt: any, usedAt?: any | null | undefined } | null | undefined } | null | undefined };
+
+export type InvalidateRefreshTokenMutationVariables = Exact<{
+  id: Scalars['Int'];
+  usedAt: Scalars['Datetime'];
+}>;
+
+
+export type InvalidateRefreshTokenMutation = { __typename?: 'Mutation', updateRefreshToken?: { __typename?: 'UpdateRefreshTokenPayload', refreshToken?: { __typename?: 'RefreshToken', usedAt?: any | null | undefined, id: number } | null | undefined } | null | undefined };
+
+export type UserRefreshTokensQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type UserRefreshTokensQuery = { __typename?: 'Query', refreshTokens?: { __typename?: 'RefreshTokensConnection', nodes: Array<{ __typename?: 'RefreshToken', createdAt: any, jti: string, id: number, usedAt?: any | null | undefined, user?: { __typename?: 'User', uuid: any } | null | undefined } | null | undefined> } | null | undefined };
+
 export type ChatUserQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -27422,6 +27809,44 @@ export type UserUuidByIdQueryVariables = Exact<{
 export type UserUuidByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', uuid: any } | null | undefined };
 
 
+export const CreateRefreshToken = gql`
+    mutation CreateRefreshToken($jti: String!, $userId: Int!) {
+  createRefreshToken(input: {refreshToken: {jti: $jti, userId: $userId}}) {
+    refreshToken {
+      id
+      jti
+      userId
+      createdAt
+      usedAt
+    }
+  }
+}
+    `;
+export const InvalidateRefreshToken = gql`
+    mutation InvalidateRefreshToken($id: Int!, $usedAt: Datetime!) {
+  updateRefreshToken(input: {patch: {usedAt: $usedAt}, id: $id}) {
+    refreshToken {
+      usedAt
+      id
+    }
+  }
+}
+    `;
+export const UserRefreshTokens = gql`
+    query UserRefreshTokens($userId: Int!) {
+  refreshTokens(condition: {userId: $userId}, orderBy: CREATED_AT_DESC) {
+    nodes {
+      createdAt
+      jti
+      id
+      usedAt
+      user {
+        uuid
+      }
+    }
+  }
+}
+    `;
 export const ChatUser = gql`
     query ChatUser($id: Int!) {
   user(id: $id) {

@@ -25,26 +25,6 @@ services:
             DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGHOST:-everglot-db}:${PGPORT}/${POSTGRES_DB}"
             SESSION_COOKIE_VALIDATION_SECRETS: ${SESSION_COOKIE_VALIDATION_SECRETS:?Please set SESSION_COOKIE_VALIDATION_SECRETS}
             AGORA_APP_CERTIFICATE: ""
-            REFRESH_TOKEN_SECRET_KEY: |
-                {
-                    "crv": "Ed25519",
-                    "d": "oQwKotJRpwz-Y71TGvYWlaXAQ1FCZ8SBUpBHxco3560",
-                    "x": "OfWEsfD3Uh9GRB3JcSAcrw5VC9MRBT-da3OH7MaSZf8",
-                    "kty": "OKP",
-                    "kid": "484fa1cd-f0a0-4a8f-a8b5-170db41de1ac",
-                }
-            REFRESH_TOKEN_JWKS: |
-                {
-                    "keys":
-                        [
-                            {
-                                "crv": "Ed25519",
-                                "x": "OfWEsfD3Uh9GRB3JcSAcrw5VC9MRBT-da3OH7MaSZf8",
-                                "kty": "OKP",
-                                "kid": "484fa1cd-f0a0-4a8f-a8b5-170db41de1ac",
-                            },
-                        ],
-                }
         entrypoint: entrypoints/ci-after-app.sh
         # Avoid building the same image twice.
         image: everglot-app-image

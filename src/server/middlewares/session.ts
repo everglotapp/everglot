@@ -75,13 +75,16 @@ export function makeMiddleware(pool: Pool) {
     }
     const sess: session.SessionOptions = {
         secret,
-        cookie: { maxAge: 3 * 24 * 60 * 60 * 1000 }, // 3 days until touch or re-login
+        cookie: {
+            maxAge: 12 * 60 * 60 * 1000, // 12 hours
+            sameSite: "strict", // Do not send this cookie to other origins.
+        },
         store: new (pgSimpleSessionStore(session))({
             pool,
             schemaName: "app_public",
             tableName: "user_sessions",
         }),
-        name: SESSION_COOKIE_NAME,
+        name: dev ? SESSION_COOKIE_NAME : `__Host-${SESSION_COOKIE_NAME}`,
         resave: false,
         saveUninitialized: false,
     }
@@ -91,10 +94,6 @@ export function makeMiddleware(pool: Pool) {
             ...sess.cookie,
             secure: true, // Require HTTPS connection for signing in.
         }
-    }
-    sess.cookie = {
-        ...sess.cookie,
-        sameSite: "strict", // Do not send this cookie to other origins.
     }
     middleware = session(sess)
     return middleware

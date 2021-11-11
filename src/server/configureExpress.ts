@@ -27,8 +27,12 @@ const chlog = log.child({
 export default function configureExpress(app: Express, pool: Pool): Express {
     app.use(
         compression({ threshold: 0 }),
-        sirv("static", { dev }),
-        sirv("dynamic", { dev: true }),
+        sirv("static", { dev, etag: true }),
+        sirv("dynamic", {
+            dev,
+            immutable: true,
+            maxAge: 15552000, // 180 days
+        }),
         json(),
         cookieParser()
     )

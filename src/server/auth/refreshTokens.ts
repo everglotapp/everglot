@@ -177,12 +177,12 @@ export async function createRefreshToken(
     ) {
         chlog
             .child({ userId: vars.userId })
-            .error("Failed to insert a refresh token")
+            .error("Failed to create a refresh token")
         return null
     }
     chlog
         .child({ userId: vars.userId })
-        .debug("Successfully inserted a refresh token")
+        .debug("Successfully created a refresh token")
     return res.data.createRefreshToken.refreshToken
 }
 

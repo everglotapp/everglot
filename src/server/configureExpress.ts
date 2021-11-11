@@ -79,8 +79,6 @@ const UNPROTECTED_ROUTES = [
     "/join/",
     "/login",
     "/login/",
-    "/auth/refresh",
-    "/auth/refresh/",
     "/users/password/reset",
     "/users/password/reset/",
     "/users/password/reset/update",
@@ -100,6 +98,10 @@ function pathIsProtected(req: Request): boolean {
     }
     if (path.startsWith("/client/") && "get" === method) {
         // static files
+        return false
+    }
+    if (path.startsWith("/auth/refresh") && "post" === method) {
+        // refresh session
         return false
     }
     if (

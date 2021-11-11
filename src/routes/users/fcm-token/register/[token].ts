@@ -33,11 +33,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
     }
     const fcmToken = req.params["token"]
     if (!(await fcmTokenValid(fcmToken))) {
-        chlog.child({ fcmToken, userId }).debug("Invalid FCM token")
+        chlog.child({ fcmToken, userId }).info("Invalid FCM token")
         unprocessableEntity(res, "Invalid FCM token")
         return
     }
-    chlog.child({ fcmToken, userId }).debug("FCM token valid")
+    chlog.child({ fcmToken, userId }).trace("FCM token valid")
     const userDevice = await createUserDevice({ userId, fcmToken })
     if (userDevice) {
         chlog

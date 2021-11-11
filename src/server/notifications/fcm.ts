@@ -248,7 +248,16 @@ export async function createUserDevice(
         CreateUserDevice.loc!.source,
         { ...userDevice }
     )
-    if (res.errors || !res.data) {
+    if (
+        res.errors &&
+        res.errors.length &&
+        res.errors[0] &&
+        res.errors[0].message ===
+            'duplicate key value violates unique constraint "user_devices_fcm_token_key"'
+    ) {
+        chlog.child({ userDevice }).trace("Prevented FCM token re-registration")
+        return null
+    } else if (res.errors || !res.data) {
         chlog.child({ userDevice }).debug("Failed to create user device")
         return null
     }

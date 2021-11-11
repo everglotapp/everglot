@@ -1,0 +1,14 @@
+mutation UpsertUserDevice($userId: Int!, $fcmToken: String!, $updatedAt: Datetime!) {
+  upsertUserDevice(input: {userDevice: {fcmToken: $fcmToken, updatedAt: $updatedAt, userId: $userId}}, where: {fcmToken: $fcmToken}) {
+    userDevice {
+      createdAt
+      updatedAt
+      id
+      nodeId
+      uuid
+      userId
+      __typename
+    }
+    __typename
+  }
+}

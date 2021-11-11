@@ -2,13 +2,13 @@ import { getApp } from "../firebase"
 import log from "../../logger"
 
 import {
-    CreateUserDevice,
-    CreateUserDeviceMutation,
-    CreateUserDeviceMutationVariables,
     DeleteInvalidFcmToken,
     DeleteInvalidFcmTokenMutation,
     DeleteInvalidFcmTokenMutationVariables,
     Maybe,
+    UpsertUserDevice,
+    UpsertUserDeviceMutation,
+    UpsertUserDeviceMutationVariables,
     UserDevice,
 } from "../../types/generated/graphql"
 import { performQuery } from "../gql"
@@ -28,7 +28,7 @@ import {
     markNotificationAsJustSent,
     NotificationRecipient,
 } from "./utils"
-import type { BaseNotificationParams, NotificationParams } from "./params"
+import type { BaseNotificationParams } from "./params"
 import type { FcmParamsV1 } from "./params/v1"
 import type { MulticastMessage } from "firebase-admin/messaging"
 
@@ -241,28 +241,21 @@ export async function enqueueFcmNotification(
     )
 }
 
-export async function createUserDevice(
-    userDevice: CreateUserDeviceMutationVariables
-): Promise<CreateUserDeviceMutation["createUserDevice"] | null> {
-    const res = await performQuery<CreateUserDeviceMutation>(
-        CreateUserDevice.loc!.source,
-        { ...userDevice }
+export async function upsertUserDevice(
+    vars: UpsertUserDeviceMutationVariables
+): Promise<
+    | NonNullable<UpsertUserDeviceMutation["upsertUserDevice"]>["userDevice"]
+    | null
+> {
+    const res = await performQuery<UpsertUserDeviceMutation>(
+        UpsertUserDevice.loc!.source,
+        vars
     )
-    if (
-        res.errors &&
-        res.errors.length &&
-        res.errors[0] &&
-        res.errors[0].message ===
-            'duplicate key value violates unique constraint "user_devices_fcm_token_key"'
-    ) {
-        chlog.child({ userDevice }).trace("Prevented FCM token re-registration")
-        return null
-    } else if (res.errors || !res.data) {
-        chlog.child({ userDevice }).debug("Failed to create user device")
+    if (!res.data) {
+        chlog.child({ res }).error("Failed to upsert user device")
         return null
     }
-    chlog.child({ userDevice }).debug("Successfully created user device")
-    return res.data?.createUserDevice || null
+    return res.data?.upsertUserDevice?.userDevice || null
 }
 
 async function deleteInvalidFcmToken(

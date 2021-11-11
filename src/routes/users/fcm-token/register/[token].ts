@@ -8,7 +8,7 @@ const chlog = log.child({
 })
 
 import type { Request, Response } from "express"
-import { createUserDevice } from "../../../../server/notifications/fcm"
+import { upsertUserDevice } from "../../../../server/notifications/fcm"
 
 async function fcmTokenValid(token: string): Promise<boolean> {
     try {
@@ -38,7 +38,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
     chlog.child({ fcmToken, userId }).trace("FCM token valid")
-    const userDevice = await createUserDevice({ userId, fcmToken })
+    const userDevice = await upsertUserDevice({
+        userId,
+        fcmToken,
+        updatedAt: new Date().toISOString(),
+    })
     if (userDevice) {
         chlog
             .child({ userDevice })

@@ -413,15 +413,6 @@ declare module '*/createNotification.graphql' {
 }
     
 
-declare module '*/createUserDevice.graphql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const CreateUserDevice: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
 declare module '*/currentUserInAppNotifications.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -642,6 +633,15 @@ declare module '*/updateUserResetPasswordToken.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const UpdateUserResetPasswordToken: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/upsertUserDevice.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UpsertUserDevice: DocumentNode;
 
   export default defaultDocument;
 }

@@ -25617,6 +25617,7 @@ export type UserDevice = Node & {
   id: Scalars['Int'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
+  updatedAt: Scalars['Datetime'];
   /** Reads a single `User` that is related to this `UserDevice`. */
   user?: Maybe<User>;
   userId?: Maybe<Scalars['Int']>;
@@ -25634,6 +25635,8 @@ export type UserDeviceCondition = {
   fcmToken?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `id` field. */
   id?: Maybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `updatedAt` field. */
+  updatedAt?: Maybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `userId` field. */
   userId?: Maybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
@@ -25654,6 +25657,8 @@ export type UserDeviceFilter = {
   not?: Maybe<UserDeviceFilter>;
   /** Checks for any expressions in this list. */
   or?: Maybe<Array<UserDeviceFilter>>;
+  /** Filter by the object’s `updatedAt` field. */
+  updatedAt?: Maybe<DatetimeFilter>;
   /** Filter by the object’s `userId` field. */
   userId?: Maybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
@@ -25665,6 +25670,7 @@ export type UserDeviceInput = {
   createdAt?: Maybe<Scalars['Datetime']>;
   fcmToken?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
+  updatedAt?: Maybe<Scalars['Datetime']>;
   userId?: Maybe<Scalars['Int']>;
   uuid?: Maybe<Scalars['UUID']>;
 };
@@ -25674,6 +25680,7 @@ export type UserDevicePatch = {
   createdAt?: Maybe<Scalars['Datetime']>;
   fcmToken?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
+  updatedAt?: Maybe<Scalars['Datetime']>;
   userId?: Maybe<Scalars['Int']>;
   uuid?: Maybe<Scalars['UUID']>;
 };
@@ -25711,6 +25718,8 @@ export enum UserDevicesOrderBy {
   Natural = 'NATURAL',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  UpdatedAtAsc = 'UPDATED_AT_ASC',
+  UpdatedAtDesc = 'UPDATED_AT_DESC',
   UserIdAsc = 'USER_ID_ASC',
   UserIdDesc = 'USER_ID_DESC',
   UuidAsc = 'UUID_ASC',
@@ -27550,14 +27559,6 @@ export type CreateNotificationMutationVariables = Exact<{
 
 export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification?: { __typename?: 'CreateNotificationPayload', clientMutationId?: string | null | undefined, notification?: { __typename?: 'Notification', createdAt: any, expiresAt?: any | null | undefined, withheldUntil?: any | null | undefined, id: number } | null | undefined } | null | undefined };
 
-export type CreateUserDeviceMutationVariables = Exact<{
-  userId: Scalars['Int'];
-  fcmToken?: Maybe<Scalars['String']>;
-}>;
-
-
-export type CreateUserDeviceMutation = { __typename?: 'Mutation', createUserDevice?: { __typename?: 'CreateUserDevicePayload', userDevice?: { __typename?: 'UserDevice', uuid: any, fcmToken?: string | null | undefined, id: number } | null | undefined } | null | undefined };
-
 export type CurrentUserInAppNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -27743,6 +27744,15 @@ export type UpdateUserResetPasswordTokenMutationVariables = Exact<{
 
 
 export type UpdateUserResetPasswordTokenMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'UpdateUserPayload', user?: { __typename?: 'User', id: number, resetPasswordTokenCreatedAt?: any | null | undefined, resetPasswordToken?: string | null | undefined } | null | undefined } | null | undefined };
+
+export type UpsertUserDeviceMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  fcmToken: Scalars['String'];
+  updatedAt: Scalars['Datetime'];
+}>;
+
+
+export type UpsertUserDeviceMutation = { __typename?: 'Mutation', upsertUserDevice?: { __typename?: 'UpsertUserDevicePayload', userDevice?: { __typename?: 'UserDevice', createdAt: any, updatedAt: any, id: number, nodeId: string, uuid: any, userId?: number | null | undefined } | null | undefined } | null | undefined };
 
 export type UpsertUserPreferenceMutationVariables = Exact<{
   feedLanguageId: Scalars['Int'];
@@ -28793,17 +28803,6 @@ export const CreateNotification = gql`
   }
 }
     `;
-export const CreateUserDevice = gql`
-    mutation CreateUserDevice($userId: Int!, $fcmToken: String) {
-  createUserDevice(input: {userDevice: {userId: $userId, fcmToken: $fcmToken}}) {
-    userDevice {
-      uuid
-      fcmToken
-      id
-    }
-  }
-}
-    `;
 export const CurrentUserInAppNotifications = gql`
     query CurrentUserInAppNotifications {
   currentUser {
@@ -29385,6 +29384,23 @@ export const UpdateUserResetPasswordToken = gql`
       id
       resetPasswordTokenCreatedAt
       resetPasswordToken
+    }
+  }
+}
+    `;
+export const UpsertUserDevice = gql`
+    mutation UpsertUserDevice($userId: Int!, $fcmToken: String!, $updatedAt: Datetime!) {
+  upsertUserDevice(
+    input: {userDevice: {fcmToken: $fcmToken, updatedAt: $updatedAt, userId: $userId}}
+    where: {fcmToken: $fcmToken}
+  ) {
+    userDevice {
+      createdAt
+      updatedAt
+      id
+      nodeId
+      uuid
+      userId
     }
   }
 }

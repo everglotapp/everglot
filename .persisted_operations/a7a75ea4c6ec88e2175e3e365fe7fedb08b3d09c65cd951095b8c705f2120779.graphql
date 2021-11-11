@@ -23,12 +23,22 @@ query CurrentUserInAppNotifications {
                 alpha2
                 __typename
               }
+              body
+              games {
+                nodes {
+                  revealedByCurrentUser
+                  gameType
+                  __typename
+                }
+                __typename
+              }
               __typename
             }
             language {
               alpha2
               __typename
             }
+            body
             __typename
           }
           __typename

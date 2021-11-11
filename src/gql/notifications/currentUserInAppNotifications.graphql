@@ -21,10 +21,18 @@ query CurrentUserInAppNotifications {
                             language {
                                 alpha2
                             }
+                            body
+                            games {
+                                nodes {
+                                    revealedByCurrentUser
+                                    gameType
+                                }
+                            }
                         }
                         language {
                             alpha2
                         }
+                        body
                     }
                 }
                 type

@@ -3,13 +3,15 @@ query OutstandingFcmNotifications($notExpiredAt: Datetime!) {
         notificationsByChannelId(
             orderBy: CREATED_AT_ASC
             filter: {
-                and: {
-                    sentAt: { isNull: true }
-                    or: [
-                        { expiresAt: { greaterThan: $notExpiredAt } }
-                        { expiresAt: { isNull: true } }
-                    ]
-                }
+                and: [
+                    { sentAt: { isNull: true } }
+                    {
+                        or: [
+                            { expiresAt: { isNull: true } }
+                            { expiresAt: { greaterThan: $notExpiredAt } }
+                        ]
+                    }
+                ]
             }
         ) {
             nodes {

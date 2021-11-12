@@ -28914,7 +28914,7 @@ export const OutstandingEmailNotifications = gql`
   notificationChannelByName(name: "Email") {
     notificationsByChannelId(
       orderBy: CREATED_AT_ASC
-      filter: {and: {sentAt: {isNull: true}, or: [{expiresAt: {greaterThan: $notExpiredAt}}, {expiresAt: {isNull: true}}]}}
+      filter: {and: [{sentAt: {isNull: true}}, {or: [{expiresAt: {isNull: true}}, {expiresAt: {greaterThan: $notExpiredAt}}]}]}
     ) {
       nodes {
         id
@@ -28937,7 +28937,7 @@ export const OutstandingFcmNotifications = gql`
   notificationChannelByName(name: "Firebase Cloud Messaging") {
     notificationsByChannelId(
       orderBy: CREATED_AT_ASC
-      filter: {and: {sentAt: {isNull: true}, or: [{expiresAt: {greaterThan: $notExpiredAt}}, {expiresAt: {isNull: true}}]}}
+      filter: {and: [{sentAt: {isNull: true}}, {or: [{expiresAt: {isNull: true}}, {expiresAt: {greaterThan: $notExpiredAt}}]}]}
     ) {
       nodes {
         id

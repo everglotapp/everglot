@@ -1,6 +1,6 @@
 query OutstandingEmailNotifications($notExpiredAt: Datetime!) {
   notificationChannelByName(name: "Email") {
-    notificationsByChannelId(orderBy: CREATED_AT_ASC, filter: {and: {sentAt: {isNull: true}, or: [{expiresAt: {greaterThan: $notExpiredAt}}, {expiresAt: {isNull: true}}]}}) {
+    notificationsByChannelId(orderBy: CREATED_AT_ASC, filter: {and: [{sentAt: {isNull: true}}, {or: [{expiresAt: {isNull: true}}, {expiresAt: {greaterThan: $notExpiredAt}}]}]}) {
       nodes {
         id
         recipient {

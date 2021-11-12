@@ -6,6 +6,7 @@ import {
     DeleteInvalidFcmTokenMutation,
     DeleteInvalidFcmTokenMutationVariables,
     Maybe,
+    OutstandingFcmNotificationsQueryVariables,
     UpsertUserDevice,
     UpsertUserDeviceMutation,
     UpsertUserDeviceMutationVariables,
@@ -182,14 +183,15 @@ async function sendNextFcmNotification() {
 async function getNextOutstandingFcmNotification() {
     const res = await performQuery<OutstandingFcmNotificationsQuery>(
         OutstandingFcmNotifications.loc!.source,
-        {}
+        {
+            notExpiredAt: new Date().toISOString(),
+        } as OutstandingFcmNotificationsQueryVariables
     )
     const notifications =
         res.data?.notificationChannelByName?.notificationsByChannelId?.nodes
     if (!notifications) {
         return null
     }
-    // TODO: Check expiresAt and allow any time later than now
     return (
         notifications.find((notification) => {
             if (!notification) {

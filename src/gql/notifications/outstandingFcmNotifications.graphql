@@ -1,8 +1,16 @@
-query OutstandingFcmNotifications {
+query OutstandingFcmNotifications($notExpiredAt: Datetime!) {
     notificationChannelByName(name: "Firebase Cloud Messaging") {
         notificationsByChannelId(
             orderBy: CREATED_AT_ASC
-            filter: { sentAt: { isNull: true } }
+            filter: {
+                and: {
+                    sentAt: { isNull: true }
+                    or: [
+                        { expiresAt: { greaterThan: $notExpiredAt } }
+                        { expiresAt: { isNull: true } }
+                    ]
+                }
+            }
         ) {
             nodes {
                 id

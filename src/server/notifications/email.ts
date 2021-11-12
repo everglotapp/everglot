@@ -7,6 +7,7 @@ import log from "../../logger"
 import {
     OutstandingEmailNotifications,
     OutstandingEmailNotificationsQuery,
+    OutstandingEmailNotificationsQueryVariables,
     UnsubscribeUserEmailNotifications,
     UnsubscribeUserEmailNotificationsMutation,
     UnsubscribeUserEmailNotificationsMutationVariables,
@@ -190,7 +191,9 @@ function getSendinblueTransactionalEmailsApiInstance() {
 async function getNextOutstandingEmailNotification() {
     const res = await performQuery<OutstandingEmailNotificationsQuery>(
         OutstandingEmailNotifications.loc!.source,
-        {}
+        {
+            notExpiredAt: new Date().toISOString(),
+        } as OutstandingEmailNotificationsQueryVariables
     )
     const notifications =
         res.data?.notificationChannelByName?.notificationsByChannelId?.nodes

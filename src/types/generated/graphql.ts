@@ -27594,12 +27594,16 @@ export type NotificationChannelByNameQueryVariables = Exact<{
 
 export type NotificationChannelByNameQuery = { __typename?: 'Query', notificationChannelByName?: { __typename?: 'NotificationChannel', id: number } | null | undefined };
 
-export type OutstandingEmailNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
+export type OutstandingEmailNotificationsQueryVariables = Exact<{
+  notExpiredAt: Scalars['Datetime'];
+}>;
 
 
 export type OutstandingEmailNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: { __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<{ __typename?: 'Notification', id: number, params?: any | null | undefined, expiresAt?: any | null | undefined, withheldUntil?: any | null | undefined, recipient?: { __typename?: 'User', email: string, emailNotificationsEnabled: boolean, username?: string | null | undefined, unconfirmedEmail?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
 
-export type OutstandingFcmNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
+export type OutstandingFcmNotificationsQueryVariables = Exact<{
+  notExpiredAt: Scalars['Datetime'];
+}>;
 
 
 export type OutstandingFcmNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: { __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<{ __typename?: 'Notification', id: number, params?: any | null | undefined, expiresAt?: any | null | undefined, withheldUntil?: any | null | undefined, recipient?: { __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<{ __typename?: 'UserDevice', fcmToken?: string | null | undefined } | null | undefined> } } | null | undefined, recipientGroup?: { __typename?: 'Group', uuid: any, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<{ __typename?: 'GroupUser', user?: { __typename?: 'User', uuid: any, userDevices: { __typename?: 'UserDevicesConnection', nodes: Array<{ __typename?: 'UserDevice', fcmToken?: string | null | undefined } | null | undefined> } } | null | undefined } | null | undefined> } } | null | undefined } | null | undefined> } } | null | undefined };
@@ -28906,11 +28910,11 @@ export const NotificationChannelByName = gql`
 }
     `;
 export const OutstandingEmailNotifications = gql`
-    query OutstandingEmailNotifications {
+    query OutstandingEmailNotifications($notExpiredAt: Datetime!) {
   notificationChannelByName(name: "Email") {
     notificationsByChannelId(
       orderBy: CREATED_AT_ASC
-      filter: {sentAt: {isNull: true}}
+      filter: {and: {sentAt: {isNull: true}, or: [{expiresAt: {greaterThan: $notExpiredAt}}, {expiresAt: {isNull: true}}]}}
     ) {
       nodes {
         id
@@ -28929,11 +28933,11 @@ export const OutstandingEmailNotifications = gql`
 }
     `;
 export const OutstandingFcmNotifications = gql`
-    query OutstandingFcmNotifications {
+    query OutstandingFcmNotifications($notExpiredAt: Datetime!) {
   notificationChannelByName(name: "Firebase Cloud Messaging") {
     notificationsByChannelId(
       orderBy: CREATED_AT_ASC
-      filter: {sentAt: {isNull: true}}
+      filter: {and: {sentAt: {isNull: true}, or: [{expiresAt: {greaterThan: $notExpiredAt}}, {expiresAt: {isNull: true}}]}}
     ) {
       nodes {
         id

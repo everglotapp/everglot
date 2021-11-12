@@ -335,7 +335,7 @@
         selectedText = null
         selectionRange = null
         const s = window.getSelection
-            ? window.getSelection()
+            ? window.getSelection() // @ts-ignore
             : document.selection
         if (!s) {
             return

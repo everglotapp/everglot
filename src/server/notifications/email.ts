@@ -16,7 +16,7 @@ import {
     getEmailNotificationChannelId,
     markNotificationAsJustSent,
 } from "./utils"
-import type { BaseNotificationParams, NotificationParamsV1 } from "./params"
+import type { BaseNotificationParams } from "./params"
 import type {
     EmailParamsV1,
     ManualHtmlEmailParamsV1,

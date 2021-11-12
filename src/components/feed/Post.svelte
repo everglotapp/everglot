@@ -40,8 +40,10 @@
     import {
         BodyPart,
         BodyPartType,
+        GuessCaseLocale,
         GuessCaseOption,
         GuessCaseRange,
+        GuessGenderLocale,
         GuessGenderOption,
         GuessGenderRange,
         GUESS_CASE_OPTIONS,
@@ -215,6 +217,14 @@
         game === null || $currentUserUuid === null
             ? null
             : $currentUserUuid === author.uuid
+    $: guessCaseLocale =
+        language && game && game.gameType === PostGameType.GuessCase
+            ? (language.alpha2 as GuessCaseLocale)
+            : null
+    $: guessGenderLocale =
+        language && game && game.gameType === PostGameType.GuessGender
+            ? (language.alpha2 as GuessGenderLocale)
+            : null
 
     let rangeByUuid: Record<
         string,
@@ -238,12 +248,9 @@
         })) || []
     )
 
-    $: currentUserAnswers =
-        game === null
-            ? []
-            : game.answersByCurrentUser.nodes
-                  .filter(Boolean)
-                  .map((node) => node!)
+    $: currentUserAnswers = game
+        ? game.answersByCurrentUser.nodes.filter(Boolean).map((node) => node!)
+        : []
     $: currentUserCorrectAnswers = currentUserAnswers.filter(
         (answer) => answer.correct
     )
@@ -266,30 +273,29 @@
                       }),
                       {}
                   )
-    $: currentUserHasAnsweredOrRevealed =
-        game === null
-            ? null
-            : currentUserAnswers.length || game.revealedByCurrentUser
+    $: currentUserHasAnsweredOrRevealed = game
+        ? currentUserAnswers.length || game.revealedByCurrentUser
+        : null
     $: currentUserCanAnswer =
         !currentUserCreatedGame && !currentUserHasAnsweredOrRevealed
     $: correctAnswers =
-        game === null || !game.correctAnswers.nodes.length
+        !game || !game.correctAnswers.nodes.length
             ? null
             : game.correctAnswers.nodes.filter(Boolean).map((node) => node!)
-    let correctAnswerByRangeUuid: Record<
+    type UuidToAnswer = Record<
         string,
         NonNullable<NonNullable<typeof game>["correctAnswers"]["nodes"][number]>
     >
-    $: correctAnswerByRangeUuid =
-        correctAnswers === null
-            ? {}
-            : correctAnswers.reduce(
-                  (uuidToAnswer, answer) => ({
-                      ...uuidToAnswer,
-                      [answer.rangeUuid]: answer,
-                  }),
-                  {}
-              )
+    let correctAnswerByRangeUuid: UuidToAnswer
+    $: correctAnswerByRangeUuid = correctAnswers
+        ? correctAnswers.reduce(
+              (uuidToAnswer, answer) => ({
+                  ...uuidToAnswer,
+                  [answer.rangeUuid]: answer,
+              }),
+              {} as UuidToAnswer
+          )
+        : ({} as UuidToAnswer)
     let displayedAnswerByRangeUuid: Record<
         string,
         | NonNullable<
@@ -465,17 +471,16 @@
             onFailure()
         }
     }
-    $: anyRangeAnswered =
-        game === null
-            ? null
-            : game.gameType === PostGameType.GuessCase ||
-              game.gameType === PostGameType.GuessGender
+    $: anyRangeAnswered = game
+        ? game.gameType === PostGameType.GuessCase ||
+          game.gameType === PostGameType.GuessGender
             ? Object.values(answerRanges).some(Boolean)
             : game.gameType === PostGameType.Cloze
             ? Object.values(clozeAnswers).some(
                   (clozeAnswer) => clozeAnswer && clozeAnswer.length
               )
             : null
+        : null
     let showCorrectAnswers: boolean = false
 
     let showCorrections: boolean = false
@@ -528,7 +533,7 @@
         correctionText = null
         correctionRange = null
         const s = window.getSelection
-            ? window.getSelection()
+            ? window.getSelection() // @ts-ignore
             : document.selection
         if (!s) {
             return
@@ -945,9 +950,7 @@
                         on:cancel={() => (answerRangeUuid = null)}
                         on:remove={() => {
                             if (answerRangeUuid !== null) {
-                                if (
-                                    answerRanges.hasOwnProperty(answerRangeUuid)
-                                ) {
+                                if (answerRangeUuid in answerRanges) {
                                     answerRanges[answerRangeUuid] = null
                                 }
                                 answerRangeUuid = null
@@ -1045,7 +1048,7 @@
                                                 ].caseOption
                                                     ? `post-game-guess-case-${
                                                           GUESS_CASE_OPTIONS[
-                                                              language.alpha2
+                                                              guessCaseLocale
                                                           ][
                                                               displayedAnswerByRangeUuid[
                                                                   bodyPart.uuid
@@ -1059,7 +1062,7 @@
                                                       ].genderOption
                                                     ? `post-game-guess-gender-${
                                                           GUESS_GENDER_OPTIONS[
-                                                              language.alpha2
+                                                              guessGenderLocale
                                                           ][
                                                               displayedAnswerByRangeUuid[
                                                                   bodyPart.uuid

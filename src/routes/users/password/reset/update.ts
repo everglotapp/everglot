@@ -57,7 +57,7 @@ async function sendResetPasswordSuccessMail(userId: number, resetAt: Date) {
         templateParams: {
             username: username || "user",
             changeDetail: "Unknown location",
-            date: resetAt.toUTCString("en"),
+            date: resetAt.toUTCString(),
         },
         version: NotificationParamsVersion.V1,
     })

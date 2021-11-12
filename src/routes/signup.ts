@@ -169,7 +169,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 }
             }
             for (const code of learning) {
-                if (!cefrLevels.hasOwnProperty(code)) {
+                if (!(code in cefrLevels)) {
                     throw new Error(`cefrLevels doesn't have property ${code}`)
                 }
                 if (teaching.includes(code)) {

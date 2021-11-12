@@ -121,7 +121,7 @@ export function selectable(node: HTMLElement, opts?: SelectableOpts) {
             return
         }
         const s = window.getSelection
-            ? window.getSelection()
+            ? window.getSelection() // @ts-ignore
             : document.selection
         // console.log("maybeUpdateSelection", {
         //     s,
@@ -153,7 +153,7 @@ export function selectable(node: HTMLElement, opts?: SelectableOpts) {
             return
         }
         const s = window.getSelection
-            ? window.getSelection()
+            ? window.getSelection() // @ts-ignore
             : document.selection
         if (!s) {
             return

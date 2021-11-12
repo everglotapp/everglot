@@ -13,6 +13,7 @@ import {
 import {
     PostGame,
     PostGameRange,
+    PostGamesCorrectAnswersConnection,
     PostGameType,
 } from "../../../../types/generated/graphql"
 import type { PostGameAnswerPayload } from "../../../../types/posts"
@@ -22,6 +23,27 @@ const chlog = log.child({
 })
 
 const MAX_CLOZE_ANSWER_LENGTH = 128
+
+function isPostGameAnswerPayload(
+    payload: unknown
+): payload is PostGameAnswerPayload {
+    return (
+        typeof payload === "object" &&
+        payload !== null &&
+        !Array.isArray(payload) &&
+        "rangeUuid" in payload
+    )
+}
+
+function isValidPostGameAnswer(
+    answer: unknown
+): answer is PostGameAnswerPayload {
+    return (
+        isPostGameAnswerPayload(answer) &&
+        typeof answer.rangeUuid === "string" &&
+        uuidValidate(answer.rangeUuid)
+    )
+}
 
 export async function post(req: Request, res: Response, next: () => void) {
     const { user_id: userId } = req.session
@@ -45,14 +67,7 @@ export async function post(req: Request, res: Response, next: () => void) {
         return
     }
     for (const answer of answers as unknown[]) {
-        if (
-            !answer ||
-            typeof answer !== "object" ||
-            Array.isArray(answer) ||
-            !(answer as object).hasOwnProperty("rangeUuid") ||
-            typeof (answer as PostGameAnswerPayload).rangeUuid !== "string" ||
-            !uuidValidate((answer as PostGameAnswerPayload).rangeUuid)
-        ) {
+        if (!isValidPostGameAnswer(answer)) {
             chlog
                 .child({
                     userId,
@@ -188,10 +203,23 @@ export async function post(req: Request, res: Response, next: () => void) {
 function isAnswerCorrect(
     answer: PostGameAnswerPayload,
     range: Pick<PostGameRange, "uuid" | "id" | "caseOption" | "genderOption">,
-    game: Pick<PostGame, "gameType" | "correctAnswers" | "post">
+    game: Pick<PostGame, "gameType"> & {
+        post?:
+            | {
+                  language?: { alpha2: string } | null | undefined
+              }
+            | null
+            | undefined
+        correctAnswers: {
+            nodes: (
+                | PostGamesCorrectAnswersConnection["nodes"][number]
+                | undefined
+            )[]
+        }
+    }
 ): boolean | null {
     const correctAnswer = game.correctAnswers.nodes.find(
-        (answer) => answer !== null && answer.rangeUuid === range.uuid
+        (answer) => answer && answer.rangeUuid === range.uuid
     )
     if (!correctAnswer) {
         return null

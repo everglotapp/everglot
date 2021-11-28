@@ -98,12 +98,27 @@
                         in:scale={{ duration: 100 }}
                     >
                         <div class="avatar">
-                            <Avatar
-                                username={notification.metadata.user.username}
-                                uuid={notification.metadata.user.uuid}
-                                url={notification.metadata.user.avatarUrl}
-                                size={56}
-                            />
+                            {#if notification.type === InAppParamsTypeV1.PostUserMention}
+                                {#if notification.metadata.post && notification.metadata.post.author && notification.metadata.post.author.username && notification.metadata.post.author.avatarUrl}
+                                    <Avatar
+                                        username={notification.metadata.post
+                                            .author.username}
+                                        uuid={notification.metadata.post.author
+                                            .uuid}
+                                        url={notification.metadata.post.author
+                                            .avatarUrl}
+                                        size={56}
+                                    />
+                                {/if}
+                            {:else if notification.metadata.user.username && notification.metadata.user.avatarUrl}
+                                <Avatar
+                                    username={notification.metadata.user
+                                        .username}
+                                    uuid={notification.metadata.user.uuid}
+                                    url={notification.metadata.user.avatarUrl}
+                                    size={56}
+                                />
+                            {/if}
                         </div>
                         <div class="main flex-col items-start">
                             <div class="description font-bold text-gray">

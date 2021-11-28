@@ -27562,7 +27562,7 @@ export type CreateNotificationMutation = { __typename?: 'Mutation', createNotifi
 export type CurrentUserInAppNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserInAppNotificationsQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', inAppNotifications: { __typename?: 'NotificationsConnection', nodes: Array<{ __typename?: 'Notification', uuid: any, createdAt: any, type?: string | null | undefined, metadata?: { __typename?: 'InAppNotificationMetadatum', user?: { __typename?: 'User', uuid: any, avatarUrl?: string | null | undefined, displayName?: string | null | undefined, username?: string | null | undefined, followedByCurrentUser?: boolean | null | undefined } | null | undefined, post?: { __typename?: 'Post', uuid: any, snowflakeId: any, body: string, author?: { __typename?: 'User', uuid: any, displayName?: string | null | undefined, username?: string | null | undefined } | null | undefined, parentPost?: { __typename?: 'Post', uuid: any, snowflakeId: any, body: string, language?: { __typename?: 'Language', alpha2: string } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', revealedByCurrentUser?: boolean | null | undefined, gameType: PostGameType } | null | undefined> } } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined } | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
+export type CurrentUserInAppNotificationsQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', inAppNotifications: { __typename?: 'NotificationsConnection', nodes: Array<{ __typename?: 'Notification', uuid: any, createdAt: any, type?: string | null | undefined, metadata?: { __typename?: 'InAppNotificationMetadatum', user?: { __typename?: 'User', uuid: any, avatarUrl?: string | null | undefined, displayName?: string | null | undefined, username?: string | null | undefined, followedByCurrentUser?: boolean | null | undefined } | null | undefined, post?: { __typename?: 'Post', uuid: any, snowflakeId: any, body: string, author?: { __typename?: 'User', uuid: any, avatarUrl?: string | null | undefined, displayName?: string | null | undefined, username?: string | null | undefined } | null | undefined, parentPost?: { __typename?: 'Post', uuid: any, snowflakeId: any, body: string, language?: { __typename?: 'Language', alpha2: string } | null | undefined, games: { __typename?: 'PostGamesConnection', nodes: Array<{ __typename?: 'PostGame', revealedByCurrentUser?: boolean | null | undefined, gameType: PostGameType } | null | undefined> } } | null | undefined, language?: { __typename?: 'Language', alpha2: string } | null | undefined } | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
 
 export type DeleteInvalidFcmTokenMutationVariables = Exact<{
   fcmToken: Scalars['String'];
@@ -28825,6 +28825,7 @@ export const CurrentUserInAppNotifications = gql`
           post {
             author {
               uuid
+              avatarUrl
               displayName
               username
             }

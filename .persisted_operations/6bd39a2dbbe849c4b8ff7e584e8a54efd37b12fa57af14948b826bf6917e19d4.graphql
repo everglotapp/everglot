@@ -16,6 +16,7 @@ query CurrentUserInAppNotifications {
           post {
             author {
               uuid
+              avatarUrl
               displayName
               username
               __typename

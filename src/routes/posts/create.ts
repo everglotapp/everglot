@@ -197,15 +197,15 @@ export async function notifyMentionedUser(
         return
     }
     enqueueInAppNotification(
-        { userId: parentPost.authorId, groupId: null },
+        { userId: postUserMention.userId, groupId: null },
         null,
         null,
         {
             version: NotificationParamsVersion.V1,
             type: InAppParamsTypeV1.PostUserMention,
             data: {
-                userUuid: mentionedUser.uuid,
                 postUuid,
+                userUuid: mentionedUser.uuid,
             },
         }
     )

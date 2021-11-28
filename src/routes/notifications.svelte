@@ -154,12 +154,12 @@
                                         >
                                     {/if}
                                 {:else if notification.type === InAppParamsTypeV1.PostUserMention}
-                                    {#if notification.metadata && notification.metadata.post && notification.metadata.post.parentPost}
+                                    {#if notification.metadata && notification.metadata.post && notification.metadata.post.parentPost && notification.metadata.post.author}
                                         <span class="text-gray-bitdark"
-                                            >{notification.metadata.user
+                                            >{notification.metadata.post.author
                                                 .displayName ||
-                                                notification.metadata.user
-                                                    .username}</span
+                                                notification.metadata.post
+                                                    .author.username}</span
                                         >
                                         tagged you under a squeek{#if notification.metadata.post.parentPost.games.nodes.length && notification.metadata.post.parentPost.games.nodes[0] && (!notification.metadata.post.parentPost.games.nodes[0].revealedByCurrentUser || notification.metadata.post.parentPost.games.nodes[0].gameType !== PostGameType.Cloze)}:
                                             <span class="text-gray-bitdark"

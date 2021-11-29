@@ -1,3 +1,7 @@
+export const entries = Object.entries as <T>(
+    o: T
+) => [Extract<keyof T, string>, T[keyof T]][]
+
 /**
  * Source: https://github.com/alsotang/is-chinese
  */

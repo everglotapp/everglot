@@ -20,11 +20,14 @@
         groupIsForLanguage,
     } from "../stores/groups"
     import type { GroupNode } from "../stores/groups"
-    import { LOCALE_TO_ARRAY_MAP, SUPPORTED_LOCALES } from "../constants"
+    import { SUPPORTED_LOCALES } from "../constants"
     import type { SupportedLocale } from "../constants"
 
     query(allGroupsStore)
 
+    const LOCALE_TO_ARRAY_MAP = Object.fromEntries(
+        SUPPORTED_LOCALES.map((locale) => [locale, [] as any[]])
+    ) as Record<SupportedLocale, any[]>
     let groups: Record<SupportedLocale, GroupNode[]> = LOCALE_TO_ARRAY_MAP
 
     $: if (!$allGroupsStore.fetching && !$allGroupsStore.error) {
@@ -141,8 +144,9 @@
                                     >
                                         {#each group.groupUsers.nodes
                                             .filter(Boolean)
+                                            .filter( (node) => Boolean(node.user) )
                                             .slice(0, 5)
-                                            .map((node) => node && node.user) as user, i (user.uuid)}
+                                            .map((node) => node.user) as user, i (user.uuid)}
                                             <div
                                                 style={`position: absolute; right: ${
                                                     10 *

@@ -62,6 +62,7 @@
     import CorrectionRangeDropdown, {
         CreatePostCorrectionEvent,
     } from "./CorrectionRangeDropdown.svelte"
+    import { entries } from "../../utils"
 
     query(currentUserStore)
 
@@ -428,21 +429,21 @@
             clozeAnswer?: string | undefined
         }[] = []
         if (game.gameType === PostGameType.GuessCase) {
-            answers = Object.entries(answerRanges)
+            answers = entries(answerRanges)
                 .filter(([_uuid, range]) => Boolean(range))
                 .map(([uuid, range]) => ({
                     rangeUuid: uuid,
                     caseOption: (range! as GuessCaseRange).option,
                 }))
         } else if (game.gameType === PostGameType.GuessGender) {
-            answers = Object.entries(answerRanges)
+            answers = entries(answerRanges)
                 .filter(([_uuid, range]) => Boolean(range))
                 .map(([uuid, range]) => ({
                     rangeUuid: uuid,
                     genderOption: (range! as GuessGenderRange).option,
                 }))
         } else if (game.gameType === PostGameType.Cloze) {
-            answers = Object.entries(clozeAnswers)
+            answers = entries(clozeAnswers)
                 .filter(([_uuid, answer]) => answer && answer.length)
                 .map(([uuid, answer]) => ({
                     rangeUuid: uuid,

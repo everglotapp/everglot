@@ -43,12 +43,7 @@
     style="transform-origin: center;"
 >
     <div class="avatar">
-        <Avatar
-            url={avatarUrl || ""}
-            username={username || ""}
-            size={32}
-            {uuid}
-        />
+        <Avatar url={avatarUrl} username={username || ""} size={32} {uuid} />
         {#if activeStatus}
             <div class={`active-status ${activeStatus}`} />
         {/if}

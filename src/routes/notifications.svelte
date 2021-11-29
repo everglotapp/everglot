@@ -99,7 +99,7 @@
                     >
                         <div class="avatar">
                             {#if notification.type === InAppParamsTypeV1.PostUserMention}
-                                {#if notification.metadata.post && notification.metadata.post.author && notification.metadata.post.author.username && notification.metadata.post.author.avatarUrl}
+                                {#if notification.metadata.post && notification.metadata.post.author && notification.metadata.post.author.username}
                                     <Avatar
                                         username={notification.metadata.post
                                             .author.username}

@@ -6,13 +6,14 @@
     import ButtonSmall from "../util/ButtonSmall.svelte"
     import { PostGameType } from "../../types/generated/graphql"
     import {
-        GuessGenderLocale,
         GUESS_CASE_LOCALES,
         GUESS_CASE_OPTIONS,
         GUESS_GENDER_LOCALES,
         GUESS_GENDER_OPTIONS,
         PostGameRange,
     } from "../../constants"
+    import type { GuessGenderLocale, GuessCaseLocale } from "../../constants"
+    import { entries } from "../../utils"
 
     export let gameType: PostGameType
     export let id: string
@@ -52,15 +53,15 @@
 
     $: availableGuessCaseOptions =
         locale && (GUESS_CASE_LOCALES as readonly string[]).includes(locale)
-            ? Object.entries(GUESS_CASE_OPTIONS[locale as GuessCaseLocale]).map(
+            ? entries(GUESS_CASE_OPTIONS[locale as GuessCaseLocale]).map(
                   (entry) => ({ value: entry[0], localizationId: entry[1] })
               )
             : []
     $: availableGuessGenderOptions =
         locale && (GUESS_GENDER_LOCALES as readonly string[]).includes(locale)
-            ? Object.entries(
-                  GUESS_GENDER_OPTIONS[locale as GuessGenderLocale]
-              ).map((entry) => ({ value: entry[0], localizationId: entry[1] }))
+            ? entries(GUESS_GENDER_OPTIONS[locale as GuessGenderLocale]).map(
+                  (entry) => ({ value: entry[0], localizationId: entry[1] })
+              )
             : []
 
     $: top =

@@ -46,15 +46,15 @@
 </script>
 
 <script lang="ts">
-    export let uuid: string | null | undefined = ""
+    export let uuid: string | null | undefined
     export let username: string = ""
-    export let url: string = ""
+    export let url: string | null | undefined
     export let size: number = 50
     export let showShadow: boolean = true
     export let id: string | undefined = undefined
 
     $: initial = username.charAt(0)
-    $: showImage = url?.startsWith("https://") || url?.startsWith("/")
+    $: showImage = url && (url.startsWith("https://") || url.startsWith("/"))
     let backgroundColor: string = DEFAULT_BACKGROUND_COLOR
     $: if (uuid && !showImage) {
         calculateBackgroundColor(uuid).then(
@@ -76,7 +76,7 @@
 >
     {#if showImage}
         <img
-            src={url}
+            src={url || ""}
             alt={initial}
             role="presentation"
             aria-label={`Avatar of ${username}`}

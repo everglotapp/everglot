@@ -11,9 +11,6 @@ export const SUPPORTED_LOCALES = [
     "pt",
 ] as const
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
-export const LOCALE_TO_ARRAY_MAP = Object.fromEntries(
-    SUPPORTED_LOCALES.map((locale) => [locale, [] as any[]])
-) as Record<SupportedLocale, any[]>
 
 export const HANGMAN_LOCALES = [
     "en",

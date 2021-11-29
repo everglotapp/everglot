@@ -32,6 +32,7 @@
     import { stores as fluentStores } from "@nubolab-ffwd/svelte-fluent/src/internal/FluentProvider.svelte"
     import { SUPPORTED_LOCALES } from "../constants"
     import { localeIsSupported } from "../helpers/locales"
+    import { entries } from "../utils"
     const { translate } = fluentStores()!
 
     query(languageCodeMappings)
@@ -152,7 +153,7 @@
                 gender,
                 teaching: teachingCodes,
                 learning: learningCodes,
-                cefrLevels: Object.entries(learningLevels).reduce(
+                cefrLevels: entries(learningLevels).reduce(
                     (levels, [code, level]) =>
                         learningCodes.includes(code)
                             ? { ...levels, [code]: level }

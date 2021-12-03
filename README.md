@@ -7,6 +7,7 @@ Everglot web application based on Express.js, Svelte/Sapper, Socket.io, PostgreS
 Create a file called `.env` in the same directory as this readme. Otherwise set the following environment variables through some other means.
 
 ```bash
+ROARR_LOG=true
 POSTGRES_USER=everglot_app_user
 POSTGRES_PASSWORD=everglot_app_pass
 POSTGRES_DB=everglot_app_db

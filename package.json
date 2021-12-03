@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "run-p watch:*",
     "watch:css": "postcss src/assets/global.pcss -o static/global.css -w",
-    "watch:dev": "dotenv sapper dev | roarr pretty-print",
+    "watch:dev": "dotenv sapper dev",
     "build": "run-s build:css build:css:fonts build:sapper",
     "build:css": "NODE_ENV=production postcss src/assets/global.pcss -o static/global.css",
     "build:css:fonts": "run-p build:css:fonts:poppins build:css:fonts:noto build:css:fonts:notosc build:css:fonts:notojp",
@@ -158,7 +158,7 @@
     "svelte-emoji-selector": "file:src/node_modules/svelte-emoji-selector",
     "svelte-feather-icons": "^3.5.0",
     "svelte-preprocess": "^4.9.8",
-    "svelte-select": "^4.4.3",
+    "svelte-select": "^4.4.6",
     "svelte-time": "^0.6.0",
     "tailwindcss": "^2.2.19",
     "ts-jest": "^27.0.7",

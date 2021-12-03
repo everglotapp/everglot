@@ -1,0 +1,28 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "docker-compose-db",
+      "type": "shell",
+      "isBackground": true,
+      "command": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up everglot-db"
+    },
+    {
+      "label": "build:css",
+      "type": "npm",
+      "script": "build:css"
+    },
+    {
+      "label": "codegen",
+      "type": "npm",
+      "script": "codegen"
+    },
+    {
+      "label": "migrate",
+      "type": "process",
+      "command": "npx dotenv npm run migrate up"
+    }
+  ]
+}

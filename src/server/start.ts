@@ -11,12 +11,12 @@ import notifications from "./notifications"
 const { HOST = "127.0.0.1", PORT = 3000, RETRY = 5 } = process.env
 
 /** Watch the PG database and update the GraphQL schema automatically. */
-async function initializeServersidePostgraphile() {
+export async function initializeServersidePostgraphile() {
     await gql.start()
 }
 
 /** Stop watching the PG database and updating the GraphQL schema. */
-async function stopServersidePostgraphile() {
+export async function stopServersidePostgraphile() {
     await gql.stop()
 }
 
@@ -109,7 +109,8 @@ export async function start() {
 
     const db = await connectToDatabase()
     if (!db) {
-        log.error(`Failed to start database. Exiting.`)
+        log.error(`Failed to connect to database. Exiting.`)
+        console.log(`Failed to connect to database. Exiting.`)
         process.exit(1)
     }
 
@@ -117,6 +118,7 @@ export async function start() {
 
     const onFail = () => {
         log.error(`Failed to start web server. Exiting.`)
+        console.log(`Failed to start web server. Exiting.`)
         process.exit(1)
     }
     const httpServer = await startWebServer(db).catch(onFail)

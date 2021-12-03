@@ -3,8 +3,6 @@ import sirv from "sirv"
 import { json } from "express"
 import cookieParser from "cookie-parser"
 
-import * as sapper from "@sapper/server"
-
 import postgraphile from "./middlewares/postgraphile"
 import session from "./middlewares/session"
 import uploads from "./middlewares/uploads"
@@ -73,6 +71,7 @@ export default function configureExpress(app: Express, pool: Pool): Express {
 
     app.use(postgraphile())
 
+    const sapper = require("@sapper/server")
     app.use(sapper.middleware())
 
     return app

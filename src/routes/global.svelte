@@ -236,12 +236,4 @@
             max-width: 368px;
         }
     }
-
-    .group .members-count {
-        @apply text-xs;
-        @apply align-middle;
-        @apply bg-gray-lightest;
-        @apply rounded-md;
-        @apply p-1;
-    }
 </style>

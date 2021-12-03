@@ -37,7 +37,7 @@ export async function createInviteToken({
 }
 
 export async function getInviteTokenIdByToken(
-    token: String
+    token: string
 ): Promise<Maybe<InviteToken["id"]>> {
     const res = await db?.query<{ id: InviteToken["id"] }>({
         text: `SELECT id

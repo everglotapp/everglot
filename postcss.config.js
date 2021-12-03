@@ -5,6 +5,7 @@ module.exports = {
             features: {
                 // enable nesting
                 "nesting-rules": true,
+                'focus-within-pseudo-class': false
             },
         }),
         require("autoprefixer"),

@@ -4,12 +4,16 @@ Everglot web application based on Express.js, Svelte/Sapper, Socket.io, PostgreS
 
 ## Configuration
 
-If you are going to use `docker-compose` (highly recommended), create a file called `.env` in the same directory as this readme. Otherwise set the following environment variables through some other means.
+Create a file called `.env` in the same directory as this readme. Otherwise set the following environment variables through some other means.
 
 ```bash
 POSTGRES_USER=everglot_app_user
 POSTGRES_PASSWORD=everglot_app_pass
 POSTGRES_DB=everglot_app_db
+PGUSER=everglot_app_user
+PGPASSWORD=everglot_app_pass
+PGDATABASE=everglot_app_db
+DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGHOST}:${PGPORT}/${POSTGRES_DB}"
 SESSION_COOKIE_VALIDATION_SECRETS=["SomeVeryLongRandomSecret123"]
 AGORA_APP_CERTIFICATE=inserthere
 SENDINBLUE_API_KEY=inserthere
@@ -25,28 +29,37 @@ You can generate a keypair for JSON Web Tokens by running `node scripts/generate
 
 ## Development
 
-Development works easiest with `docker` and `docker-compose`. Run
+### Database
+
+Run
+
+```
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d everglot-db
+```
+
+to start (and automatically initialize) the PostgreSQL database at `postgres://localhost:5432`
+
+### Node.js
+
+You will likely want to run NPM commands outside of the containers. Install Node.js [through your package manager](https://nodejs.org/en/download/package-manager/) or with NVM (Node version manager).
+
+Run
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+npm run dev
 ```
 
 to automatically start all required servers, including:
 
--   PostgreSQL database at `postgres://localhost:5432`
 -   Express.js web server at [`http://localhost:8002`](http://localhost:8002)
 -   Socket.io chat server at `http://localhost:8002/socket.io/`
 -   PostGraphile GraphQL server at `http://localhost:8002/graphql`
     -   GraphiQL IDE at [`http://localhost:8002/graphiql`](http://localhost:8002/graphiql)
 
-Files from this directory are automatically mirrored. Sometimes you may find yourself needing to restart the app Docker container (re-run the above command), for example
+Files from this directory are automatically mirrored. Sometimes you may find yourself needing to restart the app (re-run the `npm` command), for example
 
 -   when adding new files to the server (`src/server` directory)
 -   when adding new NPM dependencies.
-
-### Node.js
-
-You will likely want to run NPM commands outside of the containers. Install Node.js [through your package manager](https://nodejs.org/en/download/package-manager/) or with NVM (Node version manager).
 
 ### Dependencies
 

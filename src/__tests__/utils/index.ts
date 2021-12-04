@@ -22,7 +22,7 @@ import {
 } from "../../types/generated/graphql"
 import type { Pool } from "pg"
 import { AuthMethod, Gender } from "../../users"
-import { SESSION_COOKIE_NAME } from "../../server/middlewares/session"
+import { getSessionIdCookieName } from "../../server/middlewares/session"
 import { generateEmailUnsubscribeToken } from "../../helpers/tokens"
 
 const BASE_URL = "http://everglot-app:3000"
@@ -281,11 +281,11 @@ export async function login(
     return { res: clonedRes, sessionCookie: getSessionCookieValue(res) }
 }
 
-export function sessionCookieHeader(sessionCookie: Maybe<string>) {
-    if (!sessionCookie) {
+export function makeSessionIdCookieHeader(value: Maybe<string>) {
+    if (!value) {
         return ""
     }
-    return `${SESSION_COOKIE_NAME}=${sessionCookie}`
+    return `${getSessionIdCookieName()}=${value}`
 }
 
 // Adapted from https://stackoverflow.com/a/55680330/9926795
@@ -295,8 +295,9 @@ export function getSessionCookieValue(res: Response) {
         const [name, value] = header.split("=")
         return { name, value }
     }
+    const sessionIdCookieName = getSessionIdCookieName()
     const sessionCookie = cookies.find((raw) => {
-        return headerToCookie(raw).name === SESSION_COOKIE_NAME
+        return headerToCookie(raw).name === sessionIdCookieName
     })
     if (!sessionCookie) {
         return null

@@ -18,23 +18,15 @@ const {
     SESSION_COOKIE_VALIDATION_SECRETS,
     SESSION_COOKIE_NAME = "everglot_sid",
     NODE_ENV,
-    DISABLE_SECURE_COOKIES = "false",
 } = process.env
 
-export { SESSION_COOKIE_NAME }
-
 const dev = NODE_ENV === "development"
-let disableSecureCookies = false
-try {
-    if (JSON.parse(DISABLE_SECURE_COOKIES) === true) {
-        disableSecureCookies = true
-    }
-} catch (e) {
-    chlog
-        .child({ DISABLE_SECURE_COOKIES })
-        .warn(
-            "Failed to parse DISABLE_SECURE_COOKIES as JSON. Ignoring it and thus not disabling secure cookies."
-        )
+
+const MAX_COOKIE_AGE_MS = 12 * 60 * 60 * 1000 // 12 hours
+
+export function getSessionIdCookieName() {
+    const secure = !dev
+    return secure ? `__Host-${SESSION_COOKIE_NAME}` : SESSION_COOKIE_NAME
 }
 
 export function makeMiddleware(pool: Pool) {
@@ -73,23 +65,28 @@ export function makeMiddleware(pool: Pool) {
             )
         exit(1)
     }
+
+    const secure = !dev
+
     const sess: session.SessionOptions = {
         secret,
         cookie: {
-            maxAge: 12 * 60 * 60 * 1000, // 12 hours
+            maxAge: MAX_COOKIE_AGE_MS,
             sameSite: "strict", // Do not send this cookie to other origins.
+            secure,
+            httpOnly: true,
         },
         store: new (pgSimpleSessionStore(session))({
             pool,
             schemaName: "app_public",
             tableName: "user_sessions",
         }),
-        name: dev ? SESSION_COOKIE_NAME : `__Host-${SESSION_COOKIE_NAME}`,
+        name: getSessionIdCookieName(),
         resave: false,
         saveUninitialized: false,
     }
 
-    if (!dev && !disableSecureCookies) {
+    if (secure) {
         sess.cookie = {
             ...sess.cookie,
             secure: true, // Require HTTPS connection for signing in.

@@ -4,7 +4,7 @@ import {
     seedDatabase,
     createUser,
     login,
-    sessionCookieHeader,
+    makeSessionIdCookieHeader,
 } from "../../../../utils"
 import type { TestUser } from "../../../../utils"
 import { start } from "../../../../../server/gql"
@@ -55,7 +55,7 @@ describe("[token] route", () => {
         const res = await fetch("/users/fcm-token/register/whatever-token", {
             redirect: "manual",
             headers: {
-                cookie: sessionCookieHeader(sessionCookie),
+                cookie: makeSessionIdCookieHeader(sessionCookie),
             },
         })
         expect(res.status).toBe(404)
@@ -74,7 +74,7 @@ describe("[token] route", () => {
         const res = await fetch("/users/fcm-token/register/wrong-token", {
             method: "post",
             headers: {
-                cookie: sessionCookieHeader(sessionCookie),
+                cookie: makeSessionIdCookieHeader(sessionCookie),
             },
             redirect: "manual",
         })

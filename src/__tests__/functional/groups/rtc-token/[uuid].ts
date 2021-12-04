@@ -4,7 +4,7 @@ import {
     seedDatabase,
     createUser,
     login,
-    sessionCookieHeader,
+    makeSessionIdCookieHeader,
 } from "../../../utils"
 import type { TestUser } from "../../../utils"
 import { start } from "../../../../server/gql"
@@ -55,7 +55,7 @@ describe("[uuid] route", () => {
         await signIn()
         const res = await fetch("/groups/rtc-token/this-is-a-wrong-uuid", {
             headers: {
-                cookie: sessionCookieHeader(sessionCookie),
+                cookie: makeSessionIdCookieHeader(sessionCookie),
             },
             redirect: "manual",
         })
@@ -71,7 +71,7 @@ describe("[uuid] route", () => {
         await signIn()
         const res = await fetch(`/groups/rtc-token/${group!.uuid}`, {
             headers: {
-                cookie: sessionCookieHeader(sessionCookie),
+                cookie: makeSessionIdCookieHeader(sessionCookie),
             },
             redirect: "manual",
         })

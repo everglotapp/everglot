@@ -27,8 +27,6 @@ services:
             SESSION_COOKIE_VALIDATION_SECRETS: ${SESSION_COOKIE_VALIDATION_SECRETS:?Please set SESSION_COOKIE_VALIDATION_SECRETS}
             AGORA_APP_CERTIFICATE: ""
             SENDINBLUE_API_KEY: ""
-            REFRESH_TOKEN_SECRET_KEY: '{"crv":"Ed25519","d":"sDL5fY2MQOYK7IYXYN_P9mATSuIEnlLuHWpNJuCNjak","x":"1A2wEpVUVIgYR2ysRSy4KgIXh_GNWnPUrUTwBPhzsyc","kty":"OKP","kid":"cc8f369d-0042-4264-90f4-2396964c176a"}'
-            REFRESH_TOKEN_JWKS: '{"keys":[{"crv":"Ed25519","x":"1A2wEpVUVIgYR2ysRSy4KgIXh_GNWnPUrUTwBPhzsyc","kty":"OKP","kid":"cc8f369d-0042-4264-90f4-2396964c176a"}]}'
         entrypoint: entrypoints/test-after-app.sh
         # Avoid building the same image twice.
         image: everglot-app-image

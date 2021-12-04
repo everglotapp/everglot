@@ -4,23 +4,10 @@ Everglot web application based on Express.js, Svelte/Sapper, Socket.io, PostgreS
 
 ## Configuration
 
-Create a file called `.env` in the same directory as this readme. Otherwise set the following environment variables through some other means.
+Copy `.env.example` to `.env` in the same directory as this readme. Replace every value that says TODO by specific values:
 
-```bash
-ROARR_LOG=true
-POSTGRES_USER=everglot_app_user
-POSTGRES_PASSWORD=everglot_app_pass
-POSTGRES_DB=everglot_app_db
-PGUSER=everglot_app_user
-PGPASSWORD=everglot_app_pass
-PGDATABASE=everglot_app_db
-DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGHOST}:${PGPORT}/${POSTGRES_DB}"
-SESSION_COOKIE_VALIDATION_SECRETS=["SomeVeryLongRandomSecret123"]
-AGORA_APP_CERTIFICATE=inserthere
-SENDINBLUE_API_KEY=inserthere
-REFRESH_TOKEN_SECRET_KEY=some_secret_EdDSA_jwk
-REFRESH_TOKEN_JWKS=some_EdDSA_jwks
-```
+-   For `SESSION_COOKIE_VALIDATION_SECRETS` you typically want an array containing a single random string.
+-   For refresh tokens to work you need to set up a private and a public key which you can generate using `node scripts/generateKeyPair.mjs`
 
 In development you should keep the first three variables as they are.
 

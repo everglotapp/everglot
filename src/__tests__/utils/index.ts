@@ -278,7 +278,7 @@ export async function login(
         })
         .trace("Attempted to sign in during test")
     expect(res.status).toBe(200)
-    return { res: clonedRes, sessionCookie: getSessionCookieValue(res) }
+    return { res: clonedRes, sessionCookie: getSessionCookieValue(clonedRes) }
 }
 
 export function makeSessionIdCookieHeader(value: Maybe<string>) {
@@ -293,7 +293,7 @@ export function getSessionCookieValue(res: Response) {
     const cookies: string[] = res.headers.raw()["set-cookie"] || []
     const headerToCookie = (header: string) => {
         const [name, value] = header.split("=")
-        return { name, value }
+        return { name, value: value.split(";")[0].trim() }
     }
     const sessionIdCookieName = getSessionIdCookieName()
     const sessionCookie = cookies.find((raw) => {

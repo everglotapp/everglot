@@ -25,6 +25,7 @@ services:
             DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGHOST:-everglot-db}:${PGPORT}/${POSTGRES_DB}"
             SESSION_COOKIE_VALIDATION_SECRETS: ${SESSION_COOKIE_VALIDATION_SECRETS:?Please set SESSION_COOKIE_VALIDATION_SECRETS}
             AGORA_APP_CERTIFICATE: ""
+            SENDINBLUE_API_KEY: ""
         entrypoint: entrypoints/ci-after-app.sh
         # Avoid building the same image twice.
         image: everglot-app-image

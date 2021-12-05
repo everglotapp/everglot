@@ -15,11 +15,27 @@ const chlog = log.child({
 
 let middleware: RequestHandler | null
 
-const { SESSION_COOKIE_VALIDATION_SECRETS, NODE_ENV } = process.env
+const {
+    SESSION_COOKIE_VALIDATION_SECRETS,
+    NODE_ENV,
+    DISABLE_SECURE_COOKIES = "false",
+} = process.env
 
 const dev = NODE_ENV === "development"
-const test = NODE_ENV === "test"
 const MAX_COOKIE_AGE_MS = 12 * 60 * 60 * 1000 // 12 hours
+
+let disableSecureCookies = false
+try {
+    if (JSON.parse(DISABLE_SECURE_COOKIES) === true) {
+        disableSecureCookies = true
+    }
+} catch (e) {
+    chlog
+        .child({ DISABLE_SECURE_COOKIES })
+        .warn(
+            "Failed to parse DISABLE_SECURE_COOKIES as JSON. Ignoring it and thus not disabling secure cookies."
+        )
+}
 
 export function makeMiddleware(pool: Pool) {
     if (middleware) {
@@ -58,7 +74,7 @@ export function makeMiddleware(pool: Pool) {
         exit(1)
     }
 
-    const secure = !dev && !test
+    const secure = !dev && !disableSecureCookies
 
     const sess: session.SessionOptions = {
         secret,

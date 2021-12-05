@@ -1,14 +1,11 @@
-const { SESSION_COOKIE_NAME = "everglot_sid", NODE_ENV = "browser" } =
-    process.env
-const dev = NODE_ENV === "development"
-const test = NODE_ENV === "test"
+const { SESSION_COOKIE_NAME = "everglot_sid", NODE_ENV } = process.env
+const prod = NODE_ENV === "production"
 
 /**
  * Returns name of session ID cookie based on the environment.
  */
 export function getSessionIdCookieName() {
-    const secure = !dev && !test
-    return secure ? `__Host-${SESSION_COOKIE_NAME}` : SESSION_COOKIE_NAME
+    return prod ? `__Host-${SESSION_COOKIE_NAME}` : SESSION_COOKIE_NAME
 }
 
 export const entries = Object.entries as <T>(

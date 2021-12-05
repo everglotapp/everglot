@@ -4,7 +4,7 @@ import {
     seedDatabase,
     createUser,
     login,
-    getSessionCookieValue,
+    getSessionIdCookieValue,
 } from "../../utils"
 import type { TestUser } from "../../utils"
 import { start } from "../../../server/gql"
@@ -106,7 +106,7 @@ describe("auth/refresh route", () => {
             redirect: "manual",
         })
         expect(res.status).toBe(200)
-        expect(getSessionCookieValue(res.headers.raw())).not.toEqual(
+        expect(getSessionIdCookieValue(res.headers.raw())).not.toEqual(
             sessionCookie
         )
     })

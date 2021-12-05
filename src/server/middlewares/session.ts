@@ -22,6 +22,7 @@ const {
 } = process.env
 
 const dev = NODE_ENV === "development"
+const prod = NODE_ENV === "production"
 const MAX_COOKIE_AGE_MS = 12 * 60 * 60 * 1000 // 12 hours
 
 let disableSecureCookies = false
@@ -74,7 +75,7 @@ export function makeMiddleware(pool: Pool) {
         exit(1)
     }
 
-    const secure = !dev && !disableSecureCookies
+    const secure = prod && !disableSecureCookies
 
     const sess: session.SessionOptions = {
         secret,

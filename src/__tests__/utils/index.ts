@@ -278,7 +278,7 @@ export async function login(
         })
         .trace("Attempted to sign in during test")
     expect(res.status).toBe(200)
-    const sessionCookie = getSessionCookieValue(clonedRes.headers.raw())
+    const sessionCookie = getSessionIdCookieValue(clonedRes.headers.raw())
     chlog
         .child({
             sessionCookie,
@@ -296,7 +296,7 @@ export function makeSessionIdCookieHeader(value: Maybe<string>) {
 }
 
 // Adapted from https://stackoverflow.com/a/55680330/9926795
-export function getSessionCookieValue(headers: { [k: string]: string[] }) {
+export function getSessionIdCookieValue(headers: { [k: string]: string[] }) {
     const cookies: string[] = headers["set-cookie"] || []
     const headerToCookie = (header: string) => {
         const [name, value] = header.split("=")

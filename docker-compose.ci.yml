@@ -16,6 +16,7 @@ services:
     everglot-app-ci:
         environment:
             NODE_ENV: "test"
+            BASE_URL: "http://everglot-app:3000"
             ROARR_LOG: "true"
             PGUSER: "everglot_app_user"
             PGPASSWORD: "everglot_app_pass"

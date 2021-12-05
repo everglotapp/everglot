@@ -25,7 +25,7 @@ import { AuthMethod, Gender } from "../../users"
 import { generateEmailUnsubscribeToken } from "../../helpers/tokens"
 import { getSessionIdCookieName } from "../../utils"
 
-const BASE_URL = "http://everglot-app:3000"
+const { BASE_URL } = process.env
 
 const fakerator = new Fakerator()
 
@@ -278,7 +278,15 @@ export async function login(
         })
         .trace("Attempted to sign in during test")
     expect(res.status).toBe(200)
-    return { res: clonedRes, sessionCookie: getSessionCookieValue(clonedRes) }
+    const sessionCookie = getSessionCookieValue(res)
+    console.log({ sessionCookie })
+    chlog
+        .child({
+            sessionCookie,
+            headers: res.headers,
+        })
+        .trace("Retrieved session cookie")
+    return { res: clonedRes, sessionCookie }
 }
 
 export function makeSessionIdCookieHeader(value: Maybe<string>) {
@@ -306,5 +314,5 @@ export function getSessionCookieValue(res: Response) {
 }
 
 export function getAppUrl(path = "/") {
-    return `http://everglot-app:3000${path}`
+    return `${BASE_URL}${path}`
 }

@@ -5,10 +5,11 @@ services:
         volumes:
             - ./:/home/node/app
         environment:
-            NODE_ENV: "development"
+            NODE_ENV: "production"
             ROARR_LOG: "true"
             HOST: "0.0.0.0"
-            PORT: "3000"
+            PORT: "30001"
+            DISABLE_SECURE_COOKIES: "true"
         entrypoint: entrypoints/test-after-db.sh
         command: ["/bin/sh", "-c", "npm run dev | roarr pretty-print"]
         # Avoid building the same image twice.
@@ -16,7 +17,8 @@ services:
 
     everglot-app-test:
         environment:
-            NODE_ENV: "development"
+            NODE_ENV: "test"
+            BASE_URL: "http://everglot-app:30001"
             ROARR_LOG: "true"
             PGUSER: ${POSTGRES_USER:?Please set POSTGRES_USER}
             PGPASSWORD: ${POSTGRES_PASSWORD:?Please set POSTGRES_PASSWORD}

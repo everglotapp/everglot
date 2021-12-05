@@ -22,8 +22,8 @@ import {
 } from "../../types/generated/graphql"
 import type { Pool } from "pg"
 import { AuthMethod, Gender } from "../../users"
-import { getSessionIdCookieName } from "../../server/middlewares/session"
 import { generateEmailUnsubscribeToken } from "../../helpers/tokens"
+import { getSessionIdCookieName } from "../../utils"
 
 const BASE_URL = "http://everglot-app:3000"
 

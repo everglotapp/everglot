@@ -7,6 +7,7 @@ import log from "../../logger"
 
 import type { Pool } from "pg"
 import type { RequestHandler } from "express"
+import { getSessionIdCookieName } from "../../utils"
 
 const chlog = log.child({
     namespace: "session",
@@ -14,20 +15,11 @@ const chlog = log.child({
 
 let middleware: RequestHandler | null
 
-const {
-    SESSION_COOKIE_VALIDATION_SECRETS,
-    SESSION_COOKIE_NAME = "everglot_sid",
-    NODE_ENV,
-} = process.env
+const { SESSION_COOKIE_VALIDATION_SECRETS, NODE_ENV } = process.env
 
 const dev = NODE_ENV === "development"
-
+const test = NODE_ENV === "test"
 const MAX_COOKIE_AGE_MS = 12 * 60 * 60 * 1000 // 12 hours
-
-export function getSessionIdCookieName() {
-    const secure = !dev
-    return secure ? `__Host-${SESSION_COOKIE_NAME}` : SESSION_COOKIE_NAME
-}
 
 export function makeMiddleware(pool: Pool) {
     if (middleware) {
@@ -66,7 +58,7 @@ export function makeMiddleware(pool: Pool) {
         exit(1)
     }
 
-    const secure = !dev
+    const secure = !dev && !test
 
     const sess: session.SessionOptions = {
         secret,

@@ -10,11 +10,11 @@ services:
         depends_on:
             - everglot-db
         environment:
-            PGUSER: ${POSTGRES_USER:?Please set POSTGRES_USER}
-            PGPASSWORD: ${POSTGRES_PASSWORD:?Please set POSTGRES_PASSWORD}
-            PGDATABASE: ${POSTGRES_DB:?Please set POSTGRES_DB}
-            PGHOST: ${PGHOST:-everglot-db}
-            PGPORT: ${PGPORT:-5432}
+            PGUSER: "${POSTGRES_USER:?Please set POSTGRES_USER}"
+            PGPASSWORD: "${POSTGRES_PASSWORD:?Please set POSTGRES_PASSWORD}"
+            PGDATABASE: "${POSTGRES_DB:?Please set POSTGRES_DB}"
+            PGHOST: "${PGHOST:-everglot-db}"
+            PGPORT: "${PGPORT:-5432}"
             DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGHOST:-everglot-db}:${PGPORT}/${POSTGRES_DB}"
             SESSION_COOKIE_VALIDATION_SECRETS: ${SESSION_COOKIE_VALIDATION_SECRETS:?Please set SESSION_COOKIE_VALIDATION_SECRETS}
             AGORA_APP_CERTIFICATE: ${AGORA_APP_CERTIFICATE:?Please set AGORA_APP_CERTIFICATE}

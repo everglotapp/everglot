@@ -181,20 +181,22 @@ export async function truncateAllTables(db: Pool) {
  */
 export async function doTruncateNonLookupTables(db: Pool) {
     const client = await db.connect()
+    const SCHEMA = "app_public"
     try {
         await client.query("begin")
         await client.query(`set role to everglot_app_user`)
-        await client.query(`delete from app_public.refresh_tokens where true`)
-        await client.query(`delete from app_public.user_languages where true`)
-        await client.query(`delete from app_public.group_users where true`)
-        await client.query(`delete from app_public.messages where true`)
-        await client.query(`delete from app_public.groups where true`)
+        await client.query(`truncate table ${SCHEMA}.refresh_tokens cascade`)
+        await client.query(`truncate table ${SCHEMA}.user_languages cascade`)
+        await client.query(`truncate table ${SCHEMA}.group_users cascade`)
+        await client.query(`truncate table ${SCHEMA}.message_previews cascade`)
+        await client.query(`truncate table ${SCHEMA}.messages cascade`)
+        await client.query(`truncate table ${SCHEMA}.groups cascade`)
         await client.query(
-            `update app_public.users set signed_up_with_token_id = null where true`
+            `update ${SCHEMA}.users set signed_up_with_token_id = null where true`
         )
-        await client.query(`delete from app_public.invite_tokens where true`)
-        await client.query(`delete from app_public.user_sessions where true`)
-        await client.query(`delete from app_public.users where true`)
+        await client.query(`truncate table ${SCHEMA}.invite_tokens cascade`)
+        await client.query(`truncate table ${SCHEMA}.user_sessions cascade`)
+        await client.query(`truncate table ${SCHEMA}.users cascade`)
         await client.query("commit")
         return true
     } catch (e) {

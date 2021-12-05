@@ -8,6 +8,7 @@ import log from "../../logger"
 import type { Pool } from "pg"
 import type { RequestHandler } from "express"
 import { getSessionIdCookieName } from "../../utils"
+import { DATABASE_SCHEMA } from "../db"
 
 const chlog = log.child({
     namespace: "session",
@@ -21,7 +22,6 @@ const {
     DISABLE_SECURE_COOKIES = "false",
 } = process.env
 
-const dev = NODE_ENV === "development"
 const prod = NODE_ENV === "production"
 const MAX_COOKIE_AGE_MS = 12 * 60 * 60 * 1000 // 12 hours
 
@@ -75,19 +75,17 @@ export function makeMiddleware(pool: Pool) {
         exit(1)
     }
 
-    const secure = prod && !disableSecureCookies
-
     const sess: session.SessionOptions = {
         secret,
         cookie: {
             maxAge: MAX_COOKIE_AGE_MS,
             sameSite: "strict", // Do not send this cookie to other origins.
-            secure,
+            secure: prod && !disableSecureCookies, // Whether to require HTTPS connection for signing in.
             httpOnly: true,
         },
         store: new (pgSimpleSessionStore(session))({
             pool,
-            schemaName: "app_public",
+            schemaName: DATABASE_SCHEMA,
             tableName: "user_sessions",
         }),
         name: getSessionIdCookieName(),
@@ -95,12 +93,6 @@ export function makeMiddleware(pool: Pool) {
         saveUninitialized: false,
     }
 
-    if (secure) {
-        sess.cookie = {
-            ...sess.cookie,
-            secure: true, // Require HTTPS connection for signing in.
-        }
-    }
     middleware = session(sess)
     return middleware
 }

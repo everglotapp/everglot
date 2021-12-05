@@ -1,4 +1,4 @@
-import { db } from "../../server/db"
+import { DATABASE_SCHEMA, db } from "../../server/db"
 
 import { PROMPT_LOCALES } from "../../constants"
 import log from "../../logger"
@@ -92,11 +92,11 @@ async function getRandomPrompt(
         `
     select * from(
         select uuid, content_${language}, UPPER(p.type::text) as type
-        from app_public.prompts p
+        from ${DATABASE_SCHEMA}.prompts p
         where true
         and language_id in (
             select id
-            from app_public.languages
+            from ${DATABASE_SCHEMA}.languages
             where alpha2 = $1
         )
         and not(p.uuid = any($2))

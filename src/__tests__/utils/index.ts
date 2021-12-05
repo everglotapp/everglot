@@ -23,9 +23,8 @@ import {
 import type { Pool } from "pg"
 import { AuthMethod, Gender } from "../../users"
 import { generateEmailUnsubscribeToken } from "../../helpers/tokens"
-import { getSessionIdCookieName } from "../../utils"
 
-const { BASE_URL } = process.env
+const { BASE_URL, SESSION_COOKIE_NAME } = process.env
 
 const fakerator = new Fakerator()
 
@@ -294,7 +293,7 @@ export function makeSessionIdCookieHeader(value: Maybe<string>) {
     if (!value) {
         return ""
     }
-    return `${getSessionIdCookieName()}=${value}`
+    return `${SESSION_COOKIE_NAME}=${value}`
 }
 
 // Adapted from https://stackoverflow.com/a/55680330/9926795
@@ -304,9 +303,8 @@ export function getSessionIdCookieValue(headers: { [k: string]: string[] }) {
         const [name, value] = header.split("=")
         return { name, value: value.split(";")[0].trim() }
     }
-    const sessionIdCookieName = getSessionIdCookieName()
     const sessionCookie = cookies.find((raw) => {
-        return headerToCookie(raw).name === sessionIdCookieName
+        return headerToCookie(raw).name === SESSION_COOKIE_NAME
     })
     if (!sessionCookie) {
         return null

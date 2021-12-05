@@ -7,7 +7,6 @@ import log from "../../logger"
 
 import type { Pool } from "pg"
 import type { RequestHandler } from "express"
-import { getSessionIdCookieName } from "../../utils"
 import { DATABASE_SCHEMA } from "../db"
 
 const chlog = log.child({
@@ -20,6 +19,7 @@ const {
     SESSION_COOKIE_VALIDATION_SECRETS,
     NODE_ENV,
     DISABLE_SECURE_COOKIES = "false",
+    SESSION_COOKIE_NAME,
 } = process.env
 
 const prod = NODE_ENV === "production"
@@ -36,6 +36,12 @@ try {
         .warn(
             "Failed to parse DISABLE_SECURE_COOKIES as JSON. Ignoring it and thus not disabling secure cookies."
         )
+}
+
+const secure = prod && !disableSecureCookies
+
+function getSessionIdCookieName() {
+    return secure ? `__Host-${SESSION_COOKIE_NAME}` : SESSION_COOKIE_NAME
 }
 
 export function makeMiddleware(pool: Pool) {
@@ -80,7 +86,7 @@ export function makeMiddleware(pool: Pool) {
         cookie: {
             maxAge: MAX_COOKIE_AGE_MS,
             sameSite: "strict", // Do not send this cookie to other origins.
-            secure: prod && !disableSecureCookies, // Whether to require HTTPS connection for signing in.
+            secure, // Whether to require HTTPS connection for signing in.
             httpOnly: true,
         },
         store: new (pgSimpleSessionStore(session))({

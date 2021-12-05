@@ -106,7 +106,9 @@ describe("auth/refresh route", () => {
             redirect: "manual",
         })
         expect(res.status).toBe(200)
-        expect(getSessionCookieValue(res)).not.toEqual(sessionCookie)
+        expect(getSessionCookieValue(res.headers.raw())).not.toEqual(
+            sessionCookie
+        )
     })
 
     test("POST with the same token twice fails", async () => {

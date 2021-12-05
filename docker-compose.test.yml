@@ -27,6 +27,7 @@ services:
             PGPORT: "${PGPORT:-5432}"
             DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGHOST:-everglot-db}:${PGPORT}/${POSTGRES_DB}"
             SESSION_COOKIE_VALIDATION_SECRETS: ${SESSION_COOKIE_VALIDATION_SECRETS:?Please set SESSION_COOKIE_VALIDATION_SECRETS}
+            SESSION_COOKIE_NAME: "${SESSION_COOKIE_NAME:-everglot_sid}"
             AGORA_APP_CERTIFICATE: ""
             SENDINBLUE_API_KEY: ""
         entrypoint: entrypoints/test-after-app.sh

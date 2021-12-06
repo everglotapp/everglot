@@ -90,6 +90,13 @@
 
 <div class="container max-w-2xl sm:py-8">
     {#if $inAppNotifications}
+        {#if !$inAppNotifications.length}
+            <div
+                class="py-4 px-8 bg-primary-lightest font-secondary text-gray-bitdark font-bold"
+            >
+                You're up to date
+            </div>
+        {/if}
         {#each $inAppNotifications as notification (notification.uuid)}
             {#if notification.metadata && notification.metadata.user}
                 <a href={links[notification.uuid] || ""} class="wrapper">

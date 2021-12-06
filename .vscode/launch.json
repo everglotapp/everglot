@@ -5,10 +5,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "npm run dev",
-      "name": "Run npm run dev",
+      "name": "Everglot Dev Server",
       "request": "launch",
-      "type": "node-terminal"
+      "type": "node-terminal",
+      "command": "npm run dev -- 2>&1 | npx roarr pretty-print --fe '{\"context.logLevel\":{gt:10}}'",
+      "preLaunchTask": "docker-compose-db"
     }
   ]
 }

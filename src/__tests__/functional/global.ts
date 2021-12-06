@@ -4,7 +4,7 @@ import {
     seedDatabase,
     createUser,
     login,
-    sessionCookieHeader,
+    makeSessionIdCookieHeader,
 } from "../utils"
 import type { TestUser } from "../utils"
 import { start } from "../../server/gql"
@@ -54,7 +54,7 @@ describe("global route", () => {
         await signIn()
         const res = await fetch("/global", {
             headers: {
-                cookie: sessionCookieHeader(sessionCookie),
+                cookie: makeSessionIdCookieHeader(sessionCookie),
             },
             redirect: "manual",
         })

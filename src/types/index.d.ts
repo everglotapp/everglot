@@ -13,4 +13,11 @@ declare global {
             session: SessionData
         }
     }
+
+    namespace Express {
+        import type { Session, SessionData } from "express-session"
+        interface Request {
+            session: Session & Partial<SessionData> & { user_id: string }
+        }
+    }
 }

@@ -22,10 +22,9 @@ import {
 } from "../../types/generated/graphql"
 import type { Pool } from "pg"
 import { AuthMethod, Gender } from "../../users"
-import { SESSION_COOKIE_NAME } from "../../server/middlewares/session"
 import { generateEmailUnsubscribeToken } from "../../helpers/tokens"
 
-const BASE_URL = "http://everglot-app:3000"
+const { BASE_URL, SESSION_COOKIE_NAME } = process.env
 
 const fakerator = new Fakerator()
 
@@ -181,20 +180,22 @@ export async function truncateAllTables(db: Pool) {
  */
 export async function doTruncateNonLookupTables(db: Pool) {
     const client = await db.connect()
+    const SCHEMA = "app_public"
     try {
         await client.query("begin")
         await client.query(`set role to everglot_app_user`)
-        await client.query(`delete from app_public.refresh_tokens where true`)
-        await client.query(`delete from app_public.user_languages where true`)
-        await client.query(`delete from app_public.group_users where true`)
-        await client.query(`delete from app_public.messages where true`)
-        await client.query(`delete from app_public.groups where true`)
+        await client.query(`truncate table ${SCHEMA}.refresh_tokens cascade`)
+        await client.query(`truncate table ${SCHEMA}.user_languages cascade`)
+        await client.query(`truncate table ${SCHEMA}.group_users cascade`)
+        await client.query(`truncate table ${SCHEMA}.message_previews cascade`)
+        await client.query(`truncate table ${SCHEMA}.messages cascade`)
+        await client.query(`truncate table ${SCHEMA}.groups cascade`)
         await client.query(
-            `update app_public.users set signed_up_with_token_id = null where true`
+            `update ${SCHEMA}.users set signed_up_with_token_id = null where true`
         )
-        await client.query(`delete from app_public.invite_tokens where true`)
-        await client.query(`delete from app_public.user_sessions where true`)
-        await client.query(`delete from app_public.users where true`)
+        await client.query(`truncate table ${SCHEMA}.invite_tokens cascade`)
+        await client.query(`truncate table ${SCHEMA}.user_sessions cascade`)
+        await client.query(`truncate table ${SCHEMA}.users cascade`)
         await client.query("commit")
         return true
     } catch (e) {
@@ -278,22 +279,23 @@ export async function login(
         })
         .trace("Attempted to sign in during test")
     expect(res.status).toBe(200)
-    return { res: clonedRes, sessionCookie: getSessionCookieValue(res) }
+    const sessionCookie = getSessionIdCookieValue(clonedRes.headers.raw())
+    return { res: clonedRes, sessionCookie }
 }
 
-export function sessionCookieHeader(sessionCookie: Maybe<string>) {
-    if (!sessionCookie) {
+export function makeSessionIdCookieHeader(value: Maybe<string>) {
+    if (!value) {
         return ""
     }
-    return `${SESSION_COOKIE_NAME}=${sessionCookie}`
+    return `${SESSION_COOKIE_NAME}=${value}`
 }
 
 // Adapted from https://stackoverflow.com/a/55680330/9926795
-export function getSessionCookieValue(res: Response) {
-    const cookies: string[] = res.headers.raw()["set-cookie"] || []
+export function getSessionIdCookieValue(headers: { [k: string]: string[] }) {
+    const cookies: string[] = headers["set-cookie"] || []
     const headerToCookie = (header: string) => {
         const [name, value] = header.split("=")
-        return { name, value }
+        return { name, value: value.split(";")[0].trim() }
     }
     const sessionCookie = cookies.find((raw) => {
         return headerToCookie(raw).name === SESSION_COOKIE_NAME
@@ -305,5 +307,5 @@ export function getSessionCookieValue(res: Response) {
 }
 
 export function getAppUrl(path = "/") {
-    return `http://everglot-app:3000${path}`
+    return `${BASE_URL}${path}`
 }

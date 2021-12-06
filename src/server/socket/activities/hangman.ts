@@ -7,7 +7,7 @@ import {
     HangmanState,
 } from "../../../types/activities"
 
-import { db } from "../../db"
+import { DATABASE_SCHEMA, db } from "../../db"
 
 import log from "../../../logger"
 import { getGroupActivity } from "./utils"
@@ -28,7 +28,7 @@ async function getRandomWord(language: HangmanLocale): Promise<string | null> {
     const res = await db?.query<{ word: string }>(
         `
     select word from(
-        select * from app_public.words_${language}
+        select * from ${DATABASE_SCHEMA}.words_${language}
         where length >= $1
         and length <= $2
         order by random()

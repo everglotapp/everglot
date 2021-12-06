@@ -9,7 +9,7 @@ import {
     GuessCharacterState,
 } from "../../../types/activities"
 
-import { db } from "../../db"
+import { DATABASE_SCHEMA, db } from "../../db"
 
 import log from "../../../logger"
 import { getGroupActivity } from "./utils"
@@ -36,7 +36,7 @@ async function getRandomCharacter(
     >(
         `
     select character, hint from(
-        select * from app_public.guess_character_questions_${language}
+        select * from ${DATABASE_SCHEMA}.guess_character_questions_${language}
         order by random()
     ) wd limit 1
     `

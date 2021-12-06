@@ -73,6 +73,7 @@ export async function stop() {
         return false
     }
     await releaseWatcher()
+    releaseWatcher = undefined
     return true
 }
 

@@ -15,16 +15,19 @@ services:
 
     everglot-app-ci:
         environment:
-            NODE_ENV: "development"
+            NODE_ENV: "test"
+            BASE_URL: "http://everglot-app:3000"
             ROARR_LOG: "true"
-            PGUSER: ${POSTGRES_USER:?Please set POSTGRES_USER}
-            PGPASSWORD: ${POSTGRES_PASSWORD:?Please set POSTGRES_PASSWORD}
-            PGDATABASE: ${POSTGRES_DB:?Please set POSTGRES_DB}
-            PGHOST: ${PGHOST:-everglot-db}
-            PGPORT: ${PGPORT:-5432}
-            DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGHOST:-everglot-db}:${PGPORT}/${POSTGRES_DB}"
-            SESSION_COOKIE_VALIDATION_SECRETS: ${SESSION_COOKIE_VALIDATION_SECRETS:?Please set SESSION_COOKIE_VALIDATION_SECRETS}
+            PGUSER: "everglot_app_user"
+            PGPASSWORD: "everglot_app_pass"
+            PGDATABASE: "everglot_app_db"
+            PGHOST: "everglot-db"
+            PGPORT: "5432"
+            DATABASE_URL: "postgres://everglot_app_user:everglot_app_pass@everglot-db:5432/everglot_app_db"
+            SESSION_COOKIE_VALIDATION_SECRETS: "${SESSION_COOKIE_VALIDATION_SECRETS:?Please set SESSION_COOKIE_VALIDATION_SECRETS}"
+            SESSION_COOKIE_NAME: "${SESSION_COOKIE_NAME:-everglot_sid}"
             AGORA_APP_CERTIFICATE: ""
+            SENDINBLUE_API_KEY: ""
         entrypoint: entrypoints/ci-after-app.sh
         # Avoid building the same image twice.
         image: everglot-app-image

@@ -1,6 +1,6 @@
 import log from "../logger"
 
-import { db } from "./db"
+import { DATABASE_SCHEMA, db } from "./db"
 
 import type { User, InviteToken, Maybe } from "../types/generated/graphql"
 
@@ -37,11 +37,11 @@ export async function createInviteToken({
 }
 
 export async function getInviteTokenIdByToken(
-    token: String
+    token: string
 ): Promise<Maybe<InviteToken["id"]>> {
     const res = await db?.query<{ id: InviteToken["id"] }>({
         text: `SELECT id
-        FROM app_public.invite_tokens
+        FROM ${DATABASE_SCHEMA}.invite_tokens
         WHERE invite_token = $1
         LIMIT 1`,
         values: [token],

@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -32,53 +33,53 @@ export type Scalars = {
 /** A filter to be used against BigInt fields. All fields are combined with a logical ‘and.’ */
 export type BigIntFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Scalars['BigInt']>;
+  distinctFrom?: InputMaybe<Scalars['BigInt']>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<Scalars['BigInt']>;
+  equalTo?: InputMaybe<Scalars['BigInt']>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<Scalars['BigInt']>;
+  greaterThan?: InputMaybe<Scalars['BigInt']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Scalars['BigInt']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['BigInt']>;
   /** Included in the specified list. */
-  in?: Maybe<Array<Scalars['BigInt']>>;
+  in?: InputMaybe<Array<Scalars['BigInt']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<Scalars['BigInt']>;
+  lessThan?: InputMaybe<Scalars['BigInt']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Scalars['BigInt']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['BigInt']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Scalars['BigInt']>;
+  notDistinctFrom?: InputMaybe<Scalars['BigInt']>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Scalars['BigInt']>;
+  notEqualTo?: InputMaybe<Scalars['BigInt']>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<Scalars['BigInt']>>;
+  notIn?: InputMaybe<Array<Scalars['BigInt']>>;
 };
 
 /** A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’ */
 export type BooleanFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Scalars['Boolean']>;
+  distinctFrom?: InputMaybe<Scalars['Boolean']>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<Scalars['Boolean']>;
+  equalTo?: InputMaybe<Scalars['Boolean']>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<Scalars['Boolean']>;
+  greaterThan?: InputMaybe<Scalars['Boolean']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Scalars['Boolean']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Boolean']>;
   /** Included in the specified list. */
-  in?: Maybe<Array<Scalars['Boolean']>>;
+  in?: InputMaybe<Array<Scalars['Boolean']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<Scalars['Boolean']>;
+  lessThan?: InputMaybe<Scalars['Boolean']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Scalars['Boolean']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['Boolean']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Scalars['Boolean']>;
+  notDistinctFrom?: InputMaybe<Scalars['Boolean']>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Scalars['Boolean']>;
+  notEqualTo?: InputMaybe<Scalars['Boolean']>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<Scalars['Boolean']>>;
+  notIn?: InputMaybe<Array<Scalars['Boolean']>>;
 };
 
 export type ChineseGuessCharacterQuestion = Node & {
@@ -101,59 +102,59 @@ export type ChineseGuessCharacterQuestion = Node & {
  */
 export type ChineseGuessCharacterQuestionCondition = {
   /** Checks for equality with the object’s `character` field. */
-  character?: Maybe<Scalars['String']>;
+  character?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `hint` field. */
-  hint?: Maybe<Scalars['String']>;
+  hint?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `ChineseGuessCharacterQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type ChineseGuessCharacterQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<ChineseGuessCharacterQuestionFilter>>;
+  and?: InputMaybe<Array<ChineseGuessCharacterQuestionFilter>>;
   /** Filter by the object’s `character` field. */
-  character?: Maybe<StringFilter>;
+  character?: InputMaybe<StringFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `hint` field. */
-  hint?: Maybe<StringFilter>;
+  hint?: InputMaybe<StringFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<ChineseGuessCharacterQuestionFilter>;
+  not?: InputMaybe<ChineseGuessCharacterQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<ChineseGuessCharacterQuestionFilter>>;
+  or?: InputMaybe<Array<ChineseGuessCharacterQuestionFilter>>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `ChineseGuessCharacterQuestion` */
 export type ChineseGuessCharacterQuestionInput = {
   character: Scalars['String'];
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   hint: Scalars['String'];
-  id?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `ChineseGuessCharacterQuestion`. Fields that are set will be updated. */
 export type ChineseGuessCharacterQuestionPatch = {
-  character?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  hint?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  character?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  hint?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `ChineseGuessCharacterQuestion` values. */
@@ -216,53 +217,53 @@ export type ChineseRandomQuestion = Node & {
  */
 export type ChineseRandomQuestionCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `ChineseRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type ChineseRandomQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<ChineseRandomQuestionFilter>>;
+  and?: InputMaybe<Array<ChineseRandomQuestionFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<ChineseRandomQuestionFilter>;
+  not?: InputMaybe<ChineseRandomQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<ChineseRandomQuestionFilter>>;
+  or?: InputMaybe<Array<ChineseRandomQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `ChineseRandomQuestion` */
 export type ChineseRandomQuestionInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `ChineseRandomQuestion`. Fields that are set will be updated. */
 export type ChineseRandomQuestionPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `ChineseRandomQuestion` values. */
@@ -324,59 +325,59 @@ export type ChineseWouldYouRatherQuestion = Node & {
  */
 export type ChineseWouldYouRatherQuestionCondition = {
   /** Checks for equality with the object’s `answers` field. */
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `ChineseWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type ChineseWouldYouRatherQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<ChineseWouldYouRatherQuestionFilter>>;
+  and?: InputMaybe<Array<ChineseWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `answers` field. */
-  answers?: Maybe<StringListFilter>;
+  answers?: InputMaybe<StringListFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<ChineseWouldYouRatherQuestionFilter>;
+  not?: InputMaybe<ChineseWouldYouRatherQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<ChineseWouldYouRatherQuestionFilter>>;
+  or?: InputMaybe<Array<ChineseWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `ChineseWouldYouRatherQuestion` */
 export type ChineseWouldYouRatherQuestionInput = {
-  answers: Array<Maybe<Scalars['String']>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  answers: Array<InputMaybe<Scalars['String']>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `ChineseWouldYouRatherQuestion`. Fields that are set will be updated. */
 export type ChineseWouldYouRatherQuestionPatch = {
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `ChineseWouldYouRatherQuestion` values. */
@@ -428,7 +429,7 @@ export type CreateChineseGuessCharacterQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our create `ChineseGuessCharacterQuestion` mutation. */
@@ -452,7 +453,7 @@ export type CreateChineseGuessCharacterQuestionPayload = {
 
 /** The output of our create `ChineseGuessCharacterQuestion` mutation. */
 export type CreateChineseGuessCharacterQuestionPayloadChineseGuessCharacterQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
 };
 
 /** All input for the create `ChineseRandomQuestion` mutation. */
@@ -463,7 +464,7 @@ export type CreateChineseRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our create `ChineseRandomQuestion` mutation. */
@@ -487,7 +488,7 @@ export type CreateChineseRandomQuestionPayload = {
 
 /** The output of our create `ChineseRandomQuestion` mutation. */
 export type CreateChineseRandomQuestionPayloadChineseRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ChineseRandomQuestionsOrderBy>>;
 };
 
 /** All input for the create `ChineseWouldYouRatherQuestion` mutation. */
@@ -498,7 +499,7 @@ export type CreateChineseWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our create `ChineseWouldYouRatherQuestion` mutation. */
@@ -522,7 +523,7 @@ export type CreateChineseWouldYouRatherQuestionPayload = {
 
 /** The output of our create `ChineseWouldYouRatherQuestion` mutation. */
 export type CreateChineseWouldYouRatherQuestionPayloadChineseWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the create `EnglishRandomQuestion` mutation. */
@@ -531,7 +532,7 @@ export type CreateEnglishRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `EnglishRandomQuestion` to be created by this mutation. */
   englishRandomQuestion: EnglishRandomQuestionInput;
 };
@@ -557,7 +558,7 @@ export type CreateEnglishRandomQuestionPayload = {
 
 /** The output of our create `EnglishRandomQuestion` mutation. */
 export type CreateEnglishRandomQuestionPayloadEnglishRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<EnglishRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<EnglishRandomQuestionsOrderBy>>;
 };
 
 /** All input for the create `EnglishWord` mutation. */
@@ -566,7 +567,7 @@ export type CreateEnglishWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `EnglishWord` to be created by this mutation. */
   englishWord: EnglishWordInput;
 };
@@ -592,7 +593,7 @@ export type CreateEnglishWordPayload = {
 
 /** The output of our create `EnglishWord` mutation. */
 export type CreateEnglishWordPayloadEnglishWordEdgeArgs = {
-  orderBy?: Maybe<Array<EnglishWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<EnglishWordsOrderBy>>;
 };
 
 /** All input for the create `EnglishWouldYouRatherQuestion` mutation. */
@@ -601,7 +602,7 @@ export type CreateEnglishWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `EnglishWouldYouRatherQuestion` to be created by this mutation. */
   englishWouldYouRatherQuestion: EnglishWouldYouRatherQuestionInput;
 };
@@ -627,7 +628,7 @@ export type CreateEnglishWouldYouRatherQuestionPayload = {
 
 /** The output of our create `EnglishWouldYouRatherQuestion` mutation. */
 export type CreateEnglishWouldYouRatherQuestionPayloadEnglishWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the create `FrenchRandomQuestion` mutation. */
@@ -636,7 +637,7 @@ export type CreateFrenchRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `FrenchRandomQuestion` to be created by this mutation. */
   frenchRandomQuestion: FrenchRandomQuestionInput;
 };
@@ -662,7 +663,7 @@ export type CreateFrenchRandomQuestionPayload = {
 
 /** The output of our create `FrenchRandomQuestion` mutation. */
 export type CreateFrenchRandomQuestionPayloadFrenchRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<FrenchRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<FrenchRandomQuestionsOrderBy>>;
 };
 
 /** All input for the create `FrenchWord` mutation. */
@@ -671,7 +672,7 @@ export type CreateFrenchWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `FrenchWord` to be created by this mutation. */
   frenchWord: FrenchWordInput;
 };
@@ -697,7 +698,7 @@ export type CreateFrenchWordPayload = {
 
 /** The output of our create `FrenchWord` mutation. */
 export type CreateFrenchWordPayloadFrenchWordEdgeArgs = {
-  orderBy?: Maybe<Array<FrenchWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<FrenchWordsOrderBy>>;
 };
 
 /** All input for the create `FrenchWouldYouRatherQuestion` mutation. */
@@ -706,7 +707,7 @@ export type CreateFrenchWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `FrenchWouldYouRatherQuestion` to be created by this mutation. */
   frenchWouldYouRatherQuestion: FrenchWouldYouRatherQuestionInput;
 };
@@ -732,7 +733,7 @@ export type CreateFrenchWouldYouRatherQuestionPayload = {
 
 /** The output of our create `FrenchWouldYouRatherQuestion` mutation. */
 export type CreateFrenchWouldYouRatherQuestionPayloadFrenchWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the create `GermanRandomQuestion` mutation. */
@@ -741,7 +742,7 @@ export type CreateGermanRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `GermanRandomQuestion` to be created by this mutation. */
   germanRandomQuestion: GermanRandomQuestionInput;
 };
@@ -767,7 +768,7 @@ export type CreateGermanRandomQuestionPayload = {
 
 /** The output of our create `GermanRandomQuestion` mutation. */
 export type CreateGermanRandomQuestionPayloadGermanRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<GermanRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<GermanRandomQuestionsOrderBy>>;
 };
 
 /** All input for the create `GermanWord` mutation. */
@@ -776,7 +777,7 @@ export type CreateGermanWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `GermanWord` to be created by this mutation. */
   germanWord: GermanWordInput;
 };
@@ -802,7 +803,7 @@ export type CreateGermanWordPayload = {
 
 /** The output of our create `GermanWord` mutation. */
 export type CreateGermanWordPayloadGermanWordEdgeArgs = {
-  orderBy?: Maybe<Array<GermanWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<GermanWordsOrderBy>>;
 };
 
 /** All input for the create `GermanWouldYouRatherQuestion` mutation. */
@@ -811,7 +812,7 @@ export type CreateGermanWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `GermanWouldYouRatherQuestion` to be created by this mutation. */
   germanWouldYouRatherQuestion: GermanWouldYouRatherQuestionInput;
 };
@@ -837,7 +838,7 @@ export type CreateGermanWouldYouRatherQuestionPayload = {
 
 /** The output of our create `GermanWouldYouRatherQuestion` mutation. */
 export type CreateGermanWouldYouRatherQuestionPayloadGermanWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the create `Group` mutation. */
@@ -846,7 +847,7 @@ export type CreateGroupInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Group` to be created by this mutation. */
   group: GroupInput;
 };
@@ -874,7 +875,7 @@ export type CreateGroupPayload = {
 
 /** The output of our create `Group` mutation. */
 export type CreateGroupPayloadGroupEdgeArgs = {
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 /** All input for the create `GroupUser` mutation. */
@@ -883,7 +884,7 @@ export type CreateGroupUserInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `GroupUser` to be created by this mutation. */
   groupUser: GroupUserInput;
 };
@@ -911,7 +912,7 @@ export type CreateGroupUserPayload = {
 
 /** The output of our create `GroupUser` mutation. */
 export type CreateGroupUserPayloadGroupUserEdgeArgs = {
-  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  orderBy?: InputMaybe<Array<GroupUsersOrderBy>>;
 };
 
 /** All input for the create `InAppNotificationMetadatum` mutation. */
@@ -920,7 +921,7 @@ export type CreateInAppNotificationMetadatumInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `InAppNotificationMetadatum` to be created by this mutation. */
   inAppNotificationMetadatum: InAppNotificationMetadatumInput;
 };
@@ -950,7 +951,7 @@ export type CreateInAppNotificationMetadatumPayload = {
 
 /** The output of our create `InAppNotificationMetadatum` mutation. */
 export type CreateInAppNotificationMetadatumPayloadInAppNotificationMetadatumEdgeArgs = {
-  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+  orderBy?: InputMaybe<Array<InAppNotificationMetadataOrderBy>>;
 };
 
 /** All input for the create `InviteToken` mutation. */
@@ -959,7 +960,7 @@ export type CreateInviteTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `InviteToken` to be created by this mutation. */
   inviteToken: InviteTokenInput;
 };
@@ -985,7 +986,7 @@ export type CreateInviteTokenPayload = {
 
 /** The output of our create `InviteToken` mutation. */
 export type CreateInviteTokenPayloadInviteTokenEdgeArgs = {
-  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+  orderBy?: InputMaybe<Array<InviteTokensOrderBy>>;
 };
 
 /** All input for the create `ItalianRandomQuestion` mutation. */
@@ -994,7 +995,7 @@ export type CreateItalianRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `ItalianRandomQuestion` to be created by this mutation. */
   italianRandomQuestion: ItalianRandomQuestionInput;
 };
@@ -1020,7 +1021,7 @@ export type CreateItalianRandomQuestionPayload = {
 
 /** The output of our create `ItalianRandomQuestion` mutation. */
 export type CreateItalianRandomQuestionPayloadItalianRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ItalianRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ItalianRandomQuestionsOrderBy>>;
 };
 
 /** All input for the create `ItalianWord` mutation. */
@@ -1029,7 +1030,7 @@ export type CreateItalianWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `ItalianWord` to be created by this mutation. */
   italianWord: ItalianWordInput;
 };
@@ -1055,7 +1056,7 @@ export type CreateItalianWordPayload = {
 
 /** The output of our create `ItalianWord` mutation. */
 export type CreateItalianWordPayloadItalianWordEdgeArgs = {
-  orderBy?: Maybe<Array<ItalianWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<ItalianWordsOrderBy>>;
 };
 
 /** All input for the create `ItalianWouldYouRatherQuestion` mutation. */
@@ -1064,7 +1065,7 @@ export type CreateItalianWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `ItalianWouldYouRatherQuestion` to be created by this mutation. */
   italianWouldYouRatherQuestion: ItalianWouldYouRatherQuestionInput;
 };
@@ -1090,7 +1091,7 @@ export type CreateItalianWouldYouRatherQuestionPayload = {
 
 /** The output of our create `ItalianWouldYouRatherQuestion` mutation. */
 export type CreateItalianWouldYouRatherQuestionPayloadItalianWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the create `JapaneseRandomQuestion` mutation. */
@@ -1099,7 +1100,7 @@ export type CreateJapaneseRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `JapaneseRandomQuestion` to be created by this mutation. */
   japaneseRandomQuestion: JapaneseRandomQuestionInput;
 };
@@ -1125,7 +1126,7 @@ export type CreateJapaneseRandomQuestionPayload = {
 
 /** The output of our create `JapaneseRandomQuestion` mutation. */
 export type CreateJapaneseRandomQuestionPayloadJapaneseRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<JapaneseRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<JapaneseRandomQuestionsOrderBy>>;
 };
 
 /** All input for the create `JapaneseWouldYouRatherQuestion` mutation. */
@@ -1134,7 +1135,7 @@ export type CreateJapaneseWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `JapaneseWouldYouRatherQuestion` to be created by this mutation. */
   japaneseWouldYouRatherQuestion: JapaneseWouldYouRatherQuestionInput;
 };
@@ -1160,7 +1161,7 @@ export type CreateJapaneseWouldYouRatherQuestionPayload = {
 
 /** The output of our create `JapaneseWouldYouRatherQuestion` mutation. */
 export type CreateJapaneseWouldYouRatherQuestionPayloadJapaneseWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the create `KoreanRandomQuestion` mutation. */
@@ -1169,7 +1170,7 @@ export type CreateKoreanRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `KoreanRandomQuestion` to be created by this mutation. */
   koreanRandomQuestion: KoreanRandomQuestionInput;
 };
@@ -1195,7 +1196,7 @@ export type CreateKoreanRandomQuestionPayload = {
 
 /** The output of our create `KoreanRandomQuestion` mutation. */
 export type CreateKoreanRandomQuestionPayloadKoreanRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<KoreanRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<KoreanRandomQuestionsOrderBy>>;
 };
 
 /** All input for the create `KoreanWouldYouRatherQuestion` mutation. */
@@ -1204,7 +1205,7 @@ export type CreateKoreanWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `KoreanWouldYouRatherQuestion` to be created by this mutation. */
   koreanWouldYouRatherQuestion: KoreanWouldYouRatherQuestionInput;
 };
@@ -1230,7 +1231,7 @@ export type CreateKoreanWouldYouRatherQuestionPayload = {
 
 /** The output of our create `KoreanWouldYouRatherQuestion` mutation. */
 export type CreateKoreanWouldYouRatherQuestionPayloadKoreanWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the create `Language` mutation. */
@@ -1239,7 +1240,7 @@ export type CreateLanguageInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Language` to be created by this mutation. */
   language: LanguageInput;
 };
@@ -1263,7 +1264,7 @@ export type CreateLanguagePayload = {
 
 /** The output of our create `Language` mutation. */
 export type CreateLanguagePayloadLanguageEdgeArgs = {
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 /** All input for the create `LanguageSkillLevel` mutation. */
@@ -1272,7 +1273,7 @@ export type CreateLanguageSkillLevelInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `LanguageSkillLevel` to be created by this mutation. */
   languageSkillLevel: LanguageSkillLevelInput;
 };
@@ -1296,7 +1297,7 @@ export type CreateLanguageSkillLevelPayload = {
 
 /** The output of our create `LanguageSkillLevel` mutation. */
 export type CreateLanguageSkillLevelPayloadLanguageSkillLevelEdgeArgs = {
-  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  orderBy?: InputMaybe<Array<LanguageSkillLevelsOrderBy>>;
 };
 
 /** All input for the create `Message` mutation. */
@@ -1305,7 +1306,7 @@ export type CreateMessageInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Message` to be created by this mutation. */
   message: MessageInput;
 };
@@ -1337,7 +1338,7 @@ export type CreateMessagePayload = {
 
 /** The output of our create `Message` mutation. */
 export type CreateMessagePayloadMessageEdgeArgs = {
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** All input for the create `MessagePreview` mutation. */
@@ -1346,7 +1347,7 @@ export type CreateMessagePreviewInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `MessagePreview` to be created by this mutation. */
   messagePreview: MessagePreviewInput;
 };
@@ -1372,7 +1373,7 @@ export type CreateMessagePreviewPayload = {
 
 /** The output of our create `MessagePreview` mutation. */
 export type CreateMessagePreviewPayloadMessagePreviewEdgeArgs = {
-  orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
+  orderBy?: InputMaybe<Array<MessagePreviewsOrderBy>>;
 };
 
 /** All input for the create `NotificationChannel` mutation. */
@@ -1381,7 +1382,7 @@ export type CreateNotificationChannelInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `NotificationChannel` to be created by this mutation. */
   notificationChannel: NotificationChannelInput;
 };
@@ -1405,7 +1406,7 @@ export type CreateNotificationChannelPayload = {
 
 /** The output of our create `NotificationChannel` mutation. */
 export type CreateNotificationChannelPayloadNotificationChannelEdgeArgs = {
-  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  orderBy?: InputMaybe<Array<NotificationChannelsOrderBy>>;
 };
 
 /** All input for the create `Notification` mutation. */
@@ -1414,7 +1415,7 @@ export type CreateNotificationInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Notification` to be created by this mutation. */
   notification: NotificationInput;
 };
@@ -1444,7 +1445,7 @@ export type CreateNotificationPayload = {
 
 /** The output of our create `Notification` mutation. */
 export type CreateNotificationPayloadNotificationEdgeArgs = {
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 /** All input for the create `PortugueseRandomQuestion` mutation. */
@@ -1453,7 +1454,7 @@ export type CreatePortugueseRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PortugueseRandomQuestion` to be created by this mutation. */
   portugueseRandomQuestion: PortugueseRandomQuestionInput;
 };
@@ -1479,7 +1480,7 @@ export type CreatePortugueseRandomQuestionPayload = {
 
 /** The output of our create `PortugueseRandomQuestion` mutation. */
 export type CreatePortugueseRandomQuestionPayloadPortugueseRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<PortugueseRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PortugueseRandomQuestionsOrderBy>>;
 };
 
 /** All input for the create `PortugueseWord` mutation. */
@@ -1488,7 +1489,7 @@ export type CreatePortugueseWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PortugueseWord` to be created by this mutation. */
   portugueseWord: PortugueseWordInput;
 };
@@ -1514,7 +1515,7 @@ export type CreatePortugueseWordPayload = {
 
 /** The output of our create `PortugueseWord` mutation. */
 export type CreatePortugueseWordPayloadPortugueseWordEdgeArgs = {
-  orderBy?: Maybe<Array<PortugueseWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<PortugueseWordsOrderBy>>;
 };
 
 /** All input for the create `PortugueseWouldYouRatherQuestion` mutation. */
@@ -1523,7 +1524,7 @@ export type CreatePortugueseWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PortugueseWouldYouRatherQuestion` to be created by this mutation. */
   portugueseWouldYouRatherQuestion: PortugueseWouldYouRatherQuestionInput;
 };
@@ -1549,7 +1550,7 @@ export type CreatePortugueseWouldYouRatherQuestionPayload = {
 
 /** The output of our create `PortugueseWouldYouRatherQuestion` mutation. */
 export type CreatePortugueseWouldYouRatherQuestionPayloadPortugueseWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the create `PostCorrection` mutation. */
@@ -1558,7 +1559,7 @@ export type CreatePostCorrectionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostCorrection` to be created by this mutation. */
   postCorrection: PostCorrectionInput;
 };
@@ -1586,7 +1587,7 @@ export type CreatePostCorrectionPayload = {
 
 /** The output of our create `PostCorrection` mutation. */
 export type CreatePostCorrectionPayloadPostCorrectionEdgeArgs = {
-  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostCorrectionsOrderBy>>;
 };
 
 /** All input for the create `PostGameAnswer` mutation. */
@@ -1595,7 +1596,7 @@ export type CreatePostGameAnswerInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostGameAnswer` to be created by this mutation. */
   postGameAnswer: PostGameAnswerInput;
 };
@@ -1625,7 +1626,7 @@ export type CreatePostGameAnswerPayload = {
 
 /** The output of our create `PostGameAnswer` mutation. */
 export type CreatePostGameAnswerPayloadPostGameAnswerEdgeArgs = {
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 /** All input for the create `PostGame` mutation. */
@@ -1634,7 +1635,7 @@ export type CreatePostGameInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostGame` to be created by this mutation. */
   postGame: PostGameInput;
 };
@@ -1660,7 +1661,7 @@ export type CreatePostGamePayload = {
 
 /** The output of our create `PostGame` mutation. */
 export type CreatePostGamePayloadPostGameEdgeArgs = {
-  orderBy?: Maybe<Array<PostGamesOrderBy>>;
+  orderBy?: InputMaybe<Array<PostGamesOrderBy>>;
 };
 
 /** All input for the create `PostGameRange` mutation. */
@@ -1669,7 +1670,7 @@ export type CreatePostGameRangeInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostGameRange` to be created by this mutation. */
   postGameRange: PostGameRangeInput;
 };
@@ -1695,7 +1696,7 @@ export type CreatePostGameRangePayload = {
 
 /** The output of our create `PostGameRange` mutation. */
 export type CreatePostGameRangePayloadPostGameRangeEdgeArgs = {
-  orderBy?: Maybe<Array<PostGameRangesOrderBy>>;
+  orderBy?: InputMaybe<Array<PostGameRangesOrderBy>>;
 };
 
 /** All input for the create `Post` mutation. */
@@ -1704,7 +1705,7 @@ export type CreatePostInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Post` to be created by this mutation. */
   post: PostInput;
 };
@@ -1715,7 +1716,7 @@ export type CreatePostLikeInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostLike` to be created by this mutation. */
   postLike: PostLikeInput;
 };
@@ -1743,7 +1744,7 @@ export type CreatePostLikePayload = {
 
 /** The output of our create `PostLike` mutation. */
 export type CreatePostLikePayloadPostLikeEdgeArgs = {
-  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  orderBy?: InputMaybe<Array<PostLikesOrderBy>>;
 };
 
 /** The output of our create `Post` mutation. */
@@ -1773,7 +1774,7 @@ export type CreatePostPayload = {
 
 /** The output of our create `Post` mutation. */
 export type CreatePostPayloadPostEdgeArgs = {
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 /** All input for the create `PostRecording` mutation. */
@@ -1782,7 +1783,7 @@ export type CreatePostRecordingInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostRecording` to be created by this mutation. */
   postRecording: PostRecordingInput;
 };
@@ -1810,7 +1811,7 @@ export type CreatePostRecordingPayload = {
 
 /** The output of our create `PostRecording` mutation. */
 export type CreatePostRecordingPayloadPostRecordingEdgeArgs = {
-  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostRecordingsOrderBy>>;
 };
 
 /** All input for the create `PostUserMention` mutation. */
@@ -1819,7 +1820,7 @@ export type CreatePostUserMentionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostUserMention` to be created by this mutation. */
   postUserMention: PostUserMentionInput;
 };
@@ -1847,7 +1848,7 @@ export type CreatePostUserMentionPayload = {
 
 /** The output of our create `PostUserMention` mutation. */
 export type CreatePostUserMentionPayloadPostUserMentionEdgeArgs = {
-  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostUserMentionsOrderBy>>;
 };
 
 /** All input for the create `Prompt` mutation. */
@@ -1856,7 +1857,7 @@ export type CreatePromptInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Prompt` to be created by this mutation. */
   prompt: PromptInput;
 };
@@ -1884,7 +1885,7 @@ export type CreatePromptPayload = {
 
 /** The output of our create `Prompt` mutation. */
 export type CreatePromptPayloadPromptEdgeArgs = {
-  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  orderBy?: InputMaybe<Array<PromptsOrderBy>>;
 };
 
 /** All input for the create `RefreshToken` mutation. */
@@ -1893,7 +1894,7 @@ export type CreateRefreshTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `RefreshToken` to be created by this mutation. */
   refreshToken: RefreshTokenInput;
 };
@@ -1919,7 +1920,7 @@ export type CreateRefreshTokenPayload = {
 
 /** The output of our create `RefreshToken` mutation. */
 export type CreateRefreshTokenPayloadRefreshTokenEdgeArgs = {
-  orderBy?: Maybe<Array<RefreshTokensOrderBy>>;
+  orderBy?: InputMaybe<Array<RefreshTokensOrderBy>>;
 };
 
 /** All input for the create `RussianRandomQuestion` mutation. */
@@ -1928,7 +1929,7 @@ export type CreateRussianRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `RussianRandomQuestion` to be created by this mutation. */
   russianRandomQuestion: RussianRandomQuestionInput;
 };
@@ -1954,7 +1955,7 @@ export type CreateRussianRandomQuestionPayload = {
 
 /** The output of our create `RussianRandomQuestion` mutation. */
 export type CreateRussianRandomQuestionPayloadRussianRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<RussianRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<RussianRandomQuestionsOrderBy>>;
 };
 
 /** All input for the create `RussianWord` mutation. */
@@ -1963,7 +1964,7 @@ export type CreateRussianWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `RussianWord` to be created by this mutation. */
   russianWord: RussianWordInput;
 };
@@ -1989,7 +1990,7 @@ export type CreateRussianWordPayload = {
 
 /** The output of our create `RussianWord` mutation. */
 export type CreateRussianWordPayloadRussianWordEdgeArgs = {
-  orderBy?: Maybe<Array<RussianWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<RussianWordsOrderBy>>;
 };
 
 /** All input for the create `RussianWouldYouRatherQuestion` mutation. */
@@ -1998,7 +1999,7 @@ export type CreateRussianWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `RussianWouldYouRatherQuestion` to be created by this mutation. */
   russianWouldYouRatherQuestion: RussianWouldYouRatherQuestionInput;
 };
@@ -2024,7 +2025,7 @@ export type CreateRussianWouldYouRatherQuestionPayload = {
 
 /** The output of our create `RussianWouldYouRatherQuestion` mutation. */
 export type CreateRussianWouldYouRatherQuestionPayloadRussianWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the create `SpanishRandomQuestion` mutation. */
@@ -2033,7 +2034,7 @@ export type CreateSpanishRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `SpanishRandomQuestion` to be created by this mutation. */
   spanishRandomQuestion: SpanishRandomQuestionInput;
 };
@@ -2059,7 +2060,7 @@ export type CreateSpanishRandomQuestionPayload = {
 
 /** The output of our create `SpanishRandomQuestion` mutation. */
 export type CreateSpanishRandomQuestionPayloadSpanishRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<SpanishRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<SpanishRandomQuestionsOrderBy>>;
 };
 
 /** All input for the create `SpanishWord` mutation. */
@@ -2068,7 +2069,7 @@ export type CreateSpanishWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `SpanishWord` to be created by this mutation. */
   spanishWord: SpanishWordInput;
 };
@@ -2094,7 +2095,7 @@ export type CreateSpanishWordPayload = {
 
 /** The output of our create `SpanishWord` mutation. */
 export type CreateSpanishWordPayloadSpanishWordEdgeArgs = {
-  orderBy?: Maybe<Array<SpanishWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<SpanishWordsOrderBy>>;
 };
 
 /** All input for the create `SpanishWouldYouRatherQuestion` mutation. */
@@ -2103,7 +2104,7 @@ export type CreateSpanishWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `SpanishWouldYouRatherQuestion` to be created by this mutation. */
   spanishWouldYouRatherQuestion: SpanishWouldYouRatherQuestionInput;
 };
@@ -2129,7 +2130,7 @@ export type CreateSpanishWouldYouRatherQuestionPayload = {
 
 /** The output of our create `SpanishWouldYouRatherQuestion` mutation. */
 export type CreateSpanishWouldYouRatherQuestionPayloadSpanishWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the create `UserDevice` mutation. */
@@ -2138,7 +2139,7 @@ export type CreateUserDeviceInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `UserDevice` to be created by this mutation. */
   userDevice: UserDeviceInput;
 };
@@ -2164,7 +2165,7 @@ export type CreateUserDevicePayload = {
 
 /** The output of our create `UserDevice` mutation. */
 export type CreateUserDevicePayloadUserDeviceEdgeArgs = {
-  orderBy?: Maybe<Array<UserDevicesOrderBy>>;
+  orderBy?: InputMaybe<Array<UserDevicesOrderBy>>;
 };
 
 /** All input for the create `UserFollower` mutation. */
@@ -2173,7 +2174,7 @@ export type CreateUserFollowerInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `UserFollower` to be created by this mutation. */
   userFollower: UserFollowerInput;
 };
@@ -2201,7 +2202,7 @@ export type CreateUserFollowerPayload = {
 
 /** The output of our create `UserFollower` mutation. */
 export type CreateUserFollowerPayloadUserFollowerEdgeArgs = {
-  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  orderBy?: InputMaybe<Array<UserFollowersOrderBy>>;
 };
 
 /** All input for the create `User` mutation. */
@@ -2210,7 +2211,7 @@ export type CreateUserInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `User` to be created by this mutation. */
   user: UserInput;
 };
@@ -2221,7 +2222,7 @@ export type CreateUserLanguageInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `UserLanguage` to be created by this mutation. */
   userLanguage: UserLanguageInput;
 };
@@ -2251,7 +2252,7 @@ export type CreateUserLanguagePayload = {
 
 /** The output of our create `UserLanguage` mutation. */
 export type CreateUserLanguagePayloadUserLanguageEdgeArgs = {
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 /** The output of our create `User` mutation. */
@@ -2277,7 +2278,7 @@ export type CreateUserPayload = {
 
 /** The output of our create `User` mutation. */
 export type CreateUserPayloadUserEdgeArgs = {
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /** All input for the create `UserPreference` mutation. */
@@ -2286,7 +2287,7 @@ export type CreateUserPreferenceInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `UserPreference` to be created by this mutation. */
   userPreference: UserPreferenceInput;
 };
@@ -2314,7 +2315,7 @@ export type CreateUserPreferencePayload = {
 
 /** The output of our create `UserPreference` mutation. */
 export type CreateUserPreferencePayloadUserPreferenceEdgeArgs = {
-  orderBy?: Maybe<Array<UserPreferencesOrderBy>>;
+  orderBy?: InputMaybe<Array<UserPreferencesOrderBy>>;
 };
 
 /** All input for the create `UserSession` mutation. */
@@ -2323,7 +2324,7 @@ export type CreateUserSessionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `UserSession` to be created by this mutation. */
   userSession: UserSessionInput;
 };
@@ -2347,33 +2348,33 @@ export type CreateUserSessionPayload = {
 
 /** The output of our create `UserSession` mutation. */
 export type CreateUserSessionPayloadUserSessionEdgeArgs = {
-  orderBy?: Maybe<Array<UserSessionsOrderBy>>;
+  orderBy?: InputMaybe<Array<UserSessionsOrderBy>>;
 };
 
 /** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
 export type DatetimeFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Scalars['Datetime']>;
+  distinctFrom?: InputMaybe<Scalars['Datetime']>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<Scalars['Datetime']>;
+  equalTo?: InputMaybe<Scalars['Datetime']>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<Scalars['Datetime']>;
+  greaterThan?: InputMaybe<Scalars['Datetime']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Scalars['Datetime']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Datetime']>;
   /** Included in the specified list. */
-  in?: Maybe<Array<Scalars['Datetime']>>;
+  in?: InputMaybe<Array<Scalars['Datetime']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<Scalars['Datetime']>;
+  lessThan?: InputMaybe<Scalars['Datetime']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Scalars['Datetime']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['Datetime']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Scalars['Datetime']>;
+  notDistinctFrom?: InputMaybe<Scalars['Datetime']>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Scalars['Datetime']>;
+  notEqualTo?: InputMaybe<Scalars['Datetime']>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<Scalars['Datetime']>>;
+  notIn?: InputMaybe<Array<Scalars['Datetime']>>;
 };
 
 /** All input for the `deleteChineseGuessCharacterQuestionByNodeId` mutation. */
@@ -2382,7 +2383,7 @@ export type DeleteChineseGuessCharacterQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `ChineseGuessCharacterQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -2393,7 +2394,7 @@ export type DeleteChineseGuessCharacterQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -2403,7 +2404,7 @@ export type DeleteChineseGuessCharacterQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -2429,7 +2430,7 @@ export type DeleteChineseGuessCharacterQuestionPayload = {
 
 /** The output of our delete `ChineseGuessCharacterQuestion` mutation. */
 export type DeleteChineseGuessCharacterQuestionPayloadChineseGuessCharacterQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteChineseRandomQuestionByNodeId` mutation. */
@@ -2438,7 +2439,7 @@ export type DeleteChineseRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `ChineseRandomQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -2449,7 +2450,7 @@ export type DeleteChineseRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -2459,7 +2460,7 @@ export type DeleteChineseRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -2485,7 +2486,7 @@ export type DeleteChineseRandomQuestionPayload = {
 
 /** The output of our delete `ChineseRandomQuestion` mutation. */
 export type DeleteChineseRandomQuestionPayloadChineseRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ChineseRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteChineseWouldYouRatherQuestionByNodeId` mutation. */
@@ -2494,7 +2495,7 @@ export type DeleteChineseWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `ChineseWouldYouRatherQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -2505,7 +2506,7 @@ export type DeleteChineseWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -2515,7 +2516,7 @@ export type DeleteChineseWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -2541,7 +2542,7 @@ export type DeleteChineseWouldYouRatherQuestionPayload = {
 
 /** The output of our delete `ChineseWouldYouRatherQuestion` mutation. */
 export type DeleteChineseWouldYouRatherQuestionPayloadChineseWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteEnglishRandomQuestionByNodeId` mutation. */
@@ -2550,7 +2551,7 @@ export type DeleteEnglishRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `EnglishRandomQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -2561,7 +2562,7 @@ export type DeleteEnglishRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -2571,7 +2572,7 @@ export type DeleteEnglishRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -2597,7 +2598,7 @@ export type DeleteEnglishRandomQuestionPayload = {
 
 /** The output of our delete `EnglishRandomQuestion` mutation. */
 export type DeleteEnglishRandomQuestionPayloadEnglishRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<EnglishRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<EnglishRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteEnglishWordByNodeId` mutation. */
@@ -2606,7 +2607,7 @@ export type DeleteEnglishWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `EnglishWord` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -2617,7 +2618,7 @@ export type DeleteEnglishWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -2627,7 +2628,7 @@ export type DeleteEnglishWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -2653,7 +2654,7 @@ export type DeleteEnglishWordPayload = {
 
 /** The output of our delete `EnglishWord` mutation. */
 export type DeleteEnglishWordPayloadEnglishWordEdgeArgs = {
-  orderBy?: Maybe<Array<EnglishWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<EnglishWordsOrderBy>>;
 };
 
 /** All input for the `deleteEnglishWouldYouRatherQuestionByNodeId` mutation. */
@@ -2662,7 +2663,7 @@ export type DeleteEnglishWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `EnglishWouldYouRatherQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -2673,7 +2674,7 @@ export type DeleteEnglishWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -2683,7 +2684,7 @@ export type DeleteEnglishWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -2709,7 +2710,7 @@ export type DeleteEnglishWouldYouRatherQuestionPayload = {
 
 /** The output of our delete `EnglishWouldYouRatherQuestion` mutation. */
 export type DeleteEnglishWouldYouRatherQuestionPayloadEnglishWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteFrenchRandomQuestionByNodeId` mutation. */
@@ -2718,7 +2719,7 @@ export type DeleteFrenchRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `FrenchRandomQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -2729,7 +2730,7 @@ export type DeleteFrenchRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -2739,7 +2740,7 @@ export type DeleteFrenchRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -2765,7 +2766,7 @@ export type DeleteFrenchRandomQuestionPayload = {
 
 /** The output of our delete `FrenchRandomQuestion` mutation. */
 export type DeleteFrenchRandomQuestionPayloadFrenchRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<FrenchRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<FrenchRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteFrenchWordByNodeId` mutation. */
@@ -2774,7 +2775,7 @@ export type DeleteFrenchWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `FrenchWord` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -2785,7 +2786,7 @@ export type DeleteFrenchWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -2795,7 +2796,7 @@ export type DeleteFrenchWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -2821,7 +2822,7 @@ export type DeleteFrenchWordPayload = {
 
 /** The output of our delete `FrenchWord` mutation. */
 export type DeleteFrenchWordPayloadFrenchWordEdgeArgs = {
-  orderBy?: Maybe<Array<FrenchWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<FrenchWordsOrderBy>>;
 };
 
 /** All input for the `deleteFrenchWouldYouRatherQuestionByNodeId` mutation. */
@@ -2830,7 +2831,7 @@ export type DeleteFrenchWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `FrenchWouldYouRatherQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -2841,7 +2842,7 @@ export type DeleteFrenchWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -2851,7 +2852,7 @@ export type DeleteFrenchWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -2877,7 +2878,7 @@ export type DeleteFrenchWouldYouRatherQuestionPayload = {
 
 /** The output of our delete `FrenchWouldYouRatherQuestion` mutation. */
 export type DeleteFrenchWouldYouRatherQuestionPayloadFrenchWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteGermanRandomQuestionByNodeId` mutation. */
@@ -2886,7 +2887,7 @@ export type DeleteGermanRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `GermanRandomQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -2897,7 +2898,7 @@ export type DeleteGermanRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -2907,7 +2908,7 @@ export type DeleteGermanRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -2933,7 +2934,7 @@ export type DeleteGermanRandomQuestionPayload = {
 
 /** The output of our delete `GermanRandomQuestion` mutation. */
 export type DeleteGermanRandomQuestionPayloadGermanRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<GermanRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<GermanRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteGermanWordByNodeId` mutation. */
@@ -2942,7 +2943,7 @@ export type DeleteGermanWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `GermanWord` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -2953,7 +2954,7 @@ export type DeleteGermanWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -2963,7 +2964,7 @@ export type DeleteGermanWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -2989,7 +2990,7 @@ export type DeleteGermanWordPayload = {
 
 /** The output of our delete `GermanWord` mutation. */
 export type DeleteGermanWordPayloadGermanWordEdgeArgs = {
-  orderBy?: Maybe<Array<GermanWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<GermanWordsOrderBy>>;
 };
 
 /** All input for the `deleteGermanWouldYouRatherQuestionByNodeId` mutation. */
@@ -2998,7 +2999,7 @@ export type DeleteGermanWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `GermanWouldYouRatherQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3009,7 +3010,7 @@ export type DeleteGermanWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3019,7 +3020,7 @@ export type DeleteGermanWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3045,7 +3046,7 @@ export type DeleteGermanWouldYouRatherQuestionPayload = {
 
 /** The output of our delete `GermanWouldYouRatherQuestion` mutation. */
 export type DeleteGermanWouldYouRatherQuestionPayloadGermanWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteGroupByNodeId` mutation. */
@@ -3054,7 +3055,7 @@ export type DeleteGroupByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Group` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3065,7 +3066,7 @@ export type DeleteGroupByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3075,7 +3076,7 @@ export type DeleteGroupInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3103,7 +3104,7 @@ export type DeleteGroupPayload = {
 
 /** The output of our delete `Group` mutation. */
 export type DeleteGroupPayloadGroupEdgeArgs = {
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 /** All input for the `deleteGroupUserByNodeId` mutation. */
@@ -3112,7 +3113,7 @@ export type DeleteGroupUserByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `GroupUser` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3123,7 +3124,7 @@ export type DeleteGroupUserInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3151,7 +3152,7 @@ export type DeleteGroupUserPayload = {
 
 /** The output of our delete `GroupUser` mutation. */
 export type DeleteGroupUserPayloadGroupUserEdgeArgs = {
-  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  orderBy?: InputMaybe<Array<GroupUsersOrderBy>>;
 };
 
 /** All input for the `deleteInAppNotificationMetadatumByNotificationId` mutation. */
@@ -3160,7 +3161,7 @@ export type DeleteInAppNotificationMetadatumByNotificationIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   notificationId: Scalars['Int'];
 };
 
@@ -3190,7 +3191,7 @@ export type DeleteInAppNotificationMetadatumPayload = {
 
 /** The output of our delete `InAppNotificationMetadatum` mutation. */
 export type DeleteInAppNotificationMetadatumPayloadInAppNotificationMetadatumEdgeArgs = {
-  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+  orderBy?: InputMaybe<Array<InAppNotificationMetadataOrderBy>>;
 };
 
 /** All input for the `deleteInviteTokenByNodeId` mutation. */
@@ -3199,7 +3200,7 @@ export type DeleteInviteTokenByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `InviteToken` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3210,7 +3211,7 @@ export type DeleteInviteTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3236,7 +3237,7 @@ export type DeleteInviteTokenPayload = {
 
 /** The output of our delete `InviteToken` mutation. */
 export type DeleteInviteTokenPayloadInviteTokenEdgeArgs = {
-  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+  orderBy?: InputMaybe<Array<InviteTokensOrderBy>>;
 };
 
 /** All input for the `deleteItalianRandomQuestionByNodeId` mutation. */
@@ -3245,7 +3246,7 @@ export type DeleteItalianRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `ItalianRandomQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3256,7 +3257,7 @@ export type DeleteItalianRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3266,7 +3267,7 @@ export type DeleteItalianRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3292,7 +3293,7 @@ export type DeleteItalianRandomQuestionPayload = {
 
 /** The output of our delete `ItalianRandomQuestion` mutation. */
 export type DeleteItalianRandomQuestionPayloadItalianRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ItalianRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ItalianRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteItalianWordByNodeId` mutation. */
@@ -3301,7 +3302,7 @@ export type DeleteItalianWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `ItalianWord` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3312,7 +3313,7 @@ export type DeleteItalianWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3322,7 +3323,7 @@ export type DeleteItalianWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3348,7 +3349,7 @@ export type DeleteItalianWordPayload = {
 
 /** The output of our delete `ItalianWord` mutation. */
 export type DeleteItalianWordPayloadItalianWordEdgeArgs = {
-  orderBy?: Maybe<Array<ItalianWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<ItalianWordsOrderBy>>;
 };
 
 /** All input for the `deleteItalianWouldYouRatherQuestionByNodeId` mutation. */
@@ -3357,7 +3358,7 @@ export type DeleteItalianWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `ItalianWouldYouRatherQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3368,7 +3369,7 @@ export type DeleteItalianWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3378,7 +3379,7 @@ export type DeleteItalianWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3404,7 +3405,7 @@ export type DeleteItalianWouldYouRatherQuestionPayload = {
 
 /** The output of our delete `ItalianWouldYouRatherQuestion` mutation. */
 export type DeleteItalianWouldYouRatherQuestionPayloadItalianWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteJapaneseRandomQuestionByNodeId` mutation. */
@@ -3413,7 +3414,7 @@ export type DeleteJapaneseRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `JapaneseRandomQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3424,7 +3425,7 @@ export type DeleteJapaneseRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3434,7 +3435,7 @@ export type DeleteJapaneseRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3460,7 +3461,7 @@ export type DeleteJapaneseRandomQuestionPayload = {
 
 /** The output of our delete `JapaneseRandomQuestion` mutation. */
 export type DeleteJapaneseRandomQuestionPayloadJapaneseRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<JapaneseRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<JapaneseRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteJapaneseWouldYouRatherQuestionByNodeId` mutation. */
@@ -3469,7 +3470,7 @@ export type DeleteJapaneseWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `JapaneseWouldYouRatherQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3480,7 +3481,7 @@ export type DeleteJapaneseWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3490,7 +3491,7 @@ export type DeleteJapaneseWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3516,7 +3517,7 @@ export type DeleteJapaneseWouldYouRatherQuestionPayload = {
 
 /** The output of our delete `JapaneseWouldYouRatherQuestion` mutation. */
 export type DeleteJapaneseWouldYouRatherQuestionPayloadJapaneseWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteKoreanRandomQuestionByNodeId` mutation. */
@@ -3525,7 +3526,7 @@ export type DeleteKoreanRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `KoreanRandomQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3536,7 +3537,7 @@ export type DeleteKoreanRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3546,7 +3547,7 @@ export type DeleteKoreanRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3572,7 +3573,7 @@ export type DeleteKoreanRandomQuestionPayload = {
 
 /** The output of our delete `KoreanRandomQuestion` mutation. */
 export type DeleteKoreanRandomQuestionPayloadKoreanRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<KoreanRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<KoreanRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteKoreanWouldYouRatherQuestionByNodeId` mutation. */
@@ -3581,7 +3582,7 @@ export type DeleteKoreanWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `KoreanWouldYouRatherQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3592,7 +3593,7 @@ export type DeleteKoreanWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3602,7 +3603,7 @@ export type DeleteKoreanWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3628,7 +3629,7 @@ export type DeleteKoreanWouldYouRatherQuestionPayload = {
 
 /** The output of our delete `KoreanWouldYouRatherQuestion` mutation. */
 export type DeleteKoreanWouldYouRatherQuestionPayloadKoreanWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteLanguageByAlpha2` mutation. */
@@ -3639,7 +3640,7 @@ export type DeleteLanguageByAlpha2Input = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
 /** All input for the `deleteLanguageByEnglishName` mutation. */
@@ -3648,7 +3649,7 @@ export type DeleteLanguageByEnglishNameInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   englishName: Scalars['String'];
 };
 
@@ -3658,7 +3659,7 @@ export type DeleteLanguageByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Language` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3669,7 +3670,7 @@ export type DeleteLanguageInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3693,7 +3694,7 @@ export type DeleteLanguagePayload = {
 
 /** The output of our delete `Language` mutation. */
 export type DeleteLanguagePayloadLanguageEdgeArgs = {
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 /** All input for the `deleteLanguageSkillLevelByNodeId` mutation. */
@@ -3702,7 +3703,7 @@ export type DeleteLanguageSkillLevelByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `LanguageSkillLevel` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3713,7 +3714,7 @@ export type DeleteLanguageSkillLevelInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3737,7 +3738,7 @@ export type DeleteLanguageSkillLevelPayload = {
 
 /** The output of our delete `LanguageSkillLevel` mutation. */
 export type DeleteLanguageSkillLevelPayloadLanguageSkillLevelEdgeArgs = {
-  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  orderBy?: InputMaybe<Array<LanguageSkillLevelsOrderBy>>;
 };
 
 /** All input for the `deleteMessageByNodeId` mutation. */
@@ -3746,7 +3747,7 @@ export type DeleteMessageByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Message` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3757,7 +3758,7 @@ export type DeleteMessageByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3767,7 +3768,7 @@ export type DeleteMessageInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3799,7 +3800,7 @@ export type DeleteMessagePayload = {
 
 /** The output of our delete `Message` mutation. */
 export type DeleteMessagePayloadMessageEdgeArgs = {
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** All input for the `deleteMessagePreviewByNodeId` mutation. */
@@ -3808,7 +3809,7 @@ export type DeleteMessagePreviewByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `MessagePreview` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3819,7 +3820,7 @@ export type DeleteMessagePreviewByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3829,7 +3830,7 @@ export type DeleteMessagePreviewInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3855,7 +3856,7 @@ export type DeleteMessagePreviewPayload = {
 
 /** The output of our delete `MessagePreview` mutation. */
 export type DeleteMessagePreviewPayloadMessagePreviewEdgeArgs = {
-  orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
+  orderBy?: InputMaybe<Array<MessagePreviewsOrderBy>>;
 };
 
 /** All input for the `deleteNotificationByNodeId` mutation. */
@@ -3864,7 +3865,7 @@ export type DeleteNotificationByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Notification` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3875,7 +3876,7 @@ export type DeleteNotificationByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3885,7 +3886,7 @@ export type DeleteNotificationChannelByNameInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
 };
 
@@ -3895,7 +3896,7 @@ export type DeleteNotificationChannelByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `NotificationChannel` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3906,7 +3907,7 @@ export type DeleteNotificationChannelByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -3916,7 +3917,7 @@ export type DeleteNotificationChannelInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3940,7 +3941,7 @@ export type DeleteNotificationChannelPayload = {
 
 /** The output of our delete `NotificationChannel` mutation. */
 export type DeleteNotificationChannelPayloadNotificationChannelEdgeArgs = {
-  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  orderBy?: InputMaybe<Array<NotificationChannelsOrderBy>>;
 };
 
 /** All input for the `deleteNotification` mutation. */
@@ -3949,7 +3950,7 @@ export type DeleteNotificationInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -3979,7 +3980,7 @@ export type DeleteNotificationPayload = {
 
 /** The output of our delete `Notification` mutation. */
 export type DeleteNotificationPayloadNotificationEdgeArgs = {
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 /** All input for the `deletePortugueseRandomQuestionByNodeId` mutation. */
@@ -3988,7 +3989,7 @@ export type DeletePortugueseRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PortugueseRandomQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -3999,7 +4000,7 @@ export type DeletePortugueseRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4009,7 +4010,7 @@ export type DeletePortugueseRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4035,7 +4036,7 @@ export type DeletePortugueseRandomQuestionPayload = {
 
 /** The output of our delete `PortugueseRandomQuestion` mutation. */
 export type DeletePortugueseRandomQuestionPayloadPortugueseRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<PortugueseRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PortugueseRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `deletePortugueseWordByNodeId` mutation. */
@@ -4044,7 +4045,7 @@ export type DeletePortugueseWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PortugueseWord` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4055,7 +4056,7 @@ export type DeletePortugueseWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4065,7 +4066,7 @@ export type DeletePortugueseWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4091,7 +4092,7 @@ export type DeletePortugueseWordPayload = {
 
 /** The output of our delete `PortugueseWord` mutation. */
 export type DeletePortugueseWordPayloadPortugueseWordEdgeArgs = {
-  orderBy?: Maybe<Array<PortugueseWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<PortugueseWordsOrderBy>>;
 };
 
 /** All input for the `deletePortugueseWouldYouRatherQuestionByNodeId` mutation. */
@@ -4100,7 +4101,7 @@ export type DeletePortugueseWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PortugueseWouldYouRatherQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4111,7 +4112,7 @@ export type DeletePortugueseWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4121,7 +4122,7 @@ export type DeletePortugueseWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4147,7 +4148,7 @@ export type DeletePortugueseWouldYouRatherQuestionPayload = {
 
 /** The output of our delete `PortugueseWouldYouRatherQuestion` mutation. */
 export type DeletePortugueseWouldYouRatherQuestionPayloadPortugueseWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `deletePostByNodeId` mutation. */
@@ -4156,7 +4157,7 @@ export type DeletePostByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Post` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4167,7 +4168,7 @@ export type DeletePostBySnowflakeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   snowflakeId: Scalars['BigInt'];
 };
 
@@ -4177,7 +4178,7 @@ export type DeletePostByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4187,7 +4188,7 @@ export type DeletePostCorrectionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostCorrection` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4198,7 +4199,7 @@ export type DeletePostCorrectionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4208,7 +4209,7 @@ export type DeletePostCorrectionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4236,7 +4237,7 @@ export type DeletePostCorrectionPayload = {
 
 /** The output of our delete `PostCorrection` mutation. */
 export type DeletePostCorrectionPayloadPostCorrectionEdgeArgs = {
-  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostCorrectionsOrderBy>>;
 };
 
 /** All input for the `deletePostGameAnswerByNodeId` mutation. */
@@ -4245,7 +4246,7 @@ export type DeletePostGameAnswerByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostGameAnswer` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4256,7 +4257,7 @@ export type DeletePostGameAnswerByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4266,7 +4267,7 @@ export type DeletePostGameAnswerInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4296,7 +4297,7 @@ export type DeletePostGameAnswerPayload = {
 
 /** The output of our delete `PostGameAnswer` mutation. */
 export type DeletePostGameAnswerPayloadPostGameAnswerEdgeArgs = {
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 /** All input for the `deletePostGameByNodeId` mutation. */
@@ -4305,7 +4306,7 @@ export type DeletePostGameByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostGame` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4316,7 +4317,7 @@ export type DeletePostGameByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4326,7 +4327,7 @@ export type DeletePostGameInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4352,7 +4353,7 @@ export type DeletePostGamePayload = {
 
 /** The output of our delete `PostGame` mutation. */
 export type DeletePostGamePayloadPostGameEdgeArgs = {
-  orderBy?: Maybe<Array<PostGamesOrderBy>>;
+  orderBy?: InputMaybe<Array<PostGamesOrderBy>>;
 };
 
 /** All input for the `deletePostGameRangeByNodeId` mutation. */
@@ -4361,7 +4362,7 @@ export type DeletePostGameRangeByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostGameRange` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4372,7 +4373,7 @@ export type DeletePostGameRangeByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4382,7 +4383,7 @@ export type DeletePostGameRangeInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4408,7 +4409,7 @@ export type DeletePostGameRangePayload = {
 
 /** The output of our delete `PostGameRange` mutation. */
 export type DeletePostGameRangePayloadPostGameRangeEdgeArgs = {
-  orderBy?: Maybe<Array<PostGameRangesOrderBy>>;
+  orderBy?: InputMaybe<Array<PostGameRangesOrderBy>>;
 };
 
 /** All input for the `deletePost` mutation. */
@@ -4417,7 +4418,7 @@ export type DeletePostInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4427,7 +4428,7 @@ export type DeletePostLikeByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostLike` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4438,7 +4439,7 @@ export type DeletePostLikeInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4466,7 +4467,7 @@ export type DeletePostLikePayload = {
 
 /** The output of our delete `PostLike` mutation. */
 export type DeletePostLikePayloadPostLikeEdgeArgs = {
-  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  orderBy?: InputMaybe<Array<PostLikesOrderBy>>;
 };
 
 /** The output of our delete `Post` mutation. */
@@ -4497,7 +4498,7 @@ export type DeletePostPayload = {
 
 /** The output of our delete `Post` mutation. */
 export type DeletePostPayloadPostEdgeArgs = {
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 /** All input for the `deletePostRecordingByNodeId` mutation. */
@@ -4506,7 +4507,7 @@ export type DeletePostRecordingByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostRecording` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4517,7 +4518,7 @@ export type DeletePostRecordingByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4527,7 +4528,7 @@ export type DeletePostRecordingInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4555,7 +4556,7 @@ export type DeletePostRecordingPayload = {
 
 /** The output of our delete `PostRecording` mutation. */
 export type DeletePostRecordingPayloadPostRecordingEdgeArgs = {
-  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostRecordingsOrderBy>>;
 };
 
 /** All input for the `deletePostUserMentionByNodeId` mutation. */
@@ -4564,7 +4565,7 @@ export type DeletePostUserMentionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostUserMention` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4575,7 +4576,7 @@ export type DeletePostUserMentionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4585,7 +4586,7 @@ export type DeletePostUserMentionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4613,7 +4614,7 @@ export type DeletePostUserMentionPayload = {
 
 /** The output of our delete `PostUserMention` mutation. */
 export type DeletePostUserMentionPayloadPostUserMentionEdgeArgs = {
-  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostUserMentionsOrderBy>>;
 };
 
 /** All input for the `deletePromptByNodeId` mutation. */
@@ -4622,7 +4623,7 @@ export type DeletePromptByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Prompt` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4633,7 +4634,7 @@ export type DeletePromptByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4643,7 +4644,7 @@ export type DeletePromptInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4671,7 +4672,7 @@ export type DeletePromptPayload = {
 
 /** The output of our delete `Prompt` mutation. */
 export type DeletePromptPayloadPromptEdgeArgs = {
-  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  orderBy?: InputMaybe<Array<PromptsOrderBy>>;
 };
 
 /** All input for the `deleteRefreshTokenByNodeId` mutation. */
@@ -4680,7 +4681,7 @@ export type DeleteRefreshTokenByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `RefreshToken` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4691,7 +4692,7 @@ export type DeleteRefreshTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4717,7 +4718,7 @@ export type DeleteRefreshTokenPayload = {
 
 /** The output of our delete `RefreshToken` mutation. */
 export type DeleteRefreshTokenPayloadRefreshTokenEdgeArgs = {
-  orderBy?: Maybe<Array<RefreshTokensOrderBy>>;
+  orderBy?: InputMaybe<Array<RefreshTokensOrderBy>>;
 };
 
 /** All input for the `deleteRussianRandomQuestionByNodeId` mutation. */
@@ -4726,7 +4727,7 @@ export type DeleteRussianRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `RussianRandomQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4737,7 +4738,7 @@ export type DeleteRussianRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4747,7 +4748,7 @@ export type DeleteRussianRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4773,7 +4774,7 @@ export type DeleteRussianRandomQuestionPayload = {
 
 /** The output of our delete `RussianRandomQuestion` mutation. */
 export type DeleteRussianRandomQuestionPayloadRussianRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<RussianRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<RussianRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteRussianWordByNodeId` mutation. */
@@ -4782,7 +4783,7 @@ export type DeleteRussianWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `RussianWord` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4793,7 +4794,7 @@ export type DeleteRussianWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4803,7 +4804,7 @@ export type DeleteRussianWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4829,7 +4830,7 @@ export type DeleteRussianWordPayload = {
 
 /** The output of our delete `RussianWord` mutation. */
 export type DeleteRussianWordPayloadRussianWordEdgeArgs = {
-  orderBy?: Maybe<Array<RussianWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<RussianWordsOrderBy>>;
 };
 
 /** All input for the `deleteRussianWouldYouRatherQuestionByNodeId` mutation. */
@@ -4838,7 +4839,7 @@ export type DeleteRussianWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `RussianWouldYouRatherQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4849,7 +4850,7 @@ export type DeleteRussianWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4859,7 +4860,7 @@ export type DeleteRussianWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4885,7 +4886,7 @@ export type DeleteRussianWouldYouRatherQuestionPayload = {
 
 /** The output of our delete `RussianWouldYouRatherQuestion` mutation. */
 export type DeleteRussianWouldYouRatherQuestionPayloadRussianWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteSpanishRandomQuestionByNodeId` mutation. */
@@ -4894,7 +4895,7 @@ export type DeleteSpanishRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `SpanishRandomQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4905,7 +4906,7 @@ export type DeleteSpanishRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4915,7 +4916,7 @@ export type DeleteSpanishRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4941,7 +4942,7 @@ export type DeleteSpanishRandomQuestionPayload = {
 
 /** The output of our delete `SpanishRandomQuestion` mutation. */
 export type DeleteSpanishRandomQuestionPayloadSpanishRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<SpanishRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<SpanishRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteSpanishWordByNodeId` mutation. */
@@ -4950,7 +4951,7 @@ export type DeleteSpanishWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `SpanishWord` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -4961,7 +4962,7 @@ export type DeleteSpanishWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -4971,7 +4972,7 @@ export type DeleteSpanishWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -4997,7 +4998,7 @@ export type DeleteSpanishWordPayload = {
 
 /** The output of our delete `SpanishWord` mutation. */
 export type DeleteSpanishWordPayloadSpanishWordEdgeArgs = {
-  orderBy?: Maybe<Array<SpanishWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<SpanishWordsOrderBy>>;
 };
 
 /** All input for the `deleteSpanishWouldYouRatherQuestionByNodeId` mutation. */
@@ -5006,7 +5007,7 @@ export type DeleteSpanishWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `SpanishWouldYouRatherQuestion` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -5017,7 +5018,7 @@ export type DeleteSpanishWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -5027,7 +5028,7 @@ export type DeleteSpanishWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -5053,7 +5054,7 @@ export type DeleteSpanishWouldYouRatherQuestionPayload = {
 
 /** The output of our delete `SpanishWouldYouRatherQuestion` mutation. */
 export type DeleteSpanishWouldYouRatherQuestionPayloadSpanishWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `deleteUserByEmail` mutation. */
@@ -5062,7 +5063,7 @@ export type DeleteUserByEmailInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
 };
 
@@ -5072,7 +5073,7 @@ export type DeleteUserByEmailUnsubscribeTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   emailUnsubscribeToken: Scalars['String'];
 };
 
@@ -5082,7 +5083,7 @@ export type DeleteUserByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `User` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -5093,7 +5094,7 @@ export type DeleteUserByResetPasswordTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   resetPasswordToken: Scalars['String'];
 };
 
@@ -5103,7 +5104,7 @@ export type DeleteUserByUsernameInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   username: Scalars['String'];
 };
 
@@ -5113,7 +5114,7 @@ export type DeleteUserByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -5123,7 +5124,7 @@ export type DeleteUserDeviceByFcmTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   fcmToken: Scalars['String'];
 };
 
@@ -5133,7 +5134,7 @@ export type DeleteUserDeviceByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `UserDevice` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -5144,7 +5145,7 @@ export type DeleteUserDeviceByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -5154,7 +5155,7 @@ export type DeleteUserDeviceInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -5180,7 +5181,7 @@ export type DeleteUserDevicePayload = {
 
 /** The output of our delete `UserDevice` mutation. */
 export type DeleteUserDevicePayloadUserDeviceEdgeArgs = {
-  orderBy?: Maybe<Array<UserDevicesOrderBy>>;
+  orderBy?: InputMaybe<Array<UserDevicesOrderBy>>;
 };
 
 /** All input for the `deleteUserFollowerByNodeId` mutation. */
@@ -5189,7 +5190,7 @@ export type DeleteUserFollowerByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `UserFollower` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -5200,7 +5201,7 @@ export type DeleteUserFollowerInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -5228,7 +5229,7 @@ export type DeleteUserFollowerPayload = {
 
 /** The output of our delete `UserFollower` mutation. */
 export type DeleteUserFollowerPayloadUserFollowerEdgeArgs = {
-  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  orderBy?: InputMaybe<Array<UserFollowersOrderBy>>;
 };
 
 /** All input for the `deleteUser` mutation. */
@@ -5237,7 +5238,7 @@ export type DeleteUserInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -5247,7 +5248,7 @@ export type DeleteUserLanguageByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `UserLanguage` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -5258,7 +5259,7 @@ export type DeleteUserLanguageInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -5288,7 +5289,7 @@ export type DeleteUserLanguagePayload = {
 
 /** The output of our delete `UserLanguage` mutation. */
 export type DeleteUserLanguagePayloadUserLanguageEdgeArgs = {
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 /** The output of our delete `User` mutation. */
@@ -5315,7 +5316,7 @@ export type DeleteUserPayload = {
 
 /** The output of our delete `User` mutation. */
 export type DeleteUserPayloadUserEdgeArgs = {
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /** All input for the `deleteUserPreferenceByNodeId` mutation. */
@@ -5324,7 +5325,7 @@ export type DeleteUserPreferenceByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `UserPreference` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -5335,7 +5336,7 @@ export type DeleteUserPreferenceByUserIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   userId: Scalars['Int'];
 };
 
@@ -5345,7 +5346,7 @@ export type DeleteUserPreferenceInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -5373,7 +5374,7 @@ export type DeleteUserPreferencePayload = {
 
 /** The output of our delete `UserPreference` mutation. */
 export type DeleteUserPreferencePayloadUserPreferenceEdgeArgs = {
-  orderBy?: Maybe<Array<UserPreferencesOrderBy>>;
+  orderBy?: InputMaybe<Array<UserPreferencesOrderBy>>;
 };
 
 /** All input for the `deleteUserSessionByNodeId` mutation. */
@@ -5382,7 +5383,7 @@ export type DeleteUserSessionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `UserSession` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -5393,7 +5394,7 @@ export type DeleteUserSessionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   sid: Scalars['String'];
 };
 
@@ -5417,7 +5418,7 @@ export type DeleteUserSessionPayload = {
 
 /** The output of our delete `UserSession` mutation. */
 export type DeleteUserSessionPayloadUserSessionEdgeArgs = {
-  orderBy?: Maybe<Array<UserSessionsOrderBy>>;
+  orderBy?: InputMaybe<Array<UserSessionsOrderBy>>;
 };
 
 export type EnglishRandomQuestion = Node & {
@@ -5439,53 +5440,53 @@ export type EnglishRandomQuestion = Node & {
  */
 export type EnglishRandomQuestionCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `EnglishRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type EnglishRandomQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<EnglishRandomQuestionFilter>>;
+  and?: InputMaybe<Array<EnglishRandomQuestionFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<EnglishRandomQuestionFilter>;
+  not?: InputMaybe<EnglishRandomQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<EnglishRandomQuestionFilter>>;
+  or?: InputMaybe<Array<EnglishRandomQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `EnglishRandomQuestion` */
 export type EnglishRandomQuestionInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `EnglishRandomQuestion`. Fields that are set will be updated. */
 export type EnglishRandomQuestionPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `EnglishRandomQuestion` values. */
@@ -5549,67 +5550,67 @@ export type EnglishWord = Node & {
  */
 export type EnglishWordCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `frequency` field. */
-  frequency?: Maybe<Scalars['Float']>;
+  frequency?: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `length` field. */
-  length?: Maybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   /** Checks for equality with the object’s `word` field. */
-  word?: Maybe<Scalars['String']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `EnglishWord` object types. All fields are combined with a logical ‘and.’ */
 export type EnglishWordFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<EnglishWordFilter>>;
+  and?: InputMaybe<Array<EnglishWordFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `frequency` field. */
-  frequency?: Maybe<FloatFilter>;
+  frequency?: InputMaybe<FloatFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `length` field. */
-  length?: Maybe<IntFilter>;
+  length?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<EnglishWordFilter>;
+  not?: InputMaybe<EnglishWordFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<EnglishWordFilter>>;
+  or?: InputMaybe<Array<EnglishWordFilter>>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
   /** Filter by the object’s `word` field. */
-  word?: Maybe<StringFilter>;
+  word?: InputMaybe<StringFilter>;
 };
 
 /** An input for mutations affecting `EnglishWord` */
 export type EnglishWordInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   word: Scalars['String'];
 };
 
 /** Represents an update to a `EnglishWord`. Fields that are set will be updated. */
 export type EnglishWordPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
-  frequency?: Maybe<Scalars['Float']>;
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
-  word?: Maybe<Scalars['String']>;
+  frequency?: InputMaybe<Scalars['Float']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `EnglishWord` values. */
@@ -5675,59 +5676,59 @@ export type EnglishWouldYouRatherQuestion = Node & {
  */
 export type EnglishWouldYouRatherQuestionCondition = {
   /** Checks for equality with the object’s `answers` field. */
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `EnglishWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type EnglishWouldYouRatherQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<EnglishWouldYouRatherQuestionFilter>>;
+  and?: InputMaybe<Array<EnglishWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `answers` field. */
-  answers?: Maybe<StringListFilter>;
+  answers?: InputMaybe<StringListFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<EnglishWouldYouRatherQuestionFilter>;
+  not?: InputMaybe<EnglishWouldYouRatherQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<EnglishWouldYouRatherQuestionFilter>>;
+  or?: InputMaybe<Array<EnglishWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `EnglishWouldYouRatherQuestion` */
 export type EnglishWouldYouRatherQuestionInput = {
-  answers: Array<Maybe<Scalars['String']>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  answers: Array<InputMaybe<Scalars['String']>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `EnglishWouldYouRatherQuestion`. Fields that are set will be updated. */
 export type EnglishWouldYouRatherQuestionPatch = {
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `EnglishWouldYouRatherQuestion` values. */
@@ -5774,27 +5775,27 @@ export enum EnglishWouldYouRatherQuestionsOrderBy {
 /** A filter to be used against Float fields. All fields are combined with a logical ‘and.’ */
 export type FloatFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Scalars['Float']>;
+  distinctFrom?: InputMaybe<Scalars['Float']>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<Scalars['Float']>;
+  equalTo?: InputMaybe<Scalars['Float']>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<Scalars['Float']>;
+  greaterThan?: InputMaybe<Scalars['Float']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Scalars['Float']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Float']>;
   /** Included in the specified list. */
-  in?: Maybe<Array<Scalars['Float']>>;
+  in?: InputMaybe<Array<Scalars['Float']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<Scalars['Float']>;
+  lessThan?: InputMaybe<Scalars['Float']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Scalars['Float']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['Float']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Scalars['Float']>;
+  notDistinctFrom?: InputMaybe<Scalars['Float']>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Scalars['Float']>;
+  notEqualTo?: InputMaybe<Scalars['Float']>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<Scalars['Float']>>;
+  notIn?: InputMaybe<Array<Scalars['Float']>>;
 };
 
 export type FrenchRandomQuestion = Node & {
@@ -5816,53 +5817,53 @@ export type FrenchRandomQuestion = Node & {
  */
 export type FrenchRandomQuestionCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `FrenchRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type FrenchRandomQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<FrenchRandomQuestionFilter>>;
+  and?: InputMaybe<Array<FrenchRandomQuestionFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<FrenchRandomQuestionFilter>;
+  not?: InputMaybe<FrenchRandomQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<FrenchRandomQuestionFilter>>;
+  or?: InputMaybe<Array<FrenchRandomQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `FrenchRandomQuestion` */
 export type FrenchRandomQuestionInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `FrenchRandomQuestion`. Fields that are set will be updated. */
 export type FrenchRandomQuestionPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `FrenchRandomQuestion` values. */
@@ -5926,67 +5927,67 @@ export type FrenchWord = Node & {
  */
 export type FrenchWordCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `frequency` field. */
-  frequency?: Maybe<Scalars['Float']>;
+  frequency?: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `length` field. */
-  length?: Maybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   /** Checks for equality with the object’s `word` field. */
-  word?: Maybe<Scalars['String']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `FrenchWord` object types. All fields are combined with a logical ‘and.’ */
 export type FrenchWordFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<FrenchWordFilter>>;
+  and?: InputMaybe<Array<FrenchWordFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `frequency` field. */
-  frequency?: Maybe<FloatFilter>;
+  frequency?: InputMaybe<FloatFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `length` field. */
-  length?: Maybe<IntFilter>;
+  length?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<FrenchWordFilter>;
+  not?: InputMaybe<FrenchWordFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<FrenchWordFilter>>;
+  or?: InputMaybe<Array<FrenchWordFilter>>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
   /** Filter by the object’s `word` field. */
-  word?: Maybe<StringFilter>;
+  word?: InputMaybe<StringFilter>;
 };
 
 /** An input for mutations affecting `FrenchWord` */
 export type FrenchWordInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   word: Scalars['String'];
 };
 
 /** Represents an update to a `FrenchWord`. Fields that are set will be updated. */
 export type FrenchWordPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
-  frequency?: Maybe<Scalars['Float']>;
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
-  word?: Maybe<Scalars['String']>;
+  frequency?: InputMaybe<Scalars['Float']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `FrenchWord` values. */
@@ -6052,59 +6053,59 @@ export type FrenchWouldYouRatherQuestion = Node & {
  */
 export type FrenchWouldYouRatherQuestionCondition = {
   /** Checks for equality with the object’s `answers` field. */
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `FrenchWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type FrenchWouldYouRatherQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<FrenchWouldYouRatherQuestionFilter>>;
+  and?: InputMaybe<Array<FrenchWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `answers` field. */
-  answers?: Maybe<StringListFilter>;
+  answers?: InputMaybe<StringListFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<FrenchWouldYouRatherQuestionFilter>;
+  not?: InputMaybe<FrenchWouldYouRatherQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<FrenchWouldYouRatherQuestionFilter>>;
+  or?: InputMaybe<Array<FrenchWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `FrenchWouldYouRatherQuestion` */
 export type FrenchWouldYouRatherQuestionInput = {
-  answers: Array<Maybe<Scalars['String']>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  answers: Array<InputMaybe<Scalars['String']>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `FrenchWouldYouRatherQuestion`. Fields that are set will be updated. */
 export type FrenchWouldYouRatherQuestionPatch = {
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `FrenchWouldYouRatherQuestion` values. */
@@ -6154,7 +6155,7 @@ export type GenerateSnowflakeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our `generateSnowflakeId` mutation. */
@@ -6189,53 +6190,53 @@ export type GermanRandomQuestion = Node & {
  */
 export type GermanRandomQuestionCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `GermanRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type GermanRandomQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<GermanRandomQuestionFilter>>;
+  and?: InputMaybe<Array<GermanRandomQuestionFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<GermanRandomQuestionFilter>;
+  not?: InputMaybe<GermanRandomQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<GermanRandomQuestionFilter>>;
+  or?: InputMaybe<Array<GermanRandomQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `GermanRandomQuestion` */
 export type GermanRandomQuestionInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `GermanRandomQuestion`. Fields that are set will be updated. */
 export type GermanRandomQuestionPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `GermanRandomQuestion` values. */
@@ -6299,67 +6300,67 @@ export type GermanWord = Node & {
  */
 export type GermanWordCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `frequency` field. */
-  frequency?: Maybe<Scalars['Float']>;
+  frequency?: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `length` field. */
-  length?: Maybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   /** Checks for equality with the object’s `word` field. */
-  word?: Maybe<Scalars['String']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `GermanWord` object types. All fields are combined with a logical ‘and.’ */
 export type GermanWordFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<GermanWordFilter>>;
+  and?: InputMaybe<Array<GermanWordFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `frequency` field. */
-  frequency?: Maybe<FloatFilter>;
+  frequency?: InputMaybe<FloatFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `length` field. */
-  length?: Maybe<IntFilter>;
+  length?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<GermanWordFilter>;
+  not?: InputMaybe<GermanWordFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<GermanWordFilter>>;
+  or?: InputMaybe<Array<GermanWordFilter>>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
   /** Filter by the object’s `word` field. */
-  word?: Maybe<StringFilter>;
+  word?: InputMaybe<StringFilter>;
 };
 
 /** An input for mutations affecting `GermanWord` */
 export type GermanWordInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   word: Scalars['String'];
 };
 
 /** Represents an update to a `GermanWord`. Fields that are set will be updated. */
 export type GermanWordPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
-  frequency?: Maybe<Scalars['Float']>;
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
-  word?: Maybe<Scalars['String']>;
+  frequency?: InputMaybe<Scalars['Float']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `GermanWord` values. */
@@ -6425,59 +6426,59 @@ export type GermanWouldYouRatherQuestion = Node & {
  */
 export type GermanWouldYouRatherQuestionCondition = {
   /** Checks for equality with the object’s `answers` field. */
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `GermanWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type GermanWouldYouRatherQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<GermanWouldYouRatherQuestionFilter>>;
+  and?: InputMaybe<Array<GermanWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `answers` field. */
-  answers?: Maybe<StringListFilter>;
+  answers?: InputMaybe<StringListFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<GermanWouldYouRatherQuestionFilter>;
+  not?: InputMaybe<GermanWouldYouRatherQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<GermanWouldYouRatherQuestionFilter>>;
+  or?: InputMaybe<Array<GermanWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `GermanWouldYouRatherQuestion` */
 export type GermanWouldYouRatherQuestionInput = {
-  answers: Array<Maybe<Scalars['String']>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  answers: Array<InputMaybe<Scalars['String']>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `GermanWouldYouRatherQuestion`. Fields that are set will be updated. */
 export type GermanWouldYouRatherQuestionPatch = {
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `GermanWouldYouRatherQuestion` values. */
@@ -6536,27 +6537,27 @@ export enum GrammaticalCase {
 /** A filter to be used against GrammaticalCase fields. All fields are combined with a logical ‘and.’ */
 export type GrammaticalCaseFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<GrammaticalCase>;
+  distinctFrom?: InputMaybe<GrammaticalCase>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<GrammaticalCase>;
+  equalTo?: InputMaybe<GrammaticalCase>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<GrammaticalCase>;
+  greaterThan?: InputMaybe<GrammaticalCase>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<GrammaticalCase>;
+  greaterThanOrEqualTo?: InputMaybe<GrammaticalCase>;
   /** Included in the specified list. */
-  in?: Maybe<Array<GrammaticalCase>>;
+  in?: InputMaybe<Array<GrammaticalCase>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<GrammaticalCase>;
+  lessThan?: InputMaybe<GrammaticalCase>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<GrammaticalCase>;
+  lessThanOrEqualTo?: InputMaybe<GrammaticalCase>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<GrammaticalCase>;
+  notDistinctFrom?: InputMaybe<GrammaticalCase>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<GrammaticalCase>;
+  notEqualTo?: InputMaybe<GrammaticalCase>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<GrammaticalCase>>;
+  notIn?: InputMaybe<Array<GrammaticalCase>>;
 };
 
 export enum GrammaticalGender {
@@ -6574,27 +6575,27 @@ export enum GrammaticalGender {
 /** A filter to be used against GrammaticalGender fields. All fields are combined with a logical ‘and.’ */
 export type GrammaticalGenderFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<GrammaticalGender>;
+  distinctFrom?: InputMaybe<GrammaticalGender>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<GrammaticalGender>;
+  equalTo?: InputMaybe<GrammaticalGender>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<GrammaticalGender>;
+  greaterThan?: InputMaybe<GrammaticalGender>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<GrammaticalGender>;
+  greaterThanOrEqualTo?: InputMaybe<GrammaticalGender>;
   /** Included in the specified list. */
-  in?: Maybe<Array<GrammaticalGender>>;
+  in?: InputMaybe<Array<GrammaticalGender>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<GrammaticalGender>;
+  lessThan?: InputMaybe<GrammaticalGender>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<GrammaticalGender>;
+  lessThanOrEqualTo?: InputMaybe<GrammaticalGender>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<GrammaticalGender>;
+  notDistinctFrom?: InputMaybe<GrammaticalGender>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<GrammaticalGender>;
+  notEqualTo?: InputMaybe<GrammaticalGender>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<GrammaticalGender>>;
+  notIn?: InputMaybe<Array<GrammaticalGender>>;
 };
 
 export type Group = Node & {
@@ -6634,163 +6635,163 @@ export type Group = Node & {
 
 
 export type GroupGroupUsersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupUserCondition>;
-  filter?: Maybe<GroupUserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupUserCondition>;
+  filter?: InputMaybe<GroupUserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupUsersOrderBy>>;
 };
 
 
 export type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 
 export type GroupMessagesByRecipientGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 
 export type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationChannelCondition>;
-  filter?: Maybe<NotificationChannelFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationChannelCondition>;
+  filter?: InputMaybe<NotificationChannelFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationChannelsOrderBy>>;
 };
 
 
 export type GroupNotificationsByRecipientGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationCondition>;
-  filter?: Maybe<NotificationFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationCondition>;
+  filter?: InputMaybe<NotificationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 
 export type GroupUsersByGroupUserGroupIdAndUserIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type GroupUsersByMessageRecipientGroupIdAndRecipientIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type GroupUsersByMessageRecipientGroupIdAndSenderIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type GroupUsersByNotificationRecipientGroupIdAndRecipientIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /** A condition to be used against `Group` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type GroupCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `global` field. */
-  global?: Maybe<Scalars['Boolean']>;
+  global?: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `groupName` field. */
-  groupName?: Maybe<Scalars['String']>;
+  groupName?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `languageId` field. */
-  languageId?: Maybe<Scalars['Int']>;
+  languageId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `languageSkillLevelId` field. */
-  languageSkillLevelId?: Maybe<Scalars['Int']>;
+  languageSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `Group` object types. All fields are combined with a logical ‘and.’ */
 export type GroupFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<GroupFilter>>;
+  and?: InputMaybe<Array<GroupFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `global` field. */
-  global?: Maybe<BooleanFilter>;
+  global?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `groupName` field. */
-  groupName?: Maybe<StringFilter>;
+  groupName?: InputMaybe<StringFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `languageId` field. */
-  languageId?: Maybe<IntFilter>;
+  languageId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `languageSkillLevelId` field. */
-  languageSkillLevelId?: Maybe<IntFilter>;
+  languageSkillLevelId?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<GroupFilter>;
+  not?: InputMaybe<GroupFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<GroupFilter>>;
+  or?: InputMaybe<Array<GroupFilter>>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `Group` */
 export type GroupInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  global?: Maybe<Scalars['Boolean']>;
-  groupName?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  languageId?: Maybe<Scalars['Int']>;
-  languageSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  global?: InputMaybe<Scalars['Boolean']>;
+  groupName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  languageId?: InputMaybe<Scalars['Int']>;
+  languageSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `Message` values, with data from `Message`. */
@@ -6820,14 +6821,14 @@ export type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEd
 
 /** A `Message` edge in the connection, with data from `Message`. */
 export type GroupMessagesByMessageRecipientGroupIdAndParentMessageIdManyToManyEdgeMessagesByParentMessageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** A connection to a list of `NotificationChannel` values, with data from `Notification`. */
@@ -6857,25 +6858,25 @@ export type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdM
 
 /** A `NotificationChannel` edge in the connection, with data from `Notification`. */
 export type GroupNotificationChannelsByNotificationRecipientGroupIdAndChannelIdManyToManyEdgeNotificationsByChannelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationCondition>;
-  filter?: Maybe<NotificationFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationCondition>;
+  filter?: InputMaybe<NotificationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 /** Represents an update to a `Group`. Fields that are set will be updated. */
 export type GroupPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  global?: Maybe<Scalars['Boolean']>;
-  groupName?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  languageId?: Maybe<Scalars['Int']>;
-  languageSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  global?: InputMaybe<Scalars['Boolean']>;
+  groupName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  languageId?: InputMaybe<Scalars['Int']>;
+  languageSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 export type GroupUser = Node & {
@@ -6900,59 +6901,59 @@ export type GroupUser = Node & {
  */
 export type GroupUserCondition = {
   /** Checks for equality with the object’s `groupId` field. */
-  groupId?: Maybe<Scalars['Int']>;
+  groupId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `joinedOn` field. */
-  joinedOn?: Maybe<Scalars['Datetime']>;
+  joinedOn?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `lastActive` field. */
-  lastActive?: Maybe<Scalars['Datetime']>;
+  lastActive?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `userType` field. */
-  userType?: Maybe<UserType>;
+  userType?: InputMaybe<UserType>;
 };
 
 /** A filter to be used against `GroupUser` object types. All fields are combined with a logical ‘and.’ */
 export type GroupUserFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<GroupUserFilter>>;
+  and?: InputMaybe<Array<GroupUserFilter>>;
   /** Filter by the object’s `groupId` field. */
-  groupId?: Maybe<IntFilter>;
+  groupId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `joinedOn` field. */
-  joinedOn?: Maybe<DatetimeFilter>;
+  joinedOn?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `lastActive` field. */
-  lastActive?: Maybe<DatetimeFilter>;
+  lastActive?: InputMaybe<DatetimeFilter>;
   /** Negates the expression. */
-  not?: Maybe<GroupUserFilter>;
+  not?: InputMaybe<GroupUserFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<GroupUserFilter>>;
+  or?: InputMaybe<Array<GroupUserFilter>>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `userType` field. */
-  userType?: Maybe<UserTypeFilter>;
+  userType?: InputMaybe<UserTypeFilter>;
 };
 
 /** An input for mutations affecting `GroupUser` */
 export type GroupUserInput = {
-  groupId?: Maybe<Scalars['Int']>;
-  id?: Maybe<Scalars['Int']>;
-  joinedOn?: Maybe<Scalars['Datetime']>;
-  lastActive?: Maybe<Scalars['Datetime']>;
-  userId?: Maybe<Scalars['Int']>;
+  groupId?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  joinedOn?: InputMaybe<Scalars['Datetime']>;
+  lastActive?: InputMaybe<Scalars['Datetime']>;
+  userId?: InputMaybe<Scalars['Int']>;
   userType: UserType;
 };
 
 /** Represents an update to a `GroupUser`. Fields that are set will be updated. */
 export type GroupUserPatch = {
-  groupId?: Maybe<Scalars['Int']>;
-  id?: Maybe<Scalars['Int']>;
-  joinedOn?: Maybe<Scalars['Datetime']>;
-  lastActive?: Maybe<Scalars['Datetime']>;
-  userId?: Maybe<Scalars['Int']>;
-  userType?: Maybe<UserType>;
+  groupId?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  joinedOn?: InputMaybe<Scalars['Datetime']>;
+  lastActive?: InputMaybe<Scalars['Datetime']>;
+  userId?: InputMaybe<Scalars['Int']>;
+  userType?: InputMaybe<UserType>;
 };
 
 /** A connection to a list of `User` values, with data from `GroupUser`. */
@@ -6982,14 +6983,14 @@ export type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `GroupUser`. */
 export type GroupUsersByGroupUserGroupIdAndUserIdManyToManyEdgeGroupUsersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupUserCondition>;
-  filter?: Maybe<GroupUserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupUserCondition>;
+  filter?: InputMaybe<GroupUserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupUsersOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `Message`. */
@@ -7019,14 +7020,14 @@ export type GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `Message`. */
 export type GroupUsersByMessageRecipientGroupIdAndRecipientIdManyToManyEdgeMessagesByRecipientIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `Message`. */
@@ -7056,14 +7057,14 @@ export type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `Message`. */
 export type GroupUsersByMessageRecipientGroupIdAndSenderIdManyToManyEdgeMessagesBySenderIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `Notification`. */
@@ -7093,14 +7094,14 @@ export type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdge
 
 /** A `User` edge in the connection, with data from `Notification`. */
 export type GroupUsersByNotificationRecipientGroupIdAndRecipientIdManyToManyEdgeNotificationsByRecipientIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationCondition>;
-  filter?: Maybe<NotificationFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationCondition>;
+  filter?: InputMaybe<NotificationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 /** A connection to a list of `GroupUser` values. */
@@ -7243,73 +7244,73 @@ export type InAppNotificationMetadatum = {
  */
 export type InAppNotificationMetadatumCondition = {
   /** Checks for equality with the object’s `notificationId` field. */
-  notificationId?: Maybe<Scalars['Int']>;
+  notificationId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `postId` field. */
-  postId?: Maybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recipientId` field. */
-  recipientId?: Maybe<Scalars['Int']>;
+  recipientId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `InAppNotificationMetadatum` object types. All fields are combined with a logical ‘and.’ */
 export type InAppNotificationMetadatumFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<InAppNotificationMetadatumFilter>>;
+  and?: InputMaybe<Array<InAppNotificationMetadatumFilter>>;
   /** Negates the expression. */
-  not?: Maybe<InAppNotificationMetadatumFilter>;
+  not?: InputMaybe<InAppNotificationMetadatumFilter>;
   /** Filter by the object’s `notificationId` field. */
-  notificationId?: Maybe<IntFilter>;
+  notificationId?: InputMaybe<IntFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<InAppNotificationMetadatumFilter>>;
+  or?: InputMaybe<Array<InAppNotificationMetadatumFilter>>;
   /** Filter by the object’s `postId` field. */
-  postId?: Maybe<IntFilter>;
+  postId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `recipientId` field. */
-  recipientId?: Maybe<IntFilter>;
+  recipientId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
 };
 
 /** An input for mutations affecting `InAppNotificationMetadatum` */
 export type InAppNotificationMetadatumInput = {
-  notificationId?: Maybe<Scalars['Int']>;
-  postId?: Maybe<Scalars['Int']>;
-  recipientId?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
+  notificationId?: InputMaybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
+  recipientId?: InputMaybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** Represents an update to a `InAppNotificationMetadatum`. Fields that are set will be updated. */
 export type InAppNotificationMetadatumPatch = {
-  notificationId?: Maybe<Scalars['Int']>;
-  postId?: Maybe<Scalars['Int']>;
-  recipientId?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
+  notificationId?: InputMaybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
+  recipientId?: InputMaybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against Int fields. All fields are combined with a logical ‘and.’ */
 export type IntFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Scalars['Int']>;
+  distinctFrom?: InputMaybe<Scalars['Int']>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<Scalars['Int']>;
+  equalTo?: InputMaybe<Scalars['Int']>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<Scalars['Int']>;
+  greaterThan?: InputMaybe<Scalars['Int']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Scalars['Int']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Int']>;
   /** Included in the specified list. */
-  in?: Maybe<Array<Scalars['Int']>>;
+  in?: InputMaybe<Array<Scalars['Int']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<Scalars['Int']>;
+  lessThan?: InputMaybe<Scalars['Int']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Scalars['Int']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['Int']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Scalars['Int']>;
+  notDistinctFrom?: InputMaybe<Scalars['Int']>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Scalars['Int']>;
+  notEqualTo?: InputMaybe<Scalars['Int']>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<Scalars['Int']>>;
+  notIn?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export type InviteToken = Node & {
@@ -7331,26 +7332,26 @@ export type InviteToken = Node & {
 
 
 export type InviteTokenLanguagesByUserSignedUpWithTokenIdAndLocaleArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageCondition>;
-  filter?: Maybe<LanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageCondition>;
+  filter?: InputMaybe<LanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 
 export type InviteTokenUsersBySignedUpWithTokenIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /**
@@ -7359,44 +7360,44 @@ export type InviteTokenUsersBySignedUpWithTokenIdArgs = {
  */
 export type InviteTokenCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `description` field. */
-  description?: Maybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `inviteToken` field. */
-  inviteToken?: Maybe<Scalars['String']>;
+  inviteToken?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `InviteToken` object types. All fields are combined with a logical ‘and.’ */
 export type InviteTokenFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<InviteTokenFilter>>;
+  and?: InputMaybe<Array<InviteTokenFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `description` field. */
-  description?: Maybe<StringFilter>;
+  description?: InputMaybe<StringFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `inviteToken` field. */
-  inviteToken?: Maybe<StringFilter>;
+  inviteToken?: InputMaybe<StringFilter>;
   /** Negates the expression. */
-  not?: Maybe<InviteTokenFilter>;
+  not?: InputMaybe<InviteTokenFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<InviteTokenFilter>>;
+  or?: InputMaybe<Array<InviteTokenFilter>>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
 };
 
 /** An input for mutations affecting `InviteToken` */
 export type InviteTokenInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  description?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  inviteToken?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  inviteToken?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A connection to a list of `Language` values, with data from `User`. */
@@ -7426,23 +7427,23 @@ export type InviteTokenLanguagesByUserSignedUpWithTokenIdAndLocaleManyToManyEdge
 
 /** A `Language` edge in the connection, with data from `User`. */
 export type InviteTokenLanguagesByUserSignedUpWithTokenIdAndLocaleManyToManyEdgeUsersByLocaleArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /** Represents an update to a `InviteToken`. Fields that are set will be updated. */
 export type InviteTokenPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  description?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  inviteToken?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  inviteToken?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A connection to a list of `InviteToken` values. */
@@ -7503,53 +7504,53 @@ export type ItalianRandomQuestion = Node & {
  */
 export type ItalianRandomQuestionCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `ItalianRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type ItalianRandomQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<ItalianRandomQuestionFilter>>;
+  and?: InputMaybe<Array<ItalianRandomQuestionFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<ItalianRandomQuestionFilter>;
+  not?: InputMaybe<ItalianRandomQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<ItalianRandomQuestionFilter>>;
+  or?: InputMaybe<Array<ItalianRandomQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `ItalianRandomQuestion` */
 export type ItalianRandomQuestionInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `ItalianRandomQuestion`. Fields that are set will be updated. */
 export type ItalianRandomQuestionPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `ItalianRandomQuestion` values. */
@@ -7613,67 +7614,67 @@ export type ItalianWord = Node & {
  */
 export type ItalianWordCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `frequency` field. */
-  frequency?: Maybe<Scalars['Float']>;
+  frequency?: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `length` field. */
-  length?: Maybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   /** Checks for equality with the object’s `word` field. */
-  word?: Maybe<Scalars['String']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `ItalianWord` object types. All fields are combined with a logical ‘and.’ */
 export type ItalianWordFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<ItalianWordFilter>>;
+  and?: InputMaybe<Array<ItalianWordFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `frequency` field. */
-  frequency?: Maybe<FloatFilter>;
+  frequency?: InputMaybe<FloatFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `length` field. */
-  length?: Maybe<IntFilter>;
+  length?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<ItalianWordFilter>;
+  not?: InputMaybe<ItalianWordFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<ItalianWordFilter>>;
+  or?: InputMaybe<Array<ItalianWordFilter>>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
   /** Filter by the object’s `word` field. */
-  word?: Maybe<StringFilter>;
+  word?: InputMaybe<StringFilter>;
 };
 
 /** An input for mutations affecting `ItalianWord` */
 export type ItalianWordInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   word: Scalars['String'];
 };
 
 /** Represents an update to a `ItalianWord`. Fields that are set will be updated. */
 export type ItalianWordPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
-  frequency?: Maybe<Scalars['Float']>;
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
-  word?: Maybe<Scalars['String']>;
+  frequency?: InputMaybe<Scalars['Float']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `ItalianWord` values. */
@@ -7739,59 +7740,59 @@ export type ItalianWouldYouRatherQuestion = Node & {
  */
 export type ItalianWouldYouRatherQuestionCondition = {
   /** Checks for equality with the object’s `answers` field. */
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `ItalianWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type ItalianWouldYouRatherQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<ItalianWouldYouRatherQuestionFilter>>;
+  and?: InputMaybe<Array<ItalianWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `answers` field. */
-  answers?: Maybe<StringListFilter>;
+  answers?: InputMaybe<StringListFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<ItalianWouldYouRatherQuestionFilter>;
+  not?: InputMaybe<ItalianWouldYouRatherQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<ItalianWouldYouRatherQuestionFilter>>;
+  or?: InputMaybe<Array<ItalianWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `ItalianWouldYouRatherQuestion` */
 export type ItalianWouldYouRatherQuestionInput = {
-  answers: Array<Maybe<Scalars['String']>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  answers: Array<InputMaybe<Scalars['String']>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `ItalianWouldYouRatherQuestion`. Fields that are set will be updated. */
 export type ItalianWouldYouRatherQuestionPatch = {
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `ItalianWouldYouRatherQuestion` values. */
@@ -7838,37 +7839,37 @@ export enum ItalianWouldYouRatherQuestionsOrderBy {
 /** A filter to be used against JSON fields. All fields are combined with a logical ‘and.’ */
 export type JsonFilter = {
   /** Contained by the specified JSON. */
-  containedBy?: Maybe<Scalars['JSON']>;
+  containedBy?: InputMaybe<Scalars['JSON']>;
   /** Contains the specified JSON. */
-  contains?: Maybe<Scalars['JSON']>;
+  contains?: InputMaybe<Scalars['JSON']>;
   /** Contains all of the specified keys. */
-  containsAllKeys?: Maybe<Array<Scalars['String']>>;
+  containsAllKeys?: InputMaybe<Array<Scalars['String']>>;
   /** Contains any of the specified keys. */
-  containsAnyKeys?: Maybe<Array<Scalars['String']>>;
+  containsAnyKeys?: InputMaybe<Array<Scalars['String']>>;
   /** Contains the specified key. */
-  containsKey?: Maybe<Scalars['String']>;
+  containsKey?: InputMaybe<Scalars['String']>;
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Scalars['JSON']>;
+  distinctFrom?: InputMaybe<Scalars['JSON']>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<Scalars['JSON']>;
+  equalTo?: InputMaybe<Scalars['JSON']>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<Scalars['JSON']>;
+  greaterThan?: InputMaybe<Scalars['JSON']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Scalars['JSON']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['JSON']>;
   /** Included in the specified list. */
-  in?: Maybe<Array<Scalars['JSON']>>;
+  in?: InputMaybe<Array<Scalars['JSON']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<Scalars['JSON']>;
+  lessThan?: InputMaybe<Scalars['JSON']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Scalars['JSON']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['JSON']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Scalars['JSON']>;
+  notDistinctFrom?: InputMaybe<Scalars['JSON']>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Scalars['JSON']>;
+  notEqualTo?: InputMaybe<Scalars['JSON']>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<Scalars['JSON']>>;
+  notIn?: InputMaybe<Array<Scalars['JSON']>>;
 };
 
 export type JapaneseRandomQuestion = Node & {
@@ -7890,53 +7891,53 @@ export type JapaneseRandomQuestion = Node & {
  */
 export type JapaneseRandomQuestionCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `JapaneseRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type JapaneseRandomQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<JapaneseRandomQuestionFilter>>;
+  and?: InputMaybe<Array<JapaneseRandomQuestionFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<JapaneseRandomQuestionFilter>;
+  not?: InputMaybe<JapaneseRandomQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<JapaneseRandomQuestionFilter>>;
+  or?: InputMaybe<Array<JapaneseRandomQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `JapaneseRandomQuestion` */
 export type JapaneseRandomQuestionInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `JapaneseRandomQuestion`. Fields that are set will be updated. */
 export type JapaneseRandomQuestionPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `JapaneseRandomQuestion` values. */
@@ -7998,59 +7999,59 @@ export type JapaneseWouldYouRatherQuestion = Node & {
  */
 export type JapaneseWouldYouRatherQuestionCondition = {
   /** Checks for equality with the object’s `answers` field. */
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `JapaneseWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type JapaneseWouldYouRatherQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<JapaneseWouldYouRatherQuestionFilter>>;
+  and?: InputMaybe<Array<JapaneseWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `answers` field. */
-  answers?: Maybe<StringListFilter>;
+  answers?: InputMaybe<StringListFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<JapaneseWouldYouRatherQuestionFilter>;
+  not?: InputMaybe<JapaneseWouldYouRatherQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<JapaneseWouldYouRatherQuestionFilter>>;
+  or?: InputMaybe<Array<JapaneseWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `JapaneseWouldYouRatherQuestion` */
 export type JapaneseWouldYouRatherQuestionInput = {
-  answers: Array<Maybe<Scalars['String']>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  answers: Array<InputMaybe<Scalars['String']>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `JapaneseWouldYouRatherQuestion`. Fields that are set will be updated. */
 export type JapaneseWouldYouRatherQuestionPatch = {
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `JapaneseWouldYouRatherQuestion` values. */
@@ -8100,7 +8101,7 @@ export type JoinGlobalGroupInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   groupUuid: Scalars['UUID'];
 };
 
@@ -8126,7 +8127,7 @@ export type JoinGlobalGroupPayload = {
 
 /** The output of our `joinGlobalGroup` mutation. */
 export type JoinGlobalGroupPayloadGroupUserEdgeArgs = {
-  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  orderBy?: InputMaybe<Array<GroupUsersOrderBy>>;
 };
 
 export type KoreanRandomQuestion = Node & {
@@ -8148,53 +8149,53 @@ export type KoreanRandomQuestion = Node & {
  */
 export type KoreanRandomQuestionCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `KoreanRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type KoreanRandomQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<KoreanRandomQuestionFilter>>;
+  and?: InputMaybe<Array<KoreanRandomQuestionFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<KoreanRandomQuestionFilter>;
+  not?: InputMaybe<KoreanRandomQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<KoreanRandomQuestionFilter>>;
+  or?: InputMaybe<Array<KoreanRandomQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `KoreanRandomQuestion` */
 export type KoreanRandomQuestionInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `KoreanRandomQuestion`. Fields that are set will be updated. */
 export type KoreanRandomQuestionPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `KoreanRandomQuestion` values. */
@@ -8256,59 +8257,59 @@ export type KoreanWouldYouRatherQuestion = Node & {
  */
 export type KoreanWouldYouRatherQuestionCondition = {
   /** Checks for equality with the object’s `answers` field. */
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `KoreanWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type KoreanWouldYouRatherQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<KoreanWouldYouRatherQuestionFilter>>;
+  and?: InputMaybe<Array<KoreanWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `answers` field. */
-  answers?: Maybe<StringListFilter>;
+  answers?: InputMaybe<StringListFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<KoreanWouldYouRatherQuestionFilter>;
+  not?: InputMaybe<KoreanWouldYouRatherQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<KoreanWouldYouRatherQuestionFilter>>;
+  or?: InputMaybe<Array<KoreanWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `KoreanWouldYouRatherQuestion` */
 export type KoreanWouldYouRatherQuestionInput = {
-  answers: Array<Maybe<Scalars['String']>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  answers: Array<InputMaybe<Scalars['String']>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `KoreanWouldYouRatherQuestion`. Fields that are set will be updated. */
 export type KoreanWouldYouRatherQuestionPatch = {
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `KoreanWouldYouRatherQuestion` values. */
@@ -8393,170 +8394,170 @@ export type Language = Node & {
 
 
 export type LanguageGroupsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupCondition>;
-  filter?: Maybe<GroupFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupCondition>;
+  filter?: InputMaybe<GroupFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 
 export type LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InviteTokenCondition>;
-  filter?: Maybe<InviteTokenFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InviteTokenCondition>;
+  filter?: InputMaybe<InviteTokenFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InviteTokensOrderBy>>;
 };
 
 
 export type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageSkillLevelCondition>;
-  filter?: Maybe<LanguageSkillLevelFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageSkillLevelCondition>;
+  filter?: InputMaybe<LanguageSkillLevelFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguageSkillLevelsOrderBy>>;
 };
 
 
 export type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageSkillLevelCondition>;
-  filter?: Maybe<LanguageSkillLevelFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageSkillLevelCondition>;
+  filter?: InputMaybe<LanguageSkillLevelFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguageSkillLevelsOrderBy>>;
 };
 
 
 export type LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageSkillLevelCondition>;
-  filter?: Maybe<LanguageSkillLevelFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageSkillLevelCondition>;
+  filter?: InputMaybe<LanguageSkillLevelFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguageSkillLevelsOrderBy>>;
 };
 
 
 export type LanguagePostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
 export type LanguagePostsByPostLanguageIdAndParentPostIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
 export type LanguagePromptsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PromptCondition>;
-  filter?: Maybe<PromptFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PromptCondition>;
+  filter?: InputMaybe<PromptFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PromptsOrderBy>>;
 };
 
 
 export type LanguagePromptsByPostLanguageIdAndPromptIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PromptCondition>;
-  filter?: Maybe<PromptFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PromptCondition>;
+  filter?: InputMaybe<PromptFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PromptsOrderBy>>;
 };
 
 
 export type LanguageUserLanguagesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserLanguageCondition>;
-  filter?: Maybe<UserLanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserLanguageCondition>;
+  filter?: InputMaybe<UserLanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 
 export type LanguageUserPreferencesByFeedLanguageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserPreferenceCondition>;
-  filter?: Maybe<UserPreferenceFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserPreferencesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserPreferenceCondition>;
+  filter?: InputMaybe<UserPreferenceFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserPreferencesOrderBy>>;
 };
 
 
 export type LanguageUsersByLocaleArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type LanguageUsersByPostLanguageIdAndAuthorIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type LanguageUsersByUserLanguageLanguageIdAndUserIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /**
@@ -8565,40 +8566,40 @@ export type LanguageUsersByUserLanguageLanguageIdAndUserIdArgs = {
  */
 export type LanguageCondition = {
   /** Checks for equality with the object’s `alpha2` field. */
-  alpha2?: Maybe<Scalars['String']>;
+  alpha2?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `englishName` field. */
-  englishName?: Maybe<Scalars['String']>;
+  englishName?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `Language` object types. All fields are combined with a logical ‘and.’ */
 export type LanguageFilter = {
   /** Filter by the object’s `alpha2` field. */
-  alpha2?: Maybe<StringFilter>;
+  alpha2?: InputMaybe<StringFilter>;
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<LanguageFilter>>;
+  and?: InputMaybe<Array<LanguageFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `englishName` field. */
-  englishName?: Maybe<StringFilter>;
+  englishName?: InputMaybe<StringFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<LanguageFilter>;
+  not?: InputMaybe<LanguageFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<LanguageFilter>>;
+  or?: InputMaybe<Array<LanguageFilter>>;
 };
 
 /** An input for mutations affecting `Language` */
 export type LanguageInput = {
   /** ISO 3166-1 alpha-2 standardized code */
   alpha2: Scalars['String'];
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   englishName: Scalars['String'];
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** A connection to a list of `InviteToken` values, with data from `User`. */
@@ -8628,14 +8629,14 @@ export type LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyEdge
 
 /** A `InviteToken` edge in the connection, with data from `User`. */
 export type LanguageInviteTokensByUserLocaleAndSignedUpWithTokenIdManyToManyEdgeUsersBySignedUpWithTokenIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /** A connection to a list of `LanguageSkillLevel` values, with data from `Group`. */
@@ -8665,14 +8666,14 @@ export type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdM
 
 /** A `LanguageSkillLevel` edge in the connection, with data from `Group`. */
 export type LanguageLanguageSkillLevelsByGroupLanguageIdAndLanguageSkillLevelIdManyToManyEdgeGroupsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupCondition>;
-  filter?: Maybe<GroupFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupCondition>;
+  filter?: InputMaybe<GroupFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 /** A connection to a list of `LanguageSkillLevel` values, with data from `Prompt`. */
@@ -8702,14 +8703,14 @@ export type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLeve
 
 /** A `LanguageSkillLevel` edge in the connection, with data from `Prompt`. */
 export type LanguageLanguageSkillLevelsByPromptLanguageIdAndRecommendedSkillLevelIdManyToManyEdgePromptsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PromptCondition>;
-  filter?: Maybe<PromptFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PromptCondition>;
+  filter?: InputMaybe<PromptFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PromptsOrderBy>>;
 };
 
 /** A connection to a list of `LanguageSkillLevel` values, with data from `UserLanguage`. */
@@ -8739,23 +8740,23 @@ export type LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillL
 
 /** A `LanguageSkillLevel` edge in the connection, with data from `UserLanguage`. */
 export type LanguageLanguageSkillLevelsByUserLanguageLanguageIdAndLanguageSkillLevelIdManyToManyEdgeUserLanguagesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserLanguageCondition>;
-  filter?: Maybe<UserLanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserLanguageCondition>;
+  filter?: InputMaybe<UserLanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 /** Represents an update to a `Language`. Fields that are set will be updated. */
 export type LanguagePatch = {
   /** ISO 3166-1 alpha-2 standardized code */
-  alpha2?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  englishName?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
+  alpha2?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  englishName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** A connection to a list of `Post` values, with data from `Post`. */
@@ -8785,14 +8786,14 @@ export type LanguagePostsByPostLanguageIdAndParentPostIdManyToManyEdge = {
 
 /** A `Post` edge in the connection, with data from `Post`. */
 export type LanguagePostsByPostLanguageIdAndParentPostIdManyToManyEdgeRepliesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 /** A connection to a list of `Prompt` values, with data from `Post`. */
@@ -8822,14 +8823,14 @@ export type LanguagePromptsByPostLanguageIdAndPromptIdManyToManyEdge = {
 
 /** A `Prompt` edge in the connection, with data from `Post`. */
 export type LanguagePromptsByPostLanguageIdAndPromptIdManyToManyEdgePostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 export type LanguageSkillLevel = Node & {
@@ -8912,422 +8913,422 @@ export type LanguageSkillLevel = Node & {
 
 
 export type LanguageSkillLevelChineseGuessCharacterQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ChineseGuessCharacterQuestionCondition>;
-  filter?: Maybe<ChineseGuessCharacterQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ChineseGuessCharacterQuestionCondition>;
+  filter?: InputMaybe<ChineseGuessCharacterQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelChineseRandomQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ChineseRandomQuestionCondition>;
-  filter?: Maybe<ChineseRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ChineseRandomQuestionCondition>;
+  filter?: InputMaybe<ChineseRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ChineseRandomQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelChineseWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ChineseWouldYouRatherQuestionCondition>;
-  filter?: Maybe<ChineseWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ChineseWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<ChineseWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelEnglishRandomQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<EnglishRandomQuestionCondition>;
-  filter?: Maybe<EnglishRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<EnglishRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<EnglishRandomQuestionCondition>;
+  filter?: InputMaybe<EnglishRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<EnglishRandomQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelEnglishWordsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<EnglishWordCondition>;
-  filter?: Maybe<EnglishWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<EnglishWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<EnglishWordCondition>;
+  filter?: InputMaybe<EnglishWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<EnglishWordsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelEnglishWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<EnglishWouldYouRatherQuestionCondition>;
-  filter?: Maybe<EnglishWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<EnglishWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<EnglishWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelFrenchRandomQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<FrenchRandomQuestionCondition>;
-  filter?: Maybe<FrenchRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<FrenchRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<FrenchRandomQuestionCondition>;
+  filter?: InputMaybe<FrenchRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<FrenchRandomQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelFrenchWordsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<FrenchWordCondition>;
-  filter?: Maybe<FrenchWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<FrenchWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<FrenchWordCondition>;
+  filter?: InputMaybe<FrenchWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<FrenchWordsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelFrenchWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<FrenchWouldYouRatherQuestionCondition>;
-  filter?: Maybe<FrenchWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<FrenchWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<FrenchWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelGermanRandomQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GermanRandomQuestionCondition>;
-  filter?: Maybe<GermanRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GermanRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GermanRandomQuestionCondition>;
+  filter?: InputMaybe<GermanRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GermanRandomQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelGermanWordsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GermanWordCondition>;
-  filter?: Maybe<GermanWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GermanWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GermanWordCondition>;
+  filter?: InputMaybe<GermanWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GermanWordsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelGermanWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GermanWouldYouRatherQuestionCondition>;
-  filter?: Maybe<GermanWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GermanWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<GermanWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelGroupsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupCondition>;
-  filter?: Maybe<GroupFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupCondition>;
+  filter?: InputMaybe<GroupFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelItalianRandomQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ItalianRandomQuestionCondition>;
-  filter?: Maybe<ItalianRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ItalianRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ItalianRandomQuestionCondition>;
+  filter?: InputMaybe<ItalianRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ItalianRandomQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelItalianWordsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ItalianWordCondition>;
-  filter?: Maybe<ItalianWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ItalianWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ItalianWordCondition>;
+  filter?: InputMaybe<ItalianWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ItalianWordsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelItalianWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ItalianWouldYouRatherQuestionCondition>;
-  filter?: Maybe<ItalianWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ItalianWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<ItalianWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelJapaneseRandomQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<JapaneseRandomQuestionCondition>;
-  filter?: Maybe<JapaneseRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<JapaneseRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<JapaneseRandomQuestionCondition>;
+  filter?: InputMaybe<JapaneseRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<JapaneseRandomQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelJapaneseWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<JapaneseWouldYouRatherQuestionCondition>;
-  filter?: Maybe<JapaneseWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<JapaneseWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<JapaneseWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelKoreanRandomQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<KoreanRandomQuestionCondition>;
-  filter?: Maybe<KoreanRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<KoreanRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<KoreanRandomQuestionCondition>;
+  filter?: InputMaybe<KoreanRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<KoreanRandomQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelKoreanWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<KoreanWouldYouRatherQuestionCondition>;
-  filter?: Maybe<KoreanWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<KoreanWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<KoreanWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageCondition>;
-  filter?: Maybe<LanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageCondition>;
+  filter?: InputMaybe<LanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 
 export type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageCondition>;
-  filter?: Maybe<LanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageCondition>;
+  filter?: InputMaybe<LanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 
 export type LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageCondition>;
-  filter?: Maybe<LanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageCondition>;
+  filter?: InputMaybe<LanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 
 export type LanguageSkillLevelPortugueseRandomQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PortugueseRandomQuestionCondition>;
-  filter?: Maybe<PortugueseRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PortugueseRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PortugueseRandomQuestionCondition>;
+  filter?: InputMaybe<PortugueseRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PortugueseRandomQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelPortugueseWordsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PortugueseWordCondition>;
-  filter?: Maybe<PortugueseWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PortugueseWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PortugueseWordCondition>;
+  filter?: InputMaybe<PortugueseWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PortugueseWordsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelPortugueseWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PortugueseWouldYouRatherQuestionCondition>;
-  filter?: Maybe<PortugueseWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PortugueseWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<PortugueseWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelPromptsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PromptCondition>;
-  filter?: Maybe<PromptFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PromptCondition>;
+  filter?: InputMaybe<PromptFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PromptsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelRussianRandomQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<RussianRandomQuestionCondition>;
-  filter?: Maybe<RussianRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<RussianRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<RussianRandomQuestionCondition>;
+  filter?: InputMaybe<RussianRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<RussianRandomQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelRussianWordsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<RussianWordCondition>;
-  filter?: Maybe<RussianWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<RussianWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<RussianWordCondition>;
+  filter?: InputMaybe<RussianWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<RussianWordsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelRussianWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<RussianWouldYouRatherQuestionCondition>;
-  filter?: Maybe<RussianWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<RussianWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<RussianWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelSpanishRandomQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<SpanishRandomQuestionCondition>;
-  filter?: Maybe<SpanishRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<SpanishRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<SpanishRandomQuestionCondition>;
+  filter?: InputMaybe<SpanishRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<SpanishRandomQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelSpanishWordsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<SpanishWordCondition>;
-  filter?: Maybe<SpanishWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<SpanishWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<SpanishWordCondition>;
+  filter?: InputMaybe<SpanishWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<SpanishWordsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelSpanishWouldYouRatherQuestionsByRecommendedSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<SpanishWouldYouRatherQuestionCondition>;
-  filter?: Maybe<SpanishWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<SpanishWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<SpanishWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
 };
 
 
 export type LanguageSkillLevelUserLanguagesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserLanguageCondition>;
-  filter?: Maybe<UserLanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserLanguageCondition>;
+  filter?: InputMaybe<UserLanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 
 export type LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /**
@@ -9336,29 +9337,29 @@ export type LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdAr
  */
 export type LanguageSkillLevelCondition = {
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `name` field. */
-  name?: Maybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `LanguageSkillLevel` object types. All fields are combined with a logical ‘and.’ */
 export type LanguageSkillLevelFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<LanguageSkillLevelFilter>>;
+  and?: InputMaybe<Array<LanguageSkillLevelFilter>>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `name` field. */
-  name?: Maybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
   /** Negates the expression. */
-  not?: Maybe<LanguageSkillLevelFilter>;
+  not?: InputMaybe<LanguageSkillLevelFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<LanguageSkillLevelFilter>>;
+  or?: InputMaybe<Array<LanguageSkillLevelFilter>>;
 };
 
 /** An input for mutations affecting `LanguageSkillLevel` */
 export type LanguageSkillLevelInput = {
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `Language` values, with data from `Group`. */
@@ -9388,14 +9389,14 @@ export type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdM
 
 /** A `Language` edge in the connection, with data from `Group`. */
 export type LanguageSkillLevelLanguagesByGroupLanguageSkillLevelIdAndLanguageIdManyToManyEdgeGroupsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupCondition>;
-  filter?: Maybe<GroupFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupCondition>;
+  filter?: InputMaybe<GroupFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 /** A connection to a list of `Language` values, with data from `Prompt`. */
@@ -9425,14 +9426,14 @@ export type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguag
 
 /** A `Language` edge in the connection, with data from `Prompt`. */
 export type LanguageSkillLevelLanguagesByPromptRecommendedSkillLevelIdAndLanguageIdManyToManyEdgePromptsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PromptCondition>;
-  filter?: Maybe<PromptFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PromptCondition>;
+  filter?: InputMaybe<PromptFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PromptsOrderBy>>;
 };
 
 /** A connection to a list of `Language` values, with data from `UserLanguage`. */
@@ -9462,20 +9463,20 @@ export type LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLang
 
 /** A `Language` edge in the connection, with data from `UserLanguage`. */
 export type LanguageSkillLevelLanguagesByUserLanguageLanguageSkillLevelIdAndLanguageIdManyToManyEdgeUserLanguagesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserLanguageCondition>;
-  filter?: Maybe<UserLanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserLanguageCondition>;
+  filter?: InputMaybe<UserLanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 /** Represents an update to a `LanguageSkillLevel`. Fields that are set will be updated. */
 export type LanguageSkillLevelPatch = {
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `User` values, with data from `UserLanguage`. */
@@ -9505,14 +9506,14 @@ export type LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdMa
 
 /** A `User` edge in the connection, with data from `UserLanguage`. */
 export type LanguageSkillLevelUsersByUserLanguageLanguageSkillLevelIdAndUserIdManyToManyEdgeUserLanguagesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserLanguageCondition>;
-  filter?: Maybe<UserLanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserLanguageCondition>;
+  filter?: InputMaybe<UserLanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 /** A connection to a list of `LanguageSkillLevel` values. */
@@ -9575,14 +9576,14 @@ export type LanguageUsersByPostLanguageIdAndAuthorIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `Post`. */
 export type LanguageUsersByPostLanguageIdAndAuthorIdManyToManyEdgeAuthoredPostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `UserLanguage`. */
@@ -9612,14 +9613,14 @@ export type LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `UserLanguage`. */
 export type LanguageUsersByUserLanguageLanguageIdAndUserIdManyToManyEdgeUserLanguagesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserLanguageCondition>;
-  filter?: Maybe<UserLanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserLanguageCondition>;
+  filter?: InputMaybe<UserLanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 /** A connection to a list of `Language` values. */
@@ -9693,108 +9694,108 @@ export type Message = Node & {
 
 
 export type MessageGroupsByMessageParentMessageIdAndRecipientGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupCondition>;
-  filter?: Maybe<GroupFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupCondition>;
+  filter?: InputMaybe<GroupFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 
 export type MessageMessagePreviewsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessagePreviewCondition>;
-  filter?: Maybe<MessagePreviewFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessagePreviewCondition>;
+  filter?: InputMaybe<MessagePreviewFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagePreviewsOrderBy>>;
 };
 
 
 export type MessageMessagesByParentMessageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 
 export type MessageUsersByMessageParentMessageIdAndRecipientIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type MessageUsersByMessageParentMessageIdAndSenderIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /** A condition to be used against `Message` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type MessageCondition = {
   /** Checks for equality with the object’s `body` field. */
-  body?: Maybe<Scalars['String']>;
+  body?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `parentMessageId` field. */
-  parentMessageId?: Maybe<Scalars['Int']>;
+  parentMessageId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recipientGroupId` field. */
-  recipientGroupId?: Maybe<Scalars['Int']>;
+  recipientGroupId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recipientId` field. */
-  recipientId?: Maybe<Scalars['Int']>;
+  recipientId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `senderId` field. */
-  senderId?: Maybe<Scalars['Int']>;
+  senderId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `Message` object types. All fields are combined with a logical ‘and.’ */
 export type MessageFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<MessageFilter>>;
+  and?: InputMaybe<Array<MessageFilter>>;
   /** Filter by the object’s `body` field. */
-  body?: Maybe<StringFilter>;
+  body?: InputMaybe<StringFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<MessageFilter>;
+  not?: InputMaybe<MessageFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<MessageFilter>>;
+  or?: InputMaybe<Array<MessageFilter>>;
   /** Filter by the object’s `parentMessageId` field. */
-  parentMessageId?: Maybe<IntFilter>;
+  parentMessageId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `recipientGroupId` field. */
-  recipientGroupId?: Maybe<IntFilter>;
+  recipientGroupId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `recipientId` field. */
-  recipientId?: Maybe<IntFilter>;
+  recipientId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `senderId` field. */
-  senderId?: Maybe<IntFilter>;
+  senderId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** A connection to a list of `Group` values, with data from `Message`. */
@@ -9824,38 +9825,38 @@ export type MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyEd
 
 /** A `Group` edge in the connection, with data from `Message`. */
 export type MessageGroupsByMessageParentMessageIdAndRecipientGroupIdManyToManyEdgeMessagesByRecipientGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** An input for mutations affecting `Message` */
 export type MessageInput = {
   body: Scalars['String'];
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  parentMessageId?: Maybe<Scalars['Int']>;
-  recipientGroupId?: Maybe<Scalars['Int']>;
-  recipientId?: Maybe<Scalars['Int']>;
-  senderId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  parentMessageId?: InputMaybe<Scalars['Int']>;
+  recipientGroupId?: InputMaybe<Scalars['Int']>;
+  recipientId?: InputMaybe<Scalars['Int']>;
+  senderId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `Message`. Fields that are set will be updated. */
 export type MessagePatch = {
-  body?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  parentMessageId?: Maybe<Scalars['Int']>;
-  recipientGroupId?: Maybe<Scalars['Int']>;
-  recipientId?: Maybe<Scalars['Int']>;
-  senderId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  body?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  parentMessageId?: InputMaybe<Scalars['Int']>;
+  recipientGroupId?: InputMaybe<Scalars['Int']>;
+  recipientId?: InputMaybe<Scalars['Int']>;
+  senderId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 export type MessagePreview = Node & {
@@ -9880,63 +9881,63 @@ export type MessagePreview = Node & {
  */
 export type MessagePreviewCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `extension` field. */
-  extension?: Maybe<Scalars['String']>;
+  extension?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `filename` field. */
-  filename?: Maybe<Scalars['String']>;
+  filename?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `messageId` field. */
-  messageId?: Maybe<Scalars['Int']>;
+  messageId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `MessagePreview` object types. All fields are combined with a logical ‘and.’ */
 export type MessagePreviewFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<MessagePreviewFilter>>;
+  and?: InputMaybe<Array<MessagePreviewFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `extension` field. */
-  extension?: Maybe<StringFilter>;
+  extension?: InputMaybe<StringFilter>;
   /** Filter by the object’s `filename` field. */
-  filename?: Maybe<StringFilter>;
+  filename?: InputMaybe<StringFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `messageId` field. */
-  messageId?: Maybe<IntFilter>;
+  messageId?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<MessagePreviewFilter>;
+  not?: InputMaybe<MessagePreviewFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<MessagePreviewFilter>>;
+  or?: InputMaybe<Array<MessagePreviewFilter>>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `MessagePreview` */
 export type MessagePreviewInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Extension without leading dot */
-  extension?: Maybe<Scalars['String']>;
+  extension?: InputMaybe<Scalars['String']>;
   /** Basename without extension */
   filename: Scalars['String'];
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   messageId: Scalars['Int'];
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `MessagePreview`. Fields that are set will be updated. */
 export type MessagePreviewPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Extension without leading dot */
-  extension?: Maybe<Scalars['String']>;
+  extension?: InputMaybe<Scalars['String']>;
   /** Basename without extension */
-  filename?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  messageId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  filename?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  messageId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `MessagePreview` values. */
@@ -10007,14 +10008,14 @@ export type MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `Message`. */
 export type MessageUsersByMessageParentMessageIdAndRecipientIdManyToManyEdgeMessagesByRecipientIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `Message`. */
@@ -10044,14 +10045,14 @@ export type MessageUsersByMessageParentMessageIdAndSenderIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `Message`. */
 export type MessageUsersByMessageParentMessageIdAndSenderIdManyToManyEdgeMessagesBySenderIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** A connection to a list of `Message` values. */
@@ -13229,378 +13230,378 @@ export type MutationUpdateUserSessionByNodeIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertChineseGuessCharacterQuestionArgs = {
   input: UpsertChineseGuessCharacterQuestionInput;
-  where?: Maybe<UpsertChineseGuessCharacterQuestionWhere>;
+  where?: InputMaybe<UpsertChineseGuessCharacterQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertChineseRandomQuestionArgs = {
   input: UpsertChineseRandomQuestionInput;
-  where?: Maybe<UpsertChineseRandomQuestionWhere>;
+  where?: InputMaybe<UpsertChineseRandomQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertChineseWouldYouRatherQuestionArgs = {
   input: UpsertChineseWouldYouRatherQuestionInput;
-  where?: Maybe<UpsertChineseWouldYouRatherQuestionWhere>;
+  where?: InputMaybe<UpsertChineseWouldYouRatherQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertEnglishRandomQuestionArgs = {
   input: UpsertEnglishRandomQuestionInput;
-  where?: Maybe<UpsertEnglishRandomQuestionWhere>;
+  where?: InputMaybe<UpsertEnglishRandomQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertEnglishWordArgs = {
   input: UpsertEnglishWordInput;
-  where?: Maybe<UpsertEnglishWordWhere>;
+  where?: InputMaybe<UpsertEnglishWordWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertEnglishWouldYouRatherQuestionArgs = {
   input: UpsertEnglishWouldYouRatherQuestionInput;
-  where?: Maybe<UpsertEnglishWouldYouRatherQuestionWhere>;
+  where?: InputMaybe<UpsertEnglishWouldYouRatherQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertFrenchRandomQuestionArgs = {
   input: UpsertFrenchRandomQuestionInput;
-  where?: Maybe<UpsertFrenchRandomQuestionWhere>;
+  where?: InputMaybe<UpsertFrenchRandomQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertFrenchWordArgs = {
   input: UpsertFrenchWordInput;
-  where?: Maybe<UpsertFrenchWordWhere>;
+  where?: InputMaybe<UpsertFrenchWordWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertFrenchWouldYouRatherQuestionArgs = {
   input: UpsertFrenchWouldYouRatherQuestionInput;
-  where?: Maybe<UpsertFrenchWouldYouRatherQuestionWhere>;
+  where?: InputMaybe<UpsertFrenchWouldYouRatherQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertGermanRandomQuestionArgs = {
   input: UpsertGermanRandomQuestionInput;
-  where?: Maybe<UpsertGermanRandomQuestionWhere>;
+  where?: InputMaybe<UpsertGermanRandomQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertGermanWordArgs = {
   input: UpsertGermanWordInput;
-  where?: Maybe<UpsertGermanWordWhere>;
+  where?: InputMaybe<UpsertGermanWordWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertGermanWouldYouRatherQuestionArgs = {
   input: UpsertGermanWouldYouRatherQuestionInput;
-  where?: Maybe<UpsertGermanWouldYouRatherQuestionWhere>;
+  where?: InputMaybe<UpsertGermanWouldYouRatherQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertGroupArgs = {
   input: UpsertGroupInput;
-  where?: Maybe<UpsertGroupWhere>;
+  where?: InputMaybe<UpsertGroupWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertGroupUserArgs = {
   input: UpsertGroupUserInput;
-  where?: Maybe<UpsertGroupUserWhere>;
+  where?: InputMaybe<UpsertGroupUserWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertInAppNotificationMetadatumArgs = {
   input: UpsertInAppNotificationMetadatumInput;
-  where?: Maybe<UpsertInAppNotificationMetadatumWhere>;
+  where?: InputMaybe<UpsertInAppNotificationMetadatumWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertInviteTokenArgs = {
   input: UpsertInviteTokenInput;
-  where?: Maybe<UpsertInviteTokenWhere>;
+  where?: InputMaybe<UpsertInviteTokenWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertItalianRandomQuestionArgs = {
   input: UpsertItalianRandomQuestionInput;
-  where?: Maybe<UpsertItalianRandomQuestionWhere>;
+  where?: InputMaybe<UpsertItalianRandomQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertItalianWordArgs = {
   input: UpsertItalianWordInput;
-  where?: Maybe<UpsertItalianWordWhere>;
+  where?: InputMaybe<UpsertItalianWordWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertItalianWouldYouRatherQuestionArgs = {
   input: UpsertItalianWouldYouRatherQuestionInput;
-  where?: Maybe<UpsertItalianWouldYouRatherQuestionWhere>;
+  where?: InputMaybe<UpsertItalianWouldYouRatherQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertJapaneseRandomQuestionArgs = {
   input: UpsertJapaneseRandomQuestionInput;
-  where?: Maybe<UpsertJapaneseRandomQuestionWhere>;
+  where?: InputMaybe<UpsertJapaneseRandomQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertJapaneseWouldYouRatherQuestionArgs = {
   input: UpsertJapaneseWouldYouRatherQuestionInput;
-  where?: Maybe<UpsertJapaneseWouldYouRatherQuestionWhere>;
+  where?: InputMaybe<UpsertJapaneseWouldYouRatherQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertKoreanRandomQuestionArgs = {
   input: UpsertKoreanRandomQuestionInput;
-  where?: Maybe<UpsertKoreanRandomQuestionWhere>;
+  where?: InputMaybe<UpsertKoreanRandomQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertKoreanWouldYouRatherQuestionArgs = {
   input: UpsertKoreanWouldYouRatherQuestionInput;
-  where?: Maybe<UpsertKoreanWouldYouRatherQuestionWhere>;
+  where?: InputMaybe<UpsertKoreanWouldYouRatherQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertLanguageArgs = {
   input: UpsertLanguageInput;
-  where?: Maybe<UpsertLanguageWhere>;
+  where?: InputMaybe<UpsertLanguageWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertLanguageSkillLevelArgs = {
   input: UpsertLanguageSkillLevelInput;
-  where?: Maybe<UpsertLanguageSkillLevelWhere>;
+  where?: InputMaybe<UpsertLanguageSkillLevelWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertMessageArgs = {
   input: UpsertMessageInput;
-  where?: Maybe<UpsertMessageWhere>;
+  where?: InputMaybe<UpsertMessageWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertMessagePreviewArgs = {
   input: UpsertMessagePreviewInput;
-  where?: Maybe<UpsertMessagePreviewWhere>;
+  where?: InputMaybe<UpsertMessagePreviewWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertNotificationArgs = {
   input: UpsertNotificationInput;
-  where?: Maybe<UpsertNotificationWhere>;
+  where?: InputMaybe<UpsertNotificationWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertNotificationChannelArgs = {
   input: UpsertNotificationChannelInput;
-  where?: Maybe<UpsertNotificationChannelWhere>;
+  where?: InputMaybe<UpsertNotificationChannelWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPortugueseRandomQuestionArgs = {
   input: UpsertPortugueseRandomQuestionInput;
-  where?: Maybe<UpsertPortugueseRandomQuestionWhere>;
+  where?: InputMaybe<UpsertPortugueseRandomQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPortugueseWordArgs = {
   input: UpsertPortugueseWordInput;
-  where?: Maybe<UpsertPortugueseWordWhere>;
+  where?: InputMaybe<UpsertPortugueseWordWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPortugueseWouldYouRatherQuestionArgs = {
   input: UpsertPortugueseWouldYouRatherQuestionInput;
-  where?: Maybe<UpsertPortugueseWouldYouRatherQuestionWhere>;
+  where?: InputMaybe<UpsertPortugueseWouldYouRatherQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPostArgs = {
   input: UpsertPostInput;
-  where?: Maybe<UpsertPostWhere>;
+  where?: InputMaybe<UpsertPostWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPostCorrectionArgs = {
   input: UpsertPostCorrectionInput;
-  where?: Maybe<UpsertPostCorrectionWhere>;
+  where?: InputMaybe<UpsertPostCorrectionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPostGameArgs = {
   input: UpsertPostGameInput;
-  where?: Maybe<UpsertPostGameWhere>;
+  where?: InputMaybe<UpsertPostGameWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPostGameAnswerArgs = {
   input: UpsertPostGameAnswerInput;
-  where?: Maybe<UpsertPostGameAnswerWhere>;
+  where?: InputMaybe<UpsertPostGameAnswerWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPostGameRangeArgs = {
   input: UpsertPostGameRangeInput;
-  where?: Maybe<UpsertPostGameRangeWhere>;
+  where?: InputMaybe<UpsertPostGameRangeWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPostLikeArgs = {
   input: UpsertPostLikeInput;
-  where?: Maybe<UpsertPostLikeWhere>;
+  where?: InputMaybe<UpsertPostLikeWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPostRecordingArgs = {
   input: UpsertPostRecordingInput;
-  where?: Maybe<UpsertPostRecordingWhere>;
+  where?: InputMaybe<UpsertPostRecordingWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPostUserMentionArgs = {
   input: UpsertPostUserMentionInput;
-  where?: Maybe<UpsertPostUserMentionWhere>;
+  where?: InputMaybe<UpsertPostUserMentionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPromptArgs = {
   input: UpsertPromptInput;
-  where?: Maybe<UpsertPromptWhere>;
+  where?: InputMaybe<UpsertPromptWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertRefreshTokenArgs = {
   input: UpsertRefreshTokenInput;
-  where?: Maybe<UpsertRefreshTokenWhere>;
+  where?: InputMaybe<UpsertRefreshTokenWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertRussianRandomQuestionArgs = {
   input: UpsertRussianRandomQuestionInput;
-  where?: Maybe<UpsertRussianRandomQuestionWhere>;
+  where?: InputMaybe<UpsertRussianRandomQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertRussianWordArgs = {
   input: UpsertRussianWordInput;
-  where?: Maybe<UpsertRussianWordWhere>;
+  where?: InputMaybe<UpsertRussianWordWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertRussianWouldYouRatherQuestionArgs = {
   input: UpsertRussianWouldYouRatherQuestionInput;
-  where?: Maybe<UpsertRussianWouldYouRatherQuestionWhere>;
+  where?: InputMaybe<UpsertRussianWouldYouRatherQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertSpanishRandomQuestionArgs = {
   input: UpsertSpanishRandomQuestionInput;
-  where?: Maybe<UpsertSpanishRandomQuestionWhere>;
+  where?: InputMaybe<UpsertSpanishRandomQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertSpanishWordArgs = {
   input: UpsertSpanishWordInput;
-  where?: Maybe<UpsertSpanishWordWhere>;
+  where?: InputMaybe<UpsertSpanishWordWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertSpanishWouldYouRatherQuestionArgs = {
   input: UpsertSpanishWouldYouRatherQuestionInput;
-  where?: Maybe<UpsertSpanishWouldYouRatherQuestionWhere>;
+  where?: InputMaybe<UpsertSpanishWouldYouRatherQuestionWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertUserArgs = {
   input: UpsertUserInput;
-  where?: Maybe<UpsertUserWhere>;
+  where?: InputMaybe<UpsertUserWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertUserDeviceArgs = {
   input: UpsertUserDeviceInput;
-  where?: Maybe<UpsertUserDeviceWhere>;
+  where?: InputMaybe<UpsertUserDeviceWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertUserFollowerArgs = {
   input: UpsertUserFollowerInput;
-  where?: Maybe<UpsertUserFollowerWhere>;
+  where?: InputMaybe<UpsertUserFollowerWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertUserLanguageArgs = {
   input: UpsertUserLanguageInput;
-  where?: Maybe<UpsertUserLanguageWhere>;
+  where?: InputMaybe<UpsertUserLanguageWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertUserPreferenceArgs = {
   input: UpsertUserPreferenceInput;
-  where?: Maybe<UpsertUserPreferenceWhere>;
+  where?: InputMaybe<UpsertUserPreferenceWhere>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertUserSessionArgs = {
   input: UpsertUserSessionInput;
-  where?: Maybe<UpsertUserSessionWhere>;
+  where?: InputMaybe<UpsertUserSessionWhere>;
 };
 
 /** An object with a globally unique `ID`. */
@@ -13653,38 +13654,38 @@ export type NotificationChannel = Node & {
 
 
 export type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupCondition>;
-  filter?: Maybe<GroupFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupCondition>;
+  filter?: InputMaybe<GroupFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 
 export type NotificationChannelNotificationsByChannelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationCondition>;
-  filter?: Maybe<NotificationFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationCondition>;
+  filter?: InputMaybe<NotificationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 
 export type NotificationChannelUsersByNotificationChannelIdAndRecipientIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /**
@@ -13693,31 +13694,31 @@ export type NotificationChannelUsersByNotificationChannelIdAndRecipientIdArgs = 
  */
 export type NotificationChannelCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `name` field. */
-  name?: Maybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `NotificationChannel` object types. All fields are combined with a logical ‘and.’ */
 export type NotificationChannelFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<NotificationChannelFilter>>;
+  and?: InputMaybe<Array<NotificationChannelFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `name` field. */
-  name?: Maybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
   /** Negates the expression. */
-  not?: Maybe<NotificationChannelFilter>;
+  not?: InputMaybe<NotificationChannelFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<NotificationChannelFilter>>;
+  or?: InputMaybe<Array<NotificationChannelFilter>>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** A connection to a list of `Group` values, with data from `Notification`. */
@@ -13747,30 +13748,30 @@ export type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdM
 
 /** A `Group` edge in the connection, with data from `Notification`. */
 export type NotificationChannelGroupsByNotificationChannelIdAndRecipientGroupIdManyToManyEdgeNotificationsByRecipientGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationCondition>;
-  filter?: Maybe<NotificationFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationCondition>;
+  filter?: InputMaybe<NotificationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 /** An input for mutations affecting `NotificationChannel` */
 export type NotificationChannelInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `NotificationChannel`. Fields that are set will be updated. */
 export type NotificationChannelPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `User` values, with data from `Notification`. */
@@ -13800,14 +13801,14 @@ export type NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToM
 
 /** A `User` edge in the connection, with data from `Notification`. */
 export type NotificationChannelUsersByNotificationChannelIdAndRecipientIdManyToManyEdgeNotificationsByRecipientIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationCondition>;
-  filter?: Maybe<NotificationFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationCondition>;
+  filter?: InputMaybe<NotificationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 /** A connection to a list of `NotificationChannel` values. */
@@ -13853,91 +13854,91 @@ export enum NotificationChannelsOrderBy {
  */
 export type NotificationCondition = {
   /** Checks for equality with the object’s `channelId` field. */
-  channelId?: Maybe<Scalars['Int']>;
+  channelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `expiresAt` field. */
-  expiresAt?: Maybe<Scalars['Datetime']>;
+  expiresAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `params` field. */
-  params?: Maybe<Scalars['JSON']>;
+  params?: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `readAt` field. */
-  readAt?: Maybe<Scalars['Datetime']>;
+  readAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `recipientGroupId` field. */
-  recipientGroupId?: Maybe<Scalars['Int']>;
+  recipientGroupId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recipientId` field. */
-  recipientId?: Maybe<Scalars['Int']>;
+  recipientId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `sentAt` field. */
-  sentAt?: Maybe<Scalars['Datetime']>;
+  sentAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   /** Checks for equality with the object’s `withheldUntil` field. */
-  withheldUntil?: Maybe<Scalars['Datetime']>;
+  withheldUntil?: InputMaybe<Scalars['Datetime']>;
 };
 
 /** A filter to be used against `Notification` object types. All fields are combined with a logical ‘and.’ */
 export type NotificationFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<NotificationFilter>>;
+  and?: InputMaybe<Array<NotificationFilter>>;
   /** Filter by the object’s `channelId` field. */
-  channelId?: Maybe<IntFilter>;
+  channelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `expiresAt` field. */
-  expiresAt?: Maybe<DatetimeFilter>;
+  expiresAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<NotificationFilter>;
+  not?: InputMaybe<NotificationFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<NotificationFilter>>;
+  or?: InputMaybe<Array<NotificationFilter>>;
   /** Filter by the object’s `params` field. */
-  params?: Maybe<JsonFilter>;
+  params?: InputMaybe<JsonFilter>;
   /** Filter by the object’s `readAt` field. */
-  readAt?: Maybe<DatetimeFilter>;
+  readAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `recipientGroupId` field. */
-  recipientGroupId?: Maybe<IntFilter>;
+  recipientGroupId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `recipientId` field. */
-  recipientId?: Maybe<IntFilter>;
+  recipientId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `sentAt` field. */
-  sentAt?: Maybe<DatetimeFilter>;
+  sentAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `type` field. */
-  type?: Maybe<StringFilter>;
+  type?: InputMaybe<StringFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
   /** Filter by the object’s `withheldUntil` field. */
-  withheldUntil?: Maybe<DatetimeFilter>;
+  withheldUntil?: InputMaybe<DatetimeFilter>;
 };
 
 /** An input for mutations affecting `Notification` */
 export type NotificationInput = {
   channelId: Scalars['Int'];
-  createdAt?: Maybe<Scalars['Datetime']>;
-  expiresAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  params?: Maybe<Scalars['JSON']>;
-  readAt?: Maybe<Scalars['Datetime']>;
-  recipientGroupId?: Maybe<Scalars['Int']>;
-  recipientId?: Maybe<Scalars['Int']>;
-  sentAt?: Maybe<Scalars['Datetime']>;
-  uuid?: Maybe<Scalars['UUID']>;
-  withheldUntil?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  expiresAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  params?: InputMaybe<Scalars['JSON']>;
+  readAt?: InputMaybe<Scalars['Datetime']>;
+  recipientGroupId?: InputMaybe<Scalars['Int']>;
+  recipientId?: InputMaybe<Scalars['Int']>;
+  sentAt?: InputMaybe<Scalars['Datetime']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  withheldUntil?: InputMaybe<Scalars['Datetime']>;
 };
 
 /** Represents an update to a `Notification`. Fields that are set will be updated. */
 export type NotificationPatch = {
-  channelId?: Maybe<Scalars['Int']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  expiresAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  params?: Maybe<Scalars['JSON']>;
-  readAt?: Maybe<Scalars['Datetime']>;
-  recipientGroupId?: Maybe<Scalars['Int']>;
-  recipientId?: Maybe<Scalars['Int']>;
-  sentAt?: Maybe<Scalars['Datetime']>;
-  uuid?: Maybe<Scalars['UUID']>;
-  withheldUntil?: Maybe<Scalars['Datetime']>;
+  channelId?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  expiresAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  params?: InputMaybe<Scalars['JSON']>;
+  readAt?: InputMaybe<Scalars['Datetime']>;
+  recipientGroupId?: InputMaybe<Scalars['Int']>;
+  recipientId?: InputMaybe<Scalars['Int']>;
+  sentAt?: InputMaybe<Scalars['Datetime']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  withheldUntil?: InputMaybe<Scalars['Datetime']>;
 };
 
 /** A connection to a list of `Notification` values. */
@@ -14023,53 +14024,53 @@ export type PortugueseRandomQuestion = Node & {
  */
 export type PortugueseRandomQuestionCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `PortugueseRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type PortugueseRandomQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PortugueseRandomQuestionFilter>>;
+  and?: InputMaybe<Array<PortugueseRandomQuestionFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<PortugueseRandomQuestionFilter>;
+  not?: InputMaybe<PortugueseRandomQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PortugueseRandomQuestionFilter>>;
+  or?: InputMaybe<Array<PortugueseRandomQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `PortugueseRandomQuestion` */
 export type PortugueseRandomQuestionInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `PortugueseRandomQuestion`. Fields that are set will be updated. */
 export type PortugueseRandomQuestionPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `PortugueseRandomQuestion` values. */
@@ -14133,67 +14134,67 @@ export type PortugueseWord = Node & {
  */
 export type PortugueseWordCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `frequency` field. */
-  frequency?: Maybe<Scalars['Float']>;
+  frequency?: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `length` field. */
-  length?: Maybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   /** Checks for equality with the object’s `word` field. */
-  word?: Maybe<Scalars['String']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `PortugueseWord` object types. All fields are combined with a logical ‘and.’ */
 export type PortugueseWordFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PortugueseWordFilter>>;
+  and?: InputMaybe<Array<PortugueseWordFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `frequency` field. */
-  frequency?: Maybe<FloatFilter>;
+  frequency?: InputMaybe<FloatFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `length` field. */
-  length?: Maybe<IntFilter>;
+  length?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<PortugueseWordFilter>;
+  not?: InputMaybe<PortugueseWordFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PortugueseWordFilter>>;
+  or?: InputMaybe<Array<PortugueseWordFilter>>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
   /** Filter by the object’s `word` field. */
-  word?: Maybe<StringFilter>;
+  word?: InputMaybe<StringFilter>;
 };
 
 /** An input for mutations affecting `PortugueseWord` */
 export type PortugueseWordInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   word: Scalars['String'];
 };
 
 /** Represents an update to a `PortugueseWord`. Fields that are set will be updated. */
 export type PortugueseWordPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
-  frequency?: Maybe<Scalars['Float']>;
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
-  word?: Maybe<Scalars['String']>;
+  frequency?: InputMaybe<Scalars['Float']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `PortugueseWord` values. */
@@ -14259,59 +14260,59 @@ export type PortugueseWouldYouRatherQuestion = Node & {
  */
 export type PortugueseWouldYouRatherQuestionCondition = {
   /** Checks for equality with the object’s `answers` field. */
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `PortugueseWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type PortugueseWouldYouRatherQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PortugueseWouldYouRatherQuestionFilter>>;
+  and?: InputMaybe<Array<PortugueseWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `answers` field. */
-  answers?: Maybe<StringListFilter>;
+  answers?: InputMaybe<StringListFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<PortugueseWouldYouRatherQuestionFilter>;
+  not?: InputMaybe<PortugueseWouldYouRatherQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PortugueseWouldYouRatherQuestionFilter>>;
+  or?: InputMaybe<Array<PortugueseWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `PortugueseWouldYouRatherQuestion` */
 export type PortugueseWouldYouRatherQuestionInput = {
-  answers: Array<Maybe<Scalars['String']>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  answers: Array<InputMaybe<Scalars['String']>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `PortugueseWouldYouRatherQuestion`. Fields that are set will be updated. */
 export type PortugueseWouldYouRatherQuestionPatch = {
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `PortugueseWouldYouRatherQuestion` values. */
@@ -14410,204 +14411,204 @@ export type Post = Node & {
 
 
 export type PostCorrectionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCorrectionCondition>;
-  filter?: Maybe<PostCorrectionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCorrectionCondition>;
+  filter?: InputMaybe<PostCorrectionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostCorrectionsOrderBy>>;
 };
 
 
 export type PostGamesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameCondition>;
-  filter?: Maybe<PostGameFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGamesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameCondition>;
+  filter?: InputMaybe<PostGameFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGamesOrderBy>>;
 };
 
 
 export type PostLanguagesByPostParentPostIdAndLanguageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageCondition>;
-  filter?: Maybe<LanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageCondition>;
+  filter?: InputMaybe<LanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 
 export type PostLikesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostLikeCondition>;
-  filter?: Maybe<PostLikeFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostLikeCondition>;
+  filter?: InputMaybe<PostLikeFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostLikesOrderBy>>;
 };
 
 
 export type PostPromptsByPostParentPostIdAndPromptIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PromptCondition>;
-  filter?: Maybe<PromptFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PromptCondition>;
+  filter?: InputMaybe<PromptFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PromptsOrderBy>>;
 };
 
 
 export type PostRecordingsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostRecordingCondition>;
-  filter?: Maybe<PostRecordingFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostRecordingCondition>;
+  filter?: InputMaybe<PostRecordingFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostRecordingsOrderBy>>;
 };
 
 
 export type PostRelatedInAppNotificationsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InAppNotificationMetadatumCondition>;
-  filter?: Maybe<InAppNotificationMetadatumFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InAppNotificationMetadatumCondition>;
+  filter?: InputMaybe<InAppNotificationMetadatumFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InAppNotificationMetadataOrderBy>>;
 };
 
 
 export type PostRepliesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
 export type PostUserMentionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostUserMentionCondition>;
-  filter?: Maybe<PostUserMentionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostUserMentionCondition>;
+  filter?: InputMaybe<PostUserMentionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostUserMentionsOrderBy>>;
 };
 
 
 export type PostUsersByInAppNotificationMetadatumPostIdAndUserIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type PostUsersByPostCorrectionPostIdAndUserIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type PostUsersByPostLikePostIdAndUserIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type PostUsersByPostParentPostIdAndAuthorIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type PostUsersByPostRecordingPostIdAndUserIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type PostUsersByPostUserMentionPostIdAndUserIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /** A condition to be used against `Post` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type PostCondition = {
   /** Checks for equality with the object’s `authorId` field. */
-  authorId?: Maybe<Scalars['Int']>;
+  authorId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `body` field. */
-  body?: Maybe<Scalars['String']>;
+  body?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `languageId` field. */
-  languageId?: Maybe<Scalars['Int']>;
+  languageId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `parentPostId` field. */
-  parentPostId?: Maybe<Scalars['Int']>;
+  parentPostId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `promptId` field. */
-  promptId?: Maybe<Scalars['Int']>;
+  promptId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `snowflakeId` field. */
-  snowflakeId?: Maybe<Scalars['BigInt']>;
+  snowflakeId?: InputMaybe<Scalars['BigInt']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 export type PostCorrection = Node & {
@@ -14635,73 +14636,73 @@ export type PostCorrection = Node & {
  */
 export type PostCorrectionCondition = {
   /** Checks for equality with the object’s `body` field. */
-  body?: Maybe<Scalars['String']>;
+  body?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `endIndex` field. */
-  endIndex?: Maybe<Scalars['Int']>;
+  endIndex?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `postId` field. */
-  postId?: Maybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `startIndex` field. */
-  startIndex?: Maybe<Scalars['Int']>;
+  startIndex?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `PostCorrection` object types. All fields are combined with a logical ‘and.’ */
 export type PostCorrectionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PostCorrectionFilter>>;
+  and?: InputMaybe<Array<PostCorrectionFilter>>;
   /** Filter by the object’s `body` field. */
-  body?: Maybe<StringFilter>;
+  body?: InputMaybe<StringFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `endIndex` field. */
-  endIndex?: Maybe<IntFilter>;
+  endIndex?: InputMaybe<IntFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<PostCorrectionFilter>;
+  not?: InputMaybe<PostCorrectionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PostCorrectionFilter>>;
+  or?: InputMaybe<Array<PostCorrectionFilter>>;
   /** Filter by the object’s `postId` field. */
-  postId?: Maybe<IntFilter>;
+  postId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `startIndex` field. */
-  startIndex?: Maybe<IntFilter>;
+  startIndex?: InputMaybe<IntFilter>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `PostCorrection` */
 export type PostCorrectionInput = {
   body: Scalars['String'];
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   endIndex: Scalars['Int'];
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   postId: Scalars['Int'];
   startIndex: Scalars['Int'];
   /** Author of the correction */
   userId: Scalars['Int'];
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `PostCorrection`. Fields that are set will be updated. */
 export type PostCorrectionPatch = {
-  body?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  endIndex?: Maybe<Scalars['Int']>;
-  id?: Maybe<Scalars['Int']>;
-  postId?: Maybe<Scalars['Int']>;
-  startIndex?: Maybe<Scalars['Int']>;
+  body?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  endIndex?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
+  startIndex?: InputMaybe<Scalars['Int']>;
   /** Author of the correction */
-  userId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  userId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `PostCorrection` values. */
@@ -14752,29 +14753,29 @@ export enum PostCorrectionsOrderBy {
 /** A filter to be used against `Post` object types. All fields are combined with a logical ‘and.’ */
 export type PostFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PostFilter>>;
+  and?: InputMaybe<Array<PostFilter>>;
   /** Filter by the object’s `authorId` field. */
-  authorId?: Maybe<IntFilter>;
+  authorId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `body` field. */
-  body?: Maybe<StringFilter>;
+  body?: InputMaybe<StringFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `languageId` field. */
-  languageId?: Maybe<IntFilter>;
+  languageId?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<PostFilter>;
+  not?: InputMaybe<PostFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PostFilter>>;
+  or?: InputMaybe<Array<PostFilter>>;
   /** Filter by the object’s `parentPostId` field. */
-  parentPostId?: Maybe<IntFilter>;
+  parentPostId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `promptId` field. */
-  promptId?: Maybe<IntFilter>;
+  promptId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `snowflakeId` field. */
-  snowflakeId?: Maybe<BigIntFilter>;
+  snowflakeId?: InputMaybe<BigIntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 export type PostGame = Node & {
@@ -14807,80 +14808,80 @@ export type PostGame = Node & {
 
 
 export type PostGameAnswerRevealsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameAnswerCondition>;
-  filter?: Maybe<PostGameAnswerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameAnswerCondition>;
+  filter?: InputMaybe<PostGameAnswerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 
 export type PostGameAnswerersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
 export type PostGameAnswersByCurrentUserArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  filter?: Maybe<PostGameAnswerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  filter?: InputMaybe<PostGameAnswerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
 export type PostGameCorrectAnswersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  filter?: Maybe<PostGamesCorrectAnswersRecordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  filter?: InputMaybe<PostGamesCorrectAnswersRecordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
 export type PostGamePostGameRangesByPostGameAnswerGameIdAndRangeIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameRangeCondition>;
-  filter?: Maybe<PostGameRangeFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameRangesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameRangeCondition>;
+  filter?: InputMaybe<PostGameRangeFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameRangesOrderBy>>;
 };
 
 
 export type PostGameRangesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameRangeCondition>;
-  filter?: Maybe<PostGameRangeFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameRangesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameRangeCondition>;
+  filter?: InputMaybe<PostGameRangeFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameRangesOrderBy>>;
 };
 
 
 export type PostGameUsersByPostGameAnswerGameIdAndUserIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 export type PostGameAnswer = Node & {
@@ -14911,83 +14912,83 @@ export type PostGameAnswer = Node & {
  */
 export type PostGameAnswerCondition = {
   /** Checks for equality with the object’s `caseOption` field. */
-  caseOption?: Maybe<GrammaticalCase>;
+  caseOption?: InputMaybe<GrammaticalCase>;
   /** Checks for equality with the object’s `clozeAnswer` field. */
-  clozeAnswer?: Maybe<Scalars['String']>;
+  clozeAnswer?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `correct` field. */
-  correct?: Maybe<Scalars['Boolean']>;
+  correct?: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `gameId` field. */
-  gameId?: Maybe<Scalars['Int']>;
+  gameId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `genderOption` field. */
-  genderOption?: Maybe<GrammaticalGender>;
+  genderOption?: InputMaybe<GrammaticalGender>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `rangeId` field. */
-  rangeId?: Maybe<Scalars['Int']>;
+  rangeId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `PostGameAnswer` object types. All fields are combined with a logical ‘and.’ */
 export type PostGameAnswerFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PostGameAnswerFilter>>;
+  and?: InputMaybe<Array<PostGameAnswerFilter>>;
   /** Filter by the object’s `caseOption` field. */
-  caseOption?: Maybe<GrammaticalCaseFilter>;
+  caseOption?: InputMaybe<GrammaticalCaseFilter>;
   /** Filter by the object’s `clozeAnswer` field. */
-  clozeAnswer?: Maybe<StringFilter>;
+  clozeAnswer?: InputMaybe<StringFilter>;
   /** Filter by the object’s `correct` field. */
-  correct?: Maybe<BooleanFilter>;
+  correct?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `gameId` field. */
-  gameId?: Maybe<IntFilter>;
+  gameId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `genderOption` field. */
-  genderOption?: Maybe<GrammaticalGenderFilter>;
+  genderOption?: InputMaybe<GrammaticalGenderFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<PostGameAnswerFilter>;
+  not?: InputMaybe<PostGameAnswerFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PostGameAnswerFilter>>;
+  or?: InputMaybe<Array<PostGameAnswerFilter>>;
   /** Filter by the object’s `rangeId` field. */
-  rangeId?: Maybe<IntFilter>;
+  rangeId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `PostGameAnswer` */
 export type PostGameAnswerInput = {
-  caseOption?: Maybe<GrammaticalCase>;
-  clozeAnswer?: Maybe<Scalars['String']>;
-  correct?: Maybe<Scalars['Boolean']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  gameId?: Maybe<Scalars['Int']>;
-  genderOption?: Maybe<GrammaticalGender>;
-  id?: Maybe<Scalars['Int']>;
-  rangeId?: Maybe<Scalars['Int']>;
+  caseOption?: InputMaybe<GrammaticalCase>;
+  clozeAnswer?: InputMaybe<Scalars['String']>;
+  correct?: InputMaybe<Scalars['Boolean']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  gameId?: InputMaybe<Scalars['Int']>;
+  genderOption?: InputMaybe<GrammaticalGender>;
+  id?: InputMaybe<Scalars['Int']>;
+  rangeId?: InputMaybe<Scalars['Int']>;
   userId: Scalars['Int'];
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `PostGameAnswer`. Fields that are set will be updated. */
 export type PostGameAnswerPatch = {
-  caseOption?: Maybe<GrammaticalCase>;
-  clozeAnswer?: Maybe<Scalars['String']>;
-  correct?: Maybe<Scalars['Boolean']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  gameId?: Maybe<Scalars['Int']>;
-  genderOption?: Maybe<GrammaticalGender>;
-  id?: Maybe<Scalars['Int']>;
-  rangeId?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  caseOption?: InputMaybe<GrammaticalCase>;
+  clozeAnswer?: InputMaybe<Scalars['String']>;
+  correct?: InputMaybe<Scalars['Boolean']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  gameId?: InputMaybe<Scalars['Int']>;
+  genderOption?: InputMaybe<GrammaticalGender>;
+  id?: InputMaybe<Scalars['Int']>;
+  rangeId?: InputMaybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `PostGameAnswer` values. */
@@ -15045,57 +15046,57 @@ export enum PostGameAnswersOrderBy {
  */
 export type PostGameCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `gameType` field. */
-  gameType?: Maybe<PostGameType>;
+  gameType?: InputMaybe<PostGameType>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `postId` field. */
-  postId?: Maybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `PostGame` object types. All fields are combined with a logical ‘and.’ */
 export type PostGameFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PostGameFilter>>;
+  and?: InputMaybe<Array<PostGameFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `currentUserCanSeeCorrectAnswers` field. */
-  currentUserCanSeeCorrectAnswers?: Maybe<BooleanFilter>;
+  currentUserCanSeeCorrectAnswers?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `gameType` field. */
-  gameType?: Maybe<PostGameTypeFilter>;
+  gameType?: InputMaybe<PostGameTypeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<PostGameFilter>;
+  not?: InputMaybe<PostGameFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PostGameFilter>>;
+  or?: InputMaybe<Array<PostGameFilter>>;
   /** Filter by the object’s `postId` field. */
-  postId?: Maybe<IntFilter>;
+  postId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `revealedByCurrentUser` field. */
-  revealedByCurrentUser?: Maybe<BooleanFilter>;
+  revealedByCurrentUser?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `PostGame` */
 export type PostGameInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   gameType: PostGameType;
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   postId: Scalars['Int'];
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `PostGame`. Fields that are set will be updated. */
 export type PostGamePatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  gameType?: Maybe<PostGameType>;
-  id?: Maybe<Scalars['Int']>;
-  postId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  gameType?: InputMaybe<PostGameType>;
+  id?: InputMaybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `PostGameRange` values, with data from `PostGameAnswer`. */
@@ -15125,14 +15126,14 @@ export type PostGamePostGameRangesByPostGameAnswerGameIdAndRangeIdManyToManyEdge
 
 /** A `PostGameRange` edge in the connection, with data from `PostGameAnswer`. */
 export type PostGamePostGameRangesByPostGameAnswerGameIdAndRangeIdManyToManyEdgeAnswersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameAnswerCondition>;
-  filter?: Maybe<PostGameAnswerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameAnswerCondition>;
+  filter?: InputMaybe<PostGameAnswerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 export type PostGameRange = Node & {
@@ -15161,38 +15162,38 @@ export type PostGameRange = Node & {
 
 
 export type PostGameRangeAnswersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameAnswerCondition>;
-  filter?: Maybe<PostGameAnswerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameAnswerCondition>;
+  filter?: InputMaybe<PostGameAnswerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 
 export type PostGameRangePostGamesByPostGameAnswerRangeIdAndGameIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameCondition>;
-  filter?: Maybe<PostGameFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGamesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameCondition>;
+  filter?: InputMaybe<PostGameFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGamesOrderBy>>;
 };
 
 
 export type PostGameRangeUsersByPostGameAnswerRangeIdAndUserIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /**
@@ -15201,75 +15202,75 @@ export type PostGameRangeUsersByPostGameAnswerRangeIdAndUserIdArgs = {
  */
 export type PostGameRangeCondition = {
   /** Checks for equality with the object’s `caseOption` field. */
-  caseOption?: Maybe<GrammaticalCase>;
+  caseOption?: InputMaybe<GrammaticalCase>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `endIndex` field. */
-  endIndex?: Maybe<Scalars['Int']>;
+  endIndex?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `gameId` field. */
-  gameId?: Maybe<Scalars['Int']>;
+  gameId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `genderOption` field. */
-  genderOption?: Maybe<GrammaticalGender>;
+  genderOption?: InputMaybe<GrammaticalGender>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `startIndex` field. */
-  startIndex?: Maybe<Scalars['Int']>;
+  startIndex?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `PostGameRange` object types. All fields are combined with a logical ‘and.’ */
 export type PostGameRangeFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PostGameRangeFilter>>;
+  and?: InputMaybe<Array<PostGameRangeFilter>>;
   /** Filter by the object’s `caseOption` field. */
-  caseOption?: Maybe<GrammaticalCaseFilter>;
+  caseOption?: InputMaybe<GrammaticalCaseFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `endIndex` field. */
-  endIndex?: Maybe<IntFilter>;
+  endIndex?: InputMaybe<IntFilter>;
   /** Filter by the object’s `gameId` field. */
-  gameId?: Maybe<IntFilter>;
+  gameId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `genderOption` field. */
-  genderOption?: Maybe<GrammaticalGenderFilter>;
+  genderOption?: InputMaybe<GrammaticalGenderFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<PostGameRangeFilter>;
+  not?: InputMaybe<PostGameRangeFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PostGameRangeFilter>>;
+  or?: InputMaybe<Array<PostGameRangeFilter>>;
   /** Filter by the object’s `startIndex` field. */
-  startIndex?: Maybe<IntFilter>;
+  startIndex?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `PostGameRange` */
 export type PostGameRangeInput = {
   /** Case as chosen by the post creator */
-  caseOption?: Maybe<GrammaticalCase>;
-  createdAt?: Maybe<Scalars['Datetime']>;
+  caseOption?: InputMaybe<GrammaticalCase>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   endIndex: Scalars['Int'];
   gameId: Scalars['Int'];
   /** Gender as chosen by the post creator */
-  genderOption?: Maybe<GrammaticalGender>;
-  id?: Maybe<Scalars['Int']>;
+  genderOption?: InputMaybe<GrammaticalGender>;
+  id?: InputMaybe<Scalars['Int']>;
   startIndex: Scalars['Int'];
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `PostGameRange`. Fields that are set will be updated. */
 export type PostGameRangePatch = {
   /** Case as chosen by the post creator */
-  caseOption?: Maybe<GrammaticalCase>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  endIndex?: Maybe<Scalars['Int']>;
-  gameId?: Maybe<Scalars['Int']>;
+  caseOption?: InputMaybe<GrammaticalCase>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  endIndex?: InputMaybe<Scalars['Int']>;
+  gameId?: InputMaybe<Scalars['Int']>;
   /** Gender as chosen by the post creator */
-  genderOption?: Maybe<GrammaticalGender>;
-  id?: Maybe<Scalars['Int']>;
-  startIndex?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  genderOption?: InputMaybe<GrammaticalGender>;
+  id?: InputMaybe<Scalars['Int']>;
+  startIndex?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `PostGame` values, with data from `PostGameAnswer`. */
@@ -15299,14 +15300,14 @@ export type PostGameRangePostGamesByPostGameAnswerRangeIdAndGameIdManyToManyEdge
 
 /** A `PostGame` edge in the connection, with data from `PostGameAnswer`. */
 export type PostGameRangePostGamesByPostGameAnswerRangeIdAndGameIdManyToManyEdgeAnswerRevealsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameAnswerCondition>;
-  filter?: Maybe<PostGameAnswerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameAnswerCondition>;
+  filter?: InputMaybe<PostGameAnswerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `PostGameAnswer`. */
@@ -15336,14 +15337,14 @@ export type PostGameRangeUsersByPostGameAnswerRangeIdAndUserIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `PostGameAnswer`. */
 export type PostGameRangeUsersByPostGameAnswerRangeIdAndUserIdManyToManyEdgePostGameAnswersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameAnswerCondition>;
-  filter?: Maybe<PostGameAnswerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameAnswerCondition>;
+  filter?: InputMaybe<PostGameAnswerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 /** A connection to a list of `PostGameRange` values. */
@@ -15400,27 +15401,27 @@ export enum PostGameType {
 /** A filter to be used against PostGameType fields. All fields are combined with a logical ‘and.’ */
 export type PostGameTypeFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<PostGameType>;
+  distinctFrom?: InputMaybe<PostGameType>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<PostGameType>;
+  equalTo?: InputMaybe<PostGameType>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<PostGameType>;
+  greaterThan?: InputMaybe<PostGameType>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<PostGameType>;
+  greaterThanOrEqualTo?: InputMaybe<PostGameType>;
   /** Included in the specified list. */
-  in?: Maybe<Array<PostGameType>>;
+  in?: InputMaybe<Array<PostGameType>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<PostGameType>;
+  lessThan?: InputMaybe<PostGameType>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<PostGameType>;
+  lessThanOrEqualTo?: InputMaybe<PostGameType>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<PostGameType>;
+  notDistinctFrom?: InputMaybe<PostGameType>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<PostGameType>;
+  notEqualTo?: InputMaybe<PostGameType>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<PostGameType>>;
+  notIn?: InputMaybe<Array<PostGameType>>;
 };
 
 /** A connection to a list of `User` values, with data from `PostGameAnswer`. */
@@ -15450,14 +15451,14 @@ export type PostGameUsersByPostGameAnswerGameIdAndUserIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `PostGameAnswer`. */
 export type PostGameUsersByPostGameAnswerGameIdAndUserIdManyToManyEdgePostGameAnswersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameAnswerCondition>;
-  filter?: Maybe<PostGameAnswerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameAnswerCondition>;
+  filter?: InputMaybe<PostGameAnswerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 /** A connection to a list of `PostGame` values. */
@@ -15505,19 +15506,19 @@ export type PostGamesCorrectAnswersRecord = {
 /** A filter to be used against `PostGamesCorrectAnswersRecord` object types. All fields are combined with a logical ‘and.’ */
 export type PostGamesCorrectAnswersRecordFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PostGamesCorrectAnswersRecordFilter>>;
+  and?: InputMaybe<Array<PostGamesCorrectAnswersRecordFilter>>;
   /** Filter by the object’s `caseOption` field. */
-  caseOption?: Maybe<GrammaticalCaseFilter>;
+  caseOption?: InputMaybe<GrammaticalCaseFilter>;
   /** Filter by the object’s `clozeAnswer` field. */
-  clozeAnswer?: Maybe<StringFilter>;
+  clozeAnswer?: InputMaybe<StringFilter>;
   /** Filter by the object’s `genderOption` field. */
-  genderOption?: Maybe<GrammaticalGenderFilter>;
+  genderOption?: InputMaybe<GrammaticalGenderFilter>;
   /** Negates the expression. */
-  not?: Maybe<PostGamesCorrectAnswersRecordFilter>;
+  not?: InputMaybe<PostGamesCorrectAnswersRecordFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PostGamesCorrectAnswersRecordFilter>>;
+  or?: InputMaybe<Array<PostGamesCorrectAnswersRecordFilter>>;
   /** Filter by the object’s `rangeUuid` field. */
-  rangeUuid?: Maybe<UuidFilter>;
+  rangeUuid?: InputMaybe<UuidFilter>;
 };
 
 /** A `PostGame` edge in the connection. */
@@ -15548,15 +15549,15 @@ export enum PostGamesOrderBy {
 
 /** An input for mutations affecting `Post` */
 export type PostInput = {
-  authorId?: Maybe<Scalars['Int']>;
+  authorId?: InputMaybe<Scalars['Int']>;
   body: Scalars['String'];
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   languageId: Scalars['Int'];
-  parentPostId?: Maybe<Scalars['Int']>;
-  promptId?: Maybe<Scalars['Int']>;
-  snowflakeId?: Maybe<Scalars['BigInt']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  parentPostId?: InputMaybe<Scalars['Int']>;
+  promptId?: InputMaybe<Scalars['Int']>;
+  snowflakeId?: InputMaybe<Scalars['BigInt']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `Language` values, with data from `Post`. */
@@ -15586,14 +15587,14 @@ export type PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdge = {
 
 /** A `Language` edge in the connection, with data from `Post`. */
 export type PostLanguagesByPostParentPostIdAndLanguageIdManyToManyEdgePostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 export type PostLike = Node & {
@@ -15616,47 +15617,47 @@ export type PostLike = Node & {
  */
 export type PostLikeCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `postId` field. */
-  postId?: Maybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `PostLike` object types. All fields are combined with a logical ‘and.’ */
 export type PostLikeFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PostLikeFilter>>;
+  and?: InputMaybe<Array<PostLikeFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<PostLikeFilter>;
+  not?: InputMaybe<PostLikeFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PostLikeFilter>>;
+  or?: InputMaybe<Array<PostLikeFilter>>;
   /** Filter by the object’s `postId` field. */
-  postId?: Maybe<IntFilter>;
+  postId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
 };
 
 /** An input for mutations affecting `PostLike` */
 export type PostLikeInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   postId: Scalars['Int'];
   userId: Scalars['Int'];
 };
 
 /** Represents an update to a `PostLike`. Fields that are set will be updated. */
 export type PostLikePatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  postId?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A connection to a list of `PostLike` values. */
@@ -15698,15 +15699,15 @@ export enum PostLikesOrderBy {
 
 /** Represents an update to a `Post`. Fields that are set will be updated. */
 export type PostPatch = {
-  authorId?: Maybe<Scalars['Int']>;
-  body?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  languageId?: Maybe<Scalars['Int']>;
-  parentPostId?: Maybe<Scalars['Int']>;
-  promptId?: Maybe<Scalars['Int']>;
-  snowflakeId?: Maybe<Scalars['BigInt']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  authorId?: InputMaybe<Scalars['Int']>;
+  body?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  languageId?: InputMaybe<Scalars['Int']>;
+  parentPostId?: InputMaybe<Scalars['Int']>;
+  promptId?: InputMaybe<Scalars['Int']>;
+  snowflakeId?: InputMaybe<Scalars['BigInt']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `Prompt` values, with data from `Post`. */
@@ -15736,14 +15737,14 @@ export type PostPromptsByPostParentPostIdAndPromptIdManyToManyEdge = {
 
 /** A `Prompt` edge in the connection, with data from `Post`. */
 export type PostPromptsByPostParentPostIdAndPromptIdManyToManyEdgePostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 export type PostRecording = Node & {
@@ -15771,69 +15772,69 @@ export type PostRecording = Node & {
  */
 export type PostRecordingCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `extension` field. */
-  extension?: Maybe<Scalars['String']>;
+  extension?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `filename` field. */
-  filename?: Maybe<Scalars['String']>;
+  filename?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `postId` field. */
-  postId?: Maybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `PostRecording` object types. All fields are combined with a logical ‘and.’ */
 export type PostRecordingFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PostRecordingFilter>>;
+  and?: InputMaybe<Array<PostRecordingFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `extension` field. */
-  extension?: Maybe<StringFilter>;
+  extension?: InputMaybe<StringFilter>;
   /** Filter by the object’s `filename` field. */
-  filename?: Maybe<StringFilter>;
+  filename?: InputMaybe<StringFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<PostRecordingFilter>;
+  not?: InputMaybe<PostRecordingFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PostRecordingFilter>>;
+  or?: InputMaybe<Array<PostRecordingFilter>>;
   /** Filter by the object’s `postId` field. */
-  postId?: Maybe<IntFilter>;
+  postId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `PostRecording` */
 export type PostRecordingInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Extension without leading dot */
-  extension?: Maybe<Scalars['String']>;
+  extension?: InputMaybe<Scalars['String']>;
   /** Basename without extension */
   filename: Scalars['String'];
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   postId: Scalars['Int'];
   userId: Scalars['Int'];
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `PostRecording`. Fields that are set will be updated. */
 export type PostRecordingPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Extension without leading dot */
-  extension?: Maybe<Scalars['String']>;
+  extension?: InputMaybe<Scalars['String']>;
   /** Basename without extension */
-  filename?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  postId?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  filename?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `PostRecording` values. */
@@ -15903,67 +15904,67 @@ export type PostUserMention = Node & {
  */
 export type PostUserMentionCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `endIndex` field. */
-  endIndex?: Maybe<Scalars['Int']>;
+  endIndex?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `postId` field. */
-  postId?: Maybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `startIndex` field. */
-  startIndex?: Maybe<Scalars['Int']>;
+  startIndex?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `PostUserMention` object types. All fields are combined with a logical ‘and.’ */
 export type PostUserMentionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PostUserMentionFilter>>;
+  and?: InputMaybe<Array<PostUserMentionFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `endIndex` field. */
-  endIndex?: Maybe<IntFilter>;
+  endIndex?: InputMaybe<IntFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<PostUserMentionFilter>;
+  not?: InputMaybe<PostUserMentionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PostUserMentionFilter>>;
+  or?: InputMaybe<Array<PostUserMentionFilter>>;
   /** Filter by the object’s `postId` field. */
-  postId?: Maybe<IntFilter>;
+  postId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `startIndex` field. */
-  startIndex?: Maybe<IntFilter>;
+  startIndex?: InputMaybe<IntFilter>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `PostUserMention` */
 export type PostUserMentionInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   endIndex: Scalars['Int'];
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   postId: Scalars['Int'];
   startIndex: Scalars['Int'];
   /** Mentioned user */
   userId: Scalars['Int'];
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `PostUserMention`. Fields that are set will be updated. */
 export type PostUserMentionPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  endIndex?: Maybe<Scalars['Int']>;
-  id?: Maybe<Scalars['Int']>;
-  postId?: Maybe<Scalars['Int']>;
-  startIndex?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  endIndex?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  postId?: InputMaybe<Scalars['Int']>;
+  startIndex?: InputMaybe<Scalars['Int']>;
   /** Mentioned user */
-  userId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  userId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `PostUserMention` values. */
@@ -16036,14 +16037,14 @@ export type PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyEdge =
 
 /** A `User` edge in the connection, with data from `InAppNotificationMetadatum`. */
 export type PostUsersByInAppNotificationMetadatumPostIdAndUserIdManyToManyEdgeRelatedInAppNotificationsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InAppNotificationMetadatumCondition>;
-  filter?: Maybe<InAppNotificationMetadatumFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InAppNotificationMetadatumCondition>;
+  filter?: InputMaybe<InAppNotificationMetadatumFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InAppNotificationMetadataOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `PostCorrection`. */
@@ -16073,14 +16074,14 @@ export type PostUsersByPostCorrectionPostIdAndUserIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `PostCorrection`. */
 export type PostUsersByPostCorrectionPostIdAndUserIdManyToManyEdgePostCorrectionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCorrectionCondition>;
-  filter?: Maybe<PostCorrectionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCorrectionCondition>;
+  filter?: InputMaybe<PostCorrectionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostCorrectionsOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `PostLike`. */
@@ -16110,14 +16111,14 @@ export type PostUsersByPostLikePostIdAndUserIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `PostLike`. */
 export type PostUsersByPostLikePostIdAndUserIdManyToManyEdgePostLikesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostLikeCondition>;
-  filter?: Maybe<PostLikeFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostLikeCondition>;
+  filter?: InputMaybe<PostLikeFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostLikesOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `Post`. */
@@ -16147,14 +16148,14 @@ export type PostUsersByPostParentPostIdAndAuthorIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `Post`. */
 export type PostUsersByPostParentPostIdAndAuthorIdManyToManyEdgeAuthoredPostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `PostRecording`. */
@@ -16184,14 +16185,14 @@ export type PostUsersByPostRecordingPostIdAndUserIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `PostRecording`. */
 export type PostUsersByPostRecordingPostIdAndUserIdManyToManyEdgePostRecordingsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostRecordingCondition>;
-  filter?: Maybe<PostRecordingFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostRecordingCondition>;
+  filter?: InputMaybe<PostRecordingFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostRecordingsOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `PostUserMention`. */
@@ -16221,14 +16222,14 @@ export type PostUsersByPostUserMentionPostIdAndUserIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `PostUserMention`. */
 export type PostUsersByPostUserMentionPostIdAndUserIdManyToManyEdgePostUserMentionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostUserMentionCondition>;
-  filter?: Maybe<PostUserMentionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostUserMentionCondition>;
+  filter?: InputMaybe<PostUserMentionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostUserMentionsOrderBy>>;
 };
 
 /** A connection to a list of `Post` values. */
@@ -16315,150 +16316,150 @@ export type Prompt = Node & {
 
 
 export type PromptLanguagesByPostPromptIdAndLanguageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageCondition>;
-  filter?: Maybe<LanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageCondition>;
+  filter?: InputMaybe<LanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 
 export type PromptPostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
 export type PromptPostsByPostPromptIdAndParentPostIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
 export type PromptUsersByPostPromptIdAndAuthorIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /** A condition to be used against `Prompt` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type PromptCondition = {
   /** Checks for equality with the object’s `contentDe` field. */
-  contentDe?: Maybe<Scalars['String']>;
+  contentDe?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `contentEn` field. */
-  contentEn?: Maybe<Scalars['String']>;
+  contentEn?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `contentEs` field. */
-  contentEs?: Maybe<Scalars['String']>;
+  contentEs?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `contentFr` field. */
-  contentFr?: Maybe<Scalars['String']>;
+  contentFr?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `contentIt` field. */
-  contentIt?: Maybe<Scalars['String']>;
+  contentIt?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `contentJa` field. */
-  contentJa?: Maybe<Scalars['String']>;
+  contentJa?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `contentKo` field. */
-  contentKo?: Maybe<Scalars['String']>;
+  contentKo?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `contentPt` field. */
-  contentPt?: Maybe<Scalars['String']>;
+  contentPt?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `contentRu` field. */
-  contentRu?: Maybe<Scalars['String']>;
+  contentRu?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `contentZh` field. */
-  contentZh?: Maybe<Scalars['String']>;
+  contentZh?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `languageId` field. */
-  languageId?: Maybe<Scalars['Int']>;
+  languageId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `type` field. */
-  type?: Maybe<PromptType>;
+  type?: InputMaybe<PromptType>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `Prompt` object types. All fields are combined with a logical ‘and.’ */
 export type PromptFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<PromptFilter>>;
+  and?: InputMaybe<Array<PromptFilter>>;
   /** Filter by the object’s `content` field. */
-  content?: Maybe<StringFilter>;
+  content?: InputMaybe<StringFilter>;
   /** Filter by the object’s `contentDe` field. */
-  contentDe?: Maybe<StringFilter>;
+  contentDe?: InputMaybe<StringFilter>;
   /** Filter by the object’s `contentEn` field. */
-  contentEn?: Maybe<StringFilter>;
+  contentEn?: InputMaybe<StringFilter>;
   /** Filter by the object’s `contentEs` field. */
-  contentEs?: Maybe<StringFilter>;
+  contentEs?: InputMaybe<StringFilter>;
   /** Filter by the object’s `contentFr` field. */
-  contentFr?: Maybe<StringFilter>;
+  contentFr?: InputMaybe<StringFilter>;
   /** Filter by the object’s `contentIt` field. */
-  contentIt?: Maybe<StringFilter>;
+  contentIt?: InputMaybe<StringFilter>;
   /** Filter by the object’s `contentJa` field. */
-  contentJa?: Maybe<StringFilter>;
+  contentJa?: InputMaybe<StringFilter>;
   /** Filter by the object’s `contentKo` field. */
-  contentKo?: Maybe<StringFilter>;
+  contentKo?: InputMaybe<StringFilter>;
   /** Filter by the object’s `contentPt` field. */
-  contentPt?: Maybe<StringFilter>;
+  contentPt?: InputMaybe<StringFilter>;
   /** Filter by the object’s `contentRu` field. */
-  contentRu?: Maybe<StringFilter>;
+  contentRu?: InputMaybe<StringFilter>;
   /** Filter by the object’s `contentZh` field. */
-  contentZh?: Maybe<StringFilter>;
+  contentZh?: InputMaybe<StringFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `languageId` field. */
-  languageId?: Maybe<IntFilter>;
+  languageId?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<PromptFilter>;
+  not?: InputMaybe<PromptFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<PromptFilter>>;
+  or?: InputMaybe<Array<PromptFilter>>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `type` field. */
-  type?: Maybe<PromptTypeFilter>;
+  type?: InputMaybe<PromptTypeFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `Prompt` */
 export type PromptInput = {
-  contentDe?: Maybe<Scalars['String']>;
-  contentEn?: Maybe<Scalars['String']>;
-  contentEs?: Maybe<Scalars['String']>;
-  contentFr?: Maybe<Scalars['String']>;
-  contentIt?: Maybe<Scalars['String']>;
-  contentJa?: Maybe<Scalars['String']>;
-  contentKo?: Maybe<Scalars['String']>;
-  contentPt?: Maybe<Scalars['String']>;
-  contentRu?: Maybe<Scalars['String']>;
-  contentZh?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  contentDe?: InputMaybe<Scalars['String']>;
+  contentEn?: InputMaybe<Scalars['String']>;
+  contentEs?: InputMaybe<Scalars['String']>;
+  contentFr?: InputMaybe<Scalars['String']>;
+  contentIt?: InputMaybe<Scalars['String']>;
+  contentJa?: InputMaybe<Scalars['String']>;
+  contentKo?: InputMaybe<Scalars['String']>;
+  contentPt?: InputMaybe<Scalars['String']>;
+  contentRu?: InputMaybe<Scalars['String']>;
+  contentZh?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   languageId: Scalars['Int'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   type: PromptType;
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `Language` values, with data from `Post`. */
@@ -16488,34 +16489,34 @@ export type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdge = {
 
 /** A `Language` edge in the connection, with data from `Post`. */
 export type PromptLanguagesByPostPromptIdAndLanguageIdManyToManyEdgePostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 /** Represents an update to a `Prompt`. Fields that are set will be updated. */
 export type PromptPatch = {
-  contentDe?: Maybe<Scalars['String']>;
-  contentEn?: Maybe<Scalars['String']>;
-  contentEs?: Maybe<Scalars['String']>;
-  contentFr?: Maybe<Scalars['String']>;
-  contentIt?: Maybe<Scalars['String']>;
-  contentJa?: Maybe<Scalars['String']>;
-  contentKo?: Maybe<Scalars['String']>;
-  contentPt?: Maybe<Scalars['String']>;
-  contentRu?: Maybe<Scalars['String']>;
-  contentZh?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  languageId?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  type?: Maybe<PromptType>;
-  uuid?: Maybe<Scalars['UUID']>;
+  contentDe?: InputMaybe<Scalars['String']>;
+  contentEn?: InputMaybe<Scalars['String']>;
+  contentEs?: InputMaybe<Scalars['String']>;
+  contentFr?: InputMaybe<Scalars['String']>;
+  contentIt?: InputMaybe<Scalars['String']>;
+  contentJa?: InputMaybe<Scalars['String']>;
+  contentKo?: InputMaybe<Scalars['String']>;
+  contentPt?: InputMaybe<Scalars['String']>;
+  contentRu?: InputMaybe<Scalars['String']>;
+  contentZh?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  languageId?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  type?: InputMaybe<PromptType>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `Post` values, with data from `Post`. */
@@ -16545,14 +16546,14 @@ export type PromptPostsByPostPromptIdAndParentPostIdManyToManyEdge = {
 
 /** A `Post` edge in the connection, with data from `Post`. */
 export type PromptPostsByPostPromptIdAndParentPostIdManyToManyEdgeRepliesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 export enum PromptType {
@@ -16563,27 +16564,27 @@ export enum PromptType {
 /** A filter to be used against PromptType fields. All fields are combined with a logical ‘and.’ */
 export type PromptTypeFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<PromptType>;
+  distinctFrom?: InputMaybe<PromptType>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<PromptType>;
+  equalTo?: InputMaybe<PromptType>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<PromptType>;
+  greaterThan?: InputMaybe<PromptType>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<PromptType>;
+  greaterThanOrEqualTo?: InputMaybe<PromptType>;
   /** Included in the specified list. */
-  in?: Maybe<Array<PromptType>>;
+  in?: InputMaybe<Array<PromptType>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<PromptType>;
+  lessThan?: InputMaybe<PromptType>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<PromptType>;
+  lessThanOrEqualTo?: InputMaybe<PromptType>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<PromptType>;
+  notDistinctFrom?: InputMaybe<PromptType>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<PromptType>;
+  notEqualTo?: InputMaybe<PromptType>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<PromptType>>;
+  notIn?: InputMaybe<Array<PromptType>>;
 };
 
 /** A connection to a list of `User` values, with data from `Post`. */
@@ -16613,14 +16614,14 @@ export type PromptUsersByPostPromptIdAndAuthorIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `Post`. */
 export type PromptUsersByPostPromptIdAndAuthorIdManyToManyEdgeAuthoredPostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 /** A connection to a list of `Prompt` values. */
@@ -17051,14 +17052,14 @@ export type QueryChineseGuessCharacterQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryChineseGuessCharacterQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ChineseGuessCharacterQuestionCondition>;
-  filter?: Maybe<ChineseGuessCharacterQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ChineseGuessCharacterQuestionCondition>;
+  filter?: InputMaybe<ChineseGuessCharacterQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
 };
 
 
@@ -17082,14 +17083,14 @@ export type QueryChineseRandomQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryChineseRandomQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ChineseRandomQuestionCondition>;
-  filter?: Maybe<ChineseRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ChineseRandomQuestionCondition>;
+  filter?: InputMaybe<ChineseRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ChineseRandomQuestionsOrderBy>>;
 };
 
 
@@ -17113,14 +17114,14 @@ export type QueryChineseWouldYouRatherQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryChineseWouldYouRatherQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ChineseWouldYouRatherQuestionCondition>;
-  filter?: Maybe<ChineseWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ChineseWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<ChineseWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
 };
 
 
@@ -17144,14 +17145,14 @@ export type QueryEnglishRandomQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryEnglishRandomQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<EnglishRandomQuestionCondition>;
-  filter?: Maybe<EnglishRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<EnglishRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<EnglishRandomQuestionCondition>;
+  filter?: InputMaybe<EnglishRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<EnglishRandomQuestionsOrderBy>>;
 };
 
 
@@ -17175,14 +17176,14 @@ export type QueryEnglishWordByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryEnglishWordsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<EnglishWordCondition>;
-  filter?: Maybe<EnglishWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<EnglishWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<EnglishWordCondition>;
+  filter?: InputMaybe<EnglishWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<EnglishWordsOrderBy>>;
 };
 
 
@@ -17206,27 +17207,27 @@ export type QueryEnglishWouldYouRatherQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryEnglishWouldYouRatherQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<EnglishWouldYouRatherQuestionCondition>;
-  filter?: Maybe<EnglishWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<EnglishWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<EnglishWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryFeedPostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  afterUuid?: Maybe<Scalars['UUID']>;
-  before?: Maybe<Scalars['Cursor']>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  locale?: Maybe<Scalars['String']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  afterUuid?: InputMaybe<Scalars['UUID']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -17250,14 +17251,14 @@ export type QueryFrenchRandomQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryFrenchRandomQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<FrenchRandomQuestionCondition>;
-  filter?: Maybe<FrenchRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<FrenchRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<FrenchRandomQuestionCondition>;
+  filter?: InputMaybe<FrenchRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<FrenchRandomQuestionsOrderBy>>;
 };
 
 
@@ -17281,14 +17282,14 @@ export type QueryFrenchWordByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryFrenchWordsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<FrenchWordCondition>;
-  filter?: Maybe<FrenchWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<FrenchWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<FrenchWordCondition>;
+  filter?: InputMaybe<FrenchWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<FrenchWordsOrderBy>>;
 };
 
 
@@ -17312,14 +17313,14 @@ export type QueryFrenchWouldYouRatherQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryFrenchWouldYouRatherQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<FrenchWouldYouRatherQuestionCondition>;
-  filter?: Maybe<FrenchWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<FrenchWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<FrenchWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
 };
 
 
@@ -17343,14 +17344,14 @@ export type QueryGermanRandomQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryGermanRandomQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GermanRandomQuestionCondition>;
-  filter?: Maybe<GermanRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GermanRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GermanRandomQuestionCondition>;
+  filter?: InputMaybe<GermanRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GermanRandomQuestionsOrderBy>>;
 };
 
 
@@ -17374,14 +17375,14 @@ export type QueryGermanWordByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryGermanWordsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GermanWordCondition>;
-  filter?: Maybe<GermanWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GermanWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GermanWordCondition>;
+  filter?: InputMaybe<GermanWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GermanWordsOrderBy>>;
 };
 
 
@@ -17405,14 +17406,14 @@ export type QueryGermanWouldYouRatherQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryGermanWouldYouRatherQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GermanWouldYouRatherQuestionCondition>;
-  filter?: Maybe<GermanWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GermanWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<GermanWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
 };
 
 
@@ -17454,40 +17455,40 @@ export type QueryGroupUserByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryGroupUsersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupUserCondition>;
-  filter?: Maybe<GroupUserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupUserCondition>;
+  filter?: InputMaybe<GroupUserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupUsersOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryGroupsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupCondition>;
-  filter?: Maybe<GroupFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupCondition>;
+  filter?: InputMaybe<GroupFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryInAppNotificationMetadataArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InAppNotificationMetadatumCondition>;
-  filter?: Maybe<InAppNotificationMetadatumFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InAppNotificationMetadatumCondition>;
+  filter?: InputMaybe<InAppNotificationMetadatumFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InAppNotificationMetadataOrderBy>>;
 };
 
 
@@ -17511,14 +17512,14 @@ export type QueryInviteTokenByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryInviteTokensArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InviteTokenCondition>;
-  filter?: Maybe<InviteTokenFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InviteTokenCondition>;
+  filter?: InputMaybe<InviteTokenFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InviteTokensOrderBy>>;
 };
 
 
@@ -17542,14 +17543,14 @@ export type QueryItalianRandomQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryItalianRandomQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ItalianRandomQuestionCondition>;
-  filter?: Maybe<ItalianRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ItalianRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ItalianRandomQuestionCondition>;
+  filter?: InputMaybe<ItalianRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ItalianRandomQuestionsOrderBy>>;
 };
 
 
@@ -17573,14 +17574,14 @@ export type QueryItalianWordByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryItalianWordsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ItalianWordCondition>;
-  filter?: Maybe<ItalianWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ItalianWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ItalianWordCondition>;
+  filter?: InputMaybe<ItalianWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ItalianWordsOrderBy>>;
 };
 
 
@@ -17604,14 +17605,14 @@ export type QueryItalianWouldYouRatherQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryItalianWouldYouRatherQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ItalianWouldYouRatherQuestionCondition>;
-  filter?: Maybe<ItalianWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ItalianWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<ItalianWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
 };
 
 
@@ -17635,14 +17636,14 @@ export type QueryJapaneseRandomQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryJapaneseRandomQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<JapaneseRandomQuestionCondition>;
-  filter?: Maybe<JapaneseRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<JapaneseRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<JapaneseRandomQuestionCondition>;
+  filter?: InputMaybe<JapaneseRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<JapaneseRandomQuestionsOrderBy>>;
 };
 
 
@@ -17666,14 +17667,14 @@ export type QueryJapaneseWouldYouRatherQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryJapaneseWouldYouRatherQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<JapaneseWouldYouRatherQuestionCondition>;
-  filter?: Maybe<JapaneseWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<JapaneseWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<JapaneseWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
 };
 
 
@@ -17697,14 +17698,14 @@ export type QueryKoreanRandomQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryKoreanRandomQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<KoreanRandomQuestionCondition>;
-  filter?: Maybe<KoreanRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<KoreanRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<KoreanRandomQuestionCondition>;
+  filter?: InputMaybe<KoreanRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<KoreanRandomQuestionsOrderBy>>;
 };
 
 
@@ -17728,14 +17729,14 @@ export type QueryKoreanWouldYouRatherQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryKoreanWouldYouRatherQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<KoreanWouldYouRatherQuestionCondition>;
-  filter?: Maybe<KoreanWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<KoreanWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<KoreanWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
 };
 
 
@@ -17777,27 +17778,27 @@ export type QueryLanguageSkillLevelByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryLanguageSkillLevelsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageSkillLevelCondition>;
-  filter?: Maybe<LanguageSkillLevelFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageSkillLevelCondition>;
+  filter?: InputMaybe<LanguageSkillLevelFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguageSkillLevelsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryLanguagesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageCondition>;
-  filter?: Maybe<LanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageCondition>;
+  filter?: InputMaybe<LanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 
@@ -17839,27 +17840,27 @@ export type QueryMessagePreviewByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryMessagePreviewsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessagePreviewCondition>;
-  filter?: Maybe<MessagePreviewFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessagePreviewCondition>;
+  filter?: InputMaybe<MessagePreviewFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagePreviewsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryMessagesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 
@@ -17913,27 +17914,27 @@ export type QueryNotificationChannelByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryNotificationChannelsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationChannelCondition>;
-  filter?: Maybe<NotificationChannelFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationChannelCondition>;
+  filter?: InputMaybe<NotificationChannelFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationChannelsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryNotificationsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationCondition>;
-  filter?: Maybe<NotificationFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationCondition>;
+  filter?: InputMaybe<NotificationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 
@@ -17957,14 +17958,14 @@ export type QueryPortugueseRandomQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPortugueseRandomQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PortugueseRandomQuestionCondition>;
-  filter?: Maybe<PortugueseRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PortugueseRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PortugueseRandomQuestionCondition>;
+  filter?: InputMaybe<PortugueseRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PortugueseRandomQuestionsOrderBy>>;
 };
 
 
@@ -17988,14 +17989,14 @@ export type QueryPortugueseWordByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPortugueseWordsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PortugueseWordCondition>;
-  filter?: Maybe<PortugueseWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PortugueseWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PortugueseWordCondition>;
+  filter?: InputMaybe<PortugueseWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PortugueseWordsOrderBy>>;
 };
 
 
@@ -18019,14 +18020,14 @@ export type QueryPortugueseWouldYouRatherQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPortugueseWouldYouRatherQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PortugueseWouldYouRatherQuestionCondition>;
-  filter?: Maybe<PortugueseWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PortugueseWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<PortugueseWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
 };
 
 
@@ -18074,14 +18075,14 @@ export type QueryPostCorrectionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPostCorrectionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCorrectionCondition>;
-  filter?: Maybe<PostCorrectionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCorrectionCondition>;
+  filter?: InputMaybe<PostCorrectionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostCorrectionsOrderBy>>;
 };
 
 
@@ -18111,14 +18112,14 @@ export type QueryPostGameAnswerByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPostGameAnswersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameAnswerCondition>;
-  filter?: Maybe<PostGameAnswerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameAnswerCondition>;
+  filter?: InputMaybe<PostGameAnswerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 
@@ -18154,27 +18155,27 @@ export type QueryPostGameRangeByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPostGameRangesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameRangeCondition>;
-  filter?: Maybe<PostGameRangeFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameRangesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameRangeCondition>;
+  filter?: InputMaybe<PostGameRangeFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameRangesOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPostGamesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameCondition>;
-  filter?: Maybe<PostGameFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGamesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameCondition>;
+  filter?: InputMaybe<PostGameFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGamesOrderBy>>;
 };
 
 
@@ -18192,14 +18193,14 @@ export type QueryPostLikeByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPostLikesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostLikeCondition>;
-  filter?: Maybe<PostLikeFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostLikeCondition>;
+  filter?: InputMaybe<PostLikeFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostLikesOrderBy>>;
 };
 
 
@@ -18223,14 +18224,14 @@ export type QueryPostRecordingByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPostRecordingsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostRecordingCondition>;
-  filter?: Maybe<PostRecordingFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostRecordingCondition>;
+  filter?: InputMaybe<PostRecordingFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostRecordingsOrderBy>>;
 };
 
 
@@ -18254,27 +18255,27 @@ export type QueryPostUserMentionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPostUserMentionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostUserMentionCondition>;
-  filter?: Maybe<PostUserMentionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostUserMentionCondition>;
+  filter?: InputMaybe<PostUserMentionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostUserMentionsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
@@ -18298,14 +18299,14 @@ export type QueryPromptByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPromptsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PromptCondition>;
-  filter?: Maybe<PromptFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PromptCondition>;
+  filter?: InputMaybe<PromptFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PromptsOrderBy>>;
 };
 
 
@@ -18323,14 +18324,14 @@ export type QueryRefreshTokenByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryRefreshTokensArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<RefreshTokenCondition>;
-  filter?: Maybe<RefreshTokenFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<RefreshTokensOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<RefreshTokenCondition>;
+  filter?: InputMaybe<RefreshTokenFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<RefreshTokensOrderBy>>;
 };
 
 
@@ -18354,14 +18355,14 @@ export type QueryRussianRandomQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryRussianRandomQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<RussianRandomQuestionCondition>;
-  filter?: Maybe<RussianRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<RussianRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<RussianRandomQuestionCondition>;
+  filter?: InputMaybe<RussianRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<RussianRandomQuestionsOrderBy>>;
 };
 
 
@@ -18385,14 +18386,14 @@ export type QueryRussianWordByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryRussianWordsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<RussianWordCondition>;
-  filter?: Maybe<RussianWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<RussianWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<RussianWordCondition>;
+  filter?: InputMaybe<RussianWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<RussianWordsOrderBy>>;
 };
 
 
@@ -18416,14 +18417,14 @@ export type QueryRussianWouldYouRatherQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryRussianWouldYouRatherQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<RussianWouldYouRatherQuestionCondition>;
-  filter?: Maybe<RussianWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<RussianWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<RussianWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
 };
 
 
@@ -18447,14 +18448,14 @@ export type QuerySpanishRandomQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QuerySpanishRandomQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<SpanishRandomQuestionCondition>;
-  filter?: Maybe<SpanishRandomQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<SpanishRandomQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<SpanishRandomQuestionCondition>;
+  filter?: InputMaybe<SpanishRandomQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<SpanishRandomQuestionsOrderBy>>;
 };
 
 
@@ -18478,14 +18479,14 @@ export type QuerySpanishWordByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QuerySpanishWordsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<SpanishWordCondition>;
-  filter?: Maybe<SpanishWordFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<SpanishWordsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<SpanishWordCondition>;
+  filter?: InputMaybe<SpanishWordFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<SpanishWordsOrderBy>>;
 };
 
 
@@ -18509,14 +18510,14 @@ export type QuerySpanishWouldYouRatherQuestionByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QuerySpanishWouldYouRatherQuestionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<SpanishWouldYouRatherQuestionCondition>;
-  filter?: Maybe<SpanishWouldYouRatherQuestionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<SpanishWouldYouRatherQuestionCondition>;
+  filter?: InputMaybe<SpanishWouldYouRatherQuestionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
 };
 
 
@@ -18588,14 +18589,14 @@ export type QueryUserDeviceByUuidArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUserDevicesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserDeviceCondition>;
-  filter?: Maybe<UserDeviceFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserDevicesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserDeviceCondition>;
+  filter?: InputMaybe<UserDeviceFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserDevicesOrderBy>>;
 };
 
 
@@ -18613,14 +18614,14 @@ export type QueryUserFollowerByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUserFollowersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserFollowerCondition>;
-  filter?: Maybe<UserFollowerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserFollowerCondition>;
+  filter?: InputMaybe<UserFollowerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserFollowersOrderBy>>;
 };
 
 
@@ -18644,14 +18645,14 @@ export type QueryUserLanguageByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUserLanguagesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserLanguageCondition>;
-  filter?: Maybe<UserLanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserLanguageCondition>;
+  filter?: InputMaybe<UserLanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 
@@ -18675,14 +18676,14 @@ export type QueryUserPreferenceByUserIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUserPreferencesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserPreferenceCondition>;
-  filter?: Maybe<UserPreferenceFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserPreferencesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserPreferenceCondition>;
+  filter?: InputMaybe<UserPreferenceFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserPreferencesOrderBy>>;
 };
 
 
@@ -18700,52 +18701,52 @@ export type QueryUserSessionByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUserSessionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserSessionCondition>;
-  filter?: Maybe<UserSessionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserSessionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserSessionCondition>;
+  filter?: InputMaybe<UserSessionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserSessionsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUsersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUsersWithoutLearnerGroupArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  lid?: Maybe<Scalars['Int']>;
-  lsklid?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  lid?: InputMaybe<Scalars['Int']>;
+  lsklid?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUsersWithoutNativeGroupArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  lid?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  lid?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 export type RefreshToken = Node & {
@@ -18767,53 +18768,53 @@ export type RefreshToken = Node & {
  */
 export type RefreshTokenCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `jti` field. */
-  jti?: Maybe<Scalars['String']>;
+  jti?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `usedAt` field. */
-  usedAt?: Maybe<Scalars['Datetime']>;
+  usedAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `RefreshToken` object types. All fields are combined with a logical ‘and.’ */
 export type RefreshTokenFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<RefreshTokenFilter>>;
+  and?: InputMaybe<Array<RefreshTokenFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `jti` field. */
-  jti?: Maybe<StringFilter>;
+  jti?: InputMaybe<StringFilter>;
   /** Negates the expression. */
-  not?: Maybe<RefreshTokenFilter>;
+  not?: InputMaybe<RefreshTokenFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<RefreshTokenFilter>>;
+  or?: InputMaybe<Array<RefreshTokenFilter>>;
   /** Filter by the object’s `usedAt` field. */
-  usedAt?: Maybe<DatetimeFilter>;
+  usedAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
 };
 
 /** An input for mutations affecting `RefreshToken` */
 export type RefreshTokenInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   jti: Scalars['String'];
-  usedAt?: Maybe<Scalars['Datetime']>;
-  userId?: Maybe<Scalars['Int']>;
+  usedAt?: InputMaybe<Scalars['Datetime']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** Represents an update to a `RefreshToken`. Fields that are set will be updated. */
 export type RefreshTokenPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  jti?: Maybe<Scalars['String']>;
-  usedAt?: Maybe<Scalars['Datetime']>;
-  userId?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  jti?: InputMaybe<Scalars['String']>;
+  usedAt?: InputMaybe<Scalars['Datetime']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A connection to a list of `RefreshToken` values. */
@@ -18861,7 +18862,7 @@ export type RegisterUserActivityInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   userId: Scalars['Int'];
 };
 
@@ -18897,53 +18898,53 @@ export type RussianRandomQuestion = Node & {
  */
 export type RussianRandomQuestionCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `RussianRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type RussianRandomQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<RussianRandomQuestionFilter>>;
+  and?: InputMaybe<Array<RussianRandomQuestionFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<RussianRandomQuestionFilter>;
+  not?: InputMaybe<RussianRandomQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<RussianRandomQuestionFilter>>;
+  or?: InputMaybe<Array<RussianRandomQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `RussianRandomQuestion` */
 export type RussianRandomQuestionInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `RussianRandomQuestion`. Fields that are set will be updated. */
 export type RussianRandomQuestionPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `RussianRandomQuestion` values. */
@@ -19007,67 +19008,67 @@ export type RussianWord = Node & {
  */
 export type RussianWordCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `frequency` field. */
-  frequency?: Maybe<Scalars['Float']>;
+  frequency?: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `length` field. */
-  length?: Maybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   /** Checks for equality with the object’s `word` field. */
-  word?: Maybe<Scalars['String']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `RussianWord` object types. All fields are combined with a logical ‘and.’ */
 export type RussianWordFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<RussianWordFilter>>;
+  and?: InputMaybe<Array<RussianWordFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `frequency` field. */
-  frequency?: Maybe<FloatFilter>;
+  frequency?: InputMaybe<FloatFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `length` field. */
-  length?: Maybe<IntFilter>;
+  length?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<RussianWordFilter>;
+  not?: InputMaybe<RussianWordFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<RussianWordFilter>>;
+  or?: InputMaybe<Array<RussianWordFilter>>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
   /** Filter by the object’s `word` field. */
-  word?: Maybe<StringFilter>;
+  word?: InputMaybe<StringFilter>;
 };
 
 /** An input for mutations affecting `RussianWord` */
 export type RussianWordInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   word: Scalars['String'];
 };
 
 /** Represents an update to a `RussianWord`. Fields that are set will be updated. */
 export type RussianWordPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
-  frequency?: Maybe<Scalars['Float']>;
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
-  word?: Maybe<Scalars['String']>;
+  frequency?: InputMaybe<Scalars['Float']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `RussianWord` values. */
@@ -19133,59 +19134,59 @@ export type RussianWouldYouRatherQuestion = Node & {
  */
 export type RussianWouldYouRatherQuestionCondition = {
   /** Checks for equality with the object’s `answers` field. */
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `RussianWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type RussianWouldYouRatherQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<RussianWouldYouRatherQuestionFilter>>;
+  and?: InputMaybe<Array<RussianWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `answers` field. */
-  answers?: Maybe<StringListFilter>;
+  answers?: InputMaybe<StringListFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<RussianWouldYouRatherQuestionFilter>;
+  not?: InputMaybe<RussianWouldYouRatherQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<RussianWouldYouRatherQuestionFilter>>;
+  or?: InputMaybe<Array<RussianWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `RussianWouldYouRatherQuestion` */
 export type RussianWouldYouRatherQuestionInput = {
-  answers: Array<Maybe<Scalars['String']>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  answers: Array<InputMaybe<Scalars['String']>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `RussianWouldYouRatherQuestion`. Fields that are set will be updated. */
 export type RussianWouldYouRatherQuestionPatch = {
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `RussianWouldYouRatherQuestion` values. */
@@ -19248,53 +19249,53 @@ export type SpanishRandomQuestion = Node & {
  */
 export type SpanishRandomQuestionCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `SpanishRandomQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type SpanishRandomQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<SpanishRandomQuestionFilter>>;
+  and?: InputMaybe<Array<SpanishRandomQuestionFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<SpanishRandomQuestionFilter>;
+  not?: InputMaybe<SpanishRandomQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<SpanishRandomQuestionFilter>>;
+  or?: InputMaybe<Array<SpanishRandomQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `SpanishRandomQuestion` */
 export type SpanishRandomQuestionInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `SpanishRandomQuestion`. Fields that are set will be updated. */
 export type SpanishRandomQuestionPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `SpanishRandomQuestion` values. */
@@ -19358,67 +19359,67 @@ export type SpanishWord = Node & {
  */
 export type SpanishWordCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `frequency` field. */
-  frequency?: Maybe<Scalars['Float']>;
+  frequency?: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `length` field. */
-  length?: Maybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   /** Checks for equality with the object’s `word` field. */
-  word?: Maybe<Scalars['String']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `SpanishWord` object types. All fields are combined with a logical ‘and.’ */
 export type SpanishWordFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<SpanishWordFilter>>;
+  and?: InputMaybe<Array<SpanishWordFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `frequency` field. */
-  frequency?: Maybe<FloatFilter>;
+  frequency?: InputMaybe<FloatFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `length` field. */
-  length?: Maybe<IntFilter>;
+  length?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<SpanishWordFilter>;
+  not?: InputMaybe<SpanishWordFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<SpanishWordFilter>>;
+  or?: InputMaybe<Array<SpanishWordFilter>>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
   /** Filter by the object’s `word` field. */
-  word?: Maybe<StringFilter>;
+  word?: InputMaybe<StringFilter>;
 };
 
 /** An input for mutations affecting `SpanishWord` */
 export type SpanishWordInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
   frequency: Scalars['Float'];
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
   word: Scalars['String'];
 };
 
 /** Represents an update to a `SpanishWord`. Fields that are set will be updated. */
 export type SpanishWordPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Ranges from 0 to 1 (higher is more frequent) */
-  frequency?: Maybe<Scalars['Float']>;
-  id?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
-  word?: Maybe<Scalars['String']>;
+  frequency?: InputMaybe<Scalars['Float']>;
+  id?: InputMaybe<Scalars['Int']>;
+  length?: InputMaybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  word?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `SpanishWord` values. */
@@ -19484,59 +19485,59 @@ export type SpanishWouldYouRatherQuestion = Node & {
  */
 export type SpanishWouldYouRatherQuestionCondition = {
   /** Checks for equality with the object’s `answers` field. */
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `question` field. */
-  question?: Maybe<Scalars['String']>;
+  question?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `SpanishWouldYouRatherQuestion` object types. All fields are combined with a logical ‘and.’ */
 export type SpanishWouldYouRatherQuestionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<SpanishWouldYouRatherQuestionFilter>>;
+  and?: InputMaybe<Array<SpanishWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `answers` field. */
-  answers?: Maybe<StringListFilter>;
+  answers?: InputMaybe<StringListFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<SpanishWouldYouRatherQuestionFilter>;
+  not?: InputMaybe<SpanishWouldYouRatherQuestionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<SpanishWouldYouRatherQuestionFilter>>;
+  or?: InputMaybe<Array<SpanishWouldYouRatherQuestionFilter>>;
   /** Filter by the object’s `question` field. */
-  question?: Maybe<StringFilter>;
+  question?: InputMaybe<StringFilter>;
   /** Filter by the object’s `recommendedSkillLevelId` field. */
-  recommendedSkillLevelId?: Maybe<IntFilter>;
+  recommendedSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `SpanishWouldYouRatherQuestion` */
 export type SpanishWouldYouRatherQuestionInput = {
-  answers: Array<Maybe<Scalars['String']>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
+  answers: Array<InputMaybe<Scalars['String']>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
   question: Scalars['String'];
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `SpanishWouldYouRatherQuestion`. Fields that are set will be updated. */
 export type SpanishWouldYouRatherQuestionPatch = {
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Scalars['String']>;
-  recommendedSkillLevelId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  answers?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question?: InputMaybe<Scalars['String']>;
+  recommendedSkillLevelId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `SpanishWouldYouRatherQuestion` values. */
@@ -19583,145 +19584,145 @@ export enum SpanishWouldYouRatherQuestionsOrderBy {
 /** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
 export type StringFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Scalars['String']>;
+  distinctFrom?: InputMaybe<Scalars['String']>;
   /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  distinctFromInsensitive?: Maybe<Scalars['String']>;
+  distinctFromInsensitive?: InputMaybe<Scalars['String']>;
   /** Ends with the specified string (case-sensitive). */
-  endsWith?: Maybe<Scalars['String']>;
+  endsWith?: InputMaybe<Scalars['String']>;
   /** Ends with the specified string (case-insensitive). */
-  endsWithInsensitive?: Maybe<Scalars['String']>;
+  endsWithInsensitive?: InputMaybe<Scalars['String']>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<Scalars['String']>;
+  equalTo?: InputMaybe<Scalars['String']>;
   /** Equal to the specified value (case-insensitive). */
-  equalToInsensitive?: Maybe<Scalars['String']>;
+  equalToInsensitive?: InputMaybe<Scalars['String']>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<Scalars['String']>;
+  greaterThan?: InputMaybe<Scalars['String']>;
   /** Greater than the specified value (case-insensitive). */
-  greaterThanInsensitive?: Maybe<Scalars['String']>;
+  greaterThanInsensitive?: InputMaybe<Scalars['String']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Scalars['String']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['String']>;
   /** Greater than or equal to the specified value (case-insensitive). */
-  greaterThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
+  greaterThanOrEqualToInsensitive?: InputMaybe<Scalars['String']>;
   /** Included in the specified list. */
-  in?: Maybe<Array<Scalars['String']>>;
+  in?: InputMaybe<Array<Scalars['String']>>;
   /** Included in the specified list (case-insensitive). */
-  inInsensitive?: Maybe<Array<Scalars['String']>>;
+  inInsensitive?: InputMaybe<Array<Scalars['String']>>;
   /** Contains the specified string (case-sensitive). */
-  includes?: Maybe<Scalars['String']>;
+  includes?: InputMaybe<Scalars['String']>;
   /** Contains the specified string (case-insensitive). */
-  includesInsensitive?: Maybe<Scalars['String']>;
+  includesInsensitive?: InputMaybe<Scalars['String']>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<Scalars['String']>;
+  lessThan?: InputMaybe<Scalars['String']>;
   /** Less than the specified value (case-insensitive). */
-  lessThanInsensitive?: Maybe<Scalars['String']>;
+  lessThanInsensitive?: InputMaybe<Scalars['String']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Scalars['String']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['String']>;
   /** Less than or equal to the specified value (case-insensitive). */
-  lessThanOrEqualToInsensitive?: Maybe<Scalars['String']>;
+  lessThanOrEqualToInsensitive?: InputMaybe<Scalars['String']>;
   /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  like?: Maybe<Scalars['String']>;
+  like?: InputMaybe<Scalars['String']>;
   /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  likeInsensitive?: Maybe<Scalars['String']>;
+  likeInsensitive?: InputMaybe<Scalars['String']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Scalars['String']>;
+  notDistinctFrom?: InputMaybe<Scalars['String']>;
   /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  notDistinctFromInsensitive?: Maybe<Scalars['String']>;
+  notDistinctFromInsensitive?: InputMaybe<Scalars['String']>;
   /** Does not end with the specified string (case-sensitive). */
-  notEndsWith?: Maybe<Scalars['String']>;
+  notEndsWith?: InputMaybe<Scalars['String']>;
   /** Does not end with the specified string (case-insensitive). */
-  notEndsWithInsensitive?: Maybe<Scalars['String']>;
+  notEndsWithInsensitive?: InputMaybe<Scalars['String']>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Scalars['String']>;
+  notEqualTo?: InputMaybe<Scalars['String']>;
   /** Not equal to the specified value (case-insensitive). */
-  notEqualToInsensitive?: Maybe<Scalars['String']>;
+  notEqualToInsensitive?: InputMaybe<Scalars['String']>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<Scalars['String']>>;
+  notIn?: InputMaybe<Array<Scalars['String']>>;
   /** Not included in the specified list (case-insensitive). */
-  notInInsensitive?: Maybe<Array<Scalars['String']>>;
+  notInInsensitive?: InputMaybe<Array<Scalars['String']>>;
   /** Does not contain the specified string (case-sensitive). */
-  notIncludes?: Maybe<Scalars['String']>;
+  notIncludes?: InputMaybe<Scalars['String']>;
   /** Does not contain the specified string (case-insensitive). */
-  notIncludesInsensitive?: Maybe<Scalars['String']>;
+  notIncludesInsensitive?: InputMaybe<Scalars['String']>;
   /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLike?: Maybe<Scalars['String']>;
+  notLike?: InputMaybe<Scalars['String']>;
   /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLikeInsensitive?: Maybe<Scalars['String']>;
+  notLikeInsensitive?: InputMaybe<Scalars['String']>;
   /** Does not start with the specified string (case-sensitive). */
-  notStartsWith?: Maybe<Scalars['String']>;
+  notStartsWith?: InputMaybe<Scalars['String']>;
   /** Does not start with the specified string (case-insensitive). */
-  notStartsWithInsensitive?: Maybe<Scalars['String']>;
+  notStartsWithInsensitive?: InputMaybe<Scalars['String']>;
   /** Starts with the specified string (case-sensitive). */
-  startsWith?: Maybe<Scalars['String']>;
+  startsWith?: InputMaybe<Scalars['String']>;
   /** Starts with the specified string (case-insensitive). */
-  startsWithInsensitive?: Maybe<Scalars['String']>;
+  startsWithInsensitive?: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against String List fields. All fields are combined with a logical ‘and.’ */
 export type StringListFilter = {
   /** Any array item is equal to the specified value. */
-  anyEqualTo?: Maybe<Scalars['String']>;
+  anyEqualTo?: InputMaybe<Scalars['String']>;
   /** Any array item is greater than the specified value. */
-  anyGreaterThan?: Maybe<Scalars['String']>;
+  anyGreaterThan?: InputMaybe<Scalars['String']>;
   /** Any array item is greater than or equal to the specified value. */
-  anyGreaterThanOrEqualTo?: Maybe<Scalars['String']>;
+  anyGreaterThanOrEqualTo?: InputMaybe<Scalars['String']>;
   /** Any array item is less than the specified value. */
-  anyLessThan?: Maybe<Scalars['String']>;
+  anyLessThan?: InputMaybe<Scalars['String']>;
   /** Any array item is less than or equal to the specified value. */
-  anyLessThanOrEqualTo?: Maybe<Scalars['String']>;
+  anyLessThanOrEqualTo?: InputMaybe<Scalars['String']>;
   /** Any array item is not equal to the specified value. */
-  anyNotEqualTo?: Maybe<Scalars['String']>;
+  anyNotEqualTo?: InputMaybe<Scalars['String']>;
   /** Contained by the specified list of values. */
-  containedBy?: Maybe<Array<Maybe<Scalars['String']>>>;
+  containedBy?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Contains the specified list of values. */
-  contains?: Maybe<Array<Maybe<Scalars['String']>>>;
+  contains?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Array<Maybe<Scalars['String']>>>;
+  distinctFrom?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<Array<Maybe<Scalars['String']>>>;
+  equalTo?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<Array<Maybe<Scalars['String']>>>;
+  greaterThan?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Array<Maybe<Scalars['String']>>>;
+  greaterThanOrEqualTo?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<Array<Maybe<Scalars['String']>>>;
+  lessThan?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Array<Maybe<Scalars['String']>>>;
+  lessThanOrEqualTo?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Array<Maybe<Scalars['String']>>>;
+  notDistinctFrom?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Array<Maybe<Scalars['String']>>>;
+  notEqualTo?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Overlaps the specified list of values. */
-  overlaps?: Maybe<Array<Maybe<Scalars['String']>>>;
+  overlaps?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 /** A filter to be used against UUID fields. All fields are combined with a logical ‘and.’ */
 export type UuidFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<Scalars['UUID']>;
+  distinctFrom?: InputMaybe<Scalars['UUID']>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<Scalars['UUID']>;
+  equalTo?: InputMaybe<Scalars['UUID']>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<Scalars['UUID']>;
+  greaterThan?: InputMaybe<Scalars['UUID']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<Scalars['UUID']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['UUID']>;
   /** Included in the specified list. */
-  in?: Maybe<Array<Scalars['UUID']>>;
+  in?: InputMaybe<Array<Scalars['UUID']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<Scalars['UUID']>;
+  lessThan?: InputMaybe<Scalars['UUID']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<Scalars['UUID']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['UUID']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<Scalars['UUID']>;
+  notDistinctFrom?: InputMaybe<Scalars['UUID']>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<Scalars['UUID']>;
+  notEqualTo?: InputMaybe<Scalars['UUID']>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<Scalars['UUID']>>;
+  notIn?: InputMaybe<Array<Scalars['UUID']>>;
 };
 
 /** All input for the `updateChineseGuessCharacterQuestionByNodeId` mutation. */
@@ -19730,7 +19731,7 @@ export type UpdateChineseGuessCharacterQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `ChineseGuessCharacterQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `ChineseGuessCharacterQuestion` being updated. */
@@ -19743,7 +19744,7 @@ export type UpdateChineseGuessCharacterQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `ChineseGuessCharacterQuestion` being updated. */
   patch: ChineseGuessCharacterQuestionPatch;
   uuid: Scalars['UUID'];
@@ -19755,7 +19756,7 @@ export type UpdateChineseGuessCharacterQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `ChineseGuessCharacterQuestion` being updated. */
   patch: ChineseGuessCharacterQuestionPatch;
@@ -19782,7 +19783,7 @@ export type UpdateChineseGuessCharacterQuestionPayload = {
 
 /** The output of our update `ChineseGuessCharacterQuestion` mutation. */
 export type UpdateChineseGuessCharacterQuestionPayloadChineseGuessCharacterQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
 };
 
 /** All input for the `updateChineseRandomQuestionByNodeId` mutation. */
@@ -19791,7 +19792,7 @@ export type UpdateChineseRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `ChineseRandomQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `ChineseRandomQuestion` being updated. */
@@ -19804,7 +19805,7 @@ export type UpdateChineseRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `ChineseRandomQuestion` being updated. */
   patch: ChineseRandomQuestionPatch;
   uuid: Scalars['UUID'];
@@ -19816,7 +19817,7 @@ export type UpdateChineseRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `ChineseRandomQuestion` being updated. */
   patch: ChineseRandomQuestionPatch;
@@ -19843,7 +19844,7 @@ export type UpdateChineseRandomQuestionPayload = {
 
 /** The output of our update `ChineseRandomQuestion` mutation. */
 export type UpdateChineseRandomQuestionPayloadChineseRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ChineseRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `updateChineseWouldYouRatherQuestionByNodeId` mutation. */
@@ -19852,7 +19853,7 @@ export type UpdateChineseWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `ChineseWouldYouRatherQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `ChineseWouldYouRatherQuestion` being updated. */
@@ -19865,7 +19866,7 @@ export type UpdateChineseWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `ChineseWouldYouRatherQuestion` being updated. */
   patch: ChineseWouldYouRatherQuestionPatch;
   uuid: Scalars['UUID'];
@@ -19877,7 +19878,7 @@ export type UpdateChineseWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `ChineseWouldYouRatherQuestion` being updated. */
   patch: ChineseWouldYouRatherQuestionPatch;
@@ -19904,7 +19905,7 @@ export type UpdateChineseWouldYouRatherQuestionPayload = {
 
 /** The output of our update `ChineseWouldYouRatherQuestion` mutation. */
 export type UpdateChineseWouldYouRatherQuestionPayloadChineseWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `updateEnglishRandomQuestionByNodeId` mutation. */
@@ -19913,7 +19914,7 @@ export type UpdateEnglishRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `EnglishRandomQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `EnglishRandomQuestion` being updated. */
@@ -19926,7 +19927,7 @@ export type UpdateEnglishRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `EnglishRandomQuestion` being updated. */
   patch: EnglishRandomQuestionPatch;
   uuid: Scalars['UUID'];
@@ -19938,7 +19939,7 @@ export type UpdateEnglishRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `EnglishRandomQuestion` being updated. */
   patch: EnglishRandomQuestionPatch;
@@ -19965,7 +19966,7 @@ export type UpdateEnglishRandomQuestionPayload = {
 
 /** The output of our update `EnglishRandomQuestion` mutation. */
 export type UpdateEnglishRandomQuestionPayloadEnglishRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<EnglishRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<EnglishRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `updateEnglishWordByNodeId` mutation. */
@@ -19974,7 +19975,7 @@ export type UpdateEnglishWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `EnglishWord` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `EnglishWord` being updated. */
@@ -19987,7 +19988,7 @@ export type UpdateEnglishWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `EnglishWord` being updated. */
   patch: EnglishWordPatch;
   uuid: Scalars['UUID'];
@@ -19999,7 +20000,7 @@ export type UpdateEnglishWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `EnglishWord` being updated. */
   patch: EnglishWordPatch;
@@ -20026,7 +20027,7 @@ export type UpdateEnglishWordPayload = {
 
 /** The output of our update `EnglishWord` mutation. */
 export type UpdateEnglishWordPayloadEnglishWordEdgeArgs = {
-  orderBy?: Maybe<Array<EnglishWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<EnglishWordsOrderBy>>;
 };
 
 /** All input for the `updateEnglishWouldYouRatherQuestionByNodeId` mutation. */
@@ -20035,7 +20036,7 @@ export type UpdateEnglishWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `EnglishWouldYouRatherQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `EnglishWouldYouRatherQuestion` being updated. */
@@ -20048,7 +20049,7 @@ export type UpdateEnglishWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `EnglishWouldYouRatherQuestion` being updated. */
   patch: EnglishWouldYouRatherQuestionPatch;
   uuid: Scalars['UUID'];
@@ -20060,7 +20061,7 @@ export type UpdateEnglishWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `EnglishWouldYouRatherQuestion` being updated. */
   patch: EnglishWouldYouRatherQuestionPatch;
@@ -20087,7 +20088,7 @@ export type UpdateEnglishWouldYouRatherQuestionPayload = {
 
 /** The output of our update `EnglishWouldYouRatherQuestion` mutation. */
 export type UpdateEnglishWouldYouRatherQuestionPayloadEnglishWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `updateFrenchRandomQuestionByNodeId` mutation. */
@@ -20096,7 +20097,7 @@ export type UpdateFrenchRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `FrenchRandomQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `FrenchRandomQuestion` being updated. */
@@ -20109,7 +20110,7 @@ export type UpdateFrenchRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `FrenchRandomQuestion` being updated. */
   patch: FrenchRandomQuestionPatch;
   uuid: Scalars['UUID'];
@@ -20121,7 +20122,7 @@ export type UpdateFrenchRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `FrenchRandomQuestion` being updated. */
   patch: FrenchRandomQuestionPatch;
@@ -20148,7 +20149,7 @@ export type UpdateFrenchRandomQuestionPayload = {
 
 /** The output of our update `FrenchRandomQuestion` mutation. */
 export type UpdateFrenchRandomQuestionPayloadFrenchRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<FrenchRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<FrenchRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `updateFrenchWordByNodeId` mutation. */
@@ -20157,7 +20158,7 @@ export type UpdateFrenchWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `FrenchWord` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `FrenchWord` being updated. */
@@ -20170,7 +20171,7 @@ export type UpdateFrenchWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `FrenchWord` being updated. */
   patch: FrenchWordPatch;
   uuid: Scalars['UUID'];
@@ -20182,7 +20183,7 @@ export type UpdateFrenchWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `FrenchWord` being updated. */
   patch: FrenchWordPatch;
@@ -20209,7 +20210,7 @@ export type UpdateFrenchWordPayload = {
 
 /** The output of our update `FrenchWord` mutation. */
 export type UpdateFrenchWordPayloadFrenchWordEdgeArgs = {
-  orderBy?: Maybe<Array<FrenchWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<FrenchWordsOrderBy>>;
 };
 
 /** All input for the `updateFrenchWouldYouRatherQuestionByNodeId` mutation. */
@@ -20218,7 +20219,7 @@ export type UpdateFrenchWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `FrenchWouldYouRatherQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `FrenchWouldYouRatherQuestion` being updated. */
@@ -20231,7 +20232,7 @@ export type UpdateFrenchWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `FrenchWouldYouRatherQuestion` being updated. */
   patch: FrenchWouldYouRatherQuestionPatch;
   uuid: Scalars['UUID'];
@@ -20243,7 +20244,7 @@ export type UpdateFrenchWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `FrenchWouldYouRatherQuestion` being updated. */
   patch: FrenchWouldYouRatherQuestionPatch;
@@ -20270,7 +20271,7 @@ export type UpdateFrenchWouldYouRatherQuestionPayload = {
 
 /** The output of our update `FrenchWouldYouRatherQuestion` mutation. */
 export type UpdateFrenchWouldYouRatherQuestionPayloadFrenchWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `updateGermanRandomQuestionByNodeId` mutation. */
@@ -20279,7 +20280,7 @@ export type UpdateGermanRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `GermanRandomQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `GermanRandomQuestion` being updated. */
@@ -20292,7 +20293,7 @@ export type UpdateGermanRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `GermanRandomQuestion` being updated. */
   patch: GermanRandomQuestionPatch;
   uuid: Scalars['UUID'];
@@ -20304,7 +20305,7 @@ export type UpdateGermanRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `GermanRandomQuestion` being updated. */
   patch: GermanRandomQuestionPatch;
@@ -20331,7 +20332,7 @@ export type UpdateGermanRandomQuestionPayload = {
 
 /** The output of our update `GermanRandomQuestion` mutation. */
 export type UpdateGermanRandomQuestionPayloadGermanRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<GermanRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<GermanRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `updateGermanWordByNodeId` mutation. */
@@ -20340,7 +20341,7 @@ export type UpdateGermanWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `GermanWord` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `GermanWord` being updated. */
@@ -20353,7 +20354,7 @@ export type UpdateGermanWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `GermanWord` being updated. */
   patch: GermanWordPatch;
   uuid: Scalars['UUID'];
@@ -20365,7 +20366,7 @@ export type UpdateGermanWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `GermanWord` being updated. */
   patch: GermanWordPatch;
@@ -20392,7 +20393,7 @@ export type UpdateGermanWordPayload = {
 
 /** The output of our update `GermanWord` mutation. */
 export type UpdateGermanWordPayloadGermanWordEdgeArgs = {
-  orderBy?: Maybe<Array<GermanWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<GermanWordsOrderBy>>;
 };
 
 /** All input for the `updateGermanWouldYouRatherQuestionByNodeId` mutation. */
@@ -20401,7 +20402,7 @@ export type UpdateGermanWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `GermanWouldYouRatherQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `GermanWouldYouRatherQuestion` being updated. */
@@ -20414,7 +20415,7 @@ export type UpdateGermanWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `GermanWouldYouRatherQuestion` being updated. */
   patch: GermanWouldYouRatherQuestionPatch;
   uuid: Scalars['UUID'];
@@ -20426,7 +20427,7 @@ export type UpdateGermanWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `GermanWouldYouRatherQuestion` being updated. */
   patch: GermanWouldYouRatherQuestionPatch;
@@ -20453,7 +20454,7 @@ export type UpdateGermanWouldYouRatherQuestionPayload = {
 
 /** The output of our update `GermanWouldYouRatherQuestion` mutation. */
 export type UpdateGermanWouldYouRatherQuestionPayloadGermanWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `updateGroupByNodeId` mutation. */
@@ -20462,7 +20463,7 @@ export type UpdateGroupByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Group` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Group` being updated. */
@@ -20475,7 +20476,7 @@ export type UpdateGroupByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `Group` being updated. */
   patch: GroupPatch;
   uuid: Scalars['UUID'];
@@ -20487,7 +20488,7 @@ export type UpdateGroupInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `Group` being updated. */
   patch: GroupPatch;
@@ -20516,7 +20517,7 @@ export type UpdateGroupPayload = {
 
 /** The output of our update `Group` mutation. */
 export type UpdateGroupPayloadGroupEdgeArgs = {
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 /** All input for the `updateGroupUserByNodeId` mutation. */
@@ -20525,7 +20526,7 @@ export type UpdateGroupUserByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `GroupUser` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `GroupUser` being updated. */
@@ -20538,7 +20539,7 @@ export type UpdateGroupUserInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `GroupUser` being updated. */
   patch: GroupUserPatch;
@@ -20567,7 +20568,7 @@ export type UpdateGroupUserPayload = {
 
 /** The output of our update `GroupUser` mutation. */
 export type UpdateGroupUserPayloadGroupUserEdgeArgs = {
-  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  orderBy?: InputMaybe<Array<GroupUsersOrderBy>>;
 };
 
 /** All input for the `updateInAppNotificationMetadatumByNotificationId` mutation. */
@@ -20576,7 +20577,7 @@ export type UpdateInAppNotificationMetadatumByNotificationIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   notificationId: Scalars['Int'];
   /** An object where the defined keys will be set on the `InAppNotificationMetadatum` being updated. */
   patch: InAppNotificationMetadatumPatch;
@@ -20607,7 +20608,7 @@ export type UpdateInAppNotificationMetadatumPayload = {
 
 /** The output of our update `InAppNotificationMetadatum` mutation. */
 export type UpdateInAppNotificationMetadatumPayloadInAppNotificationMetadatumEdgeArgs = {
-  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+  orderBy?: InputMaybe<Array<InAppNotificationMetadataOrderBy>>;
 };
 
 /** All input for the `updateInviteTokenByNodeId` mutation. */
@@ -20616,7 +20617,7 @@ export type UpdateInviteTokenByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `InviteToken` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `InviteToken` being updated. */
@@ -20629,7 +20630,7 @@ export type UpdateInviteTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `InviteToken` being updated. */
   patch: InviteTokenPatch;
@@ -20656,7 +20657,7 @@ export type UpdateInviteTokenPayload = {
 
 /** The output of our update `InviteToken` mutation. */
 export type UpdateInviteTokenPayloadInviteTokenEdgeArgs = {
-  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+  orderBy?: InputMaybe<Array<InviteTokensOrderBy>>;
 };
 
 /** All input for the `updateItalianRandomQuestionByNodeId` mutation. */
@@ -20665,7 +20666,7 @@ export type UpdateItalianRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `ItalianRandomQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `ItalianRandomQuestion` being updated. */
@@ -20678,7 +20679,7 @@ export type UpdateItalianRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `ItalianRandomQuestion` being updated. */
   patch: ItalianRandomQuestionPatch;
   uuid: Scalars['UUID'];
@@ -20690,7 +20691,7 @@ export type UpdateItalianRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `ItalianRandomQuestion` being updated. */
   patch: ItalianRandomQuestionPatch;
@@ -20717,7 +20718,7 @@ export type UpdateItalianRandomQuestionPayload = {
 
 /** The output of our update `ItalianRandomQuestion` mutation. */
 export type UpdateItalianRandomQuestionPayloadItalianRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ItalianRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ItalianRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `updateItalianWordByNodeId` mutation. */
@@ -20726,7 +20727,7 @@ export type UpdateItalianWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `ItalianWord` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `ItalianWord` being updated. */
@@ -20739,7 +20740,7 @@ export type UpdateItalianWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `ItalianWord` being updated. */
   patch: ItalianWordPatch;
   uuid: Scalars['UUID'];
@@ -20751,7 +20752,7 @@ export type UpdateItalianWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `ItalianWord` being updated. */
   patch: ItalianWordPatch;
@@ -20778,7 +20779,7 @@ export type UpdateItalianWordPayload = {
 
 /** The output of our update `ItalianWord` mutation. */
 export type UpdateItalianWordPayloadItalianWordEdgeArgs = {
-  orderBy?: Maybe<Array<ItalianWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<ItalianWordsOrderBy>>;
 };
 
 /** All input for the `updateItalianWouldYouRatherQuestionByNodeId` mutation. */
@@ -20787,7 +20788,7 @@ export type UpdateItalianWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `ItalianWouldYouRatherQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `ItalianWouldYouRatherQuestion` being updated. */
@@ -20800,7 +20801,7 @@ export type UpdateItalianWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `ItalianWouldYouRatherQuestion` being updated. */
   patch: ItalianWouldYouRatherQuestionPatch;
   uuid: Scalars['UUID'];
@@ -20812,7 +20813,7 @@ export type UpdateItalianWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `ItalianWouldYouRatherQuestion` being updated. */
   patch: ItalianWouldYouRatherQuestionPatch;
@@ -20839,7 +20840,7 @@ export type UpdateItalianWouldYouRatherQuestionPayload = {
 
 /** The output of our update `ItalianWouldYouRatherQuestion` mutation. */
 export type UpdateItalianWouldYouRatherQuestionPayloadItalianWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `updateJapaneseRandomQuestionByNodeId` mutation. */
@@ -20848,7 +20849,7 @@ export type UpdateJapaneseRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `JapaneseRandomQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `JapaneseRandomQuestion` being updated. */
@@ -20861,7 +20862,7 @@ export type UpdateJapaneseRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `JapaneseRandomQuestion` being updated. */
   patch: JapaneseRandomQuestionPatch;
   uuid: Scalars['UUID'];
@@ -20873,7 +20874,7 @@ export type UpdateJapaneseRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `JapaneseRandomQuestion` being updated. */
   patch: JapaneseRandomQuestionPatch;
@@ -20900,7 +20901,7 @@ export type UpdateJapaneseRandomQuestionPayload = {
 
 /** The output of our update `JapaneseRandomQuestion` mutation. */
 export type UpdateJapaneseRandomQuestionPayloadJapaneseRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<JapaneseRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<JapaneseRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `updateJapaneseWouldYouRatherQuestionByNodeId` mutation. */
@@ -20909,7 +20910,7 @@ export type UpdateJapaneseWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `JapaneseWouldYouRatherQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `JapaneseWouldYouRatherQuestion` being updated. */
@@ -20922,7 +20923,7 @@ export type UpdateJapaneseWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `JapaneseWouldYouRatherQuestion` being updated. */
   patch: JapaneseWouldYouRatherQuestionPatch;
   uuid: Scalars['UUID'];
@@ -20934,7 +20935,7 @@ export type UpdateJapaneseWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `JapaneseWouldYouRatherQuestion` being updated. */
   patch: JapaneseWouldYouRatherQuestionPatch;
@@ -20961,7 +20962,7 @@ export type UpdateJapaneseWouldYouRatherQuestionPayload = {
 
 /** The output of our update `JapaneseWouldYouRatherQuestion` mutation. */
 export type UpdateJapaneseWouldYouRatherQuestionPayloadJapaneseWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `updateKoreanRandomQuestionByNodeId` mutation. */
@@ -20970,7 +20971,7 @@ export type UpdateKoreanRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `KoreanRandomQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `KoreanRandomQuestion` being updated. */
@@ -20983,7 +20984,7 @@ export type UpdateKoreanRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `KoreanRandomQuestion` being updated. */
   patch: KoreanRandomQuestionPatch;
   uuid: Scalars['UUID'];
@@ -20995,7 +20996,7 @@ export type UpdateKoreanRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `KoreanRandomQuestion` being updated. */
   patch: KoreanRandomQuestionPatch;
@@ -21022,7 +21023,7 @@ export type UpdateKoreanRandomQuestionPayload = {
 
 /** The output of our update `KoreanRandomQuestion` mutation. */
 export type UpdateKoreanRandomQuestionPayloadKoreanRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<KoreanRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<KoreanRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `updateKoreanWouldYouRatherQuestionByNodeId` mutation. */
@@ -21031,7 +21032,7 @@ export type UpdateKoreanWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `KoreanWouldYouRatherQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `KoreanWouldYouRatherQuestion` being updated. */
@@ -21044,7 +21045,7 @@ export type UpdateKoreanWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `KoreanWouldYouRatherQuestion` being updated. */
   patch: KoreanWouldYouRatherQuestionPatch;
   uuid: Scalars['UUID'];
@@ -21056,7 +21057,7 @@ export type UpdateKoreanWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `KoreanWouldYouRatherQuestion` being updated. */
   patch: KoreanWouldYouRatherQuestionPatch;
@@ -21083,7 +21084,7 @@ export type UpdateKoreanWouldYouRatherQuestionPayload = {
 
 /** The output of our update `KoreanWouldYouRatherQuestion` mutation. */
 export type UpdateKoreanWouldYouRatherQuestionPayloadKoreanWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `updateLanguageByAlpha2` mutation. */
@@ -21094,7 +21095,7 @@ export type UpdateLanguageByAlpha2Input = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `Language` being updated. */
   patch: LanguagePatch;
 };
@@ -21105,7 +21106,7 @@ export type UpdateLanguageByEnglishNameInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   englishName: Scalars['String'];
   /** An object where the defined keys will be set on the `Language` being updated. */
   patch: LanguagePatch;
@@ -21117,7 +21118,7 @@ export type UpdateLanguageByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Language` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Language` being updated. */
@@ -21130,7 +21131,7 @@ export type UpdateLanguageInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `Language` being updated. */
   patch: LanguagePatch;
@@ -21155,7 +21156,7 @@ export type UpdateLanguagePayload = {
 
 /** The output of our update `Language` mutation. */
 export type UpdateLanguagePayloadLanguageEdgeArgs = {
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 /** All input for the `updateLanguageSkillLevelByNodeId` mutation. */
@@ -21164,7 +21165,7 @@ export type UpdateLanguageSkillLevelByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `LanguageSkillLevel` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `LanguageSkillLevel` being updated. */
@@ -21177,7 +21178,7 @@ export type UpdateLanguageSkillLevelInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `LanguageSkillLevel` being updated. */
   patch: LanguageSkillLevelPatch;
@@ -21202,7 +21203,7 @@ export type UpdateLanguageSkillLevelPayload = {
 
 /** The output of our update `LanguageSkillLevel` mutation. */
 export type UpdateLanguageSkillLevelPayloadLanguageSkillLevelEdgeArgs = {
-  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  orderBy?: InputMaybe<Array<LanguageSkillLevelsOrderBy>>;
 };
 
 /** All input for the `updateMessageByNodeId` mutation. */
@@ -21211,7 +21212,7 @@ export type UpdateMessageByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Message` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Message` being updated. */
@@ -21224,7 +21225,7 @@ export type UpdateMessageByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `Message` being updated. */
   patch: MessagePatch;
   uuid: Scalars['UUID'];
@@ -21236,7 +21237,7 @@ export type UpdateMessageInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `Message` being updated. */
   patch: MessagePatch;
@@ -21269,7 +21270,7 @@ export type UpdateMessagePayload = {
 
 /** The output of our update `Message` mutation. */
 export type UpdateMessagePayloadMessageEdgeArgs = {
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** All input for the `updateMessagePreviewByNodeId` mutation. */
@@ -21278,7 +21279,7 @@ export type UpdateMessagePreviewByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `MessagePreview` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `MessagePreview` being updated. */
@@ -21291,7 +21292,7 @@ export type UpdateMessagePreviewByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `MessagePreview` being updated. */
   patch: MessagePreviewPatch;
   uuid: Scalars['UUID'];
@@ -21303,7 +21304,7 @@ export type UpdateMessagePreviewInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `MessagePreview` being updated. */
   patch: MessagePreviewPatch;
@@ -21330,7 +21331,7 @@ export type UpdateMessagePreviewPayload = {
 
 /** The output of our update `MessagePreview` mutation. */
 export type UpdateMessagePreviewPayloadMessagePreviewEdgeArgs = {
-  orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
+  orderBy?: InputMaybe<Array<MessagePreviewsOrderBy>>;
 };
 
 /** All input for the `updateNotificationByNodeId` mutation. */
@@ -21339,7 +21340,7 @@ export type UpdateNotificationByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Notification` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Notification` being updated. */
@@ -21352,7 +21353,7 @@ export type UpdateNotificationByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `Notification` being updated. */
   patch: NotificationPatch;
   uuid: Scalars['UUID'];
@@ -21364,7 +21365,7 @@ export type UpdateNotificationChannelByNameInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   /** An object where the defined keys will be set on the `NotificationChannel` being updated. */
   patch: NotificationChannelPatch;
@@ -21376,7 +21377,7 @@ export type UpdateNotificationChannelByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `NotificationChannel` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `NotificationChannel` being updated. */
@@ -21389,7 +21390,7 @@ export type UpdateNotificationChannelByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `NotificationChannel` being updated. */
   patch: NotificationChannelPatch;
   uuid: Scalars['UUID'];
@@ -21401,7 +21402,7 @@ export type UpdateNotificationChannelInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `NotificationChannel` being updated. */
   patch: NotificationChannelPatch;
@@ -21426,7 +21427,7 @@ export type UpdateNotificationChannelPayload = {
 
 /** The output of our update `NotificationChannel` mutation. */
 export type UpdateNotificationChannelPayloadNotificationChannelEdgeArgs = {
-  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  orderBy?: InputMaybe<Array<NotificationChannelsOrderBy>>;
 };
 
 /** All input for the `updateNotification` mutation. */
@@ -21435,7 +21436,7 @@ export type UpdateNotificationInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `Notification` being updated. */
   patch: NotificationPatch;
@@ -21466,7 +21467,7 @@ export type UpdateNotificationPayload = {
 
 /** The output of our update `Notification` mutation. */
 export type UpdateNotificationPayloadNotificationEdgeArgs = {
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 /** All input for the `updatePortugueseRandomQuestionByNodeId` mutation. */
@@ -21475,7 +21476,7 @@ export type UpdatePortugueseRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PortugueseRandomQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `PortugueseRandomQuestion` being updated. */
@@ -21488,7 +21489,7 @@ export type UpdatePortugueseRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `PortugueseRandomQuestion` being updated. */
   patch: PortugueseRandomQuestionPatch;
   uuid: Scalars['UUID'];
@@ -21500,7 +21501,7 @@ export type UpdatePortugueseRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `PortugueseRandomQuestion` being updated. */
   patch: PortugueseRandomQuestionPatch;
@@ -21527,7 +21528,7 @@ export type UpdatePortugueseRandomQuestionPayload = {
 
 /** The output of our update `PortugueseRandomQuestion` mutation. */
 export type UpdatePortugueseRandomQuestionPayloadPortugueseRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<PortugueseRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PortugueseRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `updatePortugueseWordByNodeId` mutation. */
@@ -21536,7 +21537,7 @@ export type UpdatePortugueseWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PortugueseWord` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `PortugueseWord` being updated. */
@@ -21549,7 +21550,7 @@ export type UpdatePortugueseWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `PortugueseWord` being updated. */
   patch: PortugueseWordPatch;
   uuid: Scalars['UUID'];
@@ -21561,7 +21562,7 @@ export type UpdatePortugueseWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `PortugueseWord` being updated. */
   patch: PortugueseWordPatch;
@@ -21588,7 +21589,7 @@ export type UpdatePortugueseWordPayload = {
 
 /** The output of our update `PortugueseWord` mutation. */
 export type UpdatePortugueseWordPayloadPortugueseWordEdgeArgs = {
-  orderBy?: Maybe<Array<PortugueseWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<PortugueseWordsOrderBy>>;
 };
 
 /** All input for the `updatePortugueseWouldYouRatherQuestionByNodeId` mutation. */
@@ -21597,7 +21598,7 @@ export type UpdatePortugueseWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PortugueseWouldYouRatherQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `PortugueseWouldYouRatherQuestion` being updated. */
@@ -21610,7 +21611,7 @@ export type UpdatePortugueseWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `PortugueseWouldYouRatherQuestion` being updated. */
   patch: PortugueseWouldYouRatherQuestionPatch;
   uuid: Scalars['UUID'];
@@ -21622,7 +21623,7 @@ export type UpdatePortugueseWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `PortugueseWouldYouRatherQuestion` being updated. */
   patch: PortugueseWouldYouRatherQuestionPatch;
@@ -21649,7 +21650,7 @@ export type UpdatePortugueseWouldYouRatherQuestionPayload = {
 
 /** The output of our update `PortugueseWouldYouRatherQuestion` mutation. */
 export type UpdatePortugueseWouldYouRatherQuestionPayloadPortugueseWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `updatePostByNodeId` mutation. */
@@ -21658,7 +21659,7 @@ export type UpdatePostByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Post` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Post` being updated. */
@@ -21671,7 +21672,7 @@ export type UpdatePostBySnowflakeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `Post` being updated. */
   patch: PostPatch;
   snowflakeId: Scalars['BigInt'];
@@ -21683,7 +21684,7 @@ export type UpdatePostByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `Post` being updated. */
   patch: PostPatch;
   uuid: Scalars['UUID'];
@@ -21695,7 +21696,7 @@ export type UpdatePostCorrectionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostCorrection` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `PostCorrection` being updated. */
@@ -21708,7 +21709,7 @@ export type UpdatePostCorrectionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `PostCorrection` being updated. */
   patch: PostCorrectionPatch;
   uuid: Scalars['UUID'];
@@ -21720,7 +21721,7 @@ export type UpdatePostCorrectionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `PostCorrection` being updated. */
   patch: PostCorrectionPatch;
@@ -21749,7 +21750,7 @@ export type UpdatePostCorrectionPayload = {
 
 /** The output of our update `PostCorrection` mutation. */
 export type UpdatePostCorrectionPayloadPostCorrectionEdgeArgs = {
-  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostCorrectionsOrderBy>>;
 };
 
 /** All input for the `updatePostGameAnswerByNodeId` mutation. */
@@ -21758,7 +21759,7 @@ export type UpdatePostGameAnswerByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostGameAnswer` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `PostGameAnswer` being updated. */
@@ -21771,7 +21772,7 @@ export type UpdatePostGameAnswerByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `PostGameAnswer` being updated. */
   patch: PostGameAnswerPatch;
   uuid: Scalars['UUID'];
@@ -21783,7 +21784,7 @@ export type UpdatePostGameAnswerInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `PostGameAnswer` being updated. */
   patch: PostGameAnswerPatch;
@@ -21814,7 +21815,7 @@ export type UpdatePostGameAnswerPayload = {
 
 /** The output of our update `PostGameAnswer` mutation. */
 export type UpdatePostGameAnswerPayloadPostGameAnswerEdgeArgs = {
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 /** All input for the `updatePostGameByNodeId` mutation. */
@@ -21823,7 +21824,7 @@ export type UpdatePostGameByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostGame` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `PostGame` being updated. */
@@ -21836,7 +21837,7 @@ export type UpdatePostGameByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `PostGame` being updated. */
   patch: PostGamePatch;
   uuid: Scalars['UUID'];
@@ -21848,7 +21849,7 @@ export type UpdatePostGameInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `PostGame` being updated. */
   patch: PostGamePatch;
@@ -21875,7 +21876,7 @@ export type UpdatePostGamePayload = {
 
 /** The output of our update `PostGame` mutation. */
 export type UpdatePostGamePayloadPostGameEdgeArgs = {
-  orderBy?: Maybe<Array<PostGamesOrderBy>>;
+  orderBy?: InputMaybe<Array<PostGamesOrderBy>>;
 };
 
 /** All input for the `updatePostGameRangeByNodeId` mutation. */
@@ -21884,7 +21885,7 @@ export type UpdatePostGameRangeByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostGameRange` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `PostGameRange` being updated. */
@@ -21897,7 +21898,7 @@ export type UpdatePostGameRangeByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `PostGameRange` being updated. */
   patch: PostGameRangePatch;
   uuid: Scalars['UUID'];
@@ -21909,7 +21910,7 @@ export type UpdatePostGameRangeInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `PostGameRange` being updated. */
   patch: PostGameRangePatch;
@@ -21936,7 +21937,7 @@ export type UpdatePostGameRangePayload = {
 
 /** The output of our update `PostGameRange` mutation. */
 export type UpdatePostGameRangePayloadPostGameRangeEdgeArgs = {
-  orderBy?: Maybe<Array<PostGameRangesOrderBy>>;
+  orderBy?: InputMaybe<Array<PostGameRangesOrderBy>>;
 };
 
 /** All input for the `updatePost` mutation. */
@@ -21945,7 +21946,7 @@ export type UpdatePostInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `Post` being updated. */
   patch: PostPatch;
@@ -21957,7 +21958,7 @@ export type UpdatePostLikeByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostLike` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `PostLike` being updated. */
@@ -21970,7 +21971,7 @@ export type UpdatePostLikeInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `PostLike` being updated. */
   patch: PostLikePatch;
@@ -21999,7 +22000,7 @@ export type UpdatePostLikePayload = {
 
 /** The output of our update `PostLike` mutation. */
 export type UpdatePostLikePayloadPostLikeEdgeArgs = {
-  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  orderBy?: InputMaybe<Array<PostLikesOrderBy>>;
 };
 
 /** The output of our update `Post` mutation. */
@@ -22029,7 +22030,7 @@ export type UpdatePostPayload = {
 
 /** The output of our update `Post` mutation. */
 export type UpdatePostPayloadPostEdgeArgs = {
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 /** All input for the `updatePostRecordingByNodeId` mutation. */
@@ -22038,7 +22039,7 @@ export type UpdatePostRecordingByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostRecording` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `PostRecording` being updated. */
@@ -22051,7 +22052,7 @@ export type UpdatePostRecordingByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `PostRecording` being updated. */
   patch: PostRecordingPatch;
   uuid: Scalars['UUID'];
@@ -22063,7 +22064,7 @@ export type UpdatePostRecordingInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `PostRecording` being updated. */
   patch: PostRecordingPatch;
@@ -22092,7 +22093,7 @@ export type UpdatePostRecordingPayload = {
 
 /** The output of our update `PostRecording` mutation. */
 export type UpdatePostRecordingPayloadPostRecordingEdgeArgs = {
-  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostRecordingsOrderBy>>;
 };
 
 /** All input for the `updatePostUserMentionByNodeId` mutation. */
@@ -22101,7 +22102,7 @@ export type UpdatePostUserMentionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `PostUserMention` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `PostUserMention` being updated. */
@@ -22114,7 +22115,7 @@ export type UpdatePostUserMentionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `PostUserMention` being updated. */
   patch: PostUserMentionPatch;
   uuid: Scalars['UUID'];
@@ -22126,7 +22127,7 @@ export type UpdatePostUserMentionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `PostUserMention` being updated. */
   patch: PostUserMentionPatch;
@@ -22155,7 +22156,7 @@ export type UpdatePostUserMentionPayload = {
 
 /** The output of our update `PostUserMention` mutation. */
 export type UpdatePostUserMentionPayloadPostUserMentionEdgeArgs = {
-  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostUserMentionsOrderBy>>;
 };
 
 /** All input for the `updatePromptByNodeId` mutation. */
@@ -22164,7 +22165,7 @@ export type UpdatePromptByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Prompt` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Prompt` being updated. */
@@ -22177,7 +22178,7 @@ export type UpdatePromptByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `Prompt` being updated. */
   patch: PromptPatch;
   uuid: Scalars['UUID'];
@@ -22189,7 +22190,7 @@ export type UpdatePromptInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `Prompt` being updated. */
   patch: PromptPatch;
@@ -22218,7 +22219,7 @@ export type UpdatePromptPayload = {
 
 /** The output of our update `Prompt` mutation. */
 export type UpdatePromptPayloadPromptEdgeArgs = {
-  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  orderBy?: InputMaybe<Array<PromptsOrderBy>>;
 };
 
 /** All input for the `updateRefreshTokenByNodeId` mutation. */
@@ -22227,7 +22228,7 @@ export type UpdateRefreshTokenByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `RefreshToken` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `RefreshToken` being updated. */
@@ -22240,7 +22241,7 @@ export type UpdateRefreshTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `RefreshToken` being updated. */
   patch: RefreshTokenPatch;
@@ -22267,7 +22268,7 @@ export type UpdateRefreshTokenPayload = {
 
 /** The output of our update `RefreshToken` mutation. */
 export type UpdateRefreshTokenPayloadRefreshTokenEdgeArgs = {
-  orderBy?: Maybe<Array<RefreshTokensOrderBy>>;
+  orderBy?: InputMaybe<Array<RefreshTokensOrderBy>>;
 };
 
 /** All input for the `updateRussianRandomQuestionByNodeId` mutation. */
@@ -22276,7 +22277,7 @@ export type UpdateRussianRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `RussianRandomQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `RussianRandomQuestion` being updated. */
@@ -22289,7 +22290,7 @@ export type UpdateRussianRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `RussianRandomQuestion` being updated. */
   patch: RussianRandomQuestionPatch;
   uuid: Scalars['UUID'];
@@ -22301,7 +22302,7 @@ export type UpdateRussianRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `RussianRandomQuestion` being updated. */
   patch: RussianRandomQuestionPatch;
@@ -22328,7 +22329,7 @@ export type UpdateRussianRandomQuestionPayload = {
 
 /** The output of our update `RussianRandomQuestion` mutation. */
 export type UpdateRussianRandomQuestionPayloadRussianRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<RussianRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<RussianRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `updateRussianWordByNodeId` mutation. */
@@ -22337,7 +22338,7 @@ export type UpdateRussianWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `RussianWord` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `RussianWord` being updated. */
@@ -22350,7 +22351,7 @@ export type UpdateRussianWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `RussianWord` being updated. */
   patch: RussianWordPatch;
   uuid: Scalars['UUID'];
@@ -22362,7 +22363,7 @@ export type UpdateRussianWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `RussianWord` being updated. */
   patch: RussianWordPatch;
@@ -22389,7 +22390,7 @@ export type UpdateRussianWordPayload = {
 
 /** The output of our update `RussianWord` mutation. */
 export type UpdateRussianWordPayloadRussianWordEdgeArgs = {
-  orderBy?: Maybe<Array<RussianWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<RussianWordsOrderBy>>;
 };
 
 /** All input for the `updateRussianWouldYouRatherQuestionByNodeId` mutation. */
@@ -22398,7 +22399,7 @@ export type UpdateRussianWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `RussianWouldYouRatherQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `RussianWouldYouRatherQuestion` being updated. */
@@ -22411,7 +22412,7 @@ export type UpdateRussianWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `RussianWouldYouRatherQuestion` being updated. */
   patch: RussianWouldYouRatherQuestionPatch;
   uuid: Scalars['UUID'];
@@ -22423,7 +22424,7 @@ export type UpdateRussianWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `RussianWouldYouRatherQuestion` being updated. */
   patch: RussianWouldYouRatherQuestionPatch;
@@ -22450,7 +22451,7 @@ export type UpdateRussianWouldYouRatherQuestionPayload = {
 
 /** The output of our update `RussianWouldYouRatherQuestion` mutation. */
 export type UpdateRussianWouldYouRatherQuestionPayloadRussianWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `updateSpanishRandomQuestionByNodeId` mutation. */
@@ -22459,7 +22460,7 @@ export type UpdateSpanishRandomQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `SpanishRandomQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `SpanishRandomQuestion` being updated. */
@@ -22472,7 +22473,7 @@ export type UpdateSpanishRandomQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `SpanishRandomQuestion` being updated. */
   patch: SpanishRandomQuestionPatch;
   uuid: Scalars['UUID'];
@@ -22484,7 +22485,7 @@ export type UpdateSpanishRandomQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `SpanishRandomQuestion` being updated. */
   patch: SpanishRandomQuestionPatch;
@@ -22511,7 +22512,7 @@ export type UpdateSpanishRandomQuestionPayload = {
 
 /** The output of our update `SpanishRandomQuestion` mutation. */
 export type UpdateSpanishRandomQuestionPayloadSpanishRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<SpanishRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<SpanishRandomQuestionsOrderBy>>;
 };
 
 /** All input for the `updateSpanishWordByNodeId` mutation. */
@@ -22520,7 +22521,7 @@ export type UpdateSpanishWordByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `SpanishWord` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `SpanishWord` being updated. */
@@ -22533,7 +22534,7 @@ export type UpdateSpanishWordByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `SpanishWord` being updated. */
   patch: SpanishWordPatch;
   uuid: Scalars['UUID'];
@@ -22545,7 +22546,7 @@ export type UpdateSpanishWordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `SpanishWord` being updated. */
   patch: SpanishWordPatch;
@@ -22572,7 +22573,7 @@ export type UpdateSpanishWordPayload = {
 
 /** The output of our update `SpanishWord` mutation. */
 export type UpdateSpanishWordPayloadSpanishWordEdgeArgs = {
-  orderBy?: Maybe<Array<SpanishWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<SpanishWordsOrderBy>>;
 };
 
 /** All input for the `updateSpanishWouldYouRatherQuestionByNodeId` mutation. */
@@ -22581,7 +22582,7 @@ export type UpdateSpanishWouldYouRatherQuestionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `SpanishWouldYouRatherQuestion` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `SpanishWouldYouRatherQuestion` being updated. */
@@ -22594,7 +22595,7 @@ export type UpdateSpanishWouldYouRatherQuestionByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `SpanishWouldYouRatherQuestion` being updated. */
   patch: SpanishWouldYouRatherQuestionPatch;
   uuid: Scalars['UUID'];
@@ -22606,7 +22607,7 @@ export type UpdateSpanishWouldYouRatherQuestionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `SpanishWouldYouRatherQuestion` being updated. */
   patch: SpanishWouldYouRatherQuestionPatch;
@@ -22633,7 +22634,7 @@ export type UpdateSpanishWouldYouRatherQuestionPayload = {
 
 /** The output of our update `SpanishWouldYouRatherQuestion` mutation. */
 export type UpdateSpanishWouldYouRatherQuestionPayloadSpanishWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** All input for the `updateUserByEmail` mutation. */
@@ -22642,7 +22643,7 @@ export type UpdateUserByEmailInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   /** An object where the defined keys will be set on the `User` being updated. */
   patch: UserPatch;
@@ -22654,7 +22655,7 @@ export type UpdateUserByEmailUnsubscribeTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   emailUnsubscribeToken: Scalars['String'];
   /** An object where the defined keys will be set on the `User` being updated. */
   patch: UserPatch;
@@ -22666,7 +22667,7 @@ export type UpdateUserByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `User` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `User` being updated. */
@@ -22679,7 +22680,7 @@ export type UpdateUserByResetPasswordTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `User` being updated. */
   patch: UserPatch;
   resetPasswordToken: Scalars['String'];
@@ -22691,7 +22692,7 @@ export type UpdateUserByUsernameInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `User` being updated. */
   patch: UserPatch;
   username: Scalars['String'];
@@ -22703,7 +22704,7 @@ export type UpdateUserByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `User` being updated. */
   patch: UserPatch;
   uuid: Scalars['UUID'];
@@ -22715,7 +22716,7 @@ export type UpdateUserDeviceByFcmTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   fcmToken: Scalars['String'];
   /** An object where the defined keys will be set on the `UserDevice` being updated. */
   patch: UserDevicePatch;
@@ -22727,7 +22728,7 @@ export type UpdateUserDeviceByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `UserDevice` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `UserDevice` being updated. */
@@ -22740,7 +22741,7 @@ export type UpdateUserDeviceByUuidInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `UserDevice` being updated. */
   patch: UserDevicePatch;
   uuid: Scalars['UUID'];
@@ -22752,7 +22753,7 @@ export type UpdateUserDeviceInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `UserDevice` being updated. */
   patch: UserDevicePatch;
@@ -22779,7 +22780,7 @@ export type UpdateUserDevicePayload = {
 
 /** The output of our update `UserDevice` mutation. */
 export type UpdateUserDevicePayloadUserDeviceEdgeArgs = {
-  orderBy?: Maybe<Array<UserDevicesOrderBy>>;
+  orderBy?: InputMaybe<Array<UserDevicesOrderBy>>;
 };
 
 /** All input for the `updateUserFollowerByNodeId` mutation. */
@@ -22788,7 +22789,7 @@ export type UpdateUserFollowerByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `UserFollower` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `UserFollower` being updated. */
@@ -22801,7 +22802,7 @@ export type UpdateUserFollowerInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `UserFollower` being updated. */
   patch: UserFollowerPatch;
@@ -22830,7 +22831,7 @@ export type UpdateUserFollowerPayload = {
 
 /** The output of our update `UserFollower` mutation. */
 export type UpdateUserFollowerPayloadUserFollowerEdgeArgs = {
-  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  orderBy?: InputMaybe<Array<UserFollowersOrderBy>>;
 };
 
 /** All input for the `updateUser` mutation. */
@@ -22839,7 +22840,7 @@ export type UpdateUserInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `User` being updated. */
   patch: UserPatch;
@@ -22851,7 +22852,7 @@ export type UpdateUserLanguageByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `UserLanguage` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `UserLanguage` being updated. */
@@ -22864,7 +22865,7 @@ export type UpdateUserLanguageInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `UserLanguage` being updated. */
   patch: UserLanguagePatch;
@@ -22895,7 +22896,7 @@ export type UpdateUserLanguagePayload = {
 
 /** The output of our update `UserLanguage` mutation. */
 export type UpdateUserLanguagePayloadUserLanguageEdgeArgs = {
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 /** The output of our update `User` mutation. */
@@ -22921,7 +22922,7 @@ export type UpdateUserPayload = {
 
 /** The output of our update `User` mutation. */
 export type UpdateUserPayloadUserEdgeArgs = {
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /** All input for the `updateUserPreferenceByNodeId` mutation. */
@@ -22930,7 +22931,7 @@ export type UpdateUserPreferenceByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `UserPreference` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `UserPreference` being updated. */
@@ -22943,7 +22944,7 @@ export type UpdateUserPreferenceByUserIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `UserPreference` being updated. */
   patch: UserPreferencePatch;
   userId: Scalars['Int'];
@@ -22955,7 +22956,7 @@ export type UpdateUserPreferenceInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `UserPreference` being updated. */
   patch: UserPreferencePatch;
@@ -22984,7 +22985,7 @@ export type UpdateUserPreferencePayload = {
 
 /** The output of our update `UserPreference` mutation. */
 export type UpdateUserPreferencePayloadUserPreferenceEdgeArgs = {
-  orderBy?: Maybe<Array<UserPreferencesOrderBy>>;
+  orderBy?: InputMaybe<Array<UserPreferencesOrderBy>>;
 };
 
 /** All input for the `updateUserSessionByNodeId` mutation. */
@@ -22993,7 +22994,7 @@ export type UpdateUserSessionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `UserSession` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `UserSession` being updated. */
@@ -23006,7 +23007,7 @@ export type UpdateUserSessionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `UserSession` being updated. */
   patch: UserSessionPatch;
   sid: Scalars['String'];
@@ -23031,7 +23032,7 @@ export type UpdateUserSessionPayload = {
 
 /** The output of our update `UserSession` mutation. */
 export type UpdateUserSessionPayloadUserSessionEdgeArgs = {
-  orderBy?: Maybe<Array<UserSessionsOrderBy>>;
+  orderBy?: InputMaybe<Array<UserSessionsOrderBy>>;
 };
 
 /** All input for the upsert `ChineseGuessCharacterQuestion` mutation. */
@@ -23039,7 +23040,7 @@ export type UpsertChineseGuessCharacterQuestionInput = {
   /** The `ChineseGuessCharacterQuestion` to be upserted by this mutation. */
   chineseGuessCharacterQuestion: ChineseGuessCharacterQuestionInput;
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our upsert `ChineseGuessCharacterQuestion` mutation. */
@@ -23060,13 +23061,13 @@ export type UpsertChineseGuessCharacterQuestionPayload = {
 
 /** The output of our upsert `ChineseGuessCharacterQuestion` mutation. */
 export type UpsertChineseGuessCharacterQuestionPayloadChineseGuessCharacterQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ChineseGuessCharacterQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `ChineseGuessCharacterQuestion` mutation. */
 export type UpsertChineseGuessCharacterQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `ChineseRandomQuestion` mutation. */
@@ -23074,7 +23075,7 @@ export type UpsertChineseRandomQuestionInput = {
   /** The `ChineseRandomQuestion` to be upserted by this mutation. */
   chineseRandomQuestion: ChineseRandomQuestionInput;
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our upsert `ChineseRandomQuestion` mutation. */
@@ -23095,13 +23096,13 @@ export type UpsertChineseRandomQuestionPayload = {
 
 /** The output of our upsert `ChineseRandomQuestion` mutation. */
 export type UpsertChineseRandomQuestionPayloadChineseRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ChineseRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ChineseRandomQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `ChineseRandomQuestion` mutation. */
 export type UpsertChineseRandomQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `ChineseWouldYouRatherQuestion` mutation. */
@@ -23109,7 +23110,7 @@ export type UpsertChineseWouldYouRatherQuestionInput = {
   /** The `ChineseWouldYouRatherQuestion` to be upserted by this mutation. */
   chineseWouldYouRatherQuestion: ChineseWouldYouRatherQuestionInput;
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our upsert `ChineseWouldYouRatherQuestion` mutation. */
@@ -23130,19 +23131,19 @@ export type UpsertChineseWouldYouRatherQuestionPayload = {
 
 /** The output of our upsert `ChineseWouldYouRatherQuestion` mutation. */
 export type UpsertChineseWouldYouRatherQuestionPayloadChineseWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ChineseWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `ChineseWouldYouRatherQuestion` mutation. */
 export type UpsertChineseWouldYouRatherQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `EnglishRandomQuestion` mutation. */
 export type UpsertEnglishRandomQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `EnglishRandomQuestion` to be upserted by this mutation. */
   englishRandomQuestion: EnglishRandomQuestionInput;
 };
@@ -23165,19 +23166,19 @@ export type UpsertEnglishRandomQuestionPayload = {
 
 /** The output of our upsert `EnglishRandomQuestion` mutation. */
 export type UpsertEnglishRandomQuestionPayloadEnglishRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<EnglishRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<EnglishRandomQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `EnglishRandomQuestion` mutation. */
 export type UpsertEnglishRandomQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `EnglishWord` mutation. */
 export type UpsertEnglishWordInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `EnglishWord` to be upserted by this mutation. */
   englishWord: EnglishWordInput;
 };
@@ -23200,19 +23201,19 @@ export type UpsertEnglishWordPayload = {
 
 /** The output of our upsert `EnglishWord` mutation. */
 export type UpsertEnglishWordPayloadEnglishWordEdgeArgs = {
-  orderBy?: Maybe<Array<EnglishWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<EnglishWordsOrderBy>>;
 };
 
 /** Where conditions for the upsert `EnglishWord` mutation. */
 export type UpsertEnglishWordWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `EnglishWouldYouRatherQuestion` mutation. */
 export type UpsertEnglishWouldYouRatherQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `EnglishWouldYouRatherQuestion` to be upserted by this mutation. */
   englishWouldYouRatherQuestion: EnglishWouldYouRatherQuestionInput;
 };
@@ -23235,19 +23236,19 @@ export type UpsertEnglishWouldYouRatherQuestionPayload = {
 
 /** The output of our upsert `EnglishWouldYouRatherQuestion` mutation. */
 export type UpsertEnglishWouldYouRatherQuestionPayloadEnglishWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<EnglishWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `EnglishWouldYouRatherQuestion` mutation. */
 export type UpsertEnglishWouldYouRatherQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `FrenchRandomQuestion` mutation. */
 export type UpsertFrenchRandomQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `FrenchRandomQuestion` to be upserted by this mutation. */
   frenchRandomQuestion: FrenchRandomQuestionInput;
 };
@@ -23270,19 +23271,19 @@ export type UpsertFrenchRandomQuestionPayload = {
 
 /** The output of our upsert `FrenchRandomQuestion` mutation. */
 export type UpsertFrenchRandomQuestionPayloadFrenchRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<FrenchRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<FrenchRandomQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `FrenchRandomQuestion` mutation. */
 export type UpsertFrenchRandomQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `FrenchWord` mutation. */
 export type UpsertFrenchWordInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `FrenchWord` to be upserted by this mutation. */
   frenchWord: FrenchWordInput;
 };
@@ -23305,19 +23306,19 @@ export type UpsertFrenchWordPayload = {
 
 /** The output of our upsert `FrenchWord` mutation. */
 export type UpsertFrenchWordPayloadFrenchWordEdgeArgs = {
-  orderBy?: Maybe<Array<FrenchWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<FrenchWordsOrderBy>>;
 };
 
 /** Where conditions for the upsert `FrenchWord` mutation. */
 export type UpsertFrenchWordWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `FrenchWouldYouRatherQuestion` mutation. */
 export type UpsertFrenchWouldYouRatherQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `FrenchWouldYouRatherQuestion` to be upserted by this mutation. */
   frenchWouldYouRatherQuestion: FrenchWouldYouRatherQuestionInput;
 };
@@ -23340,19 +23341,19 @@ export type UpsertFrenchWouldYouRatherQuestionPayload = {
 
 /** The output of our upsert `FrenchWouldYouRatherQuestion` mutation. */
 export type UpsertFrenchWouldYouRatherQuestionPayloadFrenchWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<FrenchWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `FrenchWouldYouRatherQuestion` mutation. */
 export type UpsertFrenchWouldYouRatherQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `GermanRandomQuestion` mutation. */
 export type UpsertGermanRandomQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `GermanRandomQuestion` to be upserted by this mutation. */
   germanRandomQuestion: GermanRandomQuestionInput;
 };
@@ -23375,19 +23376,19 @@ export type UpsertGermanRandomQuestionPayload = {
 
 /** The output of our upsert `GermanRandomQuestion` mutation. */
 export type UpsertGermanRandomQuestionPayloadGermanRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<GermanRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<GermanRandomQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `GermanRandomQuestion` mutation. */
 export type UpsertGermanRandomQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `GermanWord` mutation. */
 export type UpsertGermanWordInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `GermanWord` to be upserted by this mutation. */
   germanWord: GermanWordInput;
 };
@@ -23410,19 +23411,19 @@ export type UpsertGermanWordPayload = {
 
 /** The output of our upsert `GermanWord` mutation. */
 export type UpsertGermanWordPayloadGermanWordEdgeArgs = {
-  orderBy?: Maybe<Array<GermanWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<GermanWordsOrderBy>>;
 };
 
 /** Where conditions for the upsert `GermanWord` mutation. */
 export type UpsertGermanWordWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `GermanWouldYouRatherQuestion` mutation. */
 export type UpsertGermanWouldYouRatherQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `GermanWouldYouRatherQuestion` to be upserted by this mutation. */
   germanWouldYouRatherQuestion: GermanWouldYouRatherQuestionInput;
 };
@@ -23445,19 +23446,19 @@ export type UpsertGermanWouldYouRatherQuestionPayload = {
 
 /** The output of our upsert `GermanWouldYouRatherQuestion` mutation. */
 export type UpsertGermanWouldYouRatherQuestionPayloadGermanWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<GermanWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `GermanWouldYouRatherQuestion` mutation. */
 export type UpsertGermanWouldYouRatherQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `Group` mutation. */
 export type UpsertGroupInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Group` to be upserted by this mutation. */
   group: GroupInput;
 };
@@ -23482,13 +23483,13 @@ export type UpsertGroupPayload = {
 
 /** The output of our upsert `Group` mutation. */
 export type UpsertGroupPayloadGroupEdgeArgs = {
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 /** All input for the upsert `GroupUser` mutation. */
 export type UpsertGroupUserInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `GroupUser` to be upserted by this mutation. */
   groupUser: GroupUserInput;
 };
@@ -23513,24 +23514,24 @@ export type UpsertGroupUserPayload = {
 
 /** The output of our upsert `GroupUser` mutation. */
 export type UpsertGroupUserPayloadGroupUserEdgeArgs = {
-  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  orderBy?: InputMaybe<Array<GroupUsersOrderBy>>;
 };
 
 /** Where conditions for the upsert `GroupUser` mutation. */
 export type UpsertGroupUserWhere = {
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** Where conditions for the upsert `Group` mutation. */
 export type UpsertGroupWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `InAppNotificationMetadatum` mutation. */
 export type UpsertInAppNotificationMetadatumInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `InAppNotificationMetadatum` to be upserted by this mutation. */
   inAppNotificationMetadatum: InAppNotificationMetadatumInput;
 };
@@ -23557,18 +23558,18 @@ export type UpsertInAppNotificationMetadatumPayload = {
 
 /** The output of our upsert `InAppNotificationMetadatum` mutation. */
 export type UpsertInAppNotificationMetadatumPayloadInAppNotificationMetadatumEdgeArgs = {
-  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+  orderBy?: InputMaybe<Array<InAppNotificationMetadataOrderBy>>;
 };
 
 /** Where conditions for the upsert `InAppNotificationMetadatum` mutation. */
 export type UpsertInAppNotificationMetadatumWhere = {
-  notificationId?: Maybe<Scalars['Int']>;
+  notificationId?: InputMaybe<Scalars['Int']>;
 };
 
 /** All input for the upsert `InviteToken` mutation. */
 export type UpsertInviteTokenInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `InviteToken` to be upserted by this mutation. */
   inviteToken: InviteTokenInput;
 };
@@ -23591,18 +23592,18 @@ export type UpsertInviteTokenPayload = {
 
 /** The output of our upsert `InviteToken` mutation. */
 export type UpsertInviteTokenPayloadInviteTokenEdgeArgs = {
-  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+  orderBy?: InputMaybe<Array<InviteTokensOrderBy>>;
 };
 
 /** Where conditions for the upsert `InviteToken` mutation. */
 export type UpsertInviteTokenWhere = {
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** All input for the upsert `ItalianRandomQuestion` mutation. */
 export type UpsertItalianRandomQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `ItalianRandomQuestion` to be upserted by this mutation. */
   italianRandomQuestion: ItalianRandomQuestionInput;
 };
@@ -23625,19 +23626,19 @@ export type UpsertItalianRandomQuestionPayload = {
 
 /** The output of our upsert `ItalianRandomQuestion` mutation. */
 export type UpsertItalianRandomQuestionPayloadItalianRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ItalianRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ItalianRandomQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `ItalianRandomQuestion` mutation. */
 export type UpsertItalianRandomQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `ItalianWord` mutation. */
 export type UpsertItalianWordInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `ItalianWord` to be upserted by this mutation. */
   italianWord: ItalianWordInput;
 };
@@ -23660,19 +23661,19 @@ export type UpsertItalianWordPayload = {
 
 /** The output of our upsert `ItalianWord` mutation. */
 export type UpsertItalianWordPayloadItalianWordEdgeArgs = {
-  orderBy?: Maybe<Array<ItalianWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<ItalianWordsOrderBy>>;
 };
 
 /** Where conditions for the upsert `ItalianWord` mutation. */
 export type UpsertItalianWordWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `ItalianWouldYouRatherQuestion` mutation. */
 export type UpsertItalianWouldYouRatherQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `ItalianWouldYouRatherQuestion` to be upserted by this mutation. */
   italianWouldYouRatherQuestion: ItalianWouldYouRatherQuestionInput;
 };
@@ -23695,19 +23696,19 @@ export type UpsertItalianWouldYouRatherQuestionPayload = {
 
 /** The output of our upsert `ItalianWouldYouRatherQuestion` mutation. */
 export type UpsertItalianWouldYouRatherQuestionPayloadItalianWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<ItalianWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `ItalianWouldYouRatherQuestion` mutation. */
 export type UpsertItalianWouldYouRatherQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `JapaneseRandomQuestion` mutation. */
 export type UpsertJapaneseRandomQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `JapaneseRandomQuestion` to be upserted by this mutation. */
   japaneseRandomQuestion: JapaneseRandomQuestionInput;
 };
@@ -23730,19 +23731,19 @@ export type UpsertJapaneseRandomQuestionPayload = {
 
 /** The output of our upsert `JapaneseRandomQuestion` mutation. */
 export type UpsertJapaneseRandomQuestionPayloadJapaneseRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<JapaneseRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<JapaneseRandomQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `JapaneseRandomQuestion` mutation. */
 export type UpsertJapaneseRandomQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `JapaneseWouldYouRatherQuestion` mutation. */
 export type UpsertJapaneseWouldYouRatherQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `JapaneseWouldYouRatherQuestion` to be upserted by this mutation. */
   japaneseWouldYouRatherQuestion: JapaneseWouldYouRatherQuestionInput;
 };
@@ -23765,19 +23766,19 @@ export type UpsertJapaneseWouldYouRatherQuestionPayload = {
 
 /** The output of our upsert `JapaneseWouldYouRatherQuestion` mutation. */
 export type UpsertJapaneseWouldYouRatherQuestionPayloadJapaneseWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<JapaneseWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `JapaneseWouldYouRatherQuestion` mutation. */
 export type UpsertJapaneseWouldYouRatherQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `KoreanRandomQuestion` mutation. */
 export type UpsertKoreanRandomQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `KoreanRandomQuestion` to be upserted by this mutation. */
   koreanRandomQuestion: KoreanRandomQuestionInput;
 };
@@ -23800,19 +23801,19 @@ export type UpsertKoreanRandomQuestionPayload = {
 
 /** The output of our upsert `KoreanRandomQuestion` mutation. */
 export type UpsertKoreanRandomQuestionPayloadKoreanRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<KoreanRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<KoreanRandomQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `KoreanRandomQuestion` mutation. */
 export type UpsertKoreanRandomQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `KoreanWouldYouRatherQuestion` mutation. */
 export type UpsertKoreanWouldYouRatherQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `KoreanWouldYouRatherQuestion` to be upserted by this mutation. */
   koreanWouldYouRatherQuestion: KoreanWouldYouRatherQuestionInput;
 };
@@ -23835,19 +23836,19 @@ export type UpsertKoreanWouldYouRatherQuestionPayload = {
 
 /** The output of our upsert `KoreanWouldYouRatherQuestion` mutation. */
 export type UpsertKoreanWouldYouRatherQuestionPayloadKoreanWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<KoreanWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `KoreanWouldYouRatherQuestion` mutation. */
 export type UpsertKoreanWouldYouRatherQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `Language` mutation. */
 export type UpsertLanguageInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Language` to be upserted by this mutation. */
   language: LanguageInput;
 };
@@ -23868,13 +23869,13 @@ export type UpsertLanguagePayload = {
 
 /** The output of our upsert `Language` mutation. */
 export type UpsertLanguagePayloadLanguageEdgeArgs = {
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 /** All input for the upsert `LanguageSkillLevel` mutation. */
 export type UpsertLanguageSkillLevelInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `LanguageSkillLevel` to be upserted by this mutation. */
   languageSkillLevel: LanguageSkillLevelInput;
 };
@@ -23895,25 +23896,25 @@ export type UpsertLanguageSkillLevelPayload = {
 
 /** The output of our upsert `LanguageSkillLevel` mutation. */
 export type UpsertLanguageSkillLevelPayloadLanguageSkillLevelEdgeArgs = {
-  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  orderBy?: InputMaybe<Array<LanguageSkillLevelsOrderBy>>;
 };
 
 /** Where conditions for the upsert `LanguageSkillLevel` mutation. */
 export type UpsertLanguageSkillLevelWhere = {
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** Where conditions for the upsert `Language` mutation. */
 export type UpsertLanguageWhere = {
-  alpha2?: Maybe<Scalars['String']>;
-  englishName?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
+  alpha2?: InputMaybe<Scalars['String']>;
+  englishName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** All input for the upsert `Message` mutation. */
 export type UpsertMessageInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Message` to be upserted by this mutation. */
   message: MessageInput;
 };
@@ -23942,13 +23943,13 @@ export type UpsertMessagePayload = {
 
 /** The output of our upsert `Message` mutation. */
 export type UpsertMessagePayloadMessageEdgeArgs = {
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** All input for the upsert `MessagePreview` mutation. */
 export type UpsertMessagePreviewInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `MessagePreview` to be upserted by this mutation. */
   messagePreview: MessagePreviewInput;
 };
@@ -23971,25 +23972,25 @@ export type UpsertMessagePreviewPayload = {
 
 /** The output of our upsert `MessagePreview` mutation. */
 export type UpsertMessagePreviewPayloadMessagePreviewEdgeArgs = {
-  orderBy?: Maybe<Array<MessagePreviewsOrderBy>>;
+  orderBy?: InputMaybe<Array<MessagePreviewsOrderBy>>;
 };
 
 /** Where conditions for the upsert `MessagePreview` mutation. */
 export type UpsertMessagePreviewWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Where conditions for the upsert `Message` mutation. */
 export type UpsertMessageWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `NotificationChannel` mutation. */
 export type UpsertNotificationChannelInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `NotificationChannel` to be upserted by this mutation. */
   notificationChannel: NotificationChannelInput;
 };
@@ -24010,20 +24011,20 @@ export type UpsertNotificationChannelPayload = {
 
 /** The output of our upsert `NotificationChannel` mutation. */
 export type UpsertNotificationChannelPayloadNotificationChannelEdgeArgs = {
-  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  orderBy?: InputMaybe<Array<NotificationChannelsOrderBy>>;
 };
 
 /** Where conditions for the upsert `NotificationChannel` mutation. */
 export type UpsertNotificationChannelWhere = {
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `Notification` mutation. */
 export type UpsertNotificationInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Notification` to be upserted by this mutation. */
   notification: NotificationInput;
 };
@@ -24050,19 +24051,19 @@ export type UpsertNotificationPayload = {
 
 /** The output of our upsert `Notification` mutation. */
 export type UpsertNotificationPayloadNotificationEdgeArgs = {
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 /** Where conditions for the upsert `Notification` mutation. */
 export type UpsertNotificationWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `PortugueseRandomQuestion` mutation. */
 export type UpsertPortugueseRandomQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PortugueseRandomQuestion` to be upserted by this mutation. */
   portugueseRandomQuestion: PortugueseRandomQuestionInput;
 };
@@ -24085,19 +24086,19 @@ export type UpsertPortugueseRandomQuestionPayload = {
 
 /** The output of our upsert `PortugueseRandomQuestion` mutation. */
 export type UpsertPortugueseRandomQuestionPayloadPortugueseRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<PortugueseRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PortugueseRandomQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `PortugueseRandomQuestion` mutation. */
 export type UpsertPortugueseRandomQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `PortugueseWord` mutation. */
 export type UpsertPortugueseWordInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PortugueseWord` to be upserted by this mutation. */
   portugueseWord: PortugueseWordInput;
 };
@@ -24120,19 +24121,19 @@ export type UpsertPortugueseWordPayload = {
 
 /** The output of our upsert `PortugueseWord` mutation. */
 export type UpsertPortugueseWordPayloadPortugueseWordEdgeArgs = {
-  orderBy?: Maybe<Array<PortugueseWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<PortugueseWordsOrderBy>>;
 };
 
 /** Where conditions for the upsert `PortugueseWord` mutation. */
 export type UpsertPortugueseWordWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `PortugueseWouldYouRatherQuestion` mutation. */
 export type UpsertPortugueseWouldYouRatherQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PortugueseWouldYouRatherQuestion` to be upserted by this mutation. */
   portugueseWouldYouRatherQuestion: PortugueseWouldYouRatherQuestionInput;
 };
@@ -24155,19 +24156,19 @@ export type UpsertPortugueseWouldYouRatherQuestionPayload = {
 
 /** The output of our upsert `PortugueseWouldYouRatherQuestion` mutation. */
 export type UpsertPortugueseWouldYouRatherQuestionPayloadPortugueseWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PortugueseWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `PortugueseWouldYouRatherQuestion` mutation. */
 export type UpsertPortugueseWouldYouRatherQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `PostCorrection` mutation. */
 export type UpsertPostCorrectionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostCorrection` to be upserted by this mutation. */
   postCorrection: PostCorrectionInput;
 };
@@ -24192,19 +24193,19 @@ export type UpsertPostCorrectionPayload = {
 
 /** The output of our upsert `PostCorrection` mutation. */
 export type UpsertPostCorrectionPayloadPostCorrectionEdgeArgs = {
-  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostCorrectionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `PostCorrection` mutation. */
 export type UpsertPostCorrectionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `PostGameAnswer` mutation. */
 export type UpsertPostGameAnswerInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostGameAnswer` to be upserted by this mutation. */
   postGameAnswer: PostGameAnswerInput;
 };
@@ -24231,19 +24232,19 @@ export type UpsertPostGameAnswerPayload = {
 
 /** The output of our upsert `PostGameAnswer` mutation. */
 export type UpsertPostGameAnswerPayloadPostGameAnswerEdgeArgs = {
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 /** Where conditions for the upsert `PostGameAnswer` mutation. */
 export type UpsertPostGameAnswerWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `PostGame` mutation. */
 export type UpsertPostGameInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostGame` to be upserted by this mutation. */
   postGame: PostGameInput;
 };
@@ -24266,13 +24267,13 @@ export type UpsertPostGamePayload = {
 
 /** The output of our upsert `PostGame` mutation. */
 export type UpsertPostGamePayloadPostGameEdgeArgs = {
-  orderBy?: Maybe<Array<PostGamesOrderBy>>;
+  orderBy?: InputMaybe<Array<PostGamesOrderBy>>;
 };
 
 /** All input for the upsert `PostGameRange` mutation. */
 export type UpsertPostGameRangeInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostGameRange` to be upserted by this mutation. */
   postGameRange: PostGameRangeInput;
 };
@@ -24295,25 +24296,25 @@ export type UpsertPostGameRangePayload = {
 
 /** The output of our upsert `PostGameRange` mutation. */
 export type UpsertPostGameRangePayloadPostGameRangeEdgeArgs = {
-  orderBy?: Maybe<Array<PostGameRangesOrderBy>>;
+  orderBy?: InputMaybe<Array<PostGameRangesOrderBy>>;
 };
 
 /** Where conditions for the upsert `PostGameRange` mutation. */
 export type UpsertPostGameRangeWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Where conditions for the upsert `PostGame` mutation. */
 export type UpsertPostGameWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `Post` mutation. */
 export type UpsertPostInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Post` to be upserted by this mutation. */
   post: PostInput;
 };
@@ -24321,7 +24322,7 @@ export type UpsertPostInput = {
 /** All input for the upsert `PostLike` mutation. */
 export type UpsertPostLikeInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostLike` to be upserted by this mutation. */
   postLike: PostLikeInput;
 };
@@ -24346,12 +24347,12 @@ export type UpsertPostLikePayload = {
 
 /** The output of our upsert `PostLike` mutation. */
 export type UpsertPostLikePayloadPostLikeEdgeArgs = {
-  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  orderBy?: InputMaybe<Array<PostLikesOrderBy>>;
 };
 
 /** Where conditions for the upsert `PostLike` mutation. */
 export type UpsertPostLikeWhere = {
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** The output of our upsert `Post` mutation. */
@@ -24378,13 +24379,13 @@ export type UpsertPostPayload = {
 
 /** The output of our upsert `Post` mutation. */
 export type UpsertPostPayloadPostEdgeArgs = {
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 /** All input for the upsert `PostRecording` mutation. */
 export type UpsertPostRecordingInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostRecording` to be upserted by this mutation. */
   postRecording: PostRecordingInput;
 };
@@ -24409,19 +24410,19 @@ export type UpsertPostRecordingPayload = {
 
 /** The output of our upsert `PostRecording` mutation. */
 export type UpsertPostRecordingPayloadPostRecordingEdgeArgs = {
-  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostRecordingsOrderBy>>;
 };
 
 /** Where conditions for the upsert `PostRecording` mutation. */
 export type UpsertPostRecordingWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `PostUserMention` mutation. */
 export type UpsertPostUserMentionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `PostUserMention` to be upserted by this mutation. */
   postUserMention: PostUserMentionInput;
 };
@@ -24446,26 +24447,26 @@ export type UpsertPostUserMentionPayload = {
 
 /** The output of our upsert `PostUserMention` mutation. */
 export type UpsertPostUserMentionPayloadPostUserMentionEdgeArgs = {
-  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+  orderBy?: InputMaybe<Array<PostUserMentionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `PostUserMention` mutation. */
 export type UpsertPostUserMentionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Where conditions for the upsert `Post` mutation. */
 export type UpsertPostWhere = {
-  id?: Maybe<Scalars['Int']>;
-  snowflakeId?: Maybe<Scalars['BigInt']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  snowflakeId?: InputMaybe<Scalars['BigInt']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `Prompt` mutation. */
 export type UpsertPromptInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Prompt` to be upserted by this mutation. */
   prompt: PromptInput;
 };
@@ -24490,19 +24491,19 @@ export type UpsertPromptPayload = {
 
 /** The output of our upsert `Prompt` mutation. */
 export type UpsertPromptPayloadPromptEdgeArgs = {
-  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  orderBy?: InputMaybe<Array<PromptsOrderBy>>;
 };
 
 /** Where conditions for the upsert `Prompt` mutation. */
 export type UpsertPromptWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `RefreshToken` mutation. */
 export type UpsertRefreshTokenInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `RefreshToken` to be upserted by this mutation. */
   refreshToken: RefreshTokenInput;
 };
@@ -24525,18 +24526,18 @@ export type UpsertRefreshTokenPayload = {
 
 /** The output of our upsert `RefreshToken` mutation. */
 export type UpsertRefreshTokenPayloadRefreshTokenEdgeArgs = {
-  orderBy?: Maybe<Array<RefreshTokensOrderBy>>;
+  orderBy?: InputMaybe<Array<RefreshTokensOrderBy>>;
 };
 
 /** Where conditions for the upsert `RefreshToken` mutation. */
 export type UpsertRefreshTokenWhere = {
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** All input for the upsert `RussianRandomQuestion` mutation. */
 export type UpsertRussianRandomQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `RussianRandomQuestion` to be upserted by this mutation. */
   russianRandomQuestion: RussianRandomQuestionInput;
 };
@@ -24559,19 +24560,19 @@ export type UpsertRussianRandomQuestionPayload = {
 
 /** The output of our upsert `RussianRandomQuestion` mutation. */
 export type UpsertRussianRandomQuestionPayloadRussianRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<RussianRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<RussianRandomQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `RussianRandomQuestion` mutation. */
 export type UpsertRussianRandomQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `RussianWord` mutation. */
 export type UpsertRussianWordInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `RussianWord` to be upserted by this mutation. */
   russianWord: RussianWordInput;
 };
@@ -24594,19 +24595,19 @@ export type UpsertRussianWordPayload = {
 
 /** The output of our upsert `RussianWord` mutation. */
 export type UpsertRussianWordPayloadRussianWordEdgeArgs = {
-  orderBy?: Maybe<Array<RussianWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<RussianWordsOrderBy>>;
 };
 
 /** Where conditions for the upsert `RussianWord` mutation. */
 export type UpsertRussianWordWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `RussianWouldYouRatherQuestion` mutation. */
 export type UpsertRussianWouldYouRatherQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `RussianWouldYouRatherQuestion` to be upserted by this mutation. */
   russianWouldYouRatherQuestion: RussianWouldYouRatherQuestionInput;
 };
@@ -24629,19 +24630,19 @@ export type UpsertRussianWouldYouRatherQuestionPayload = {
 
 /** The output of our upsert `RussianWouldYouRatherQuestion` mutation. */
 export type UpsertRussianWouldYouRatherQuestionPayloadRussianWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<RussianWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `RussianWouldYouRatherQuestion` mutation. */
 export type UpsertRussianWouldYouRatherQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `SpanishRandomQuestion` mutation. */
 export type UpsertSpanishRandomQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `SpanishRandomQuestion` to be upserted by this mutation. */
   spanishRandomQuestion: SpanishRandomQuestionInput;
 };
@@ -24664,19 +24665,19 @@ export type UpsertSpanishRandomQuestionPayload = {
 
 /** The output of our upsert `SpanishRandomQuestion` mutation. */
 export type UpsertSpanishRandomQuestionPayloadSpanishRandomQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<SpanishRandomQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<SpanishRandomQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `SpanishRandomQuestion` mutation. */
 export type UpsertSpanishRandomQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `SpanishWord` mutation. */
 export type UpsertSpanishWordInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `SpanishWord` to be upserted by this mutation. */
   spanishWord: SpanishWordInput;
 };
@@ -24699,19 +24700,19 @@ export type UpsertSpanishWordPayload = {
 
 /** The output of our upsert `SpanishWord` mutation. */
 export type UpsertSpanishWordPayloadSpanishWordEdgeArgs = {
-  orderBy?: Maybe<Array<SpanishWordsOrderBy>>;
+  orderBy?: InputMaybe<Array<SpanishWordsOrderBy>>;
 };
 
 /** Where conditions for the upsert `SpanishWord` mutation. */
 export type UpsertSpanishWordWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `SpanishWouldYouRatherQuestion` mutation. */
 export type UpsertSpanishWouldYouRatherQuestionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `SpanishWouldYouRatherQuestion` to be upserted by this mutation. */
   spanishWouldYouRatherQuestion: SpanishWouldYouRatherQuestionInput;
 };
@@ -24734,19 +24735,19 @@ export type UpsertSpanishWouldYouRatherQuestionPayload = {
 
 /** The output of our upsert `SpanishWouldYouRatherQuestion` mutation. */
 export type UpsertSpanishWouldYouRatherQuestionPayloadSpanishWouldYouRatherQuestionEdgeArgs = {
-  orderBy?: Maybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
+  orderBy?: InputMaybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `SpanishWouldYouRatherQuestion` mutation. */
 export type UpsertSpanishWouldYouRatherQuestionWhere = {
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `UserDevice` mutation. */
 export type UpsertUserDeviceInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `UserDevice` to be upserted by this mutation. */
   userDevice: UserDeviceInput;
 };
@@ -24769,20 +24770,20 @@ export type UpsertUserDevicePayload = {
 
 /** The output of our upsert `UserDevice` mutation. */
 export type UpsertUserDevicePayloadUserDeviceEdgeArgs = {
-  orderBy?: Maybe<Array<UserDevicesOrderBy>>;
+  orderBy?: InputMaybe<Array<UserDevicesOrderBy>>;
 };
 
 /** Where conditions for the upsert `UserDevice` mutation. */
 export type UpsertUserDeviceWhere = {
-  fcmToken?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  fcmToken?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** All input for the upsert `UserFollower` mutation. */
 export type UpsertUserFollowerInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `UserFollower` to be upserted by this mutation. */
   userFollower: UserFollowerInput;
 };
@@ -24807,18 +24808,18 @@ export type UpsertUserFollowerPayload = {
 
 /** The output of our upsert `UserFollower` mutation. */
 export type UpsertUserFollowerPayloadUserFollowerEdgeArgs = {
-  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  orderBy?: InputMaybe<Array<UserFollowersOrderBy>>;
 };
 
 /** Where conditions for the upsert `UserFollower` mutation. */
 export type UpsertUserFollowerWhere = {
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** All input for the upsert `User` mutation. */
 export type UpsertUserInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `User` to be upserted by this mutation. */
   user: UserInput;
 };
@@ -24826,7 +24827,7 @@ export type UpsertUserInput = {
 /** All input for the upsert `UserLanguage` mutation. */
 export type UpsertUserLanguageInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `UserLanguage` to be upserted by this mutation. */
   userLanguage: UserLanguageInput;
 };
@@ -24853,12 +24854,12 @@ export type UpsertUserLanguagePayload = {
 
 /** The output of our upsert `UserLanguage` mutation. */
 export type UpsertUserLanguagePayloadUserLanguageEdgeArgs = {
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 /** Where conditions for the upsert `UserLanguage` mutation. */
 export type UpsertUserLanguageWhere = {
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** The output of our upsert `User` mutation. */
@@ -24881,13 +24882,13 @@ export type UpsertUserPayload = {
 
 /** The output of our upsert `User` mutation. */
 export type UpsertUserPayloadUserEdgeArgs = {
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /** All input for the upsert `UserPreference` mutation. */
 export type UpsertUserPreferenceInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `UserPreference` to be upserted by this mutation. */
   userPreference: UserPreferenceInput;
 };
@@ -24912,19 +24913,19 @@ export type UpsertUserPreferencePayload = {
 
 /** The output of our upsert `UserPreference` mutation. */
 export type UpsertUserPreferencePayloadUserPreferenceEdgeArgs = {
-  orderBy?: Maybe<Array<UserPreferencesOrderBy>>;
+  orderBy?: InputMaybe<Array<UserPreferencesOrderBy>>;
 };
 
 /** Where conditions for the upsert `UserPreference` mutation. */
 export type UpsertUserPreferenceWhere = {
-  id?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** All input for the upsert `UserSession` mutation. */
 export type UpsertUserSessionInput = {
   /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `UserSession` to be upserted by this mutation. */
   userSession: UserSessionInput;
 };
@@ -24945,22 +24946,22 @@ export type UpsertUserSessionPayload = {
 
 /** The output of our upsert `UserSession` mutation. */
 export type UpsertUserSessionPayloadUserSessionEdgeArgs = {
-  orderBy?: Maybe<Array<UserSessionsOrderBy>>;
+  orderBy?: InputMaybe<Array<UserSessionsOrderBy>>;
 };
 
 /** Where conditions for the upsert `UserSession` mutation. */
 export type UpsertUserSessionWhere = {
-  sid?: Maybe<Scalars['String']>;
+  sid?: InputMaybe<Scalars['String']>;
 };
 
 /** Where conditions for the upsert `User` mutation. */
 export type UpsertUserWhere = {
-  email?: Maybe<Scalars['String']>;
-  emailUnsubscribeToken?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  resetPasswordToken?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  email?: InputMaybe<Scalars['String']>;
+  emailUnsubscribeToken?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  resetPasswordToken?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 export type User = Node & {
@@ -25079,535 +25080,535 @@ export type User = Node & {
 
 
 export type UserAuthoredPostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
 export type UserFollowedUsersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserFollowerCondition>;
-  filter?: Maybe<UserFollowerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserFollowerCondition>;
+  filter?: InputMaybe<UserFollowerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserFollowersOrderBy>>;
 };
 
 
 export type UserFollowersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserFollowerCondition>;
-  filter?: Maybe<UserFollowerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserFollowerCondition>;
+  filter?: InputMaybe<UserFollowerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserFollowersOrderBy>>;
 };
 
 
 export type UserGroupUsersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupUserCondition>;
-  filter?: Maybe<GroupUserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupUserCondition>;
+  filter?: InputMaybe<GroupUserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupUsersOrderBy>>;
 };
 
 
 export type UserGroupsByGroupUserUserIdAndGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupCondition>;
-  filter?: Maybe<GroupFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupCondition>;
+  filter?: InputMaybe<GroupFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 
 export type UserGroupsByMessageRecipientIdAndRecipientGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupCondition>;
-  filter?: Maybe<GroupFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupCondition>;
+  filter?: InputMaybe<GroupFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 
 export type UserGroupsByMessageSenderIdAndRecipientGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupCondition>;
-  filter?: Maybe<GroupFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupCondition>;
+  filter?: InputMaybe<GroupFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 
 export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupCondition>;
-  filter?: Maybe<GroupFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupCondition>;
+  filter?: InputMaybe<GroupFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupsOrderBy>>;
 };
 
 
 export type UserInAppNotificationsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  afterUuid?: Maybe<Scalars['UUID']>;
-  before?: Maybe<Scalars['Cursor']>;
-  filter?: Maybe<NotificationFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  afterUuid?: InputMaybe<Scalars['UUID']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  filter?: InputMaybe<NotificationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
 export type UserInviteTokensArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InviteTokenCondition>;
-  filter?: Maybe<InviteTokenFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InviteTokensOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InviteTokenCondition>;
+  filter?: InputMaybe<InviteTokenFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InviteTokensOrderBy>>;
 };
 
 
 export type UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageSkillLevelCondition>;
-  filter?: Maybe<LanguageSkillLevelFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguageSkillLevelsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageSkillLevelCondition>;
+  filter?: InputMaybe<LanguageSkillLevelFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguageSkillLevelsOrderBy>>;
 };
 
 
 export type UserLanguagesByPostAuthorIdAndLanguageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageCondition>;
-  filter?: Maybe<LanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageCondition>;
+  filter?: InputMaybe<LanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 
 export type UserLanguagesByUserLanguageUserIdAndLanguageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<LanguageCondition>;
-  filter?: Maybe<LanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<LanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<LanguageCondition>;
+  filter?: InputMaybe<LanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LanguagesOrderBy>>;
 };
 
 
 export type UserMessagesByMessageRecipientIdAndParentMessageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 
 export type UserMessagesByMessageSenderIdAndParentMessageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 
 export type UserMessagesByRecipientIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 
 export type UserMessagesBySenderIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 
 export type UserNotificationChannelsByNotificationRecipientIdAndChannelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationChannelCondition>;
-  filter?: Maybe<NotificationChannelFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationChannelsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationChannelCondition>;
+  filter?: InputMaybe<NotificationChannelFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationChannelsOrderBy>>;
 };
 
 
 export type UserNotificationsByRecipientIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationCondition>;
-  filter?: Maybe<NotificationFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationCondition>;
+  filter?: InputMaybe<NotificationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 
 export type UserPostCorrectionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCorrectionCondition>;
-  filter?: Maybe<PostCorrectionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCorrectionCondition>;
+  filter?: InputMaybe<PostCorrectionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostCorrectionsOrderBy>>;
 };
 
 
 export type UserPostGameAnswersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameAnswerCondition>;
-  filter?: Maybe<PostGameAnswerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameAnswerCondition>;
+  filter?: InputMaybe<PostGameAnswerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 
 export type UserPostGameRangesByPostGameAnswerUserIdAndRangeIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameRangeCondition>;
-  filter?: Maybe<PostGameRangeFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameRangesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameRangeCondition>;
+  filter?: InputMaybe<PostGameRangeFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameRangesOrderBy>>;
 };
 
 
 export type UserPostGamesByPostGameAnswerUserIdAndGameIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameCondition>;
-  filter?: Maybe<PostGameFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGamesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameCondition>;
+  filter?: InputMaybe<PostGameFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGamesOrderBy>>;
 };
 
 
 export type UserPostLikesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostLikeCondition>;
-  filter?: Maybe<PostLikeFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostLikeCondition>;
+  filter?: InputMaybe<PostLikeFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostLikesOrderBy>>;
 };
 
 
 export type UserPostRecordingsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostRecordingCondition>;
-  filter?: Maybe<PostRecordingFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostRecordingCondition>;
+  filter?: InputMaybe<PostRecordingFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostRecordingsOrderBy>>;
 };
 
 
 export type UserPostUserMentionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostUserMentionCondition>;
-  filter?: Maybe<PostUserMentionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostUserMentionCondition>;
+  filter?: InputMaybe<PostUserMentionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostUserMentionsOrderBy>>;
 };
 
 
 export type UserPostsByInAppNotificationMetadatumUserIdAndPostIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
 export type UserPostsByPostAuthorIdAndParentPostIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
 export type UserPostsByPostCorrectionUserIdAndPostIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
 export type UserPostsByPostLikeUserIdAndPostIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
 export type UserPostsByPostRecordingUserIdAndPostIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
 export type UserPostsByPostUserMentionUserIdAndPostIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 
 export type UserPromptsByPostAuthorIdAndPromptIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PromptCondition>;
-  filter?: Maybe<PromptFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PromptsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PromptCondition>;
+  filter?: InputMaybe<PromptFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PromptsOrderBy>>;
 };
 
 
 export type UserRefreshTokensArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<RefreshTokenCondition>;
-  filter?: Maybe<RefreshTokenFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<RefreshTokensOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<RefreshTokenCondition>;
+  filter?: InputMaybe<RefreshTokenFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<RefreshTokensOrderBy>>;
 };
 
 
 export type UserRelatedInAppNotificationsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InAppNotificationMetadatumCondition>;
-  filter?: Maybe<InAppNotificationMetadatumFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InAppNotificationMetadatumCondition>;
+  filter?: InputMaybe<InAppNotificationMetadatumFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InAppNotificationMetadataOrderBy>>;
 };
 
 
 export type UserUserDevicesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserDeviceCondition>;
-  filter?: Maybe<UserDeviceFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserDevicesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserDeviceCondition>;
+  filter?: InputMaybe<UserDeviceFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserDevicesOrderBy>>;
 };
 
 
 export type UserUserLanguagesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserLanguageCondition>;
-  filter?: Maybe<UserLanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserLanguageCondition>;
+  filter?: InputMaybe<UserLanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 
 export type UserUsersByMessageRecipientIdAndSenderIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type UserUsersByMessageSenderIdAndRecipientIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type UserUsersByUserFollowerFollowerIdAndUserIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 export type UserUsersByUserFollowerUserIdAndFollowerIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserCondition>;
-  filter?: Maybe<UserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 /** A condition to be used against `User` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type UserCondition = {
   /** Checks for equality with the object’s `avatarUrl` field. */
-  avatarUrl?: Maybe<Scalars['String']>;
+  avatarUrl?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `bio` field. */
-  bio?: Maybe<Scalars['String']>;
+  bio?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `displayName` field. */
-  displayName?: Maybe<Scalars['String']>;
+  displayName?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `email` field. */
-  email?: Maybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `emailNotificationsEnabled` field. */
-  emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
+  emailNotificationsEnabled?: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `emailUnsubscribeToken` field. */
-  emailUnsubscribeToken?: Maybe<Scalars['String']>;
+  emailUnsubscribeToken?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `gender` field. */
-  gender?: Maybe<Scalars['String']>;
+  gender?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `googleId` field. */
-  googleId?: Maybe<Scalars['String']>;
+  googleId?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `lastActiveAt` field. */
-  lastActiveAt?: Maybe<Scalars['Datetime']>;
+  lastActiveAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `locale` field. */
-  locale?: Maybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `passwordHash` field. */
-  passwordHash?: Maybe<Scalars['String']>;
+  passwordHash?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `resetPasswordToken` field. */
-  resetPasswordToken?: Maybe<Scalars['String']>;
+  resetPasswordToken?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `resetPasswordTokenCreatedAt` field. */
-  resetPasswordTokenCreatedAt?: Maybe<Scalars['Datetime']>;
+  resetPasswordTokenCreatedAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `signedUpWithTokenId` field. */
-  signedUpWithTokenId?: Maybe<Scalars['Int']>;
+  signedUpWithTokenId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `unconfirmedEmail` field. */
-  unconfirmedEmail?: Maybe<Scalars['String']>;
+  unconfirmedEmail?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `username` field. */
-  username?: Maybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 export type UserDevice = Node & {
@@ -25630,59 +25631,59 @@ export type UserDevice = Node & {
  */
 export type UserDeviceCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `fcmToken` field. */
-  fcmToken?: Maybe<Scalars['String']>;
+  fcmToken?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `updatedAt` field. */
-  updatedAt?: Maybe<Scalars['Datetime']>;
+  updatedAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `uuid` field. */
-  uuid?: Maybe<Scalars['UUID']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A filter to be used against `UserDevice` object types. All fields are combined with a logical ‘and.’ */
 export type UserDeviceFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<UserDeviceFilter>>;
+  and?: InputMaybe<Array<UserDeviceFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `fcmToken` field. */
-  fcmToken?: Maybe<StringFilter>;
+  fcmToken?: InputMaybe<StringFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<UserDeviceFilter>;
+  not?: InputMaybe<UserDeviceFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<UserDeviceFilter>>;
+  or?: InputMaybe<Array<UserDeviceFilter>>;
   /** Filter by the object’s `updatedAt` field. */
-  updatedAt?: Maybe<DatetimeFilter>;
+  updatedAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 /** An input for mutations affecting `UserDevice` */
 export type UserDeviceInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  fcmToken?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  updatedAt?: Maybe<Scalars['Datetime']>;
-  userId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  fcmToken?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  updatedAt?: InputMaybe<Scalars['Datetime']>;
+  userId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** Represents an update to a `UserDevice`. Fields that are set will be updated. */
 export type UserDevicePatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  fcmToken?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  updatedAt?: Maybe<Scalars['Datetime']>;
-  userId?: Maybe<Scalars['Int']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  fcmToken?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  updatedAt?: InputMaybe<Scalars['Datetime']>;
+  userId?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `UserDevice` values. */
@@ -25729,51 +25730,51 @@ export enum UserDevicesOrderBy {
 /** A filter to be used against `User` object types. All fields are combined with a logical ‘and.’ */
 export type UserFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<UserFilter>>;
+  and?: InputMaybe<Array<UserFilter>>;
   /** Filter by the object’s `avatarUrl` field. */
-  avatarUrl?: Maybe<StringFilter>;
+  avatarUrl?: InputMaybe<StringFilter>;
   /** Filter by the object’s `bio` field. */
-  bio?: Maybe<StringFilter>;
+  bio?: InputMaybe<StringFilter>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `displayName` field. */
-  displayName?: Maybe<StringFilter>;
+  displayName?: InputMaybe<StringFilter>;
   /** Filter by the object’s `email` field. */
-  email?: Maybe<StringFilter>;
+  email?: InputMaybe<StringFilter>;
   /** Filter by the object’s `emailNotificationsEnabled` field. */
-  emailNotificationsEnabled?: Maybe<BooleanFilter>;
+  emailNotificationsEnabled?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `emailUnsubscribeToken` field. */
-  emailUnsubscribeToken?: Maybe<StringFilter>;
+  emailUnsubscribeToken?: InputMaybe<StringFilter>;
   /** Filter by the object’s `followedByCurrentUser` field. */
-  followedByCurrentUser?: Maybe<BooleanFilter>;
+  followedByCurrentUser?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `gender` field. */
-  gender?: Maybe<StringFilter>;
+  gender?: InputMaybe<StringFilter>;
   /** Filter by the object’s `googleId` field. */
-  googleId?: Maybe<StringFilter>;
+  googleId?: InputMaybe<StringFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `lastActiveAt` field. */
-  lastActiveAt?: Maybe<DatetimeFilter>;
+  lastActiveAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `locale` field. */
-  locale?: Maybe<IntFilter>;
+  locale?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<UserFilter>;
+  not?: InputMaybe<UserFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<UserFilter>>;
+  or?: InputMaybe<Array<UserFilter>>;
   /** Filter by the object’s `passwordHash` field. */
-  passwordHash?: Maybe<StringFilter>;
+  passwordHash?: InputMaybe<StringFilter>;
   /** Filter by the object’s `resetPasswordToken` field. */
-  resetPasswordToken?: Maybe<StringFilter>;
+  resetPasswordToken?: InputMaybe<StringFilter>;
   /** Filter by the object’s `resetPasswordTokenCreatedAt` field. */
-  resetPasswordTokenCreatedAt?: Maybe<DatetimeFilter>;
+  resetPasswordTokenCreatedAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `signedUpWithTokenId` field. */
-  signedUpWithTokenId?: Maybe<IntFilter>;
+  signedUpWithTokenId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `unconfirmedEmail` field. */
-  unconfirmedEmail?: Maybe<StringFilter>;
+  unconfirmedEmail?: InputMaybe<StringFilter>;
   /** Filter by the object’s `username` field. */
-  username?: Maybe<StringFilter>;
+  username?: InputMaybe<StringFilter>;
   /** Filter by the object’s `uuid` field. */
-  uuid?: Maybe<UuidFilter>;
+  uuid?: InputMaybe<UuidFilter>;
 };
 
 export type UserFollower = Node & {
@@ -25796,47 +25797,47 @@ export type UserFollower = Node & {
  */
 export type UserFollowerCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `followerId` field. */
-  followerId?: Maybe<Scalars['Int']>;
+  followerId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `UserFollower` object types. All fields are combined with a logical ‘and.’ */
 export type UserFollowerFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<UserFollowerFilter>>;
+  and?: InputMaybe<Array<UserFollowerFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `followerId` field. */
-  followerId?: Maybe<IntFilter>;
+  followerId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<UserFollowerFilter>;
+  not?: InputMaybe<UserFollowerFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<UserFollowerFilter>>;
+  or?: InputMaybe<Array<UserFollowerFilter>>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
 };
 
 /** An input for mutations affecting `UserFollower` */
 export type UserFollowerInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   followerId: Scalars['Int'];
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   userId: Scalars['Int'];
 };
 
 /** Represents an update to a `UserFollower`. Fields that are set will be updated. */
 export type UserFollowerPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  followerId?: Maybe<Scalars['Int']>;
-  id?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  followerId?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A connection to a list of `UserFollower` values. */
@@ -25903,14 +25904,14 @@ export type UserGroupsByGroupUserUserIdAndGroupIdManyToManyEdge = {
 
 /** A `Group` edge in the connection, with data from `GroupUser`. */
 export type UserGroupsByGroupUserUserIdAndGroupIdManyToManyEdgeGroupUsersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<GroupUserCondition>;
-  filter?: Maybe<GroupUserFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<GroupUsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GroupUserCondition>;
+  filter?: InputMaybe<GroupUserFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupUsersOrderBy>>;
 };
 
 /** A connection to a list of `Group` values, with data from `Message`. */
@@ -25940,14 +25941,14 @@ export type UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyEdge = {
 
 /** A `Group` edge in the connection, with data from `Message`. */
 export type UserGroupsByMessageRecipientIdAndRecipientGroupIdManyToManyEdgeMessagesByRecipientGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** A connection to a list of `Group` values, with data from `Message`. */
@@ -25977,14 +25978,14 @@ export type UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyEdge = {
 
 /** A `Group` edge in the connection, with data from `Message`. */
 export type UserGroupsByMessageSenderIdAndRecipientGroupIdManyToManyEdgeMessagesByRecipientGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** A connection to a list of `Group` values, with data from `Notification`. */
@@ -26014,37 +26015,37 @@ export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdge
 
 /** A `Group` edge in the connection, with data from `Notification`. */
 export type UserGroupsByNotificationRecipientIdAndRecipientGroupIdManyToManyEdgeNotificationsByRecipientGroupIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationCondition>;
-  filter?: Maybe<NotificationFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationCondition>;
+  filter?: InputMaybe<NotificationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 /** An input for mutations affecting `User` */
 export type UserInput = {
-  avatarUrl?: Maybe<Scalars['String']>;
-  bio?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  displayName?: Maybe<Scalars['String']>;
+  avatarUrl?: InputMaybe<Scalars['String']>;
+  bio?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  displayName?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
-  emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
-  emailUnsubscribeToken?: Maybe<Scalars['String']>;
-  gender?: Maybe<Scalars['String']>;
-  googleId?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  lastActiveAt?: Maybe<Scalars['Datetime']>;
-  locale?: Maybe<Scalars['Int']>;
-  passwordHash?: Maybe<Scalars['String']>;
-  resetPasswordToken?: Maybe<Scalars['String']>;
-  resetPasswordTokenCreatedAt?: Maybe<Scalars['Datetime']>;
-  signedUpWithTokenId?: Maybe<Scalars['Int']>;
-  unconfirmedEmail?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  emailNotificationsEnabled?: InputMaybe<Scalars['Boolean']>;
+  emailUnsubscribeToken?: InputMaybe<Scalars['String']>;
+  gender?: InputMaybe<Scalars['String']>;
+  googleId?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  lastActiveAt?: InputMaybe<Scalars['Datetime']>;
+  locale?: InputMaybe<Scalars['Int']>;
+  passwordHash?: InputMaybe<Scalars['String']>;
+  resetPasswordToken?: InputMaybe<Scalars['String']>;
+  resetPasswordTokenCreatedAt?: InputMaybe<Scalars['Datetime']>;
+  signedUpWithTokenId?: InputMaybe<Scalars['Int']>;
+  unconfirmedEmail?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 export type UserLanguage = Node & {
@@ -26071,59 +26072,59 @@ export type UserLanguage = Node & {
  */
 export type UserLanguageCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `languageId` field. */
-  languageId?: Maybe<Scalars['Int']>;
+  languageId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `languageSkillLevelId` field. */
-  languageSkillLevelId?: Maybe<Scalars['Int']>;
+  languageSkillLevelId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `native` field. */
-  native?: Maybe<Scalars['Boolean']>;
+  native?: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `UserLanguage` object types. All fields are combined with a logical ‘and.’ */
 export type UserLanguageFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<UserLanguageFilter>>;
+  and?: InputMaybe<Array<UserLanguageFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Filter by the object’s `languageId` field. */
-  languageId?: Maybe<IntFilter>;
+  languageId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `languageSkillLevelId` field. */
-  languageSkillLevelId?: Maybe<IntFilter>;
+  languageSkillLevelId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `native` field. */
-  native?: Maybe<BooleanFilter>;
+  native?: InputMaybe<BooleanFilter>;
   /** Negates the expression. */
-  not?: Maybe<UserLanguageFilter>;
+  not?: InputMaybe<UserLanguageFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<UserLanguageFilter>>;
+  or?: InputMaybe<Array<UserLanguageFilter>>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
 };
 
 /** An input for mutations affecting `UserLanguage` */
 export type UserLanguageInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  languageId?: Maybe<Scalars['Int']>;
-  languageSkillLevelId?: Maybe<Scalars['Int']>;
-  native?: Maybe<Scalars['Boolean']>;
-  userId?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  languageId?: InputMaybe<Scalars['Int']>;
+  languageSkillLevelId?: InputMaybe<Scalars['Int']>;
+  native?: InputMaybe<Scalars['Boolean']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** Represents an update to a `UserLanguage`. Fields that are set will be updated. */
 export type UserLanguagePatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id?: Maybe<Scalars['Int']>;
-  languageId?: Maybe<Scalars['Int']>;
-  languageSkillLevelId?: Maybe<Scalars['Int']>;
-  native?: Maybe<Scalars['Boolean']>;
-  userId?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  id?: InputMaybe<Scalars['Int']>;
+  languageId?: InputMaybe<Scalars['Int']>;
+  languageSkillLevelId?: InputMaybe<Scalars['Int']>;
+  native?: InputMaybe<Scalars['Boolean']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A connection to a list of `LanguageSkillLevel` values, with data from `UserLanguage`. */
@@ -26153,14 +26154,14 @@ export type UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdMa
 
 /** A `LanguageSkillLevel` edge in the connection, with data from `UserLanguage`. */
 export type UserLanguageSkillLevelsByUserLanguageUserIdAndLanguageSkillLevelIdManyToManyEdgeUserLanguagesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserLanguageCondition>;
-  filter?: Maybe<UserLanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserLanguageCondition>;
+  filter?: InputMaybe<UserLanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 /** A connection to a list of `Language` values, with data from `Post`. */
@@ -26190,14 +26191,14 @@ export type UserLanguagesByPostAuthorIdAndLanguageIdManyToManyEdge = {
 
 /** A `Language` edge in the connection, with data from `Post`. */
 export type UserLanguagesByPostAuthorIdAndLanguageIdManyToManyEdgePostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 /** A connection to a list of `Language` values, with data from `UserLanguage`. */
@@ -26227,14 +26228,14 @@ export type UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyEdge = {
 
 /** A `Language` edge in the connection, with data from `UserLanguage`. */
 export type UserLanguagesByUserLanguageUserIdAndLanguageIdManyToManyEdgeUserLanguagesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserLanguageCondition>;
-  filter?: Maybe<UserLanguageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserLanguagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserLanguageCondition>;
+  filter?: InputMaybe<UserLanguageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserLanguagesOrderBy>>;
 };
 
 /** A connection to a list of `UserLanguage` values. */
@@ -26305,14 +26306,14 @@ export type UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyEdge = {
 
 /** A `Message` edge in the connection, with data from `Message`. */
 export type UserMessagesByMessageRecipientIdAndParentMessageIdManyToManyEdgeMessagesByParentMessageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** A connection to a list of `Message` values, with data from `Message`. */
@@ -26342,14 +26343,14 @@ export type UserMessagesByMessageSenderIdAndParentMessageIdManyToManyEdge = {
 
 /** A `Message` edge in the connection, with data from `Message`. */
 export type UserMessagesByMessageSenderIdAndParentMessageIdManyToManyEdgeMessagesByParentMessageIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** A connection to a list of `NotificationChannel` values, with data from `Notification`. */
@@ -26379,37 +26380,37 @@ export type UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToM
 
 /** A `NotificationChannel` edge in the connection, with data from `Notification`. */
 export type UserNotificationChannelsByNotificationRecipientIdAndChannelIdManyToManyEdgeNotificationsByChannelIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<NotificationCondition>;
-  filter?: Maybe<NotificationFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<NotificationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<NotificationCondition>;
+  filter?: InputMaybe<NotificationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 /** Represents an update to a `User`. Fields that are set will be updated. */
 export type UserPatch = {
-  avatarUrl?: Maybe<Scalars['String']>;
-  bio?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  displayName?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  emailNotificationsEnabled?: Maybe<Scalars['Boolean']>;
-  emailUnsubscribeToken?: Maybe<Scalars['String']>;
-  gender?: Maybe<Scalars['String']>;
-  googleId?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  lastActiveAt?: Maybe<Scalars['Datetime']>;
-  locale?: Maybe<Scalars['Int']>;
-  passwordHash?: Maybe<Scalars['String']>;
-  resetPasswordToken?: Maybe<Scalars['String']>;
-  resetPasswordTokenCreatedAt?: Maybe<Scalars['Datetime']>;
-  signedUpWithTokenId?: Maybe<Scalars['Int']>;
-  unconfirmedEmail?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
-  uuid?: Maybe<Scalars['UUID']>;
+  avatarUrl?: InputMaybe<Scalars['String']>;
+  bio?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  displayName?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  emailNotificationsEnabled?: InputMaybe<Scalars['Boolean']>;
+  emailUnsubscribeToken?: InputMaybe<Scalars['String']>;
+  gender?: InputMaybe<Scalars['String']>;
+  googleId?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  lastActiveAt?: InputMaybe<Scalars['Datetime']>;
+  locale?: InputMaybe<Scalars['Int']>;
+  passwordHash?: InputMaybe<Scalars['String']>;
+  resetPasswordToken?: InputMaybe<Scalars['String']>;
+  resetPasswordTokenCreatedAt?: InputMaybe<Scalars['Datetime']>;
+  signedUpWithTokenId?: InputMaybe<Scalars['Int']>;
+  unconfirmedEmail?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 /** A connection to a list of `PostGameRange` values, with data from `PostGameAnswer`. */
@@ -26439,14 +26440,14 @@ export type UserPostGameRangesByPostGameAnswerUserIdAndRangeIdManyToManyEdge = {
 
 /** A `PostGameRange` edge in the connection, with data from `PostGameAnswer`. */
 export type UserPostGameRangesByPostGameAnswerUserIdAndRangeIdManyToManyEdgeAnswersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameAnswerCondition>;
-  filter?: Maybe<PostGameAnswerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameAnswerCondition>;
+  filter?: InputMaybe<PostGameAnswerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 /** A connection to a list of `PostGame` values, with data from `PostGameAnswer`. */
@@ -26476,14 +26477,14 @@ export type UserPostGamesByPostGameAnswerUserIdAndGameIdManyToManyEdge = {
 
 /** A `PostGame` edge in the connection, with data from `PostGameAnswer`. */
 export type UserPostGamesByPostGameAnswerUserIdAndGameIdManyToManyEdgeAnswerRevealsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostGameAnswerCondition>;
-  filter?: Maybe<PostGameAnswerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostGameAnswersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostGameAnswerCondition>;
+  filter?: InputMaybe<PostGameAnswerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostGameAnswersOrderBy>>;
 };
 
 /** A connection to a list of `Post` values, with data from `InAppNotificationMetadatum`. */
@@ -26513,14 +26514,14 @@ export type UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyEdge =
 
 /** A `Post` edge in the connection, with data from `InAppNotificationMetadatum`. */
 export type UserPostsByInAppNotificationMetadatumUserIdAndPostIdManyToManyEdgeRelatedInAppNotificationsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InAppNotificationMetadatumCondition>;
-  filter?: Maybe<InAppNotificationMetadatumFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InAppNotificationMetadataOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InAppNotificationMetadatumCondition>;
+  filter?: InputMaybe<InAppNotificationMetadatumFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InAppNotificationMetadataOrderBy>>;
 };
 
 /** A connection to a list of `Post` values, with data from `Post`. */
@@ -26550,14 +26551,14 @@ export type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdge = {
 
 /** A `Post` edge in the connection, with data from `Post`. */
 export type UserPostsByPostAuthorIdAndParentPostIdManyToManyEdgeRepliesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 /** A connection to a list of `Post` values, with data from `PostCorrection`. */
@@ -26587,14 +26588,14 @@ export type UserPostsByPostCorrectionUserIdAndPostIdManyToManyEdge = {
 
 /** A `Post` edge in the connection, with data from `PostCorrection`. */
 export type UserPostsByPostCorrectionUserIdAndPostIdManyToManyEdgeCorrectionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCorrectionCondition>;
-  filter?: Maybe<PostCorrectionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostCorrectionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCorrectionCondition>;
+  filter?: InputMaybe<PostCorrectionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostCorrectionsOrderBy>>;
 };
 
 /** A connection to a list of `Post` values, with data from `PostLike`. */
@@ -26624,14 +26625,14 @@ export type UserPostsByPostLikeUserIdAndPostIdManyToManyEdge = {
 
 /** A `Post` edge in the connection, with data from `PostLike`. */
 export type UserPostsByPostLikeUserIdAndPostIdManyToManyEdgeLikesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostLikeCondition>;
-  filter?: Maybe<PostLikeFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostLikesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostLikeCondition>;
+  filter?: InputMaybe<PostLikeFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostLikesOrderBy>>;
 };
 
 /** A connection to a list of `Post` values, with data from `PostRecording`. */
@@ -26661,14 +26662,14 @@ export type UserPostsByPostRecordingUserIdAndPostIdManyToManyEdge = {
 
 /** A `Post` edge in the connection, with data from `PostRecording`. */
 export type UserPostsByPostRecordingUserIdAndPostIdManyToManyEdgeRecordingsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostRecordingCondition>;
-  filter?: Maybe<PostRecordingFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostRecordingsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostRecordingCondition>;
+  filter?: InputMaybe<PostRecordingFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostRecordingsOrderBy>>;
 };
 
 /** A connection to a list of `Post` values, with data from `PostUserMention`. */
@@ -26698,14 +26699,14 @@ export type UserPostsByPostUserMentionUserIdAndPostIdManyToManyEdge = {
 
 /** A `Post` edge in the connection, with data from `PostUserMention`. */
 export type UserPostsByPostUserMentionUserIdAndPostIdManyToManyEdgeUserMentionsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostUserMentionCondition>;
-  filter?: Maybe<PostUserMentionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostUserMentionsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostUserMentionCondition>;
+  filter?: InputMaybe<PostUserMentionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostUserMentionsOrderBy>>;
 };
 
 export type UserPreference = Node & {
@@ -26728,47 +26729,47 @@ export type UserPreference = Node & {
  */
 export type UserPreferenceCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `feedLanguageId` field. */
-  feedLanguageId?: Maybe<Scalars['Int']>;
+  feedLanguageId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `userId` field. */
-  userId?: Maybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `UserPreference` object types. All fields are combined with a logical ‘and.’ */
 export type UserPreferenceFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<UserPreferenceFilter>>;
+  and?: InputMaybe<Array<UserPreferenceFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `feedLanguageId` field. */
-  feedLanguageId?: Maybe<IntFilter>;
+  feedLanguageId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `id` field. */
-  id?: Maybe<IntFilter>;
+  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
-  not?: Maybe<UserPreferenceFilter>;
+  not?: InputMaybe<UserPreferenceFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<UserPreferenceFilter>>;
+  or?: InputMaybe<Array<UserPreferenceFilter>>;
   /** Filter by the object’s `userId` field. */
-  userId?: Maybe<IntFilter>;
+  userId?: InputMaybe<IntFilter>;
 };
 
 /** An input for mutations affecting `UserPreference` */
 export type UserPreferenceInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   feedLanguageId: Scalars['Int'];
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   userId: Scalars['Int'];
 };
 
 /** Represents an update to a `UserPreference`. Fields that are set will be updated. */
 export type UserPreferencePatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  feedLanguageId?: Maybe<Scalars['Int']>;
-  id?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  feedLanguageId?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A connection to a list of `UserPreference` values. */
@@ -26835,14 +26836,14 @@ export type UserPromptsByPostAuthorIdAndPromptIdManyToManyEdge = {
 
 /** A `Prompt` edge in the connection, with data from `Post`. */
 export type UserPromptsByPostAuthorIdAndPromptIdManyToManyEdgePostsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<PostCondition>;
-  filter?: Maybe<PostFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<PostsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PostsOrderBy>>;
 };
 
 export type UserSession = Node & {
@@ -26861,34 +26862,34 @@ export type UserSession = Node & {
  */
 export type UserSessionCondition = {
   /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `expire` field. */
-  expire?: Maybe<Scalars['Datetime']>;
+  expire?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `sess` field. */
-  sess?: Maybe<Scalars['JSON']>;
+  sess?: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `sid` field. */
-  sid?: Maybe<Scalars['String']>;
+  sid?: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `UserSession` object types. All fields are combined with a logical ‘and.’ */
 export type UserSessionFilter = {
   /** Checks for all expressions in this list. */
-  and?: Maybe<Array<UserSessionFilter>>;
+  and?: InputMaybe<Array<UserSessionFilter>>;
   /** Filter by the object’s `createdAt` field. */
-  createdAt?: Maybe<DatetimeFilter>;
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `expire` field. */
-  expire?: Maybe<DatetimeFilter>;
+  expire?: InputMaybe<DatetimeFilter>;
   /** Negates the expression. */
-  not?: Maybe<UserSessionFilter>;
+  not?: InputMaybe<UserSessionFilter>;
   /** Checks for any expressions in this list. */
-  or?: Maybe<Array<UserSessionFilter>>;
+  or?: InputMaybe<Array<UserSessionFilter>>;
   /** Filter by the object’s `sid` field. */
-  sid?: Maybe<StringFilter>;
+  sid?: InputMaybe<StringFilter>;
 };
 
 /** An input for mutations affecting `UserSession` */
 export type UserSessionInput = {
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   expire: Scalars['Datetime'];
   sess: Scalars['JSON'];
   sid: Scalars['String'];
@@ -26896,10 +26897,10 @@ export type UserSessionInput = {
 
 /** Represents an update to a `UserSession`. Fields that are set will be updated. */
 export type UserSessionPatch = {
-  createdAt?: Maybe<Scalars['Datetime']>;
-  expire?: Maybe<Scalars['Datetime']>;
-  sess?: Maybe<Scalars['JSON']>;
-  sid?: Maybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  expire?: InputMaybe<Scalars['Datetime']>;
+  sess?: InputMaybe<Scalars['JSON']>;
+  sid?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `UserSession` values. */
@@ -26948,27 +26949,27 @@ export enum UserType {
 /** A filter to be used against UserType fields. All fields are combined with a logical ‘and.’ */
 export type UserTypeFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: Maybe<UserType>;
+  distinctFrom?: InputMaybe<UserType>;
   /** Equal to the specified value. */
-  equalTo?: Maybe<UserType>;
+  equalTo?: InputMaybe<UserType>;
   /** Greater than the specified value. */
-  greaterThan?: Maybe<UserType>;
+  greaterThan?: InputMaybe<UserType>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: Maybe<UserType>;
+  greaterThanOrEqualTo?: InputMaybe<UserType>;
   /** Included in the specified list. */
-  in?: Maybe<Array<UserType>>;
+  in?: InputMaybe<Array<UserType>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: Maybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan?: Maybe<UserType>;
+  lessThan?: InputMaybe<UserType>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: Maybe<UserType>;
+  lessThanOrEqualTo?: InputMaybe<UserType>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: Maybe<UserType>;
+  notDistinctFrom?: InputMaybe<UserType>;
   /** Not equal to the specified value. */
-  notEqualTo?: Maybe<UserType>;
+  notEqualTo?: InputMaybe<UserType>;
   /** Not included in the specified list. */
-  notIn?: Maybe<Array<UserType>>;
+  notIn?: InputMaybe<Array<UserType>>;
 };
 
 /** A connection to a list of `User` values, with data from `Message`. */
@@ -26998,14 +26999,14 @@ export type UserUsersByMessageRecipientIdAndSenderIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `Message`. */
 export type UserUsersByMessageRecipientIdAndSenderIdManyToManyEdgeMessagesBySenderIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `Message`. */
@@ -27035,14 +27036,14 @@ export type UserUsersByMessageSenderIdAndRecipientIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `Message`. */
 export type UserUsersByMessageSenderIdAndRecipientIdManyToManyEdgeMessagesByRecipientIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<MessageCondition>;
-  filter?: Maybe<MessageFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<MessagesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<MessageCondition>;
+  filter?: InputMaybe<MessageFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<MessagesOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `UserFollower`. */
@@ -27072,14 +27073,14 @@ export type UserUsersByUserFollowerFollowerIdAndUserIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `UserFollower`. */
 export type UserUsersByUserFollowerFollowerIdAndUserIdManyToManyEdgeFollowersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserFollowerCondition>;
-  filter?: Maybe<UserFollowerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserFollowerCondition>;
+  filter?: InputMaybe<UserFollowerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserFollowersOrderBy>>;
 };
 
 /** A connection to a list of `User` values, with data from `UserFollower`. */
@@ -27109,14 +27110,14 @@ export type UserUsersByUserFollowerUserIdAndFollowerIdManyToManyEdge = {
 
 /** A `User` edge in the connection, with data from `UserFollower`. */
 export type UserUsersByUserFollowerUserIdAndFollowerIdManyToManyEdgeFollowedUsersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<UserFollowerCondition>;
-  filter?: Maybe<UserFollowerFilter>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UserFollowersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<UserFollowerCondition>;
+  filter?: InputMaybe<UserFollowerFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserFollowersOrderBy>>;
 };
 
 /** A connection to a list of `User` values. */
@@ -27217,10 +27218,10 @@ export type ChatUserQueryVariables = Exact<{
 export type ChatUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: number, username?: string | null | undefined, uuid: any, avatarUrl?: string | null | undefined } | null | undefined };
 
 export type CreateMessageMutationVariables = Exact<{
-  parentMessageId?: Maybe<Scalars['Int']>;
-  recipientGroupId?: Maybe<Scalars['Int']>;
-  recipientId?: Maybe<Scalars['Int']>;
-  senderId?: Maybe<Scalars['Int']>;
+  parentMessageId?: InputMaybe<Scalars['Int']>;
+  recipientGroupId?: InputMaybe<Scalars['Int']>;
+  recipientId?: InputMaybe<Scalars['Int']>;
+  senderId?: InputMaybe<Scalars['Int']>;
   uuid: Scalars['UUID'];
   body: Scalars['String'];
 }>;
@@ -27231,7 +27232,7 @@ export type CreateMessageMutation = { __typename?: 'Mutation', createMessage?: {
 export type CreateMessagePreviewMutationVariables = Exact<{
   messageId: Scalars['Int'];
   filename: Scalars['String'];
-  extension?: Maybe<Scalars['String']>;
+  extension?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 }>;
 
@@ -27247,7 +27248,7 @@ export type GroupChatQuery = { __typename?: 'Query', groupByUuid?: { __typename?
 
 export type GroupChatMessagesQueryVariables = Exact<{
   groupUuid: Scalars['UUID'];
-  before?: Maybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
 }>;
 
 
@@ -27268,9 +27269,9 @@ export type RegisterUserActivityMutation = { __typename?: 'Mutation', registerUs
 export type CreatePostMutationVariables = Exact<{
   authorId: Scalars['Int'];
   body: Scalars['String'];
-  parentPostId?: Maybe<Scalars['Int']>;
+  parentPostId?: InputMaybe<Scalars['Int']>;
   languageId: Scalars['Int'];
-  promptId?: Maybe<Scalars['Int']>;
+  promptId?: InputMaybe<Scalars['Int']>;
 }>;
 
 
@@ -27297,13 +27298,13 @@ export type CreatePostGameMutationVariables = Exact<{
 export type CreatePostGameMutation = { __typename?: 'Mutation', createPostGame?: { __typename?: 'CreatePostGamePayload', postGame?: { __typename?: 'PostGame', id: number, postId: number, nodeId: string, createdAt: any } | null | undefined } | null | undefined };
 
 export type CreatePostGameAnswerMutationVariables = Exact<{
-  genderOption?: Maybe<GrammaticalGender>;
-  caseOption?: Maybe<GrammaticalCase>;
-  correct?: Maybe<Scalars['Boolean']>;
-  rangeId?: Maybe<Scalars['Int']>;
-  gameId?: Maybe<Scalars['Int']>;
+  genderOption?: InputMaybe<GrammaticalGender>;
+  caseOption?: InputMaybe<GrammaticalCase>;
+  correct?: InputMaybe<Scalars['Boolean']>;
+  rangeId?: InputMaybe<Scalars['Int']>;
+  gameId?: InputMaybe<Scalars['Int']>;
   userId: Scalars['Int'];
-  clozeAnswer?: Maybe<Scalars['String']>;
+  clozeAnswer?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -27313,9 +27314,9 @@ export type CreatePostGameRangeMutationVariables = Exact<{
   gameId: Scalars['Int'];
   startIndex: Scalars['Int'];
   endIndex: Scalars['Int'];
-  genderOption?: Maybe<GrammaticalGender>;
-  caseOption?: Maybe<GrammaticalCase>;
-  uuid?: Maybe<Scalars['UUID']>;
+  genderOption?: InputMaybe<GrammaticalGender>;
+  caseOption?: InputMaybe<GrammaticalCase>;
+  uuid?: InputMaybe<Scalars['UUID']>;
 }>;
 
 
@@ -27333,7 +27334,7 @@ export type CreatePostRecordingMutationVariables = Exact<{
   userId: Scalars['Int'];
   postId: Scalars['Int'];
   filename: Scalars['String'];
-  extension?: Maybe<Scalars['String']>;
+  extension?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -27365,7 +27366,7 @@ export type DeletePostLikeMutation = { __typename?: 'Mutation', deletePostLike?:
 
 export type FeedPostsQueryVariables = Exact<{
   locale: Scalars['String'];
-  afterUuid?: Maybe<Scalars['UUID']>;
+  afterUuid?: InputMaybe<Scalars['UUID']>;
 }>;
 
 
@@ -27548,12 +27549,12 @@ export type AdminEmailsFcmTokensQuery = { __typename?: 'Query', users?: { __type
 
 export type CreateNotificationMutationVariables = Exact<{
   channelId: Scalars['Int'];
-  recipientId?: Maybe<Scalars['Int']>;
-  recipientGroupId?: Maybe<Scalars['Int']>;
-  sentAt?: Maybe<Scalars['Datetime']>;
-  params?: Maybe<Scalars['JSON']>;
-  expiresAt?: Maybe<Scalars['Datetime']>;
-  withheldUntil?: Maybe<Scalars['Datetime']>;
+  recipientId?: InputMaybe<Scalars['Int']>;
+  recipientGroupId?: InputMaybe<Scalars['Int']>;
+  sentAt?: InputMaybe<Scalars['Datetime']>;
+  params?: InputMaybe<Scalars['JSON']>;
+  expiresAt?: InputMaybe<Scalars['Datetime']>;
+  withheldUntil?: InputMaybe<Scalars['Datetime']>;
 }>;
 
 
@@ -27581,7 +27582,7 @@ export type GroupMessageNotificationQuery = { __typename?: 'Query', groupByUuid?
 
 export type MarkNotificationAsSentMutationVariables = Exact<{
   id: Scalars['Int'];
-  sentAt?: Maybe<Scalars['Datetime']>;
+  sentAt?: InputMaybe<Scalars['Datetime']>;
 }>;
 
 
@@ -27686,7 +27687,7 @@ export type CreateUserMutationVariables = Exact<{
   username: Scalars['String'];
   uuid: Scalars['UUID'];
   avatarUrl: Scalars['String'];
-  locale?: Maybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['Int']>;
   emailUnsubscribeToken: Scalars['String'];
 }>;
 
@@ -27695,7 +27696,7 @@ export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typ
 
 export type CreateUserLanguageMutationVariables = Exact<{
   languageId: Scalars['Int'];
-  languageSkillLevelId?: Maybe<Scalars['Int']>;
+  languageSkillLevelId?: InputMaybe<Scalars['Int']>;
   native: Scalars['Boolean'];
   userId: Scalars['Int'];
 }>;

@@ -3,11 +3,11 @@ import sirv from "sirv"
 import { json } from "express"
 import cookieParser from "cookie-parser"
 
-import * as sapper from "@sapper/server"
-
 import postgraphile from "./middlewares/postgraphile"
 import session from "./middlewares/session"
 import uploads from "./middlewares/uploads"
+
+import * as sapper from "@sapper/server"
 
 import log from "../logger"
 import { registerUserActivity } from "./users"
@@ -24,7 +24,10 @@ const chlog = log.child({
     namespace: "express",
 })
 
-export default function configureExpress(app: Express, pool: Pool): Express {
+export default async function configureExpress(
+    app: Express,
+    pool: Pool
+): Promise<Express> {
     app.use(
         compression({ threshold: 0 }),
         sirv("static", { dev, etag: true }),

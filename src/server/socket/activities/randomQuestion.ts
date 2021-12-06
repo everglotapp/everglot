@@ -15,7 +15,7 @@ import {
 } from "../../../constants"
 import type { Server as SocketIO } from "socket.io"
 
-import { db } from "../../db"
+import { DATABASE_SCHEMA, db } from "../../db"
 
 import log from "../../../logger"
 import { bots } from ".."
@@ -42,7 +42,7 @@ async function getRandomQuestion(
     const res = await db?.query<Pick<RandomQuestion, "uuid" | "question">>(
         `
     select uuid, question from(
-        select * from app_public.random_questions_${language}
+        select * from ${DATABASE_SCHEMA}.random_questions_${language}
         where true
         and not(uuid = any($1))
         order by random()

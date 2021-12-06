@@ -5,7 +5,7 @@ import {
     seedDatabase,
     createUser,
     login,
-    sessionCookieHeader,
+    makeSessionIdCookieHeader,
 } from "../utils"
 import type { TestUser } from "../utils"
 import { start } from "../../server/gql"
@@ -55,7 +55,7 @@ describe("login route", () => {
         await signIn()
         const res = await fetch("/login", {
             headers: {
-                cookie: sessionCookieHeader(sessionCookie),
+                cookie: makeSessionIdCookieHeader(sessionCookie),
             },
             redirect: "manual",
         })
@@ -68,7 +68,7 @@ describe("login route", () => {
             method: "POST",
             headers: {
                 "content-type": "application/json",
-                cookie: sessionCookieHeader(sessionCookie),
+                cookie: makeSessionIdCookieHeader(sessionCookie),
             },
             redirect: "manual",
         })

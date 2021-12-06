@@ -4,7 +4,7 @@ import {
     fetch,
     truncateAllTables,
     seedDatabase,
-    sessionCookieHeader,
+    makeSessionIdCookieHeader,
     login,
     createUser,
 } from "../utils"
@@ -71,7 +71,7 @@ describe("join route", () => {
         await signIn()
         const res = await fetch("/join", {
             headers: {
-                cookie: sessionCookieHeader(sessionCookie),
+                cookie: makeSessionIdCookieHeader(sessionCookie),
             },
             redirect: "manual",
         })

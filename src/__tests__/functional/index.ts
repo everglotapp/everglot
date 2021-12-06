@@ -4,7 +4,7 @@ import {
     seedDatabase,
     createUser,
     login,
-    sessionCookieHeader,
+    makeSessionIdCookieHeader,
     getLanguage,
     createUserLanguage,
     TestLanguage,
@@ -62,7 +62,7 @@ describe("index route", () => {
         await signIn()
         const res = await fetch("/", {
             headers: {
-                cookie: sessionCookieHeader(sessionCookie),
+                cookie: makeSessionIdCookieHeader(sessionCookie),
             },
             redirect: "manual",
         })
@@ -80,7 +80,7 @@ describe("index route", () => {
         })
         const res = await fetch("/", {
             headers: {
-                cookie: sessionCookieHeader(sessionCookie),
+                cookie: makeSessionIdCookieHeader(sessionCookie),
             },
             redirect: "manual",
         })

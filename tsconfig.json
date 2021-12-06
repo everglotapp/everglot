@@ -13,10 +13,19 @@
       "node",
       "jest",
       "express",
+      "express-session",
       "gapi.auth2",
       "dom-mediacapture-record"
     ]
   },
-  "include": ["src/**/*", "src/*", "src/node_modules/**/*"],
-  "exclude": ["node_modules/*", "__sapper__/*", "static/*"]
+  "include": [
+    "src/**/*",
+    "src/*",
+    "src/node_modules/**/*",
+    "scripts/generate-invite-token.ts"
+  ],
+  "exclude": ["node_modules/*", "__sapper__/*", "static/*"],
+  "ts-node": {
+    "files": true
+  }
 }

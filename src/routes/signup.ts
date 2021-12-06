@@ -15,7 +15,7 @@ import {
 import type { Request, Response } from "express"
 import { ensureJson, serverError } from "../helpers"
 
-import { createDatabasePool } from "../server/db"
+import { createDatabasePool, DATABASE_SCHEMA } from "../server/db"
 import { notifyAdminsOfSignUp } from "../server/notifications/admin"
 import { getLanguageIdByAlpha2 } from "../server/locales"
 import { localeIsSupported } from "../helpers/locales"
@@ -224,7 +224,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
 }
 
 const SQL_UPDATE_USER_ATTRIBUTES = `
-UPDATE app_public.users SET
+UPDATE ${DATABASE_SCHEMA}.users SET
     username = $2,
     display_name = $3,
     gender = $4,
@@ -233,7 +233,7 @@ WHERE id = $1
 RETURNING id`
 
 const SQL_ASSIGN_NATIVE_LANGUAGE = `
-INSERT INTO app_public.user_languages (
+INSERT INTO ${DATABASE_SCHEMA}.user_languages (
     user_id,
     language_id,
     language_skill_level_id,
@@ -243,7 +243,7 @@ VALUES (
     $1,
     (
         SELECT id
-        FROM app_public.languages
+        FROM ${DATABASE_SCHEMA}.languages
         WHERE alpha2 = $2
     ),
     null,
@@ -252,7 +252,7 @@ VALUES (
 RETURNING id`
 
 const SQL_ASSIGN_NON_NATIVE_LANGUAGE = `
-INSERT INTO app_public.user_languages (
+INSERT INTO ${DATABASE_SCHEMA}.user_languages (
     user_id,
     language_id,
     language_skill_level_id,
@@ -262,12 +262,12 @@ VALUES (
     $1,
     (
         SELECT id
-        FROM app_public.languages
+        FROM ${DATABASE_SCHEMA}.languages
         WHERE alpha2 = $2
     ),
     (
         SELECT id
-        FROM app_public.language_skill_levels
+        FROM ${DATABASE_SCHEMA}.language_skill_levels
         WHERE name = $3
     ),
     false

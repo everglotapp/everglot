@@ -1,4 +1,4 @@
-interface AbstractTemplateEmailParamsV1<I extends number, P extends object>
+interface ITemplateEmailParamsV1<I extends number, P extends object>
     extends CommonEmailParamsV1 {
     templateId: I
     templateParams: P
@@ -8,7 +8,7 @@ export type TemplateEmailParamsV1 =
     | ResetPasswordTemplateEmailParamsV1
     | ResetPasswordSuccessTemplateEmailParamsV1
     | GroupAssignmentTemplateEmailParamsV1
-export type ResetPasswordTemplateEmailParamsV1 = AbstractTemplateEmailParamsV1<
+export type ResetPasswordTemplateEmailParamsV1 = ITemplateEmailParamsV1<
     18,
     {
         username: string
@@ -16,18 +16,19 @@ export type ResetPasswordTemplateEmailParamsV1 = AbstractTemplateEmailParamsV1<
     }
 >
 
-export type ResetPasswordSuccessTemplateEmailParamsV1 =
-    AbstractTemplateEmailParamsV1<
-        19,
-        {
-            username: string
-            changeDetail: string
-            date: string
-        }
-    >
+export type ResetPasswordSuccessTemplateEmailParamsV1 = ITemplateEmailParamsV1<
+    19,
+    {
+        username: string
+        changeDetail: string
+        date: string
+    }
+>
 
-export type GroupAssignmentTemplateEmailParamsV1 =
-    AbstractTemplateEmailParamsV1<10, {}>
+export type GroupAssignmentTemplateEmailParamsV1 = ITemplateEmailParamsV1<
+    10,
+    {}
+>
 
 export interface ManualTextEmailParamsV1 extends ManualEmailParamsV1 {
     textContent?: string

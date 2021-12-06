@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid"
 import validateEmail from "deep-email-validator"
 import { OAuth2Client } from "google-auth-library"
 
-import { db } from "../server/db"
+import { DATABASE_SCHEMA, db } from "../server/db"
 
 import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import {
@@ -237,7 +237,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
 
     const uuid = uuidv4()
     const queryResult = await db?.query({
-        text: `INSERT INTO app_public.users (
+        text: `INSERT INTO ${DATABASE_SCHEMA}.users (
                 username,
                 email,
                 password_hash,

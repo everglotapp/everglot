@@ -7,6 +7,7 @@ import log from "../../logger"
 
 import type { Pool } from "pg"
 import type { RequestHandler } from "express"
+import { DATABASE_SCHEMA } from "../db"
 
 const chlog = log.child({
     namespace: "session",
@@ -16,14 +17,14 @@ let middleware: RequestHandler | null
 
 const {
     SESSION_COOKIE_VALIDATION_SECRETS,
-    SESSION_COOKIE_NAME = "everglot_sid",
     NODE_ENV,
     DISABLE_SECURE_COOKIES = "false",
+    SESSION_COOKIE_NAME,
 } = process.env
 
-export { SESSION_COOKIE_NAME }
+const prod = NODE_ENV === "production"
+const MAX_COOKIE_AGE_MS = 12 * 60 * 60 * 1000 // 12 hours
 
-const dev = NODE_ENV === "development"
 let disableSecureCookies = false
 try {
     if (JSON.parse(DISABLE_SECURE_COOKIES) === true) {
@@ -35,6 +36,12 @@ try {
         .warn(
             "Failed to parse DISABLE_SECURE_COOKIES as JSON. Ignoring it and thus not disabling secure cookies."
         )
+}
+
+const secure = prod && !disableSecureCookies
+
+function getSessionIdCookieName() {
+    return secure ? `__Host-${SESSION_COOKIE_NAME}` : SESSION_COOKIE_NAME
 }
 
 export function makeMiddleware(pool: Pool) {
@@ -73,28 +80,25 @@ export function makeMiddleware(pool: Pool) {
             )
         exit(1)
     }
+
     const sess: session.SessionOptions = {
         secret,
         cookie: {
-            maxAge: 12 * 60 * 60 * 1000, // 12 hours
+            maxAge: MAX_COOKIE_AGE_MS,
             sameSite: "strict", // Do not send this cookie to other origins.
+            secure, // Whether to require HTTPS connection for signing in.
+            httpOnly: true,
         },
         store: new (pgSimpleSessionStore(session))({
             pool,
-            schemaName: "app_public",
+            schemaName: DATABASE_SCHEMA,
             tableName: "user_sessions",
         }),
-        name: dev ? SESSION_COOKIE_NAME : `__Host-${SESSION_COOKIE_NAME}`,
+        name: getSessionIdCookieName(),
         resave: false,
         saveUninitialized: false,
     }
 
-    if (!dev && !disableSecureCookies) {
-        sess.cookie = {
-            ...sess.cookie,
-            secure: true, // Require HTTPS connection for signing in.
-        }
-    }
     middleware = session(sess)
     return middleware
 }

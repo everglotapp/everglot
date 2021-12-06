@@ -280,12 +280,6 @@ export async function login(
         .trace("Attempted to sign in during test")
     expect(res.status).toBe(200)
     const sessionCookie = getSessionIdCookieValue(clonedRes.headers.raw())
-    chlog
-        .child({
-            sessionCookie,
-            headers: clonedRes.headers.raw(),
-        })
-        .trace("Retrieved session cookie")
     return { res: clonedRes, sessionCookie }
 }
 

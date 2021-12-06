@@ -137,10 +137,10 @@ docker-compose \
     -f docker-compose.test.yml \
     -p test \
     run --entrypoint entrypoints/test-after-db.sh --rm everglot-app \
-    mispipe "npm run test -- src/__tests__/unit" "npx roarr pretty-print --fe '{\"context.logLevel\":{gt:20}}'"
+    mispipe "npm run test -- src/__tests__/unit" "npx roarr pretty-print --filter 'context.logLevel:>20'"
 ```
 
-> Note: You can increase the output verbosity by reducing the "greater than" property to e.g. `{gt:10}` or `{gt:0}`.
+> Note: You can increase the output verbosity by filtering the "context.logLevel" property by e.g. `>10` or `>0`.
 
 To run tests against a running app it must be started in a separate container as well. The following command does that and will also wait for the database to be up.
 
@@ -166,7 +166,7 @@ docker-compose \
     -f docker-compose.test.yml \
     -p test \
     run --rm everglot-app-test \
-    npm run test:pretty -- --fe '{"context.logLevel":{gt:20}}'
+    npm run test:pretty -- --filter 'context.logLevel:>20''
 ```
 
 ### Functional tests only

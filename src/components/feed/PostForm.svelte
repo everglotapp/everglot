@@ -44,9 +44,11 @@
         localeSupportsGuessGenderGames,
         localeSupportsPostGamification,
     } from "../../helpers/locales"
+    import { trackEvent } from "../../routes/_helpers/analytics"
 
     export let shownPromptUuid: string | null
     export let locale: SupportedLocale | null
+    export let eventCategory: EventCategory
 
     const dispatch = createEventDispatcher()
 
@@ -590,8 +592,14 @@
             <div class="bg-white flex flex-col items-center py-4 px-4">
                 {#if guessCaseSupported}
                     <ButtonLarge
-                        on:click={() =>
-                            handleSelectGameType(PostGameType.GuessCase)}
+                        on:click={() => {
+                            trackEvent(
+                                eventCategory,
+                                "PickPostGameType",
+                                PostGameType.GuessCase
+                            )
+                            handleSelectGameType(PostGameType.GuessCase)
+                        }}
                         tag="button"
                         variant="OUTLINED"
                         color="PRIMARY"
@@ -603,8 +611,14 @@
                 {/if}
                 {#if guessGenderSupported}
                     <ButtonLarge
-                        on:click={() =>
-                            handleSelectGameType(PostGameType.GuessGender)}
+                        on:click={() => {
+                            trackEvent(
+                                eventCategory,
+                                "PickPostGameType",
+                                PostGameType.GuessGender
+                            )
+                            handleSelectGameType(PostGameType.GuessGender)
+                        }}
                         tag="button"
                         variant="OUTLINED"
                         color="PRIMARY"
@@ -616,8 +630,14 @@
                 {/if}
                 {#if clozeSupported}
                     <ButtonLarge
-                        on:click={() =>
-                            handleSelectGameType(PostGameType.Cloze)}
+                        on:click={() => {
+                            trackEvent(
+                                eventCategory,
+                                "PickPostGameType",
+                                PostGameType.Cloze
+                            )
+                            handleSelectGameType(PostGameType.Cloze)
+                        }}
                         tag="button"
                         variant="OUTLINED"
                         color="PRIMARY"
@@ -666,7 +686,10 @@
                 <ButtonSmall
                     tag="button"
                     variant="TEXT"
-                    on:click={handleCloseGamify}
+                    on:click={() => {
+                        trackEvent(eventCategory, "ClickCloseGamify")
+                        handleCloseGamify()
+                    }}
                     className="close-gamify-button flex items-center"
                 >
                     <XIcon size="16" strokeWidth={1} class="mr-1" />
@@ -774,7 +797,10 @@
                         className="flex mb-1 items-center justify-self-start"
                         tag="button"
                         variant="OUTLINED"
-                        on:click={() => (gamify = true)}
+                        on:click={() => {
+                            trackEvent(eventCategory, "ClickGamify")
+                            gamify = true
+                        }}
                         ><svg
                             width="22"
                             height="22"
@@ -796,9 +822,15 @@
                     tag="button"
                     variant={recording ? "TEXT" : "OUTLINED"}
                     disabled={!recording && audioUrl !== null}
-                    on:click={recording
-                        ? handleUserRecordFinish
-                        : handleUserRecordStart}
+                    on:click={(e) => {
+                        if (recording) {
+                            trackEvent(eventCategory, "ClickStopRecording")
+                            handleUserRecordFinish()
+                        } else {
+                            trackEvent(eventCategory, "ClickStartRecording")
+                            handleUserRecordStart(e)
+                        }
+                    }}
                     >{#if recording}<CheckIcon
                             size="18"
                             strokeWidth={3}
@@ -811,15 +843,17 @@
                         className="items-center mb-1 recording ml-0 mr-1"
                         tag="button"
                         variant="TEXT"
-                        on:click={handleUserRecordCancel}
-                        ><XIcon size="20" class="text-gray" /></ButtonSmall
+                        on:click={() => {
+                            trackEvent(eventCategory, "ClickCancelRecording")
+                            handleUserRecordCancel()
+                        }}><XIcon size="20" class="text-gray" /></ButtonSmall
                     >
                 {/if}
                 <ButtonLarge
                     className="items-center mb-1"
                     tag="button"
                     on:click={() => {
-                        dispatch("clickPost")
+                        trackEvent(eventCategory, "ClickSubmit")
                         handlePost()
                     }}
                     ><SendIcon size="18" class="mr-2" /><Localized

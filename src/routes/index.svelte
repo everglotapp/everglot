@@ -200,7 +200,9 @@
 
     let previouslyPickedLocale: SupportedLocale | undefined = "en"
     $: if (pickedLocale && pickedLocale !== previouslyPickedLocale) {
-        trackEvent("Feed", "PickLocale", pickedLocale)
+        if (feedLocaleInitialized) {
+            trackEvent("Feed", "PickLocale", pickedLocale)
+        }
         fetch(`/preferences/update`, {
             method: "post",
             headers: {
@@ -535,10 +537,8 @@
     <PostForm
         shownPromptUuid={shownPrompt ? shownPrompt.uuid : null}
         locale={pickedLocale || null}
+        eventCategory="Feed_PostForm"
         on:postSuccess={handlePostSuccess}
-        on:clickPost={() => {
-            trackEvent("Feed", "ClickPost")
-        }}
     />
     <div class="container max-w-2xl py-2 pl-3 pr-2 sm:px-0 gap-y-1">
         {#each posts as post (post.uuid)}

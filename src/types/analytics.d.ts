@@ -3,7 +3,7 @@ interface Window {
     Matomo?: Matomo
 }
 
-type EventCategory = "MainNav" | "Feed"
+type EventCategory = "MainNav" | "Feed" | "Feed_PostForm"
 
 type CATEGORY_ACTIONS = {
     MainNav:
@@ -40,7 +40,14 @@ type CATEGORY_ACTIONS = {
         | "ClickAwayCloseLocaleDropdown"
         | "EscapeCloseLocaleDropdown"
         | "PickLocale"
-        | "ClickPost"
+    Feed_PostForm:
+        | "ClickSubmit"
+        | "ClickStartRecording"
+        | "ClickCancelRecording"
+        | "ClickStopRecording"
+        | "ClickGamify"
+        | "ClickCloseGamify"
+        | "PickPostGameType"
 }
 
 type EventAction<T extends EventCategory> = T extends keyof CATEGORY_ACTIONS

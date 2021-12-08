@@ -46,7 +46,7 @@
 </script>
 
 <script lang="ts">
-    export let uuid: string | null | undefined
+    export let uuid: string | null | undefined = undefined
     export let username: string = ""
     export let url: string | null | undefined
     export let size: number = 50

@@ -40,8 +40,12 @@ try {
 
 const secure = prod && !disableSecureCookies
 
-function getSessionIdCookieName() {
-    return secure ? `__Host-${SESSION_COOKIE_NAME}` : SESSION_COOKIE_NAME
+function getSessionIdCookieName(forceSecure?: boolean) {
+    const prefixedCookie =
+        typeof forceSecure === "undefined" ? secure : forceSecure
+    return prefixedCookie
+        ? `__Host-${SESSION_COOKIE_NAME}`
+        : SESSION_COOKIE_NAME
 }
 
 export function makeMiddleware(pool: Pool) {
@@ -100,28 +104,31 @@ export function makeMiddleware(pool: Pool) {
     }
 
     const sessionMiddleware = session(sess)
-    if (!secure) {
-        return sessionMiddleware
-    }
-    /**
-     * Compatibility for (Flutter) clients which for some reason don't support
-     * setting __Host- prefixed cookies on webviews.
-     */
-    return (req: Request, res: Response, next: NextFunction) => {
-        const insecureCookieName = getSessionIdCookieName()
-        if (
-            insecureCookieName &&
-            typeof req.cookies !== "undefined" &&
-            insecureCookieName in req.cookies &&
-            req.cookies[insecureCookieName]
-        ) {
-            const secureCookieName = `__Host-${insecureCookieName}`
-            if (!(secureCookieName in req.cookies)) {
-                req.cookies[secureCookieName] = req.cookies[insecureCookieName]
+    if (secure) {
+        /**
+         * Compatibility for (Flutter) clients which for some reason don't support
+         * setting __Host- prefixed cookies on webviews.
+         */
+        middleware = (req: Request, res: Response, next: NextFunction) => {
+            const insecureCookieName = getSessionIdCookieName(false)
+            if (
+                insecureCookieName &&
+                typeof req.cookies !== "undefined" &&
+                insecureCookieName in req.cookies &&
+                req.cookies[insecureCookieName]
+            ) {
+                const secureCookieName = getSessionIdCookieName(true)
+                if (!(secureCookieName in req.cookies)) {
+                    req.cookies[secureCookieName] =
+                        req.cookies[insecureCookieName]
+                }
             }
+            return sessionMiddleware(req, res, next)
         }
-        return sessionMiddleware(req, res, next)
+    } else {
+        middleware = sessionMiddleware
     }
+    return middleware
 }
 
 export default makeMiddleware

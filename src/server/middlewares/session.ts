@@ -6,7 +6,7 @@ import { exit } from "process"
 import log from "../../logger"
 
 import type { Pool } from "pg"
-import type { RequestHandler } from "express"
+import type { Request, Response, RequestHandler, NextFunction } from "express"
 import { DATABASE_SCHEMA } from "../db"
 
 const chlog = log.child({
@@ -19,7 +19,7 @@ const {
     SESSION_COOKIE_VALIDATION_SECRETS,
     NODE_ENV,
     DISABLE_SECURE_COOKIES = "false",
-    SESSION_COOKIE_NAME,
+    SESSION_COOKIE_NAME = "everglot_sid",
 } = process.env
 
 const prod = NODE_ENV === "production"
@@ -99,8 +99,29 @@ export function makeMiddleware(pool: Pool) {
         saveUninitialized: false,
     }
 
-    middleware = session(sess)
-    return middleware
+    const sessionMiddleware = session(sess)
+    if (!secure) {
+        return sessionMiddleware
+    }
+    /**
+     * Compatibility for (Flutter) clients which for some reason don't support
+     * setting __Host- prefixed cookies on webviews.
+     */
+    return (req: Request, res: Response, next: NextFunction) => {
+        const insecureCookieName = getSessionIdCookieName()
+        if (
+            insecureCookieName &&
+            typeof req.cookies !== "undefined" &&
+            insecureCookieName in req.cookies &&
+            req.cookies[insecureCookieName]
+        ) {
+            const secureCookieName = `__Host-${insecureCookieName}`
+            if (!(secureCookieName in req.cookies)) {
+                req.cookies[secureCookieName] = req.cookies[insecureCookieName]
+            }
+        }
+        return sessionMiddleware(req, res, next)
+    }
 }
 
 export default makeMiddleware

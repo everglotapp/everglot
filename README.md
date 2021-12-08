@@ -60,7 +60,7 @@ npm i --also=dev
 It is also highly recommended you install the Roarr CLI globally so that you can prettify log outputs when necessary. This is done by default within our Docker images for development and testing but you may want this if you interact with production servers.
 
 ```bash
-npm i -g @roarr/cli
+sudo npm i -g @roarr/cli
 ```
 
 ### Database Schema
@@ -131,6 +131,8 @@ It is important that you run commands regarding the testing environment in a dif
 
 To only run unit tests there is no need to start the app server itself, just execute the following command. It will automatically start the test database if it's not up, yet.
 
+> In VSCode you can simply press Ctrl+P and enter `task unit-tests`.
+
 ```bash
 docker-compose \
     -f docker-compose.yml \
@@ -160,6 +162,8 @@ docker-compose \
 
 To simply run all tests, execute the following command. Containers created this way will automatically wait 100 seconds for the web server to start in case it's not reachable, yet.
 
+> In VSCode you can simply press Ctrl+P and enter `task tests`.
+
 ```bash
 docker-compose \
     -f docker-compose.yml \
@@ -171,6 +175,8 @@ docker-compose \
 
 ### Functional tests only
 
+> In VSCode you can simply press Ctrl+P and enter `task functional-tests`.
+
 To run only functional tests:
 
 ```bash
@@ -179,7 +185,7 @@ docker-compose \
     -f docker-compose.test.yml \
     -p test \
     run --rm everglot-app-test \
-    mispipe "npm run test -- src/__tests__/functional" "npx roarr pretty-print --fe '{\"context.logLevel\":{gt:20}}'"
+    mispipe "npm run test -- src/__tests__/functional" "npx roarr pretty-print --filter 'context.logLevel:>20''"
 ```
 
 > Side note: Jest's `--forceExit` option (as defined in the `test` script within `package.json`) is currently necessary because something is still running somewhere which prevents the tests from exiting normally within 1 second. `--runInBand` causes tests to be run sequentially, preventing some race conditions w.r.t. database setup and teardown.

@@ -10,21 +10,21 @@
       "command": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up everglot-db"
     },
     {
-      "label": "test",
+      "label": "tests",
       "command": "docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test run --rm everglot-app-test mispipe \"npm run test:watch\" \"npx roarr pretty-print --filter 'context.logLevel:>20'\"",
       "type": "shell",
       "group": "test",
       "isBackground": true
     },
     {
-      "label": "test-unit",
-      "command": "docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test run --rm everglot-app-test mispipe \"npm run test:watch -- src/__tests__/unit\" \"npx roarr pretty-print --filter 'context.logLevel:>20'\"",
+      "label": "unit-tests",
+      "command": "docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test run --rm everglot-app-test mispipe \"npm run test:watch -- src/__tests__/unit\" | npx roarr pretty-print --filter 'context.logLevel:>20'",
       "type": "shell",
       "group": "test",
       "isBackground": true
     },
     {
-      "label": "test-functional",
+      "label": "functional-tests",
       "command": "docker-compose -f docker-compose.yml -f docker-compose.test.yml -p test run --rm everglot-app-test mispipe \"npm run test:watch -- src/__tests__/functional\" \"npx roarr pretty-print --filter 'context.logLevel:>20'\"",
       "type": "shell",
       "group": "test",

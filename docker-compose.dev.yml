@@ -25,7 +25,7 @@ services:
             [
                 "/bin/sh",
                 "-c",
-                'npm run dev | roarr pretty-print --fe ''{"context.logLevel":{gt:10}}''',
+                'npm run dev | roarr pretty-print --filter "context.logLevel:>10"',
             ]
         # Run the service with the following command to show log messages with level TRACE as well.
         # You can usually pass it at the end of your `docker-compose` shell command.

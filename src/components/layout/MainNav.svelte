@@ -45,6 +45,7 @@
         SIDEBAR_MENU_ICON_BUTTON_ID,
     } from "../../constants"
     import { Page } from "../../routes/_helpers/routing"
+    import { trackEvent } from "../../routes/_helpers/analytics"
 
     query(currentUserStore)
     query(allGroupsStore)
@@ -73,8 +74,15 @@
         event.preventDefault()
         if (userHasPrivateGroups) {
             showGroupsDropdown = !showGroupsDropdown
+            trackEvent(
+                "MainNav",
+                showGroupsDropdown
+                    ? "ClickOpenGroupsDropdown"
+                    : "ClickCloseGroupsDropdown"
+            )
             return
         }
+        trackEvent("MainNav", "ClickGroups")
         if (userHasCompletedProfile) {
             goto("/signup/success", { replaceState: false })
             return
@@ -144,6 +152,7 @@
                     role="presentation"
                     class="logo font-bold uppercase tracking-wide"
                     href="/"
+                    on:click={() => trackEvent("MainNav", "ClickLogo")}
                     ><img
                         src="/logo-192.png"
                         alt="Everglot"
@@ -160,6 +169,7 @@
                     color="PRIMARY"
                     className="w-full"
                     href="/signup"
+                    on:click={() => trackEvent("MainNav", "ClickSignUp")}
                     ><span><Localized id="main-nav-continue" /></span
                     ></ButtonSmall
                 >
@@ -174,8 +184,15 @@
                     variant="TEXT"
                     color="SECONDARY"
                     tag="button"
-                    on:click={() =>
-                        ($showChatSidebarDrawer = !$showChatSidebarDrawer)}
+                    on:click={() => {
+                        $showChatSidebarDrawer = !$showChatSidebarDrawer
+                        trackEvent(
+                            "MainNav",
+                            $showChatSidebarDrawer
+                                ? "ClickOpenSidebar"
+                                : "ClickCloseSidebar"
+                        )
+                    }}
                     className="w-full justify-between items-center"
                 >
                     <MenuIcon size="24" />
@@ -257,11 +274,22 @@
                         {#if showGroupsDropdown}
                             <ClickAwayListener
                                 elementId="groups-dropdown-clickaway"
-                                on:clickaway={() =>
-                                    (showGroupsDropdown = false)}
+                                on:clickaway={() => {
+                                    showGroupsDropdown = false
+                                    trackEvent(
+                                        "MainNav",
+                                        "ClickAwayCloseGroupsDropdown"
+                                    )
+                                }}
                             />
                             <EscapeKeyListener
-                                on:keydown={() => (showGroupsDropdown = false)}
+                                on:keydown={() => {
+                                    showGroupsDropdown = false
+                                    trackEvent(
+                                        "MainNav",
+                                        "EscapeCloseGroupsDropdown"
+                                    )
+                                }}
                             />
                             <div
                                 aria-label={`Groups`}
@@ -292,6 +320,12 @@
                                                         variant="TEXT"
                                                         color="SECONDARY"
                                                         href={`/chat?group=${group.uuid}`}
+                                                        on:click={() =>
+                                                            trackEvent(
+                                                                "MainNav",
+                                                                "ClickGroup",
+                                                                group.uuid
+                                                            )}
                                                         className="w-full"
                                                     >
                                                         <span
@@ -355,8 +389,9 @@
                         <BellIcon size="24" />
                     </a>
                     <button
-                        on:click={() =>
-                            (showSettingsDropdown = !showSettingsDropdown)}
+                        on:click={() => {
+                            showSettingsDropdown = !showSettingsDropdown
+                        }}
                         class="nav-item-with-icon justify-center cursor-pointer relative"
                         id="settings-dropdown-clickaway"
                     >
@@ -388,10 +423,22 @@
                     {#if showSettingsDropdown}
                         <ClickAwayListener
                             elementId="settings-dropdown-clickaway"
-                            on:clickaway={() => (showSettingsDropdown = false)}
+                            on:clickaway={() => {
+                                showSettingsDropdown = false
+                                trackEvent(
+                                    "MainNav",
+                                    "ClickAwayCloseSettingsDropdown"
+                                )
+                            }}
                         />
                         <EscapeKeyListener
-                            on:keydown={() => (showSettingsDropdown = false)}
+                            on:keydown={() => {
+                                showSettingsDropdown = false
+                                trackEvent(
+                                    "MainNav",
+                                    "EscapeCloseSettingsDropdown"
+                                )
+                            }}
                         />
                         <div
                             class="relative"
@@ -423,6 +470,15 @@
                                                     color="PRIMARY"
                                                     className="w-full justify-between items-center"
                                                     href={`/chat?group=${$joinedCallRoom}`}
+                                                    on:click={() => {
+                                                        if ($joinedCallRoom) {
+                                                            trackEvent(
+                                                                "MainNav",
+                                                                "ClickJoinGroupCall",
+                                                                $joinedCallRoom
+                                                            )
+                                                        }
+                                                    }}
                                                     ><span class="mr-1"
                                                         ><Localized
                                                             id="main-nav-go-to-call"
@@ -441,6 +497,12 @@
                                                     color="SECONDARY"
                                                     className="w-full"
                                                     href={`/u/${$currentUser.username}`}
+                                                    on:click={() => {
+                                                        trackEvent(
+                                                            "MainNav",
+                                                            "ClickProfile"
+                                                        )
+                                                    }}
                                                     ><span
                                                         ><Localized
                                                             id="main-nav-profile"
@@ -458,6 +520,10 @@
                                                     tag="button"
                                                     on:click={() => {
                                                         showInviteModal = true
+                                                        trackEvent(
+                                                            "MainNav",
+                                                            "ClickOpenInviteFriendsModal"
+                                                        )
                                                     }}
                                                     ><span
                                                         ><Localized
@@ -476,6 +542,12 @@
                                                     className="w-full"
                                                     href="https://testflight.apple.com/join/ZvjofjHo"
                                                     target="_blank"
+                                                    on:click={() => {
+                                                        trackEvent(
+                                                            "MainNav",
+                                                            "ClickIOS"
+                                                        )
+                                                    }}
                                                     ><svg
                                                         fill="#000000"
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -501,6 +573,12 @@
                                                     className="w-full"
                                                     href="https://play.google.com/store/apps/details?id=com.everglot"
                                                     target="_blank"
+                                                    on:click={() => {
+                                                        trackEvent(
+                                                            "MainNav",
+                                                            "ClickAndroid"
+                                                        )
+                                                    }}
                                                 >
                                                     <svg
                                                         width="24"
@@ -596,6 +674,12 @@
                                                 target={$userAgentIsMobileApp
                                                     ? "_blank"
                                                     : "_self"}
+                                                on:click={() => {
+                                                    trackEvent(
+                                                        "MainNav",
+                                                        "ClickFeedback"
+                                                    )
+                                                }}
                                                 ><span class="mr-1"
                                                     ><Localized
                                                         id="main-nav-feedback"
@@ -610,6 +694,12 @@
                                                 tag="a"
                                                 className="w-full"
                                                 href="/privacy"
+                                                on:click={() => {
+                                                    trackEvent(
+                                                        "MainNav",
+                                                        "ClickPrivacy"
+                                                    )
+                                                }}
                                                 ><span class="mr-1"
                                                     ><Localized
                                                         id="main-nav-privacy"
@@ -623,7 +713,13 @@
                                                 color="SECONDARY"
                                                 tag="button"
                                                 className="w-full"
-                                                on:click={handleLogout}
+                                                on:click={() => {
+                                                    trackEvent(
+                                                        "MainNav",
+                                                        "ClickSignOut"
+                                                    )
+                                                    handleLogout()
+                                                }}
                                                 ><span class="mr-1"
                                                     ><Localized
                                                         id="main-nav-logout"

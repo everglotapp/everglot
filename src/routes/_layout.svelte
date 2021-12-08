@@ -1,3 +1,36 @@
+<script context="module" lang="ts">
+    function onLoaded(): any {
+        const tryInitializeMatomo = () => {
+            if (
+                typeof window !== undefined &&
+                "Matomo" in window &&
+                window.Matomo
+            ) {
+                matomoInitialized.set(true)
+            } else {
+                setTimeout(tryInitializeMatomo, 10)
+            }
+        }
+        tryInitializeMatomo()
+    }
+    if (typeof window !== "undefined") {
+        const _paq = (window._paq = window._paq || [])
+        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        _paq.push(["enableLinkTracking"])
+        ;(function () {
+            _paq.push(["setTrackerUrl", TRACKER_URL])
+            _paq.push(["setSiteId", SITE_ID])
+            const d = document
+            const g = d.createElement("script")
+            const s = d.getElementsByTagName("script")[0]
+            g.async = true
+            g.src = TRACKER_BASE_URL + "matomo.js"
+            g.onload = onLoaded()
+            s.parentNode!.insertBefore(g, s)
+        })()
+    }
+</script>
+
 <script lang="ts">
     import { onMount } from "svelte"
     import { scale } from "svelte/transition"
@@ -9,6 +42,7 @@
 
     import { currentUserStore } from "../stores/currentUser"
     import { allGroupsStore } from "../stores/groups"
+    import { matomoInitialized, matomoStore } from "../stores/analytics"
 
     import LocaleProvider from "../components/util/LocaleProvider.svelte"
     import MainNav from "../components/layout/MainNav.svelte"
@@ -16,10 +50,16 @@
     import ChatProvider from "../components/util/ChatProvider.svelte"
     import { showChatSidebarDrawer } from "../stores/chat"
     import { showSwitchCallModal } from "../stores/call"
-    import { MOBILE_APP_USER_AGENTS } from "../constants"
+    import {
+        MOBILE_APP_USER_AGENTS,
+        SITE_ID,
+        TRACKER_BASE_URL,
+        TRACKER_URL,
+    } from "../constants"
     import { currentPage, previousPage, userAgentIsMobileApp } from "../stores"
     import { currentGroupLocale, feedLocale } from "../stores/locales"
     import { getPage, Page } from "./_helpers/routing"
+    import { trackPageView } from "./_helpers/analytics"
 
     setupUrql()
 
@@ -28,6 +68,10 @@
 
     const { page } = stores()
     $: path = $page.path
+
+    $: if ($page && $matomoStore) {
+        trackPageView()
+    }
 
     $: {
         const newPage = getPage(path)

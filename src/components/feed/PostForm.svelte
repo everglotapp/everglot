@@ -818,7 +818,10 @@
                 <ButtonLarge
                     className="items-center mb-1"
                     tag="button"
-                    on:click={() => handlePost()}
+                    on:click={() => {
+                        dispatch("clickPost")
+                        handlePost()
+                    }}
                     ><SendIcon size="18" class="mr-2" /><Localized
                         id="index-post-form-post-button"
                     /></ButtonLarge

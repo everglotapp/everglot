@@ -40,6 +40,7 @@
     import type { SupportedLocale } from "../constants"
     import { feedLocale } from "../stores/locales"
     import { localeIsSupported } from "../helpers/locales"
+    import { trackEvent } from "./_helpers/analytics"
 
     query(languageCodeMappings)
 
@@ -199,6 +200,7 @@
 
     let previouslyPickedLocale: SupportedLocale | undefined = "en"
     $: if (pickedLocale && pickedLocale !== previouslyPickedLocale) {
+        trackEvent("Feed", "PickLocale", pickedLocale)
         fetch(`/preferences/update`, {
             method: "post",
             headers: {
@@ -386,7 +388,15 @@
                         className="items-center"
                         tag="button"
                         variant={shownPrompt ? "OUTLINED" : "FILLED"}
-                        on:click={handleShuffle}
+                        on:click={() => {
+                            trackEvent(
+                                "Feed",
+                                shownPrompt
+                                    ? "ClickShufflePrompts"
+                                    : "ClickShufflePromptsInitial"
+                            )
+                            handleShuffle()
+                        }}
                         ><ZapIcon size="20" class="mr-2" /><span
                             class="hidden sm:inline"
                             >{#if shownPrompt}
@@ -426,8 +436,15 @@
                 </select>
                 <ButtonSmall
                     id={languageButtonId}
-                    on:click={() =>
-                        (languageButtonFocused = !languageButtonFocused)}
+                    on:click={() => {
+                        languageButtonFocused = !languageButtonFocused
+                        trackEvent(
+                            "Feed",
+                            languageButtonFocused
+                                ? "ClickOpenLocaleDropdown"
+                                : "ClickCloseLocaleDropdown"
+                        )
+                    }}
                     variant="TEXT"
                     tag="button"
                     color="SECONDARY"
@@ -458,8 +475,9 @@
                                 <li
                                     value={item.value}
                                     aria-selected={item.value === pickedLocale}
-                                    on:click={() =>
-                                        handlePickLocale(item.value)}
+                                    on:click={() => {
+                                        handlePickLocale(item.value)
+                                    }}
                                 >
                                     <div class="py-1 px-3">
                                         <Localized
@@ -472,10 +490,16 @@
                     </div>
                     <ClickAwayListener
                         elementId={[languageButtonDropdownId, languageButtonId]}
-                        on:clickaway={() => (languageButtonFocused = false)}
+                        on:clickaway={() => {
+                            trackEvent("Feed", "ClickAwayCloseLocaleDropdown")
+                            languageButtonFocused = false
+                        }}
                     />
                     <EscapeKeyListener
-                        on:keydown={() => (languageButtonFocused = false)}
+                        on:keydown={() => {
+                            trackEvent("Feed", "EscapeCloseLocaleDropdown")
+                            languageButtonFocused = false
+                        }}
                     />
                 {/if}
             </div>
@@ -497,7 +521,10 @@
                 <ButtonSmall
                     tag="button"
                     variant="TEXT"
-                    on:click={() => unsetPrompt()}
+                    on:click={() => {
+                        trackEvent("Feed", "ClickClosePrompt")
+                        unsetPrompt()
+                    }}
                     className="close-prompt-button"
                 >
                     <XCircleIcon size="32" strokeWidth={1} />
@@ -509,6 +536,9 @@
         shownPromptUuid={shownPrompt ? shownPrompt.uuid : null}
         locale={pickedLocale || null}
         on:postSuccess={handlePostSuccess}
+        on:clickPost={() => {
+            trackEvent("Feed", "ClickPost")
+        }}
     />
     <div class="container max-w-2xl py-2 pl-3 pr-2 sm:px-0 gap-y-1">
         {#each posts as post (post.uuid)}

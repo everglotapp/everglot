@@ -21,6 +21,7 @@ export const AGORA_APP_ID = "38aefcc1e5254b578fb65665fe227ed5"
 
 export * from "./posts"
 export * from "./locales"
+export * from "./analytics"
 
 export const MESSAGE_PREVIEW_BASE_PATH = "/images/preview" as const
 export const USER_UPLOADED_IMAGES_BASE_PATH = "/images/uploads" as const

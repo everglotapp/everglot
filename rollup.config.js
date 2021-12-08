@@ -140,6 +140,7 @@ export default {
                 emitFiles: false, // already emitted by client build
             }),
             resolve({
+                exportConditions: ["node"],
                 dedupe: ["svelte"],
             }),
             json({ compact: true }),

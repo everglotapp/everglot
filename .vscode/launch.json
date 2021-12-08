@@ -8,7 +8,7 @@
       "name": "Everglot Dev Server",
       "request": "launch",
       "type": "node-terminal",
-      "command": "npm run dev -- 2>&1 | npx roarr pretty-print --fe '{\"context.logLevel\":{gt:10}}'",
+      "command": "npm run dev -- 2>&1 | npx roarr pretty-print --filter \"context.logLevel:>10\"",
       "preLaunchTask": "docker-compose-db"
     }
   ]

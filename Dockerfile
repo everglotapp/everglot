@@ -1,4 +1,4 @@
-from node:16-alpine
+FROM node:16-alpine
 
 # Install Yarn.
 # Necessary as of 2021-03-21 only to run the git-based NPM dependency deep-email-validator.
@@ -70,6 +70,11 @@ COPY --chown=node:node . .
 
 # Build the app including assets etc.
 RUN npm run build
+
+# Add log pretty printing and filtering CLI.
+RUN set -eux \
+    & [ "$NODE_ENV" != "production" ] || \
+        (npm i @roarr/cli)
 
 # Re-install without dev dependencies if not in development.
 #RUN set -eux \

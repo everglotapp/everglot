@@ -293,7 +293,7 @@
             {#key feedback}
                 <div
                     class={`px-8 py-4 font-bold ${
-                        feedbackSuccess ? "text-green-600" : "text-red-700"
+                        feedbackSuccess ? "text-emerald-600" : "text-red-700"
                     }`}
                     in:scale={{ duration: 200, delay: 150 }}
                     out:scale={{ duration: 100, delay: 0 }}

@@ -452,7 +452,7 @@
                     color="SECONDARY"
                     className="language-button flex items-center text-gray-bitdark font-secondary font-bold relative"
                 >
-                    <span class="overflow-hidden overflow-ellipsis">
+                    <span class="overflow-hidden text-ellipsis">
                         {#if pickedLocale}
                             <Localized id={`locale-${pickedLocale}`} />
                         {:else}

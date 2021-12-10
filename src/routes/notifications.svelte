@@ -101,7 +101,7 @@
             {#if notification.metadata && notification.metadata.user}
                 <a href={links[notification.uuid] || ""} class="wrapper">
                     <div
-                        class="flex flex-1 justify-start w-full overflow-hidden overflow-ellipsis px-4 pt-2 pb-3 flex-row items-center border-b"
+                        class="flex flex-1 justify-start w-full overflow-hidden text-ellipsis px-4 pt-2 pb-3 flex-row items-center border-b"
                         in:scale={{ duration: 100 }}
                     >
                         <div class="avatar">

@@ -400,7 +400,7 @@
         @apply inline-block;
         @apply whitespace-nowrap;
         @apply overflow-hidden;
-        @apply overflow-ellipsis;
+        @apply text-ellipsis;
         @apply text-primary-dark;
         @apply font-bold;
 

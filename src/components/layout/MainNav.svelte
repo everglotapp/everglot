@@ -457,7 +457,7 @@
                                     <div class="my-auto pt-2">
                                         {#if $currentUser && $currentUser.username && $currentUser.username.length}
                                             <span
-                                                class="px-4 pb-2 text-gray-bitdark font-bold block overflow-hidden overflow-ellipsis whitespace-nowrap"
+                                                class="px-4 pb-2 text-gray-bitdark font-bold block overflow-hidden text-ellipsis whitespace-nowrap"
                                                 style="max-width: 10rem;"
                                                 >{$currentUser.username}</span
                                             >

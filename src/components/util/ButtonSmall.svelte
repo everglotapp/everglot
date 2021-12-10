@@ -97,17 +97,18 @@
 {/if}
 
 <style>
+    @import "tailwindcss/components";
     @layer components {
         button,
         a {
-            @apply py-1;
-            @apply px-4;
             @apply inline-flex;
             @apply rounded-xl;
             @apply font-bold;
             @apply cursor-pointer;
             @apply transition-colors;
             @apply font-secondary;
+
+            padding: 0.15rem 0.75rem;
         }
 
         button:focus,

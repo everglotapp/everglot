@@ -220,7 +220,7 @@
                                 className="w-full flex justify-between"
                             >
                                 <span
-                                    class="font-sans overflow-hidden overflow-ellipsis pr-8"
+                                    class="font-sans overflow-hidden text-ellipsis pr-8"
                                 >
                                     {group.group.groupName}</span
                                 >

@@ -700,14 +700,11 @@
 
         @apply px-3;
 
+        @apply md:bottom-0;
+        @apply md:p-0;
+
         @screen md {
             grid-template-rows: 70px 1fr;
-
-            @apply bottom-0;
-            @apply p-0;
-        }
-
-        @screen md {
             bottom: 70px;
         }
     }
@@ -748,28 +745,22 @@
     }
 
     .views.split .view-left {
-        @screen md {
-            @apply flex;
-        }
+        @apply md:flex;
     }
 
-    .views.mobile-games .view-left {
-        @media (max-width: theme("screens.md")) {
+    @media (max-width: theme("screens.md")) {
+        .views.mobile-games .view-left {
             @apply flex;
         }
-    }
 
-    .views.mobile-chat .view-right {
-        @media (max-width: theme("screens.md")) {
+        .views.mobile-chat .view-right {
             @apply flex;
         }
     }
 
     .view-right,
     .views.split .view-right {
-        @screen md {
-            @apply flex;
-        }
+        @apply md:flex;
     }
 
     .view-inner {
@@ -837,9 +828,7 @@
         @apply z-10;
         @apply hidden;
 
-        @screen md {
-            @apply block;
-        }
+        @apply md:block;
     }
 
     @media (max-width: theme("screens.md")) {

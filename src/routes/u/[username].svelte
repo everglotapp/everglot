@@ -491,7 +491,7 @@
                                             className="group-item flex justify-start"
                                         >
                                             <span
-                                                class="group-item-name font-sans overflow-hidden overflow-ellipsis pr-8"
+                                                class="group-item-name font-sans overflow-hidden text-ellipsis pr-8"
                                             >
                                                 {groupUser.group
                                                     .groupName}</span
@@ -729,12 +729,10 @@
         padding: 0.75rem 0.7rem 0.5rem;
         font-size: 0.95rem;
 
-        @screen sm {
-            @apply pt-3;
-            @apply pb-2;
-            @apply px-3;
-            @apply text-base;
-        }
+        @apply sm:pt-3;
+        @apply sm:pb-2;
+        @apply sm:px-3;
+        @apply sm:text-base;
     }
 
     .tabs > button[aria-selected="true"]::after {
@@ -763,9 +761,7 @@
     h2 {
         @apply mb-3;
 
-        @screen sm {
-            @apply mb-2;
-        }
+        @apply sm:mb-2;
     }
 
     .bio {

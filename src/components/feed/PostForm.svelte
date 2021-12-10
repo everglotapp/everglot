@@ -953,7 +953,7 @@
 
         @apply w-full;
         @apply overflow-hidden;
-        @apply overflow-ellipsis;
+        @apply text-ellipsis;
         @apply py-2;
         @apply px-4;
         @apply mb-2;

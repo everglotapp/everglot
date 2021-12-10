@@ -116,7 +116,7 @@
         @apply text-gray-dark;
         @apply text-sm;
         @apply overflow-hidden;
-        @apply overflow-ellipsis;
+        @apply text-ellipsis;
         @apply text-left;
         @apply whitespace-nowrap;
     }

@@ -144,7 +144,7 @@
     </PageTitle>
 
     {#if success}
-        <div class="py-4 px-8 bg-green-200 text-xl font-bold font-secondary">
+        <div class="py-4 px-8 bg-emerald-200 text-xl font-bold font-secondary">
             Your password has been updated successfully! You will be redirected
             in {remainingSeconds === null ? "?" : remainingSeconds}
             {remainingSeconds === 1 ? "second" : "seconds"}!

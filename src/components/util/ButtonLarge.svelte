@@ -71,11 +71,10 @@
 {/if}
 
 <style>
+    @import "tailwindcss/components";
     @layer components {
         button,
         a {
-            @apply py-2;
-            @apply px-6;
             @apply inline-flex;
             @apply rounded-xl;
             @apply font-bold;
@@ -86,6 +85,7 @@
 
             line-height: 1.5rem;
             font-size: 1.15rem;
+            padding: 0.35rem 1.15rem;
         }
 
         button:disabled,

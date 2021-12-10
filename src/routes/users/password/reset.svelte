@@ -80,7 +80,7 @@
     </PageTitle>
 
     {#if success}
-        <div class="py-4 px-8 bg-green-100 text-xl font-bold font-secondary">
+        <div class="py-4 px-8 bg-emerald-100 text-xl font-bold font-secondary">
             An email has been sent to your mail address. Please follow the
             instructions to reset your password!
         </div>

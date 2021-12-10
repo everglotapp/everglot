@@ -223,21 +223,21 @@
         </div>
     {/key}
     <div
-        class="flex flex-wrap items-center flex-grow overflow-hidden overflow-ellipsis whitespace-nowrap"
+        class="flex flex-wrap items-center flex-grow overflow-hidden text-ellipsis whitespace-nowrap"
     >
         <div class="flex flex-col flex-grow w-full">
             <div class="flex flex-wrap items-center">
                 {#if displayName}
                     <span
-                        class="text-2xl font-primary font-bold overflow-hidden overflow-ellipsis mr-2"
+                        class="text-2xl font-primary font-bold overflow-hidden text-ellipsis mr-2"
                         title={displayName || ""}>{displayName || ""}</span
                     ><span
-                        class="text-xl font-primary text-gray-bitdark overflow-hidden overflow-ellipsis"
+                        class="text-xl font-primary text-gray-bitdark overflow-hidden text-ellipsis"
                         title={username || ""}>({username || ""})</span
                     >
                 {:else}
                     <span
-                        class="text-2xl font-primary font-bold overflow-hidden overflow-ellipsis"
+                        class="text-2xl font-primary font-bold overflow-hidden text-ellipsis"
                         title={username || ""}>{username || ""}</span
                     >
                 {/if}

@@ -227,7 +227,7 @@
         @apply mr-3;
         @apply whitespace-nowrap;
         @apply overflow-hidden;
-        @apply overflow-ellipsis;
+        @apply text-ellipsis;
         @apply text-base;
         @apply text-black;
         @apply font-normal;

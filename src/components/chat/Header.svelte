@@ -46,7 +46,7 @@
 
         @screen md {
             @apply h-auto;
-            @apply py-4;
+            @apply px-4;
             @apply px-8;
         }
     }

@@ -1563,7 +1563,7 @@
     }
 
     .body-part-range-answer.correct:not(.skipped) {
-        @apply text-green-500;
+        @apply text-emerald-500;
     }
 
     .body-part-range-answer.incorrect:not(.skipped) {

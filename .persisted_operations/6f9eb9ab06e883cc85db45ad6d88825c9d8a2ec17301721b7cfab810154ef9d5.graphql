@@ -1,9 +1,0 @@
-mutation ConfirmUserEmail($id: Int!, $email: String!, $emailConfirmedAt: Datetime!) {
-  updateUser(input: {patch: {email: $email, emailConfirmedAt: $emailConfirmedAt, emailConfirmToken: null, unconfirmedEmail: null}, id: $id}) {
-    user {
-      id
-      __typename
-    }
-    __typename
-  }
-}

@@ -9,6 +9,7 @@ mutation ConfirmUserEmail(
                 email: $email
                 emailConfirmedAt: $emailConfirmedAt
                 emailConfirmToken: null
+                emailConfirmTokenCreatedAt: null
                 unconfirmedEmail: null
             }
             id: $id

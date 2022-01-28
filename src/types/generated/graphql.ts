@@ -29381,7 +29381,7 @@ export const UserProfile = gql`
 export const ConfirmUserEmail = gql`
     mutation ConfirmUserEmail($id: Int!, $email: String!, $emailConfirmedAt: Datetime!) {
   updateUser(
-    input: {patch: {email: $email, emailConfirmedAt: $emailConfirmedAt, emailConfirmToken: null, unconfirmedEmail: null}, id: $id}
+    input: {patch: {email: $email, emailConfirmedAt: $emailConfirmedAt, emailConfirmToken: null, emailConfirmTokenCreatedAt: null, unconfirmedEmail: null}, id: $id}
   ) {
     user {
       id

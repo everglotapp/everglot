@@ -15,6 +15,7 @@ import { ensureJson, serverError } from "../helpers"
 import {
     generateInviteToken,
     generateEmailUnsubscribeToken,
+    generateEmailConfirmToken,
 } from "../helpers/tokens"
 import {
     GOOGLE_WEB_SIGNIN_CLIENT_ID,
@@ -38,6 +39,11 @@ import {
     generateRefreshToken,
     REFRESH_TOKEN_JTI_GENERATOR,
 } from "../server/auth/refreshTokens"
+import { enqueueEmailNotification } from "../server/notifications/email"
+import { NotificationParamsVersion } from "../server/notifications/params"
+
+const NOTIFICATION_EXPIRY_SECONDS = 30 * 24 * 60 * 60 // 30 days
+const NOTIFICATION_WITHHELD_SECONDS = 0
 
 type InvalidEmailReason = "smtp" | "regex" | "typo" | "mx" | "disposable"
 
@@ -235,6 +241,17 @@ export async function post(req: Request, res: Response, _next: () => void) {
         return
     }
 
+    const emailConfirmToken = await generateEmailConfirmToken()
+    if (!emailConfirmToken) {
+        chlog
+            .child({ emailConfirmToken })
+            .error(`Email confirm token generation failed`)
+        serverError(res)
+        return
+    }
+
+    const emailIsConfirmed =
+        googleId !== null && authMethod === AuthMethod.GOOGLE
     const uuid = uuidv4()
     const queryResult = await db?.query({
         text: `INSERT INTO ${DATABASE_SCHEMA}.users (
@@ -246,7 +263,11 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 avatar_url,
                 locale,
                 signed_up_with_token_id,
-                email_unsubscribe_token
+                email_unsubscribe_token,
+                email_confirm_token,
+                email_confirm_token_created_at,
+                unconfirmed_email,
+                email_confirmed_at
             )
             VALUES (
                 $1,
@@ -262,14 +283,18 @@ export async function post(req: Request, res: Response, _next: () => void) {
                     LIMIT 1
                 ),
                 $8,
-                $9
+                $9,
+                $10,
+                CASE WHEN $2 IS NULL THEN current_timestamp ELSE null END,
+                $11,
+                CASE WHEN $2 IS NULL THEN null ELSE current_timestamp END
             )
             ON CONFLICT (email)
                 DO NOTHING
             RETURNING id`,
         values: [
             username,
-            email,
+            emailIsConfirmed ? email : null, // confirmed email
             hash,
             uuid,
             googleId,
@@ -277,6 +302,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
             locale,
             inviteTokenId,
             emailUnsubscribeToken,
+            emailIsConfirmed ? null : emailConfirmToken,
+            emailIsConfirmed ? null : email, // unconfirmed email
         ],
     })
     const userId = queryResult?.rows[0]?.id
@@ -340,6 +367,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             return
         }
     }
+
     req.session.regenerate(function (err: any) {
         if (err) {
             chlog.error("Failed to (re)generate session: %s", err.message)
@@ -349,4 +377,25 @@ export async function post(req: Request, res: Response, _next: () => void) {
             res.status(200).json({ success: true, refreshToken })
         }
     })
+
+    // TODO: Send welcome email to Google sign ups without email confirm token
+    if (authMethod === AuthMethod.EMAIL) {
+        const expiresAt = new Date(
+            Date.now() + NOTIFICATION_EXPIRY_SECONDS * 1000
+        )
+        const withheldUntil = new Date(
+            Date.now() + NOTIFICATION_WITHHELD_SECONDS * 1000
+        )
+        void enqueueEmailNotification(userId, expiresAt, withheldUntil, {
+            templateId: 15,
+            templateParams: {
+                // TODO: Send username only in Google sign ups
+                username: username ?? "",
+                email,
+                confirmEmailUrl: `https://app.everglot.com/email/confirm?token=${emailConfirmToken}`,
+                unsubscribeUrl: `https://app.everglot.com/email/unsubscribe?token=${emailUnsubscribeToken}`,
+            },
+            version: NotificationParamsVersion.V1,
+        })
+    }
 }

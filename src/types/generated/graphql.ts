@@ -5057,6 +5057,16 @@ export type DeleteSpanishWouldYouRatherQuestionPayloadSpanishWouldYouRatherQuest
   orderBy?: InputMaybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
 };
 
+/** All input for the `deleteUserByEmailConfirmToken` mutation. */
+export type DeleteUserByEmailConfirmTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  emailConfirmToken: Scalars['String'];
+};
+
 /** All input for the `deleteUserByEmail` mutation. */
 export type DeleteUserByEmailInput = {
   /**
@@ -10496,6 +10506,8 @@ export type Mutation = {
   /** Deletes a single `User` using a unique key. */
   deleteUserByEmail?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using a unique key. */
+  deleteUserByEmailConfirmToken?: Maybe<DeleteUserPayload>;
+  /** Deletes a single `User` using a unique key. */
   deleteUserByEmailUnsubscribeToken?: Maybe<DeleteUserPayload>;
   /** Deletes a single `User` using its globally unique id. */
   deleteUserByNodeId?: Maybe<DeleteUserPayload>;
@@ -10818,6 +10830,8 @@ export type Mutation = {
   updateUser?: Maybe<UpdateUserPayload>;
   /** Updates a single `User` using a unique key and a patch. */
   updateUserByEmail?: Maybe<UpdateUserPayload>;
+  /** Updates a single `User` using a unique key and a patch. */
+  updateUserByEmailConfirmToken?: Maybe<UpdateUserPayload>;
   /** Updates a single `User` using a unique key and a patch. */
   updateUserByEmailUnsubscribeToken?: Maybe<UpdateUserPayload>;
   /** Updates a single `User` using its globally unique id and a patch. */
@@ -12142,6 +12156,12 @@ export type MutationDeleteUserByEmailArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteUserByEmailConfirmTokenArgs = {
+  input: DeleteUserByEmailConfirmTokenInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserByEmailUnsubscribeTokenArgs = {
   input: DeleteUserByEmailUnsubscribeTokenInput;
 };
@@ -13116,6 +13136,12 @@ export type MutationUpdateUserArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateUserByEmailArgs = {
   input: UpdateUserByEmailInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateUserByEmailConfirmTokenArgs = {
+  input: UpdateUserByEmailConfirmTokenInput;
 };
 
 
@@ -16988,6 +17014,7 @@ export type Query = Node & {
   spanishWouldYouRatherQuestions?: Maybe<SpanishWouldYouRatherQuestionsConnection>;
   user?: Maybe<User>;
   userByEmail?: Maybe<User>;
+  userByEmailConfirmToken?: Maybe<User>;
   userByEmailUnsubscribeToken?: Maybe<User>;
   /** Reads a single `User` using its globally unique `ID`. */
   userByNodeId?: Maybe<User>;
@@ -18530,6 +18557,12 @@ export type QueryUserArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryUserByEmailArgs = {
   email: Scalars['String'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryUserByEmailConfirmTokenArgs = {
+  emailConfirmToken: Scalars['String'];
 };
 
 
@@ -22637,6 +22670,18 @@ export type UpdateSpanishWouldYouRatherQuestionPayloadSpanishWouldYouRatherQuest
   orderBy?: InputMaybe<Array<SpanishWouldYouRatherQuestionsOrderBy>>;
 };
 
+/** All input for the `updateUserByEmailConfirmToken` mutation. */
+export type UpdateUserByEmailConfirmTokenInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  emailConfirmToken: Scalars['String'];
+  /** An object where the defined keys will be set on the `User` being updated. */
+  patch: UserPatch;
+};
+
 /** All input for the `updateUserByEmail` mutation. */
 export type UpdateUserByEmailInput = {
   /**
@@ -24957,6 +25002,7 @@ export type UpsertUserSessionWhere = {
 /** Where conditions for the upsert `User` mutation. */
 export type UpsertUserWhere = {
   email?: InputMaybe<Scalars['String']>;
+  emailConfirmToken?: InputMaybe<Scalars['String']>;
   emailUnsubscribeToken?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
   resetPasswordToken?: InputMaybe<Scalars['String']>;
@@ -24972,7 +25018,10 @@ export type User = Node & {
   bio: Scalars['String'];
   createdAt: Scalars['Datetime'];
   displayName?: Maybe<Scalars['String']>;
-  email: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+  emailConfirmToken?: Maybe<Scalars['String']>;
+  emailConfirmTokenCreatedAt?: Maybe<Scalars['Datetime']>;
+  emailConfirmedAt?: Maybe<Scalars['Datetime']>;
   emailNotificationsEnabled: Scalars['Boolean'];
   emailUnsubscribeToken?: Maybe<Scalars['String']>;
   followedByCurrentUser?: Maybe<Scalars['Boolean']>;
@@ -25581,6 +25630,12 @@ export type UserCondition = {
   displayName?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `email` field. */
   email?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `emailConfirmToken` field. */
+  emailConfirmToken?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `emailConfirmTokenCreatedAt` field. */
+  emailConfirmTokenCreatedAt?: InputMaybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `emailConfirmedAt` field. */
+  emailConfirmedAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `emailNotificationsEnabled` field. */
   emailNotificationsEnabled?: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `emailUnsubscribeToken` field. */
@@ -25741,6 +25796,12 @@ export type UserFilter = {
   displayName?: InputMaybe<StringFilter>;
   /** Filter by the object’s `email` field. */
   email?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `emailConfirmToken` field. */
+  emailConfirmToken?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `emailConfirmTokenCreatedAt` field. */
+  emailConfirmTokenCreatedAt?: InputMaybe<DatetimeFilter>;
+  /** Filter by the object’s `emailConfirmedAt` field. */
+  emailConfirmedAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `emailNotificationsEnabled` field. */
   emailNotificationsEnabled?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `emailUnsubscribeToken` field. */
@@ -26031,7 +26092,10 @@ export type UserInput = {
   bio?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['Datetime']>;
   displayName?: InputMaybe<Scalars['String']>;
-  email: Scalars['String'];
+  email?: InputMaybe<Scalars['String']>;
+  emailConfirmToken?: InputMaybe<Scalars['String']>;
+  emailConfirmTokenCreatedAt?: InputMaybe<Scalars['Datetime']>;
+  emailConfirmedAt?: InputMaybe<Scalars['Datetime']>;
   emailNotificationsEnabled?: InputMaybe<Scalars['Boolean']>;
   emailUnsubscribeToken?: InputMaybe<Scalars['String']>;
   gender?: InputMaybe<Scalars['String']>;
@@ -26397,6 +26461,9 @@ export type UserPatch = {
   createdAt?: InputMaybe<Scalars['Datetime']>;
   displayName?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
+  emailConfirmToken?: InputMaybe<Scalars['String']>;
+  emailConfirmTokenCreatedAt?: InputMaybe<Scalars['Datetime']>;
+  emailConfirmedAt?: InputMaybe<Scalars['Datetime']>;
   emailNotificationsEnabled?: InputMaybe<Scalars['Boolean']>;
   emailUnsubscribeToken?: InputMaybe<Scalars['String']>;
   gender?: InputMaybe<Scalars['String']>;
@@ -27153,6 +27220,12 @@ export enum UsersOrderBy {
   DisplayNameAsc = 'DISPLAY_NAME_ASC',
   DisplayNameDesc = 'DISPLAY_NAME_DESC',
   EmailAsc = 'EMAIL_ASC',
+  EmailConfirmedAtAsc = 'EMAIL_CONFIRMED_AT_ASC',
+  EmailConfirmedAtDesc = 'EMAIL_CONFIRMED_AT_DESC',
+  EmailConfirmTokenAsc = 'EMAIL_CONFIRM_TOKEN_ASC',
+  EmailConfirmTokenCreatedAtAsc = 'EMAIL_CONFIRM_TOKEN_CREATED_AT_ASC',
+  EmailConfirmTokenCreatedAtDesc = 'EMAIL_CONFIRM_TOKEN_CREATED_AT_DESC',
+  EmailConfirmTokenDesc = 'EMAIL_CONFIRM_TOKEN_DESC',
   EmailDesc = 'EMAIL_DESC',
   EmailNotificationsEnabledAsc = 'EMAIL_NOTIFICATIONS_ENABLED_ASC',
   EmailNotificationsEnabledDesc = 'EMAIL_NOTIFICATIONS_ENABLED_DESC',
@@ -27257,7 +27330,7 @@ export type GroupChatMessagesQuery = { __typename?: 'Query', groupByUuid?: { __t
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', bio: string, email: string, gender?: string | null | undefined, username?: string | null | undefined, uuid: any, avatarUrl?: string | null | undefined, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number }, languageByLocale?: { __typename?: 'Language', alpha2: string } | null | undefined, inviteTokens: { __typename?: 'InviteTokensConnection', nodes: Array<{ __typename?: 'InviteToken', inviteToken: string } | null | undefined> }, preference?: { __typename?: 'UserPreference', feedLanguage?: { __typename?: 'Language', alpha2: string } | null | undefined } | null | undefined } | null | undefined };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', bio: string, email?: string | null | undefined, gender?: string | null | undefined, username?: string | null | undefined, uuid: any, avatarUrl?: string | null | undefined, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number }, languageByLocale?: { __typename?: 'Language', alpha2: string } | null | undefined, inviteTokens: { __typename?: 'InviteTokensConnection', nodes: Array<{ __typename?: 'InviteToken', inviteToken: string } | null | undefined> }, preference?: { __typename?: 'UserPreference', feedLanguage?: { __typename?: 'Language', alpha2: string } | null | undefined } | null | undefined } | null | undefined };
 
 export type RegisterUserActivityMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -27600,7 +27673,7 @@ export type OutstandingEmailNotificationsQueryVariables = Exact<{
 }>;
 
 
-export type OutstandingEmailNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: { __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<{ __typename?: 'Notification', id: number, params?: any | null | undefined, expiresAt?: any | null | undefined, withheldUntil?: any | null | undefined, recipient?: { __typename?: 'User', email: string, emailNotificationsEnabled: boolean, username?: string | null | undefined, unconfirmedEmail?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
+export type OutstandingEmailNotificationsQuery = { __typename?: 'Query', notificationChannelByName?: { __typename?: 'NotificationChannel', notificationsByChannelId: { __typename?: 'NotificationsConnection', nodes: Array<{ __typename?: 'Notification', id: number, params?: any | null | undefined, expiresAt?: any | null | undefined, withheldUntil?: any | null | undefined, recipient?: { __typename?: 'User', email?: string | null | undefined, emailNotificationsEnabled: boolean, username?: string | null | undefined, unconfirmedEmail?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
 
 export type OutstandingFcmNotificationsQueryVariables = Exact<{
   notExpiredAt: Scalars['Datetime'];
@@ -27643,7 +27716,7 @@ export type UnsubscribeUserEmailNotificationsMutationVariables = Exact<{
 }>;
 
 
-export type UnsubscribeUserEmailNotificationsMutation = { __typename?: 'Mutation', updateUserByEmailUnsubscribeToken?: { __typename?: 'UpdateUserPayload', clientMutationId?: string | null | undefined, user?: { __typename?: 'User', email: string, uuid: any, username?: string | null | undefined } | null | undefined } | null | undefined };
+export type UnsubscribeUserEmailNotificationsMutation = { __typename?: 'Mutation', updateUserByEmailUnsubscribeToken?: { __typename?: 'UpdateUserPayload', clientMutationId?: string | null | undefined, user?: { __typename?: 'User', email?: string | null | undefined, uuid: any, username?: string | null | undefined } | null | undefined } | null | undefined };
 
 export type UserFollowershipNotificationQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -27680,6 +27753,15 @@ export type UserProfileQueryVariables = Exact<{
 
 export type UserProfileQuery = { __typename?: 'Query', userByUsername?: { __typename?: 'User', bio: string, gender?: string | null | undefined, username?: string | null | undefined, avatarUrl?: string | null | undefined, uuid: any, displayName?: string | null | undefined, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<{ __typename?: 'UserLanguage', native: boolean, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
 
+export type ConfirmUserEmailMutationVariables = Exact<{
+  id: Scalars['Int'];
+  email: Scalars['String'];
+  emailConfirmedAt: Scalars['Datetime'];
+}>;
+
+
+export type ConfirmUserEmailMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'UpdateUserPayload', user?: { __typename?: 'User', id: number } | null | undefined } | null | undefined };
+
 export type CreateUserMutationVariables = Exact<{
   email: Scalars['String'];
   gender: Scalars['String'];
@@ -27689,6 +27771,8 @@ export type CreateUserMutationVariables = Exact<{
   avatarUrl: Scalars['String'];
   locale?: InputMaybe<Scalars['Int']>;
   emailUnsubscribeToken: Scalars['String'];
+  emailConfirmToken?: InputMaybe<Scalars['String']>;
+  emailConfirmTokenCreatedAt?: InputMaybe<Scalars['Datetime']>;
 }>;
 
 
@@ -27715,7 +27799,7 @@ export type CreateUserPreferenceMutation = { __typename?: 'Mutation', createUser
 export type CurrentUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserProfileQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', bio: string, email: string, gender?: string | null | undefined, username?: string | null | undefined, avatarUrl?: string | null | undefined, uuid: any, displayName?: string | null | undefined, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<{ __typename?: 'UserLanguage', native: boolean, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<{ __typename?: 'GroupUser', nodeId: string, userType: UserType, joinedOn: any, group?: { __typename?: 'Group', uuid: any, groupName?: string | null | undefined, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
+export type CurrentUserProfileQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', bio: string, email?: string | null | undefined, unconfirmedEmail?: string | null | undefined, gender?: string | null | undefined, username?: string | null | undefined, avatarUrl?: string | null | undefined, uuid: any, displayName?: string | null | undefined, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<{ __typename?: 'UserLanguage', native: boolean, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<{ __typename?: 'GroupUser', nodeId: string, userType: UserType, joinedOn: any, group?: { __typename?: 'Group', uuid: any, groupName?: string | null | undefined, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
 
 export type ResetUserPasswordMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -27767,6 +27851,13 @@ export type UpsertUserPreferenceMutationVariables = Exact<{
 
 export type UpsertUserPreferenceMutation = { __typename?: 'Mutation', upsertUserPreference?: { __typename?: 'UpsertUserPreferencePayload', userPreference?: { __typename?: 'UserPreference', createdAt: any, id: number, nodeId: string, feedLanguageId: number } | null | undefined } | null | undefined };
 
+export type UserByEmailConfirmTokenQueryVariables = Exact<{
+  emailConfirmToken: Scalars['String'];
+}>;
+
+
+export type UserByEmailConfirmTokenQuery = { __typename?: 'Query', userByEmailConfirmToken?: { __typename?: 'User', id: number, emailConfirmTokenCreatedAt?: any | null | undefined, unconfirmedEmail?: string | null | undefined, uuid: any } | null | undefined };
+
 export type UserByResetPasswordTokenQueryVariables = Exact<{
   resetPasswordToken: Scalars['String'];
 }>;
@@ -27814,7 +27905,7 @@ export type UserPasswordResetDataByEmailQueryVariables = Exact<{
 }>;
 
 
-export type UserPasswordResetDataByEmailQuery = { __typename?: 'Query', userByEmail?: { __typename?: 'User', id: number, resetPasswordToken?: string | null | undefined, resetPasswordTokenCreatedAt?: any | null | undefined, unconfirmedEmail?: string | null | undefined, googleId?: string | null | undefined, email: string } | null | undefined };
+export type UserPasswordResetDataByEmailQuery = { __typename?: 'Query', userByEmail?: { __typename?: 'User', id: number, resetPasswordToken?: string | null | undefined, resetPasswordTokenCreatedAt?: any | null | undefined, unconfirmedEmail?: string | null | undefined, googleId?: string | null | undefined, email?: string | null | undefined } | null | undefined };
 
 export type UserUuidByIdQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -29287,10 +29378,21 @@ export const UserProfile = gql`
   }
 }
     `;
+export const ConfirmUserEmail = gql`
+    mutation ConfirmUserEmail($id: Int!, $email: String!, $emailConfirmedAt: Datetime!) {
+  updateUser(
+    input: {patch: {email: $email, emailConfirmedAt: $emailConfirmedAt, emailConfirmToken: null, unconfirmedEmail: null}, id: $id}
+  ) {
+    user {
+      id
+    }
+  }
+}
+    `;
 export const CreateUser = gql`
-    mutation CreateUser($email: String!, $gender: String!, $passwordHash: String!, $username: String!, $uuid: UUID!, $avatarUrl: String!, $locale: Int, $emailUnsubscribeToken: String!) {
+    mutation CreateUser($email: String!, $gender: String!, $passwordHash: String!, $username: String!, $uuid: UUID!, $avatarUrl: String!, $locale: Int, $emailUnsubscribeToken: String!, $emailConfirmToken: String, $emailConfirmTokenCreatedAt: Datetime) {
   createUser(
-    input: {user: {email: $email, gender: $gender, passwordHash: $passwordHash, username: $username, uuid: $uuid, avatarUrl: $avatarUrl, locale: $locale, emailUnsubscribeToken: $emailUnsubscribeToken}}
+    input: {user: {email: $email, unconfirmedEmail: $email, gender: $gender, passwordHash: $passwordHash, username: $username, uuid: $uuid, avatarUrl: $avatarUrl, locale: $locale, emailUnsubscribeToken: $emailUnsubscribeToken, emailConfirmToken: $emailConfirmToken, emailConfirmTokenCreatedAt: $emailConfirmTokenCreatedAt}}
   ) {
     user {
       id
@@ -29328,6 +29430,7 @@ export const CurrentUserProfile = gql`
   currentUser {
     bio
     email
+    unconfirmedEmail
     gender
     username
     avatarUrl
@@ -29436,6 +29539,16 @@ export const UpsertUserPreference = gql`
       nodeId
       feedLanguageId
     }
+  }
+}
+    `;
+export const UserByEmailConfirmToken = gql`
+    query UserByEmailConfirmToken($emailConfirmToken: String!) {
+  userByEmailConfirmToken(emailConfirmToken: $emailConfirmToken) {
+    id
+    emailConfirmTokenCreatedAt
+    unconfirmedEmail
+    uuid
   }
 }
     `;

@@ -6,6 +6,12 @@ async function generateEmailUnsubscribeToken() {
 }
 exports.generateEmailUnsubscribeToken = generateEmailUnsubscribeToken
 
+async function generateEmailConfirmToken() {
+    const uidgen = new UIDGenerator(384, UIDGenerator.BASE66)
+    return await uidgen.generate().catch(() => null)
+}
+exports.generateEmailConfirmToken = generateEmailConfirmToken
+
 async function generateResetPasswordToken() {
     const uidgen = new UIDGenerator(384, UIDGenerator.BASE66)
     return await uidgen.generate().catch(() => null)
@@ -20,6 +26,7 @@ exports.generateInviteToken = generateInviteToken
 
 exports.default = {
     generateEmailUnsubscribeToken,
+    generateEmailConfirmToken,
     generateResetPasswordToken,
     generateInviteToken,
 }

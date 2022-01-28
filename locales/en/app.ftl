@@ -312,6 +312,14 @@ email-unsubscribe-success-description = You will no longer receive email notific
 email-unsubscribe-failure-link-invalid = The link that got you here is no longer valid.
 email-unsubscribe-failure-contact-us = Please contact us if you think this is a mistake.
 
+## Email confirmation successful
+email-confirm-success-headline = Success!
+email-confirm-success-description = You have confirmed your email address.
+
+## Email confirmation unsuccessful
+email-confirm-failure-link-invalid = The link that got you here is no longer valid.
+email-confirm-failure-contact-us = Please contact us if you think this is a mistake.
+
 ## Locales
 
 locale-en = English

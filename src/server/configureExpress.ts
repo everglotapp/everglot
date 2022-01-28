@@ -131,6 +131,10 @@ function pathIsProtected(req: Request): boolean {
     if (path.startsWith("/email/unsubscribe") && "get" === method) {
         return false
     }
+    // For tokens passed via GET in query string.
+    if (path.startsWith("/email/confirm") && "get" === method) {
+        return false
+    }
     if (path.startsWith("/users/password/reset/") && "get" === method) {
         return false
     }

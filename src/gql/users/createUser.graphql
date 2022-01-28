@@ -7,11 +7,14 @@ mutation CreateUser(
     $avatarUrl: String!
     $locale: Int
     $emailUnsubscribeToken: String!
+    $emailConfirmToken: String
+    $emailConfirmTokenCreatedAt: Datetime
 ) {
     createUser(
         input: {
             user: {
                 email: $email
+                unconfirmedEmail: $email
                 gender: $gender
                 passwordHash: $passwordHash
                 username: $username
@@ -19,6 +22,8 @@ mutation CreateUser(
                 avatarUrl: $avatarUrl
                 locale: $locale
                 emailUnsubscribeToken: $emailUnsubscribeToken
+                emailConfirmToken: $emailConfirmToken
+                emailConfirmTokenCreatedAt: $emailConfirmTokenCreatedAt
             }
         }
     ) {

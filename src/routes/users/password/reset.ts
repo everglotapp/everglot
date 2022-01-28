@@ -14,11 +14,9 @@ import {
 import { enqueueEmailNotification } from "../../../server/notifications/email"
 import { NotificationParamsVersion } from "../../../server/notifications/params"
 import { generateResetPasswordToken } from "../../../helpers/tokens"
-import {
-    APP_BASE_URL,
-    RESET_PASSWORD_TOKEN_VALID_SECONDS,
-} from "../../../server/constants"
+import { RESET_PASSWORD_TOKEN_VALID_SECONDS } from "../../../server/constants"
 import { getUserPasswordResetEmailNotification } from "../../../server/notifications/users"
+import routes from "../../../server/routes"
 
 const NOTIFICATION_EXPIRY_SECONDS = 24 * 60 * 60
 const NOTIFICATION_WITHHELD_SECONDS = 3
@@ -33,7 +31,7 @@ async function sendResetPasswordMail(userId: number) {
         return
     }
     const { user } = notificationData
-    if (!user) {
+    if (!user || !user.resetPasswordToken) {
         chlog
             .child({ userId, notificationData })
             .error("Missing notification data for user password reset")
@@ -51,7 +49,9 @@ async function sendResetPasswordMail(userId: number) {
         templateId: 18,
         templateParams: {
             username: username || "user",
-            resetPasswordUrl: `${APP_BASE_URL}/users/password/reset/${user.resetPasswordToken}`,
+            resetPasswordUrl: routes.users.password.reset(
+                user.resetPasswordToken
+            ),
         },
         version: NotificationParamsVersion.V1,
     })

@@ -378,21 +378,26 @@ export async function post(req: Request, res: Response, _next: () => void) {
         }
     })
 
-    // TODO: Send welcome email to Google sign ups without email confirm token
+    const expiresAt = new Date(Date.now() + NOTIFICATION_EXPIRY_SECONDS * 1000)
+    const withheldUntil = new Date(
+        Date.now() + NOTIFICATION_WITHHELD_SECONDS * 1000
+    )
     if (authMethod === AuthMethod.EMAIL) {
-        const expiresAt = new Date(
-            Date.now() + NOTIFICATION_EXPIRY_SECONDS * 1000
-        )
-        const withheldUntil = new Date(
-            Date.now() + NOTIFICATION_WITHHELD_SECONDS * 1000
-        )
         void enqueueEmailNotification(userId, expiresAt, withheldUntil, {
             templateId: 15,
             templateParams: {
-                // TODO: Send username only in Google sign ups
-                username: username ?? "",
                 email,
                 confirmEmailUrl: `https://app.everglot.com/email/confirm?token=${emailConfirmToken}`,
+                unsubscribeUrl: `https://app.everglot.com/email/unsubscribe?token=${emailUnsubscribeToken}`,
+            },
+            version: NotificationParamsVersion.V1,
+        })
+    } else if (authMethod === AuthMethod.GOOGLE) {
+        void enqueueEmailNotification(userId, expiresAt, withheldUntil, {
+            templateId: 20,
+            templateParams: {
+                username: username ?? "",
+                email,
                 unsubscribeUrl: `https://app.everglot.com/email/unsubscribe?token=${emailUnsubscribeToken}`,
             },
             version: NotificationParamsVersion.V1,

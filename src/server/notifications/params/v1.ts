@@ -5,20 +5,31 @@ interface ITemplateEmailParamsV1<I extends number, P extends object>
 }
 
 export type TemplateEmailParamsV1 =
-    | SignUpConfirmationTemplateEmailParamsV1
+    | SignUpEmailConfirmationTemplateEmailParamsV1
+    | SignUpWithoutEmailConfirmationTemplateEmailParamsV1
     | ResetPasswordTemplateEmailParamsV1
     | ResetPasswordSuccessTemplateEmailParamsV1
     | GroupAssignmentTemplateEmailParamsV1
 
-export type SignUpConfirmationTemplateEmailParamsV1 = ITemplateEmailParamsV1<
-    15,
-    {
-        username: string
-        email: string
-        confirmEmailUrl: string
-        unsubscribeUrl: string
-    }
->
+export type SignUpEmailConfirmationTemplateEmailParamsV1 =
+    ITemplateEmailParamsV1<
+        15,
+        {
+            email: string
+            confirmEmailUrl: string
+            unsubscribeUrl: string
+        }
+    >
+
+export type SignUpWithoutEmailConfirmationTemplateEmailParamsV1 =
+    ITemplateEmailParamsV1<
+        20,
+        {
+            username: string
+            email: string
+            unsubscribeUrl: string
+        }
+    >
 
 export type ResetPasswordTemplateEmailParamsV1 = ITemplateEmailParamsV1<
     18,

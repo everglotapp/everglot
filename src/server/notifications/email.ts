@@ -101,7 +101,15 @@ async function sendNextEmailNotification() {
         return
     }
     const from = params!.from || DEFAULT_EMAIL_FROM
-    const to = recipient.email
+    const to = recipient.email || recipient.unconfirmedEmail
+    if (!to) {
+        chlog
+            .child({ notification })
+            .error(
+                "Not sending email, user has neither a confirmed nor an unconfirmed email"
+            )
+        return
+    }
     const baseEmail = {
         sender: from,
         replyTo: from,

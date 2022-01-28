@@ -2,6 +2,7 @@ query CurrentUserProfile {
   currentUser {
     bio
     email
+    unconfirmedEmail
     gender
     username
     avatarUrl

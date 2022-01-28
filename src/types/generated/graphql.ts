@@ -27799,7 +27799,7 @@ export type CreateUserPreferenceMutation = { __typename?: 'Mutation', createUser
 export type CurrentUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserProfileQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', bio: string, email?: string | null | undefined, gender?: string | null | undefined, username?: string | null | undefined, avatarUrl?: string | null | undefined, uuid: any, displayName?: string | null | undefined, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<{ __typename?: 'UserLanguage', native: boolean, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<{ __typename?: 'GroupUser', nodeId: string, userType: UserType, joinedOn: any, group?: { __typename?: 'Group', uuid: any, groupName?: string | null | undefined, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
+export type CurrentUserProfileQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', bio: string, email?: string | null | undefined, unconfirmedEmail?: string | null | undefined, gender?: string | null | undefined, username?: string | null | undefined, avatarUrl?: string | null | undefined, uuid: any, displayName?: string | null | undefined, userLanguages: { __typename?: 'UserLanguagesConnection', totalCount: number, nodes: Array<{ __typename?: 'UserLanguage', native: boolean, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined> }, groupUsers: { __typename?: 'GroupUsersConnection', nodes: Array<{ __typename?: 'GroupUser', nodeId: string, userType: UserType, joinedOn: any, group?: { __typename?: 'Group', uuid: any, groupName?: string | null | undefined, language?: { __typename?: 'Language', englishName: string } | null | undefined, languageSkillLevel?: { __typename?: 'LanguageSkillLevel', name?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined> } } | null | undefined };
 
 export type ResetUserPasswordMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -29430,6 +29430,7 @@ export const CurrentUserProfile = gql`
   currentUser {
     bio
     email
+    unconfirmedEmail
     gender
     username
     avatarUrl

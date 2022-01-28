@@ -79,6 +79,7 @@
     }
 
     $: email = userProfile?.email
+    $: unconfirmedEmail = userProfile?.unconfirmedEmail
     $: username = userProfile?.username
     $: displayName = userProfile?.displayName
     $: gender = userProfile?.gender
@@ -118,7 +119,26 @@
         <div class="flex flex-row flex-wrap-reverse">
             <div class="w-full md:w-1/2">
                 <h4><Localized id="profile-email" /></h4>
-                <div class="mb-4">{email || ""}</div>
+                <div class="mb-4 flex flex-col gap-y-2">
+                    {#if email}
+                        <span>{email}</span>
+                    {/if}
+                    {#if unconfirmedEmail}
+                        <span class="text-gray flex items-center"
+                            ><svg
+                                class="mr-2 fill-gray"
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="24px"
+                                viewBox="0 0 24 24"
+                                width="24px"
+                                fill="#000000"
+                                ><path d="M0 0h24v24H0V0z" fill="none" /><path
+                                    d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"
+                                /></svg
+                            >{unconfirmedEmail}</span
+                        >
+                    {/if}
+                </div>
                 <div class="hidden">
                     <a href="/changepassword">
                         <Localized id="profile-change-password" />

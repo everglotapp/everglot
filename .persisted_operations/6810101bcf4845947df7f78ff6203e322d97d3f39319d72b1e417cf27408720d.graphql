@@ -1,0 +1,9 @@
+query UserByEmailConfirmToken($emailConfirmToken: String!) {
+  userByEmailConfirmToken(emailConfirmToken: $emailConfirmToken) {
+    id
+    emailConfirmTokenCreatedAt
+    unconfirmedEmail
+    uuid
+    __typename
+  }
+}

@@ -566,6 +566,15 @@ declare module '*/userProfile.graphql' {
 }
     
 
+declare module '*/confirmUserEmail.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const ConfirmUserEmail: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/createUser.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -651,6 +660,15 @@ declare module '*/upsertUserPreference.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const UpsertUserPreference: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/userByEmailConfirmToken.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserByEmailConfirmToken: DocumentNode;
 
   export default defaultDocument;
 }

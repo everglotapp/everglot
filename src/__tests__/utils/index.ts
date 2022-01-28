@@ -19,28 +19,36 @@ import {
     Maybe,
     LanguageIdByAlpha2,
     CreateUserLanguage,
+    CreateUser,
 } from "../../types/generated/graphql"
 import type { Pool } from "pg"
 import { AuthMethod, Gender } from "../../users"
-import { generateEmailUnsubscribeToken } from "../../helpers/tokens"
+import {
+    generateEmailUnsubscribeToken,
+    generateEmailConfirmToken,
+} from "../../helpers/tokens"
 
 const { BASE_URL, SESSION_COOKIE_NAME } = process.env
 
 const fakerator = new Fakerator()
 
 export type TestUser = {
-    id: User["id"]
     uuid: string
-    email: User["email"]
-    username: User["username"]
     gender: Gender
-    avatarUrl: User["avatarUrl"]
     password: string
-    passwordHash: User["passwordHash"]
-    locale: User["locale"]
-    signedUpWithTokenId: User["signedUpWithTokenId"]
-    emailUnsubscribeToken: User["emailUnsubscribeToken"]
-}
+} & Pick<
+    User,
+    | "id"
+    | "email"
+    | "username"
+    | "avatarUrl"
+    | "passwordHash"
+    | "locale"
+    | "signedUpWithTokenId"
+    | "emailUnsubscribeToken"
+    | "emailConfirmToken"
+    | "emailConfirmTokenCreatedAt"
+>
 
 export type TestLanguage = Pick<Language, "alpha2" | "id">
 
@@ -59,40 +67,12 @@ export async function createUser(): Promise<TestUser> {
         locale: null,
         signedUpWithTokenId: null,
         emailUnsubscribeToken: await generateEmailUnsubscribeToken(),
+        emailConfirmToken: await generateEmailConfirmToken(),
+        emailConfirmTokenCreatedAt: new Date().toISOString(),
     }
 
     const res = await performQuery<CreateUserMutation>(
-        `mutation CreateUser(
-            $email: String!
-            $gender: String!
-            $passwordHash: String!
-            $username: String!
-            $uuid: UUID!
-            $avatarUrl: String!
-            $locale: Int
-            $signedUpWithTokenId: Int
-            $emailUnsubscribeToken: String!
-        ) {
-            createUser(
-                input: {
-                    user: {
-                        email: $email
-                        gender: $gender
-                        passwordHash: $passwordHash
-                        username: $username
-                        uuid: $uuid
-                        avatarUrl: $avatarUrl
-                        locale: $locale
-                        signedUpWithTokenId: $signedUpWithTokenId
-                        emailUnsubscribeToken: $emailUnsubscribeToken
-                    }
-                }
-            ) {
-                user {
-                    id
-                }
-            }
-        }`,
+        CreateUser.loc!.source,
         user
     )
     expect(res).not.toBeNull()

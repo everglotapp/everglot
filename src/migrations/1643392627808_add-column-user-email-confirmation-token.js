@@ -27,13 +27,13 @@ exports.up = async (pgm) => {
         `GRANT UPDATE(email, unconfirmed_email, email_confirmed_at, email_confirm_token, email_confirm_token_created_at) ON app_public.users TO evg_server`
     )
     pgm.sql(
-        `GRANT INSERT(email_confirmed_at, email_confirm_token, email_confirm_token_created_at) ON app_public.users TO evg_server`
+        `GRANT INSERT(unconfirmed_email, email_confirmed_at, email_confirm_token, email_confirm_token_created_at) ON app_public.users TO evg_server`
     )
 }
 
 exports.down = (pgm) => {
     pgm.sql(
-        `REVOKE INSERT(email_confirmed_at, email_confirm_token, email_confirm_token_created_at) ON app_public.users FROM evg_server`
+        `REVOKE INSERT(unconfirmed_email, email_confirmed_at, email_confirm_token, email_confirm_token_created_at) ON app_public.users FROM evg_server`
     )
     pgm.sql(
         `REVOKE UPDATE(email, unconfirmed_email, email_confirmed_at, email_confirm_token, email_confirm_token_created_at) ON app_public.users FROM evg_server`

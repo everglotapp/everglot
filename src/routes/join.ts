@@ -285,9 +285,9 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 $8,
                 $9,
                 $10,
-                CASE WHEN $2 IS NULL THEN current_timestamp ELSE null END,
+                CASE WHEN $2::varchar IS NULL THEN current_timestamp ELSE null END,
                 $11,
-                CASE WHEN $2 IS NULL THEN null ELSE current_timestamp END
+                CASE WHEN $2::varchar IS NULL THEN null ELSE current_timestamp END
             )
             ON CONFLICT (email)
                 DO NOTHING

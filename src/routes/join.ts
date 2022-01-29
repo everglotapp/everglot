@@ -5,6 +5,7 @@ import validateEmail from "deep-email-validator"
 import { OAuth2Client } from "google-auth-library"
 
 import { DATABASE_SCHEMA, db } from "../server/db"
+import routes from "../server/routes"
 
 import { AuthMethod, MIN_PASSWORD_LENGTH } from "../users"
 import {
@@ -387,8 +388,8 @@ export async function post(req: Request, res: Response, _next: () => void) {
             templateId: 15,
             templateParams: {
                 email,
-                confirmEmailUrl: `https://app.everglot.com/email/confirm?token=${emailConfirmToken}`,
-                unsubscribeUrl: `https://app.everglot.com/email/unsubscribe?token=${emailUnsubscribeToken}`,
+                confirmEmailUrl: routes.email.confirm(emailConfirmToken),
+                unsubscribeUrl: routes.email.unsubscribe(emailUnsubscribeToken),
             },
             version: NotificationParamsVersion.V1,
         })
@@ -398,7 +399,7 @@ export async function post(req: Request, res: Response, _next: () => void) {
             templateParams: {
                 username: username ?? "",
                 email,
-                unsubscribeUrl: `https://app.everglot.com/email/unsubscribe?token=${emailUnsubscribeToken}`,
+                unsubscribeUrl: routes.email.unsubscribe(emailUnsubscribeToken),
             },
             version: NotificationParamsVersion.V1,
         })

@@ -91,7 +91,7 @@ describe("postSelections", () => {
         ])
     })
 
-    test("getBodyPartsWithOverlaps merges overlapping ranges", () => {
+    test.skip("getBodyPartsWithOverlaps merges overlapping ranges", () => {
         const text = "I am happy"
         const pickedRanges: PostGameRange[] = [
             { start: 2, end: 3, uuid: UUID_1 },

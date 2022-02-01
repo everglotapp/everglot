@@ -1,5 +1,14 @@
 import { MESSAGE_PREVIEW_BASE_PATH } from "../constants"
+import type { SessionData } from "express-session"
+import type { Socket } from "socket.io"
 import type { User } from "./generated/graphql"
+import type { IncomingMessage } from "http"
+
+export interface EverglotChatSocket extends Socket {
+    request: IncomingMessage & {
+        session: SessionData
+    }
+}
 
 export type ChatUser = {
     socketId: string

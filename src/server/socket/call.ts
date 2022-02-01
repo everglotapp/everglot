@@ -6,6 +6,7 @@ import log from "../../logger"
 import { getAllGroupUuids } from "../groups"
 
 import type { Server as SocketIO } from "socket.io"
+import type { EverglotChatSocket } from "../../types/chat"
 
 const chlog = log.child({
     namespace: "call",
@@ -17,7 +18,11 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     const { session } = socket.request
 
     socket.on("userJoinCall", async ({ groupUuid }: { groupUuid: string }) => {
-        const userId = session.user_id
+        const { user_id: userId } = session
+        if (!userId) {
+            chlog.child({ userId, groupUuid }).error("User is not signed in")
+            return
+        }
         const userMeta = await getChatUserByUserId(userId)
         if (!userMeta) {
             chlog
@@ -41,7 +46,11 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     })
 
     socket.on("userLeaveCall", async ({ groupUuid }: { groupUuid: string }) => {
-        const userId = session.user_id
+        const { user_id: userId } = session
+        if (!userId) {
+            chlog.child({ userId, groupUuid }).error("User is not signed in")
+            return
+        }
         const userMeta = await getChatUserByUserId(userId)
         if (!userMeta) {
             chlog
@@ -79,7 +88,13 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
             groupUuid: string
             callMeta: Pick<VoiceChatUser, "micMuted" | "audioMuted">
         }) => {
-            const userId = session.user_id
+            const { user_id: userId } = session
+            if (!userId) {
+                chlog
+                    .child({ userId, groupUuid })
+                    .error("User is not signed in")
+                return
+            }
             const userMeta = await getChatUserByUserId(userId)
             if (!userMeta) {
                 chlog

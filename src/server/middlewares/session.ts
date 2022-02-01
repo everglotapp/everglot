@@ -111,6 +111,15 @@ export function makeMiddleware(pool: Pool) {
          */
         middleware = (req: Request, res: Response, next: NextFunction) => {
             const insecureCookieName = getSessionIdCookieName(false)
+            if (req.headers["user-agent"] === "ANDROID_WEBVIEW") {
+                chlog
+                    .child({
+                        req,
+                        insecureCookieName,
+                        secureCookieName: getSessionIdCookieName(true),
+                    })
+                    .debug("Logging android request")
+            }
             if (
                 insecureCookieName &&
                 typeof req.cookies !== "undefined" &&

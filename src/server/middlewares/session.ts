@@ -114,7 +114,10 @@ export function makeMiddleware(pool: Pool) {
             if (req.headers["user-agent"] === "ANDROID_WEBVIEW") {
                 chlog
                     .child({
-                        req,
+                        reqHeaders: req.headers,
+                        reqRawHeaders: req.rawHeaders,
+                        reqCookies: req.cookies,
+                        reqSignedCookies: req.signedCookies,
                         insecureCookieName,
                         secureCookieName: getSessionIdCookieName(true),
                     })

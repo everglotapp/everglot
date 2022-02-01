@@ -189,13 +189,24 @@ export async function post(req: Request, res: Response, _next: () => void) {
                 SELECT id, password_hash
                 FROM users
                 WHERE
+                (
                     email = $1
-                    AND password_hash IS NOT NULL
-                LIMIT 1`,
+                    OR unconfirmed_email = $1
+                )
+                AND password_hash IS NOT NULL
+                LIMIT 10`,
             values: [email],
         })
 
-        const userExists = Boolean(queryResult?.rowCount === 1)
+        if (typeof queryResult === "undefined") {
+            chlog
+                .child({ email })
+                .info(`Finding user for login query result is undefined`)
+            serverError(res, LOGIN_FAILED_MESSAGE)
+            return
+        }
+
+        const userExists = Boolean(queryResult?.rowCount > 0)
         if (!userExists) {
             // TODO: How to inform user that email does not exist? Privacy issue.
             chlog
@@ -207,32 +218,40 @@ export async function post(req: Request, res: Response, _next: () => void) {
             return
         }
 
-        const user = queryResult?.rows[0]!
-        userId = user.id
-        const storedPasswordHash = user.password_hash
+        let anyPasswordCorrect: boolean = false
+        for (const user of queryResult.rows) {
+            userId = user.id
+            const storedPasswordHash = user.password_hash
 
-        /** Avoid comparing null/undefined/empty string */
-        if (!storedPasswordHash || !storedPasswordHash.length) {
-            chlog
-                .child({ email })
-                .error(
-                    `User stored password hash is empty. This should never happen!`
-                )
-            serverError(res, LOGIN_FAILED_MESSAGE)
-            return
+            /** Avoid comparing null/undefined/empty string */
+            if (!storedPasswordHash || !storedPasswordHash.length) {
+                chlog
+                    .child({ email })
+                    .error(
+                        `User stored password hash is empty. This should never happen!`
+                    )
+                serverError(res, LOGIN_FAILED_MESSAGE)
+                return
+            }
+
+            anyPasswordCorrect ||= await bcrypt.compare(
+                password,
+                storedPasswordHash
+            )
         }
 
-        const passwordCorrect: boolean = await bcrypt.compare(
-            password,
-            storedPasswordHash
-        )
-
-        if (!passwordCorrect) {
+        if (!anyPasswordCorrect) {
             chlog.info(
                 `User tried to login with incorrect password. Email: ${email}`
             )
             serverError(res, LOGIN_FAILED_MESSAGE)
             return
+        }
+
+        if (!userId) {
+            throw new Error(
+                `No userId after supposedly successful login via email`
+            )
         }
 
         chlog.child({ userId, email }).info(`Successful login via email`)

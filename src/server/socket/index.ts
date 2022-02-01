@@ -19,6 +19,7 @@ import type { Pool } from "pg"
 import type { Server } from "http"
 import { authenticateUserInGroup } from "../auth"
 import { getChatUserByUserId } from "./utils"
+import type { EverglotChatSocket } from "../../types/chat"
 
 const chlog = log.child({
     namespace: "chat",
@@ -41,7 +42,13 @@ export function start(server: Server, pool: Pool) {
         const { session } = socket.request
 
         socket.on("joinRoom", async ({ groupUuid }: { groupUuid: string }) => {
-            const userId = session.user_id
+            const { user_id: userId } = session
+            if (!userId) {
+                chlog
+                    .child({ userId, groupUuid })
+                    .error("User is not signed in")
+                return
+            }
             const userMeta = await getChatUserByUserId(userId)
             if (!userMeta) {
                 return
@@ -104,7 +111,13 @@ export function start(server: Server, pool: Pool) {
                 if (!groupUuid || !groupUuid || !uuidValidate(groupUuid)) {
                     return
                 }
-                const userId = session.user_id
+                const { user_id: userId } = session
+                if (!userId) {
+                    chlog
+                        .child({ userId, groupUuid })
+                        .error("User is not signed in")
+                    return
+                }
                 const userMeta = await getChatUserByUserId(userId)
                 if (!userMeta) {
                     return
@@ -128,7 +141,11 @@ export function start(server: Server, pool: Pool) {
 
         // Runs when client disconnects
         socket.on("disconnect", async () => {
-            const userId = session.user_id
+            const { user_id: userId } = session
+            if (!userId) {
+                chlog.child({ userId }).error("User is not signed in")
+                return
+            }
             const userMeta = await getChatUserByUserId(userId)
             if (!userMeta) {
                 return

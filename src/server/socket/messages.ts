@@ -24,7 +24,7 @@ import type {
 import log from "../../logger"
 import UIDGenerator from "uid-generator"
 import { MESSAGE_PREVIEW_BASE_PATH } from "../../constants"
-import type { ChatMessage } from "../../types/chat"
+import type { ChatMessage, EverglotChatSocket } from "../../types/chat"
 
 import type { Server as SocketIO } from "socket.io"
 

@@ -20,7 +20,7 @@ import { DATABASE_SCHEMA, db } from "../../db"
 
 import log from "../../../logger"
 import { bots } from ".."
-import type { ChatUser } from "../../../types/chat"
+import type { ChatUser, EverglotChatSocket } from "../../../types/chat"
 import { getGroupLanguageByUuid } from "../../groups"
 
 const chlog = log.child({
@@ -110,7 +110,7 @@ export class WouldYouRatherGame {
                     question: this.question,
                     picks: this.#picks,
                 })
-                .debug("No question")
+                .error("No question")
             return null
         }
         if (answerIndex < 0 || answerIndex >= this.question.answers.length) {
@@ -122,7 +122,7 @@ export class WouldYouRatherGame {
                     picks: this.#picks,
                     answers: this.question?.answers || "unknown",
                 })
-                .debug("answerIndex wrong")
+                .warn("answerIndex wrong")
             return null
         }
         if (this.#picks.hasOwnProperty(userUuid)) {
@@ -134,7 +134,7 @@ export class WouldYouRatherGame {
                     picks: this.#picks,
                     answers: this.question?.answers || "unknown",
                 })
-                .debug("userUuid has picked already")
+                .warn("userUuid has picked already")
             return null
         }
         this.#picks[userUuid] = answerIndex
@@ -180,7 +180,7 @@ export async function handleUserConnected(
             if (!chatUser) {
                 chlog
                     .child({ socketId: socket.id, answerIndex })
-                    .debug(
+                    .error(
                         "User trying to pick an answer in Would You Rather not found"
                     )
                 return
@@ -194,7 +194,7 @@ export async function handleUserConnected(
                         userUuid: chatUser.user.uuid,
                         answerIndex,
                     })
-                    .debug(
+                    .warn(
                         "User tried to pick an answer in Would You Rather but no activity is running for their group"
                     )
                 return
@@ -206,7 +206,7 @@ export async function handleUserConnected(
                         userUuid: chatUser.user.uuid,
                         answerIndex,
                     })
-                    .debug(
+                    .warn(
                         "User tried to pick an answer in Would You Rather but current group activity is not Would You Rather"
                     )
                 return
@@ -220,7 +220,7 @@ export async function handleUserConnected(
                         questionUuid: game.question?.uuid || null,
                         answerIndex,
                     })
-                    .debug(
+                    .warn(
                         "User tried to pick an answer in Would You Rather but game is over"
                     )
                 return

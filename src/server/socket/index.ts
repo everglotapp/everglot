@@ -1,4 +1,4 @@
-import { Server as SocketIO } from "socket.io"
+import { Server as SocketIO, Socket } from "socket.io"
 import { validate as uuidValidate } from "uuid"
 
 import log from "../../logger"
@@ -32,23 +32,22 @@ export function start(server: Server, pool: Pool) {
 
     /** Reuse session/authentication from Express server. */
     const sessionMiddleware = session(pool)
-    io.use((socket: EverglotChatSocket, next) => {
+    io.use((socket: Socket, next) => {
         // @ts-ignore
         sessionMiddleware(socket.request, {}, next)
     })
 
     // Run when client connects
     io.on("connection", async (socket: EverglotChatSocket) => {
-        const { session } = socket.request
-
         socket.on("joinRoom", async ({ groupUuid }: { groupUuid: string }) => {
-            const { user_id: userId } = session
-            if (!userId) {
+            const { session } = socket.request
+            if (!session || !session.user_id) {
                 chlog
-                    .child({ userId, groupUuid })
+                    .child({ namespace: "joinRoom", groupUuid })
                     .error("User is not signed in")
                 return
             }
+            const userId = session.user_id
             const userMeta = await getChatUserByUserId(userId)
             if (!userMeta) {
                 return
@@ -108,16 +107,17 @@ export function start(server: Server, pool: Pool) {
         socket.on(
             "leaveRoom",
             async ({ room: groupUuid }: { room: string }) => {
+                const { session } = socket.request
                 if (!groupUuid || !groupUuid || !uuidValidate(groupUuid)) {
                     return
                 }
-                const { user_id: userId } = session
-                if (!userId) {
+                if (!session || !session.user_id) {
                     chlog
-                        .child({ userId, groupUuid })
+                        .child({ namespace: "leaveRoom", groupUuid })
                         .error("User is not signed in")
                     return
                 }
+                const userId = session.user_id
                 const userMeta = await getChatUserByUserId(userId)
                 if (!userMeta) {
                     return
@@ -141,11 +141,14 @@ export function start(server: Server, pool: Pool) {
 
         // Runs when client disconnects
         socket.on("disconnect", async () => {
-            const { user_id: userId } = session
-            if (!userId) {
-                chlog.child({ userId }).error("User is not signed in")
+            const { session } = socket.request
+            if (!session || !session.user_id) {
+                chlog
+                    .child({ namespace: "disconnect" })
+                    .error("User is not signed in")
                 return
             }
+            const userId = session.user_id
             const userMeta = await getChatUserByUserId(userId)
             if (!userMeta) {
                 return

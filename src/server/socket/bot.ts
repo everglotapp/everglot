@@ -8,6 +8,7 @@ import { getGroupIdByUuid } from "../groups"
 import log from "../../logger"
 
 import type { Group, Language, Maybe } from "../../types/generated/graphql"
+import type { EverglotChatSocket } from "../../types/chat"
 
 const chlog = log.child({
     namespace: "bot",

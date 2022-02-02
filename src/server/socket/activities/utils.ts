@@ -23,7 +23,7 @@ export async function startGroupActivity(
             .child({
                 groupUuid,
             })
-            .debug("An activity is already running for this group")
+            .error("An activity is already running for this group")
         return null
     }
     if (kind === GroupActivityKind.Hangman) {
@@ -37,7 +37,7 @@ export async function startGroupActivity(
     } else {
         chlog
             .child({ groupUuid, kind })
-            .debug("Tried to start group activity of unknown kind")
+            .error("Tried to start group activity of unknown kind")
         return null
     }
     return groupActivities[groupUuid]

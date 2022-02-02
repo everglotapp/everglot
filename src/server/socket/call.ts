@@ -15,14 +15,15 @@ const chlog = log.child({
 const users: VoiceChatUser[] = []
 
 export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
-    const { session } = socket.request
-
     socket.on("userJoinCall", async ({ groupUuid }: { groupUuid: string }) => {
-        const { user_id: userId } = session
-        if (!userId) {
-            chlog.child({ userId, groupUuid }).error("User is not signed in")
+        const { session } = socket.request
+        if (!session || !session.user_id) {
+            chlog
+                .child({ namespace: "userJoinCall", groupUuid })
+                .error("User is not signed in")
             return
         }
+        const userId = session.user_id
         const userMeta = await getChatUserByUserId(userId)
         if (!userMeta) {
             chlog
@@ -46,11 +47,14 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
     })
 
     socket.on("userLeaveCall", async ({ groupUuid }: { groupUuid: string }) => {
-        const { user_id: userId } = session
-        if (!userId) {
-            chlog.child({ userId, groupUuid }).error("User is not signed in")
+        const { session } = socket.request
+        if (!session || !session.user_id) {
+            chlog
+                .child({ namespace: "userLeaveCall", groupUuid })
+                .error("User is not signed in")
             return
         }
+        const userId = session.user_id
         const userMeta = await getChatUserByUserId(userId)
         if (!userMeta) {
             chlog
@@ -88,13 +92,14 @@ export function handleUserConnected(io: SocketIO, socket: EverglotChatSocket) {
             groupUuid: string
             callMeta: Pick<VoiceChatUser, "micMuted" | "audioMuted">
         }) => {
-            const { user_id: userId } = session
-            if (!userId) {
+            const { session } = socket.request
+            if (!session || !session.user_id) {
                 chlog
-                    .child({ userId, groupUuid })
+                    .child({ namespace: "userCallMeta", groupUuid, callMeta })
                     .error("User is not signed in")
                 return
             }
+            const userId = session.user_id
             const userMeta = await getChatUserByUserId(userId)
             if (!userMeta) {
                 chlog

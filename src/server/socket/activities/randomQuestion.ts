@@ -19,7 +19,7 @@ import { DATABASE_SCHEMA, db } from "../../db"
 
 import log from "../../../logger"
 import { bots } from ".."
-import type { ChatUser } from "../../../types/chat"
+import type { ChatUser, EverglotChatSocket } from "../../../types/chat"
 import { getGroupLanguageByUuid } from "../../groups"
 import { getCurrentUser } from "../users"
 import { getGroupActivity } from "./utils"
@@ -122,7 +122,7 @@ export async function handleUserConnected(
         if (!chatUser) {
             chlog
                 .child({ socketId: socket.id })
-                .debug("User trying to get next Random Question not found")
+                .error("User trying to get next Random Question not found")
             return
         }
         const { groupUuid } = chatUser
@@ -133,7 +133,7 @@ export async function handleUserConnected(
                     groupUuid,
                     userUuid: chatUser.user.uuid,
                 })
-                .debug(
+                .error(
                     "User tried to get next Random Question but no activity is running for their group"
                 )
             return
@@ -144,7 +144,7 @@ export async function handleUserConnected(
                     groupUuid,
                     userUuid: chatUser.user.uuid,
                 })
-                .debug(
+                .error(
                     "User tried to get next Random Question but current group activity is not Random Question"
                 )
             return

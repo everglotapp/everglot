@@ -17,7 +17,7 @@ import { isChineseCharacter } from "../../../utils"
 import type { ChineseGuessCharacterQuestion } from "../../../types/generated/graphql"
 import type { Server as SocketIO } from "socket.io"
 import { bots } from ".."
-import type { ChatUser } from "../../../types/chat"
+import type { ChatUser, EverglotChatSocket } from "../../../types/chat"
 import { getGroupLanguageByUuid } from "../../groups"
 
 const chlog = log.child({
@@ -164,7 +164,7 @@ export async function handleUserConnected(
             if (!chatUser) {
                 chlog
                     .child({ socketId: socket.id, guess })
-                    .debug("User trying to guess in Guess Character not found")
+                    .error("User trying to guess in Guess Character not found")
                 return
             }
             const {

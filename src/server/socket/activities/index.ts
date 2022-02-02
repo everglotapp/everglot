@@ -10,6 +10,7 @@ import { GroupActivity, GroupActivityKind } from "../../../types/activities"
 import type { Server as SocketIO } from "socket.io"
 import { getCurrentUser } from "../users"
 import { endGroupActivity, getGroupActivity, startGroupActivity } from "./utils"
+import type { EverglotChatSocket } from "../../../types/chat"
 
 const chlog = log.child({
     namespace: "activities",
@@ -26,7 +27,7 @@ export async function handleUserConnected(
             if (!chatUser) {
                 chlog
                     .child({ kind, socketId: socket.id })
-                    .debug("User trying to start group activity not found")
+                    .error("User trying to start group activity not found")
                 return
             }
             const {
@@ -59,7 +60,7 @@ export async function handleUserConnected(
         if (!chatUser) {
             chlog
                 .child({ socketId: socket.id })
-                .debug("User trying to end group activity not found")
+                .error("User trying to end group activity not found")
             return
         }
         const {

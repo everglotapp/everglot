@@ -1,5 +1,5 @@
 import type { User } from "../../types/generated/graphql"
-import type { ChatUser } from "../../types/chat"
+import type { ChatUser, EverglotChatSocket } from "../../types/chat"
 
 type SocketHistory = {
     greeted: boolean

@@ -13,7 +13,7 @@ import log from "../../../logger"
 import { getGroupActivity } from "./utils"
 import type { Server as SocketIO } from "socket.io"
 import { bots } from ".."
-import type { ChatUser } from "../../../types/chat"
+import type { ChatUser, EverglotChatSocket } from "../../../types/chat"
 import { getGroupLanguageByUuid } from "../../groups"
 
 const chlog = log.child({
@@ -367,7 +367,7 @@ export async function start(groupUuid: string) {
             .child({
                 groupUuid,
             })
-            .debug("Group not found")
+            .error("Group not found")
         return null
     }
     const alpha2 = group.groupByUuid?.language?.alpha2
@@ -377,12 +377,18 @@ export async function start(groupUuid: string) {
                 groupUuid,
                 alpha2,
             })
-            .debug("Group locale does not support hangman")
+            .error("Group locale does not support hangman")
         return null
     }
     const game = (games[groupUuid] ||= new HangmanGame(alpha2 as HangmanLocale))
     if (!(await game.start())) {
         end(groupUuid)
+        chlog
+            .child({
+                groupUuid,
+                alpha2,
+            })
+            .error("Hangman game failed to start")
         return null
     }
     return {

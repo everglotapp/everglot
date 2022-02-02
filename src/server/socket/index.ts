@@ -43,7 +43,12 @@ export function start(server: Server, pool: Pool) {
             const { session } = socket.request
             if (!session || !session.user_id) {
                 chlog
-                    .child({ namespace: "joinRoom", groupUuid })
+                    .child({
+                        namespace: "joinRoom",
+                        groupUuid,
+                        session,
+                        request: socket.request,
+                    })
                     .error("User is not signed in")
                 return
             }

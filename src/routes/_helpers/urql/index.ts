@@ -11,9 +11,21 @@ import type { DocumentNode, OperationDefinitionNode } from "graphql"
 
 const GRAPHQL_ENDPOINT = "/graphql"
 
+function baseUrl() {
+    if (typeof window !== "undefined") {
+        return window.location.protocol + "//" + window.location.host
+    }
+    if (process.env.NODE_ENV === "development") {
+        return "http://localhost/"
+    } else if (process.env.NODE_ENV === "production") {
+        return `https://${process.env.HOST}/`
+    }
+    return "/"
+}
+
 export function setupUrql() {
     return initClient({
-        url: GRAPHQL_ENDPOINT,
+        url: `${baseUrl()}${GRAPHQL_ENDPOINT}`,
         fetch,
         exchanges: [
             devtoolsExchange,

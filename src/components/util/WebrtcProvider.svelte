@@ -75,6 +75,9 @@
     }
 
     async function joinRoom(roomId: string, userId: string): Promise<boolean> {
+        if (typeof window === "undefined") {
+            return false
+        }
         if (!client) {
             await createClientIfNotExists()
         }

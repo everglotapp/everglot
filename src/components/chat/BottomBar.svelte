@@ -21,7 +21,6 @@
     import type { WebrtcContext } from "../util/WebrtcProvider.svelte"
 
     import { groupUuid } from "../../stores"
-    import { currentUserUuid } from "../../stores/currentUser"
     import {
         groupChatStore,
         currentUserIsGroupMember,

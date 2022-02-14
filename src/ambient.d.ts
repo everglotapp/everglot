@@ -592,3 +592,9 @@ declare module "fakerator" {
 
     export default fakerator
 }
+
+declare namespace svelte.JSX {
+    interface SvelteInputProps {
+        mozactionhint: string
+    }
+}

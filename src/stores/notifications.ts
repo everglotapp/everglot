@@ -19,7 +19,7 @@ export const currentUserInAppNotificationsStore = operationStore<
     { pause: true, requestPolicy: "network-only" }
 )
 
-type CurrentUserInAppNotificationNode = NonNullable<
+export type CurrentUserInAppNotificationNode = NonNullable<
     NonNullable<
         NonNullable<
             NonNullable<CurrentUserInAppNotificationsQuery["currentUser"]>

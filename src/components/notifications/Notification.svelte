@@ -4,13 +4,12 @@
 
     import Avatar from "../users/Avatar.svelte"
     import { PostGameType } from "../../types/generated/graphql"
-    import type { Notification } from "../../types/generated/graphql"
     import { InAppParamsTypeV1 } from "../../server/notifications/params/v1"
     import type { CurrentUserInAppNotificationNode } from "../../stores/notifications"
 
     export let metadata: CurrentUserInAppNotificationNode["metadata"]
-    export let type: NonNullable<Notification>["type"]
-    export let createdAt: NonNullable<Notification>["createdAt"]
+    export let type: CurrentUserInAppNotificationNode["type"]
+    export let createdAt: CurrentUserInAppNotificationNode["createdAt"]
 
     const POST_PREVIEW_LENGTH = 45
     function formatPostPreview(body: string): string {

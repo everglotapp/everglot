@@ -708,9 +708,9 @@
                                         className="flex items-center"
                                     >
                                         {#if followedUser.followedByCurrentUser}
-                                            Unfollow
+                                            <Localized id="user-unfollow" />
                                         {:else}
-                                            Follow
+                                            <Localized id="user-follow" />
                                         {/if}
                                     </ButtonSmall>
                                 </div>

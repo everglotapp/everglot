@@ -283,6 +283,10 @@ global-error = Error
 ## Global profile page
 
 u-username-browser-window-title = { $username } - { -brand-name }
+u-username-tabs-about = About
+u-username-tabs-squeeks = Squeeks
+u-username-tabs-followers = Followers
+u-username-tabs-following = Following
 
 ## Profile page
 

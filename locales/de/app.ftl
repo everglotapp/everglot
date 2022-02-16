@@ -236,6 +236,14 @@ global-group-members-count =
     }
 global-error = Fehler
 
+## Global profile page
+
+u-username-browser-window-title = { $username } - { -brand-name }
+u-username-tabs-about = Über
+u-username-tabs-squeeks = Squeeks
+u-username-tabs-followers = Follower
+u-username-tabs-following = Folgt
+
 ## Profile page
 
 profile-browser-window-title = Mein Profil – { -brand-name }

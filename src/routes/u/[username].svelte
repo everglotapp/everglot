@@ -354,19 +354,23 @@
         <div class="tabs container max-w-2xl mb-4">
             <button
                 aria-selected={tab === ProfileTab.About}
-                on:click={() => (tab = ProfileTab.About)}>About</button
+                on:click={() => (tab = ProfileTab.About)}
+                ><Localized id="u-username-tabs-about" /></button
             >
             <button
                 aria-selected={tab === ProfileTab.Squeeks}
-                on:click={() => (tab = ProfileTab.Squeeks)}>Squeeks</button
+                on:click={() => (tab = ProfileTab.Squeeks)}
+                ><Localized id="u-username-tabs-squeeks" /></button
             >
             <button
                 aria-selected={tab === ProfileTab.Followers}
-                on:click={() => (tab = ProfileTab.Followers)}>Followers</button
+                on:click={() => (tab = ProfileTab.Followers)}
+                ><Localized id="u-username-tabs-followers" /></button
             >
             <button
                 aria-selected={tab === ProfileTab.Following}
-                on:click={() => (tab = ProfileTab.Following)}>Following</button
+                on:click={() => (tab = ProfileTab.Following)}
+                ><Localized id="u-username-tabs-following" /></button
             >
         </div>
         {#if tab === ProfileTab.About}

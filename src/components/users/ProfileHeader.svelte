@@ -30,7 +30,7 @@
     export let userUuid: Maybe<string>
     export let isCurrentUser: boolean
 
-    export let followers: NonNullable<
+    type FollowerNode = NonNullable<
         NonNullable<
             NonNullable<
                 NonNullable<
@@ -38,7 +38,8 @@
                 >["followers"]["nodes"]
             >[number]
         >["follower"]
-    >[]
+    >
+    export let followers: FollowerNode[]
 
     $: currentUserIsFollowing =
         !isCurrentUser &&
@@ -248,7 +249,9 @@
                         <span class="text-gray-bitdark font-bold"
                             >{followers.length}</span
                         ></span
-                    ><span class="mx-2">Followers</span></span
+                    ><span class="mx-2"
+                        ><Localized id="profile-header-followers" /></span
+                    ></span
                 >
                 {#if !isCurrentUser}
                     <ButtonSmall
@@ -263,9 +266,9 @@
                         className="flex items-center"
                     >
                         {#if (currentUserIsFollowing && !tmpUnfollowed) || tmpFollowed}
-                            Unfollow
+                            <Localized id="user-unfollow" />
                         {:else}
-                            Follow
+                            <Localized id="user-follow" />
                         {/if}
                     </ButtonSmall>
                 {/if}

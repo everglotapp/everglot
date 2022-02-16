@@ -304,6 +304,10 @@ profile-upload-avatar = Upload Avatar
 profile-avatar-upload-failed = Your avatar could not be changed successfully. Please try again.
 profile-avatar-max-size = Avatars must be smaller than { $maxSize } in size.
 
+# ProfileHeader component
+
+profile-header-followers = Followers
+
 ## Email notifications unsubscription successful
 email-unsubscribe-success-headline = Success!
 email-unsubscribe-success-description = You will no longer receive email notifications.

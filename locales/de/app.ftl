@@ -256,6 +256,10 @@ profile-upload-avatar = Avatar hochladen
 profile-avatar-upload-failed = Dein Avatar konnte nicht erfolgreich geändert werden. Probiere es noch einmal.
 profile-avatar-max-size = Avatare müssen kleiner als { $maxSize } sein.
 
+# ProfileHeader component
+
+profile-header-followers = Follower
+
 ## Email notifications unsubscription successful
 
 email-unsubscribe-success-headline = Alles klar!

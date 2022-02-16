@@ -124,7 +124,9 @@
                         <span>{email}</span>
                     {/if}
                     {#if unconfirmedEmail}
-                        <span class="text-gray flex items-center"
+                        <span
+                            class="text-gray flex items-center"
+                            title="You have not confirmed your email yet"
                             ><svg
                                 class="mr-2 fill-gray"
                                 xmlns="http://www.w3.org/2000/svg"

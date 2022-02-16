@@ -287,6 +287,16 @@ u-username-tabs-about = About
 u-username-tabs-squeeks = Squeeks
 u-username-tabs-followers = Followers
 u-username-tabs-following = Following
+u-username-section-languages = Languages
+u-username-section-email = Email
+u-username-section-groups = Groups
+u-username-section-bio = About Me
+u-username-section-bio-edit = edit
+u-username-section-bio-edit-cancel = cancel
+u-username-section-bio-edit-form-cancel = Cancel
+u-username-section-bio-edit-form-save = Save
+u-username-section-bio-empty = We're all eagerly waiting for { $username } to introduce themselves.
+u-username-followers-none = Nobody is following { $username }, yet ☹️
 
 ## Profile page
 

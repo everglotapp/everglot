@@ -380,14 +380,16 @@
                 <div class="pt-4 sm:pt-8 pb-4 px-4" style="flex: 0 0 240px;">
                     {#if userIsCurrentUser}
                         <div class="pb-8">
-                            <h2>Email</h2>
+                            <h2><Localized id="u-username-section-email" /></h2>
                             {#if $currentUserProfileStore.data && currentUserProfile}
                                 <span
                                     >{currentUserProfile.email ||
                                         "unknown"}</span
                                 >
                                 {#if currentUserProfile.unconfirmedEmail}
-                                    <span class="text-gray flex items-center"
+                                    <span
+                                        class="text-gray flex items-center"
+                                        title="You have not confirmed your email yet"
                                         ><svg
                                             class="mr-2 fill-gray"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -410,7 +412,7 @@
                         </div>
                     {/if}
                     <div class="pb-8">
-                        <h2>Languages</h2>
+                        <h2><Localized id="u-username-section-languages" /></h2>
                         <ul>
                             {#each userLanguages as language}
                                 <li
@@ -438,13 +440,19 @@
                 <div class="pt-4 sm:pt-8 pb-4 px-4" style="flex: 1 1 400px;">
                     <div class="pb-8">
                         <h2 class="flex items-center">
-                            About Me{#if userIsCurrentUser}<ButtonSmall
+                            <Localized
+                                id="u-username-section-bio"
+                            />{#if userIsCurrentUser}<ButtonSmall
                                     tag="button"
                                     variant="TEXT"
                                     color={editBio ? "SECONDARY" : "PRIMARY"}
                                     className="flex items-center text-sm ml-1"
                                     on:click={() => (editBio = !editBio)}
-                                    >{#if editBio}cancel{:else}edit{/if}</ButtonSmall
+                                    >{#if editBio}<Localized
+                                            id="u-username-section-bio-edit-cancel"
+                                        />{:else}<Localized
+                                            id="u-username-section-bio-edit"
+                                        />{/if}</ButtonSmall
                                 >{/if}
                         </h2>
                         {#if editBio}
@@ -468,7 +476,9 @@
                                         ><XIcon
                                             size="20"
                                             class="mr-2"
-                                        />Cancel</ButtonLarge
+                                        /><Localized
+                                            id="u-username-section-bio-edit-form-cancel"
+                                        /></ButtonLarge
                                     >
                                     <ButtonLarge
                                         tag="button"
@@ -479,7 +489,9 @@
                                         ><CheckIcon
                                             size="20"
                                             class="mr-2"
-                                        />Save</ButtonLarge
+                                        /><Localized
+                                            id="u-username-section-bio-edit-form-save"
+                                        /></ButtonLarge
                                     >
                                 </div>
                             </form>
@@ -493,16 +505,22 @@
                                         {bioPart}<br />
                                     {/each}
                                 {:else}<span class="text-gray"
-                                        >We're all eagerly waiting for {displayName ||
-                                            username}
-                                        to introduce themselves.</span
+                                        ><Localized
+                                            id="u-username-section-bio-empty"
+                                            args={{
+                                                username:
+                                                    displayName || username,
+                                            }}
+                                        /></span
                                     >{/if}
                             </p>
                         {/if}
                     </div>
                     {#if userIsCurrentUser && currentUserGroupUsers.length}
                         <div class="pb-8">
-                            <h2>Groups</h2>
+                            <h2>
+                                <Localized id="u-username-section-groups" />
+                            </h2>
                             {#each currentUserGroupUsers as groupUser}
                                 {#if groupUser.group}
                                     <li class="list-none">
@@ -589,7 +607,10 @@
             >
                 {#if !followers.length}
                     <div class="py-4 px-2 text-gray w-full text-center">
-                        Nobody is following {displayName || username}, yet ☹️
+                        <Localized
+                            id="u-username-followers-none"
+                            args={{ username: displayName || username }}
+                        />
                     </div>
                 {/if}
                 <ul class="flex flex-col w-full">

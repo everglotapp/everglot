@@ -11,6 +11,12 @@
     export let type: CurrentUserInAppNotificationNode["type"]
     export let createdAt: CurrentUserInAppNotificationNode["createdAt"]
 
+    $: post = metadata?.post
+    $: postAuthor = post?.author
+    $: parentPost = post?.parentPost
+    $: parentPostGame = parentPost?.games.nodes?.[0]
+    $: user = metadata?.user
+
     const POST_PREVIEW_LENGTH = 45
     function formatPostPreview(body: string): string {
         if (body.length <= POST_PREVIEW_LENGTH - 1) {
@@ -25,6 +31,10 @@
         InAppParamsTypeV1.PostLike,
         InAppParamsTypeV1.PostReply,
     ].includes(type as InAppParamsTypeV1)
+    $: needsParentPost = [
+        InAppParamsTypeV1.PostReply,
+        InAppParamsTypeV1.PostUserMention,
+    ].includes(type as InAppParamsTypeV1)
     $: needsUser = [
         InAppParamsTypeV1.PostCorrection,
         InAppParamsTypeV1.PostLike,
@@ -33,10 +43,12 @@
         InAppParamsTypeV1.UserFollowership,
     ].includes(type as InAppParamsTypeV1)
 
-    $: valid =
+    $: valid = Boolean(
         metadata &&
-        (needsPost ? metadata?.post : true) &&
-        (needsUser ? metadata?.user : true)
+            (!needsPost || post) &&
+            (!needsParentPost || parentPost) &&
+            (!needsUser || user)
+    )
 
     function getLink(): string {
         if (
@@ -70,7 +82,7 @@
     $: link = valid ? getLink() : null
 </script>
 
-{#if valid && metadata}
+{#if metadata && valid}
     <a href={link || ""} class="flex rounded-lg hover:bg-primary-lightest">
         <div
             class="flex flex-1 justify-start w-full overflow-hidden text-ellipsis px-4 pt-2 pb-3 flex-row items-center border-b"
@@ -78,19 +90,19 @@
         >
             <div class="avatar">
                 {#if type === InAppParamsTypeV1.PostUserMention}
-                    {#if metadata.post && metadata.post.author && metadata.post.author.username}
+                    {#if postAuthor && postAuthor.username}
                         <Avatar
-                            username={metadata.post.author.username}
-                            uuid={metadata.post.author.uuid}
-                            url={metadata.post.author.avatarUrl}
+                            username={postAuthor.username}
+                            uuid={postAuthor.uuid}
+                            url={postAuthor.avatarUrl}
                             size={56}
                         />
                     {/if}
-                {:else if metadata.user?.username && metadata.user?.avatarUrl}
+                {:else if user && user.username && user.avatarUrl}
                     <Avatar
-                        username={metadata.user.username}
-                        uuid={metadata.user.uuid}
-                        url={metadata.user.avatarUrl}
+                        username={user.username}
+                        uuid={user.uuid}
+                        url={user.avatarUrl}
                         size={56}
                     />
                 {/if}
@@ -98,58 +110,52 @@
             <div class="main flex-col items-start">
                 <div class="description font-bold text-gray">
                     {#if type === InAppParamsTypeV1.PostReply}
-                        {#if metadata && metadata.post && metadata.post.parentPost}
+                        {#if parentPost && user}
                             <span class="text-gray-bitdark"
-                                >{metadata.user?.displayName ||
-                                    metadata.user?.username}</span
+                                >{user.displayName || user.username}</span
                             >
                             replied to your squeek:
                             <span class="text-gray-bitdark"
-                                >{formatPostPreview(
-                                    metadata.post.parentPost.body
-                                )}</span
+                                >{formatPostPreview(parentPost.body)}</span
                             >
                         {/if}
                     {:else if type === InAppParamsTypeV1.PostCorrection}
-                        {#if metadata && metadata.post}
+                        {#if post && user}
                             <span class="text-gray-bitdark"
-                                >{metadata.user?.displayName ||
-                                    metadata.user?.username}</span
+                                >{user.displayName || user.username}</span
                             >
                             suggested a correction for your squeek:
                             <span class="text-gray-bitdark"
-                                >{formatPostPreview(metadata.post.body)}</span
+                                >{formatPostPreview(post.body)}</span
                             >
                         {/if}
                     {:else if type === InAppParamsTypeV1.PostLike}
-                        {#if metadata && metadata.post}
+                        {#if post && user}
                             <span class="text-gray-bitdark"
-                                >{metadata.user?.displayName ||
-                                    metadata.user?.username}</span
+                                >{user.displayName || user.username}</span
                             >
                             likes your squeek:
                             <span class="text-gray-bitdark"
-                                >{formatPostPreview(metadata.post.body)}</span
+                                >{formatPostPreview(post.body)}</span
                             >
                         {/if}
                     {:else if type === InAppParamsTypeV1.PostUserMention}
-                        {#if metadata && metadata.post && metadata.post.parentPost && metadata.post.author}
+                        {#if parentPost && postAuthor}
                             <span class="text-gray-bitdark"
-                                >{metadata.post.author.displayName ||
-                                    metadata.post.author.username}</span
+                                >{postAuthor.displayName ||
+                                    postAuthor.username}</span
                             >
-                            tagged you under a squeek{#if metadata.post.parentPost.games.nodes.length && metadata.post.parentPost.games.nodes[0] && (!metadata.post.parentPost.games.nodes[0].revealedByCurrentUser || metadata.post.parentPost.games.nodes[0].gameType !== PostGameType.Cloze)}:
+                            tagged you under a squeek{#if parentPostGame && parentPostGame && (!parentPostGame.revealedByCurrentUser || parentPostGame.gameType !== PostGameType.Cloze)}:
                                 <span class="text-gray-bitdark"
-                                    >{formatPostPreview(
-                                        metadata.post.parentPost.body
-                                    )}</span
+                                    >{formatPostPreview(parentPost.body)}</span
                                 >{/if}
                         {/if}
                     {:else if type === InAppParamsTypeV1.UserFollowership}
-                        <span class="text-gray-bitdark"
-                            >{metadata.user?.displayName ||
-                                metadata.user?.username}</span
-                        > started following you
+                        {#if user}
+                            <span class="text-gray-bitdark"
+                                >{user.displayName || user.username}</span
+                            > started following you
+                        {/if}
                     {/if}
                 </div>
                 <div class="time">

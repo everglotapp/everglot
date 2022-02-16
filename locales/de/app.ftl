@@ -14,6 +14,21 @@ user-unfollow = Entfolgen
 
 ## Feed page
 
+index-browser-window-title = { -brand-name } – Sprachgemeinschaft
+index-shuffle-prompts-button-initial = Gib mir einen Tipp
+index-shuffle-prompts-button-prompt-shown = Neuer Tipp
+index-shuffle-prompts-button-initial-mobile = Tipp erhalten
+index-shuffle-prompts-button-prompt-shown-mobile = Neuer Tipp
+index-prompt-instruction-word = Nutze dieses Wort in einem Satz.
+index-post-form-gamify-button = Spiel hinzufügen
+index-post-form-gamify-note = Spiel hinzufügen: Halte Teile deines Squeeks gedrückt.
+index-post-form-record-button = Aufnehmen
+index-post-form-post-button = Posten
+index-post-form-body-input-placeholder = Lass deinem Squeek freien Lauf …
+post-game-create-modal-title = Wähle ein Spiel
+post-game-create-modal-guess-case = { -post-game-type(type: "guess_case") }
+post-game-create-modal-guess-gender = { -post-game-type(type: "guess_gender") }
+post-game-create-modal-cloze = { -post-game-type(type: "cloze") }
 post-game-guess-case-de-nominative = Nominativ
 post-game-guess-case-de-genitive = Genitiv
 post-game-guess-case-de-dative = Dativ
@@ -25,6 +40,16 @@ post-game-cloze-new-gap = Lücke erstellen
 post-game-cancel = Abbrechen
 post-game-selection-remove = Löschen
 post-game-selection-cancel = Abbrechen
+post-prompt-note-word = Forme einen Satz mit "{ $word }".
+post-game-note-game-action = { $gameType ->
+       *[GUESS_CASE] den Fall zu erraten
+        [GUESS_GENDER] das Geschlecht zu erraten
+        [CLOZE] die Lücken zu füllen
+    }
+post-game-note-own = Du hast die anderen aufgefordert, { post-game-note-game-action }.
+post-game-note-other = { $username } fordert dich auf, { post-game-note-game-action }!
+post-corrections-note = Wähle Teile des Squeeks um ihn zu korrigieren. (Drücken und halten)
+post-correction-selection-cancel = Schließen
 
 ## Chat page
 
@@ -160,6 +185,7 @@ login-form-password = Passwort
 login-form-submit = Einloggen
 login-form-signup = Ich habe keinen Account
 login-form-google = Mit Google einloggen
+login-form-reset-password = Passwort vergessen
 
 ## Join page
 
@@ -219,6 +245,15 @@ signup-form-gender-other = Divers
 signup-form-submit = Weiter
 signup-form-error-loading-language-codes = Etwas ist schiefgelaufen.
 
+## Reset Password page
+
+users-password-reset-browser-window-title = Passwort vergessen – { -brand-name }
+users-password-reset-form-title = Ich habe mein { -brand-name }-Passwort vergessen
+users-password-reset-form-email = E-Mail
+users-password-reset-form-submit = Mein Passwort ändern
+users-password-reset-form-login = Nein, ich erinnere mich wieder
+users-password-reset-form-signup = Ich habe keinen Account
+
 ## User Bio component
 
 user-bio-languages-title = Sprachen
@@ -244,7 +279,7 @@ u-username-tabs-squeeks = Squeeks
 u-username-tabs-followers = Follower
 u-username-tabs-following = Folgt
 u-username-section-languages = Sprachen
-u-username-section-email = Email
+u-username-section-email = E-Mail
 u-username-section-groups = Gruppen
 u-username-section-bio = Über mich
 u-username-section-bio-edit = bearbeiten

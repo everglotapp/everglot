@@ -14,6 +14,7 @@ import { registerUserActivity } from "./users"
 
 import type { Express, Request } from "express"
 import type { Pool } from "pg"
+import { forbidden } from "../helpers"
 
 const { NODE_ENV, DEMO_TOKEN, DEMO2_TOKEN } = process.env
 const dev = NODE_ENV === "development"
@@ -49,6 +50,10 @@ export default async function configureExpress(
     app.use(session(pool))
 
     app.use((req, res, next) => {
+        if (req.path.startsWith("/graphql") && !req.session.user_id) {
+            forbidden(res)
+            return
+        }
         if (pathIsProtected(req) && !req.session.user_id) {
             chlog.debug(`Unauthorized access to path "${req.path}"`)
             // TODO: Add parameter with request path to redirect to after login
@@ -138,8 +143,8 @@ function pathIsProtected(req: Request): boolean {
     if (path.startsWith("/users/password/reset/") && "get" === method) {
         return false
     }
-    // if (dev && path === "/graphql") {
-    //     return false
-    // }
+    if (dev && path === "/graphiql") {
+        return false
+    }
     return true
 }

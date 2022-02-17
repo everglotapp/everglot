@@ -11,17 +11,36 @@ import type { DocumentNode, OperationDefinitionNode } from "graphql"
 
 const GRAPHQL_ENDPOINT = "/graphql"
 
-function baseUrl() {
-    if (typeof window !== "undefined") {
-        return window.location.protocol + "//" + window.location.host
-    }
-    const { NODE_ENV, HOST, PORT } = process.env
-    if (NODE_ENV === "development") {
-        return "http://localhost"
-    } else if (NODE_ENV === "production") {
-        return `https://${HOST}${PORT ? `:${PORT}` : ""}`
-    }
-    return "/"
+type WindowLocationProtocol<T extends string = string> = `${T}:`
+type GraphqlProtocol = WindowLocationProtocol<"https" | "http">
+type GraphlqlBaseUrl = `${GraphqlProtocol}${string}`
+/**
+ * @returns Base URL for GraphQL requests.
+ */
+function baseUrl(): GraphlqlBaseUrl {
+    const { protocol, host } = ((): {
+        protocol: GraphqlProtocol
+        host: string
+    } => {
+        if (typeof window !== "undefined") {
+            const {
+                location: { protocol, host },
+            } = window
+            if (protocol !== "http:" && protocol !== "https:") {
+                throw new Error(
+                    `Protocol ${protocol} not supported for GraphQL queries`
+                )
+            }
+            return { protocol, host }
+        }
+        const { NODE_ENV, HOST = "127.0.0.1", PORT = 3000 } = process.env
+        const prod = NODE_ENV === "production"
+        return {
+            protocol: prod ? "https:" : "http:",
+            host: `${HOST}${PORT ? `:${PORT}` : ""}`,
+        }
+    })()
+    return `${protocol}//${host}`
 }
 
 export function setupUrql() {

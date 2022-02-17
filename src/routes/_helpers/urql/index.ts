@@ -5,27 +5,12 @@ import { persistedMutationFetchExchange } from "./persistedMutationFetchExchange
 // import { cacheExchange } from "./cacheExchange"
 import { devtoolsExchange } from "@urql/devtools"
 
-import persistedOperations from "../../../graphql.client.json"
-
-import type { DocumentNode, OperationDefinitionNode } from "graphql"
-
-const GRAPHQL_ENDPOINT = "/graphql"
-
-function baseUrl() {
-    if (typeof window !== "undefined") {
-        return window.location.protocol + "//" + window.location.host
-    }
-    if (process.env.NODE_ENV === "development") {
-        return "http://localhost/"
-    } else if (process.env.NODE_ENV === "production") {
-        return `https://${process.env.HOST}/`
-    }
-    return "/"
-}
+import makeGraphqlEndpoint from "./endpoint"
+import generateHash from "./persistedOperationsHash"
 
 export function setupUrql() {
     return initClient({
-        url: `${baseUrl()}${GRAPHQL_ENDPOINT}`,
+        url: makeGraphqlEndpoint(),
         fetch,
         exchanges: [
             devtoolsExchange,
@@ -48,22 +33,4 @@ export function setupUrql() {
             fetchExchange,
         ],
     })
-}
-
-async function generateHash(
-    _query: string,
-    document: DocumentNode
-): Promise<string> {
-    // Note that we're assuming that the first definition is a operation
-    // definition rather than a FragmentDefinitionNode.
-    // Also we're ignoring the query variable meaning that we
-    // cannot just use raw query strings. To change that, return its hash.
-    const operationName = (document?.definitions[0] as OperationDefinitionNode)
-        ?.name?.value
-    if (operationName) {
-        return persistedOperations[
-            operationName as keyof typeof persistedOperations
-        ]
-    }
-    throw new Error("Failed to resolve persisted operation hash")
 }

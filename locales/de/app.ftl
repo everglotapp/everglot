@@ -40,10 +40,10 @@ post-game-cloze-new-gap = Lücke erstellen
 post-game-cancel = Abbrechen
 post-game-selection-remove = Löschen
 post-game-selection-cancel = Abbrechen
-post-prompt-note-word = Forme einen Satz mit "{ $word }".
+post-prompt-note-word = Bilde einen Satz mit "{ $word }".
 post-game-note-game-action = { $gameType ->
-       *[GUESS_CASE] den Fall zu erraten
-        [GUESS_GENDER] das Geschlecht zu erraten
+       *[GUESS_CASE] die Fälle zu erraten
+        [GUESS_GENDER] die Geschlechter zu erraten
         [CLOZE] die Lücken zu füllen
     }
 post-game-note-own = Du hast die anderen aufgefordert, { post-game-note-game-action }.

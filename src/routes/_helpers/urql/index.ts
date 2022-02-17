@@ -13,11 +13,11 @@ const GRAPHQL_ENDPOINT = "/graphql"
 
 type WindowLocationProtocol<T extends string = string> = `${T}:`
 type GraphqlProtocol = WindowLocationProtocol<"https" | "http">
-type GraphlqlBaseUrl = `${GraphqlProtocol}${string}`
+type GraphqlBaseUrl = `${GraphqlProtocol}${string}`
 /**
  * @returns Base URL for GraphQL requests.
  */
-function baseUrl(): GraphlqlBaseUrl {
+function baseUrl(): GraphqlBaseUrl {
     const { protocol, host } = ((): {
         protocol: GraphqlProtocol
         host: string

@@ -48,7 +48,7 @@ post-game-note-game-action = { $gameType ->
     }
 post-game-note-own = Du hast die anderen aufgefordert, { post-game-note-game-action }.
 post-game-note-other = { $username } fordert dich auf, { post-game-note-game-action }!
-post-corrections-note = Wähle Teile des Squeeks um ihn zu korrigieren. (Drücken und halten)
+post-corrections-note = Wähle Teile des Squeeks, um ihn zu korrigieren. (Drücken und halten)
 post-correction-selection-cancel = Schließen
 
 ## Chat page

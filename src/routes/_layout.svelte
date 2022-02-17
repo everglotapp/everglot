@@ -29,6 +29,13 @@
             s.parentNode!.insertBefore(g, s)
         })()
     }
+
+    const PAGES_WITHOUT_MAIN_NAV: Readonly<Page[]> = [
+        Page.Join,
+        Page.Login,
+        Page.ResetPassword,
+        Page.ResetPasswordToken,
+    ]
 </script>
 
 <script lang="ts">
@@ -83,10 +90,7 @@
     }
 
     $: showMainNav =
-        $currentPage !== Page.Join &&
-        $currentPage !== Page.Login &&
-        $currentPage !== Page.ResetPassword &&
-        $currentPage !== Page.ResetPasswordToken
+        !$currentPage || !PAGES_WITHOUT_MAIN_NAV.includes($currentPage)
     $: noscroll = $currentPage === Page.Chat
 
     $: navigatorLocales =

@@ -377,17 +377,20 @@
                             />
                         </button>
                     {/if}
-                    <a
-                        aria-current={$currentPage === Page.Notifications
-                            ? "page"
-                            : undefined}
-                        href="/notifications"
-                        class="nav-item-with-icon text-primary"
-                        ><span style="margin-top: -3px; margin-bottom: -2px;"
-                            ><Localized id="main-nav-notifications" /></span
-                        >
-                        <BellIcon size="24" />
-                    </a>
+                    {#if $currentUserStore.data && $currentUser}
+                        <a
+                            aria-current={$currentPage === Page.Notifications
+                                ? "page"
+                                : undefined}
+                            href="/notifications"
+                            class="nav-item-with-icon text-primary"
+                            ><span
+                                style="margin-top: -3px; margin-bottom: -2px;"
+                                ><Localized id="main-nav-notifications" /></span
+                            >
+                            <BellIcon size="24" />
+                        </a>
+                    {/if}
                     <button
                         on:click={() => {
                             showSettingsDropdown = !showSettingsDropdown

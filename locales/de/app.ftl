@@ -15,10 +15,10 @@ user-unfollow = Entfolgen
 ## Feed page
 
 index-browser-window-title = { -brand-name } – Sprachgemeinschaft
-index-shuffle-prompts-button-initial = Gib mir einen Tipp
-index-shuffle-prompts-button-prompt-shown = Neuer Tipp
-index-shuffle-prompts-button-initial-mobile = Tipp erhalten
-index-shuffle-prompts-button-prompt-shown-mobile = Neuer Tipp
+index-shuffle-prompts-button-initial = Gib mir einen Hinweis
+index-shuffle-prompts-button-prompt-shown = Neuer Hinweis
+index-shuffle-prompts-button-initial-mobile = Hinweis erhalten
+index-shuffle-prompts-button-prompt-shown-mobile = Neuer Hinweis
 index-prompt-instruction-word = Nutze dieses Wort in einem Satz.
 index-post-form-gamify-button = Spiel hinzufügen
 index-post-form-gamify-note = Spiel hinzufügen: Halte Teile deines Squeeks gedrückt.
@@ -40,7 +40,7 @@ post-game-cloze-new-gap = Lücke erstellen
 post-game-cancel = Abbrechen
 post-game-selection-remove = Löschen
 post-game-selection-cancel = Abbrechen
-post-prompt-note-word = Bilde einen Satz mit "{ $word }".
+post-prompt-note-word = Bilde einen Satz mit „{ $word }“.
 post-game-note-game-action = { $gameType ->
        *[GUESS_CASE] die Fälle zu erraten
         [GUESS_GENDER] die Geschlechter zu erraten

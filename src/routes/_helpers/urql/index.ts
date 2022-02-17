@@ -15,10 +15,11 @@ function baseUrl() {
     if (typeof window !== "undefined") {
         return window.location.protocol + "//" + window.location.host
     }
-    if (process.env.NODE_ENV === "development") {
-        return "http://localhost/"
-    } else if (process.env.NODE_ENV === "production") {
-        return `https://${process.env.HOST}/`
+    const { NODE_ENV, HOST, PORT } = process.env
+    if (NODE_ENV === "development") {
+        return "http://localhost"
+    } else if (NODE_ENV === "production") {
+        return `https://${HOST}${PORT ? `:${PORT}` : ""}`
     }
     return "/"
 }
